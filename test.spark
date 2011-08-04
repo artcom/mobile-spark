@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Worlds>
+    <World type="3D">
+        <Transform name="transformA" x="20" rotationX="30">
+            <Object3D name="objectA" src="file to object"/>
+        </Transform>
+        <Transform name="transformB" x="-20" scaleX="0.5">
+            <Object3D name="objectB" src="file to object"/>
+        </Transform>
+    </World>
+</Worlds>
