@@ -12,7 +12,7 @@ public class SparkViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(LOG_TAG, "SparkViewer created, ready to call native");     
+        Log.i(LOG_TAG, "SparkViewer created, ready to call native.");     
         BaseNativeLib.loadSpark("/sdcard/test.spark");        
         Log.i(LOG_TAG, "SparkViewer native called");     
     }
