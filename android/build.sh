@@ -1,13 +1,21 @@
 #! /bin/bash
+cd SparkViewer
+
+ANDROID_TOOL="android"
+if [ "`uname -o`" == "Cygwin" ]; then
+    ANDROID_TOOL="android.bat"
+fi
 
 # build native
 ndk-build 
 
 # update android project
-android update project --name mobile-spark --path . 
+$ANDROID_TOOL update project --name mobile-spark --path . 
 
 # build java
 ant compile
 
 # build apk && upload
 ant install
+
+cd -
