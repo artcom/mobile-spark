@@ -10,7 +10,7 @@ fi
 ndk-build 
 
 # update android project
-$ANDROID_TOOL update project --name mobile-spark --path . 
+$ANDROID_TOOL update project --name SparkViewer --path . 
 
 # build java
 ant compile
