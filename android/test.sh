@@ -1,16 +1,16 @@
 #! /bin/bash
 
 ANDROID_TOOL="android"
+MAKE_TOOL="make"
 if [ "`uname -o`" == "Cygwin" ]; then
     ANDROID_TOOL="android.bat"
+    MAKE_TOOL="nmake"
 fi
 
-# build native
-#ndk-build 
 cd ../_build
 cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchain/android.toolchain.cmake ..
 cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchain/android.toolchain.cmake ..
-make
+$MAKE_TOOL
 
 cd -
 
