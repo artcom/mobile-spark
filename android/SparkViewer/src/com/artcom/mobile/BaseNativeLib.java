@@ -8,6 +8,7 @@ public class BaseNativeLib {
       System.loadLibrary("CppEntry");
   }
 
-  public static native void loadSpark(String theFilename);
+  public static native boolean loadSpark(String theFilename);
+  public static native boolean test();
 }
 
