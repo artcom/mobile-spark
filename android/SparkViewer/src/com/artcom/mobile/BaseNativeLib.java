@@ -5,7 +5,7 @@ package com.artcom.mobile;
 public class BaseNativeLib {
 
   static {
-      System.loadLibrary("CppEntry");
+      System.loadLibrary("base");
   }
 
   public static native boolean loadSpark(String theFilename);
