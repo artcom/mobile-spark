@@ -1,5 +1,4 @@
 #! /bin/bash
-cd SparkViewer
 
 ANDROID_TOOL="android"
 if [ "`uname -o`" == "Cygwin" ]; then
@@ -7,8 +6,15 @@ if [ "`uname -o`" == "Cygwin" ]; then
 fi
 
 # build native
-ndk-build 
+#ndk-build 
 
+cd ../_build
+cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchain/android.toolchain.cmake ..
+make
+
+cd -
+
+cd SparkViewer
 # update android project
 $ANDROID_TOOL update project --name SparkViewer --path . 
 
