@@ -1,5 +1,7 @@
 set(SOURCES
 Logger.cpp
+string_functions.cpp
+Exception.cpp
 CppEntry.cpp
 XMLNode.cpp
 XMLUtils.cpp
@@ -7,7 +9,9 @@ XMLUtils.cpp
 
 set(HEADERS
 Singleton.h
+Exception.h
 Logger.h
+string_functions.h
 CppEntry.h
 XMLNode.h
 XMLUtils.h
