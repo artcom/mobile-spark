@@ -25,7 +25,7 @@
 //#include "console_functions.h"
 //#include "file_functions.h"
 
-#include <acmake/aslbase_paths.h>
+//#include <acmake/aslbase_paths.h>
 
 /*#ifdef _WIN32
 #   include <windows.h>
@@ -110,21 +110,21 @@ UnitTest::teardown() {
     std::cerr << ">>>> Completed Test Unit '" << getMyName() << "'" << ", ";
 
     if (getFailedCount()) {
-        std::cerr << TTYRED;
+//        std::cerr << TTYRED;
     }
-    std::cerr << getFailedCount() << " total tests failed unexpected" << ENDCOLOR;
+    std::cerr << getFailedCount() << " total tests failed unexpected";// << ENDCOLOR;
 
     std::cerr << ", ";
     if (getExpectedFailedCount()) {
-        std::cerr << TTYYELLOW;
+//        std::cerr << TTYYELLOW;
     }
-    std::cerr << getExpectedFailedCount() << " total tests failed expected" << ENDCOLOR;
+    std::cerr << getExpectedFailedCount() << " total tests failed expected";// << ENDCOLOR;
 
     std::cerr << ", ";
     if (getPassedCount()) {
-        std::cerr << TTYGREEN;
+//        std::cerr << TTYGREEN;
     }
-    std::cerr << getPassedCount() << " total tests passed" << ENDCOLOR;
+    std::cerr << getPassedCount() << " total tests passed";// << ENDCOLOR;
 
     std::cerr << std::endl;
 
@@ -148,11 +148,11 @@ UnitTest::ensure(bool myExpressionResult,
         if (_silentSuccess) {
             return;
         }
-        std::cerr << ">>>>>> "<< (myExpectedResult ? TTYGREEN : TTYYELLOW)
-                  << (myExpectedResult ? "OK    " : "KNOWN ") << ENDCOLOR;
+        std::cerr << ">>>>>> " /*<< (myExpectedResult ? TTYGREEN : TTYYELLOW)*/
+                  << (myExpectedResult ? "OK    " : "KNOWN ");// << ENDCOLOR;
     } else {
-        std::cerr << "###### "<< (myExpectedResult ? TTYRED : TTYYELLOW)
-                  << (myExpectedResult ? "FAIL  " : "UNEXP " ) << ENDCOLOR;
+        std::cerr << "###### " /*<< (myExpectedResult ? TTYRED : TTYYELLOW)*/
+                  << (myExpectedResult ? "FAIL  " : "UNEXP " );// << ENDCOLOR;
     }
     std::cerr << " ("<< myExpression << "), Line " << mySourceLine << std::endl;
     if (!myExpressionResult && _abortOnFailure) {
@@ -223,53 +223,53 @@ UnitTestSuite::run() {
 #endif
             setup();
         } catch (std::exception & e) {
-            std::cerr << TTYRED << "## A std::exception occured during setup of test suite '"
-                << getMyName() << ENDCOLOR << "':" << std::endl << e.what() << std::endl;
+            std::cerr /*<< TTYRED*/ << "## A std::exception occured during setup of test suite '"
+                << getMyName() /*<< ENDCOLOR*/ << "':" << std::endl << e.what() << std::endl;
             incrementFailedCount();
             throw;
         } catch (asl::Exception & e) {
-            std::cerr << TTYRED << "## An exception occured during setup of test suite '"
-                << getMyName() << ENDCOLOR << "':" << std::endl << e << std::endl;
+            std::cerr /*<< TTYRED*/ << "## An exception occured during setup of test suite '"
+                << getMyName() /*<< ENDCOLOR*/ << "':" << std::endl << e << std::endl;
             incrementFailedCount();
             throw;
         } catch (...) {
-            std::cerr << TTYRED << "## An exception occured during setup of test suite '"
-                << getMyName() << "'" << ENDCOLOR << std::endl;
+            std::cerr /*<< TTYRED*/ << "## An exception occured during setup of test suite '"
+                << getMyName() << "'" /*<< ENDCOLOR*/ << std::endl;
             incrementFailedCount();
             throw;
         }
         try {
-            if (_argc == 1) {
-                for (unsigned i = 0; i < _myTests.size(); ++i) {
-                    _myTests[i]->setup();
-                    _myTests[i]->run();
-                    setPassedCount(getPassedCount() + _myTests[i]->getPassedCount());
-                    setFailedCount(getFailedCount() + _myTests[i]->getFailedCount());
-                    setExpectedFailedCount(getExpectedFailedCount() + _myTests[i]->getExpectedFailedCount());
-                    _myTests[i]->teardown();
-                }
+            for (unsigned i = 0; i < _myTests.size(); ++i) {
+                _myTests[i]->setup();
+                _myTests[i]->run();
+                setPassedCount(getPassedCount() + _myTests[i]->getPassedCount());
+                setFailedCount(getFailedCount() + _myTests[i]->getFailedCount());
+AC_PRINT << "running test# " << i << "passed: " << _myTests[i]->getPassedCount() << " failed : " << _myTests[i]->getFailedCount();
+                setExpectedFailedCount(getExpectedFailedCount() + _myTests[i]->getExpectedFailedCount());
+                _myTests[i]->teardown();
             }
+AC_PRINT << "Suite # " << "passed: " << getPassedCount() << " failed : " << getFailedCount();
         } catch (std::exception & e) {
-            std::cerr << TTYRED << "## A std::exception occured during execution of test suite '"
-                << getMyName() << ENDCOLOR << "':" << std::endl << e.what() << std::endl;
+            std::cerr /*<< TTYRED*/ << "## A std::exception occured during execution of test suite '"
+                << getMyName() /*<< ENDCOLOR */<< "':" << std::endl << e.what() << std::endl;
             incrementFailedCount();
             throw;
         } catch (asl::Exception & e) {
-            std::cerr << TTYRED << "## An exception occured during execution of test suite '"
-                << getMyName() << "':" << ENDCOLOR << std::endl << e << std::endl;
+            std::cerr /*<< TTYRED */ << "## An exception occured during execution of test suite '"
+                << getMyName() << "':" /*<< ENDCOLOR */<< std::endl << e << std::endl;
             incrementFailedCount();
             throw;
         } catch (...) {
-            std::cerr << TTYRED << "## An unknown exception occured during execution of test suite '"
-                << getMyName() << "'" << ENDCOLOR << std::endl;
+            std::cerr /*<< TTYRED*/ << "## An unknown exception occured during execution of test suite '"
+                << getMyName() << "'" /*<< ENDCOLOR*/ << std::endl;
             incrementFailedCount();
             throw;
         }
         try {
             teardown();
         } catch (std::exception & e) {
-            std::cerr << TTYRED << "## A std::exception occured during teardown of test suite '"
-                << getMyName() << ENDCOLOR << "':" << std::endl << e.what() << std::endl;
+            std::cerr /*<< TTYRED*/ << "## A std::exception occured during teardown of test suite '"
+                << getMyName() << /*ENDCOLOR << */"':" << std::endl << e.what() << std::endl;
             incrementFailedCount();
             throw;
         } catch (asl::Exception & e) {

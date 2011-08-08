@@ -36,7 +36,6 @@
 #include <sstream>
 
 #include "Singleton.h"
-#include "UnitTest.h"
 
 namespace asl {
     enum Severity {SEV_PRINT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_DISABLED};
@@ -77,23 +76,11 @@ namespace asl {
 #ifdef _WIN32
     #define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
     #define AC_ERROR const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_ERROR, __FILE__ ,__LINE__).stream) )    
+    #define AC_WARNING const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_WARNING, __FILE__ ,__LINE__).stream) )    
 #else
     #define AC_PRINT asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).getStream()
     #define AC_ERROR asl::MessagePort(asl::SEV_ERROR, __FILE__ ,__LINE__).getStream()
+    #define AC_WARNING asl::MessagePort(asl::SEV_WARNING, __FILE__ ,__LINE__).getStream()
 #endif
-
-    
-    class Logger_UnitTest : public UnitTest {
-        public:
-            Logger_UnitTest() : UnitTest("Logger_UnitTest") {  }
-            void run() {
-                perform_LoggerTest();
-            }
-            void perform_LoggerTest() {                
-                ENSURE(AC_PRINT << "Logger::Print Test");
-        }
-    };
-        
-    
 };
 #endif
