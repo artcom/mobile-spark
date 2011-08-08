@@ -1,6 +1,7 @@
 
 #include "CppEntry.h"
 #include "log.h"
+#include "Logger.h"
 
 
 #include "XMLUtils.h"
@@ -23,7 +24,8 @@ namespace cppcore {
     bool CppEntry::loadSpark(const std::string & theFilename) {
         //test xml-loading
         loadXML(theFilename);
-        LOGI("this is cpp land");        
+        AC_PRINT << "this is the new logger land";
+        //LOGI("this is cpp land");        
         return true;
     }
     bool CppEntry::test() {

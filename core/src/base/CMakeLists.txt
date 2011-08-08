@@ -1,10 +1,13 @@
 set(SOURCES
+Logger.cpp
 CppEntry.cpp
 XMLNode.cpp
 XMLUtils.cpp
 )
 
 set(HEADERS
+Singleton.h
+Logger.h
 CppEntry.h
 XMLNode.h
 XMLUtils.h
