@@ -26,6 +26,9 @@ namespace cppcore {
         LOGI("this is cpp land");        
         return true;
     }
+    bool CppEntry::test() {
+        return true;
+    }
 
 }
 
@@ -36,15 +39,20 @@ cppcore::CppEntry myCppEntry;
 #ifdef __ANDROID__
 /////////////////////////////////////////////////////////////////////////JNI
 extern "C" {
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_BaseNativeLib_loadSpark(JNIEnv * env, jobject obj,
+    JNIEXPORT bool JNICALL Java_com_artcom_mobile_BaseNativeLib_loadSpark(JNIEnv * env, jobject obj,
                                                                           jstring filename);
+    JNIEXPORT bool JNICALL Java_com_artcom_mobile_BaseNativeLib_test(JNIEnv * env, jobject obj);
 };
 
-JNIEXPORT void JNICALL Java_com_artcom_mobile_BaseNativeLib_loadSpark(JNIEnv * env, jobject obj,
+JNIEXPORT bool JNICALL Java_com_artcom_mobile_BaseNativeLib_loadSpark(JNIEnv * env, jobject obj,
                                                                  jstring filename) {
     jboolean isCopy;
     const char* str = env->GetStringUTFChars(filename, &isCopy);                                                                    
-    myCppEntry.loadSpark(str);
+    return myCppEntry.loadSpark(str);    
+}
+JNIEXPORT bool JNICALL Java_com_artcom_mobile_BaseNativeLib_test(JNIEnv * env, jobject obj) {
+    return myCppEntry.test();
+    
 }
 #endif
 

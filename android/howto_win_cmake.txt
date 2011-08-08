@@ -1,0 +1,13 @@
+0. set "ANDROID_NDK" to your ndk-home
+
+1. build android toolchain
+    export NDK_TMPDIR=$ANDROID_NDK/../ndk-tmp
+    call $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-9 --install-dir=$ANDROID_NDK/android-toolchain --system=windows    
+    set "ANDROID_NDK_TOOLCHAIN_ROOT" to "$ANDROID_NDK/android-toolchain"
+
+2. build libs
+    mkdir "mobile-spark/_build"
+    cd android/
+    ./build.sh
+    
+
