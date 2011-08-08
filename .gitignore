@@ -1,0 +1,11 @@
+*~
+.*swp
+.*swo
+.*swa
+.*swn
+*.apk
+
+_build/*
+build.xml
+local.properties
+
