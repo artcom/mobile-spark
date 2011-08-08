@@ -6,6 +6,8 @@
 *.apk
 
 _build/*
+**/**/bin/
 build.xml
 local.properties
-
+default.properties
+proguard.cfg
