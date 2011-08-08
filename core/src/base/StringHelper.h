@@ -1,33 +1,8 @@
-#ifndef LOG_H_
-#define LOG_H_
+#ifndef STRINGHELPER_H_
+#define STRINGHELPER_H_
 
-
-#ifdef __APPLE__
-    //iOS
-    #include <string>
-    #include <sstream>
-    #import <CoreFoundation/CoreFoundation.h>
-
-    //TODO find armv7 CFSTRING library
-    //extern void NSLog(CFStringRef format, ...); 
-    
-    #define LOG_TAG location_string(__FILE__,__LINE__).c_str()
-    #define LOGI(...) printf("%s, %s \n", LOG_TAG,__VA_ARGS__)
-    #define LOGE(...) printf("%s, %s \n", LOG_TAG,__VA_ARGS__)
-
-#elif __ANDROID__
-    //Android
-    #include <string>
-    #include <sstream>
-    #include <android/log.h>
-    #define LOG_TAG location_string(__FILE__,__LINE__).c_str()
-    #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-    #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-#endif
-
-//////////////////logging
-
-
+#include <string>
+#include <sstream>
 
 static std::string
 lastFileNamePart(const char* file_name) {
@@ -53,4 +28,4 @@ static float stof(std::string theString) {
     return f;
 }
 
-#endif /* LOG_H_ */
+#endif

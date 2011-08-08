@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		421870D013EFE38A00AC6498 /* test_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 421870CF13EFE38A00AC6498 /* test_image.png */; };
+		42552F9813EFECBE009943E7 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552F9513EFECBE009943E7 /* Logger.cpp */; };
+		42552FA613F008E5009943E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42552FA413F008E4009943E7 /* CoreGraphics.framework */; };
+		42552FA813F00A95009943E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42552FA713F00A95009943E7 /* Foundation.framework */; };
 		42FE04CD13EAD10B00694837 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FE04CC13EAD10B00694837 /* UIKit.framework */; };
-		42FE04CF13EAD10B00694837 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FE04CE13EAD10B00694837 /* Foundation.framework */; };
-		42FE04D113EAD10B00694837 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FE04D013EAD10B00694837 /* CoreGraphics.framework */; };
 		42FE04D713EAD10B00694837 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42FE04D513EAD10B00694837 /* InfoPlist.strings */; };
 		42FE04DA13EAD10B00694837 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FE04D913EAD10B00694837 /* main.m */; };
 		42FE04DD13EAD10C00694837 /* SparkViewerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FE04DC13EAD10C00694837 /* SparkViewerAppDelegate.m */; };
@@ -42,6 +43,12 @@
 
 /* Begin PBXFileReference section */
 		421870CF13EFE38A00AC6498 /* test_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = test_image.png; path = ../../test_image.png; sourceTree = "<group>"; };
+		42552F9513EFECBE009943E7 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
+		42552F9613EFECBE009943E7 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		42552F9713EFECBE009943E7 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
+		42552FA313F008E4009943E7 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		42552FA413F008E4009943E7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		42552FA713F00A95009943E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		42FE04C813EAD10B00694837 /* SparkViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SparkViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42FE04CC13EAD10B00694837 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		42FE04CE13EAD10B00694837 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -62,11 +69,9 @@
 		42FE04F813EAD10C00694837 /* SparkViewerTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SparkViewerTests-Prefix.pch"; sourceTree = "<group>"; };
 		42FE04F913EAD10D00694837 /* SparkViewerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SparkViewerTests.h; sourceTree = "<group>"; };
 		42FE04FB13EAD10D00694837 /* SparkViewerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SparkViewerTests.m; sourceTree = "<group>"; };
-		42FE066E13EBDE5400694837 /* Android.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Android.mk; sourceTree = "<group>"; };
-		42FE067013EBDE5400694837 /* Android.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Android.mk; sourceTree = "<group>"; };
 		42FE067113EBDE5400694837 /* CppEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CppEntry.cpp; sourceTree = "<group>"; };
 		42FE067213EBDE5400694837 /* CppEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CppEntry.h; sourceTree = "<group>"; };
-		42FE067313EBDE5400694837 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		42FE067313EBDE5400694837 /* StringHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; path = StringHelper.h; sourceTree = "<group>"; };
 		42FE067413EBDE5400694837 /* XMLNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLNode.cpp; sourceTree = "<group>"; };
 		42FE067513EBDE5400694837 /* XMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLNode.h; sourceTree = "<group>"; };
 		42FE067613EBDE5400694837 /* XMLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLUtils.cpp; sourceTree = "<group>"; };
@@ -80,10 +85,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42552FA813F00A95009943E7 /* Foundation.framework in Frameworks */,
+				42552FA613F008E5009943E7 /* CoreGraphics.framework in Frameworks */,
 				42FE068013EBDFA900694837 /* libxml2.dylib in Frameworks */,
 				42FE04CD13EAD10B00694837 /* UIKit.framework in Frameworks */,
-				42FE04CF13EAD10B00694837 /* Foundation.framework in Frameworks */,
-				42FE04D113EAD10B00694837 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +108,9 @@
 		42FE04BD13EAD10B00694837 = {
 			isa = PBXGroup;
 			children = (
+				42552FA713F00A95009943E7 /* Foundation.framework */,
+				42552FA313F008E4009943E7 /* CoreFoundation.framework */,
+				42552FA413F008E4009943E7 /* CoreGraphics.framework */,
 				42FE067F13EBDFA900694837 /* libxml2.dylib */,
 				42FE04D213EAD10B00694837 /* SparkViewer */,
 				42FE066D13EBDE5400694837 /* src */,
@@ -180,7 +188,6 @@
 		42FE066D13EBDE5400694837 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				42FE066E13EBDE5400694837 /* Android.mk */,
 				42FE066F13EBDE5400694837 /* base */,
 			);
 			name = src;
@@ -190,10 +197,12 @@
 		42FE066F13EBDE5400694837 /* base */ = {
 			isa = PBXGroup;
 			children = (
-				42FE067013EBDE5400694837 /* Android.mk */,
+				42552F9513EFECBE009943E7 /* Logger.cpp */,
+				42552F9613EFECBE009943E7 /* Logger.h */,
+				42552F9713EFECBE009943E7 /* Singleton.h */,
 				42FE067113EBDE5400694837 /* CppEntry.cpp */,
 				42FE067213EBDE5400694837 /* CppEntry.h */,
-				42FE067313EBDE5400694837 /* log.h */,
+				42FE067313EBDE5400694837 /* StringHelper.h */,
 				42FE067413EBDE5400694837 /* XMLNode.cpp */,
 				42FE067513EBDE5400694837 /* XMLNode.h */,
 				42FE067613EBDE5400694837 /* XMLUtils.cpp */,
@@ -324,6 +333,7 @@
 				42FE067A13EBDE5400694837 /* CppEntry.cpp in Sources */,
 				42FE067B13EBDE5400694837 /* XMLNode.cpp in Sources */,
 				42FE067C13EBDE5400694837 /* XMLUtils.cpp in Sources */,
+				42552F9813EFECBE009943E7 /* Logger.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,7 +433,10 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SparkViewer/SparkViewer-Prefix.pch";
-				HEADER_SEARCH_PATHS = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/libxml2;
+				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/libxml2,
+					/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Headers,
+				);
 				INFOPLIST_FILE = "SparkViewer/SparkViewer-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = NO;
@@ -438,7 +451,10 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SparkViewer/SparkViewer-Prefix.pch";
-				HEADER_SEARCH_PATHS = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/libxml2;
+				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/libxml2,
+					/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Headers,
+				);
 				INFOPLIST_FILE = "SparkViewer/SparkViewer-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
