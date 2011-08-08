@@ -32,7 +32,7 @@
 
 #include "Logger.h"
 #include "Exception.h"
-
+#include "StringHelper.h"
 #ifdef __APPLE__
     //iOS
     #include "Logger.h"
@@ -50,12 +50,12 @@ namespace asl {
         char buf[20];
         sprintf(buf,"%i",theId);
         std::string myLogTag("[");
-        myLogTag += theModule;
-        myLogTag += ":" + std::string(buf) + "]";
+        myLogTag += lastFileNamePart(theModule);
+        myLogTag += " at:" + std::string(buf) + "]";
         
         #ifdef __APPLE__
             //iOS
-            std::cout << myLogTag.c_str() << " , " << theText.c_str() << "\n";
+            std::cout << myLogTag.c_str() << ", " << theText.c_str() << "\n";
         #elif __ANDROID__
             //Android
         switch (theSeverity) {

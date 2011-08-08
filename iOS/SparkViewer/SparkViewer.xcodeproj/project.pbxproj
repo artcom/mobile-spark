@@ -65,6 +65,7 @@
 		42552FB613F038B2009943E7 /* CppEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CppEntry.h; sourceTree = "<group>"; };
 		42552FB713F038B2009943E7 /* XMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLNode.h; sourceTree = "<group>"; };
 		42552FB813F038B2009943E7 /* XMLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLUtils.h; sourceTree = "<group>"; };
+		42552FC013F03E87009943E7 /* testLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testLogger.h; sourceTree = "<group>"; };
 		42FE04C813EAD10B00694837 /* SparkViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SparkViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42FE04CC13EAD10B00694837 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		42FE04CE13EAD10B00694837 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -206,6 +207,7 @@
 		42FE066F13EBDE5400694837 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				42552FC013F03E87009943E7 /* testLogger.h */,
 				42552FA913F038B2009943E7 /* UnitTest.h */,
 				42552FAA13F038B2009943E7 /* UnitTest.cpp */,
 				42552FAB13F038B2009943E7 /* string_functions.h */,
