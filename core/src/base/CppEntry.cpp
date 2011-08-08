@@ -1,12 +1,7 @@
-
 #include "CppEntry.h"
-#include "log.h"
 #include "Logger.h"
-
-
 #include "XMLUtils.h"
 //#include <libxml/tree.h>
-
 
 namespace cppcore {
 
@@ -17,15 +12,14 @@ namespace cppcore {
     }
 
     void CppEntry::loadXML(const std::string & theFilename) {
-        LOGI("load file: %s\n", theFilename.c_str());
+        AC_PRINT << "load file: " << theFilename.c_str();
         loadLayout(theFilename);
     }
 
     bool CppEntry::loadSpark(const std::string & theFilename) {
         //test xml-loading
         loadXML(theFilename);
-        AC_PRINT << "this is the new logger land";
-        //LOGI("this is cpp land");        
+        AC_PRINT << "this is cpp land"; 
         return true;
     }
     bool CppEntry::test() {

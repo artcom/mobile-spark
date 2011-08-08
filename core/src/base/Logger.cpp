@@ -31,8 +31,15 @@
 */
 
 #include "Logger.h"
-
-#include <android/log.h>
+#ifdef __APPLE__
+    //iOS
+    #include "Logger.h"
+    #include <iostream>
+#elif __ANDROID__
+    //Android
+    #include "Logger.h"
+    #include <android/log.h>
+#endif
 
 namespace asl {
     Logger::Logger() {}
@@ -42,8 +49,25 @@ namespace asl {
         sprintf(buf,"%i",theId);
         std::string myLogTag("[");// + theModule + ":" + std::string(buf) + "]";        
         myLogTag += theModule;
-        myLogTag += ":" + std::string(buf) + "]";        
-        __android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__)        
+        myLogTag += ":" + std::string(buf) + "]";
+        
+        #ifdef __APPLE__
+            //iOS
+            std::cout << myLogTag.c_str() << " , " << theText.c_str() << "\n";
+        #elif __ANDROID__
+            //Android
+        switch (theSeverity) {
+            case SEV_PRINT :
+                __android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
+                break;
+            case SEV_ERROR :
+                __android_log_print(ANDROID_LOG_ERROR, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
+            default:
+                __android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
+                break;
+        }
+        #endif
+               
     }
    
 };
