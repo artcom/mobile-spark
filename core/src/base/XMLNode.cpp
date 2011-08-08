@@ -1,27 +1,22 @@
 #include "XMLNode.h"
-#include <sstream>
 #include "XMLUtils.h"
 #include "Logger.h"
 #include "StringHelper.h"
-//#include "ndk3Dlib.h"
-//#include "def.h"
 
 namespace cppcore {
 
-    XMLNode::XMLNode(xmlNode* theNode) : _myNode(theNode) {
-        name = (const char*)(theNode->name);
+    XMLNode::XMLNode(xmlNode* theNode) : 
+        node(theNode) {
         xmlAttr *attribute = theNode->properties;
+        className = (const char*)(theNode->name);
         while (attribute) {
             xmlNode* attrNode = attribute->children;
-            attributes[std::string((const char*)attrNode->name)] = std::string((const char*)attrNode->content);
+            attributes[std::string((const char*)attribute->name)] = std::string((const char*)attrNode->content);
             attribute = attribute->next;
         }
 
-        xmlNode* currentChild = theNode->children;
-        for (; currentChild; currentChild = currentChild->next) {
-            if (currentChild->type == XML_ELEMENT_NODE) {
-                children.push_back(new XMLNode(currentChild));
-            }
+        if (attributes.find("name") != attributes.end()) {
+            name = attributes["name"];
         }
     }
 
@@ -37,6 +32,19 @@ namespace cppcore {
         }
     }
 
+    std::vector<float> XMLNode::getFloatArrayValue(const std::string & theKey) const {
+        std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
+        std::vector<float> floatVector;
+        if ( it != attributes.end()) {
+            char* part = strtok(const_cast<char *>(it->second.c_str()), "[], ");
+            while (part != NULL) {
+                floatVector.push_back(stof(part));
+                part = strtok(NULL, "[], ");
+            }
+        }
+        return floatVector;
+    }
+
     void XMLNode::print() const {
         AC_PRINT << "node " << name.c_str();
         for (std::map<std::string, std::string>::const_iterator it = attributes.begin(); it != attributes.end(); ++it) {
@@ -45,7 +53,7 @@ namespace cppcore {
     }
 
     void XMLNode::printTree() const {
-        printXMLNode(_myNode);
+        printXMLNode(node);
     }
 }
 

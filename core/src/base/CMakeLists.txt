@@ -22,6 +22,10 @@ XMLUtils.h
 include_directories (${LIBXML2_INCLUDE_DIRS})
 add_library(base SHARED ${SOURCES} ${HEADERS})
 find_library(ANDROID_LOG_LIB log )
+
+find_path(Boost_INCLUDE_DIRS  boost/smart_ptr/shared_ptr.hpp NO_CMAKE_FIND_ROOT_PATH)
+include_directories (${Boost_INCLUDE_DIRS})
+
  # add imported target
 add_library(LIBXML2 STATIC IMPORTED)
 # point the imported target at the real file

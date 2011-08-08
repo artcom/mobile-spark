@@ -9,7 +9,6 @@ namespace cppcore {
     CppEntry::CppEntry() {
     }
     CppEntry::~CppEntry() {
-        //TODO!!!
     }
 
     void CppEntry::loadXML(const std::string & theFilename) {
