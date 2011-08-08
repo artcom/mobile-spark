@@ -31,6 +31,7 @@
 */
 
 #include "Logger.h"
+
 #include <android/log.h>
 
 namespace asl {

@@ -36,6 +36,7 @@
 #include <sstream>
 
 #include "Singleton.h"
+#include "UnitTest.h"
 
 namespace asl {
     enum Severity {SEV_PRINT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_DISABLED};
@@ -71,9 +72,23 @@ namespace asl {
         const char * myModule;
         const int myId;
     };
+
+
+#define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
+
+    
+    class Logger_UnitTest : public UnitTest {
+        public:
+            Logger_UnitTest() : UnitTest("Logger_UnitTest") {  }
+            void run() {
+                perform_LoggerTest();
+            }
+            void perform_LoggerTest() {                
+                ENSURE(AC_PRINT << "Logger::Print Test");
+        }
+    };
         
     
-#define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
     
 };
 #endif
