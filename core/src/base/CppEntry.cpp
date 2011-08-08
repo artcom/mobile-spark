@@ -38,6 +38,7 @@ namespace cppcore {
 /////////////////////////////////////////////////////////////////////////App-Instance
 cppcore::CppEntry myCppEntry;
 
+#ifdef __ANDROID__
 /////////////////////////////////////////////////////////////////////////JNI
 extern "C" {
     JNIEXPORT bool JNICALL Java_com_artcom_mobile_BaseNativeLib_loadSpark(JNIEnv * env, jobject obj,
@@ -55,6 +56,6 @@ JNIEXPORT bool JNICALL Java_com_artcom_mobile_BaseNativeLib_test(JNIEnv * env, j
     return myCppEntry.test();
     
 }
-
+#endif
 
 
