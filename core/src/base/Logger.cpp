@@ -55,7 +55,21 @@ namespace asl {
         
         #ifdef __APPLE__
             //iOS
-            std::cout << myLogTag.c_str() << ", " << theText.c_str() << "\n";
+        switch (theSeverity) {
+            case SEV_WARNING:
+                std::cout << myLogTag.c_str() << " WARNING: " << theText.c_str() << "\n";
+                break;
+            case SEV_PRINT:
+                std::cout << myLogTag.c_str() << " LOG: " << theText.c_str() << "\n";
+                break;
+            case SEV_ERROR:
+                std::cout << myLogTag.c_str() << " ERROR: " << theText.c_str() << "\n";
+                break;
+            default:
+                throw Exception("Unknown logger severity");
+                break;
+        }
+            
         #elif __ANDROID__
             //Android
         switch (theSeverity) {
