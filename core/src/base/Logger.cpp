@@ -47,7 +47,7 @@ namespace asl {
     void Logger::log(/*Time theTime, */ Severity theSeverity, const char * theModule, int theId, const std::string & theText) {
         char buf[20];
         sprintf(buf,"%i",theId);
-        std::string myLogTag("[");// + theModule + ":" + std::string(buf) + "]";        
+        std::string myLogTag("[");
         myLogTag += theModule;
         myLogTag += ":" + std::string(buf) + "]";
         
