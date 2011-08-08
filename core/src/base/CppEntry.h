@@ -10,6 +10,9 @@
     #include <string>
 #endif
 
+#include "UnitTest.h"
+#include "Logger.h"
+
 namespace cppcore {
     
     class CppEntry {
@@ -32,16 +35,13 @@ namespace cppcore {
                 cppcore::CppEntry myCppEntry;
                 ENSURE(myCppEntry.loadSpark("/sdcard/test.spark"));
         }
-    };
+    };*/
                 
     class MyTestSuite : public UnitTestSuite {
         public:
             MyTestSuite(const char * myName, int argc, char *argv[]) : UnitTestSuite(myName, argc, argv) {}
-            void setup() {
-                UnitTestSuite::setup();
-                addTest(new CppEntry_UnitTest);
-            }
-    };*/
+            void setup();
+    };
         
 };
 

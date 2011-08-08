@@ -31,6 +31,8 @@
 */
 
 #include "Logger.h"
+#include "Exception.h"
+
 #ifdef __APPLE__
     //iOS
     #include "Logger.h"
@@ -57,13 +59,17 @@ namespace asl {
         #elif __ANDROID__
             //Android
         switch (theSeverity) {
+            case SEV_WARNING :
+                __android_log_print(ANDROID_LOG_WARN, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
+                break;
             case SEV_PRINT :
                 __android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
                 break;
             case SEV_ERROR :
                 __android_log_print(ANDROID_LOG_ERROR, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
             default:
-                __android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
+                throw Exception("Unknown logger severity");
+                //__android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
                 break;
         }
         #endif

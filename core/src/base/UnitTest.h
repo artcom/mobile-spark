@@ -24,6 +24,7 @@
 //#include "asl_base_settings.h"
 
 #include "Exception.h"
+#include "Logger.h"
 
 #include <iostream>
 #include <vector>
@@ -108,16 +109,16 @@ public:
         if (theTest) {
             _myTests.push_back(theTest);
             theTest->setProfileRepeatCount(theProfileRepeatCount);
-            std::cerr << ">> Added Test '" << theTest->getMyName() << "', ptr = " << theTest << std::endl;
+            AC_PRINT << ">> Added Test '" << theTest->getMyName() << "', ptr = " << theTest;
         } else {
-            std::cerr << "## Failed to add Test" << std::endl;
+            AC_PRINT << "## Failed to add Test";
             incrementFailedCount();
         }
     }
     virtual void run();
 
     virtual void setup() {
-        std::cerr << ">> Launching Test Suite '" << getMyName() << "'" << std::endl;
+        AC_PRINT << ">> Launching Test Suite '" << getMyName() << "'";
     }
     virtual void teardown();
 protected:
