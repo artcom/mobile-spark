@@ -37,7 +37,7 @@ namespace cppcore {
             LOGE("Failed to allocate parser context\n");
         }
         /* parse the file, activating the DTD validation option */
-        doc = xmlCtxtReadFile(ctxt, theFilename.c_str(), NULL, XML_PARSE_DTDVALID);
+        doc = xmlCtxtReadFile(ctxt, theFilename.c_str(), NULL, XML_PARSE_DTDATTR);
         /* check if parsing suceeded */
         if (doc == NULL) {
             LOGE("Failed to parse %s\n", theFilename.c_str());
