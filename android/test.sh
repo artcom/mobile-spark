@@ -13,15 +13,13 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchain/android.toolchain.cmake ..
 $MAKE_TOOL
 
 cd -
-cd SparkViewer
 
-# update android project
-$ANDROID_TOOL update project --name SparkViewer --path . 
 
-# build java
-ant compile
+cd SparkViewerTest
+# update android test project
+$ANDROID_TOOL update test-project -m ../SparkViewer -p .
 
-# build apk && upload
-ant install
+# build test apk && upload && run test
+ant run-tests
 
 cd -
