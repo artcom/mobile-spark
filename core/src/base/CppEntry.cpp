@@ -1,5 +1,6 @@
 #include "CppEntry.h"
 #include "Logger.h"
+#include "testLogger.h"
 #include "XMLUtils.h"
 //#include <libxml/tree.h>
 
@@ -23,9 +24,16 @@ namespace cppcore {
         return true;
     }
     bool CppEntry::test() {
-        return true;
+        MyTestSuite mySuite("CppEntryTest", 0, 0);
+        mySuite.run();
+        return mySuite.returnStatus() == 0;
     }
-
+    
+    void MyTestSuite::setup() {
+        UnitTestSuite::setup();
+        addTest(new asl::Logger_UnitTest);
+            
+    }
 }
 
 
