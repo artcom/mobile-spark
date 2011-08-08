@@ -33,6 +33,7 @@ namespace cppcore {
 /////////////////////////////////////////////////////////////////////////App-Instance
 cppcore::CppEntry myCppEntry;
 
+#ifdef __ANDROID__
 /////////////////////////////////////////////////////////////////////////JNI
 extern "C" {
     JNIEXPORT void JNICALL Java_com_artcom_mobile_BaseNativeLib_loadSpark(JNIEnv * env, jobject obj,
@@ -45,6 +46,6 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_BaseNativeLib_loadSpark(JNIEnv * e
     const char* str = env->GetStringUTFChars(filename, &isCopy);                                                                    
     myCppEntry.loadSpark(str);
 }
-
+#endif
 
 

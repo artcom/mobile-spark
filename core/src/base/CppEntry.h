@@ -1,8 +1,14 @@
 #ifndef CPPENTRY
 #define CPPENTRY
 
-#include <jni.h>
-#include <string>
+#ifdef __APPLE__
+    //iOS
+    #include <string>
+#elif __ANDROID__
+    //Android
+    #include <jni.h>
+    #include <string>
+#endif
 
 namespace cppcore {
     
