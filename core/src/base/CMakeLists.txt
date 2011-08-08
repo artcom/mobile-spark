@@ -3,6 +3,7 @@ Logger.cpp
 string_functions.cpp
 Exception.cpp
 CppEntry.cpp
+UnitTest.cpp
 XMLNode.cpp
 XMLUtils.cpp
 )
@@ -12,10 +13,10 @@ Singleton.h
 Exception.h
 Logger.h
 string_functions.h
+UnitTest.h
 CppEntry.h
 XMLNode.h
 XMLUtils.h
-log.h
 )
 
 include_directories (${LIBXML2_INCLUDE_DIRS})
