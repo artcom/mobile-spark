@@ -1,11 +1,10 @@
 #include "XMLNode.h"
 #include <sstream>
-
 #include "XMLUtils.h"
-
+#include "Logger.h"
+#include "StringHelper.h"
 //#include "ndk3Dlib.h"
 //#include "def.h"
-#include "log.h"
 
 namespace cppcore {
 
@@ -39,9 +38,9 @@ namespace cppcore {
     }
 
     void XMLNode::print() const {
-        LOGI("node %s\n", name.c_str());
+        AC_PRINT << "node " << name.c_str();
         for (std::map<std::string, std::string>::const_iterator it = attributes.begin(); it != attributes.end(); ++it) {
-            LOGI("    %s: %s\n",(*it).first.c_str(), (*it).second.c_str());
+            AC_PRINT << "   " << (*it).first.c_str() << ": "<< (*it).second.c_str();
         }
     }
 

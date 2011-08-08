@@ -33,7 +33,7 @@
 {
     [super viewDidLoad];
  
-    NSString *stringPath = [[NSBundle mainBundle] pathForResource:@"blub" ofType:@"png"];
+    NSString *stringPath = [[NSBundle mainBundle] pathForResource:@"test_image" ofType:@"png"];
     UIImage *imageObj = [[UIImage alloc] initWithContentsOfFile:stringPath];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:imageObj];
@@ -64,7 +64,7 @@
     
     
     cppcore::CppEntry *myEntry = new cppcore::CppEntry();
-    NSString *sparkFilePath = [[NSBundle mainBundle] pathForResource:@"test_image" ofType:@"spark"];
+    NSString *sparkFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"spark"];
     const char *convertedSparkFilePath = [sparkFilePath UTF8String];
     
     myEntry->loadSpark(convertedSparkFilePath);

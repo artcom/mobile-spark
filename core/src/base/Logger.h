@@ -74,7 +74,13 @@ namespace asl {
     };
 
 
-#define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
+#ifdef _WIN32
+    #define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
+    #define AC_ERROR const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_ERROR, __FILE__ ,__LINE__).stream) )    
+#else
+    #define AC_PRINT asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).getStream()
+    #define AC_ERROR asl::MessagePort(asl::SEV_ERROR, __FILE__ ,__LINE__).getStream()
+#endif
 
     
     class Logger_UnitTest : public UnitTest {
@@ -88,7 +94,6 @@ namespace asl {
         }
     };
         
-    
     
 };
 #endif
