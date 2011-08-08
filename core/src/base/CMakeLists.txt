@@ -15,7 +15,6 @@ string_functions.h
 CppEntry.h
 XMLNode.h
 XMLUtils.h
-log.h
 )
 
 include_directories (${LIBXML2_INCLUDE_DIRS})
