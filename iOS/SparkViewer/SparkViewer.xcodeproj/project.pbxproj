@@ -8,9 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		421870D013EFE38A00AC6498 /* test_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 421870CF13EFE38A00AC6498 /* test_image.png */; };
-		42552F9813EFECBE009943E7 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552F9513EFECBE009943E7 /* Logger.cpp */; };
 		42552FA613F008E5009943E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42552FA413F008E4009943E7 /* CoreGraphics.framework */; };
 		42552FA813F00A95009943E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42552FA713F00A95009943E7 /* Foundation.framework */; };
+		42552FB913F038B2009943E7 /* UnitTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552FAA13F038B2009943E7 /* UnitTest.cpp */; };
+		42552FBA13F038B2009943E7 /* string_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552FAC13F038B2009943E7 /* string_functions.cpp */; };
+		42552FBB13F038B2009943E7 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552FAE13F038B2009943E7 /* Logger.cpp */; };
+		42552FBC13F038B2009943E7 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552FB013F038B2009943E7 /* Exception.cpp */; };
+		42552FBD13F038B2009943E7 /* XMLNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552FB213F038B2009943E7 /* XMLNode.cpp */; };
+		42552FBE13F038B2009943E7 /* XMLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552FB313F038B2009943E7 /* XMLUtils.cpp */; };
+		42552FBF13F038B2009943E7 /* CppEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42552FB413F038B2009943E7 /* CppEntry.cpp */; };
 		42FE04CD13EAD10B00694837 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FE04CC13EAD10B00694837 /* UIKit.framework */; };
 		42FE04D713EAD10B00694837 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42FE04D513EAD10B00694837 /* InfoPlist.strings */; };
 		42FE04DA13EAD10B00694837 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FE04D913EAD10B00694837 /* main.m */; };
@@ -24,9 +30,6 @@
 		42FE04F713EAD10C00694837 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42FE04F513EAD10C00694837 /* InfoPlist.strings */; };
 		42FE04FA13EAD10D00694837 /* SparkViewerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 42FE04F913EAD10D00694837 /* SparkViewerTests.h */; };
 		42FE04FC13EAD10D00694837 /* SparkViewerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FE04FB13EAD10D00694837 /* SparkViewerTests.m */; };
-		42FE067A13EBDE5400694837 /* CppEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42FE067113EBDE5400694837 /* CppEntry.cpp */; };
-		42FE067B13EBDE5400694837 /* XMLNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42FE067413EBDE5400694837 /* XMLNode.cpp */; };
-		42FE067C13EBDE5400694837 /* XMLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42FE067613EBDE5400694837 /* XMLUtils.cpp */; };
 		42FE068013EBDFA900694837 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FE067F13EBDFA900694837 /* libxml2.dylib */; };
 		42FE068D13EBEA9200694837 /* test.spark in Resources */ = {isa = PBXBuildFile; fileRef = 42FE068C13EBEA9200694837 /* test.spark */; };
 /* End PBXBuildFile section */
@@ -43,12 +46,25 @@
 
 /* Begin PBXFileReference section */
 		421870CF13EFE38A00AC6498 /* test_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = test_image.png; path = ../../test_image.png; sourceTree = "<group>"; };
-		42552F9513EFECBE009943E7 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
-		42552F9613EFECBE009943E7 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
-		42552F9713EFECBE009943E7 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		42552FA313F008E4009943E7 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		42552FA413F008E4009943E7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		42552FA713F00A95009943E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		42552FA913F038B2009943E7 /* UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitTest.h; sourceTree = "<group>"; };
+		42552FAA13F038B2009943E7 /* UnitTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnitTest.cpp; sourceTree = "<group>"; };
+		42552FAB13F038B2009943E7 /* string_functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_functions.h; sourceTree = "<group>"; };
+		42552FAC13F038B2009943E7 /* string_functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_functions.cpp; sourceTree = "<group>"; };
+		42552FAD13F038B2009943E7 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		42552FAE13F038B2009943E7 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
+		42552FAF13F038B2009943E7 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
+		42552FB013F038B2009943E7 /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
+		42552FB113F038B2009943E7 /* StringHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringHelper.h; sourceTree = "<group>"; };
+		42552FB213F038B2009943E7 /* XMLNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLNode.cpp; sourceTree = "<group>"; };
+		42552FB313F038B2009943E7 /* XMLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLUtils.cpp; sourceTree = "<group>"; };
+		42552FB413F038B2009943E7 /* CppEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CppEntry.cpp; sourceTree = "<group>"; };
+		42552FB513F038B2009943E7 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
+		42552FB613F038B2009943E7 /* CppEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CppEntry.h; sourceTree = "<group>"; };
+		42552FB713F038B2009943E7 /* XMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLNode.h; sourceTree = "<group>"; };
+		42552FB813F038B2009943E7 /* XMLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLUtils.h; sourceTree = "<group>"; };
 		42FE04C813EAD10B00694837 /* SparkViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SparkViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42FE04CC13EAD10B00694837 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		42FE04CE13EAD10B00694837 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -69,13 +85,6 @@
 		42FE04F813EAD10C00694837 /* SparkViewerTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SparkViewerTests-Prefix.pch"; sourceTree = "<group>"; };
 		42FE04F913EAD10D00694837 /* SparkViewerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SparkViewerTests.h; sourceTree = "<group>"; };
 		42FE04FB13EAD10D00694837 /* SparkViewerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SparkViewerTests.m; sourceTree = "<group>"; };
-		42FE067113EBDE5400694837 /* CppEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CppEntry.cpp; sourceTree = "<group>"; };
-		42FE067213EBDE5400694837 /* CppEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CppEntry.h; sourceTree = "<group>"; };
-		42FE067313EBDE5400694837 /* StringHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; path = StringHelper.h; sourceTree = "<group>"; };
-		42FE067413EBDE5400694837 /* XMLNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLNode.cpp; sourceTree = "<group>"; };
-		42FE067513EBDE5400694837 /* XMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLNode.h; sourceTree = "<group>"; };
-		42FE067613EBDE5400694837 /* XMLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLUtils.cpp; sourceTree = "<group>"; };
-		42FE067713EBDE5400694837 /* XMLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLUtils.h; sourceTree = "<group>"; };
 		42FE067F13EBDFA900694837 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		42FE068C13EBEA9200694837 /* test.spark */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = test.spark; path = ../../../test.spark; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,16 +206,22 @@
 		42FE066F13EBDE5400694837 /* base */ = {
 			isa = PBXGroup;
 			children = (
-				42552F9513EFECBE009943E7 /* Logger.cpp */,
-				42552F9613EFECBE009943E7 /* Logger.h */,
-				42552F9713EFECBE009943E7 /* Singleton.h */,
-				42FE067113EBDE5400694837 /* CppEntry.cpp */,
-				42FE067213EBDE5400694837 /* CppEntry.h */,
-				42FE067313EBDE5400694837 /* StringHelper.h */,
-				42FE067413EBDE5400694837 /* XMLNode.cpp */,
-				42FE067513EBDE5400694837 /* XMLNode.h */,
-				42FE067613EBDE5400694837 /* XMLUtils.cpp */,
-				42FE067713EBDE5400694837 /* XMLUtils.h */,
+				42552FA913F038B2009943E7 /* UnitTest.h */,
+				42552FAA13F038B2009943E7 /* UnitTest.cpp */,
+				42552FAB13F038B2009943E7 /* string_functions.h */,
+				42552FAC13F038B2009943E7 /* string_functions.cpp */,
+				42552FAD13F038B2009943E7 /* Logger.h */,
+				42552FAE13F038B2009943E7 /* Logger.cpp */,
+				42552FAF13F038B2009943E7 /* Exception.h */,
+				42552FB013F038B2009943E7 /* Exception.cpp */,
+				42552FB113F038B2009943E7 /* StringHelper.h */,
+				42552FB213F038B2009943E7 /* XMLNode.cpp */,
+				42552FB313F038B2009943E7 /* XMLUtils.cpp */,
+				42552FB413F038B2009943E7 /* CppEntry.cpp */,
+				42552FB513F038B2009943E7 /* Singleton.h */,
+				42552FB613F038B2009943E7 /* CppEntry.h */,
+				42552FB713F038B2009943E7 /* XMLNode.h */,
+				42552FB813F038B2009943E7 /* XMLUtils.h */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -330,10 +345,13 @@
 				42FE04DA13EAD10B00694837 /* main.m in Sources */,
 				42FE04DD13EAD10C00694837 /* SparkViewerAppDelegate.m in Sources */,
 				42FE04E313EAD10C00694837 /* SparkViewerViewController.mm in Sources */,
-				42FE067A13EBDE5400694837 /* CppEntry.cpp in Sources */,
-				42FE067B13EBDE5400694837 /* XMLNode.cpp in Sources */,
-				42FE067C13EBDE5400694837 /* XMLUtils.cpp in Sources */,
-				42552F9813EFECBE009943E7 /* Logger.cpp in Sources */,
+				42552FB913F038B2009943E7 /* UnitTest.cpp in Sources */,
+				42552FBA13F038B2009943E7 /* string_functions.cpp in Sources */,
+				42552FBB13F038B2009943E7 /* Logger.cpp in Sources */,
+				42552FBC13F038B2009943E7 /* Exception.cpp in Sources */,
+				42552FBD13F038B2009943E7 /* XMLNode.cpp in Sources */,
+				42552FBE13F038B2009943E7 /* XMLUtils.cpp in Sources */,
+				42552FBF13F038B2009943E7 /* CppEntry.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
