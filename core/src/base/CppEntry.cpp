@@ -3,6 +3,7 @@
 #include "XMLUtils.h"
 #include "testLogger.h"
 #include "testXMLNode.h"
+#include "testMatrixStack.h"
 
 namespace cppcore {
 
@@ -28,6 +29,7 @@ namespace cppcore {
         UnitTestSuite::setup();
         addTest(new asl::Logger_UnitTest);
         addTest(new asl::XMLNode_UnitTest);
+        addTest(new asl::MatrixStack_UnitTest);
     }
 }
 
