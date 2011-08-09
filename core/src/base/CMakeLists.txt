@@ -25,10 +25,10 @@ include_directories (${LIBXML2_INCLUDE_DIRS})
 add_library(base SHARED ${SOURCES} ${HEADERS})
 find_library(ANDROID_LOG_LIB log )
 
-find_path(Boost_INCLUDE_DIRS  boost/smart_ptr/shared_ptr.hpp NO_CMAKE_FIND_ROOT_PATH)
+find_path(Boost_INCLUDE_DIRS boost/smart_ptr/shared_ptr.hpp $ENV{BOOST_HOME} NO_CMAKE_FIND_ROOT_PATH)
 include_directories (${Boost_INCLUDE_DIRS})
 
-find_path(CML_INCLUDE_DIR cml/cml.h HINTS core/netsrc/ NO_CMAKE_FIND_ROOT_PATH)
+find_path(CML_INCLUDE_DIR cml/cml.h ${PROJECT_SOURCE_DIR}/core/netsrc NO_CMAKE_FIND_ROOT_PATH)
 include_directories (${CML_INCLUDE_DIR})
 
  # add imported target
