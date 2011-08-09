@@ -38,7 +38,7 @@
 #include "Singleton.h"
 
 namespace asl {
-    enum Severity {SEV_PRINT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_DISABLED};
+    enum Severity {SEV_PRINT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_TESTRESULT, SEV_DISABLED};
     
     class Logger : public Singleton<Logger> {
         friend class Singleton< Logger >;        
@@ -77,10 +77,12 @@ namespace asl {
     #define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
     #define AC_ERROR const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_ERROR, __FILE__ ,__LINE__).stream) )    
     #define AC_WARNING const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_WARNING, __FILE__ ,__LINE__).stream) )    
+    #define AC_TEST_RESULT const_cast<std::ostream&>( static_cast<const std::ostream&>(asl::MessagePort(asl::SEV_TESTRESULT, __FILE__ ,__LINE__).stream) )                    
 #else
     #define AC_PRINT asl::MessagePort(asl::SEV_PRINT, __FILE__ ,__LINE__).getStream()
     #define AC_ERROR asl::MessagePort(asl::SEV_ERROR, __FILE__ ,__LINE__).getStream()
     #define AC_WARNING asl::MessagePort(asl::SEV_WARNING, __FILE__ ,__LINE__).getStream()
+    #define AC_TEST_RESULT asl::MessagePort(asl::SEV_TESTRESULT, __FILE__ ,__LINE__).getStream()
 #endif
 };
 #endif
