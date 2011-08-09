@@ -164,7 +164,7 @@ public:
     Repeat(ARG theArgument) : TEST(theArgument) { }
 
     void run() {
-            std::cerr << ">>>>>>>> Repeating Test " << N << " times,  this = " << this << std::endl;
+            AC_ERROR << ">>>>>>>> Repeating Test " << N << " times,  this = " << this << std::endl;
             for (int i = 0; i < N; ++i) {
                 TEST::run();
             }
@@ -192,33 +192,33 @@ public:
     } \
  }
 
-#define DTITLE(TITLE)                               std::cerr << getTracePrefix() << TITLE << ":" << std::endl;;
-#define DPRINT2(TITEL,VARIABLE)                     std::cerr << getTracePrefix() << TITEL << ": " << #VARIABLE << " = " << VARIABLE << std::endl;;
-#define DPRINT(VARIABLE)                            std::cerr << getTracePrefix() << #VARIABLE << " = " << VARIABLE << std::endl;;
-#define DDUMP(MULTI_LINE_VARIABLE)                  std::cerr << getTracePrefix() << #MULTI_LINE_VARIABLE<< ":" << std::endl << MULTI_LINE_VARIABLE<< std::endl;
+#define DTITLE(TITLE)                               AC_ERROR << getTracePrefix() << TITLE << ":" << std::endl;;
+#define DPRINT2(TITEL,VARIABLE)                     AC_ERROR << getTracePrefix() << TITEL << ": " << #VARIABLE << " = " << VARIABLE << std::endl;;
+#define DPRINT(VARIABLE)                            AC_ERROR << getTracePrefix() << #VARIABLE << " = " << VARIABLE << std::endl;;
+#define DDUMP(MULTI_LINE_VARIABLE)                  AC_ERROR << getTracePrefix() << #MULTI_LINE_VARIABLE<< ":" << std::endl << MULTI_LINE_VARIABLE<< std::endl;
 
 
 #define ENSURE_EQUAL(EXP1,EXP2) { \
     ENSURE_FULL(EXP1 == EXP2, # EXP1 "==" # EXP2, true); \
     if ((EXP1) != (EXP2)) { \
-        std::cerr << getTracePrefix() << #EXP1 << " = " << EXP1 << std::endl; \
-        std::cerr << getTracePrefix() << #EXP2 << " = " << EXP2 << std::endl; \
+        AC_ERROR << getTracePrefix() << #EXP1 << " = " << EXP1 << std::endl; \
+        AC_ERROR << getTracePrefix() << #EXP2 << " = " << EXP2 << std::endl; \
     } \
 }
 
 #define ENSURE_ALMOSTEQUAL(EXP1,EXP2) { \
     ENSURE_FULL(almostEqual(EXP1,EXP2), # EXP1 " ~= " # EXP2, true); \
     if (!almostEqual(EXP1, EXP2)) { \
-        std::cerr << getTracePrefix() << #EXP1 << " = " << EXP1 << std::endl; \
-        std::cerr << getTracePrefix() << #EXP2 << " = " << EXP2 << std::endl; \
+        AC_ERROR << getTracePrefix() << #EXP1 << " = " << EXP1 << std::endl; \
+        AC_ERROR << getTracePrefix() << #EXP2 << " = " << EXP2 << std::endl; \
     } \
 }
 
 #define ENSURE_UNEQUAL(EXP1,EXP2) { \
     ENSURE_FULL(EXP1 != EXP2, # EXP1 "==" # EXP2, true); \
     if ((EXP1) == (EXP2)) { \
-        std::cerr << getTracePrefix() << #EXP1 << " = " << EXP1 << std::endl; \
-        std::cerr << getTracePrefix() << #EXP2 << " = " << EXP2 << std::endl; \
+        AC_ERROR << getTracePrefix() << #EXP1 << " = " << EXP1 << std::endl; \
+        AC_ERROR << getTracePrefix() << #EXP2 << " = " << EXP2 << std::endl; \
     } \
 }
 
