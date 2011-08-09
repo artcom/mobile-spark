@@ -1,9 +1,6 @@
 #include "XMLUtils.h"
 
 #include "XMLNode.h"
-//#include "spark/SparkComponentFactory.h"
-//#include "spark/Widget.h"
-
 #include "Logger.h"
 
 namespace cppcore {
@@ -24,8 +21,7 @@ namespace cppcore {
         }
     }
 
-    void loadLayout(const std::string & theFilename) {
-        AC_PRINT << "-------------------before parsing";
+    xmlNode* loadXML(const std::string & theFilename) {
         LIBXML_TEST_VERSION
         xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc; /* the resulting document tree */
@@ -40,25 +36,18 @@ namespace cppcore {
         doc = xmlCtxtReadFile(ctxt, theFilename.c_str(), NULL, XML_PARSE_DTDATTR);
         /* check if parsing suceeded */
         if (doc == NULL) {
-            AC_ERROR << "Failed to parse " << theFilename.c_str();
-            return;
+            AC_ERROR << "Failed to parse " << theFilename;
+            return root_element;
         } else {
         /* check if validation suceeded */
             if (ctxt->valid == 0) {  //does not validate, don't know why
-                AC_ERROR << "Failed to validate " << theFilename.c_str();
+                AC_ERROR << "Failed to validate " << theFilename;
             } else {
                 AC_PRINT << "xml is valid";
             }
-
         }
 
         root_element = xmlDocGetRootElement(doc);
-        printXMLNode(root_element);
-        AC_PRINT << "------------ try to create XMLNode";
-        XMLNode* myNode = new XMLNode(root_element);
-        myNode->print();
-        //spark::Component* myRootWidget = spark::SparkComponentFactory::createComponent(myNode);
-
 
         /* free up the resulting document */
         xmlFreeDoc(doc);
@@ -67,7 +56,8 @@ namespace cppcore {
         xmlFreeParserCtxt(ctxt);
         xmlCleanupParser();
         xmlMemoryDump();
-        AC_PRINT << "-------------------after parsing";
+
+        return root_element;
     }
 }
 

@@ -4,7 +4,7 @@
 .*swa
 .*swn
 *.apk
-
+.DS_Store
 _build/*
 **/**/bin/
 build.xml

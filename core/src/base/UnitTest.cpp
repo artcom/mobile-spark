@@ -81,8 +81,8 @@ UnitTest::incrementExpectedFailedCount() {
 
 int
 UnitTest::returnStatus() const {
-    std::cout << "Passed count: " << getPassedCount() << "\n";
-    std::cout << "Failed count: " << getFailedCount() << std::endl;;
+    AC_TEST_RESULT << "Passed count: " << getPassedCount();
+    AC_TEST_RESULT << "Failed count: " << getFailedCount();
     if (getPassedCount() != 0 && getFailedCount() == 0) {
         return 0;
     } else {
@@ -102,31 +102,31 @@ UnitTest::setAbortOnFailure(bool makeAbort) {
 
 void
 UnitTest::setup() {
-    std::cerr << ">>>> Launching Test Unit '" << _myName << "'" << std::endl;
+    AC_TEST_RESULT << ">>>> Launching Test Unit '" << _myName << "'";
 }
 
 void
 UnitTest::teardown() {
-    std::cerr << ">>>> Completed Test Unit '" << getMyName() << "'" << ", ";
+    AC_TEST_RESULT << ">>>> Completed Test Unit '" << getMyName() << "'" << ", ";
 
     if (getFailedCount()) {
 //        std::cerr << TTYRED;
     }
-    std::cerr << getFailedCount() << " total tests failed unexpected";// << ENDCOLOR;
+    AC_TEST_RESULT << getFailedCount() << " total tests failed unexpected";// << ENDCOLOR;
 
     std::cerr << ", ";
     if (getExpectedFailedCount()) {
 //        std::cerr << TTYYELLOW;
     }
-    std::cerr << getExpectedFailedCount() << " total tests failed expected";// << ENDCOLOR;
+    AC_TEST_RESULT << getExpectedFailedCount() << " total tests failed expected";// << ENDCOLOR;
 
-    std::cerr << ", ";
+    AC_TEST_RESULT << ", ";
     if (getPassedCount()) {
 //        std::cerr << TTYGREEN;
     }
-    std::cerr << getPassedCount() << " total tests passed";// << ENDCOLOR;
+    AC_TEST_RESULT << getPassedCount() << " total tests passed";// << ENDCOLOR;
 
-    std::cerr << std::endl;
+    AC_TEST_RESULT << std::endl;
 
 }
 
@@ -148,15 +148,15 @@ UnitTest::ensure(bool myExpressionResult,
         if (_silentSuccess) {
             return;
         }
-        std::cerr << ">>>>>> " /*<< (myExpectedResult ? TTYGREEN : TTYYELLOW)*/
+        AC_TEST_RESULT << ">>>>>> " /*<< (myExpectedResult ? TTYGREEN : TTYYELLOW)*/
                   << (myExpectedResult ? "OK    " : "KNOWN ");// << ENDCOLOR;
     } else {
-        std::cerr << "###### " /*<< (myExpectedResult ? TTYRED : TTYYELLOW)*/
+        AC_TEST_RESULT << "###### " /*<< (myExpectedResult ? TTYRED : TTYYELLOW)*/
                   << (myExpectedResult ? "FAIL  " : "UNEXP " );// << ENDCOLOR;
     }
     std::cerr << " ("<< myExpression << "), Line " << mySourceLine << std::endl;
     if (!myExpressionResult && _abortOnFailure) {
-        std::cerr << "UnitTest::ensure: Execution aborted" << std::endl;
+        AC_TEST_RESULT << "UnitTest::ensure: Execution aborted" << std::endl;
         abort();
     }
 }
@@ -244,11 +244,9 @@ UnitTestSuite::run() {
                 _myTests[i]->run();
                 setPassedCount(getPassedCount() + _myTests[i]->getPassedCount());
                 setFailedCount(getFailedCount() + _myTests[i]->getFailedCount());
-AC_PRINT << "running test# " << i << "passed: " << _myTests[i]->getPassedCount() << " failed : " << _myTests[i]->getFailedCount();
                 setExpectedFailedCount(getExpectedFailedCount() + _myTests[i]->getExpectedFailedCount());
                 _myTests[i]->teardown();
             }
-AC_PRINT << "Suite # " << "passed: " << getPassedCount() << " failed : " << getFailedCount();
         } catch (std::exception & e) {
             std::cerr /*<< TTYRED*/ << "## A std::exception occured during execution of test suite '"
                 << getMyName() /*<< ENDCOLOR */<< "':" << std::endl << e.what() << std::endl;
