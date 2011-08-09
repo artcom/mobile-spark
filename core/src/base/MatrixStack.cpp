@@ -52,7 +52,7 @@ void MatrixStack::multMatrixLocal(const matrix matrix) {
  
 // Removes the current matrix from the top of the stack.
 void MatrixStack::pop() {   
-    if (stack.size() > 0) {
+    if (stack.size() > 1) {
         stack.pop();
     }
 }
