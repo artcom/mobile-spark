@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class SparkViewerActivity extends Activity {
 	
-    private static String LOG_TAG = "SparkViewer";
+    private static String LOG_TAG = "SparkViewerActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
