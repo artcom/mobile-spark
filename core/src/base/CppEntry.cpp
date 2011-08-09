@@ -1,8 +1,8 @@
 #include "CppEntry.h"
 #include "Logger.h"
-#include "testLogger.h"
 #include "XMLUtils.h"
-//#include <libxml/tree.h>
+#include "testLogger.h"
+#include "testXMLNode.h"
 
 namespace cppcore {
 
@@ -11,14 +11,10 @@ namespace cppcore {
     CppEntry::~CppEntry() {
     }
 
-    void CppEntry::loadXML(const std::string & theFilename) {
-        AC_PRINT << "load file: " << theFilename.c_str();
-        loadLayout(theFilename);
-    }
-
     bool CppEntry::loadSpark(const std::string & theFilename) {
+        AC_PRINT << "load file: " << theFilename.c_str();
         //test xml-loading
-        loadXML(theFilename);
+        xmlNode* rootNode = loadXML(theFilename);
         AC_PRINT << "this is cpp land"; 
         return true;
     }
@@ -31,7 +27,7 @@ namespace cppcore {
     void MyTestSuite::setup() {
         UnitTestSuite::setup();
         addTest(new asl::Logger_UnitTest);
-            
+        addTest(new asl::XMLNode_UnitTest);
     }
 }
 

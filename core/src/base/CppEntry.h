@@ -21,8 +21,6 @@ namespace cppcore {
             virtual ~CppEntry();
             virtual bool test();
             virtual bool loadSpark(const std::string & theFilename);
-        private:
-            void loadXML(const std::string & theFilename);
     };
 
     /*class CppEntry_UnitTest : public UnitTest {

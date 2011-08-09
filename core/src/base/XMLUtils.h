@@ -7,7 +7,7 @@
 #include <libxml/tree.h>
 
 namespace cppcore {
-    void loadLayout(const std::string & theFilename);
+    xmlNode* loadXML(const std::string & theFilename);
     void printXMLNode(const xmlNode* theNode);
 };
 
