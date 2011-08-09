@@ -19,13 +19,14 @@ namespace cppcore {
             float getFloatValue(const std::string & theKey, const float theDefault = 0.0f) const;
             std::vector<float> getFloatArrayValue(const std::string & theKey) const;
 
-            std::string className;
+            std::string nodeName;
             std::string name;
             std::map<std::string, std::string> attributes;
 
             const xmlNode* node;
     };
 
+    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
 };
 
 #endif // XMLNODE_H

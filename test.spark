@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-<Worlds>
-    <World type="3D">
-        <Transform name="transformA" x="20" rotationX="30">
-            <Object3D name="objectA" src="file to object"/>
-        </Transform>
-        <Transform name="transformB" x="-20" scaleX="0.5">
-            <Object3D name="objectB" src="file to object"/>
-        </Transform>
-    </World>
-</Worlds>
+<Window name="ourWindow" width="300" height="300">
+    <Transform name="transformB" x="5" rotationZ="-1">
+        <Rectangle name="objectA" x="0" y="-5" width="3" height="10" color="[0,0,0.3]"/>
+        <Rectangle name="objectB" width="10" height="3" color="[0,0,0.3]"/>
+    </Transform>
+    <Transform name="transformA" x="-5" y="0" scaleX="2" >
+        <Rectangle name="objectA" width="2" height="20" color="[1,0,0.3]"/>
+    </Transform>
+</Window>

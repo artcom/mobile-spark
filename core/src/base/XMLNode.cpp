@@ -1,19 +1,22 @@
 #include "XMLNode.h"
-#include "XMLUtils.h"
 #include "Logger.h"
 #include "StringHelper.h"
+#include "XMLUtils.h"
 
 namespace cppcore {
 
     XMLNode::XMLNode(xmlNode* theNode) : 
         node(theNode) {
         xmlAttr *attribute = theNode->properties;
-        className = (const char*)(theNode->name);
+        nodeName = (const char*)(theNode->name);
+        //AC_PRINT << "node name " << nodeName;
         while (attribute) {
             xmlNode* attrNode = attribute->children;
             attributes[std::string((const char*)attribute->name)] = std::string((const char*)attrNode->content);
+            //AC_PRINT << " attr " << std::string((const char*)attribute->name) << " = " <<  std::string((const char*)attrNode->content);
             attribute = attribute->next;
         }
+        //AC_PRINT << "finished properties of " << nodeName;
 
         if (attributes.find("name") != attributes.end()) {
             name = attributes["name"];
