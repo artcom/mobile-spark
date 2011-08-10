@@ -35,8 +35,6 @@
 #include "../UnitTest.h"
 #include "../MatrixStack.h"
 
-using namespace cppcore;
-
 namespace asl {
     class MatrixStack_UnitTest : public UnitTest {
         public:

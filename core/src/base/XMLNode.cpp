@@ -3,8 +3,7 @@
 #include "string_functions.h"
 #include "XMLUtils.h"
 
-using namespace asl;
-namespace cppcore {
+namespace asl {
 
     XMLNode::XMLNode(xmlNode* theNode) : 
         node(theNode) {

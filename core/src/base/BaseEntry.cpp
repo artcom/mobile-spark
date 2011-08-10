@@ -1,9 +1,6 @@
 #include "BaseEntry.h"
 #include "Logger.h"
 #include "XMLUtils.h"
-#include "testLogger.h"
-#include "testXMLNode.h"
-#include "testMatrixStack.h"
 
 namespace asl {
 
