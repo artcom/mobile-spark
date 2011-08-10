@@ -30,4 +30,11 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>armeabi-v7a</name>
+			<type>2</type>
+			<location>D:/dev/git/mobile/mobile-spark/_build/libs/armeabi-v7a</location>
+		</link>
+	</linkedResources>
 </projectDescription>

@@ -32,7 +32,7 @@
 #ifndef _ac_mobile_asl_test_Logger_h_included_
 #define _ac_mobile_asl_test_Logger_h_included_
 
-#include "UnitTest.h"
+#include "../UnitTest.h"
 
 namespace asl {
     class Logger_UnitTest : public UnitTest {
