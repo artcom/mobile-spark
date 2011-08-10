@@ -32,7 +32,7 @@
 
 #include "Logger.h"
 #include "Exception.h"
-#include "StringHelper.h"
+#include "string_functions.h"
 #ifdef __APPLE__
     //iOS
     #include "Logger.h"
@@ -81,12 +81,14 @@ namespace asl {
                 break;
             case SEV_ERROR :
                 __android_log_print(ANDROID_LOG_ERROR, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
+                break;
             case SEV_TESTRESULT :
                 {
                     std::string myCustomLogTag("/TestResult/");
                     myCustomLogTag += myLogTag;
                     __android_log_print(ANDROID_LOG_INFO, myCustomLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
                 }
+                break;
             default:
                 //throw Exception("Unknown logger severity");
                 __android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
