@@ -1,13 +1,12 @@
-#ifndef OPENGLHELPERS_H
-#define OPENGLHELPERS_H
+#ifndef _included_mobile_asl_opengl_functions_
+#define _included_mobile_asl_opengl_functions_
 
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 
 
-/* collection of static helpers */
 
-namespace y60 {
+namespace asl {
     //////////////////////////////////////////logging
     static void printGLString(const char *name, GLenum s) {
         const char *v = (const char *) glGetString(s);
@@ -121,4 +120,4 @@ namespace y60 {
 
 };
 
-#endif // OPENGLHELPERS_H
+#endif 
