@@ -6,6 +6,8 @@ public class BaseNativeLib {
 
   static {
       System.loadLibrary("base");
+      System.loadLibrary("zip");
+      System.loadLibrary("android");
   }
 
   public static native boolean loadSpark(String theFilename);

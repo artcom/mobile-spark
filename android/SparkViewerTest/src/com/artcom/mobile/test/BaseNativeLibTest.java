@@ -13,7 +13,11 @@ public class BaseNativeLibTest extends AndroidTestCase{
 	public void testLibTest() throws Throwable {
 		System.out.println(System.getProperty("java.library.path"));
 		Log.i(LOG_TAG, System.getProperty("java.library.path"));
+
 		String myResult = TestBaseLib.test(); 
+	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);// run libs own tests
+
+		myResult = TestAndroidLib.test(); 
 	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);// run libs own tests
     }
 	public void testLibsInterfaceTest() throws Throwable {		
