@@ -66,27 +66,7 @@ namespace asl {
     }
 }
 
-string
-asl::file_string(const char* file_name) {
-    std::string myFilename(file_name); //asl::toLowerCase(file_name));
-    std::string::size_type mySlash = myFilename.find_last_of("/\\");
-    if (mySlash != std::string::npos) {
-        myFilename = myFilename.substr(mySlash+1);
-    }
-    return myFilename;
-}
 
-string
-asl::line_string(unsigned line_number) {
-    std::string message;
-    message = as_string(line_number);
-    return message;
-}
-
-string
-asl::location_string(const char* file_name, unsigned line_number) {
-    return string("[") + file_string(file_name) + ":" + as_string(line_number) + "]";
-}
 
 string
 asl::compose_message(const Exception& ex) {

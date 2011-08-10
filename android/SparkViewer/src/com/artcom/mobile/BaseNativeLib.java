@@ -9,6 +9,6 @@ public class BaseNativeLib {
   }
 
   public static native boolean loadSpark(String theFilename);
-  public static native boolean test();
+  public static native String test();
 }
 
