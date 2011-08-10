@@ -1,3 +1,5 @@
+add_subdirectory(Tests)
+
 set(SOURCES
 APK_functions.cpp
 )
