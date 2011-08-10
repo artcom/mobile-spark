@@ -14,7 +14,6 @@
 namespace android {
 
     void loadAPK (zip** theAPKArchive, const char* apkPath);
-    std::string readFromFile(const std::string thePath);
     std::string readFromPackage(zip* theAPKArchive, const char* theFileName);
     std::vector<std::string> readLineByLineFromPackage(zip* theAPKArchive, const char* theFileName);
 };

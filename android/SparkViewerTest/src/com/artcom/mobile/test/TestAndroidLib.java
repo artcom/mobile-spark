@@ -13,5 +13,5 @@ public class TestAndroidLib {
         System.loadLibrary("testAndroid");
     }
 
-    public static native String test();
+    public static native String test(String apkPath);
 }
