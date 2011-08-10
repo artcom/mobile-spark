@@ -19,7 +19,7 @@ namespace cppcore {
         public: 
             CppEntry();
             virtual ~CppEntry();
-            virtual bool test();
+            virtual std::string test();
             virtual bool loadSpark(const std::string & theFilename);
     };
 

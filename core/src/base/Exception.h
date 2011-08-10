@@ -99,9 +99,6 @@ namespace asl {
 
     };
 
-	std::string file_string(const char* file_name);
-    std::string line_string(unsigned line_number);
-    std::string location_string(const char* file_name, unsigned line_number);
 
     std::string compose_message(const Exception & ex);
 
@@ -110,8 +107,6 @@ namespace asl {
         return os << compose_message(ex) << std::endl;
     }
 
-    #define PLUS_FILE_LINE asl::location_string(__FILE__,__LINE__)
-    #define JUST_FILE_LINE asl::line_string(__LINE__),asl::file_string(__FILE__)
 
     #define DEFINE_NAMED_EXCEPTION(CLASS,NAME,BASECLASS)\
     class CLASS : public BASECLASS {\

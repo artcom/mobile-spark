@@ -1,8 +1,9 @@
 #include "XMLNode.h"
 #include "Logger.h"
-#include "StringHelper.h"
+#include "string_functions.h"
 #include "XMLUtils.h"
 
+using namespace asl;
 namespace cppcore {
 
     XMLNode::XMLNode(xmlNode* theNode) : 
