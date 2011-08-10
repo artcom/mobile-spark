@@ -21,6 +21,7 @@
 
 // own header
 #include "UnitTest.h"
+#include "string_functions.h"
 
 //#include "console_functions.h"
 //#include "file_functions.h"
@@ -43,6 +44,10 @@ using namespace asl;
 unsigned int
 UnitTest::getPassedCount() const {
     return _passedCount;
+}
+string
+UnitTest::getFailedTestMessages() const {
+    return _failingTestsMessages;
 }
 
 unsigned int
@@ -81,8 +86,6 @@ UnitTest::incrementExpectedFailedCount() {
 
 int
 UnitTest::returnStatus() const {
-    AC_TEST_RESULT << "Passed count: " << getPassedCount();
-    AC_TEST_RESULT << "Failed count: " << getFailedCount();
     if (getPassedCount() != 0 && getFailedCount() == 0) {
         return 0;
     } else {
@@ -107,26 +110,33 @@ UnitTest::setup() {
 
 void
 UnitTest::teardown() {
-    AC_TEST_RESULT << ">>>> Completed Test Unit '" << getMyName() << "'" << ", ";
+    string myTearDownString;
+    myTearDownString = ">>>> Completed Test Unit '" + string(getMyName()) +  "', ";
 
     if (getFailedCount()) {
 //        std::cerr << TTYRED;
     }
-    AC_TEST_RESULT << getFailedCount() << " total tests failed unexpected";// << ENDCOLOR;
+    myTearDownString += as_string(getFailedCount()) + " total tests failed unexpected";
+    //AC_TEST_RESULT << getFailedCount() << " total tests failed unexpected";// << ENDCOLOR;
 
-    std::cerr << ", ";
+    myTearDownString += ", ";
     if (getExpectedFailedCount()) {
 //        std::cerr << TTYYELLOW;
     }
-    AC_TEST_RESULT << getExpectedFailedCount() << " total tests failed expected";// << ENDCOLOR;
+    myTearDownString += as_string(getExpectedFailedCount()) + " total tests failed expected";
+    
+    //AC_TEST_RESULT << getExpectedFailedCount() << " total tests failed expected";// << ENDCOLOR;
 
-    AC_TEST_RESULT << ", ";
+    myTearDownString += ", ";
+    
     if (getPassedCount()) {
 //        std::cerr << TTYGREEN;
     }
-    AC_TEST_RESULT << getPassedCount() << " total tests passed";// << ENDCOLOR;
+    myTearDownString += as_string(getPassedCount()) + " total tests passed";
 
-    AC_TEST_RESULT << std::endl;
+    //AC_TEST_RESULT << getPassedCount() << " total tests passed";// << ENDCOLOR;
+
+    AC_TEST_RESULT << myTearDownString;
 
 }
 
@@ -143,18 +153,30 @@ UnitTest::ensure(bool myExpressionResult,
         unsigned long mySourceLine,
         bool myExpectedResult)
 {
+    string myEnsureResultString;
     reportResult(myExpressionResult,myExpectedResult);
     if (myExpressionResult == myExpectedResult) {
         if (_silentSuccess) {
             return;
         }
-        AC_TEST_RESULT << ">>>>>> " /*<< (myExpectedResult ? TTYGREEN : TTYYELLOW)*/
-                  << (myExpectedResult ? "OK    " : "KNOWN ");// << ENDCOLOR;
+        myEnsureResultString += ">>>>>> ";
+        myEnsureResultString += (myExpectedResult ? "OK    " : "KNOWN ");
+        //AC_TEST_RESULT << ">>>>>> " /*<< (myExpectedResult ? TTYGREEN : TTYYELLOW)*/
+        //          << (myExpectedResult ? "OK    " : "KNOWN ");// << ENDCOLOR;
     } else {
-        AC_TEST_RESULT << "###### " /*<< (myExpectedResult ? TTYRED : TTYYELLOW)*/
-                  << (myExpectedResult ? "FAIL  " : "UNEXP " );// << ENDCOLOR;
+        _failingTestsMessages += "###### ";
+        _failingTestsMessages += (myExpectedResult ? "FAIL    " : "UNEXP ");
+        _failingTestsMessages += " (" +  string(myExpression) + ") [" + lastFileNamePart(mySourceFileName) + " at:" + as_string(mySourceLine) + "]";
+        _failingTestsMessages += "\n";
+        myEnsureResultString += "###### ";
+        myEnsureResultString += (myExpectedResult ? "FAIL    " : "UNEXP ");
+        //AC_TEST_RESULT << "###### " /*<< (myExpectedResult ? TTYRED : TTYYELLOW)*/
+        //          << (myExpectedResult ? "FAIL  " : "UNEXP " );// << ENDCOLOR;
     }
-    std::cerr << " ("<< myExpression << "), Line " << mySourceLine << std::endl;
+    myEnsureResultString += " (" +  string(myExpression) + ") [" + lastFileNamePart(mySourceFileName) + " at:" + as_string(mySourceLine) + "]";
+    //AC_TEST_RESULT << " ("<< myExpression << "), Line " << as_string(mySourceLine);
+    //std::cerr << " ("<< myExpression << "), Line " << mySourceLine << std::endl;
+    AC_TEST_RESULT << myEnsureResultString;
     if (!myExpressionResult && _abortOnFailure) {
         AC_TEST_RESULT << "UnitTest::ensure: Execution aborted" << std::endl;
         abort();
@@ -166,6 +188,10 @@ UnitTest::getTracePrefix () {
     return ">>>>>>        ";
 }
 
+void 
+UnitTest::setFailedTestMessages(const string & theMessages) {
+    _failingTestsMessages = theMessages;
+}  
 void
 UnitTest::setPassedCount(unsigned int passedTests) {
     _passedCount = passedTests;
@@ -245,6 +271,9 @@ UnitTestSuite::run() {
                 setPassedCount(getPassedCount() + _myTests[i]->getPassedCount());
                 setFailedCount(getFailedCount() + _myTests[i]->getFailedCount());
                 setExpectedFailedCount(getExpectedFailedCount() + _myTests[i]->getExpectedFailedCount());
+                if (_myTests[i]->getFailedTestMessages().length() > 0 ) {
+                    setFailedTestMessages(getFailedTestMessages() + "\n" + _myTests[i]->getMyName() + "\n" + _myTests[i]->getFailedTestMessages());
+                }
                 _myTests[i]->teardown();
             }
         } catch (std::exception & e) {

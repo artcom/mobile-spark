@@ -50,7 +50,7 @@ namespace asl {
                 ENSURE_MSG((AC_WARNING << "Logger::Warn Test") && true, "Logger Test::warn string");                
 
                 //ENSURE_EXCEPTION(Logger::get().log(/*myTime,*/ Severity(SEV_DISABLED+1), "", 0, "Should throw Exception"), asl::Exception);
-                //ENSURE(false);
+                ENSURE_MSG(false, "failed test");
         }
     };    
 };

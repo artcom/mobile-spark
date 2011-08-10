@@ -39,6 +39,7 @@
 class  UnitTest {
 public:
     virtual void run() = 0;
+    std::string getFailedTestMessages() const;
     unsigned int getPassedCount() const;
     unsigned int getFailedCount() const;
     unsigned int getExpectedFailedCount() const;
@@ -75,6 +76,7 @@ public:
                 bool myExpectedResult = true)
     {ensure(myExpressionResult!=0,myExpression,mySourceFileName,mySourceLine,myExpectedResult);}
 protected:
+    virtual void setFailedTestMessages(const std::string & theMessages);    
     virtual void setPassedCount(unsigned int passedTests);
     virtual void setFailedCount(unsigned int failedTests);
     virtual void setExpectedFailedCount(unsigned int failedTests);
@@ -88,6 +90,7 @@ private:
     unsigned int _profilingRepeatCount;
     bool _silentSuccess;
     bool _abortOnFailure;
+    std::string _failingTestsMessages;
 
     void reportResult(bool myExpressionResult,bool myExpectedResult);
 };

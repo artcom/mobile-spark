@@ -64,6 +64,38 @@ namespace asl {
 
     int as_int(const std::string & theString);
 
+    static std::string
+    lastFileNamePart(const char* file_name) {
+        std::string myFilename(file_name);
+        std::string::size_type mySlash = myFilename.find_last_of("/\\");
+        if (mySlash != std::string::npos) {
+            myFilename = myFilename.substr(mySlash+1);
+        }
+        return myFilename;
+    }
+
+    static std::string
+    line_string(unsigned line_number) {
+        std::string message;
+        message = as_string(line_number);
+        return message;
+    }
+    
+    #define PLUS_FILE_LINE asl::location_string(__FILE__,__LINE__)
+    #define JUST_FILE_LINE asl::line_string(__LINE__),asl::file_string(__FILE__)
+
+        
+    static std::string
+    location_string(const char* file_name, unsigned line_number) {
+        return std::string("[") + lastFileNamePart(file_name) + ":" + as_string(line_number) + "]";
+    }
+    
+    static float stof(std::string theString) {
+        std::stringstream ss(theString);
+        float f = 0.0f;
+        ss >> f;
+        return f;
+    }
 
 } //Namespace asl
 
