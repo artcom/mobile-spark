@@ -62,7 +62,7 @@ namespace asl {
         return outValue;
     }
 
-    int as_int(const std::string & theString);
+    static int as_int(const std::string & theString);
 
     static std::string
     lastFileNamePart(const char* file_name) {
