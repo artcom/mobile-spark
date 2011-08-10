@@ -63,6 +63,7 @@ namespace asl {
     }
 
     int as_int(const std::string & theString);
+    float as_float(const std::string & theString);
 
     static std::string
     lastFileNamePart(const char* file_name) {
