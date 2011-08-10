@@ -39,13 +39,29 @@
 namespace android {
     class APK_functions_UnitTest : public UnitTest {
         public:
-            APK_functions_UnitTest() : UnitTest("APK_functions_UnitTest") {  }
+            APK_functions_UnitTest(JNIEnv* env, jstring apkPath) : 
+                env(env), apkPath(apkPath), UnitTest("APK_functions_UnitTest") {  }
+
+            JNIEnv* env;
+            jstring apkPath;
+
             void run() {
                 perform_APK_functionsTest();
             }
             
             void perform_APK_functionsTest() {                
-                ENSURE(true);
+                jboolean isCopy;
+                const char* str = env->GetStringUTFChars(apkPath, &isCopy);
+                ENSURE_MSG(str, "apkPath given form java should not be null");
+                zip* myAPKArchive = NULL;
+                loadAPK(&myAPKArchive, str);
+                ENSURE_MSG(myAPKArchive, "apkArchive should not be null");
+                std::string myTextFromFile = readFromPackage(myAPKArchive, "assets/test.txt");
+                ENSURE_MSG(!myTextFromFile.empty(), "there should be text in file");
+                ENSURE_MSG(myTextFromFile.find("foo bar") == 0, "text in file should start with 'foo bar'");
+                std::vector<std::string> myLinesInFile = readLineByLineFromPackage(myAPKArchive, "assets/test.txt");
+                ENSURE_MSG(myLinesInFile.size() == 2, "there should be two lines in file");
+                ENSURE_MSG(myLinesInFile[1].find("baz") == 0, "second line should start with 'baz'");
             }
     };    
 

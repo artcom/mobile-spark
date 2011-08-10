@@ -97,7 +97,6 @@ namespace asl {
         ss >> f;
         return f;
     }
-
 } //Namespace asl
 
 #endif

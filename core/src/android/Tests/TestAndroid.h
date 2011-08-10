@@ -19,6 +19,8 @@ namespace android {
         public:
             MyAndroidTestSuite(const char * myName, int argc, char *argv[]) : UnitTestSuite(myName, argc, argv) {}
             void setup();
+            JNIEnv *env;
+            jstring apkPath;
     };
         
 };

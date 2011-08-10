@@ -26,24 +26,6 @@ namespace android {
         //}
     }
 
-    std::string readFromFile(const std::string thePath) {
-        FILE* file = fopen(thePath.c_str(),"r");
-        std::string s;
-        if (file) {
-            char c;
-            while( !feof( file ) ) {
-              c = fgetc( file );
-              if (!feof(file)) {
-                  s += c;
-              }
-            }
-            fclose(file);
-        } else {
-            AC_ERROR << "not possible to open";
-        }
-        return s;
-    }
-
     std::string readFromPackage(zip* theAPKArchive, const char* theFileName) {
         std::string content = "";
         const size_t MAX_LENGTH = 5000;
