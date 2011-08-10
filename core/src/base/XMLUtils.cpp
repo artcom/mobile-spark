@@ -3,7 +3,7 @@
 #include "XMLNode.h"
 #include "Logger.h"
 
-namespace cppcore {
+namespace asl {
 
     void printXMLNode(const xmlNode* theNode) {
         const xmlNode *cur_node = NULL;

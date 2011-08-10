@@ -37,7 +37,6 @@
 #include "../XMLNode.h"
 #include "../XMLUtils.h"
 
-using namespace cppcore;
 
 namespace asl {
     class XMLNode_UnitTest : public UnitTest {

@@ -1,5 +1,5 @@
-#ifndef XMLNODE_H
-#define XMLNODE_H
+#ifndef _included_mobile_asl_xmlnode_
+#define _included_mobile_asl_xmlnode_
 
 #include <string>
 #include <map>
@@ -9,7 +9,7 @@
 #include <libxml/tree.h>
 #include <boost/smart_ptr/shared_ptr.hpp>
 
-namespace cppcore {
+namespace asl {
     class XMLNode {
         public:
             XMLNode(xmlNode* theNode);
@@ -29,4 +29,4 @@ namespace cppcore {
     typedef boost::shared_ptr<XMLNode> XMLNodePtr;
 };
 
-#endif // XMLNODE_H
+#endif
