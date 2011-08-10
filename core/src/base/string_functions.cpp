@@ -29,11 +29,21 @@ namespace asl {
     int as_int(const string & theString) {
         int outValue;
         istringstream myStream(theString);
-                myStream >> outValue;
+        myStream >> outValue;
         if (!myStream) {
             throw ParseException("as_int","could not convert to integer");
-        };
+        }
         return outValue;
+    }
+
+    float as_float(const string & theString) {
+        float outValue;
+        istringstream myStream(theString);
+        myStream >> outValue;
+        if (!myStream) {
+            throw ParseException("as_float","could not convert to float");
+        }
+        return outValue; 
     }
 
     bool fromString(const string & theString, bool & outValue) {
@@ -47,6 +57,5 @@ namespace asl {
         }
         return false;
     }
-
-
 }
+
