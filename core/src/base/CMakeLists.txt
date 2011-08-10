@@ -14,6 +14,7 @@ CppEntry.h
 Exception.h
 Logger.h
 MatrixStack.h
+openGL_functions.h
 Singleton.h
 string_functions.h
 UnitTest.h
