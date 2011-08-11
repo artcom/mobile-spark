@@ -5,7 +5,9 @@ BaseApp.cpp
 BaseEntry.cpp
 DemoApp.cpp
 Exception.cpp
+Geometry.cpp
 Logger.cpp
+Material.cpp
 MatrixStack.cpp
 string_functions.cpp
 UnitTest.cpp
@@ -18,7 +20,9 @@ BaseApp.h
 BaseEntry.h
 DemoApp.h
 Exception.h
+Geometry.h
 Logger.h
+Material.h
 MatrixStack.h
 openGL_functions.h
 Singleton.h
