@@ -7,7 +7,8 @@ namespace asl {
     bool loadSpark(const std::string & theFilename) {
         AC_PRINT << "load file: " << theFilename.c_str();
         //test xml-loading
-        xmlNode* rootNode = loadXML(theFilename);
+        xmlDocPtr doc = loadXML(theFilename);
+        xmlFreeDoc(doc);
         AC_PRINT << "this is cpp land"; 
         return true;
     }    

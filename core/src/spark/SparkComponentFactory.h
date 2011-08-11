@@ -6,7 +6,10 @@
 #include "Component.h"
 
 namespace spark {
-    ComponentPtr createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr());
-    ComponentPtr loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath);
+    class SparkComponentFactory {
+    public:
+        static void createComponent(ComponentPtr& theReturn, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr());
+        static ComponentPtr loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath);
+    };
 };
 #endif 

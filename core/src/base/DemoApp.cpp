@@ -1,4 +1,5 @@
 #include "DemoApp.h"
+#include "Logger.h"
 
 /////////////////// Application code, this should be in java or script language later...
 namespace asl {
@@ -7,7 +8,6 @@ namespace asl {
     }
     DemoApp::~DemoApp() {
     }
-
 }
 
 /////////////////////////////////////////////////////////////////////////App-Instance
@@ -26,6 +26,7 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_BaseNativeLib_setup(JNIEnv * env, 
                                                              jstring apkFile,
                                                              jstring layoutFile) {
     ourApp.setup(apkFile, layoutFile, env);
+    AC_PRINT << "after setup";
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_BaseNativeLib_onFrame(JNIEnv * env, jobject obj) {

@@ -24,11 +24,11 @@ namespace asl {
         }
     }
 
-    xmlNode* loadXML(const std::string & theFilename) {
+    //XXX: the user should call xmlFreeDoc(doc)
+    xmlDocPtr loadXML(const std::string & theFilename) {
         LIBXML_TEST_VERSION
         xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc; /* the resulting document tree */
-        xmlNode *root_element = NULL;
 
         /* create a parser context */
         ctxt = xmlNewParserCtxt();
@@ -41,7 +41,7 @@ namespace asl {
         /* check if parsing suceeded */
         if (doc == NULL) {
             AC_ERROR << "Failed to parse " << theFilename;
-            return root_element;
+            return doc;
         } else {
         /* check if validation suceeded */
             if (ctxt->valid == 0) {  //does not validate, don't know why
@@ -51,20 +51,15 @@ namespace asl {
             }
         }
 
-        root_element = xmlDocGetRootElement(doc);
-        AC_PRINT << "root " << root_element;
-        AC_PRINT << " name " << root_element->name;
-        AC_PRINT << " type " << root_element->type;
-
         /* free up the resulting document */
-        xmlFreeDoc(doc);
+        //xmlFreeDoc(doc);
 
         /* free up the parser context */
         xmlFreeParserCtxt(ctxt);
         xmlCleanupParser();
         xmlMemoryDump();
 
-        return root_element;
+        return doc;
     }
 }
 
