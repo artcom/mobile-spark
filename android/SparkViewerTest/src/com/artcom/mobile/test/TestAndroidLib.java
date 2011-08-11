@@ -6,10 +6,6 @@ public class TestAndroidLib {
 
     static {
         System.loadLibrary("base");	
-        System.loadLibrary("testBase");
-
-        System.loadLibrary("zip");
-        System.loadLibrary("android");
         System.loadLibrary("testAndroid");
     }
 
