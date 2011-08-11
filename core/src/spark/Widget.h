@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../base/MatrixStack.h"
+#include <masl/MatrixStack.h>
 
 #include "Container.h"
 

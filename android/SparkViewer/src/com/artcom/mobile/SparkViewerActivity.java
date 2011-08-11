@@ -16,11 +16,6 @@ public class SparkViewerActivity extends Activity {
         super.onCreate(savedInstanceState);
         mView = new ASLOpenGLView(getApplication());
         setContentView(mView);
-        
-        //testing
-        Log.i(LOG_TAG, "SparkViewer created, ready to call native.");     
-        BaseNativeLib.loadSpark("/sdcard/test.spark");        
-        Log.i(LOG_TAG, "SparkViewer native called");     
     }
     
     @Override protected void onPause() {

@@ -5,8 +5,8 @@ import android.util.Log;
 public class TestBaseLib {
 
     static {
-        System.loadLibrary("base");	
-        System.loadLibrary("testBase");
+        System.loadLibrary("masl");	
+        System.loadLibrary("testMasl");
     }
 
     public static native String test();

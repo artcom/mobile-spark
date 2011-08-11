@@ -1,17 +1,16 @@
 #include "SparkComponentFactory.h"
 
 
-#include "../base/Logger.h"
-#include "../base/XMLUtils.h"
+#include <masl/Logger.h>
+#include <masl/XMLUtils.h>
 
 #include "Window.h"
 #include "Transform.h"
 #include "Rectangle.h"
 
-using namespace asl;
+using namespace masl;
 
 //TODO: every new widget has to be
-// * added to cmake
 // * included here
 // * added to the big if-elseif-...
 // better ideas?

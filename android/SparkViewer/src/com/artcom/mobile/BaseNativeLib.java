@@ -5,12 +5,12 @@ package com.artcom.mobile;
 public class BaseNativeLib {
 
   static {
-      System.loadLibrary("base");
+      System.loadLibrary("masl");
+      System.loadLibrary("android");
+      System.loadLibrary("mar");
+      System.loadLibrary("spark");
   }
 
-  //testing
-  public static native boolean loadSpark(String theFilename);
-  //public static native String test();
   
   public static native void setup(String apkFilePath, String layoutFile);
   public static native void onFrame();

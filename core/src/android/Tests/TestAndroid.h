@@ -9,9 +9,9 @@
 #endif
 
 #include <string>
-#include <UnitTest.h>
+#include <masl/UnitTest.h>
 
-using namespace asl;
+using namespace masl;
 
 namespace android {
                     

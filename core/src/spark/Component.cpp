@@ -1,6 +1,6 @@
 #include "Component.h"
 
-#include "../base/Logger.h"
+#include <masl/Logger.h>
 
 namespace spark {
 

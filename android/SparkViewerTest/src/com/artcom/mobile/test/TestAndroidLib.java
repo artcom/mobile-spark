@@ -5,7 +5,8 @@ import android.util.Log;
 public class TestAndroidLib {
 
     static {
-        System.loadLibrary("base");	
+        System.loadLibrary("masl");
+        System.loadLibrary("android"); 
         System.loadLibrary("testAndroid");
     }
 
