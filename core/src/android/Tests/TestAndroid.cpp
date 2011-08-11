@@ -1,5 +1,6 @@
 #include "TestAndroid.h"
-#include <Logger.h>
+
+#include <masl/Logger.h>
 #include "testAPK_functions.h"
 
 

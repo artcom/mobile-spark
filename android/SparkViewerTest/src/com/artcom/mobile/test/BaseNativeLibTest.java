@@ -26,10 +26,7 @@ public class BaseNativeLibTest extends AndroidTestCase {
 		myResult = TestAndroidLib.test(getApkFilePath()); 
 	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);// run libs own tests
     }
-	public void testLibsInterfaceTest() throws Throwable {		
-		 // test bound methods
-	    Assert.assertTrue(BaseNativeLib.loadSpark("/sdcard/test.spark"));
-    }
+	
 	public void testJavaTest() throws Throwable {		
 		 // test java stuff
 	    Assert.assertTrue(true);

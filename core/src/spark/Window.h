@@ -4,13 +4,13 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 
-#include "../base/MatrixStack.h"
-#include "../base/Geometry.h"
-#include "../base/XMLNode.h"
+#include <masl/MatrixStack.h>
+#include <masl/XMLNode.h>
+#include <mar/Geometry.h>
 
 #include "Widget.h"
 
-using namespace asl;
+using namespace mar;
 
 namespace spark {
 

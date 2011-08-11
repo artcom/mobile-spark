@@ -1,8 +1,10 @@
 #ifndef _included_mobile_spark_Rectangle_
 #define _included_mobile_spark_Rectangle_
 
-#include "Geometry.h"
+#include <mar/Geometry.h>
 #include "Widget.h"
+
+using namespace mar;
 
 namespace spark {
 

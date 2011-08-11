@@ -1,7 +1,7 @@
 #ifndef _included_mobile_spark_SparkComponentFactory_
 #define _included_mobile_spark_SparkComponentFactory_
 
-#include "../base/BaseApp.h"
+#include "BaseApp.h"
 
 #include "Component.h"
 

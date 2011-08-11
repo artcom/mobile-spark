@@ -5,9 +5,9 @@
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 
-#include "../base/XMLNode.h"
+#include <masl/XMLNode.h>
 
-using namespace asl;
+using namespace masl;
 
 namespace spark {
 

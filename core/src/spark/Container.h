@@ -7,8 +7,7 @@
 #include "Component.h"
 
 
-
-namespace asl {
+namespace spark {
     class BaseApp;
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;
 }

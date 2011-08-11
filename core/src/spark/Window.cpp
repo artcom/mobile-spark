@@ -1,8 +1,7 @@
 #include "Window.h"
 
+#include <mar/openGL_functions.h>
 #include "BaseApp.h"
-#include "openGL_functions.h"
-
 
 namespace spark {
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 

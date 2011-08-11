@@ -1,32 +1,15 @@
-set(SOURCES
-Component.cpp
-Container.cpp
-Rectangle.cpp
-SparkComponentFactory.cpp
-Transform.cpp
-Widget.cpp
-Window.cpp
-)
 
-set(HEADERS
-Component.h
-Container.h
-Rectangle.h
-SparkComponentFactory.h
-Transform.h
-Widget.h
-Window.h
-)
+file(GLOB SOURCES *.cpp)
+file(GLOB HEADERS *.h)
 
-add_library(spark STATIC ${SOURCES} ${HEADERS})
+add_library(spark SHARED ${SOURCES} ${HEADERS})
 
-include_directories (${Boost_INCLUDE_DIRS})
-include_directories (${LIBXML2_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${LIBXML2_INCLUDE_DIRS})
 include_directories(${LIBZIP_INCLUDE_DIR})
-include_directories (${CML_INCLUDE_DIR})
+include_directories(${CML_INCLUDE_DIR})
 
-include_directories(${PROJECT_SOURCE_DIR}/core/src/base)
-include_directories(${PROJECT_SOURCE_DIR}/core/src/android)
+include_directories(${PROJECT_SOURCE_DIR}/core/src)
 
-target_link_libraries(spark)
+target_link_libraries(spark mar android)
 

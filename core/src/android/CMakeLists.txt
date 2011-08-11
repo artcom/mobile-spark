@@ -1,17 +1,12 @@
 add_subdirectory(Tests)
 
-set(SOURCES
-APK_functions.cpp
-)
+file(GLOB SOURCES *.cpp)
+file(GLOB HEADERS *.h)
 
-set(HEADERS
-APK_functions.h
-)
+add_library(android SHARED ${SOURCES} ${HEADERS})
 
-add_library(android STATIC ${SOURCES} ${HEADERS})
-
-include_directories (${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${LIBZIP_INCLUDE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/core/src/base)
+include_directories(${PROJECT_SOURCE_DIR}/core/src)
 
-target_link_libraries(android zip)
+target_link_libraries(android masl zip)
