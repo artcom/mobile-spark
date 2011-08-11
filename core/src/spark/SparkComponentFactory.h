@@ -8,7 +8,7 @@
 namespace spark {
     class SparkComponentFactory {
     public:
-        static void createComponent(ComponentPtr& theReturn, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr());
+        static ComponentPtr createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr());
         static ComponentPtr loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath);
     };
 };

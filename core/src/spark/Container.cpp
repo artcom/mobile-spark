@@ -11,10 +11,7 @@ namespace spark {
         for (; currentChild; currentChild = currentChild->next) {
             if (currentChild->type == XML_ELEMENT_NODE) {
                 XMLNodePtr childXMLNode = XMLNodePtr(new XMLNode(currentChild));
-                ComponentPtr myChild;
-                SparkComponentFactory::createComponent(myChild, _myApp, 
-                                        childXMLNode, ContainerPtr(this));
-                _myChildren.push_back(myChild);
+                _myChildren.push_back(SparkComponentFactory::createComponent(_myApp, childXMLNode, ContainerPtr(this)));
             }
         }
     }
