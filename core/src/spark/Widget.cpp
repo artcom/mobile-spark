@@ -29,14 +29,14 @@ namespace spark {
     }
 
     void Widget::render() const {
-        _myStage->window->matrixStack.push();
-        _myStage->window->matrixStack.multMatrixLocal(_myLocalMatrixStack.getTop());
+        _myApp->window->matrixStack.push();
+        _myApp->window->matrixStack.multMatrixLocal(_myLocalMatrixStack.getTop());
 
         drawObject();
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             (*it)->render();
         }
 
-        _myStage->window->matrixStack.pop();
+        _myApp->window->matrixStack.pop();
     }
 }

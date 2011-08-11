@@ -3,12 +3,15 @@
 
 #include "XMLUtils.h"
 #include "openGL_functions.h"
-
+#include "../spark/SparkComponentFactory.h"
 
 
 namespace asl {
 
     BaseApp::BaseApp(): step(0), _myAnimate(true) {
+    }
+
+    BaseApp::~BaseApp() {
     }
 
     bool BaseApp::setup(jstring apkPath, jstring layoutFile, JNIEnv* env) {
@@ -24,7 +27,11 @@ namespace asl {
 
         //load layout
         str = env->GetStringUTFChars(layoutFile, &isCopy); 
-        //spark::ComponentPtr component = loadLayout(BaseAppPtr(this), str);
+        AC_PRINT << "before factory call ";
+        AC_PRINT << "path " << str;
+        _myThis = BaseAppPtr(this);
+        spark::ComponentPtr component = spark::loadSparkLayout(_myThis, str);
+        AC_PRINT << "after factory call";
         //window = boost::static_pointer_cast<spark::Window>(component);
 
         return true;

@@ -22,7 +22,7 @@ namespace asl {
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;
 
     struct Material {
-        Material(const BaseAppPtr theStage);
+        Material(const BaseAppPtr theApp);
         ~Material();
 
         void createShader();
@@ -39,7 +39,7 @@ namespace asl {
         GLuint shaderProgram;
         GLuint mvpHandle;
         bool rgb;
-        const BaseAppPtr _myStage;
+        const BaseAppPtr _myApp;
     };
 
     typedef boost::shared_ptr<Material> MaterialPtr;

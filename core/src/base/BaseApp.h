@@ -11,6 +11,8 @@ namespace asl {
     class BaseApp {
         public: 
             BaseApp();
+            virtual ~BaseApp();
+
             virtual bool setup(jstring apkPath, jstring layoutFile, JNIEnv* env);
             virtual void onFrame();
             virtual void onTouch();
@@ -20,6 +22,8 @@ namespace asl {
             zip* apkArchive;
         protected:
             bool _myAnimate;
+        private:
+            BaseAppPtr _myThis;
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;

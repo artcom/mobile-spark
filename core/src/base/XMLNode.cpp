@@ -7,9 +7,17 @@ namespace asl {
 
     XMLNode::XMLNode(xmlNode* theNode) : 
         node(theNode) {
+            AC_PRINT << " a";
         xmlAttr *attribute = theNode->properties;
+            AC_PRINT << " b";
+            AC_PRINT << theNode;
+            AC_PRINT << " b.5";
+            printXMLNode(theNode);
+            AC_PRINT << " b.7.5";
+            AC_PRINT << theNode->name;
         nodeName = (const char*)(theNode->name);
-        //AC_PRINT << "node name " << nodeName;
+            AC_PRINT << " c";
+        AC_PRINT << "node name " << nodeName;
         while (attribute) {
             xmlNode* attrNode = attribute->children;
             attributes[std::string((const char*)attribute->name)] = std::string((const char*)attrNode->content);

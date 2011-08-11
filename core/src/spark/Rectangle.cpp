@@ -38,7 +38,7 @@ namespace spark {
         (element->vertexData)[17] = 0.0f;
         _myShape->elementList.push_back(element);
 
-        element->material = MaterialPtr(new Material(_myStage));
+        element->material = MaterialPtr(new Material(_myApp));
         element->material->diffuse = _myColor;
         element->material->createShader();
  
@@ -49,6 +49,6 @@ namespace spark {
     }
 
     void Rectangle::drawObject() const {
-        _myStage->window->drawObject(_myShape);
+        _myApp->window->drawObject(_myShape);
     }
 }
