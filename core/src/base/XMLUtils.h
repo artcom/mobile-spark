@@ -7,7 +7,7 @@
 #include <libxml/tree.h>
 
 namespace asl {
-    xmlNode* loadXML(const std::string & theFilename);
+    xmlDocPtr loadXML(const std::string & theFilename);
     void printXMLNode(const xmlNode* theNode);
 };
 

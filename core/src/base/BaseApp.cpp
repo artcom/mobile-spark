@@ -27,13 +27,8 @@ namespace asl {
 
         //load layout
         str = env->GetStringUTFChars(layoutFile, &isCopy); 
-        AC_PRINT << "before factory call ";
-        AC_PRINT << "path " << str;
-        _myThis = BaseAppPtr(this);
-        spark::ComponentPtr component = spark::loadSparkLayout(_myThis, str);
-        AC_PRINT << "after factory call";
-        //window = boost::static_pointer_cast<spark::Window>(component);
-
+        window = boost::static_pointer_cast<spark::Window>(spark::SparkComponentFactory::loadSparkLayout(BaseAppPtr(this), str));
+    
         return true;
     }
 
@@ -45,6 +40,8 @@ namespace asl {
                 step = 0.0f;
             }
         }
+
+        window->render();
     }
 
     void BaseApp::onTouch() {

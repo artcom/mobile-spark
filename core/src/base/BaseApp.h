@@ -22,8 +22,6 @@ namespace asl {
             zip* apkArchive;
         protected:
             bool _myAnimate;
-        private:
-            BaseAppPtr _myThis;
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;

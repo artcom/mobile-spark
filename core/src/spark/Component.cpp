@@ -1,5 +1,7 @@
 #include "Component.h"
 
+#include "../base/Logger.h"
+
 namespace spark {
 
     Component::Component(): _myParent(ComponentPtr()) {
@@ -12,6 +14,7 @@ namespace spark {
     }
 
     Component::~Component() {
+        AC_PRINT << "delete " + _myName;
     }
 
     void Component::render() const {

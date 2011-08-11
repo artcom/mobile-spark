@@ -45,7 +45,7 @@ namespace asl {
             void run() {
                 perform_XMLLibTest();
                 perform_XMLNodeTest();
-                //perform_loadXMLTest();  //XXX: this sometimes (???) does not work, I don't know why...
+                perform_loadXMLTest();  //XXX: this sometimes (???) does not work, I don't know why...
             }
             
             //fixtures
@@ -88,7 +88,9 @@ namespace asl {
             }
 
             void perform_loadXMLTest() {
-                xmlNode* xmlLibNode = loadXML("/sdcard/test.spark");
+                xmlDocPtr doc = loadXML("/sdcard/test.spark");
+                ENSURE_MSG(doc, "doc should not be null");
+                xmlNode* xmlLibNode = xmlDocGetRootElement(doc);
                 ENSURE_MSG(xmlLibNode, "xmlLibNode should not be null");
                 XMLNode *myXMLNode = new XMLNode(xmlLibNode);
                 ENSURE_MSG(myXMLNode, "XMLNode should not be null");
@@ -98,6 +100,7 @@ namespace asl {
                 ENSURE_EQUAL(myXMLNode2->name, std::string("ourWindow"));
                 ENSURE_MSG(myXMLNode2->attributes.find("width") != myXMLNode2->attributes.end(), "width should be in attributes of document");
                 ENSURE_EQUAL(myXMLNode2->attributes["width"], std::string("300"));
+                xmlFreeDoc(doc);
             }
     };    
 
