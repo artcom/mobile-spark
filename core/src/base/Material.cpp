@@ -8,7 +8,7 @@
 
 namespace asl {
 
-    Material::Material(const BaseAppPtr theStage) : _myStage(theStage) {
+    Material::Material(const BaseAppPtr theApp) : _myApp(theApp) {
 
         //TODO: create shader when we have the necessary information
         createShader();
@@ -19,8 +19,8 @@ namespace asl {
 
     void Material::createShader() {
         //TODO: ios???
-        std::string vertexShader = android::readFromPackage(_myStage->apkArchive, DEFAULT_VERTEX_SHADER.c_str());
-        std::string fragmentShader = android::readFromPackage(_myStage->apkArchive, DEFAULT_FRAGMENT_SHADER.c_str());
+        std::string vertexShader = android::readFromPackage(_myApp->apkArchive, DEFAULT_VERTEX_SHADER.c_str());
+        std::string fragmentShader = android::readFromPackage(_myApp->apkArchive, DEFAULT_FRAGMENT_SHADER.c_str());
 
         shaderProgram = createProgram(vertexShader.c_str(), fragmentShader.c_str());
         if (!shaderProgram) {

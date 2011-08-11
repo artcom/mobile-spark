@@ -2,6 +2,8 @@
 
 
 #include "../base/Logger.h"
+#include "../base/XMLUtils.h"
+
 #include "Window.h"
 #include "Transform.h"
 #include "Rectangle.h"
@@ -16,7 +18,7 @@ using namespace asl;
 
 namespace spark {
 
-    ComponentPtr SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) {
+    ComponentPtr createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) {
         ComponentPtr component;
         if (theNode->nodeName == "Window") {
             AC_PRINT << "create Window";
@@ -29,5 +31,26 @@ namespace spark {
             component = TransformPtr(new Transform(theApp, theNode, theParent));
         }
         return component;
+    }
+
+
+    ComponentPtr loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath) {
+
+        AC_PRINT << "hello from factory";
+        ComponentPtr myComponentPtr;
+        AC_PRINT << "1";
+        xmlNode* myRootNode = loadXML(thePath);
+        AC_PRINT << "2";
+        AC_PRINT << " good root? " << myRootNode;
+        AC_PRINT << " name " << myRootNode->name;
+        AC_PRINT << " type " << myRootNode->type;
+
+        //XMLNode* help = new XMLNode(myRootNode);
+        AC_PRINT << "2.5";
+        //XMLNodePtr myNode(help);
+        AC_PRINT << "3";
+        //myComponentPtr =  createComponent(theApp, myNode);
+        AC_PRINT << "4";
+        return myComponentPtr;
     }
 }

@@ -53,4 +53,4 @@ add_library(LIBXML2 STATIC IMPORTED)
 # point the imported target at the real file
 set_property(TARGET LIBXML2 PROPERTY
             IMPORTED_LOCATION ${LIBXML2_LIBRARY})
-target_link_libraries(base android LIBXML2 ${ANDROID_LOG_LIB} ${OPENGL_ES_20})
+target_link_libraries(base spark android LIBXML2 ${ANDROID_LOG_LIB} ${OPENGL_ES_20})

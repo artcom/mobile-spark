@@ -6,8 +6,11 @@
 namespace asl {
 
     void printXMLNode(const xmlNode* theNode) {
+        AC_PRINT << "print xml node";
         const xmlNode *cur_node = NULL;
         for (cur_node = theNode; cur_node; cur_node = cur_node->next) {
+            AC_PRINT << " next loop";
+            AC_PRINT << " type " << cur_node->type << " compare to " << XML_ELEMENT_NODE;
             if (cur_node->type == XML_ELEMENT_NODE) {
                 AC_PRINT << "node type: Element, name: " << cur_node->name;
                 xmlAttr *attribute = cur_node->properties;
@@ -34,6 +37,7 @@ namespace asl {
         }
         /* parse the file, activating the DTD validation option */
         doc = xmlCtxtReadFile(ctxt, theFilename.c_str(), NULL, XML_PARSE_DTDATTR);
+
         /* check if parsing suceeded */
         if (doc == NULL) {
             AC_ERROR << "Failed to parse " << theFilename;
@@ -48,6 +52,9 @@ namespace asl {
         }
 
         root_element = xmlDocGetRootElement(doc);
+        AC_PRINT << "root " << root_element;
+        AC_PRINT << " name " << root_element->name;
+        AC_PRINT << " type " << root_element->type;
 
         /* free up the resulting document */
         xmlFreeDoc(doc);
