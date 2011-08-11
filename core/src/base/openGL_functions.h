@@ -4,19 +4,19 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 
-
+#include "Logger.h"
 
 namespace asl {
     //////////////////////////////////////////logging
     static void printGLString(const char *name, GLenum s) {
         const char *v = (const char *) glGetString(s);
-        LOGI("GL %s = %s\n", name, v);
+        AC_PRINT << "GL " << name << " = " << v;
     }
 
     static void checkGlError(const char* op) {
         for (GLint error = glGetError(); error; error
                 = glGetError()) {
-            LOGI("after %s() glError (0x%x)\n", op, error);
+            AC_PRINT << "after " << op << "() glError (0x" << error << ")";
         }
     }
 
@@ -43,8 +43,7 @@ namespace asl {
                     char* buf = (char*) malloc(infoLen);
                     if (buf) {
                         glGetShaderInfoLog(shader, infoLen, NULL, buf);
-                        LOGE("Could not compile shader %d:\n%s\n",
-                                shaderType, buf);
+                        AC_ERROR << "Could not compile shader " << shaderType << ": \n" << buf;
                         free(buf);
                     }
                     glDeleteShader(shader);
@@ -82,7 +81,7 @@ namespace asl {
                     char* buf = (char*) malloc(bufLength);
                     if (buf) {
                         glGetProgramInfoLog(program, bufLength, NULL, buf);
-                        LOGE("Could not link program:\n%s\n", buf);
+                        AC_ERROR << "Could not link program:\n " << buf;
                         free(buf);
                     }
                 }
@@ -103,8 +102,7 @@ namespace asl {
          }
          checkGlError(std::string(theUniformFlag ? "glGetUniformLocation" : "glGetAttribLocation").
                              append(" ").append(theVariableName).c_str());
-         LOGI("%s(\"%s\") = %d\n", (theUniformFlag?"glGetUniformLocation":"glGetAttribLocation"), 
-                 theVariableName.c_str(), myHandle);
+         AC_PRINT << (theUniformFlag?"glGetUniformLocation":"glGetAttribLocation") << "(\"" << theVariableName << "\") = " << myHandle;
          return myHandle;
      }
  
