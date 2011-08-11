@@ -13,6 +13,7 @@ namespace asl {
             BaseApp();
             virtual bool setup(jstring apkPath, jstring layoutFile, JNIEnv* env);
             virtual void onFrame();
+            virtual void onTouch();
 
             //spark::WindowPtr window; 
             float step;

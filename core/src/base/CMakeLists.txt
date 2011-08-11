@@ -3,6 +3,7 @@ add_subdirectory(Tests)
 set(SOURCES
 BaseApp.cpp
 BaseEntry.cpp
+DemoApp.cpp
 Exception.cpp
 Logger.cpp
 MatrixStack.cpp
@@ -15,6 +16,7 @@ XMLUtils.cpp
 set(HEADERS
 BaseApp.h
 BaseEntry.h
+DemoApp.h
 Exception.h
 Logger.h
 MatrixStack.h

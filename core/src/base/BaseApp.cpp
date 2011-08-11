@@ -12,6 +12,8 @@ namespace asl {
     }
 
     bool BaseApp::setup(jstring apkPath, jstring layoutFile, JNIEnv* env) {
+        AC_PRINT << "setup";
+
         printGLInfo();
         
         //load apk
@@ -29,12 +31,18 @@ namespace asl {
     }
 
     void BaseApp::onFrame() {
+        //AC_PRINT << "onFrame";
         if (_myAnimate) {
             step += 0.0001f;
             if (step > 1.0f) {
                 step = 0.0f;
             }
         }
+    }
+
+    void BaseApp::onTouch() {
+        AC_PRINT << "onTOUCH";
+        _myAnimate = !_myAnimate;
     }
 }
 
