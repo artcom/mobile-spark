@@ -1,0 +1,138 @@
+package com.artcom.mobile;
+
+
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.PixelFormat;
+import android.opengl.GLSurfaceView;
+import android.util.Log;
+import android.view.MotionEvent;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.opengles.GL10;   //needed only for method signaturs
+
+
+public class ASLOpenGLView extends GLSurfaceView {
+    
+    public static final String PACKAGE_NAME = "com.artcom.mobile";
+    private static String LOG_TAG = "ASLOpenGLView";
+    
+    //TODO: this should be part of package
+    public static final String LAYOUT_FILE = "/sdcard/test.spark";
+    
+    private Play3DRenderer myRenderer;
+
+    public ASLOpenGLView(Context context) {
+        super(context);
+        myRenderer = new Play3DRenderer(context);
+        init(false, 0, 0);
+    }
+
+    public ASLOpenGLView(Context context, boolean translucent, int depth, int stencil) {
+        super(context);
+        init(translucent, depth, stencil);
+    }
+    
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Log.i(LOG_TAG,"View.onTouchEvent");
+        BaseNativeLib.onTouch();
+        return super.onTouchEvent(event);
+    }
+    
+    private void init(boolean translucent, int depth, int stencil) {
+
+        /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
+         * If we want a translucent one, we should change the surface's
+         * format here, using PixelFormat.TRANSLUCENT for GL Surfaces
+         * is interpreted as any 32-bit surface with alpha by SurfaceFlinger.
+         */
+        if (translucent) {
+            this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        }
+
+        setEGLContextFactory(new ContextFactory());
+        setRenderer(myRenderer);
+    }
+
+    private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
+        private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+        public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
+            Log.w(LOG_TAG, "creating OpenGL ES 2.0 context");
+            checkEglError("Before eglCreateContext", egl);
+            int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
+            EGLContext context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
+            checkEglError("After eglCreateContext", egl);
+            return context;
+        }
+
+        public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context) {
+            egl.eglDestroyContext(display, context);
+        }
+    }
+
+    private static void checkEglError(String prompt, EGL10 egl) {
+        int error;
+        while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
+            Log.e(LOG_TAG, String.format("%s: EGL error: 0x%x", prompt, error));
+        }
+    }
+
+    private static class Play3DRenderer implements GLSurfaceView.Renderer {
+        
+        public static int numFrames = 0;
+        public static long millisec = 0;
+
+        private Context context;
+        public Play3DRenderer (Context context) {
+            this.context = context;
+        }
+        
+        public void onDrawFrame(GL10 glUnused) {
+            updateFrameCounter();
+            BaseNativeLib.onFrame();
+        }
+
+        public void onSurfaceChanged(GL10 glUnused, int width, int height) {
+            BaseNativeLib.setup(getApkFilePath(), LAYOUT_FILE);
+        }
+        
+        private void updateFrameCounter() {
+            if (numFrames == 0) {
+                millisec = System.currentTimeMillis();
+            } else if (numFrames == 99) {
+                long now = System.currentTimeMillis();
+                Log.v(LOG_TAG, "num Frames " + numFrames);
+                Log.v(LOG_TAG, "time " + (now- millisec));
+                float fps = (float)numFrames/(float)(now-millisec) * 1000.0f;
+                Log.v(LOG_TAG, "fps " + fps);
+                millisec = now;
+                numFrames = 0;
+            }
+            numFrames++;
+        }
+
+        private String getApkFilePath() {
+            String apkFilePath = null;
+            ApplicationInfo appInfo = null;
+            PackageManager packMgmr = context.getPackageManager();
+            try {
+                appInfo = packMgmr.getApplicationInfo(PACKAGE_NAME, 0);
+            } catch (NameNotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Unable to locate assets, aborting...");
+            }
+            apkFilePath = appInfo.sourceDir;
+            return apkFilePath;
+        }
+
+        public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+        }
+    }
+}
+
