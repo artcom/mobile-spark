@@ -3,7 +3,7 @@
 
 #include <jni.h>
 #include "../android/APK_functions.h"
-//#include "y60/spark/Window.h"
+#include "../spark/Window.h"
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 
@@ -15,7 +15,7 @@ namespace asl {
             virtual void onFrame();
             virtual void onTouch();
 
-            //spark::WindowPtr window; 
+            spark::WindowPtr window; 
             float step;
             zip* apkArchive;
         protected:
