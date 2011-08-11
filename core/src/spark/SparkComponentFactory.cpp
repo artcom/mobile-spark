@@ -18,7 +18,8 @@ using namespace asl;
 
 namespace spark {
 
-    void SparkComponentFactory::createComponent(ComponentPtr& theReturn, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) {
+    ComponentPtr SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) {
+        ComponentPtr theReturn;
         if (theNode->nodeName == "Window") {
             AC_PRINT << "create Window";
             theReturn = WindowPtr(new Window(theApp, theNode, theParent));
@@ -29,6 +30,7 @@ namespace spark {
             AC_PRINT << "create Transform"; 
             theReturn = TransformPtr(new Transform(theApp, theNode, theParent));
         }
+        return theReturn;
     }
 
 
@@ -37,7 +39,7 @@ namespace spark {
         xmlDocPtr doc = loadXML(thePath);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));
-        createComponent(myComponentPtr, theApp, myNode);
+        myComponentPtr = createComponent(theApp, myNode);
         xmlFreeDoc(doc);        
         return myComponentPtr;
     }
