@@ -1,13 +1,11 @@
 #include "Material.h"
 
-#include <spark/BaseApp.h>  //XXX: can we remove this?
-
 #include "openGL_functions.h"
 
 
 namespace mar {
 
-    Material::Material(const spark::BaseAppPtr theApp) : _myApp(theApp) {
+    Material::Material(const AssetProviderPtr theAssetProvider) : _myAssetProvider(theAssetProvider) {
         //TODO: create shader when we have the necessary information
         createShader();
     }
@@ -17,8 +15,8 @@ namespace mar {
 
     void Material::createShader() {
         //TODO: ios???
-        std::string vertexShader = _myApp->assetProvider->getStringFromFile(DEFAULT_VERTEX_SHADER); 
-        std::string fragmentShader = _myApp->assetProvider->getStringFromFile(DEFAULT_FRAGMENT_SHADER); 
+        std::string vertexShader = _myAssetProvider->getStringFromFile(DEFAULT_VERTEX_SHADER); 
+        std::string fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_FRAGMENT_SHADER); 
 
         shaderProgram = createProgram(vertexShader.c_str(), fragmentShader.c_str());
         if (!shaderProgram) {

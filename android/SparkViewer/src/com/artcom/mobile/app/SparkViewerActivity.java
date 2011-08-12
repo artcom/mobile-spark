@@ -29,12 +29,17 @@ public class SparkViewerActivity extends Activity {
     @Override protected void onPause() {
         super.onPause();
         mView.onPause();
-        Log.i(LOG_TAG, "SparkViewer paused");        
+        Log.i(LOG_TAG, "----------------------SparkViewer paused");        
+    }
+    
+    @Override protected void onStop() {
+        super.onStop();
+        Log.i(LOG_TAG, "--------------------- on Stop");
     }
 
     @Override protected void onResume() {
         super.onResume();
         mView.onResume();
-        Log.i(LOG_TAG, "SparkViewer resumed");        
+        Log.i(LOG_TAG, "------------------------SparkViewer resumed");        
     }    
 }
