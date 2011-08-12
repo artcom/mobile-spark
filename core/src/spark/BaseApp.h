@@ -15,7 +15,7 @@ namespace spark {
             virtual ~BaseApp();
 
             virtual bool setup(jstring apkPath, jstring layoutFile, JNIEnv* env);
-            virtual void onFrame();
+            virtual void onFrme();
             virtual void onTouch();
 
             spark::WindowPtr window; 

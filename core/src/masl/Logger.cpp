@@ -30,16 +30,17 @@
 //
 */
 
+#include "Settings.h"
+
 #include "Logger.h"
 #include "Exception.h"
 #include "string_functions.h"
+
 #ifdef __APPLE__
     //iOS
-    #include "Logger.h"
     #include <iostream>
 #elif __ANDROID__
     //Android
-    #include "Logger.h"
     #include <android/log.h>
 #endif
 
