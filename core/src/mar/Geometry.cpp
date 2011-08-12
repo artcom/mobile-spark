@@ -24,7 +24,9 @@ namespace mar {
         checkGlError("glUseProgram");
 
         glUniformMatrix4fv(material->mvpHandle, 1, GL_FALSE, theMatrix.data());
+        glUniform4fv(material->colorHandle, 1, &(material->diffuse[0]));
     }
+
     void Element::unloadData() const {
         glDisableVertexAttribArray(VERTEX_POS_INDEX);
     }
