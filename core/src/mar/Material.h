@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <GLES2/gl2.h>
+#include "GlHeaders.h"
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 //shader program handles
