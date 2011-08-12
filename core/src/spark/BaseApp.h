@@ -14,7 +14,7 @@ namespace spark {
             BaseApp();
             virtual ~BaseApp();
 
-            virtual bool setup(jstring apkPath, jstring layoutFile, JNIEnv* env);
+            //virtual bool setup(std::string apkPath, std::string layoutFile, JNIEnv* env) {return true;}
             virtual void onFrame();
             virtual void onTouch();
 
