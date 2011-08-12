@@ -34,8 +34,7 @@ namespace spark {
 
 
     ComponentPtr SparkComponentFactory::loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath) {
-        //xmlDocPtr doc = loadXML(thePath);
-        std::string myLayout = android::readFromPackage(theApp->apkArchive, thePath.c_str());
+        std::string myLayout = theApp->assetProvider->getStringFromFile(thePath);
         xmlDocPtr doc = loadXMLFromMemory(myLayout);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));

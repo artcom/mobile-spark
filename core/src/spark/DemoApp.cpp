@@ -1,5 +1,6 @@
 #include "DemoApp.h"
 
+#include <jni.h>
 #include <mar/openGL_functions.h>
 #include <spark/SparkComponentFactory.h>
 
@@ -11,26 +12,7 @@ namespace spark {
     }
     DemoApp::~DemoApp() {
     }
-    
-#ifdef __ANDROID__
-    bool DemoApp::setup(std::string apkPath, std::string layoutFile, JNIEnv* env) {
-        AC_PRINT << "setup";
 
-        printGLInfo();
-        
-        //load apk
-        apkArchive = NULL;
-        //jboolean isCopy;
-        //const char* str = env->GetStringUTFChars(apkPath, &isCopy);
-        android::loadAPK(&apkArchive, apkPath);
-
-        //load layout
-        //str = env->GetStringUTFChars(layoutFile, &isCopy); 
-        window = boost::static_pointer_cast<spark::Window>(spark::SparkComponentFactory::loadSparkLayout(BaseAppPtr(this), layoutFile));
-    
-        return true;
-    }
-#endif    
 }
 
 /////////////////////////////////////////////////////////////////////////App-Instance
@@ -51,10 +33,9 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
                                                              jstring apkFile,
                                                              jstring layoutFile) {
     jboolean isCopy;
-    const char* myApkFile = env->GetStringUTFChars(apkFile, &isCopy);                                                                    
-    const char* myLayoutFile = env->GetStringUTFChars(layoutFile, &isCopy);                                                                    
-                                                                
-    ourApp.setup(myApkFile, myLayoutFile, env);
+    const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
+    const char* myLayoutFile = env->GetStringUTFChars(layoutFile, &isCopy);
+    ourApp.setup(myAssetPath, myLayoutFile);
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj) {
