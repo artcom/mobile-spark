@@ -2,12 +2,12 @@
 
 #include <masl/Logger.h>
 
-
+using namespace std;
 namespace android {
 
-    void loadAPK (zip** theAPKArchive, const char* apkPath) {
+    void loadAPK (zip** theAPKArchive, const string & apkPath) {
         AC_PRINT << "Loading APK " << apkPath;
-        *theAPKArchive = zip_open(apkPath, 0, NULL);
+        *theAPKArchive = zip_open(apkPath.c_str(), 0, NULL);
         if (!(*theAPKArchive)) {
             AC_ERROR << "Error loading APK";
             return;
@@ -26,13 +26,13 @@ namespace android {
         //}
     }
 
-    std::string readFromPackage(zip* theAPKArchive, const char* theFileName) {
+    std::string readFromPackage(zip* theAPKArchive, const string &  theFileName) {
         std::string content = "";
         const size_t MAX_LENGTH = 5000;
         if (!theAPKArchive) {
             AC_ERROR << "apk broken";
         }
-        zip_file* file = zip_fopen(theAPKArchive, theFileName, 0);
+        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
         if (!file) {
             AC_ERROR << "Error opening " << theFileName << " from APK";
             return NULL;
@@ -44,7 +44,7 @@ namespace android {
         return content;
     }
 
-    std::vector<std::string> readLineByLineFromPackage(zip* theAPKArchive, const char* theFileName) {
+    std::vector<std::string> readLineByLineFromPackage(zip* theAPKArchive, const string & theFileName) {
         std::vector<std::string> content;
         const size_t MAX_LENGTH = 1000;
         char buffer[MAX_LENGTH];
@@ -53,7 +53,7 @@ namespace android {
         if (!theAPKArchive) {
             AC_ERROR << "apk broken";
         }
-        zip_file* file = zip_fopen(theAPKArchive, theFileName, 0);
+        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
         if (!file) {
             AC_ERROR << "Error opening " << theFileName << " from APK";
             return content;
