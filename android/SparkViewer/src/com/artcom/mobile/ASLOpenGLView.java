@@ -16,6 +16,8 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;   //needed only for method signaturs
 
+import com.artcom.mobile.Base.APK;
+
 
 public class ASLOpenGLView extends GLSurfaceView {
     
@@ -41,7 +43,7 @@ public class ASLOpenGLView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.i(LOG_TAG,"View.onTouchEvent");
-        BaseNativeLib.onTouch();
+        BaseBinding.onTouch();
         return super.onTouchEvent(event);
     }
     
@@ -95,11 +97,11 @@ public class ASLOpenGLView extends GLSurfaceView {
         
         public void onDrawFrame(GL10 glUnused) {
             updateFrameCounter();
-            BaseNativeLib.onFrame();
+            BaseBinding.onFrame();
         }
 
         public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-            BaseNativeLib.setup(getApkFilePath(), LAYOUT_FILE);
+            BaseBinding.setup(APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
         }
         
         private void updateFrameCounter() {
@@ -117,19 +119,6 @@ public class ASLOpenGLView extends GLSurfaceView {
             numFrames++;
         }
 
-        private String getApkFilePath() {
-            String apkFilePath = null;
-            ApplicationInfo appInfo = null;
-            PackageManager packMgmr = context.getPackageManager();
-            try {
-                appInfo = packMgmr.getApplicationInfo(PACKAGE_NAME, 0);
-            } catch (NameNotFoundException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Unable to locate assets, aborting...");
-            }
-            apkFilePath = appInfo.sourceDir;
-            return apkFilePath;
-        }
 
         public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         }
