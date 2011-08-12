@@ -1,7 +1,8 @@
 package com.artcom.mobile;
 
 
-import com.artcom.mobile.BaseNativeLib;
+import com.artcom.mobile.BaseBinding;
+import com.artcom.mobile.Base.AC_Logger;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +19,9 @@ public class SparkViewerActivity extends Activity {
         setContentView(mView);
         
         //testing
-        Log.i(LOG_TAG, "SparkViewer created, ready to call native.");     
-        BaseNativeLib.loadSpark("/sdcard/test.spark");        
+        Log.i(LOG_TAG, "SparkViewer created, ready to call native.");  
+        AC_Logger.print("SparkViewer created, ready to call native [cpp logger].");
+        BaseBinding.loadSpark("/sdcard/test.spark");        
         Log.i(LOG_TAG, "SparkViewer native called");     
     }
     
