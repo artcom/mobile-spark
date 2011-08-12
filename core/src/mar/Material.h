@@ -39,7 +39,10 @@ namespace mar {
         std::string textureFile;
         GLuint textureId;
         GLuint shaderProgram;
+
         GLuint mvpHandle;
+        GLuint colorHandle;
+
         bool rgb;
         const spark::BaseAppPtr _myApp;
     };
