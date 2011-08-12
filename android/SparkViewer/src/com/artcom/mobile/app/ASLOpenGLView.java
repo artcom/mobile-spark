@@ -24,8 +24,7 @@ public class ASLOpenGLView extends GLSurfaceView {
     public static final String PACKAGE_NAME = "com.artcom.mobile";
     private static String LOG_TAG = "ASLOpenGLView";
     
-    //TODO: this should be part of package
-    public static final String LAYOUT_FILE = "/sdcard/test.spark";
+    public static final String LAYOUT_FILE = "assets/layouts/main.spark";
     
     private Play3DRenderer myRenderer;
 
