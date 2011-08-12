@@ -20,6 +20,6 @@ namespace spark {
     void Component::render() const {
     }
 
-    void Component::drawObject() const {
+    void Component::renderShape() const {
     }
 }

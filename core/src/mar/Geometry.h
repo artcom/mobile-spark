@@ -57,7 +57,7 @@ namespace mar {
     public:
         std::vector<ElementPtr> elementList; 
 
-        virtual void draw(const matrix & theMvp) const;
+        virtual void render(const matrix & theMvp) const;
     };
 
     typedef boost::shared_ptr<Shape> ShapePtr;

@@ -3,7 +3,7 @@
 
 namespace mar {
 
-    void Shape::draw(const matrix & theMatrix) const {
+    void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
             ElementPtr element = *it;
