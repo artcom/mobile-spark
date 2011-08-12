@@ -19,10 +19,10 @@ public class SparkViewerActivity extends Activity {
         setContentView(mView);
         
         //testing
-        Log.i(LOG_TAG, "SparkViewer created, ready to call native.");  
-        AC_Logger.print("SparkViewer created, ready to call native [cpp logger].");
-        BaseBinding.loadSpark("/sdcard/test.spark");        
-        Log.i(LOG_TAG, "SparkViewer native called");     
+        //Log.i(LOG_TAG, "SparkViewer created, ready to call native.");  
+        //AC_Logger.print("SparkViewer created, ready to call native [cpp logger].");
+        //BaseBinding.loadSpark("/sdcard/test.spark");        
+        //Log.i(LOG_TAG, "SparkViewer native called");     
     }
     
     @Override protected void onPause() {

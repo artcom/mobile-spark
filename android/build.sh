@@ -13,6 +13,10 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchain/android.toolchain.cmake ..
 $MAKE_TOOL
 
 cd -
+
+echo "push layout to sdcard"
+adb push ../test.spark /sdcard/test.spark
+
 cd SparkViewer
 
 # update android project
