@@ -2,7 +2,7 @@ package com.artcom.mobile.test;
 
 import android.util.Log;
 
-public class TestBaseLib {
+public class TestBaseBinding {
 
     static {
         System.loadLibrary("masl");	
