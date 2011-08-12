@@ -20,13 +20,13 @@ namespace spark {
     ComponentPtr SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) {
         ComponentPtr theReturn;
         if (theNode->nodeName == "Window") {
-            AC_PRINT << "create Window";
+            //AC_INFO << "create Window";
             theReturn = WindowPtr(new Window(theApp, theNode, theParent));
         } else if (theNode->nodeName == "Rectangle") {
-            AC_PRINT <<"create Rectangle";
+            //AC_INFO <<"create Rectangle";
             theReturn = RectanglePtr(new Rectangle(theApp, theNode, theParent));
         } else if (theNode->nodeName == "Transform") {
-            AC_PRINT << "create Transform"; 
+            //AC_INFO << "create Transform"; 
             theReturn = TransformPtr(new Transform(theApp, theNode, theParent));
         }
         return theReturn;
@@ -34,10 +34,12 @@ namespace spark {
 
 
     ComponentPtr SparkComponentFactory::loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath) {
-        ComponentPtr myComponentPtr;
-        xmlDocPtr doc = loadXML(thePath);
+        //xmlDocPtr doc = loadXML(thePath);
+        std::string myLayout = android::readFromPackage(theApp->apkArchive, thePath.c_str());
+        xmlDocPtr doc = loadXMLFromMemory(myLayout);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));
+        ComponentPtr myComponentPtr;
         myComponentPtr = createComponent(theApp, myNode);
         xmlFreeDoc(doc);        
         return myComponentPtr;

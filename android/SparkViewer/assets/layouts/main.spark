@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Window name="ourWindow" width="300" height="300" clearColor="[1,0,0,1]">
+<Window name="ourWindow" width="900" height="500" clearColor="[1,0,0,1]">
     <Transform name="transformB" x="5" rotationZ="-1">
         <Rectangle name="objectA" x="0" y="-5" width="3" height="10" color="[0,0,0.3]"/>
         <Rectangle name="objectB" width="10" height="3" color="[0,0,0.3]"/>
