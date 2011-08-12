@@ -11,4 +11,4 @@ include_directories (${Boost_INCLUDE_DIRS})
 include_directories (${CML_INCLUDE_DIR})
 include_directories (${LIBXML2_INCLUDE_DIRS})
 
-target_link_libraries(mar masl android ${OPENGL_ES_20})
+target_link_libraries(mar masl ${OPENGL_ES_20})

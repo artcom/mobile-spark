@@ -38,7 +38,7 @@ namespace spark {
         (element->vertexData)[17] = 0.0f;
         _myShape->elementList.push_back(element);
 
-        element->material = MaterialPtr(new Material(_myApp));
+        element->material = MaterialPtr(new Material(_myApp->assetProvider));
         element->material->diffuse = _myColor;
         element->material->createShader();
  
