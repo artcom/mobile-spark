@@ -4,10 +4,17 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
+    //needed for component factory
+    namespace  {
+        ComponentPtr createRectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr()) {
+            return RectanglePtr(new Rectangle(theApp, theXMLNode, theParent));
+        };
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Rectangle", spark::createRectangle);
+    }
+
+
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent) {
-
-        SparkComponentFactory::get().registerComponent(std::string("Rectangle"), createRectangle);
 
         float width = _myXMLNode->getFloatValue("width");
         float height = _myXMLNode->getFloatValue("height");
