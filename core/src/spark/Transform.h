@@ -9,9 +9,12 @@ namespace spark {
     public: 
         Transform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Transform();
-
     };
 
     typedef boost::shared_ptr<Transform> TransformPtr;
+
+    //needed for component factory
+    ComponentPtr createTransform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
 };
+
 #endif 

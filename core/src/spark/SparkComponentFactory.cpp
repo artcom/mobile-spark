@@ -17,19 +17,24 @@ using namespace masl;
 
 namespace spark {
 
-    ComponentPtr SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) {
-        ComponentPtr theReturn;
-        if (theNode->nodeName == "Window") {
-            //AC_INFO << "create Window";
-            theReturn = WindowPtr(new Window(theApp, theNode, theParent));
-        } else if (theNode->nodeName == "Rectangle") {
-            //AC_INFO <<"create Rectangle";
-            theReturn = RectanglePtr(new Rectangle(theApp, theNode, theParent));
-        } else if (theNode->nodeName == "Transform") {
-            //AC_INFO << "create Transform"; 
-            theReturn = TransformPtr(new Transform(theApp, theNode, theParent));
+
+    // Returns 'true' if registration was successful
+    bool SparkComponentFactory::registerComponent(const std::string & theComponentName,
+                    const CreateComponentCallback theCreateFn) {
+        return _myCreateCallbackMap.insert(CallbackMap::value_type(theComponentName, theCreateFn)).second;
+    }
+
+    // Returns 'true' if the ShapeId was registered before
+    bool SparkComponentFactory::unregisterComponent(const std::string & theComponentName) {
+        return _myCreateCallbackMap.erase(theComponentName) == 1;
+    }
+
+    ComponentPtr SparkComponentFactory::createComponent(const std::string & theComponentName, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
+        CallbackMap::const_iterator i = _myCreateCallbackMap.find(theComponentName);
+        if (i == _myCreateCallbackMap.end()) {
+            throw std::runtime_error("Unknown Component Name");
         }
-        return theReturn;
+        return (i->second)(theApp, theNode, theParent);
     }
 
 
@@ -38,8 +43,7 @@ namespace spark {
         xmlDocPtr doc = loadXMLFromMemory(myLayout);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));
-        ComponentPtr myComponentPtr;
-        myComponentPtr = createComponent(theApp, myNode);
+        ComponentPtr myComponentPtr = createComponent(myNode->nodeName, theApp, myNode);
         xmlFreeDoc(doc);        
         return myComponentPtr;
     }
