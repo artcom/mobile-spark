@@ -22,8 +22,5 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<Rectangle> RectanglePtr;
-
-    //needed for component factory
-    ComponentPtr createRectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
 };
 #endif 

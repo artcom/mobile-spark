@@ -3,12 +3,21 @@
 #include <mar/openGL_functions.h>
 #include "SparkComponentFactory.h"
 
+
 namespace spark {
+
+    //needed for component factory
+    namespace  {
+        ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr()) {
+            return WindowPtr(new Window(theApp, theXMLNode, theParent));
+        };
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
+    }
+
+
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent) {
-
-        SparkComponentFactory::get().registerComponent("Window", createWindow);
 
         _myWidth = _myXMLNode->getFloatValue("width",100);
         _myHeight = _myXMLNode->getFloatValue("height",100);
@@ -56,8 +65,4 @@ namespace spark {
         theShape->render(matrixStack.getTop());
         matrixStack.pop();
     }
-
-    ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-        return WindowPtr(new Window(theApp, theXMLNode, theParent));
-    };
 }

@@ -4,10 +4,6 @@
 #include <masl/Logger.h>
 #include <masl/XMLUtils.h>
 
-#include "Window.h"
-#include "Transform.h"
-#include "Rectangle.h"
-
 using namespace masl;
 
 //TODO: every new widget has to be
