@@ -1,9 +1,13 @@
 #include "Rectangle.h"
 #include "BaseApp.h"
 
+#include "SparkComponentFactory.h"
+
 namespace spark {
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent) {
+
+        SparkComponentFactory::get().registerComponent(std::string("Rectangle"), createRectangle);
 
         float width = _myXMLNode->getFloatValue("width");
         float height = _myXMLNode->getFloatValue("height");
@@ -51,4 +55,8 @@ namespace spark {
     void Rectangle::renderShape() const {
         _myApp->window->renderShape(_myShape);
     }
+
+    ComponentPtr createRectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
+        return RectanglePtr(new Rectangle(theApp, theXMLNode, theParent));
+    };
 }

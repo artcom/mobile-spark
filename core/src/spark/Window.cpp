@@ -1,12 +1,14 @@
 #include "Window.h"
 
 #include <mar/openGL_functions.h>
-#include "BaseApp.h"
+#include "SparkComponentFactory.h"
 
 namespace spark {
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent) {
+
+        SparkComponentFactory::get().registerComponent("Window", createWindow);
 
         _myWidth = _myXMLNode->getFloatValue("width",100);
         _myHeight = _myXMLNode->getFloatValue("height",100);
@@ -15,6 +17,8 @@ namespace spark {
         if (_myClearColor.size() == 3) {
             _myClearColor.push_back(1.0f);
         }
+
+        printGLInfo();
 
         glEnable(GL_DEPTH_TEST); 
         glDepthMask(GL_TRUE);
@@ -53,4 +57,7 @@ namespace spark {
         matrixStack.pop();
     }
 
+    ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
+        return WindowPtr(new Window(theApp, theXMLNode, theParent));
+    };
 }

@@ -4,10 +4,11 @@
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <mar/AssetProvider.h>
-#include <spark/Window.h>
+#include "Window.h"
 
 
 namespace spark {
+
     class BaseApp {
         public: 
             BaseApp();

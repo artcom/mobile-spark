@@ -31,5 +31,8 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<Window> WindowPtr;
+
+    //needed for component factory
+    ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
 };
 #endif
