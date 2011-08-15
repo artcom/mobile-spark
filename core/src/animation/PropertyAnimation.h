@@ -1,0 +1,5 @@
+#ifndef _ac_mobile_animation_PropertyAnimation_h_included_
+#define _ac_mobile_animation_PropertyAnimation_h_included_
+
+#endif
+

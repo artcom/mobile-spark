@@ -2,7 +2,8 @@
 
 #include <jni.h>
 
-#include <masl/Logger.h>
+#include <animation/AnimationManager.h>
+
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
@@ -11,6 +12,10 @@ namespace spark {
     DemoApp::~DemoApp() {
     }
 
+    void DemoApp::onTouch() {
+        animation::AnimationPtr myAnimation = animation::AnimationPtr(new animation::Animation());
+        animation::AnimationManager::get().play(myAnimation); 
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////App-Instance
