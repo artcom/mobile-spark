@@ -40,3 +40,4 @@ endmacro(ADD_FRAMEWORK)
 endif()
 
 add_subdirectory(core)
+add_subdirectory(iOS)
