@@ -30,9 +30,12 @@
 //
 */
 
+#include "Settings.h"
+
 #include "Logger.h"
 #include "Exception.h"
 #include "string_functions.h"
+
 #ifdef __APPLE__
     //iOS
     #include <iostream>
