@@ -1,7 +1,18 @@
 #include "Rectangle.h"
 #include "BaseApp.h"
 
+#include "SparkComponentFactory.h"
+
 namespace spark {
+    //needed for component factory
+    namespace  {
+        ComponentPtr createRectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr()) {
+            return RectanglePtr(new Rectangle(theApp, theXMLNode, theParent));
+        };
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Rectangle", spark::createRectangle);
+    }
+
+
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent) {
 
@@ -51,4 +62,8 @@ namespace spark {
     void Rectangle::renderShape() const {
         _myApp->window->renderShape(_myShape);
     }
+
+    ComponentPtr createRectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
+        return RectanglePtr(new Rectangle(theApp, theXMLNode, theParent));
+    };
 }

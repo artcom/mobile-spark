@@ -1,9 +1,20 @@
 #include "Window.h"
 
 #include <mar/openGL_functions.h>
-#include "BaseApp.h"
+#include "SparkComponentFactory.h"
+
 
 namespace spark {
+
+    //needed for component factory
+    namespace  {
+        ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr()) {
+            return WindowPtr(new Window(theApp, theXMLNode, theParent));
+        };
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
+    }
+
+
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent) {
@@ -15,6 +26,8 @@ namespace spark {
         if (_myClearColor.size() == 3) {
             _myClearColor.push_back(1.0f);
         }
+
+        printGLInfo();
 
         glEnable(GL_DEPTH_TEST); 
         glDepthMask(GL_TRUE);
@@ -52,5 +65,4 @@ namespace spark {
         theShape->render(matrixStack.getTop());
         matrixStack.pop();
     }
-
 }

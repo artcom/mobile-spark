@@ -1,8 +1,6 @@
 #include "DemoApp.h"
 
 #include <jni.h>
-#include <mar/openGL_functions.h>
-#include <spark/SparkComponentFactory.h>
 
 #include <masl/Logger.h>
 

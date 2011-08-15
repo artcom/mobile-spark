@@ -41,7 +41,7 @@ namespace masl {
     enum Severity {SEV_PRINT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_TESTRESULT, SEV_DISABLED};
     
     class Logger : public Singleton<Logger> {
-        friend class Singleton< Logger >;        
+        //friend class Singleton< Logger >;  //needed for what?
         public:
             Logger();            
             void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
