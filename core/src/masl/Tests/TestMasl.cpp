@@ -20,10 +20,10 @@ namespace masl {
 #ifdef __ANDROID__
 /////////////////////////////////////////////////////////////////////////JNI
 extern "C" {
-    JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_TestBaseBinding_test(JNIEnv * env, jobject obj);
+    JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_TestBaseLib_test(JNIEnv * env, jobject obj);
 };
 
-JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_TestBaseBinding_test(JNIEnv * env, jobject obj) {
+JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_TestBaseLib_test(JNIEnv * env, jobject obj) {
     masl::MyBaseTestSuite mySuite("BaseTest", 0, 0);
     mySuite.run();
     return (env->NewStringUTF(mySuite.getFailedTestMessages().c_str()));

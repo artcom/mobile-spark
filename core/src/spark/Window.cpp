@@ -59,10 +59,10 @@ namespace spark {
         Widget::render();
     }
 
-    void Window::renderShape(const ShapePtr theShape) {
+    void Window::drawObject(const ShapePtr theShape) {
         matrixStack.push();
         matrixStack.multMatrixLocal(projectionMatrix);
-        theShape->render(matrixStack.getTop());
+        theShape->draw(matrixStack.getTop());
         matrixStack.pop();
     }
 }

@@ -61,43 +61,5 @@ namespace masl {
 
         return doc;
     }
-    
-    //XXX: the user should call xmlFreeDoc(doc)
-    xmlDocPtr loadXMLFromMemory(const std::string & theXMLString) {
-        LIBXML_TEST_VERSION
-        xmlParserCtxtPtr ctxt; /* the parser context */
-        xmlDocPtr doc; /* the resulting document tree */
-
-        /* create a parser context */
-        ctxt = xmlNewParserCtxt();
-        if (ctxt == NULL) {
-            AC_ERROR << "Failed to allocate parser context";
-        }
-        /* parse the file, activating the DTD validation option */
-        doc = xmlCtxtReadMemory(ctxt, theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, XML_PARSE_DTDATTR);
-
-        /* check if parsing suceeded */
-        if (doc == NULL) {
-            AC_ERROR << "Failed to parse XMLString";
-            return doc;
-        } else {
-        /* check if validation suceeded */
-            if (ctxt->valid == 0) {  //does not validate, don't know why
-                AC_ERROR << "Failed to validate XMLString";
-            } else {
-                AC_PRINT << "xml is valid";
-            }
-        }
-
-        /* free up the resulting document */
-        //xmlFreeDoc(doc);
-
-        /* free up the parser context */
-        xmlFreeParserCtxt(ctxt);
-        xmlCleanupParser();
-        xmlMemoryDump();
-
-        return doc;
-    }
 }
 
