@@ -1,7 +1,5 @@
 package com.artcom.mobile.test;
 
-import android.util.Log;
-
 public class TestBaseLib {
 
     static {
