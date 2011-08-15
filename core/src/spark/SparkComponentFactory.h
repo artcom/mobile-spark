@@ -7,17 +7,14 @@
 #include "Component.h"
 
 namespace spark {
-
     class SparkComponentFactory : public masl::Singleton<SparkComponentFactory> {
     public:
         typedef ComponentPtr (*CreateComponentCallback)(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
     private:
         typedef std::map<const std::string, CreateComponentCallback> CallbackMap;
     public:
-        // Returns 'true' if registration was successful
         bool registerComponent(const std::string & theComponentName,
                         const CreateComponentCallback theCreateFn);
-        // Returns 'true' if the ShapeId was registered before
         bool unregisterComponent(const std::string & theComponentName);
         ComponentPtr createComponent(const std::string & theComponentName, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr()) const;
 

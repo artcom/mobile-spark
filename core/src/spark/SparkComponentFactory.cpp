@@ -6,13 +6,7 @@
 
 using namespace masl;
 
-//TODO: every new widget has to be
-// * included here
-// * added to the big if-elseif-...
-// better ideas?
-
 namespace spark {
-
 
     // Returns 'true' if registration was successful
     bool SparkComponentFactory::registerComponent(const std::string & theComponentName,
@@ -32,7 +26,6 @@ namespace spark {
         }
         return (i->second)(theApp, theNode, theParent);
     }
-
 
     ComponentPtr SparkComponentFactory::loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath) {
         std::string myLayout = theApp->assetProvider->getStringFromFile(thePath);
