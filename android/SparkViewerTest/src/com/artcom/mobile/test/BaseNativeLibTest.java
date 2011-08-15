@@ -1,6 +1,6 @@
 package com.artcom.mobile.test;
 
-import com.artcom.mobile.BaseNativeLib;
+import com.artcom.mobile.Base.NativeBinding;
 import com.artcom.mobile.test.TestBaseLib;
 
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.AndroidTestCase;
-import android.util.Log;
 import junit.framework.Assert;
 
 public class BaseNativeLibTest extends AndroidTestCase {
@@ -16,9 +15,6 @@ public class BaseNativeLibTest extends AndroidTestCase {
     private static String PACKAGE_NAME = "com.artcom.mobile.test";
        
 	public void testLibTest() throws Throwable {
-		System.out.println(System.getProperty("java.library.path"));
-		Log.i(LOG_TAG, System.getProperty("java.library.path"));
-
 		String myResult = TestBaseLib.test(); 
 	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);// run libs own tests
 
