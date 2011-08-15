@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <GLES2/gl2.h>
+#include "GlHeaders.h"
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/shared_array.hpp>
 
@@ -57,7 +57,7 @@ namespace mar {
     public:
         std::vector<ElementPtr> elementList; 
 
-        virtual void render(const matrix & theMvp) const;
+        virtual void draw(const matrix & theMvp) const;
     };
 
     typedef boost::shared_ptr<Shape> ShapePtr;

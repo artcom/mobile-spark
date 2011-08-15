@@ -1,8 +1,7 @@
 #ifndef _included_mobile_asl_opengl_functions_
 #define _included_mobile_asl_opengl_functions_
 
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#include "GlHeaders.h"
 
 #include <masl/Logger.h>
 
