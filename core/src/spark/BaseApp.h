@@ -1,26 +1,26 @@
 #ifndef _included_mobile_spark_BaseApp_
 #define _included_mobile_spark_BaseApp_
 
-#include <jni.h>
 
 #include <boost/smart_ptr/shared_ptr.hpp>
-#include <android/APK_functions.h>
-#include <spark/Window.h>
+#include <mar/AssetProvider.h>
+#include "Window.h"
 
 
 namespace spark {
+
     class BaseApp {
         public: 
             BaseApp();
             virtual ~BaseApp();
 
-            //virtual bool setup(std::string apkPath, std::string layoutFile, JNIEnv* env) {return true;}
+            virtual bool setup(std::string assetPath, std::string layoutFile);
             virtual void onFrame();
             virtual void onTouch();
 
             spark::WindowPtr window; 
             float step;
-            zip* apkArchive;
+            mar::AssetProviderPtr assetProvider;
         protected:
             bool _myAnimate;
     };

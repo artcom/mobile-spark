@@ -92,6 +92,7 @@ public class ASLOpenGLView extends GLSurfaceView {
         private Context context;
         public Play3DRenderer (Context context) {
             this.context = context;
+           
         }
         
         public void onDrawFrame(GL10 glUnused) {
@@ -100,7 +101,7 @@ public class ASLOpenGLView extends GLSurfaceView {
         }
 
         public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-        	NativeBinding.setup(APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
+        	
         }
         
         private void updateFrameCounter() {
@@ -120,6 +121,8 @@ public class ASLOpenGLView extends GLSurfaceView {
 
 
         public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+            Log.v(LOG_TAG,"_________________________________- on surface created");
+            NativeBinding.setup(APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
         }
     }
 }
