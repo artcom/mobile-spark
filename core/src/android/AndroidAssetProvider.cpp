@@ -13,7 +13,7 @@ namespace android {
     }
 
     std::string AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {
-        return readFromPackage(_myApkArchive, theFileName.c_str());
+        return readFromPackage(_myApkArchive, theFileName);
     }
 }
 
