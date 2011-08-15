@@ -1,12 +1,11 @@
 package com.artcom.mobile.app;
 
 
-import com.artcom.mobile.Base.AC_Logger;
+import com.artcom.mobile.Base.AC_Log;
 import com.artcom.mobile.Base.*;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 
 public class SparkViewerActivity extends Activity {
 	
@@ -16,30 +15,25 @@ public class SparkViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AC_Log.setTopLevelTag(LOG_TAG);
+        AC_Log.print("SparkViewer created, ready to call native [cpp logger].");
         mView = new ASLOpenGLView(getApplication());
-        setContentView(mView);
-        
-        //testing
-        //Log.i(LOG_TAG, "SparkViewer created, ready to call native.");  
-        //AC_Logger.print("SparkViewer created, ready to call native [cpp logger].");
-        //BaseBinding.loadSpark("/sdcard/test.spark");        
-        //Log.i(LOG_TAG, "SparkViewer native called");     
+        setContentView(mView);        
     }
     
     @Override protected void onPause() {
         super.onPause();
         mView.onPause();
-        Log.i(LOG_TAG, "----------------------SparkViewer paused");        
+        AC_Log.print("----------------------SparkViewer paused");     
     }
-    
     @Override protected void onStop() {
         super.onStop();
-        Log.i(LOG_TAG, "--------------------- on Stop");
+        AC_Log.print("--------------------- on Stop");
     }
 
     @Override protected void onResume() {
         super.onResume();
         mView.onResume();
-        Log.i(LOG_TAG, "------------------------SparkViewer resumed");        
+        AC_Log.print("------------------------SparkViewer resumed");        
     }    
 }

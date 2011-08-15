@@ -35,24 +35,34 @@
 #include "string_functions.h"
 #ifdef __APPLE__
     //iOS
-    #include "Logger.h"
     #include <iostream>
 #elif __ANDROID__
     //Android
-    #include "Logger.h"
     #include <android/log.h>
 #endif
 
 namespace masl {
     Logger::Logger() {}
-
+        
+        
+    void Logger::setLoggerTopLevelTag(const std::string & theTagString) {
+        _myTopLevelLogTag = theTagString;
+    }
     void Logger::log(/*Time theTime, */ Severity theSeverity, const char * theModule, int theId, const std::string & theText) {
         char buf[20];
         sprintf(buf,"%i",theId);
-        std::string myLogTag("[");
+        std::string myLogTag("/");
+        myLogTag += _myTopLevelLogTag;
+        myLogTag += "/";
+        if (theSeverity == SEV_TESTRESULT) {
+            myLogTag += "TestResult";
+            myLogTag += "/";
+        }
+        myLogTag += "[";
         myLogTag += lastFileNamePart(theModule);
         myLogTag += " at:" + std::string(buf) + "]";
-        
+            
+                
         #ifdef __APPLE__
             //iOS
         switch (theSeverity) {
@@ -83,11 +93,7 @@ namespace masl {
                 __android_log_print(ANDROID_LOG_ERROR, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
                 break;
             case SEV_TESTRESULT :
-                {
-                    std::string myCustomLogTag("/TestResult/");
-                    myCustomLogTag += myLogTag;
-                    __android_log_print(ANDROID_LOG_INFO, myCustomLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
-                }
+                __android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
                 break;
             default:
                 //throw Exception("Unknown logger severity");
