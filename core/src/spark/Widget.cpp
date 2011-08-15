@@ -32,7 +32,7 @@ namespace spark {
         _myApp->window->matrixStack.push();
         _myApp->window->matrixStack.multMatrixLocal(_myLocalMatrixStack.getTop());
 
-        renderShape();
+        drawObject();
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             (*it)->render();
         }
