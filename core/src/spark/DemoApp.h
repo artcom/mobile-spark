@@ -8,9 +8,6 @@ namespace spark {
     class DemoApp: public BaseApp {
         public: 
             DemoApp();
-#ifdef __ANDROID__            
-            bool setup(std::string apkPath, std::string layoutFile, JNIEnv* env);            
-#endif                
             virtual ~DemoApp();
     };
 
