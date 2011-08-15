@@ -1,4 +1,3 @@
-add_subdirectory(Tests)
 
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
@@ -22,3 +21,5 @@ add_library(LIBXML2 STATIC IMPORTED)
 set_property(TARGET LIBXML2 PROPERTY
             IMPORTED_LOCATION ${LIBXML2_LIBRARY})
 target_link_libraries(masl LIBXML2 ${ANDROID_LOG_LIB} )
+
+add_subdirectory(Tests)
