@@ -3,7 +3,7 @@
 
 namespace mar {
 
-    void Shape::draw(const matrix & theMatrix) const {
+    void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
             ElementPtr element = *it;
@@ -24,6 +24,7 @@ namespace mar {
         checkGlError("glUseProgram");
 
         glUniformMatrix4fv(material->mvpHandle, 1, GL_FALSE, theMatrix.data());
+        glUniform4fv(material->colorHandle, 1, &(material->diffuse[0]));
     }
     void Element::unloadData() const {
         glDisableVertexAttribArray(VERTEX_POS_INDEX);
