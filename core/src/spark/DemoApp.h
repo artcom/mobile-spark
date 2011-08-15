@@ -9,6 +9,7 @@ namespace spark {
         public: 
             DemoApp();
             virtual ~DemoApp();
+            virtual void onTouch();
     };
 
     typedef boost::shared_ptr<DemoApp> DemoAppPtr;

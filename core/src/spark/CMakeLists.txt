@@ -11,5 +11,5 @@ include_directories(${CML_INCLUDE_DIR})
 
 include_directories(${PROJECT_SOURCE_DIR}/core/src)
 
-target_link_libraries(spark mar android)
+target_link_libraries(spark mar animation android)
 

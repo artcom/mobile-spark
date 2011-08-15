@@ -13,6 +13,10 @@ namespace animation {
 
     private:
         bool _myRunning;
+        bool _myLoop;
+        bool _myFinished;
+        AnimationPtr _myParent;
+        unsigned long long _myDuration; //millisecs
     };
 
     typedef boost::shared_ptr<Animation> AnimationPtr;
