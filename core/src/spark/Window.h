@@ -22,7 +22,7 @@ namespace spark {
         matrix projectionMatrix;
 
         virtual void render() const;
-        virtual void drawObject(const ShapePtr theShape);
+        virtual void renderShape(const ShapePtr theShape);
     private:
         int _myWidth;
         int _myHeight;

@@ -5,7 +5,7 @@ namespace android {
 
     AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath) 
         :_myApkArchive(NULL), AssetProvider() {
-        android::loadAPK(&_myApkArchive, theApkPath.c_str());
+        android::loadAPK(&_myApkArchive, theApkPath);
     }
 
     AndroidAssetProvider::~AndroidAssetProvider() {
