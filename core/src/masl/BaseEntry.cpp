@@ -23,6 +23,8 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * env, jobject obj,
                                                                   int theSeverity, jstring theFilename, 
                                                                   int theLineNumber, jstring theMessage);
+    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,
+                                                                          jstring theLogString);
                                                                           
 };
 
@@ -40,6 +42,12 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * en
     const char* myMessage = env->GetStringUTFChars(theMessage, &isCopy);                                                                    
     const char* myFilename = env->GetStringUTFChars(theFilename, &isCopy);                                                                    
     masl::Logger::get().log(/*myTime,*/ masl::SEV_PRINT, myFilename, theLineNumber, myMessage);
+}
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,
+                                                                         jstring theLogString) {
+    jboolean isCopy;
+    const char* myLogString = env->GetStringUTFChars(theLogString, &isCopy);                                                                    
+    masl::Logger::get().setLoggerTopLevelTag(myLogString);
 }
 
 #endif
