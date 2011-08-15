@@ -1,13 +1,12 @@
-package com.artcom.mobile;
+package com.artcom.mobile.app;
 
-
+import com.artcom.mobile.Base.*; 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import javax.microedition.khronos.egl.EGL10;
@@ -16,14 +15,15 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;   //needed only for method signaturs
 
+import com.artcom.mobile.Base.APK;
+import com.artcom.mobile.Base.AC_Log;
 
 public class ASLOpenGLView extends GLSurfaceView {
     
     public static final String PACKAGE_NAME = "com.artcom.mobile";
     private static String LOG_TAG = "ASLOpenGLView";
     
-    //TODO: this should be part of package
-    public static final String LAYOUT_FILE = "/sdcard/test.spark";
+    public static final String LAYOUT_FILE = "assets/layouts/main.spark";
     
     private Play3DRenderer myRenderer;
 
@@ -40,8 +40,8 @@ public class ASLOpenGLView extends GLSurfaceView {
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.i(LOG_TAG,"View.onTouchEvent");
-        BaseNativeLib.onTouch();
+    	AC_Log.print("View.onTouchEvent");
+        NativeBinding.onTouch();
         return super.onTouchEvent(event);
     }
     
@@ -63,7 +63,7 @@ public class ASLOpenGLView extends GLSurfaceView {
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
         private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
         public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
-            Log.w(LOG_TAG, "creating OpenGL ES 2.0 context");
+            AC_Log.warn("creating OpenGL ES 2.0 context");
             checkEglError("Before eglCreateContext", egl);
             int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
             EGLContext context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
@@ -79,7 +79,7 @@ public class ASLOpenGLView extends GLSurfaceView {
     private static void checkEglError(String prompt, EGL10 egl) {
         int error;
         while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
-            Log.e(LOG_TAG, String.format("%s: EGL error: 0x%x", prompt, error));
+        	AC_Log.error(String.format("%s: EGL error: 0x%x", prompt, error));
         }
     }
 
@@ -91,15 +91,16 @@ public class ASLOpenGLView extends GLSurfaceView {
         private Context context;
         public Play3DRenderer (Context context) {
             this.context = context;
+           
         }
         
         public void onDrawFrame(GL10 glUnused) {
             updateFrameCounter();
-            BaseNativeLib.onFrame();
+            NativeBinding.onFrame();
         }
 
         public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-            BaseNativeLib.setup(getApkFilePath(), LAYOUT_FILE);
+        	
         }
         
         private void updateFrameCounter() {
@@ -107,31 +108,20 @@ public class ASLOpenGLView extends GLSurfaceView {
                 millisec = System.currentTimeMillis();
             } else if (numFrames == 99) {
                 long now = System.currentTimeMillis();
-                Log.v(LOG_TAG, "num Frames " + numFrames);
-                Log.v(LOG_TAG, "time " + (now- millisec));
+                AC_Log.print("num Frames " + numFrames);
+                AC_Log.print("time " + (now- millisec));
                 float fps = (float)numFrames/(float)(now-millisec) * 1000.0f;
-                Log.v(LOG_TAG, "fps " + fps);
+                AC_Log.print("fps " + fps);
                 millisec = now;
                 numFrames = 0;
             }
             numFrames++;
         }
 
-        private String getApkFilePath() {
-            String apkFilePath = null;
-            ApplicationInfo appInfo = null;
-            PackageManager packMgmr = context.getPackageManager();
-            try {
-                appInfo = packMgmr.getApplicationInfo(PACKAGE_NAME, 0);
-            } catch (NameNotFoundException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Unable to locate assets, aborting...");
-            }
-            apkFilePath = appInfo.sourceDir;
-            return apkFilePath;
-        }
 
         public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+        	AC_Log.print("_________________________________- on surface created");
+            NativeBinding.setup(APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
         }
     }
 }

@@ -1,10 +1,13 @@
 
 #include "BaseApp.h"
 
-#include <masl/XMLUtils.h>
-#include <mar/openGL_functions.h>
-#include <spark/SparkComponentFactory.h>
+#include <masl/Logger.h>
 
+#ifdef __ANDROID__
+#include <android/AndroidAssetProvider.h>
+#endif
+
+#include "SparkComponentFactory.h"
 
 namespace spark {
 
@@ -14,24 +17,18 @@ namespace spark {
     BaseApp::~BaseApp() {
     }
 
-    bool BaseApp::setup(jstring apkPath, jstring layoutFile, JNIEnv* env) {
+    bool BaseApp::setup(std::string assetPath, std::string layoutFile) {
         AC_PRINT << "setup";
 
-        printGLInfo();
-        
-        //load apk
-        apkArchive = NULL;
-        jboolean isCopy;
-        const char* str = env->GetStringUTFChars(apkPath, &isCopy);
-        android::loadAPK(&apkArchive, str);
+//TODO: AssetProvider for ios?
+#ifdef __ANDROID__
+        assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(assetPath));
+#endif
 
         //load layout
-        str = env->GetStringUTFChars(layoutFile, &isCopy); 
-        window = boost::static_pointer_cast<spark::Window>(spark::SparkComponentFactory::loadSparkLayout(BaseAppPtr(this), str));
-    
+        window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), layoutFile));
         return true;
     }
-
     void BaseApp::onFrame() {
         //AC_PRINT << "onFrame";
         if (_myAnimate) {
