@@ -1,7 +1,7 @@
 #include "DemoApp.h"
-
-#include <jni.h>
-
+#ifdef __ANDROID__
+    #include <jni.h>
+#endif
 #include <masl/Logger.h>
 
 /////////////////// Application code, this should be in java or script language later...
