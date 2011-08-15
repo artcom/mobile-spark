@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Window name="ourWindow" width="900" height="500" clearColor="[0,0.2,0.1,1]">
+    <Transform name="transformB" x="5" rotationZ="-1">
+        <Rectangle name="objectA" x="0" y="-5" width="3" height="10" color="[0,0.6,0.3]"/>
+        <Rectangle name="objectB" width="10" height="3" color="[1,0.3,0.0]"/>
+    </Transform>
+    <Transform name="transformA" x="-5" y="0" scaleX="2" >
+        <Rectangle name="objectA" width="2" height="20" color="[0.3,1,0.0]"/>
+    </Transform>
+</Window>

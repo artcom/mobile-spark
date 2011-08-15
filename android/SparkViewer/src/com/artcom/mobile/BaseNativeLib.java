@@ -1,8 +1,8 @@
-package com.artcom.mobile;
+package com.artcom.mobile.Base;
 
 //Wrapper for native library
 
-public class BaseNativeLib {
+public class NativeBinding {
 
   static {
       System.loadLibrary("masl");
@@ -15,5 +15,8 @@ public class BaseNativeLib {
   public static native void setup(String apkFilePath, String layoutFile);
   public static native void onFrame();
   public static native void onTouch();
+  public static native void log(int theSeverity, String theFilename, int theLineNumber, String theMessage);
+  public static native void setLoggerTopLevelTag(String theTagString);
+  public static native boolean loadSpark(String theFilename);
 }
 
