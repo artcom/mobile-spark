@@ -28,6 +28,7 @@ public class ASLOpenGLView extends GLSurfaceView {
     private Play3DRenderer myRenderer;
 
     public ASLOpenGLView(Context context) {
+    	    
         super(context);
         myRenderer = new Play3DRenderer(context);
         init(false, 0, 0);
@@ -55,7 +56,12 @@ public class ASLOpenGLView extends GLSurfaceView {
         if (translucent) {
             this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         }
-
+        this.setEGLConfigChooser(8, 8, 8, 8, 24, 8);
+        /*this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        
+        //this.getHolder().setFormat(PixelFormat.RGB_565);
+        this.getHolder().setFormat(PixelFormat.RGBA_8888);*/
+        
         setEGLContextFactory(new ContextFactory());
         setRenderer(myRenderer);
     }
