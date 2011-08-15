@@ -1,4 +1,4 @@
-add_subdirectory(en.lproj)
+#add_subdirectory(en.lproj)
 
 file(GLOB SOURCES *.m *.mm)
 file(GLOB HEADERS *.h *.pch)
