@@ -1,7 +1,12 @@
 package com.artcom.mobile.test;
 
+<<<<<<< HEAD
 import com.artcom.mobile.Base.NativeBinding;
 import com.artcom.mobile.test.TestBaseLib;
+=======
+import com.artcom.mobile.Base.*;
+import com.artcom.mobile.test.TestBaseBinding;
+>>>>>>> b59982b6a548bc1e4f7607f8d903d14ac87e29cb
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -15,11 +20,18 @@ public class BaseNativeLibTest extends AndroidTestCase {
     private static String PACKAGE_NAME = "com.artcom.mobile.test";
        
 	public void testLibTest() throws Throwable {
+<<<<<<< HEAD
 		String myResult = TestBaseLib.test(); 
+=======
+		System.out.println(System.getProperty("java.library.path"));
+		Log.i(LOG_TAG, System.getProperty("java.library.path"));
+
+		String myResult = TestBaseBinding.test(); 
+>>>>>>> b59982b6a548bc1e4f7607f8d903d14ac87e29cb
 	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);// run libs own tests
 
 	    
-		myResult = TestAndroidLib.test(getApkFilePath()); 
+		myResult = TestAndroidBinding.test(getApkFilePath()); 
 	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);// run libs own tests
     }
 	
