@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.8)
 SET(TARGET_PLATTFORM iPhoneSimulator)
 
 message("in CMakeLists")
-
 # SDK Info
 SET (SDKVER "4.3")
 SET (DEVROOT "/Developer/Platforms/${TARGET_PLATTFORM}.platform/Developer")

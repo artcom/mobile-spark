@@ -3,10 +3,9 @@
 #include "BaseApp.h"
 
 namespace spark {
-    Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-            _visible(false),
-            _alpha(1.0),
-            Container(theApp, theXMLNode, theParent) { 
+    Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
+        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _visible(false) 
+    { 
         _x = _myXMLNode->getFloatValue("x");
         _y = _myXMLNode->getFloatValue("y");
         _z = _myXMLNode->getFloatValue("z");

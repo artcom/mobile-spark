@@ -1,8 +1,7 @@
 #ifndef _included_mobile_spark_Window_
 #define _included_mobile_spark_Window_
 
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#include "mar/GlHeaders.h"
 
 #include <masl/MatrixStack.h>
 #include <masl/XMLNode.h>
