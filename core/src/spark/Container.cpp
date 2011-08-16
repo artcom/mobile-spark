@@ -4,9 +4,9 @@
 
 namespace spark {
 
-    Container::Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-            _myApp(theApp),
-            Component(theXMLNode, theParent) {
+    Container::Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
+        : Component(theXMLNode, theParent), _myApp(theApp)
+    {
 
         xmlNode* currentChild = theXMLNode->node->children;
         for (; currentChild; currentChild = currentChild->next) {

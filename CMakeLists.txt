@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 2.8)
 set(APP_NAME mobile-spark)
 project(${APP_NAME})
 
-#notice the "recycling" of CMAKE_C_FLAGS
-#this is necessary to pick up android flags
-set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic" )
+list(INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR})
 
+add_subdirectory(acmake)
+find_package(AcMake)
 
 if($ENV{IS_TARGET_PLATFORM_ANDROID})
 	#test for ANDROID and look for stuff not relevant to android.

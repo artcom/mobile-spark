@@ -24,7 +24,7 @@ namespace spark {
     protected:
         const XMLNodePtr _myXMLNode;
         std::string _myName;
-        virtual void drawObject() const;
+        virtual void renderShape() const;
 
     private:
         ComponentPtr _myParent;

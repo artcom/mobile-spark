@@ -8,9 +8,9 @@ namespace spark {
     }
 
     Component::Component(const XMLNodePtr theXMLNode, ComponentPtr theParent): 
-        _myParent(theParent),
         _myXMLNode(theXMLNode),
-        _myName(theXMLNode->name) {
+        _myName(theXMLNode->name),
+        _myParent(theParent) {
     }
 
     Component::~Component() {
@@ -20,6 +20,6 @@ namespace spark {
     void Component::render() const {
     }
 
-    void Component::drawObject() const {
+    void Component::renderShape() const {
     }
 }

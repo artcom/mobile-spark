@@ -37,4 +37,4 @@ elseif($ENV{IS_TARGET_PLATFORM_IOS})
 	target_link_libraries(masl LIBXML2)
 endif()
 
-#add_subdirectory(Tests)
+add_subdirectory(Tests)

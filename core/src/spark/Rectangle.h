@@ -14,7 +14,7 @@ namespace spark {
         virtual ~Rectangle();
 
     protected:
-        virtual void drawObject() const;
+        virtual void renderShape() const;
 
     private:
         ShapePtr _myShape;
