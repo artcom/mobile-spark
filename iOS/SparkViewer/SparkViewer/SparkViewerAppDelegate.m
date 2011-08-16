@@ -7,7 +7,7 @@
 //
 
 #import "SparkViewerAppDelegate.h"
-
+#import "GLView.h"
 @implementation SparkViewerAppDelegate
 
 
@@ -16,6 +16,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    //myGLView 
+    [self.window addSubview:myGLView];
     //[self.window makeKeyAndVisible];
     return YES;
 }
