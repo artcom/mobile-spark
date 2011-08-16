@@ -4,6 +4,9 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 namespace animation {
+    
+    class Animation;
+    typedef boost::shared_ptr<Animation> AnimationPtr;
     class Animation {
     public: 
         void play();
@@ -18,8 +21,6 @@ namespace animation {
         AnimationPtr _myParent;
         unsigned long long _myDuration; //millisecs
     };
-
-    typedef boost::shared_ptr<Animation> AnimationPtr;
 };
 
 #endif

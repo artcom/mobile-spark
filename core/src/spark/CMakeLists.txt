@@ -16,7 +16,7 @@ include_directories(${PROJECT_SOURCE_DIR}/core/src)
 
 if($ENV{IS_TARGET_PLATFORM_ANDROID})
 	include_directories(${LIBZIP_INCLUDE_DIR})
-	target_link_libraries(spark mar animation android)
+	target_link_libraries(spark animation android mar)
 	
 elseif($ENV{IS_TARGET_PLATFORM_IOS})
 
