@@ -5,6 +5,11 @@ public class AC_Log {
 		NativeBinding.setLoggerTopLevelTag(theTagString);
 	}
 
+	public static void info(String theMessage) {
+		NativeBinding.log(0, new Throwable().getStackTrace()[1].getFileName(), 
+	    		             new Throwable().getStackTrace()[1].getLineNumber(), 
+	    		             theMessage);   
+	}
 	public static void error(String theMessage) {
 		NativeBinding.log(0, new Throwable().getStackTrace()[1].getFileName(), 
 	    		             new Throwable().getStackTrace()[1].getLineNumber(), 
