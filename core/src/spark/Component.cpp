@@ -22,4 +22,8 @@ namespace spark {
 
     void Component::renderShape() const {
     }
+
+    ComponentPtr Component::getChildByName(const std::string & theName) const {
+        return ComponentPtr();
+    }
 }

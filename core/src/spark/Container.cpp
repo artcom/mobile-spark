@@ -19,4 +19,13 @@ namespace spark {
 
     Container::~Container() {
     }
+
+    ComponentPtr Container::getChildByName(const std::string & theName) const {
+        for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            if ((*it)->getName() == theName) {
+                return (*it);
+            }
+        }
+        return ComponentPtr();
+    }
 }

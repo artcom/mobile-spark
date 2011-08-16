@@ -21,11 +21,12 @@ namespace spark {
         virtual ~Component();
         virtual void render() const ;
         
+        const std::string & getName() const { return _myName; };
+        virtual ComponentPtr getChildByName(const std::string & theName) const; 
     protected:
         const XMLNodePtr _myXMLNode;
         std::string _myName;
         virtual void renderShape() const;
-
     private:
         ComponentPtr _myParent;
     };

@@ -2,7 +2,9 @@
 
 #include <jni.h>
 
+#include <animation/PropertyAnimation.h>
 #include <animation/AnimationManager.h>
+#include "Rectangle.h"
 
 
 /////////////////// Application code, this should be in java or script language later...
@@ -13,7 +15,10 @@ namespace spark {
     }
 
     void DemoApp::onTouch() {
-        animation::AnimationPtr myAnimation = animation::AnimationPtr(new animation::Animation());
+        ComponentPtr myTransform = window->getChildByName("transformA");
+        ComponentPtr myObject = myTransform->getChildByName("objectC");
+        RectanglePtr myCRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        animation::PropertyAnimationPtr myAnimation = animation::PropertyAnimationPtr(new animation::PropertyAnimation(setTest));
         animation::AnimationManager::get().play(myAnimation); 
     }
 }
