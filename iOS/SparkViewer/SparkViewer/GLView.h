@@ -7,10 +7,29 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <OpenGLES/EAGL.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
 
+#import <OpenGLES/ES1/gl.h>
+#import <OpenGLES/ES1/glext.h>
 
+#import <QuartzCore/QuartzCore.h>
 @interface GLView : UIView {
     
+    @private
+        
+    EAGLContext *glContext;
+    
+    GLuint framebuffer;
+    GLuint colorRenderbuffer;
+    CADisplayLink *displayLink;
+    
+    GLint width;
+    GLint height;
+    
 }
+
+- (void) render;
 
 @end
