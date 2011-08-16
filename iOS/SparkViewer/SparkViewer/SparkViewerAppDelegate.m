@@ -11,12 +11,12 @@
 @implementation SparkViewerAppDelegate
 
 
-@synthesize window=_window;
+//@synthesize window=_window;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-    [self.window makeKeyAndVisible];
+    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    //[self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -61,7 +61,7 @@
 
 - (void)dealloc
 {
-    [_window release];
+    //[_window release];
     [super dealloc];
 }
 
