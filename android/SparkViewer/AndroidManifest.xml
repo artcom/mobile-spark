@@ -3,12 +3,12 @@
       package="com.artcom.mobile"
       android:versionCode="1"
       android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="10" />
+    <uses-sdk android:minSdkVersion="9" />
 
     <application android:icon="@drawable/icon" 
                  android:label="@string/app_name"
                  android:debuggable="true">
-        <activity android:name=".SparkViewerActivity"
+        <activity android:name=".app.SparkViewerActivity"
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             	  android:launchMode="singleTask"
