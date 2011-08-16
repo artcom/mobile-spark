@@ -7,9 +7,10 @@ if [ "`uname -o`" == "Cygwin" ]; then
     MAKE_TOOL="nmake"
 fi
 
+export IS_TARGET_PLATFORM_ANDROID="TRUE"
+
 cd ../_build
-cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchain/android.toolchain.cmake ..
-cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchain/android.toolchain.cmake ..
+cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchains/android.toolchain.cmake ..
 $MAKE_TOOL
 
 cd -

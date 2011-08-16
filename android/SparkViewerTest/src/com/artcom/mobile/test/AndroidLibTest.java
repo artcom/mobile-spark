@@ -3,7 +3,7 @@ package com.artcom.mobile.test;
 import junit.framework.Assert;
 
 import com.artcom.mobile.Base.APK;
-import com.artcom.mobile.test.TestAndroidBinding;
+import com.artcom.mobile.test.AndroidBinding;
 
 import android.util.Log;
 
@@ -14,7 +14,7 @@ public class AndroidLibTest  extends AndroidTestCase{
 
 	public void testLib() throws Throwable {
 		// run libs tests method
-		String myResult = TestAndroidBinding.test(APK.getApkFilePath(PACKAGE_NAME, getContext())); 
+		String myResult = AndroidBinding.test(APK.getApkFilePath(PACKAGE_NAME, getContext())); 
 	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);
 	}
 	

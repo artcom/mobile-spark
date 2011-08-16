@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <GLES2/gl2.h>
+#include "GlHeaders.h"
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include "AssetProvider.h"
@@ -36,10 +36,8 @@ namespace mar {
         std::string textureFile;
         GLuint textureId;
         GLuint shaderProgram;
-
         GLuint mvpHandle;
         GLuint colorHandle;
-
         bool rgb;
         const AssetProviderPtr _myAssetProvider;
     };

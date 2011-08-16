@@ -43,8 +43,11 @@ namespace masl {
     class Logger : public Singleton<Logger> {
         //friend class Singleton< Logger >;  //needed for what?
         public:
-        Logger();            
-        void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);        
+            Logger();            
+            void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
+            void setLoggerTopLevelTag(const std::string & theTagString);               
+        private:
+            std::string _myTopLevelLogTag;                
     };
     
     /**

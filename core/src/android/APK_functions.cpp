@@ -2,6 +2,7 @@
 
 #include <masl/Logger.h>
 
+
 using namespace std;
 namespace android {
 

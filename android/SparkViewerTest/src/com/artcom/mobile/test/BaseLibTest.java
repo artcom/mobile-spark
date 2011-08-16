@@ -1,8 +1,8 @@
 package com.artcom.mobile.test;
 
 
-import com.artcom.mobile.Base.*;
-import com.artcom.mobile.test.TestBaseBinding;
+import com.artcom.mobile.Base.NativeBinding;
+import com.artcom.mobile.test.BaseBinding;
 import android.test.AndroidTestCase;
 import android.util.Log;
 import junit.framework.Assert;
@@ -12,7 +12,7 @@ public class BaseLibTest extends AndroidTestCase {
        
 	public void testLib() throws Throwable {
 		// run libs tests method		
-		String myResult = TestBaseBinding.test(); 
+		String myResult = BaseBinding.test(); 
 	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);
 	    
     }
