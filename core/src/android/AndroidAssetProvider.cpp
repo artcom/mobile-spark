@@ -4,8 +4,9 @@
 namespace android {
 
     AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath) 
-        :_myApkArchive(NULL), AssetProvider() {
-        android::loadAPK(&_myApkArchive, theApkPath.c_str());
+        : AssetProvider(), _myApkArchive(NULL) 
+    {
+        android::loadAPK(&_myApkArchive, theApkPath);
     }
 
     AndroidAssetProvider::~AndroidAssetProvider() {
@@ -13,7 +14,7 @@ namespace android {
     }
 
     std::string AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {
-        return readFromPackage(_myApkArchive, theFileName.c_str());
+        return readFromPackage(_myApkArchive, theFileName);
     }
 }
 

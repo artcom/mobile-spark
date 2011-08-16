@@ -208,12 +208,6 @@ else()
  set( ARMEABI_NDK_NAME "armeabi-v7a" )
 endif()
 
-#setup output directories
-set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_BINARY_DIR} CACHE PATH "root for library output, set this to change where android libs are installed to" )
-set( LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH_ROOT}/libs/${ARMEABI_NDK_NAME} CACHE PATH "path for android libs" FORCE )
-set( EXECUTABLE_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH_ROOT}/bin/${ARMEABI_NDK_NAME} CACHE PATH "Output directory for applications" FORCE)
-set( CMAKE_INSTALL_PREFIX ${ANDROID_NDK_TOOLCHAIN_ROOT}/user/${ARMEABI_NDK_NAME} CACHE STRING "path for installing" FORCE )
-
 # where is the target environment 
 if( BUILD_WITH_ANDROID_NDK )
  set( STL_LIBRARIES_PATH "${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ARMEABI_NDK_NAME}" )
@@ -289,28 +283,3 @@ set( CMAKE_EXE_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FORCE 
 set( ANDROID True )
 set( BUILD_ANDROID True )
 
-#SWIG junk...
-#set( NO_SWIG OFF CACHE BOOL "Don't search for SWIG" )
-#if( NOT NO_SWIG )
-# #need to search in the  host for swig to be found
-# set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH )
-# set( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH )
-# find_package( SWIG QUIET )
-# set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY )
-# set( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY )
-#
-# if( SWIG_FOUND )
-#  set( SWIG_USE_FILE ${CMAKE_ROOT}/Modules/UseSWIG.cmake CACHE PATH "Use Swig cmake module" )
-#  set( SWIG_OUTPUT_ROOT ${LIBRARY_OUTPUT_PATH_ROOT}/src CACHE PATH "Where swig generated files will be placed relative to, <SWIG_OUTPUT_ROOT>/com/mylib/foo/jni ..." FORCE )
-#
-#  #convenience macro for swig java packages
-#  macro( SET_SWIG_JAVA_PACKAGE package_name )
-#   string( REGEX REPLACE "[.]" "/" package_name_output ${package_name} )
-#   set( CMAKE_SWIG_OUTDIR ${SWIG_OUTPUT_ROOT}/${package_name_output} )
-#   set( CMAKE_SWIG_FLAGS "-package" "'${package_name}'" )
-#  endmacro()
-# else()
-#  message( STATUS "SWIG is not found" )
-#  set( NO_SWIG ON CACHE BOOL "Don't search for SWIG" FORCE )
-# endif()
-#endif()

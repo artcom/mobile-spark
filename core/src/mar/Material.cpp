@@ -25,6 +25,7 @@ namespace mar {
         }
 
         mvpHandle = glGetUniformLocation(shaderProgram, "u_mvpMatrix");
+        colorHandle = glGetUniformLocation(shaderProgram, "a_color");
     }
 
 }

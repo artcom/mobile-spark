@@ -41,7 +41,7 @@ namespace android {
     class APK_functions_UnitTest : public UnitTest {
         public:
             APK_functions_UnitTest(JNIEnv* env, jstring apkPath) : 
-                env(env), apkPath(apkPath), UnitTest("APK_functions_UnitTest") {  }
+                UnitTest("APK_functions_UnitTest"), env(env), apkPath(apkPath) {  }
 
             JNIEnv* env;
             jstring apkPath;

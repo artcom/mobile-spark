@@ -59,11 +59,7 @@ namespace spark {
     Rectangle::~Rectangle() {
     }
 
-    void Rectangle::drawObject() const {
-        _myApp->window->drawObject(_myShape);
+    void Rectangle::renderShape() const {
+        _myApp->window->renderShape(_myShape);
     }
-
-    ComponentPtr createRectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-        return RectanglePtr(new Rectangle(theApp, theXMLNode, theParent));
-    };
 }
