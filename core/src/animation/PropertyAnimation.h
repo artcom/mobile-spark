@@ -14,7 +14,7 @@ namespace animation {
         virtual void doFrame(const long theTime);
 
     private:
-        const O _myObject;
+        const O _myObjectPtr;
         const T _myPropertyCallback;
         const float _myStartValue;
         const float _myEndValue;
@@ -22,13 +22,13 @@ namespace animation {
 
     template <class O, class T>
     PropertyAnimation<O, T>::PropertyAnimation(
-        const O theObject,
+        const O theObjectPtr,
         const T thePropertySetter, 
         const float theStartValue, 
         const float theEndValue, 
         const long theDuration): 
             Animation(theDuration),
-            _myObject(theObject),
+            _myObjectPtr(theObjectPtr),
             _myPropertyCallback(thePropertySetter),
             _myStartValue(theStartValue),
             _myEndValue(theEndValue) {
@@ -40,7 +40,7 @@ namespace animation {
         //AC_PRINT << "progress " << _myProgress;
         float value = _myStartValue + (_myEndValue - _myStartValue) * _myProgress;
         //AC_PRINT << "value "  << value;
-        (_myObject.get()->*_myPropertyCallback)(value);
+        (_myObjectPtr.get()->*_myPropertyCallback)(value);
     }
 };
 
