@@ -2,6 +2,7 @@
 #include "BaseApp.h"
 
 #include <masl/Logger.h>
+#include <animation/AnimationManager.h>
 
 #ifdef __ANDROID__
 #include <android/AndroidAssetProvider.h>
@@ -11,7 +12,7 @@
 
 namespace spark {
 
-    BaseApp::BaseApp(): step(0), _myAnimate(true) {
+    BaseApp::BaseApp(): _myAnimate(true) {
     }
 
     BaseApp::~BaseApp() {
@@ -29,21 +30,17 @@ namespace spark {
         window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), layoutFile));
         return true;
     }
-    void BaseApp::onFrame() {
-        //AC_PRINT << "onFrame";
+    void BaseApp::onFrame(const long theCurrentMillis) {
+        //AC_PRINT << "onFrame " << theCurrentMillis;
         if (_myAnimate) {
-            step += 0.0001f;
-            if (step > 1.0f) {
-                step = 0.0f;
-            }
+            animation::AnimationManager::get().doFrame(theCurrentMillis);
         }
-
         window->render();
     }
 
     void BaseApp::onTouch() {
-        AC_PRINT << "onTOUCH";
-        _myAnimate = !_myAnimate;
+        AC_PRINT << "BaseApp::onTOUCH";
+        //_myAnimate = !_myAnimate;
     }
 }
 

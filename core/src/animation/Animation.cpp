@@ -1,11 +1,27 @@
 #include "Animation.h"
 
+#include <masl/Logger.h>
+
 namespace animation {
 
-    void Animation::play() {
+    Animation::Animation(const long theDuration) : 
+        _myRunning(false),
+        _myDuration(theDuration) {
     }
 
-    void Animation::doFrame(const unsigned long long theTime) {
+    Animation::~Animation() {}
+
+    void Animation::play(const long theStartTime) {
+        _myStartTime = theStartTime;
+        _myRunning = true;
+    }
+
+    void Animation::doFrame(const long theCurrentMillis) {
+        _myProgress = (float)(theCurrentMillis - _myStartTime)/(float)(_myDuration);
+        if (_myProgress > 1) {
+            //AC_PRINT << "..................... stop it";
+            _myRunning = false;
+        }
     }
 }
 

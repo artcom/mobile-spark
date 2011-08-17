@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include <masl/Logger.h>
 #include <masl/MatrixStack.h>
 
 #include "Container.h"
@@ -38,6 +39,8 @@ namespace spark {
 
     typedef boost::shared_ptr<Widget> WidgetPtr;
 
-    static void setTest(const float theTest) {};
+    static void setTest(const float theTest) {
+        AC_PRINT << "set test " << theTest;
+    };
 };
 #endif
