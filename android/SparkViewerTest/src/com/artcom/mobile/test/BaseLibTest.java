@@ -1,7 +1,7 @@
 package com.artcom.mobile.test;
 
 
-import com.artcom.mobile.Base.*;
+import com.artcom.mobile.Base.NativeBinding;
 import com.artcom.mobile.test.BaseBinding;
 import android.test.AndroidTestCase;
 import android.util.Log;

@@ -55,7 +55,7 @@ public class ASLOpenGLView extends GLSurfaceView {
         if (translucent) {
             this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         }
-
+        setEGLConfigChooser(new AndroidEGLConfigChooser(AndroidEGLConfigChooser.ConfigType.BEST, false));
         setEGLContextFactory(new ContextFactory());
         setRenderer(myRenderer);
     }
