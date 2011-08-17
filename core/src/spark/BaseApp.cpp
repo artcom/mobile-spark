@@ -22,11 +22,15 @@ namespace spark {
 
 //TODO: AssetProvider for ios?
 #ifdef __ANDROID__
+        AC_PRINT << "android?"
         assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(assetPath));
 #endif
-
+        AC_PRINT << "1";
+        ComponentPtr myComponentPtr = SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), layoutFile);
         //load layout
-        window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), layoutFile));
+        AC_PRINT << "2";
+        window = boost::static_pointer_cast<spark::Window>(myComponentPtr);
+        AC_PRINT << "3";
         return true;
     }
     void BaseApp::onFrame() {

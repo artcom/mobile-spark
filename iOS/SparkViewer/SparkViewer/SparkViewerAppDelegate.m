@@ -8,17 +8,23 @@
 
 #import "SparkViewerAppDelegate.h"
 #import "GLView.h"
+
 @implementation SparkViewerAppDelegate
 
-
-//@synthesize window=_window;
+@synthesize window;
+@synthesize myGLView;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    //myGLView 
+    NSLog(@"in didFinishLaunchingWithOptions");
+    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
+    myGLView = [[GLView alloc]initWithFrame:[window bounds]];
+
+    //[myGLView setBackgroundColor:[UIColor greenColor]];
     [self.window addSubview:myGLView];
-    //[self.window makeKeyAndVisible];
+    [self.window makeKeyAndVisible];
+    
+    [myGLView startAnimation];
     return YES;
 }
 
@@ -63,7 +69,10 @@
 
 - (void)dealloc
 {
-    //[_window release];
+    [window release];
+    
+    [myGLView release];
+    
     [super dealloc];
 }
 
