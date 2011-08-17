@@ -18,7 +18,6 @@ namespace animation {
             }
         }
         removeFinished();
-
     }
 
     void AnimationManager::removeFinished() {

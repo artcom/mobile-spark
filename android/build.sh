@@ -15,9 +15,6 @@ $MAKE_TOOL
 
 cd -
 
-echo "push layout to sdcard"
-adb push ../test.spark /sdcard/test.spark
-
 cd SparkViewer
 
 # update android project
