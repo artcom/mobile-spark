@@ -65,6 +65,7 @@ if($ENV{IS_TARGET_PLATFORM_IOS})
 	target_link_libraries(${APP_NAME} spark)
 
 
+	###### InterFaceBuilder not tested yet
 
 	# Make sure we can find the 'ibtool' program. If we can NOT find it we
 	# skip generation of this project
