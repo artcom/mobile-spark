@@ -24,16 +24,16 @@ namespace spark {
 
     void Widget::updateMatrix() {
         _myLocalMatrixStack.loadIdentity();
-        _myLocalMatrixStack.scaleLocal(_scaleX, _scaleY, _scaleZ);
-        _myLocalMatrixStack.rotateXAxisLocal(_rotationX);
-        _myLocalMatrixStack.rotateYAxisLocal(_rotationY);
-        _myLocalMatrixStack.rotateZAxisLocal(_rotationZ);
-        _myLocalMatrixStack.translateLocal(_x, _y, _z);
+        _myLocalMatrixStack.rotateXAxis(_rotationX);
+        _myLocalMatrixStack.rotateYAxis(_rotationY);
+        _myLocalMatrixStack.rotateZAxis(_rotationZ);
+        _myLocalMatrixStack.translate(_x, _y, _z);
+        _myLocalMatrixStack.scale(_scaleX, _scaleY, _scaleZ);
     };
 
     void Widget::render() const {
         _myApp->window->matrixStack.push();
-        _myApp->window->matrixStack.multMatrixLocal(_myLocalMatrixStack.getTop());
+        _myApp->window->matrixStack.multMatrix(_myLocalMatrixStack.getTop());
 
         renderShape();
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {

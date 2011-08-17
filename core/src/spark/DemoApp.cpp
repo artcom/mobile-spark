@@ -18,9 +18,20 @@ namespace spark {
     void DemoApp::onTouch() {
         ComponentPtr myTransform = window->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
-        RectanglePtr myCRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
-        WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myCRectangle, &Widget::setX, 0, 5));
+        RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 5));
         animation::AnimationManager::get().play(myAnimation); 
+
+        myTransform = window->getChildByName("transformB");
+        myObject = myTransform->getChildByName("objectA");
+        myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        myAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setRotationZ, 0, 6.28, 5000));
+        animation::AnimationManager::get().play(myAnimation);
+
+        myObject = myTransform->getChildByName("objectB");
+        myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        myAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));
+        animation::AnimationManager::get().play(myAnimation);
     }
 }
 
