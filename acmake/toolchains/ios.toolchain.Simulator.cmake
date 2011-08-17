@@ -1,4 +1,4 @@
-SET(TARGET_PLATTFORM iPhoneOS)
+SET(TARGET_PLATTFORM iPhoneSimulator)
 
 SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS FALSE)
 
@@ -9,8 +9,8 @@ SET (DEVROOT "/Developer/Platforms/${TARGET_PLATTFORM}.platform/Developer")
 SET (SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATTFORM}${SDKVER}.sdk")
 SET (CMAKE_OSX_SYSROOT "${SDKROOT}")
 
-SET(CMAKE_SYSTEM_PROCESSOR arm)
-SET(CMAKE_OSX_ARCHITECTURES armv7)
+SET(CMAKE_SYSTEM_PROCESSOR i386)
+SET(CMAKE_OSX_ARCHITECTURES i386)
 
 # Skip the platform compiler checks for cross compiling 
 set (CMAKE_CXX_COMPILER_WORKS TRUE)
@@ -28,12 +28,23 @@ SET (CMAKE_CXX_COMPILER "${DEVROOT}/usr/bin/g++-4.2")
 #SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -DNDEBUG=1")
 #SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS} -DNDEBUG=1 -ggdb")
 
-SET( CMAKE_C_FLAGS "-arch armv7 -no-cpp-precomp -mthumb --sysroot=${SDKROOT} -miphoneos-version-min=${SDKVER}" CACHE STRING "c flags" )
-SET( CMAKE_CXX_FLAGS "-arch armv7 -no-cpp-precomp -mthumb --sysroot=${SDKROOT} -miphoneos-version-min=${SDKVER}" CACHE STRING "c++ flags" )
+#include(CMakeForceCompiler)
+#CMAKE_FORCE_C_COMPILER(gcc-4.2 GNU)
+#CMAKE_FORCE_CXX_COMPILER(g++-4.2 GNU)
+
+SET( CMAKE_C_FLAGS "-m32 -arch i386 -no-cpp-precomp -mthumb --sysroot=${SDKROOT} -miphoneos-version-min=${SDKVER}" CACHE STRING "c flags" )
+SET( CMAKE_CXX_FLAGS "-m32 -arch i386 -no-cpp-precomp -mthumb --sysroot=${SDKROOT} -miphoneos-version-min=${SDKVER}" CACHE STRING "c++ flags" )
+
+# Definitions
+#builds a 32bit app
+#ADD_DEFINITIONS("-m32")
+#ADD_DEFINITIONS("-arch i386")
+#ADD_DEFINITIONS("-no-cpp-precomp")
+#ADD_DEFINITIONS("--sysroot=${SDKROOT}")
+#ADD_DEFINITIONS("-miphoneos-version-min=${SDKVER}")
+
 
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
-INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1")
-INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1/armv7-apple-darwin10")
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/System/Library/Frameworks")
 
 # System Libraries
