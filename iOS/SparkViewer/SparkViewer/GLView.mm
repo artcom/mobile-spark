@@ -7,18 +7,18 @@
 //
 
 #import "GLView.h"
+#include <spark/DemoApp.h>
 
 
 @implementation GLView
 
+spark::DemoApp *myDemoApp;
+
 // You must implement this method
 
 + (Class) layerClass
-
-{
-    
+{    
     return [CAEAGLLayer class];
-    
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -28,8 +28,10 @@
         // Initialization code
         // Apple changed EGL a lot, it is not possible to render to the display directly. 
         // We have to render into a framebuffer, which is displayed to the user
+        NSLog(@"in initWithFrame");
         
-        CAEAGLLayer *eaglLayer = (CAEAGLLayer *)[self layer];
+        
+        CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         eaglLayer.opaque = TRUE;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
@@ -63,25 +65,22 @@
         [glContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:eaglLayer];
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
         
-        //init Animation loop. fires at 60 hz
-        displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render)];
-        [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
         
+        myDemoApp = new spark::DemoApp();
+        myDemoApp->setup("", "main.spark");
     }
     return self;
 }
 
-- (void)render 
+- (void)render:(id)sender 
 {
+    
     //start C++ rendering here
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     
     glViewport(0, 0, width, height);
-    
-    
     
     glClearColor(0.5f, 0.4f, 0.5f, 1.0f);
     
@@ -92,30 +91,42 @@
     [glContext presentRenderbuffer:GL_RENDERBUFFER];
 }
 
+- (void)startAnimation
+{
+    if (!animating)
+    {
+        //init Animation loop. fires at 60 hz
+        displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render:)];
+        [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        animating = TRUE;
+    }
+}
+
+- (void)stopAnimation
+{
+    if (animating)
+    {
+        [displayLink invalidate];
+        displayLink = nil;
+        animating = FALSE;
+    }
+}
+
 - (void)dealloc
 {
     
-    if (framebuffer)
-        
+    if (framebuffer)   
     {
-        
         glDeleteFramebuffers(1, &framebuffer);
-        
         framebuffer = 0;
-        
     }
-    
-    
     
     if (colorRenderbuffer)
-        
     {
-        
         glDeleteRenderbuffers(1, &colorRenderbuffer);
-        
         colorRenderbuffer = 0;
-        
     }
+    
     [glContext release];
     glContext = nil;
     

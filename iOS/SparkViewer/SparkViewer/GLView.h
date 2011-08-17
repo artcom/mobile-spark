@@ -15,6 +15,9 @@
 #import <OpenGLES/ES1/glext.h>
 
 #import <QuartzCore/QuartzCore.h>
+
+//@class DemoApp;
+
 @interface GLView : UIView {
     
     @private
@@ -28,8 +31,14 @@
     GLint width;
     GLint height;
     
+    BOOL animating;
+    
+    //spark::DemoApp *myDemoApp;
+    
 }
 
-- (void) render;
+- (void) render:(id)sender;
+- (void) startAnimation;
+- (void) stopAnimation;
 
 @end
