@@ -131,7 +131,7 @@ if( EXISTS ${ANDROID_NDK} )
  set_property( CACHE ANDROID_LEVEL PROPERTY STRINGS ${PossibleAndroidLevels} )
  
  if( NOT ANDROID_LEVEL GREATER 2 )
-  set( ANDROID_LEVEL 8 CACHE STRING "android API level" FORCE )
+  set( ANDROID_LEVEL 9 CACHE STRING "android API level" FORCE )
   message( STATUS "Using default android API level android-${ANDROID_LEVEL}" )
   message( STATUS "If you prefer to use a different API level, please define the environment variable: ANDROID_LEVEL" )
  endif()
