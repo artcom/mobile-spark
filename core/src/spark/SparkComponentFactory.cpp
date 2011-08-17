@@ -28,12 +28,30 @@ namespace spark {
     }
 
     ComponentPtr SparkComponentFactory::loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath) {
+        AC_PRINT << "in loadSparkLayout 1";
+
         std::string myLayout = theApp->assetProvider->getStringFromFile(thePath);
+        
+        AC_PRINT << "in loadSparkLayout 2";
+
         xmlDocPtr doc = loadXMLFromMemory(myLayout);
+        
+        AC_PRINT << "in loadSparkLayout 3";
+
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
+        AC_PRINT << "in loadSparkLayout 4";
+
         XMLNodePtr myNode(new XMLNode(myRootNode));
+        
+        AC_PRINT << "in loadSparkLayout 5";
+
         ComponentPtr myComponentPtr = createComponent(myNode->nodeName, theApp, myNode);
+        AC_PRINT << "in loadSparkLayout 6";
+
         xmlFreeDoc(doc);        
+        
+        AC_PRINT << "in loadSparkLayout 7";
+
         return myComponentPtr;
     }
 }
