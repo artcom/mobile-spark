@@ -12,11 +12,11 @@ namespace animation {
         unsigned int animationCount() const { return _myAnimations.size(); };
         void play(AnimationPtr theAnimation);
         bool isPlaying() const { return _myAnimations.size() > 0; };
-        void doFrame(const unsigned long long theTime);
+        void doFrame(const long theCurrentMillis);
 
     private:
         std::vector<AnimationPtr> _myAnimations;
-        unsigned long long _myAnimationTime;
+        long _myAnimationTime;
 
         void removeFinished();
     };

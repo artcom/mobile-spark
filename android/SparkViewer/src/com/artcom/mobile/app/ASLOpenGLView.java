@@ -96,7 +96,7 @@ public class ASLOpenGLView extends GLSurfaceView {
         
         public void onDrawFrame(GL10 glUnused) {
             updateFrameCounter();
-            NativeBinding.onFrame();
+            NativeBinding.onFrame(System.currentTimeMillis());
         }
 
         public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -117,7 +117,6 @@ public class ASLOpenGLView extends GLSurfaceView {
             }
             numFrames++;
         }
-
 
         public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         	AC_Log.print("_________________________________- on surface created");

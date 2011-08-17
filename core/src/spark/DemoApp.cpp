@@ -9,6 +9,7 @@
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
+
     DemoApp::DemoApp():BaseApp() {
     }
     DemoApp::~DemoApp() {
@@ -33,7 +34,8 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
                                                                  jstring apkFile,
                                                                  jstring layoutFile);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj);
+    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj,
+                                                                 jlong currentMillis);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onTouch(JNIEnv * env, jobject obj);
 };
 
@@ -46,8 +48,9 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
     ourApp.setup(myAssetPath, myLayoutFile);
 }
 
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj) {
-    ourApp.onFrame();
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj,
+                                                             jlong currentMillis) {
+    ourApp.onFrame(currentMillis);
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onTouch(JNIEnv * env, jobject obj) {

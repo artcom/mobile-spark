@@ -15,11 +15,10 @@ namespace spark {
             virtual ~BaseApp();
 
             virtual bool setup(std::string assetPath, std::string layoutFile);
-            virtual void onFrame();
+            virtual void onFrame(const long theCurrentMillis);
             virtual void onTouch();
 
             spark::WindowPtr window; 
-            float step;
             mar::AssetProviderPtr assetProvider;
         protected:
             bool _myAnimate;
