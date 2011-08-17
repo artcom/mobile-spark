@@ -2,7 +2,6 @@
 
 #include <jni.h>
 
-#include <animation/PropertyAnimation.h>
 #include <animation/AnimationManager.h>
 #include "Rectangle.h"
 
@@ -15,11 +14,12 @@ namespace spark {
     DemoApp::~DemoApp() {
     }
 
+
     void DemoApp::onTouch() {
         ComponentPtr myTransform = window->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myCRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
-        animation::PropertyAnimationPtr myAnimation = animation::PropertyAnimationPtr(new animation::PropertyAnimation(setTest));
+        WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myCRectangle, &Widget::setX, 0, 5));
         animation::AnimationManager::get().play(myAnimation); 
     }
 }

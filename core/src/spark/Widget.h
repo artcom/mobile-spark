@@ -5,6 +5,7 @@
 
 #include <masl/Logger.h>
 #include <masl/MatrixStack.h>
+#include <animation/PropertyAnimation.h>
 
 #include "Container.h"
 
@@ -16,15 +17,15 @@ namespace spark {
         virtual ~Widget();
         virtual void render() const;
 
-        void setX(const float theX) { _x = theX; };
-        void setY(const float theY) { _y = theY; };
-        void setZ(const float theZ) { _z = theZ; };
-        void setScaleX(const float theScaleX) { _scaleX = theScaleX; };
-        void setScaleY(const float theScaleY) { _scaleY = theScaleY; };
-        void setScaleZ(const float theScaleZ) { _scaleZ = theScaleZ; };
-        void setRotationX(const float theRotationX) { _rotationX = theRotationX; };
-        void setRotationY(const float theRotationY) { _rotationY = theRotationY; };
-        void setRotationZ(const float theRotationZ) { _rotationZ = theRotationZ; };
+        void setX(const float theX) { _x = theX; updateMatrix();};
+        void setY(const float theY) { _y = theY; updateMatrix();};
+        void setZ(const float theZ) { _z = theZ; updateMatrix();};
+        void setScaleX(const float theScaleX) { _scaleX = theScaleX; updateMatrix();};
+        void setScaleY(const float theScaleY) { _scaleY = theScaleY; updateMatrix();};
+        void setScaleZ(const float theScaleZ) { _scaleZ = theScaleZ; updateMatrix();};
+        void setRotationX(const float theRotationX) { _rotationX = theRotationX; updateMatrix();};
+        void setRotationY(const float theRotationY) { _rotationY = theRotationY; updateMatrix();};
+        void setRotationZ(const float theRotationZ) { _rotationZ = theRotationZ; updateMatrix();};
         void setAlpha(const float theAlpha)  { _alpha = theAlpha; };
         
     protected:
@@ -35,12 +36,15 @@ namespace spark {
         float _rotationX, _rotationY, _rotationZ;
         float _alpha;
         bool _visible;
+
+        void updateMatrix();
     };
 
     typedef boost::shared_ptr<Widget> WidgetPtr;
 
-    static void setTest(const float theTest) {
-        AC_PRINT << "set test " << theTest;
-    };
+    //animations
+    typedef void (Widget::* WidgetPropertySetterFunction)(float);
+    typedef animation::PropertyAnimation<WidgetPtr, WidgetPropertySetterFunction> WidgetPropertyAnimation;
+    typedef boost::shared_ptr<WidgetPropertyAnimation>  WidgetPropertyAnimationPtr;
 };
 #endif

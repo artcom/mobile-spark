@@ -16,16 +16,20 @@ namespace spark {
         _rotationY = _myXMLNode->getFloatValue("rotationY");
         _rotationZ = _myXMLNode->getFloatValue("rotationZ");
 
+        updateMatrix();
+    }
+
+    Widget::~Widget() {
+    }
+
+    void Widget::updateMatrix() {
         _myLocalMatrixStack.loadIdentity();
         _myLocalMatrixStack.scaleLocal(_scaleX, _scaleY, _scaleZ);
         _myLocalMatrixStack.rotateXAxisLocal(_rotationX);
         _myLocalMatrixStack.rotateYAxisLocal(_rotationY);
         _myLocalMatrixStack.rotateZAxisLocal(_rotationZ);
         _myLocalMatrixStack.translateLocal(_x, _y, _z);
-    }
-
-    Widget::~Widget() {
-    }
+    };
 
     void Widget::render() const {
         _myApp->window->matrixStack.push();
