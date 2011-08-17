@@ -2,7 +2,8 @@
 1. set BOOST_HOME to wherever your boost installation is, ie. "C:/Programme/boost_1_47_0" 
    !!! (DO not use boost from "C:\Programme\PRO60 Dependencies_1.05" because we get all pro60_dep includes on the include line) !!!
 2. build android toolchain
-    export NDK_TMPDIR=$ANDROID_NDK/../ndk-tmp
+    export ANDROID_LEVEL=9
+    export NDK_TMPDIR=$(cygpath "$ANDROID_NDK/")../ndk-tmp
     call $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-9 --install-dir=$ANDROID_NDK/android-toolchain --system=windows    
     set "ANDROID_NDK_TOOLCHAIN_ROOT" to "$ANDROID_NDK/android-toolchain"
 
