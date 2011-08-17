@@ -1,0 +1,40 @@
+SET(TARGET_PLATTFORM iPhoneOS)
+
+# SDK Info
+#SET (CMAKE_SYSTEM_NAME iPhoneOS)
+SET (SDKVER "4.3")
+SET (DEVROOT "/Developer/Platforms/${TARGET_PLATTFORM}.platform/Developer")
+SET (SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATTFORM}${SDKVER}.sdk")
+SET (CMAKE_OSX_SYSROOT "${SDKROOT}")
+
+SET (CMAKE_SYSTEM_PROCESSOR arm)
+SET (CMAKE_OSX_ARCHITECTURES arm7)
+
+# Skip the platform compiler checks for cross compiling 
+set (CMAKE_CXX_COMPILER_WORKS TRUE)
+set (CMAKE_C_COMPILER_WORKS TRUE)
+
+SET( CMAKE_C_FLAGS "-arch armv7 -mthumb -miphoneos-version-min=${SDKVER} ${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
+SET( CMAKE_CXX_FLAGS "-arch armv7 -mthumb -miphoneos-version-min=${SDKVER} ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
+
+# Definitions
+ADD_DEFINITIONS("-no-cpp-precomp")
+ADD_DEFINITIONS("--sysroot=${SDKROOT}")
+ADD_DEFINITIONS("-miphoneos-version-min=${SDKVER}")
+
+INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
+INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1")
+INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1/armv7-apple-darwin10")
+INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/System/Library/Frameworks")
+
+# System Libraries
+LINK_DIRECTORIES("${SDKROOT}/usr/lib")
+LINK_DIRECTORIES("${SDKROOT}/System/Library/Frameworks")
+LINK_DIRECTORIES("${DEVROOT}/usr/lib/gcc/i686-apple-darwin10/4.2.1")
+
+SET (CMAKE_FIND_ROOT_PATH "${SDKROOT}")
+SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+SET (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+SET (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+SET (CMAKE_CROSSCOMPILING 1)
