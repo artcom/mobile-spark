@@ -7,3 +7,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/core/src)
 
 target_link_libraries(animation masl)
+
+add_subdirectory(Tests)
+
