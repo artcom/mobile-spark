@@ -48,6 +48,8 @@ namespace animation {
                 perform_AnimationManagerTest();
                 perform_PropertyAnimationTest();
                 perform_LoopAnimationTest();
+                perform_FinishTest();
+                perform_CancelTest();
             }
             
             class Object {
@@ -77,6 +79,7 @@ namespace animation {
             }
 
             void perform_PropertyAnimationTest() {                
+                AnimationManager::get().init(0);
                 ObjectPtr myObject = ObjectPtr(new Object());
                 ENSURE_MSG(myObject, "myObject should not be null");
                 ENSURE_EQUAL(myObject->getX(),0);
@@ -111,6 +114,7 @@ namespace animation {
             }
 
             void perform_LoopAnimationTest() {
+                AnimationManager::get().init(0);
                 ObjectPtr myObject = ObjectPtr(new Object());
                 ObjectPropertyAnimationPtr myAnimation = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX));
                 myAnimation->setLoop(true);
@@ -124,12 +128,58 @@ namespace animation {
                 ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
                 ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
 
+                //at the end of the animation the animation should be restarted 
+                //and the value should be reset to the start value
                 AnimationManager::get().doFrame(1000);
                 ENSURE_EQUAL(myAnimation->isRunning(),true);
                 ENSURE_EQUAL(myAnimation->isFinished(),false);
                 ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
                 ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
+                AC_PRINT << " current x " << myObject->getX();
                 ENSURE_EQUAL(myObject->getX(),0);
+            }
+
+            void perform_FinishTest() {
+                //when the animation is finished before its end
+                //the value should be set to the end value and finished should be set to true
+                AnimationManager::get().init(0);
+                ObjectPtr myObject = ObjectPtr(new Object());
+                ObjectPropertyAnimationPtr myAnimation = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX));
+                AnimationManager::get().play(myAnimation);
+                ENSURE_EQUAL(myObject->getX(), 0);
+                ENSURE_EQUAL(myAnimation->isRunning(),true);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
+
+                AnimationManager::get().doFrame(500);
+                AC_PRINT << "current x " << myObject->getX();
+                ENSURE_MSG(myObject->getX() > 0 && myObject->getX() < 1, "property x of object should be > 0 and < 1");
+
+                myAnimation->finish(523);
+                ENSURE_EQUAL(myAnimation->isRunning(),false);
+                ENSURE_EQUAL(myAnimation->isFinished(),true);
+                ENSURE_EQUAL(myObject->getX(), 1);
+            }
+
+            void perform_CancelTest() {
+                //when the animation is canceled before its end
+                //the value should stay as it was and finished should be false
+                AnimationManager::get().init(0);
+                ObjectPtr myObject = ObjectPtr(new Object());
+                ObjectPropertyAnimationPtr myAnimation = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX));
+                AnimationManager::get().play(myAnimation);
+                ENSURE_EQUAL(myObject->getX(), 0);
+                ENSURE_EQUAL(myAnimation->isRunning(),true);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
+
+                AnimationManager::get().doFrame(500);
+                ENSURE_MSG(myObject->getX() > 0 && myObject->getX() < 1, "property x of object should be > 0 and < 1");
+                float myCurrentValue = myObject->getX();
+
+                myAnimation->cancel();
+
+                ENSURE_EQUAL(myAnimation->isRunning(),false);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
+                ENSURE_EQUAL(myCurrentValue, myObject->getX());
             }
     };    
 };
