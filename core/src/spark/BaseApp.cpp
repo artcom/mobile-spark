@@ -25,7 +25,6 @@ namespace spark {
 #ifdef __ANDROID__
         assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(assetPath));
 #endif
-
         //load layout
         window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), layoutFile));
         return true;
