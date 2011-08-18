@@ -17,7 +17,7 @@ namespace animation {
     Animation::~Animation() {}
 
     void Animation::play(const long theStartTime) {
-        AC_PRINT << _myId << "..........play it";
+        //AC_PRINT << _myId << "..........play it";
         _myStartTime = theStartTime;
         _myRunning = true;
         _myFinished = false;
@@ -26,10 +26,10 @@ namespace animation {
     void Animation::doFrame(const long theCurrentMillis) {
         _myProgress = (float)(theCurrentMillis - _myStartTime)/(float)(_myDuration);
         if (_myProgress >= 1) {
-            AC_PRINT << _myId << "..................... stop it";
+            //AC_PRINT << _myId << "..................... stop it";
             finish();
             if (_myLoop) {
-                AC_PRINT << _myId << " ........ loop it";
+                //AC_PRINT << _myId << " ........ loop it";
                 play(theCurrentMillis);
             } else  {
                 _myRunning = false;
