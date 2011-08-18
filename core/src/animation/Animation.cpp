@@ -18,8 +18,9 @@ namespace animation {
 
     void Animation::doFrame(const long theCurrentMillis) {
         _myProgress = (float)(theCurrentMillis - _myStartTime)/(float)(_myDuration);
-        if (_myProgress > 1) {
+        if (_myProgress >= 1) {
             //AC_PRINT << "..................... stop it";
+            finish();
             _myRunning = false;
         }
     }
