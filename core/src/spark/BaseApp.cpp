@@ -18,17 +18,21 @@ namespace spark {
     BaseApp::~BaseApp() {
     }
 
-    bool BaseApp::setup(std::string assetPath, std::string layoutFile) {
+    bool BaseApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         AC_PRINT << "setup";
+        //init animationManager with setup-time 
+        //(needed for animations created on setup)
+        animation::AnimationManager::get().init(theCurrentMillis);
 
 //TODO: AssetProvider for ios?
 #ifdef __ANDROID__
-        assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(assetPath));
+        assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath));
 #endif
         //load layout
-        window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), layoutFile));
+        window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));
         return true;
     }
+
     void BaseApp::onFrame(const long theCurrentMillis) {
         //AC_PRINT << "onFrame " << theCurrentMillis;
         if (_myAnimate) {

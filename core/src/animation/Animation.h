@@ -13,9 +13,12 @@ namespace animation {
         ~Animation();
         void play(const long theStartTime);
         virtual void doFrame(const long theTime);
-        virtual void finish() {};
+        virtual void finish();
 
         bool isRunning() const { return _myRunning; };
+        bool isFinished()  const { return _myFinished; };
+    
+        void setLoop(const bool theLoop) { _myLoop = theLoop; };
 
     protected:
         const long _myDuration; //millisecs
@@ -23,10 +26,13 @@ namespace animation {
         float _myProgress;
 
     private:
+        unsigned int _myId;
         bool _myRunning;
-        bool _myLoop;
         bool _myFinished;
+        bool _myLoop;
         AnimationPtr _myParent;
+
+        static unsigned int idCounter;
     };
 };
 
