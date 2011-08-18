@@ -32,6 +32,7 @@ namespace animation {
     // iterate through child animations
     void SequenceAnimation::doFrame(const long theTime) {
         if (_myCurrent >= _myChildren.size()) {
+            finishAnimation(theTime);
             return;
         }
         _myChildren[_myCurrent]->doFrame(theTime);

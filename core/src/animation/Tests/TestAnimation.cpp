@@ -1,12 +1,14 @@
 #include "TestAnimation.h"
 
 #include "testPropertyAnimation.h"
+#include "testCompositeAnimation.h"
 
 namespace animation {
 
     void MyAnimationTestSuite::setup() {
         UnitTestSuite::setup();
         addTest(new animation::PropertyAnimation_UnitTest);
+        addTest(new animation::CompositeAnimation_UnitTest);
     }    
 }
 
