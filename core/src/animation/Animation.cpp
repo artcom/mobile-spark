@@ -49,7 +49,7 @@ namespace animation {
             return;
         }
         if (!_myRunning) {
-            //when composit animations are finished before child animations started
+            //when composite animations are finished before child animations started
             //child animations should be started (with comeToAnEndFlag = true) and finished immediately
             play(theTime, true); 
         }
