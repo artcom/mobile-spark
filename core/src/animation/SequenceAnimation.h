@@ -6,12 +6,16 @@
 namespace animation {
     class SequenceAnimation : public CompositeAnimation {
     public:
+        SequenceAnimation();
+        virtual ~SequenceAnimation();
         virtual void doFrame(const long theTime);
         virtual void childDurationChanged();
         virtual void play(const long theStartTime, const bool theComeToAnEndFlag = false);
     private:
         unsigned int _myCurrent;
     };
+
+    typedef boost::shared_ptr<SequenceAnimation> SequenceAnimationPtr;
 };
 
 #endif

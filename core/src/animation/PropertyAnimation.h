@@ -11,6 +11,7 @@ namespace animation {
     class PropertyAnimation : public Animation {
     public:
         PropertyAnimation(const O theObject, const T thePropertySetter, const float theStartValue = 0.0f, const float theEndValue = 1.0f, const long theDuration = 1000);
+        virtual ~PropertyAnimation();
         virtual void doFrame(const long theTime);
 
         virtual void play(const long theTime, const bool theComeToAnEndFlag = false);
@@ -22,6 +23,7 @@ namespace animation {
         const float _myStartValue;
         const float _myEndValue;
     };
+
 
     template <class O, class T>
     PropertyAnimation<O, T>::PropertyAnimation(
@@ -36,6 +38,9 @@ namespace animation {
             _myStartValue(theStartValue),
             _myEndValue(theEndValue) {
     }
+
+    template <class O, class T>
+    PropertyAnimation<O, T>::~PropertyAnimation(){}
 
     template <class O,class T>
     void PropertyAnimation<O, T>::doFrame(const long theCurrentMillis) {

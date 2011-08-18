@@ -14,7 +14,9 @@ namespace animation {
         _myLoop(false) {
     }
 
-    Animation::~Animation() {}
+    Animation::~Animation() {
+        //AC_PRINT << "destruct animation " << _myId;
+    }
 
     void Animation::doFrame(const long theCurrentMillis) {
         _myProgress = (float)(theCurrentMillis - _myStartTime)/(float)(_myDuration);

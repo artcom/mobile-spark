@@ -29,6 +29,7 @@ namespace animation {
             }
         }
         for (std::vector<std::vector<AnimationPtr>::iterator>::iterator it = myToErase.begin(); it != myToErase.end(); ++it) {
+            //AC_PRINT << "erase animation " << (**it)->getId();
             _myAnimations.erase(*it);
         }
     }

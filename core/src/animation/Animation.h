@@ -2,15 +2,18 @@
 #define _ac_mobile_animation_Animation_h_included_
 
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/smart_ptr/weak_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 namespace animation {
     
     class Animation;
     typedef boost::shared_ptr<Animation> AnimationPtr;
-    class Animation {
+    typedef boost::weak_ptr<Animation> AnimationWeakPtr;
+    class Animation : public boost::enable_shared_from_this<Animation> {
     public: 
         Animation(const long theDuration = 1000);
-        ~Animation();
+        virtual ~Animation();
         virtual void doFrame(const long theTime);
 
         virtual void play(const long theStartTime, const bool theComeToAnEndFlag = false);
@@ -21,8 +24,9 @@ namespace animation {
         bool isFinished()  const { return _myFinished; };
     
         void setLoop(const bool theLoop) { _myLoop = theLoop; };
-        void setParent(AnimationPtr theParent) { _myParent = theParent; };
+        void setParent(AnimationWeakPtr theParent) { _myParent = theParent; };
         long getDuration() const { return _myDuration;};
+        unsigned int getId() const { return _myId; };
 
     protected:
         virtual void finishAnimation(const long theTime);
@@ -35,7 +39,7 @@ namespace animation {
         bool _myRunning;
         bool _myFinished;
         bool _myLoop;
-        AnimationPtr _myParent;
+        AnimationWeakPtr _myParent;
 
         static unsigned int idCounter;
     };
