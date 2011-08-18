@@ -33,7 +33,10 @@
 #define _ac_mobile_asl_test_PropertyAnimation_h_included_
 
 #include <string>
+#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/UnitTest.h>
+
+#include "../AnimationManager.h"
 #include "../PropertyAnimation.h"
 
 
@@ -42,12 +45,64 @@ namespace animation {
         public:
             PropertyAnimation_UnitTest() : UnitTest("PropertyAnimation_UnitTest") {  }
             void run() {
-                perform_CreationTest();
+                perform_AnimationManagerTest();
+                perform_PropertyAnimationTest();
             }
             
+            class Object {
+                private: 
+                    float x;
+                public: 
+                    Object() { x = 0; };
+                    void setX(float theX) { x = theX;};
+                    float getX() { return x;};
+            };
+            typedef boost::shared_ptr<Object> ObjectPtr;
 
-            void perform_CreationTest() {                
-                ENSURE(true);
+            //animations
+            typedef void (Object::* ObjectPropertySetterFunction)(float);
+            typedef PropertyAnimation<ObjectPtr, ObjectPropertySetterFunction> ObjectPropertyAnimation;
+            typedef boost::shared_ptr<ObjectPropertyAnimation>  ObjectPropertyAnimationPtr;
+
+            void perform_AnimationManagerTest() {
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+                AnimationManager::get().doFrame(0);
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+                AnimationManager::get().doFrame(1);
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+            }
+
+            void perform_PropertyAnimationTest() {                
+                ObjectPtr myObject = ObjectPtr(new Object());
+                ENSURE_MSG(myObject, "myObject should not be null");
+                ENSURE_EQUAL(myObject->getX(),0);
+
+                AnimationManager::get().doFrame(0);
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+
+                ObjectPropertyAnimationPtr myAnimation = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX));
+                ENSURE_MSG(myAnimation, "myAnimation should not be null");
+                ENSURE_EQUAL(myAnimation->isRunning(),false);
+                AnimationManager::get().play(myAnimation);
+                ENSURE_EQUAL(myObject->getX(),0);
+                ENSURE_EQUAL(myAnimation->isRunning(),true);
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
+
+                AnimationManager::get().doFrame(999);
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
+                ENSURE_EQUAL(myAnimation->isRunning(),true);
+
+                AnimationManager::get().doFrame(1000);
+                ENSURE_EQUAL(myAnimation->isRunning(),false);
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+                ENSURE_EQUAL(myObject->getX(),1);
             }
     };    
 };
