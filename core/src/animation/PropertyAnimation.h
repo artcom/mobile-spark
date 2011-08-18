@@ -12,7 +12,9 @@ namespace animation {
     public:
         PropertyAnimation(const O theObject, const T thePropertySetter, const float theStartValue = 0.0f, const float theEndValue = 1.0f, const long theDuration = 1000);
         virtual void doFrame(const long theTime);
-        virtual void finish();
+
+        virtual void play(const long theTime, const bool theComeToAnEndFlag = false);
+        virtual void finish(const long theTime);
 
     private:
         const O _myObjectPtr;
@@ -45,7 +47,15 @@ namespace animation {
     }
 
     template <class O, class T>
-    void PropertyAnimation<O, T>::finish() {
+    void PropertyAnimation<O, T>::play(const long theTime, const bool theComeToAnEndFlag) {
+        Animation::play(theTime, theComeToAnEndFlag);
+        //AC_PRINT << "property animation set value to start value " << _myStartValue;
+        (_myObjectPtr.get()->*_myPropertyCallback)(_myStartValue);
+    }
+
+    template <class O, class T>
+    void PropertyAnimation<O, T>::finish(const long theTime) {
+        Animation::finish(theTime);
         (_myObjectPtr.get()->*_myPropertyCallback)(_myEndValue);
     }
 };
