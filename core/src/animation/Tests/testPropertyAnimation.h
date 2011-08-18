@@ -47,6 +47,7 @@ namespace animation {
             void run() {
                 perform_AnimationManagerTest();
                 perform_PropertyAnimationTest();
+                perform_LoopAnimationTest();
             }
             
             class Object {
@@ -87,9 +88,11 @@ namespace animation {
                 ObjectPropertyAnimationPtr myAnimation = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX));
                 ENSURE_MSG(myAnimation, "myAnimation should not be null");
                 ENSURE_EQUAL(myAnimation->isRunning(),false);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
                 AnimationManager::get().play(myAnimation);
                 ENSURE_EQUAL(myObject->getX(),0);
                 ENSURE_EQUAL(myAnimation->isRunning(),true);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
                 ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
                 ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
 
@@ -97,12 +100,36 @@ namespace animation {
                 ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
                 ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
                 ENSURE_EQUAL(myAnimation->isRunning(),true);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
 
                 AnimationManager::get().doFrame(1000);
                 ENSURE_EQUAL(myAnimation->isRunning(),false);
+                ENSURE_EQUAL(myAnimation->isFinished(),true);
                 ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
                 ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
                 ENSURE_EQUAL(myObject->getX(),1);
+            }
+
+            void perform_LoopAnimationTest() {
+                ObjectPtr myObject = ObjectPtr(new Object());
+                ObjectPropertyAnimationPtr myAnimation = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX));
+                myAnimation->setLoop(true);
+                ENSURE_MSG(myAnimation, "myAnimation should not be null");
+                ENSURE_EQUAL(myAnimation->isRunning(),false);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
+                AnimationManager::get().play(myAnimation);
+                ENSURE_EQUAL(myObject->getX(),0);
+                ENSURE_EQUAL(myAnimation->isRunning(),true);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
+
+                AnimationManager::get().doFrame(1000);
+                ENSURE_EQUAL(myAnimation->isRunning(),true);
+                ENSURE_EQUAL(myAnimation->isFinished(),false);
+                ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
+                ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
+                ENSURE_EQUAL(myObject->getX(),0);
             }
     };    
 };

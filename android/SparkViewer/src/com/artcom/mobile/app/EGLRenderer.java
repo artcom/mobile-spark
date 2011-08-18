@@ -36,8 +36,8 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
             millisec = System.currentTimeMillis();
         } else if (numFrames == 99) {
             long now = System.currentTimeMillis();
-            AC_Log.print("num Frames " + numFrames);
-            AC_Log.print("time " + (now- millisec));
+            //AC_Log.print("num Frames " + numFrames);
+            //AC_Log.print("time " + (now- millisec));
             float fps = (float)numFrames/(float)(now-millisec) * 1000.0f;
             AC_Log.print("fps " + fps);
             millisec = now;
