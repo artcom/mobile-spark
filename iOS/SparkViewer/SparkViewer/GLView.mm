@@ -69,7 +69,7 @@ spark::DemoApp *myDemoApp;
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
         
         myDemoApp = new spark::DemoApp();
-        myDemoApp->setup("", "main.spark");
+        myDemoApp->setup("assets/layouts/", "main.spark");
     }
     return self;
 }

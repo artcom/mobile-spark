@@ -5,7 +5,10 @@
 #include <animation/AnimationManager.h>
 
 #ifdef __ANDROID__
-#include <android/AndroidAssetProvider.h>
+    #include <android/AndroidAssetProvider.h>
+#elseif __DARWIN__
+    AC_PRINT << "apple?"
+    #include <ios/IOSAssetProvider.h>
 #endif
 
 #include "SparkComponentFactory.h"
@@ -23,7 +26,11 @@ namespace spark {
 
 //TODO: AssetProvider for ios?
 #ifdef __ANDROID__
-        assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(assetPath));
+        assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(assetPath));       
+#elseif __APPLE__
+         AC_PRINT << "1"
+        assetProvider = IOSAssetProviderPtr(new IOSAssetProvider(assetPath));
+         AC_PRINT << "2"
 #endif
         //load layout
         window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), layoutFile));
