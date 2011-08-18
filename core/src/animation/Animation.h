@@ -13,6 +13,7 @@ namespace animation {
         ~Animation();
         void play(const long theStartTime);
         virtual void doFrame(const long theTime);
+        virtual void finish() {};
 
         bool isRunning() const { return _myRunning; };
 
