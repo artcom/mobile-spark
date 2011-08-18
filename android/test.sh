@@ -16,7 +16,7 @@ $MAKE_TOOL
 cd -
 
 
-adb push SparkViewerTest/assets/layouts/main.spark /sdcard/test.spark
+adb push SparkViewerTest/assets/test.spark /sdcard/test.spark
 
 cd SparkViewerTest
 # update android test project
