@@ -2,6 +2,12 @@
 
 namespace animation {
 
+    ParallelAnimation::ParallelAnimation():CompositeAnimation() {
+    }
+
+    ParallelAnimation::~ParallelAnimation() {
+    }
+
     // duration = max(map(children, duration))
     void ParallelAnimation::childDurationChanged() {
         long d = 0;

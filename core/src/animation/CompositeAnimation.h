@@ -8,6 +8,8 @@
 namespace animation {
     class CompositeAnimation : public Animation {
     public:
+        CompositeAnimation();
+        virtual ~CompositeAnimation();
         void add(AnimationPtr theAnimation);
         virtual void childDurationChanged() = 0;
         virtual void finish(const long theTime);

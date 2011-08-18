@@ -2,6 +2,12 @@
 
 namespace animation {
 
+    SequenceAnimation::SequenceAnimation() : CompositeAnimation() {
+    }
+
+    SequenceAnimation::~SequenceAnimation() {
+    }
+    
     // duration = sum(map(children, duration))
     void SequenceAnimation::childDurationChanged() {
         long d = 0;

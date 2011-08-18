@@ -6,6 +6,7 @@
 
 #include <masl/Logger.h>
 #include <animation/AnimationManager.h>
+#include <animation/ParallelAnimation.h>
 #include "Rectangle.h"
 
 /////////////////// Application code, this should be in java or script language later...
@@ -32,18 +33,22 @@ namespace spark {
     }
 
     void DemoApp::onTouch() {
-        //add two animations
+
+        //add two parallel animations
         ComponentPtr myTransform = window->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
-        WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 5));
-        animation::AnimationManager::get().play(myAnimation); 
+        WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 5));
 
         myTransform = window->getChildByName("transformB");
         myObject = myTransform->getChildByName("objectA");
         myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
-        myAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setRotationZ, 0, 6.28, 5000));
-        animation::AnimationManager::get().play(myAnimation);
+        WidgetPropertyAnimationPtr myAnimationA = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setRotationZ, 0, 6.28, 5000));
+        
+        animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        myParallel->add(myAnimationC);
+        myParallel->add(myAnimationA);
+        animation::AnimationManager::get().play(myParallel);
     }
 }
 
