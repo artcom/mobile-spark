@@ -21,10 +21,12 @@ namespace animation {
         bool isFinished()  const { return _myFinished; };
     
         void setLoop(const bool theLoop) { _myLoop = theLoop; };
+        void setParent(AnimationPtr theParent) { _myParent = theParent; };
+        long getDuration() const { return _myDuration;};
 
     protected:
         virtual void finishAnimation(const long theTime);
-        const long _myDuration; //millisecs
+        long _myDuration; //millisecs
         long _myStartTime;
         float _myProgress;
 
