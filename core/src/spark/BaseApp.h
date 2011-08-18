@@ -14,7 +14,7 @@ namespace spark {
             BaseApp();
             virtual ~BaseApp();
 
-            virtual bool setup(std::string assetPath, std::string layoutFile);
+            virtual bool setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
             virtual void onFrame(const long theCurrentMillis);
             virtual void onTouch();
 

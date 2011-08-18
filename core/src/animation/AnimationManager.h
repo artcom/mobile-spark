@@ -13,6 +13,7 @@ namespace animation {
         void play(AnimationPtr theAnimation);
         bool isPlaying() const { return _myAnimations.size() > 0; };
         void doFrame(const long theCurrentMillis);
+        void init(const long theCurrentMillis) { _myAnimationTime = theCurrentMillis; };
 
     private:
         std::vector<AnimationPtr> _myAnimations;

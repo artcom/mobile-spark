@@ -49,7 +49,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
 
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
     	AC_Log.print("_________________________________- on surface created");
-        NativeBinding.setup(APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
+        NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
     }
 
 }

@@ -1,12 +1,7 @@
 package com.artcom.mobile.app;
 
 import com.artcom.mobile.Base.*; 
-import com.artcom.mobile.app.*; 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -14,9 +9,7 @@ import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
-import javax.microedition.khronos.opengles.GL10;   //needed only for method signaturs
 
-import com.artcom.mobile.Base.APK;
 import com.artcom.mobile.Base.AC_Log;
 
 public class ASLOpenGLView extends GLSurfaceView {

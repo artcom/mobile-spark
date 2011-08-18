@@ -9,6 +9,7 @@ namespace spark {
         public: 
             DemoApp();
             virtual ~DemoApp();
+            virtual bool setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
             virtual void onTouch();
     };
 
