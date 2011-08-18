@@ -7,6 +7,7 @@
 #include <masl/Logger.h>
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
+#include <animation/SequenceAnimation.h>
 #include "Rectangle.h"
 
 /////////////////// Application code, this should be in java or script language later...
@@ -21,13 +22,17 @@ namespace spark {
     bool DemoApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
 
-        //add looping animation
+        //add looping sequence animation
         ComponentPtr myTransform = window->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
-        WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));
-        myAnimation->setLoop(true);
-        animation::AnimationManager::get().play(myAnimation);
+        WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));
+        WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 2, 0.7, 1500));
+        animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
+        mySequence->add(myAnimation1);
+        mySequence->add(myAnimation2);
+        mySequence->setLoop(true);
+        animation::AnimationManager::get().play(mySequence);
 
         return myBaseReturn;
     }
