@@ -91,12 +91,6 @@ namespace masl {
         return std::string("[") + lastFileNamePart(file_name) + ":" + as_string(line_number) + "]";
     }
     
-    static float stof(std::string theString) {
-        std::stringstream ss(theString);
-        float f = 0.0f;
-        ss >> f;
-        return f;
-    }
 } //Namespace masl
 
 #endif
