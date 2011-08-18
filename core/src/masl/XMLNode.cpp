@@ -29,7 +29,7 @@ namespace masl {
     float XMLNode::getFloatValue(const std::string & theKey, const float theDefault) const {
         std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
         if ( it != attributes.end()) {
-            return stof(it->second);
+            return as<float>(it->second);
         } else {
             return theDefault;
         }
@@ -41,7 +41,7 @@ namespace masl {
         if ( it != attributes.end()) {
             char* part = strtok(const_cast<char *>(it->second.c_str()), "[], ");
             while (part != NULL) {
-                floatVector.push_back(stof(part));
+                floatVector.push_back(as<float>(part));
                 part = strtok(NULL, "[], ");
             }
         }
@@ -49,9 +49,9 @@ namespace masl {
     }
 
     void XMLNode::print() const {
-        AC_PRINT << "node " << name.c_str();
+        AC_PRINT << "node " << name;
         for (std::map<std::string, std::string>::const_iterator it = attributes.begin(); it != attributes.end(); ++it) {
-            AC_PRINT << "   " << (*it).first.c_str() << ": "<< (*it).second.c_str();
+            AC_PRINT << "   " << (*it).first << ": "<< (*it).second;
         }
     }
 
