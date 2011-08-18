@@ -1,4 +1,4 @@
-add_subdirectory(en.lproj)
+#add_subdirectory(en.lproj)
 
 file(GLOB SOURCES *.m *.mm)
 file(GLOB HEADERS *.h *.pch)
@@ -9,6 +9,7 @@ if($ENV{IS_TARGET_PLATFORM_IOS})
 		set(CMAKE_EXE_LINKER_FLAGS "-arch armv7 --isysroot=${SDKROOT} -miphoneos-version-min=${SDKVER}")
 	ELSEIF(${TARGET_PLATTFORM} STREQUAL iPhoneSimulator)
 		set(CMAKE_EXE_LINKER_FLAGS "-arch i386 --isysroot=${SDKROOT} -miphoneos-version-min=${SDKVER}")
+		#set(CMAKE_EXE_LINKER_FLAGS "-arch i386")
 	ENDIF()
 
 
@@ -31,8 +32,8 @@ if($ENV{IS_TARGET_PLATFORM_IOS})
 	#set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010. All Rights Reserved.")
 
 	# These variables are specific to our plist and are NOT standard CMake variables
-	set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "MainWindow")
-	set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "NSApplication")
+	#set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "MainWindow")
+	#set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "NSApplication")
 
 
 
@@ -54,9 +55,17 @@ if($ENV{IS_TARGET_PLATFORM_IOS})
 	
 	ADD_FRAMEWORK(${APP_NAME} UIKit)
 	ADD_FRAMEWORK(${APP_NAME} Foundation)
+	ADD_FRAMEWORK(${APP_NAME} QuartzCore)
+	
+	include_directories(${Boost_INCLUDE_DIRS})
+	include_directories(${LIBXML2_INCLUDE_DIRS})
+	include_directories(${CML_INCLUDE_DIR})
+	include_directories(${PROJECT_SOURCE_DIR}/core/src)
+	
 	target_link_libraries(${APP_NAME} spark)
 
 
+	###### InterFaceBuilder not tested yet
 
 	# Make sure we can find the 'ibtool' program. If we can NOT find it we
 	# skip generation of this project
