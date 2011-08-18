@@ -45,7 +45,7 @@ namespace masl {
             void run() {
                 perform_XMLLibTest();
                 perform_XMLNodeTest();
-                perform_loadXMLTest();  //XXX: this sometimes (???) does not work, I don't know why...
+                perform_loadXMLTest();  
             }
             
             //fixtures
