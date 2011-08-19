@@ -46,6 +46,9 @@ include(AcVariableUtils)
 include(AcPlatform)
 include(AcCompiler)
 include(AcBuildConfiguration)
+if (IOS)
+    include(AcIOSUtils)
+endif()
 
 ac_done_registering_build_types()
 
