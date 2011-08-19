@@ -33,11 +33,17 @@ if(ANDROID)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${ARMEABI_NDK_NAME}")
 
     add_definitions(-DANDROID)
-else(ANDROID)
+elseif(IOS)
+    add_definitions(-DiOS)
+
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
-    add_definitions(-DiOS)
-endif(ANDROID)
+    #SDK Info
+    SET (SDKVER "4.3")
+    SET (DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
+    SET (SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATFORM}${SDKVER}.sdk")
+    SET (CMAKE_OSX_SYSROOT "${SDKROOT}")
+endif()
 
