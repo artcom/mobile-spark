@@ -52,6 +52,11 @@ namespace animation {
             perform_EmptyParallelTest();
             perform_SequenceTest();
             perform_ParallelTest();
+            perform_SequenceFinishBeforeFirstFrameTest();
+            perform_SequenceFinishAfterFirstAnimationTest();
+            perform_SequenceCancelTest();
+            perform_ParallelFinishTest();
+            perform_parallelCancelTest();
         }
         
         class Object {
@@ -122,6 +127,7 @@ namespace animation {
             mySequence->add(myAnimation2);
             ENSURE_EQUAL(mySequence->getDuration(), myDuration1 + myDuration2);
 
+            //only animation1 should start playing
             AnimationManager::get().play(mySequence);
             ENSURE_EQUAL(myObject->getX(), 0);
             ENSURE_EQUAL(myObject->getY(), 0);
@@ -129,6 +135,8 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
             ENSURE_EQUAL(myAnimation1->isRunning(), true);
             ENSURE_EQUAL(myAnimation2->isRunning(), false);
+
+            //after duration1 animation 1 should be finished and animation 2 should start
             AnimationManager::get().doFrame(myDuration1);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
@@ -136,6 +144,8 @@ namespace animation {
             ENSURE_EQUAL(myObject->getY(), 0);
             ENSURE_EQUAL(myAnimation1->isRunning(), false);
             ENSURE_EQUAL(myAnimation2->isRunning(), true);
+
+            //after duration1 + duration2 all animations should be finished
             AnimationManager::get().doFrame(myDuration1 + myDuration2);
             ENSURE_EQUAL(myObject->getX(), 1);
             ENSURE_EQUAL(myObject->getY(), 1);
@@ -167,6 +177,7 @@ namespace animation {
             myParallel->add(myAnimation2);
             ENSURE_EQUAL(myParallel->getDuration(), std::max(myDuration1, myDuration2));
 
+            //both animations should start playing
             AnimationManager::get().play(myParallel);
             ENSURE_EQUAL(myObject->getX(), 0);
             ENSURE_EQUAL(myObject->getY(), 0);
@@ -174,6 +185,8 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
             ENSURE_EQUAL(myAnimation1->isRunning(), true);
             ENSURE_EQUAL(myAnimation2->isRunning(), true);
+
+            //after duration1 animation 1 should be finished and animation2 should still be running
             AnimationManager::get().doFrame(myDuration1);
             ENSURE_EQUAL(myObject->getX(), 1);
             ENSURE_MSG(myObject->getY() > 0 && myObject->getY() < 1, "y should be between 0 and 1");
@@ -181,6 +194,8 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
             ENSURE_EQUAL(myAnimation1->isRunning(), false);
             ENSURE_EQUAL(myAnimation2->isRunning(), true);
+
+            //after max(duration1, duration2) both animations should be finished
             AnimationManager::get().doFrame(std::max(myDuration1, myDuration2));
             ENSURE_EQUAL(myObject->getX(), 1);
             ENSURE_EQUAL(myObject->getY(), 1);
@@ -192,6 +207,98 @@ namespace animation {
             ENSURE_EQUAL(myAnimation1->isFinished(), true);
             ENSURE_EQUAL(myAnimation2->isFinished(), true);
             ENSURE_EQUAL(myParallel->isFinished(), true);
+        }
+
+        void perform_SequenceFinishBeforeFirstFrameTest() {
+            AnimationManager::get().init(0);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+            SequenceAnimationPtr mySequence = SequenceAnimationPtr(new SequenceAnimation);
+            ObjectPtr myObject = ObjectPtr(new Object());
+            long myDuration1 = 5;
+            long myDuration2 = 10;
+            ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
+            ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
+            mySequence->add(myAnimation1);
+            mySequence->add(myAnimation2);
+            AnimationManager::get().play(mySequence);
+
+            //finish before first doFrame
+            mySequence->finish(0);
+            ENSURE_EQUAL(mySequence->isRunning(),false);
+            ENSURE_EQUAL(mySequence->isFinished(),true);
+            ENSURE_EQUAL(myAnimation1->isRunning(), false);
+            ENSURE_EQUAL(myAnimation1->isFinished(), true);
+            ENSURE_EQUAL(myAnimation2->isRunning(), false);
+            ENSURE_EQUAL(myAnimation2->isFinished(), true);
+            ENSURE_EQUAL(myObject->getX(), 1);
+            ENSURE_EQUAL(myObject->getY(), 42);  //y should have endValue
+            AnimationManager::get().doFrame(0);
+            ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+        }
+
+        void perform_SequenceFinishAfterFirstAnimationTest() {
+            AnimationManager::get().init(0);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+            SequenceAnimationPtr mySequence = SequenceAnimationPtr(new SequenceAnimation);
+            ObjectPtr myObject = ObjectPtr(new Object());
+            long myDuration1 = 5;
+            long myDuration2 = 10;
+            ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
+            ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
+            mySequence->add(myAnimation1);
+            mySequence->add(myAnimation2);
+            AnimationManager::get().play(mySequence);
+            AnimationManager::get().doFrame(myDuration1);
+
+            //finish after first Animation 
+            mySequence->finish(myDuration1);
+            ENSURE_EQUAL(mySequence->isRunning(),false);
+            ENSURE_EQUAL(mySequence->isFinished(),true);
+            ENSURE_EQUAL(myAnimation1->isRunning(), false);
+            ENSURE_EQUAL(myAnimation1->isFinished(), true);
+            ENSURE_EQUAL(myAnimation2->isRunning(), false);
+            ENSURE_EQUAL(myAnimation2->isFinished(), true);
+            ENSURE_EQUAL(myObject->getX(), 1);
+            ENSURE_EQUAL(myObject->getY(), 42);  //y should have endValue
+            AnimationManager::get().doFrame(myDuration1);
+            ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+        }
+
+        void perform_SequenceCancelTest() {
+            AnimationManager::get().init(0);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+            SequenceAnimationPtr mySequence = SequenceAnimationPtr(new SequenceAnimation);
+            ObjectPtr myObject = ObjectPtr(new Object());
+            long myDuration1 = 5;
+            long myDuration2 = 10;
+            ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
+            ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
+            mySequence->add(myAnimation1);
+            mySequence->add(myAnimation2);
+            AnimationManager::get().play(mySequence);
+            AnimationManager::get().doFrame(myDuration1-2);
+            
+            //cancel before first animation finished
+            mySequence->cancel();
+            ENSURE_EQUAL(mySequence->isRunning(),false);
+            ENSURE_EQUAL(mySequence->isFinished(),false);
+            ENSURE_EQUAL(myAnimation1->isRunning(), false);
+            ENSURE_EQUAL(myAnimation1->isFinished(), false);
+            ENSURE_EQUAL(myAnimation2->isRunning(), false);
+            ENSURE_EQUAL(myAnimation2->isFinished(), false);
+            ENSURE_MSG(myObject->getX() > 0 && myObject->getX() < 1 , "x should be between 0 and 1");
+            //ENSURE_EQUAL(myObject->getY(), 23);   //this can not be guaranteed when canceling
+            AnimationManager::get().doFrame(myDuration1-1);
+            ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+        }
+            
+        void perform_ParallelFinishTest() {
+        }
+
+        void perform_parallelCancelTest() {
         }
     };    
 };
