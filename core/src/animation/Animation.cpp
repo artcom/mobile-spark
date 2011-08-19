@@ -33,14 +33,14 @@ namespace animation {
         _myRunning = true;
         _myFinished = false;
 
-        //TODO: callOnPlay
+        if (_myOnPlay) { _myOnPlay->execute(); }
     }
 
     void Animation::cancel() {
         //AC_PRINT << _myId << "..........cancel it";
         _myRunning = false;
         _myFinished = false;
-        //TODO: callOnCancel();
+        if (_myOnCancel) { _myOnCancel->execute(); }
     }
 
     void Animation::finish(const long theTime) {
@@ -59,7 +59,7 @@ namespace animation {
     void Animation::finishAnimation(const long theTime) {
         //AC_PRINT << _myId << "..........finish animation";
         _myProgress = 1.0; 
-        //TODO: callOnFinish();
+        if (_myOnFinish) { _myOnFinish->execute(); }
         if (_myLoop) {
             //AC_PRINT << _myId << "..........loop: restart animation";
             play(theTime);

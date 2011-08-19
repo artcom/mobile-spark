@@ -5,6 +5,8 @@
 #include <boost/smart_ptr/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+#include "Callback.h"
+
 namespace animation {
     
     class Animation;
@@ -28,6 +30,10 @@ namespace animation {
         long getDuration() const { return _myDuration;};
         unsigned int getId() const { return _myId; };
 
+        void setOnPlay(CallbackPtr theOnPlay) { _myOnPlay = theOnPlay; };
+        void setOnFinish(CallbackPtr theOnFinish) { _myOnFinish = theOnFinish; };
+        void setOnCancel(CallbackPtr theOnCancel) { _myOnCancel = theOnCancel; };
+
     protected:
         virtual void finishAnimation(const long theTime);
         long _myDuration; //millisecs
@@ -40,6 +46,10 @@ namespace animation {
         bool _myFinished;
         bool _myLoop;
         AnimationWeakPtr _myParent;
+
+        CallbackPtr _myOnPlay;
+        CallbackPtr _myOnFinish;
+        CallbackPtr _myOnCancel;
 
         static unsigned int idCounter;
     };

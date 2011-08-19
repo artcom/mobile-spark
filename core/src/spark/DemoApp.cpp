@@ -20,6 +20,11 @@ namespace spark {
     DemoApp::~DemoApp() {
     }
 
+
+    void freeFunction() {
+        AC_PRINT << "hello from free function";
+    }
+
     bool DemoApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
 
@@ -37,6 +42,8 @@ namespace spark {
         mySequence->setLoop(true);
         animation::AnimationManager::get().play(mySequence);
 
+        mySequence->setOnPlay(WidgetCallbackPtr(new WidgetCallback( myRectangle, &Widget::test)));
+        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));
         return myBaseReturn;
     }
 
