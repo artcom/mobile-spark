@@ -8,6 +8,7 @@
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
 #include <animation/SequenceAnimation.h>
+#include <animation/DelayAnimation.h>
 #include "Rectangle.h"
 
 /////////////////// Application code, this should be in java or script language later...
@@ -28,9 +29,11 @@ namespace spark {
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));
         WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 2, 0.7, 1500));
+        animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(2000));
         animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         mySequence->add(myAnimation1);
         mySequence->add(myAnimation2);
+        mySequence->add(myDelay);
         mySequence->setLoop(true);
         animation::AnimationManager::get().play(mySequence);
 
