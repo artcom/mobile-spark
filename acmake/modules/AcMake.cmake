@@ -42,6 +42,11 @@ include(FindPkgConfig)
 
 ### LOAD ACMAKE
 
+include(AcVariableUtils)
 include(AcPlatform)
 include(AcCompiler)
+include(AcBuildConfiguration)
+
+ac_done_registering_build_types()
+
 
