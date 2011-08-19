@@ -1,6 +1,6 @@
 #add_subdirectory(en.lproj)
 
-file(GLOB SOURCES *.m *.mm)
+file(GLOB SOURCES *.m *.mm *.c)
 file(GLOB HEADERS *.h *.pch)
 
 if($ENV{IS_TARGET_PLATFORM_IOS})
@@ -56,6 +56,7 @@ if($ENV{IS_TARGET_PLATFORM_IOS})
 	ADD_FRAMEWORK(${APP_NAME} UIKit)
 	ADD_FRAMEWORK(${APP_NAME} Foundation)
 	ADD_FRAMEWORK(${APP_NAME} QuartzCore)
+	ADD_FRAMEWORK(${APP_NAME} OpenGLES)
 	
 	include_directories(${Boost_INCLUDE_DIRS})
 	include_directories(${LIBXML2_INCLUDE_DIRS})

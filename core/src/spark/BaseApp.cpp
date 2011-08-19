@@ -6,8 +6,8 @@
 
 #ifdef __ANDROID__
     #include <android/AndroidAssetProvider.h>
-#elseif __DARWIN__
-    AC_PRINT << "apple?"
+#endif
+#if __APPLE__
     #include <ios/IOSAssetProvider.h>
 #endif
 
@@ -26,11 +26,12 @@ namespace spark {
 
 //TODO: AssetProvider for ios?
 #ifdef __ANDROID__
-        assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(assetPath));       
-#elseif __APPLE__
-         AC_PRINT << "1"
-        assetProvider = IOSAssetProviderPtr(new IOSAssetProvider(assetPath));
-         AC_PRINT << "2"
+        assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(assetPath));
+#endif
+#if __APPLE__
+         AC_PRINT << "1";
+        assetProvider = ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(assetPath));
+         AC_PRINT << "2";
 #endif
         //load layout
         window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), layoutFile));

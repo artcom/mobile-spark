@@ -9,6 +9,7 @@
 namespace spark {
     class SparkComponentFactory : public masl::Singleton<SparkComponentFactory> {
     public:
+        SparkComponentFactory();
         typedef ComponentPtr (*CreateComponentCallback)(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
     private:
         typedef std::map<const std::string, CreateComponentCallback> CallbackMap;
@@ -22,6 +23,7 @@ namespace spark {
 
     private:
         CallbackMap _myCreateCallbackMap;
+        void setupFactory();
     };
 };
 #endif 

@@ -35,10 +35,18 @@
     
     //spark::DemoApp *myDemoApp;
     
+    /* the shader program object */
+    
+    GLuint program;
+    GLfloat rotz;
+
+    
 }
 
 - (void) render:(id)sender;
 - (void) startAnimation;
 - (void) stopAnimation;
+- (BOOL) loadShaders;
+- (NSString*) getResourcePath:(NSString*)fileName:(NSString*)fileType:(NSString*)inDirectory;
 
 @end

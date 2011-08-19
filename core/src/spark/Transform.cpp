@@ -5,12 +5,12 @@
 
 namespace spark {
     //needed for component factory
-    namespace  {
-        ComponentPtr createTransform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr()) {
+    //namespace  {
+        ComponentPtr createTransform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
             return TransformPtr(new Transform(theApp, theXMLNode, theParent));
         };
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Transform", spark::createTransform);
-    }
+        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Transform", spark::createTransform);
+    //}
 
 
     Transform::Transform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
@@ -20,7 +20,4 @@ namespace spark {
     Transform::~Transform() {
     }
 
-    ComponentPtr createTransform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-        return TransformPtr(new Transform(theApp, theXMLNode, theParent));
-    };
 }
