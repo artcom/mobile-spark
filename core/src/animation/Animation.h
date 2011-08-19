@@ -9,6 +9,9 @@
 
 namespace animation {
     
+    typedef float (*EasingFunctionPtr)(float);
+    float defaultEasing(float theValue);
+
     class Animation;
     typedef boost::shared_ptr<Animation> AnimationPtr;
     typedef boost::weak_ptr<Animation> AnimationWeakPtr;
@@ -39,8 +42,10 @@ namespace animation {
         long _myDuration; //millisecs
         long _myStartTime;
         float _myProgress;
+        EasingFunctionPtr _myEasingFunction;
 
     private:
+        float _myProgressTime;
         unsigned int _myId;
         bool _myRunning;
         bool _myFinished;
