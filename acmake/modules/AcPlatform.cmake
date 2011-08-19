@@ -38,6 +38,6 @@ else(ANDROID)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
-    add_definitions(-DiOS)
+    add_definitions("-D__APPLE__")
 endif(ANDROID)
 
