@@ -89,85 +89,85 @@
 
 # this one is important
 set( CMAKE_SYSTEM_NAME Linux )
-#this one not so much
-set( CMAKE_SYSTEM_VERSION 1 )
 
 set( ANDROID_NDK_DEFAULT_SEARCH_PATH /opt/android-ndk-r6 )
 set( ANDROID_NDK_TOOLCHAIN_DEFAULT_SEARCH_PATH /opt/android-toolchain )
 set( TOOL_OS_SUFFIX "" )
 
-#set path for android NDK -- look
+if( APPLE )
+    set( NDKSYSTEM "darwin-x86" )
+elseif( WIN32 )
+    set( NDKSYSTEM "windows" )
+    set( TOOL_OS_SUFFIX ".exe" )
+elseif( UNIX )
+    set( NDKSYSTEM "linux-x86" )
+else()
+    message( FATAL_ERROR "Your platform is not supported" )
+endif()
+
+#look for android NDK
 if( NOT DEFINED ANDROID_NDK )
- set( ANDROID_NDK $ENV{ANDROID_NDK} )
+    set( ANDROID_NDK $ENV{ANDROID_NDK} )
 endif()
 
 if( NOT EXISTS ${ANDROID_NDK} )
- if( EXISTS ${ANDROID_NDK_DEFAULT_SEARCH_PATH} )
-  set ( ANDROID_NDK ${ANDROID_NDK_DEFAULT_SEARCH_PATH} )
-  message( STATUS "Using default path for android NDK ${ANDROID_NDK}" )
-  message( STATUS "If you prefer to use a different location, please define the environment variable: ANDROID_NDK" )
- endif()
+    if( EXISTS ${ANDROID_NDK_DEFAULT_SEARCH_PATH} )
+        set ( ANDROID_NDK ${ANDROID_NDK_DEFAULT_SEARCH_PATH} )
+        message( STATUS "Using default path for android NDK ${ANDROID_NDK}" )
+        message( STATUS "If you prefer to use a different location, please define the environment variable: ANDROID_NDK" )
+    endif()
 endif()
 
-if( EXISTS ${ANDROID_NDK} )
- set( ANDROID_NDK ${ANDROID_NDK} CACHE PATH "root of the android ndk" FORCE )
- 
- if( APPLE )
-  set( NDKSYSTEM "darwin-x86" )
- elseif( WIN32 )
-  set( NDKSYSTEM "windows" )
-  set( TOOL_OS_SUFFIX ".exe" )
- elseif( UNIX )
-  set( NDKSYSTEM "linux-x86" )
- else()
-  message( FATAL_ERROR "Your platform is not supported" )
- endif()
+#try to find toolchain
+if( NOT DEFINED ANDROID_NDK_TOOLCHAIN_ROOT )
+    set( ANDROID_NDK_TOOLCHAIN_ROOT $ENV{ANDROID_NDK_TOOLCHAIN_ROOT} )
+endif()
 
- set( ANDROID_LEVEL $ENV{ANDROID_LEVEL} )
- string( REGEX REPLACE "android-([0-9]+)" "\\1" ANDROID_LEVEL "${ANDROID_LEVEL}" )
+if( NOT EXISTS ${ANDROID_NDK_TOOLCHAIN_ROOT} )
+    set( ANDROID_NDK_TOOLCHAIN_ROOT ${ANDROID_NDK_TOOLCHAIN_DEFAULT_SEARCH_PATH} )
+    message( STATUS "Using default path for toolchain ${ANDROID_NDK_TOOLCHAIN_ROOT}" )
+    message( STATUS "If you prefer to use a different location, please define the environment variable: ANDROID_NDK_TOOLCHAIN_ROOT" )
+endif()
 
- set( PossibleAndroidLevels "3;4;5;8;9" )
- set( ANDROID_LEVEL ${ANDROID_LEVEL} CACHE STRING "android API level" )
- set_property( CACHE ANDROID_LEVEL PROPERTY STRINGS ${PossibleAndroidLevels} )
- 
- if( NOT ANDROID_LEVEL GREATER 2 )
-  set( ANDROID_LEVEL 9 CACHE STRING "android API level" FORCE )
-  message( STATUS "Using default android API level android-${ANDROID_LEVEL}" )
-  message( STATUS "If you prefer to use a different API level, please define the environment variable: ANDROID_LEVEL" )
- endif()
+# setup environment
+if( NOT DEFINED BUILD_WITH_ANDROID_NDK AND NOT DEFINED BUILD_WITH_ANDROID_NDK_TOOLCHAIN )
+    if( EXISTS ${ANDROID_NDK_TOOLCHAIN_ROOT} )
+        message( STATUS "Using android NDK standalone toolchain from ${ANDROID_NDK_TOOLCHAIN_ROOT}" )
+        set( ANDROID_NDK_TOOLCHAIN_ROOT ${ANDROID_NDK_TOOLCHAIN_ROOT} CACHE PATH "root of the Android NDK standalone toolchain" FORCE )
+        set( ANDROID_NDK_SYSROOT "${ANDROID_NDK_TOOLCHAIN_ROOT}/sysroot" )
+        set( BUILD_WITH_ANDROID_NDK_TOOLCHAIN True )
+    elseif( EXISTS ${ANDROID_NDK} )
+        set( ANDROID_NDK ${ANDROID_NDK} CACHE PATH "root of the android ndk" FORCE )
 
- set( ANDROID_NDK_TOOLCHAIN_ROOT "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/${NDKSYSTEM}" )
- set( ANDROID_NDK_SYSROOT "${ANDROID_NDK}/platforms/android-${ANDROID_LEVEL}/arch-arm/" )
+        # figure out ANDROID_LEVEL
+        set( ANDROID_LEVEL $ENV{ANDROID_LEVEL} )
+        string( REGEX REPLACE "android-([0-9]+)" "\\1" ANDROID_LEVEL "${ANDROID_LEVEL}" )
 
- #message( STATUS "Using android NDK from ${ANDROID_NDK}" )
- set( BUILD_WITH_ANDROID_NDK True )
-else()
- #try to find toolchain
- if( NOT DEFINED ANDROID_NDK_TOOLCHAIN_ROOT )
-  set( ANDROID_NDK_TOOLCHAIN_ROOT $ENV{ANDROID_NDK_TOOLCHAIN_ROOT} )
- endif()
- 
- if( NOT EXISTS ${ANDROID_NDK_TOOLCHAIN_ROOT} )
-  set( ANDROID_NDK_TOOLCHAIN_ROOT ${ANDROID_NDK_TOOLCHAIN_DEFAULT_SEARCH_PATH} )
-  message( STATUS "Using default path for toolchain ${ANDROID_NDK_TOOLCHAIN_ROOT}" )
-  message( STATUS "If you prefer to use a different location, please define the environment variable: ANDROID_NDK_TOOLCHAIN_ROOT" )
- endif()
+        set( PossibleAndroidLevels "3;4;5;8;9" )
+        set( ANDROID_LEVEL ${ANDROID_LEVEL} CACHE STRING "android API level" )
+        set_property( CACHE ANDROID_LEVEL PROPERTY STRINGS ${PossibleAndroidLevels} )
 
- set( ANDROID_NDK_TOOLCHAIN_ROOT ${ANDROID_NDK_TOOLCHAIN_ROOT} CACHE PATH "root of the Android NDK standalone toolchain" FORCE )
+        if( NOT ANDROID_LEVEL GREATER 2 )
+            set( ANDROID_LEVEL 9 CACHE STRING "android API level" FORCE )
+            message( STATUS "Using default android API level android-${ANDROID_LEVEL}" )
+            message( STATUS "If you prefer to use a different API level, please define the environment variable: ANDROID_LEVEL" )
+        endif()
 
- if( NOT EXISTS ${ANDROID_NDK_TOOLCHAIN_ROOT} )
-  message( FATAL_ERROR "neither ${ANDROID_NDK} nor ${ANDROID_NDK_TOOLCHAIN_ROOT} does not exist!
-    You should either set an environment variable:
-      export ANDROID_NDK=~/my-android-ndk
-    or
-      export ANDROID_NDK_TOOLCHAIN_ROOT=~/my-android-toolchain
-    or put the toolchain or NDK in the default path:
-      sudo ln -s ~/my-android-ndk ${ANDROID_NDK_DEFAULT_SEARCH_PATH}
-      sudo ln -s ~/my-android-toolchain ${ANDROID_NDK_TOOLCHAIN_DEFAULT_SEARCH_PATH}" )
- endif()
+        set( ANDROID_NDK_TOOLCHAIN_ROOT "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/${NDKSYSTEM}" )
+        set( ANDROID_NDK_SYSROOT "${ANDROID_NDK}/platforms/android-${ANDROID_LEVEL}/arch-arm/" )
 
- #message( STATUS "Using android NDK standalone toolchain from ${ANDROID_NDK_TOOLCHAIN_ROOT}" )
- set( BUILD_WITH_ANDROID_NDK_TOOLCHAIN True )
+        message( STATUS "Using android NDK from ${ANDROID_NDK}" )
+        set( BUILD_WITH_ANDROID_NDK True )
+    else()
+        message( FATAL_ERROR "neither ${ANDROID_NDK} nor ${ANDROID_NDK_TOOLCHAIN_ROOT} does not exist!
+        You should either set an environment variable:
+          export ANDROID_NDK=~/my-android-ndk
+        or
+          export ANDROID_NDK_TOOLCHAIN_ROOT=~/my-android-toolchain
+        or put the toolchain or NDK in the default path:
+          sudo ln -s ~/my-android-ndk ${ANDROID_NDK_DEFAULT_SEARCH_PATH}
+          sudo ln -s ~/my-android-toolchain ${ANDROID_NDK_TOOLCHAIN_DEFAULT_SEARCH_PATH}" )
+    endif()
 endif()
 
 # specify the cross compiler
@@ -187,39 +187,32 @@ set( PossibleArmTargets "armeabi;armeabi-v7a;armeabi-v7a with NEON;armeabi-v7a w
 set( ARM_TARGET "armeabi-v7a" CACHE STRING "the arm target for android, recommend armeabi-v7a for floating point support and NEON." )
 set_property( CACHE ARM_TARGET PROPERTY STRINGS ${PossibleArmTargets} )
 
-#compatibility junk for previous version of toolchain
-if( DEFINED ARM_TARGETS AND NOT DEFINED ARM_TARGET )
- SET( ARM_TARGET "${ARM_TARGETS}" )
-endif()
-
 #set these flags for client use
 if( ARM_TARGET STREQUAL "armeabi" )
- set( ARMEABI true )
- set( ARMEABI_NDK_NAME "armeabi" )
- set( NEON false )
+    set( ARMEABI true )
+    set( ARMEABI_NDK_NAME "armeabi" )
+    set( NEON false )
 else()
- if( ARM_TARGET STREQUAL "armeabi-v7a with NEON" )
-  set( NEON true )
-  set( VFPV3 true )
- elseif( ARM_TARGET STREQUAL "armeabi-v7a with VFPV3" )
-  set( VFPV3 true )
- endif()
- set( ARMEABI_V7A true )
- set( ARMEABI_NDK_NAME "armeabi-v7a" )
+    if( ARM_TARGET STREQUAL "armeabi-v7a with NEON" )
+        set( NEON true )
+        set( VFPV3 true )
+    elseif( ARM_TARGET STREQUAL "armeabi-v7a with VFPV3" )
+        set( VFPV3 true )
+    endif()
+    set( ARMEABI_V7A true )
+    set( ARMEABI_NDK_NAME "armeabi-v7a" )
 endif()
 
 # where is the target environment 
 if( BUILD_WITH_ANDROID_NDK )
- set( STL_LIBRARIES_PATH "${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ARMEABI_NDK_NAME}" )
- set( CMAKE_FIND_ROOT_PATH  ${ANDROID_NDK_TOOLCHAIN_ROOT}/bin ${ANDROID_NDK_TOOLCHAIN_ROOT}/arm-linux-androideabi ${ANDROID_NDK_SYSROOT} )
- include_directories( ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/include ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ARMEABI_NDK_NAME}/include )
+    set( CMAKE_FIND_ROOT_PATH  ${ANDROID_NDK_TOOLCHAIN_ROOT}/bin ${ANDROID_NDK_TOOLCHAIN_ROOT}/arm-linux-androideabi ${ANDROID_NDK_SYSROOT} )
+    include_directories( ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/include ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ARMEABI_NDK_NAME}/include )
 endif()
 
 if( BUILD_WITH_ANDROID_NDK_TOOLCHAIN )
- set( STL_LIBRARIES_PATH "${CMAKE_INSTALL_PREFIX}/lib" )
- set( CMAKE_FIND_ROOT_PATH  ${ANDROID_NDK_TOOLCHAIN_ROOT}/bin ${ANDROID_NDK_TOOLCHAIN_ROOT}/arm-linux-androideabi ${ANDROID_NDK_TOOLCHAIN_ROOT}/sysroot ${CMAKE_INSTALL_PREFIX} ${CMAKE_INSTALL_PREFIX}/share )
- #for some reason this is needed? TODO figure out why...
- include_directories( ${ANDROID_NDK_TOOLCHAIN_ROOT}/arm-linux-androideabi/include/c++/4.4.3/arm-linux-androideabi )
+    set( CMAKE_FIND_ROOT_PATH  ${ANDROID_NDK_TOOLCHAIN_ROOT}/bin ${ANDROID_NDK_TOOLCHAIN_ROOT}/arm-linux-androideabi ${ANDROID_NDK_TOOLCHAIN_ROOT}/sysroot ${CMAKE_INSTALL_PREFIX} ${CMAKE_INSTALL_PREFIX}/share )
+    #for some reason this is needed? TODO figure out why...
+    include_directories( ${ANDROID_NDK_TOOLCHAIN_ROOT}/arm-linux-androideabi/include/c++/4.4.3/arm-linux-androideabi )
 endif()
 
 # allow programs like swig to be found -- but can be deceiving for
@@ -234,19 +227,17 @@ set( CMAKE_C_FLAGS "-fPIC -DANDROID -Wno-psabi -fsigned-char" )
 
 set( FORCE_ARM OFF CACHE BOOL "Use 32-bit ARM instructions instead of Thumb-1" )
 if( NOT FORCE_ARM )
- #It is recommended to use the -mthumb compiler flag to force the generation
- #of 16-bit Thumb-1 instructions (the default being 32-bit ARM ones).
- set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mthumb" )
- set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb" )
+    #It is recommended to use the -mthumb compiler flag to force the generation
+    #of 16-bit Thumb-1 instructions (the default being 32-bit ARM ones).
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mthumb" )
+    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb" )
 else()
- set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -marm" )
- set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -marm" )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -marm" )
+    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -marm" )
 endif()
 
-if( BUILD_WITH_ANDROID_NDK )
- set( CMAKE_CXX_FLAGS "--sysroot=${ANDROID_NDK_SYSROOT} ${CMAKE_CXX_FLAGS}" )
- set( CMAKE_C_FLAGS "--sysroot=${ANDROID_NDK_SYSROOT} ${CMAKE_C_FLAGS}" )
-endif()
+set( CMAKE_CXX_FLAGS "--sysroot=${ANDROID_NDK_SYSROOT} ${CMAKE_CXX_FLAGS}" )
+set( CMAKE_C_FLAGS "--sysroot=${ANDROID_NDK_SYSROOT} ${CMAKE_C_FLAGS}" )
 
 if( ARMEABI_V7A )
  #these are required flags for android armv7-a
@@ -264,11 +255,9 @@ endif()
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
 set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
       
-#-Wl,-L${LIBCPP_LINK_DIR},-lstdc++,-lsupc++
-#-L${LIBCPP_LINK_DIR} -lstdc++ -lsupc++
 #Also, this is *required* to use the following linker flags that routes around
 #a CPU bug in some Cortex-A8 implementations:
-set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++ " )
+set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -lstdc++ -lsupc++ " )
 
 set( NO_UNDEFINED ON CACHE BOOL "Don't all undefined symbols" )
 if( NO_UNDEFINED )
@@ -279,7 +268,6 @@ set( CMAKE_SHARED_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FOR
 set( CMAKE_MODULE_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FORCE )
 set( CMAKE_EXE_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FORCE )
 
-#set these global flags for cmake client scripts to change behavior
+#set this global flag for cmake client scripts to change behavior
 set( ANDROID True )
-set( BUILD_ANDROID True )
 
