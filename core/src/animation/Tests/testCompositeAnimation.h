@@ -289,16 +289,67 @@ namespace animation {
             ENSURE_EQUAL(myAnimation2->isRunning(), false);
             ENSURE_EQUAL(myAnimation2->isFinished(), false);
             ENSURE_MSG(myObject->getX() > 0 && myObject->getX() < 1 , "x should be between 0 and 1");
-            //ENSURE_EQUAL(myObject->getY(), 23);   //this can not be guaranteed when canceling
+            //ENSURE_EQUAL(myObject->getY(), 23);   //this can not be guaranteed when canceling, y==0
             AnimationManager::get().doFrame(myDuration1-1);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
         }
             
         void perform_ParallelFinishTest() {
+            AnimationManager::get().init(0);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+            ParallelAnimationPtr myParallel = ParallelAnimationPtr(new ParallelAnimation);
+            ObjectPtr myObject = ObjectPtr(new Object());
+            long myDuration1 = 5;
+            long myDuration2 = 10;
+            ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
+            ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
+            myParallel->add(myAnimation1);
+            myParallel->add(myAnimation2);
+            AnimationManager::get().play(myParallel);
+            
+            //finish before first animation finished
+            myParallel->finish(myDuration1-2);
+            ENSURE_EQUAL(myParallel->isRunning(),false);
+            ENSURE_EQUAL(myParallel->isFinished(),true);
+            ENSURE_EQUAL(myAnimation1->isRunning(), false);
+            ENSURE_EQUAL(myAnimation1->isFinished(), true);
+            ENSURE_EQUAL(myAnimation2->isRunning(), false);
+            ENSURE_EQUAL(myAnimation2->isFinished(), true);
+            ENSURE_EQUAL(myObject->getX(), 1);
+            ENSURE_EQUAL(myObject->getY(), 42);   //y should be at end value
+            AnimationManager::get().doFrame(myDuration1-1);
+            ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
         }
 
         void perform_parallelCancelTest() {
+            AnimationManager::get().init(0);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
+            ParallelAnimationPtr myParallel = ParallelAnimationPtr(new ParallelAnimation);
+            ObjectPtr myObject = ObjectPtr(new Object());
+            long myDuration1 = 5;
+            long myDuration2 = 10;
+            ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
+            ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
+            myParallel->add(myAnimation1);
+            myParallel->add(myAnimation2);
+            AnimationManager::get().play(myParallel);
+            
+            //cancel before first animation finished
+            AnimationManager::get().doFrame(myDuration1-2);
+            myParallel->cancel();
+            ENSURE_EQUAL(myParallel->isRunning(),false);
+            ENSURE_EQUAL(myParallel->isFinished(),false);
+            ENSURE_EQUAL(myAnimation1->isRunning(), false);
+            ENSURE_EQUAL(myAnimation1->isFinished(), false);
+            ENSURE_EQUAL(myAnimation2->isRunning(), false);
+            ENSURE_EQUAL(myAnimation2->isFinished(), false);
+            ENSURE_MSG(myObject->getX() > 0 && myObject->getX() < 1, "x should be between 0 and 1");
+            ENSURE_MSG(myObject->getY() > 23 && myObject->getY() < 42, "y should be between 23 and 42");  
+            AnimationManager::get().doFrame(myDuration1-1);
+            ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
+            ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
         }
     };    
 };
