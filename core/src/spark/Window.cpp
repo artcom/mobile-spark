@@ -7,12 +7,12 @@
 namespace spark {
 
     //needed for component factory
-    namespace  {
-        ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr()) {
+    //namespace  {
+        ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
             return WindowPtr(new Window(theApp, theXMLNode, theParent));
         };
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
-    }
+        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
+    //}
 
 
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
@@ -52,6 +52,7 @@ namespace spark {
     }
 
     void Window::render() const {
+        AC_PRINT << "in render()";
         glClearColor(_myClearColor[0],_myClearColor[1],_myClearColor[2],_myClearColor[3]);
         checkGlError("glClearColor");
         glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
