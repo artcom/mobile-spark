@@ -4,10 +4,15 @@
 
 namespace animation {
 
+    float defaultEasing(float theValue) { 
+        return theValue; 
+    }
+
     unsigned int Animation::idCounter = 0;
 
     Animation::Animation(const long theDuration) : 
         _myDuration(theDuration),
+        _myEasingFunction(defaultEasing),
         _myId(idCounter++),
         _myRunning(false),
         _myFinished(false),
@@ -19,8 +24,9 @@ namespace animation {
     }
 
     void Animation::doFrame(const long theCurrentMillis) {
-        _myProgress = (float)(theCurrentMillis - _myStartTime)/(float)(_myDuration);
-        if (_myProgress >= 1) {
+        _myProgressTime = theCurrentMillis - _myStartTime;
+        _myProgress = _myEasingFunction(_myProgressTime/(float)_myDuration);
+        if (_myProgressTime >= _myDuration) {
             //AC_PRINT << _myId << "..................... stop it";
             finish(theCurrentMillis);
         }
@@ -29,7 +35,8 @@ namespace animation {
     void Animation::play(const long theStartTime, const bool theComeToAnEndFlag) {
         //AC_PRINT << _myId << "..........play it";
         _myStartTime = theStartTime;
-        _myProgress = 0.0;
+        _myProgressTime = 0.0;
+        _myProgress = _myEasingFunction(_myProgressTime);
         _myRunning = true;
         _myFinished = false;
 
@@ -58,7 +65,8 @@ namespace animation {
 
     void Animation::finishAnimation(const long theTime) {
         //AC_PRINT << _myId << "..........finish animation";
-        _myProgress = 1.0; 
+        _myProgressTime = _myDuration;
+        _myProgress = _myEasingFunction(1.0); 
         if (_myOnFinish) { _myOnFinish->execute(); }
         if (_myLoop) {
             //AC_PRINT << _myId << "..........loop: restart animation";
