@@ -1,5 +1,5 @@
-#ifndef _included_mobile_asl_opengl_functions_
-#define _included_mobile_asl_opengl_functions_
+#ifndef _included_mobile_mar_opengl_functions_
+#define _included_mobile_mar_opengl_functions_
 
 #include "GlHeaders.h"
 
