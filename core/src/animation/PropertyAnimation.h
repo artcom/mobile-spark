@@ -10,7 +10,7 @@ namespace animation {
     template <class O, class T>
     class PropertyAnimation : public Animation {
     public:
-        PropertyAnimation(const O theObject, const T thePropertySetter, const float theStartValue = 0.0f, const float theEndValue = 1.0f, const long theDuration = 1000);
+        PropertyAnimation(const O theObject, const T thePropertySetter, const float theStartValue = 0.0f, const float theEndValue = 1.0f, const long theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
         virtual ~PropertyAnimation();
         virtual void doFrame(const long theTime);
 
@@ -25,14 +25,17 @@ namespace animation {
     };
 
 
+    /////////////////////////////////////////implementation
+    //(has to be in header due to template)
     template <class O, class T>
     PropertyAnimation<O, T>::PropertyAnimation(
         const O theObjectPtr,
         const T thePropertySetter, 
         const float theStartValue, 
         const float theEndValue, 
-        const long theDuration): 
-            Animation(theDuration),
+        const long theDuration,
+        const EasingFunctionPtr theEasing): 
+            Animation(theDuration, theEasing),
             _myObjectPtr(theObjectPtr),
             _myPropertyCallback(thePropertySetter),
             _myStartValue(theStartValue),

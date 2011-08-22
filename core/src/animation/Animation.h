@@ -17,7 +17,7 @@ namespace animation {
     typedef boost::weak_ptr<Animation> AnimationWeakPtr;
     class Animation : public boost::enable_shared_from_this<Animation> {
     public: 
-        Animation(const long theDuration = 1000);
+        Animation(const long theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
         virtual ~Animation();
         virtual void doFrame(const long theTime);
 

@@ -10,9 +10,9 @@ namespace animation {
 
     unsigned int Animation::idCounter = 0;
 
-    Animation::Animation(const long theDuration) : 
+    Animation::Animation(const long theDuration, EasingFunctionPtr theEasing) : 
         _myDuration(theDuration),
-        _myEasingFunction(defaultEasing),
+        _myEasingFunction(theEasing),
         _myId(idCounter++),
         _myRunning(false),
         _myFinished(false),
