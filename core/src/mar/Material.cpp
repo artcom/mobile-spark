@@ -1,20 +1,17 @@
 #include "Material.h"
 
+#include <masl/Logger.h>
 #include "openGL_functions.h"
 
 
 namespace mar {
-
     Material::Material(const AssetProviderPtr theAssetProvider) : _myAssetProvider(theAssetProvider) {
-        //TODO: create shader when we have the necessary information
-        createShader();
     }
 
     Material::~Material() {
     }
 
     void Material::createShader() {
-        //TODO: ios???
         std::string vertexShader = _myAssetProvider->getStringFromFile(DEFAULT_VERTEX_SHADER); 
         std::string fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_FRAGMENT_SHADER); 
 
@@ -27,6 +24,5 @@ namespace mar {
         mvpHandle = glGetUniformLocation(shaderProgram, "u_mvpMatrix");
         colorHandle = glGetUniformLocation(shaderProgram, "a_color");
     }
-
 }
 

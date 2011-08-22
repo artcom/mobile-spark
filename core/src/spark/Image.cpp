@@ -1,5 +1,7 @@
 #include "Image.h"
 
+#include <android/AndroidAssetProvider.h>
+#include <mar/png_functions.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
 
@@ -46,6 +48,21 @@ namespace spark {
         _myShape->elementList.push_back(element);
 
         element->material = MaterialPtr(new Material(_myApp->assetProvider));
+
+        std::vector<float> _myColor;
+        _myColor.push_back(1.0);
+        _myColor.push_back(0.0);
+        _myColor.push_back(1.0);
+        _myColor.push_back(1.0);
+        element->material->diffuse = _myColor;
+
+        element->material->textureFile = _mySrc; //needed?
+        int imageWidth, imageHeight;
+        bool rgb;
+        //TODO: zip should be android
+        zip* myPackage = boost::static_pointer_cast<android::AndroidAssetProvider>(theApp->assetProvider)->getAPK();
+        element->material->textureId = loadTextureFromPNG(myPackage, _mySrc, imageWidth, imageHeight, rgb);
+        element->material->rgb = rgb;
         element->material->createShader();
  
         //_myShape->materialMap["xxx"] = element->material; //XXX: needed?
