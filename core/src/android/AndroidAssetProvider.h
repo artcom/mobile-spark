@@ -16,6 +16,8 @@ namespace android {
 
         virtual std::string getStringFromFile(const std::string & theFileName) const;        
 
+        zip* getAPK() { return _myApkArchive;};
+
     private:
         zip * _myApkArchive;
     };

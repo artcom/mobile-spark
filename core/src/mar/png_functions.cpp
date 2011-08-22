@@ -6,6 +6,8 @@ extern "C" {
 
 #include <stdio.h>
 
+#include <masl/Logger.h>
+
 
 namespace mar {
 
@@ -30,9 +32,9 @@ void png_zip_read(png_structp png_ptr, png_bytep data, png_size_t length) {
   zip_fread(file, data, length);
 }
 
-GLuint loadTextureFromPNG(zip* theAPKArchive, const char* filename, int &width, int &height, bool &rgb) {
+GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, int &width, int &height, bool &rgb) {
   AC_PRINT << "load texture file name " << filename;
-  file = zip_fopen(theAPKArchive, filename, 0);
+  file = zip_fopen(theAPKArchive, filename.c_str(), 0);
   if (!file) {
     AC_ERROR << "Error opening " << filename << " from APK";
     return TEXTURE_LOAD_ERROR;
