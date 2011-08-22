@@ -37,9 +37,8 @@ namespace spark {
 
         //create projection matrix
         matrixStack.push();
-        float w2h = (float)_myWidth/(float)_myHeight;
-        matrixStack.loadPerspective(-0.1*w2h, 0.1*w2h, -0.1, 0.1, 0.1, 100);
-        matrixStack.translate(0,0,10);
+        matrixStack.loadOrtho(-10.0, 10.0, -10.5f, 10.5f, -0.1f, 100.0f);
+
         projectionMatrix = matrixStack.getTop();
         matrixStack.pop();
 
