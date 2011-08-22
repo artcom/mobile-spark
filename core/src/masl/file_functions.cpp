@@ -26,6 +26,7 @@
 
 #include <string>
 #include <stdio.h>
+#include "Logger.h"
 
 using namespace std;
 
@@ -34,17 +35,25 @@ namespace masl {
 
     /// read a complete file into a string
     bool readFile(const std::string & theUTF8Filename, std::string & theContent) {
+        
         FILE * pFile;
-        char myCharBuffer[65536];
+        char *myCharBuffer;
         pFile = fopen (theUTF8Filename.c_str(),"r");
         if (pFile == NULL) { 
             throw Exception("Error opening file");
         } else {
-          fgets (myCharBuffer , 65536 , pFile);            
-          fclose (pFile);
-          theContent = std::string(myCharBuffer);
+            fseek(pFile,0,SEEK_END); //go to end
+            int len=ftell(pFile); //get position at end (length)
+            fseek(pFile,0,SEEK_SET); //go to beg.
+            myCharBuffer=(char *)malloc(len + 1); //malloc buffer
+            memset(myCharBuffer, 0, len + 1);
+            fread(myCharBuffer,len,1,pFile); //read into buffer
+            fclose(pFile);
+            theContent = std::string(myCharBuffer);
+            free (myCharBuffer);
         }
         return true;
+
     }
 }
 

@@ -9,7 +9,6 @@
 #import "GLView.h"
 #include <spark/DemoApp.h>
 
-
 @implementation GLView
 
 spark::DemoApp *myDemoApp;
@@ -54,42 +53,37 @@ spark::DemoApp *myDemoApp;
         [EAGLContext setCurrentContext:glContext];
         
         //create framebuffer
-        
         glGenFramebuffers(1, &framebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         
         //create color renderbuffer
-        
         glGenRenderbuffers(1, &colorRenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
         [glContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:eaglLayer];
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
-        
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
         
+        NSLog(@"width: %d,  height: %d ", width, height);
+        NSString *path = [[NSBundle mainBundle] resourcePath];
         myDemoApp = new spark::DemoApp();
-        myDemoApp->setup("", "main.spark");
+        myDemoApp->setup((displayLink.timestamp*1000.0),[path UTF8String], "assets/layouts/main.spark");
     }
     return self;
 }
 
 - (void)render:(id)sender 
 {
+    //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    NSLog(@"displaylink: %f",(displayLink.timestamp*1000.0));
+    myDemoApp->onFrame((displayLink.timestamp*1000.0));
     
-    //start C++ rendering here
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    
-    glViewport(0, 0, width, height);
-    
-    glClearColor(0.5f, 0.4f, 0.5f, 1.0f);
-    
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+    //glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     
     [glContext presentRenderbuffer:GL_RENDERBUFFER];
+    
 }
+
 
 - (void)startAnimation
 {
