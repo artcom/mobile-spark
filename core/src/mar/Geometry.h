@@ -12,16 +12,16 @@
 
 #include "Material.h"
 
-//vertex data size
-#define VERTEX_POS_SIZE        3 //x, y, z
-#define VERTEX_NORMAL_SIZE     3 //x, y, z
-#define VERTEX_TEXCOORD0_SIZE  2  //s, t
-#define NORMAL_VERTEX_SIZE (VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE)
-#define TEXTURED_VERTEX_SIZE (VERTEX_POS_SIZE + VERTEX_TEXCOORD0_SIZE)
-#define TEXTURED_NORMAL_VERTEX_SIZE (VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE + VERTEX_TEXCOORD0_SIZE)
-
 
 namespace mar {
+
+//vertex data size
+    const unsigned int VERTEX_POS_SIZE       = 3; //x, y, z
+    const unsigned int VERTEX_NORMAL_SIZE    = 3; //x, y, z
+    const unsigned int VERTEX_TEXCOORD0_SIZE = 2;  //s, t
+    const unsigned int NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE) * (sizeof(float)));
+    const unsigned int TEXTURED_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
+    const unsigned int TEXTURED_NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
 
     class Element {
     public:

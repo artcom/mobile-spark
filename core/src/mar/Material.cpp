@@ -21,7 +21,6 @@ namespace mar {
         if (_myMaterialMode == UNLIT_COLORED_MATERIAL) {
             fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_FRAGMENT_SHADER); 
         } else if (_myMaterialMode ==  UNLIT_TEXTURED_MATERIAL) {
-            AC_PRINT << "............... create textured material";
             fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
         } else {
             AC_ERROR << "unknown material mode";
@@ -40,7 +39,8 @@ namespace mar {
         if (_myMaterialMode == UNLIT_COLORED_MATERIAL) {
             colorHandle = glGetUniformLocation(shaderProgram, "a_color");
         } else if (_myMaterialMode ==  UNLIT_TEXTURED_MATERIAL) {
-            textureHandle = glGetUniformLocation(shaderProgram, "s_textureMap");
+            //why is this not needed?
+            //textureHandle = glGetUniformLocation(shaderProgram, "s_textureMap");
         } else {
             AC_ERROR << "unknown material mode";
             return;

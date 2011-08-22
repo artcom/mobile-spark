@@ -13,18 +13,6 @@ namespace mar {
 
 #define TEXTURE_LOAD_ERROR 0
 
-//Taken from http://en.wikibooks.org/wiki/OpenGL_Programming/Intermediate/Textures
-/** loadTexture
- *   loads a png file into an opengl texture object, using cstdio , libpng, and opengl.
- *
- *   \param filename : the png file to be loaded
- *   \param width : width of png, to be updated as a side effect of this function
- *   \param height : height of png, to be updated as a side effect of this function
- *
- *   \return GLuint : an opengl texture id.  Will be 0 if there is a major error,
- *           should be validated by the client of this function.
- *
- */
 
 zip_file* file;
 
@@ -32,7 +20,7 @@ void png_zip_read(png_structp png_ptr, png_bytep data, png_size_t length) {
   zip_fread(file, data, length);
 }
 
-GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, int &width, int &height, bool &rgb) {
+GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, MaterialPtr theMaterial) {
   AC_PRINT << "load texture file name " << filename;
   file = zip_fopen(theAPKArchive, filename.c_str(), 0);
   if (!file) {
@@ -107,10 +95,6 @@ GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, int 
   png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type,
       NULL, NULL, NULL);
 
-  //update width and height based on png info
-  width = twidth;
-  height = theight;
-
   // Update the png info struct.
   png_read_update_info(png_ptr, info_ptr);
 
@@ -118,7 +102,7 @@ GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, int 
   int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
 
   // Allocate the image_data as a big block, to be given to opengl
-  png_byte *image_data = new png_byte[rowbytes * height];
+  png_byte *image_data = new png_byte[rowbytes * theight];
   if (!image_data) {
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -128,7 +112,7 @@ GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, int 
   }
 
   //row_pointers is for pointing to image_data for reading the png with libpng
-  png_bytep *row_pointers = new png_bytep[height];
+  png_bytep *row_pointers = new png_bytep[theight];
   if (!row_pointers) {
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -138,8 +122,8 @@ GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, int 
     return TEXTURE_LOAD_ERROR;
   }
   // set the individual row_pointers to point at the correct offsets of image_data
-  for (int i = 0; i < height; ++i)
-    row_pointers[height - 1 - i] = image_data + i * rowbytes;
+  for (unsigned int i = 0; i < theight; ++i)
+    row_pointers[theight - 1 - i] = image_data + i * rowbytes;
 
   //read the png into image_data through row_pointers
   png_read_image(png_ptr, row_pointers);
@@ -148,15 +132,15 @@ GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, int 
   GLuint texture;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
+  bool rgb = false;
   if (color_type == PNG_COLOR_TYPE_RGB_ALPHA) {
       AC_PRINT << "alpha";
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, twidth, theight, 0, GL_RGBA,
           GL_UNSIGNED_BYTE, (GLvoid*) image_data);
-      rgb = false;
   } else if (color_type == PNG_COLOR_TYPE_RGB) {
       AC_PRINT << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> no alpha";
-      //glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+      //glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB,
           GL_UNSIGNED_BYTE, (GLvoid*) image_data);
       rgb = true;
   } else {
@@ -171,6 +155,9 @@ GLuint loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, int 
   delete[] row_pointers;
   zip_fclose(file);
 
+  theMaterial->textureId = texture;
+  theMaterial->rgb = rgb;
+  
   return texture;
 }
 
