@@ -22,7 +22,7 @@ namespace spark {
     }
 
     bool BaseApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
-        AC_PRINT << "setup";
+        //AC_PRINT << "setup";
         //init animationManager with setup-time 
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);

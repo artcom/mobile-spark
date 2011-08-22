@@ -57,7 +57,8 @@ namespace spark {
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 5, 1000,
-                    animation::EasingFnc(animation::easeInBack)));
+                    //animation::EasingFnc(animation::easeInBack)));
+                    animation::EasingFnc(animation::easeInOutElastic)));
 
         myTransform = window->getChildByName("transformB");
         myObject = myTransform->getChildByName("objectA");
