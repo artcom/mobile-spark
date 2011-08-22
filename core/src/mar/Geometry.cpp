@@ -1,4 +1,6 @@
 #include "Geometry.h"
+
+#include <masl/Logger.h>
 #include "openGL_functions.h"
 
 namespace mar {
@@ -53,8 +55,9 @@ namespace mar {
         if (textureId) {
             glBindTexture(GL_TEXTURE_2D, textureId);
         }
+
         int offset = 0;
-        int stride = TEXTURED_VERTEX_SIZE;
+        int stride = TEXTURED_VERTEX_SIZE * (sizeof(float));
         glEnableVertexAttribArray(VERTEX_POS_INDEX);
         glVertexAttribPointer(VERTEX_POS_INDEX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, 
                                 stride, (vertexData.get()));
@@ -62,6 +65,21 @@ namespace mar {
         glEnableVertexAttribArray(VERTEX_TEXCOORD0_INDEX);
         glVertexAttribPointer(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, 
                                 stride, (vertexData.get() + offset));
+
+
+
+
+//TODO: refactor
+
+        glBindAttribLocation(material->shaderProgram, 0, "a_position");
+        glBindAttribLocation(material->shaderProgram, 1, "a_texCoord0");
+        
+        glLinkProgram(material->shaderProgram);
+        glUseProgram(material->shaderProgram);
+        checkGlError("glUseProgram");
+
+        glUniformMatrix4fv(material->mvpHandle, 1, GL_FALSE, theMatrix.data());
+        //glUniform4fv(material->textureHandle, 1, material->textureId);
     }
     void ElementWithTexture::unloadData() const {
         glDisableVertexAttribArray(VERTEX_POS_INDEX);
