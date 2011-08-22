@@ -262,8 +262,10 @@ float easeInOutElastic(float t, const float b, const float c, const float d, flo
     float s = 0;
 	if (a==-1 || a < fabs(c)) { a=c; s=p/4; }
 	else s = p/(2*PI) * asin (c/a);
-    t-=1;
-	if (t < 1) return -.5*(a*pow(2,10*t) * sin( (t*d-s)*(2*PI)/p )) + b;
+	if (t < 1)  {
+        t-=1;
+        return -.5*(a*pow(2,10*t) * sin( (t*d-s)*(2*PI)/p )) + b;
+    } 
     t-=1;
 	return a*pow(2,-10*t) * sin( (t*d-s)*(2*PI)/p )*.5 + c + b;
 }

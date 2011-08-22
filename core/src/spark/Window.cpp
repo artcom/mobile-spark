@@ -51,7 +51,7 @@ namespace spark {
     }
 
     void Window::render() const {
-        AC_PRINT << "in render()";
+        //AC_PRINT << "in render()";
         glClearColor(_myClearColor[0],_myClearColor[1],_myClearColor[2],_myClearColor[3]);
         checkGlError("glClearColor");
         glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
