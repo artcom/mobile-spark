@@ -7,7 +7,7 @@
 using namespace mar;
 
 namespace spark {
-
+    ComponentPtr createRectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     class Rectangle : public Widget {
     public: 
         Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());

@@ -19,6 +19,8 @@ namespace mar {
         glEnableVertexAttribArray(VERTEX_POS_INDEX);
         glVertexAttribPointer(VERTEX_POS_INDEX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, 0, (vertexData.get()));
 
+        glBindAttribLocation(material->shaderProgram, 0, "a_position");
+        
         glLinkProgram(material->shaderProgram);
         glUseProgram(material->shaderProgram);
         checkGlError("glUseProgram");

@@ -26,7 +26,8 @@ public:
  
     void loadIdentity();
     void loadPerspective(float l, float r, float b, float t, float n, float f);
- 
+    void loadOrtho(float l, float r, float b, float t, float n, float f);
+    
     void loadMatrix(const matrix matrix);
  
     void multMatrix(const matrix matrix);    

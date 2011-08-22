@@ -35,6 +35,13 @@ void MatrixStack::loadPerspective(float l, float r, float b, float t, float n, f
     stack.top() = perspectiveMatrix;
 }
 
+void MatrixStack::loadOrtho(float l, float r, float b, float t, float n, float f) {
+    matrix orthoMatrix;
+    cml::matrix_orthographic(orthoMatrix, l, r, b, t, n, f, cml::left_handed, cml::z_clip_zero);//z_clip_neg_one);
+    stack.top() = orthoMatrix;
+}
+
+
 // Loads the specified matrix in the current matrix.
 void MatrixStack::loadMatrix(const matrix matrix) {
     stack.top() = matrix;
