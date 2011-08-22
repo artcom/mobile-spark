@@ -68,14 +68,10 @@ namespace spark {
 
         element->material = MaterialPtr(new Material(_myApp->assetProvider, UNLIT_TEXTURED_MATERIAL));
 
-        element->material->textureFile = _mySrc; //needed?
-        int imageWidth, imageHeight;
-        bool rgb;
         //TODO: zip should be android
         zip* myPackage = boost::static_pointer_cast<android::AndroidAssetProvider>(theApp->assetProvider)->getAPK();
-        element->material->textureId = loadTextureFromPNG(myPackage, _mySrc, imageWidth, imageHeight, rgb);
-        element->material->rgb = rgb;
-        AC_PRINT << "created texture with " << element->material->textureId << "  " << element->material->rgb;
+        loadTextureFromPNG(myPackage, _mySrc, element->material);
+        //material is ready -> create shader now
         element->material->createShader();
     }
 

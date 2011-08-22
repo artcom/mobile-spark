@@ -44,9 +44,7 @@ namespace mar {
         GLuint textureId;
         GLuint shaderProgram;
         GLuint mvpHandle;
-
         GLuint colorHandle;
-        GLuint textureHandle;
 
         bool rgb;
         const AssetProviderPtr _myAssetProvider;
