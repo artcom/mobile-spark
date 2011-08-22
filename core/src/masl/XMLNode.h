@@ -17,6 +17,8 @@ namespace masl {
             void print() const;
             void printTree() const;
             float getFloatValue(const std::string & theKey, const float theDefault = 0.0f) const;
+            bool getBoolValue(const std::string & theKey, const bool theDefault = true) const;
+                
             std::vector<float> getFloatArrayValue(const std::string & theKey) const;
 
             std::string nodeName;

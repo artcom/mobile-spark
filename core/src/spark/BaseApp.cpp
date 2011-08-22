@@ -32,17 +32,22 @@ namespace spark {
         assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath));
 #endif
 #if __APPLE__
-         AC_PRINT << "1";
         assetProvider = ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath));
-         AC_PRINT << "2";
 #endif
         //load layout
         window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));
         return true;
     }
 
+    void BaseApp::onSizeChanged(int theWidth, int theHeight) {
+        AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
+        if (window) {
+            window->onSizeChanged(theWidth, theHeight);
+        }
+    }
+    
     void BaseApp::onFrame(const long theCurrentMillis) {
-        AC_PRINT << "onFrame " << theCurrentMillis;
+        //AC_PRINT << "onFrame " << theCurrentMillis;
         if (_myAnimate) {
             animation::AnimationManager::get().doFrame(theCurrentMillis);
         }

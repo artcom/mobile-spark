@@ -32,7 +32,7 @@ namespace spark {
         //add looping sequence animation
         ComponentPtr myTransform = window->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
-        RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        /*RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));
         WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 2, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
@@ -45,14 +45,14 @@ namespace spark {
         animation::AnimationManager::get().play(mySequence);
 
         mySequence->setOnPlay(WidgetCallbackPtr(new WidgetCallback( myRectangle, &Widget::test)));
-        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));
+        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));*/
         return myBaseReturn;
     }
 
     void DemoApp::onTouch() {
 
         //add two parallel animations
-        ComponentPtr myTransform = window->getChildByName("transformA");
+        /*ComponentPtr myTransform = window->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
@@ -69,6 +69,7 @@ namespace spark {
         myParallel->add(myAnimationC);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
+        */
     }
 }
 
@@ -85,6 +86,8 @@ extern "C" {
                                                                  jstring layoutFile);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj,
                                                                  jlong currentMillis);
+    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
+                                                                 jint width, jint height);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onTouch(JNIEnv * env, jobject obj);
 };
 
@@ -101,6 +104,10 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj,
                                                              jlong currentMillis) {
     ourApp.onFrame(currentMillis);
+}
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
+                                                             jint width, jint height) {
+    ourApp.onSizeChanged(width, height);
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onTouch(JNIEnv * env, jobject obj) {
