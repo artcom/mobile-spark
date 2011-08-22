@@ -12,7 +12,7 @@
 using namespace mar;
 
 namespace spark {
-
+    ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     class Window : public Widget {
     public: 
         Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);

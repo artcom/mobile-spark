@@ -46,7 +46,7 @@
 
 namespace masl {
     /// read a complete file into a string
-    std::string readFile(const std::string& theFileName);
+    bool readFile(const std::string & theUTF8Filename, std::string & theContent);
 }
 
 #endif
