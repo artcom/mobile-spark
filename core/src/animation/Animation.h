@@ -4,13 +4,16 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/function.hpp>
 
 #include "Callback.h"
 
 namespace animation {
     
-    typedef float (*EasingFunctionPtr)(float);
-    float defaultEasing(float theValue);
+    typedef boost::function<float(float)> EasingFunctionPtr;
+    inline float defaultEasing(float theValue) { return theValue; };
+
+    
 
     class Animation;
     typedef boost::shared_ptr<Animation> AnimationPtr;

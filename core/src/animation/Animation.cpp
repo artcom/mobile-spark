@@ -4,10 +4,6 @@
 
 namespace animation {
 
-    float defaultEasing(float theValue) { 
-        return theValue; 
-    }
-
     unsigned int Animation::idCounter = 0;
 
     Animation::Animation(const long theDuration, EasingFunctionPtr theEasing) : 
