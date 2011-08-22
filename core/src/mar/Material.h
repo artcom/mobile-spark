@@ -19,9 +19,14 @@ namespace mar {
 
     const std::string DEFAULT_VERTEX_SHADER = "assets/shaders/default_vertex.glsl";
     const std::string DEFAULT_FRAGMENT_SHADER = "assets/shaders/default_fragment.glsl";
+    const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "assets/shaders/default_textured_fragment.glsl";
+
+    //material Modes
+    const GLuint UNLIT_COLORED_MATERIAL = 0;
+    const GLuint UNLIT_TEXTURED_MATERIAL = 1;
 
     struct Material {
-        Material(const AssetProviderPtr theAssetProvider);
+        Material(const AssetProviderPtr theAssetProvider, const GLuint theMaterialMode = UNLIT_COLORED_MATERIAL);
         ~Material();
 
         void createShader();
@@ -33,11 +38,16 @@ namespace mar {
         float shininess;
         short illuminationModel;
 
+        GLuint _myMaterialMode;
+
         std::string textureFile;
         GLuint textureId;
         GLuint shaderProgram;
         GLuint mvpHandle;
+
         GLuint colorHandle;
+        GLuint textureHandle;
+
         bool rgb;
         const AssetProviderPtr _myAssetProvider;
     };

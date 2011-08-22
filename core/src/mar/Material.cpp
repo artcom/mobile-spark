@@ -5,15 +5,28 @@
 
 
 namespace mar {
-    Material::Material(const AssetProviderPtr theAssetProvider) : _myAssetProvider(theAssetProvider) {
+    Material::Material(const AssetProviderPtr theAssetProvider, GLuint theMaterialMode) 
+        : _myMaterialMode(theMaterialMode), _myAssetProvider(theAssetProvider) {
     }
 
     Material::~Material() {
     }
 
     void Material::createShader() {
-        std::string vertexShader = _myAssetProvider->getStringFromFile(DEFAULT_VERTEX_SHADER); 
-        std::string fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_FRAGMENT_SHADER); 
+        std::string vertexShader, fragmentShader;
+
+        vertexShader = _myAssetProvider->getStringFromFile(DEFAULT_VERTEX_SHADER); 
+
+        //TODO: material inheritance?
+        if (_myMaterialMode == UNLIT_COLORED_MATERIAL) {
+            fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_FRAGMENT_SHADER); 
+        } else if (_myMaterialMode ==  UNLIT_TEXTURED_MATERIAL) {
+            AC_PRINT << "............... create textured material";
+            fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
+        } else {
+            AC_ERROR << "unknown material mode";
+            return;
+        }
 
         shaderProgram = createProgram(vertexShader.c_str(), fragmentShader.c_str());
         if (!shaderProgram) {
@@ -22,7 +35,16 @@ namespace mar {
         }
 
         mvpHandle = glGetUniformLocation(shaderProgram, "u_mvpMatrix");
-        colorHandle = glGetUniformLocation(shaderProgram, "a_color");
+
+        //TODO: material inheritance?
+        if (_myMaterialMode == UNLIT_COLORED_MATERIAL) {
+            colorHandle = glGetUniformLocation(shaderProgram, "a_color");
+        } else if (_myMaterialMode ==  UNLIT_TEXTURED_MATERIAL) {
+            textureHandle = glGetUniformLocation(shaderProgram, "s_textureMap");
+        } else {
+            AC_ERROR << "unknown material mode";
+            return;
+        }
     }
 }
 
