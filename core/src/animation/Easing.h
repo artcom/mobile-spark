@@ -1,7 +1,21 @@
 #ifndef _ac_mobile_animation_Easing_h_included_
 #define _ac_mobile_animation_Easing_h_included_
 
+#include <boost/function.hpp>
+
 namespace animation {
+
+    //function conversion
+    typedef boost::function<float(float)> FunctionPtr;
+    typedef float (*EasingFunctionPtr4)(float, float, float, float);
+    typedef float (*EasingFunctionPtr5)(float, float, float, float, float);
+    typedef float (*EasingFunctionPtr6)(float, float, float, float, float, float);
+
+    FunctionPtr EasingFnc(EasingFunctionPtr4 theFncPtr);
+    FunctionPtr EasingFnc(EasingFunctionPtr5 theFncPtr, float a = -1.0);
+    FunctionPtr EasingFnc(EasingFunctionPtr6 theFncPtr, float a = -1.0, float b = -1.0);
+
+
 /* This version of the Penner Easing Functions has been modified to use the namespace Easing. */
 
 /*
@@ -44,7 +58,7 @@ namespace animation {
 
 // simple linear tweening - no easing
 // t: current time, b: beginning value, c: change in value, d: duration
-float linearTween(const float t=0.0f, const float b=0.0f, const float c=1.0f, const float d=1.0f);
+float linearTween(const float t, const float b, const float c, const float d);
 
 
  ///////////// QUADRATIC EASING: t^2 ///////////////////
@@ -52,13 +66,13 @@ float linearTween(const float t=0.0f, const float b=0.0f, const float c=1.0f, co
 // quadratic easing in - accelerating from zero velocity
 // t: current time, b: beginning value, c: change in value, d: duration
 // t and d can be in frames or seconds/milliseconds
-float easeInQuad(float t=0.0f, const float b=0.0f, const float c=1.0f, const float d=1.0f);
+float easeInQuad(float t, const float b, const float c, const float d);
 
 // quadratic easing out - decelerating to zero velocity
-float easeOutQuad(float t=0.0f, const float b=0.0f, const float c=1.0f, const float d=1.0f);
+float easeOutQuad(float t, const float b, const float c, const float d);
 
 // quadratic easing in/out - acceleration until halfway, then deceleration
-float easeInOutQuad(float t=0.0f, const float b=0.0f, const float c=1.0f, const float d=1.0f);
+float easeInOutQuad(float t, const float b, const float c, const float d);
 
 
  ///////////// CUBIC EASING: t^3 ///////////////////////

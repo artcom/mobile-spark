@@ -3,7 +3,23 @@
 #include <math.h>
 #define PI 3.14159265
 
+#include <boost/bind.hpp>
+
 namespace animation {
+   
+    FunctionPtr EasingFnc(EasingFunctionPtr4 theFncPtr) {
+        boost::function<float(float,float,float,float)> myFncPtr = theFncPtr;
+        return boost::bind(myFncPtr, _1,0,1,1);
+    }
+    FunctionPtr EasingFnc(EasingFunctionPtr5 theFncPtr, float a) {
+        boost::function<float(float,float,float,float,float)> myFncPtr = theFncPtr;
+        return boost::bind(myFncPtr, _1,0,1,1,a);
+    }
+    FunctionPtr EasingFnc(EasingFunctionPtr6 theFncPtr, float a, float b) {
+        boost::function<float(float,float,float,float,float,float)> myFncPtr = theFncPtr;
+        return boost::bind(myFncPtr, _1,0,1,1,a,b);
+    }
+
 /* This version of the Penner Easing Functions has been modified to use the namespace Easing. */
 
 /*

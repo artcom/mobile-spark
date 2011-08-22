@@ -34,7 +34,8 @@ namespace spark {
         ComponentPtr myObject = myTransform->getChildByName("objectB");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));
-        WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 2, 0.7, 1500, animation::easeInOutQuad));
+        WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 2, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
         animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(2000));
         animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         mySequence->add(myAnimation1);
@@ -54,7 +55,9 @@ namespace spark {
         ComponentPtr myTransform = window->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
-        WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 5));
+        WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 5, 1000,
+                    animation::EasingFnc(animation::easeInBack)));
 
         myTransform = window->getChildByName("transformB");
         myObject = myTransform->getChildByName("objectA");
