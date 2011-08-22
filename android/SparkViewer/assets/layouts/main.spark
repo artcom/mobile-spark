@@ -6,5 +6,6 @@
     </Transform>
     <Transform name="transformA" x="-5" y="0" scaleX="2" >
         <Rectangle name="objectC" width="2" height="20" color="[0.0,1,0.0]"/>
+        <!--Image name="imageA" x="5" width="2" height="20" src="assets/textures/texture.png"/-->
     </Transform>
 </Window>

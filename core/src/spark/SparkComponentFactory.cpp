@@ -7,17 +7,19 @@
 #include "Transform.h"
 #include "Window.h"
 #include "Rectangle.h"
+#include "Image.h"
 
 using namespace masl;
 
 namespace spark {
     
+    //TODO: decentralize this again
     void SparkComponentFactory::setupFactory() {
         AC_PRINT << "SparkComponentFactory setup";
         bool registered = registerComponent("Window", spark::createWindow);
         registered = registerComponent("Transform", spark::createTransform);
         registered = registerComponent("Rectangle", spark::createRectangle);
-
+        registered = registerComponent("Image", spark::createImage);
     };
     
     SparkComponentFactory::SparkComponentFactory() {
