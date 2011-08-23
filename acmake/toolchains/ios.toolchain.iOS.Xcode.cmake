@@ -2,29 +2,28 @@ SET(TARGET_PLATFORM iPhoneOS)
 SET(IOS True)
 
 # SDK Info
-#SET (CMAKE_SYSTEM APPLE)
-#SET (CMAKE_SYSTEM_NAME Darwin)
-SET (SDKVER "4.3")
-SET (DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
-SET (SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATFORM}${SDKVER}.sdk")
-SET (CMAKE_OSX_SYSROOT "${SDKROOT}")
+SET(SDKVER "4.3")
+SET(DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
+SET(SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATFORM}${SDKVER}.sdk")
+SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
 SET(MACOSX_DEPLOYMENT_TARGET "Compiler Default")
 
-SET (CMAKE_SYSTEM_PROCESSOR arm)
-SET (CMAKE_OSX_ARCHITECTURES arm7)
+SET(CMAKE_SYSTEM_PROCESSOR arm)
+SET(CMAKE_OSX_ARCHITECTURES arm7)
 
 # Skip the platform compiler checks for cross compiling 
-set (CMAKE_CXX_COMPILER_WORKS TRUE)
-set (CMAKE_C_COMPILER_WORKS TRUE)
+SET(CMAKE_CXX_COMPILER_WORKS TRUE)
+SET(CMAKE_C_COMPILER_WORKS TRUE)
 
 SET( CMAKE_C_FLAGS "-arch armv7 -mthumb -miphoneos-version-min=${SDKVER} ${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
 SET( CMAKE_CXX_FLAGS "-arch armv7 -mthumb -miphoneos-version-min=${SDKVER} ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
 
-# Definitions
+# Flags
 ADD_DEFINITIONS("-no-cpp-precomp")
 ADD_DEFINITIONS("--sysroot=${SDKROOT}")
 ADD_DEFINITIONS("-miphoneos-version-min=${SDKVER}")
 
+# Header
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1")
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1/armv7-apple-darwin10")
