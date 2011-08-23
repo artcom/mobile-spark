@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
-<Window name="ourWindow" fullscreen="true" clearColor="[0,0.2,0.1,1]">
+<Window name="ourWindow" fullscreen="true" clearColor="[0.1,0.1,0.1,1]">
     <Transform name="transformB" x="170" y="170" rotationZ="0.3">
         <Rectangle name="objectA" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
         <Rectangle name="objectB" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
     </Transform>
-    <Transform name="transformA" x="100" y="10" scaleX="1" >
+    <Transform name="transformA" x="100" y="10" >
         <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
-        <Image name="imageA" x="2" width="100" height="120" src="assets/textures/texture.png"/>
+        <Image name="imageA" x="2" z="1" height="100" src="assets/textures/texture.png"/>
     </Transform>
     <Rectangle name="objectB" y="0" width="10" height="10" z="10" color="[1,1,1]"/>
+        <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
 </Window>
