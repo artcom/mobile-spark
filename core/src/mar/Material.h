@@ -11,12 +11,6 @@
 #include "AssetProvider.h"
 #include "GlHeaders.h"
 
-//shader program handles
-#define VERTEX_POS_INDEX       0
-#define VERTEX_TEXCOORD0_INDEX 1
-#define VERTEX_NORMAL_INDEX    2
-
-
 namespace mar {
 
     const std::string DEFAULT_VERTEX_SHADER = "assets/shaders/default_vertex.glsl";
