@@ -27,8 +27,8 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
         NativeBinding.onFrame(System.currentTimeMillis());
     }
 
-    public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-    	
+    public void onSurfaceChanged(GL10 glUnused, int width, int height) {    	
+    	NativeBinding.onSizeChanged(width,height);    	
     }
     
     private void updateFrameCounter() {

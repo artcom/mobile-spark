@@ -23,9 +23,11 @@ namespace spark {
 
         virtual void render() const;
         virtual void renderShape(const ShapePtr theShape);
+        virtual void onSizeChanged(int theWidth, int theHeight);
     private:
         int _myWidth;
         int _myHeight;
+        bool _myFullScreenFlag;
         std::vector<float> _myClearColor;
     };
 

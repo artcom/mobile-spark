@@ -24,6 +24,11 @@ public class ASLOpenGLView extends GLSurfaceView {
     }
 
     @Override
+    public void onSizeChanged (int w, int h, int oldw, int oldh) {
+    	NativeBinding.onSizeChanged(w,h);
+    }
+    
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
     	AC_Log.print("View.onTouchEvent");
         NativeBinding.onTouch();
