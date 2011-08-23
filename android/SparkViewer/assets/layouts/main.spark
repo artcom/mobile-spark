@@ -8,9 +8,9 @@
         </Transform>
         <Transform name="transformA" x="100" y="10" >
             <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
-            <!--Image name="imageA" x="2" z="1" height="100" src="assets/textures/texture.png"/-->
+            <Image name="imageA" x="2" z="1" height="100" src="assets/textures/texture.png"/>
         </Transform>
         <Rectangle name="objectB" y="0" width="10" height="10" z="10" color="[1,1,1]"/>
-        <!--Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/-->
+        <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
     </World>        
 </Window>

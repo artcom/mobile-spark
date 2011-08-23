@@ -33,6 +33,7 @@ namespace spark {
             AC_PRINT << "test callback";
         }
         MatrixStack _myLocalMatrixStack; //scale, roation and translation of this node
+        virtual void renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const {};
         
     protected:
     private:

@@ -14,7 +14,6 @@ namespace spark {
         virtual ~Image();
 
     private:
-        ShapePtr _myShape;
         std::string _mySrc;
         void setVertexData(ElementPtr theElement, const float theWidth, const float theHeight);
     };
