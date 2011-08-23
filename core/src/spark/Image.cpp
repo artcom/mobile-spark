@@ -18,8 +18,6 @@ namespace spark {
     Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent) {
 
-        float width = _myXMLNode->getFloatValue("width");
-        float height = _myXMLNode->getFloatValue("height");
         _mySrc = _myXMLNode->getStringValue("src");
 
         _myShape = ShapePtr(new Shape());
@@ -27,6 +25,14 @@ namespace spark {
         size_t dataPerVertex = 3 + 2;
         element->numVertices = 6;
         element->vertexData = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
+
+        //TODO: material inheritance?
+        element->material = MaterialPtr(new Material(_myApp->assetProvider, UNLIT_TEXTURED_MATERIAL));
+        loadTextureFromPNG(theApp->assetProvider, _mySrc, element->material);
+
+        float width = _myXMLNode->getFloatValue("width", element->material->width);
+        float height = _myXMLNode->getFloatValue("height", element->material->height);
+        AC_PRINT << element->material->width << " " << width << "  " << element->material->height << " " << height;
 
         (element->vertexData)[0] = 0.0f;
         (element->vertexData)[1] = 0.0f;
@@ -65,11 +71,6 @@ namespace spark {
         (element->vertexData)[29] = 1.0f;
 
         _myShape->elementList.push_back(element);
-
-        //TODO: material inheritance?
-        element->material = MaterialPtr(new Material(_myApp->assetProvider, UNLIT_TEXTURED_MATERIAL));
-        loadTextureFromPNG(theApp->assetProvider, _mySrc, element->material);
-
         //material is ready -> create shader now
         element->material->createShader();
     }
