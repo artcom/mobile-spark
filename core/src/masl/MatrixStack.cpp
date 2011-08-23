@@ -31,13 +31,13 @@ void MatrixStack::loadIdentity() {
  
 void MatrixStack::loadPerspective(float l, float r, float b, float t, float n, float f) {
     matrix perspectiveMatrix;
-    cml::matrix_perspective(perspectiveMatrix, l, r, b, t, n, f, cml::left_handed, cml::z_clip_zero);//z_clip_neg_one);
+    cml::matrix_perspective(perspectiveMatrix, l, r, b, t, n, f, cml::right_handed, cml::z_clip_zero);//z_clip_neg_one);
     stack.top() = perspectiveMatrix;
 }
 
 void MatrixStack::loadOrtho(float l, float r, float b, float t, float n, float f) {
     matrix orthoMatrix;
-    cml::matrix_orthographic(orthoMatrix, l, r, b, t, n, f, cml::left_handed, cml::z_clip_zero);//z_clip_neg_one);
+    cml::matrix_orthographic(orthoMatrix, l, r, b, t, n, f, cml::right_handed, cml::z_clip_zero);//z_clip_neg_one);
     stack.top() = orthoMatrix;
 }
 
