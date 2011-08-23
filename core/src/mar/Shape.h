@@ -18,8 +18,19 @@ namespace mar {
 
         virtual void render(const matrix & theMvp) const;
     };
-
     typedef boost::shared_ptr<Shape> ShapePtr;
+
+
+    class RectangleShape {
+    };
+
+
+    class ShapeFactory {
+    public:
+        ShapePtr createRectangle();
+        ShapePtr createNinePatch();
+        ShapePtr createObj();
+    };
 };
 
 #endif 
