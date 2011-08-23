@@ -1,7 +1,7 @@
 #ifndef _included_mobile_spark_Image_
 #define _included_mobile_spark_Image_
 
-#include <mar/Geometry.h>
+#include <mar/Shape.h>
 #include "ShapeWidget.h"
 
 using namespace mar;

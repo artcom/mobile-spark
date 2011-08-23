@@ -20,9 +20,6 @@ namespace spark {
     void Component::render(MatrixStack& theCurrentMatrixStack, matrix theProjectionMatrix) const {
     }
 
-    void Component::renderShape() const {
-    }
-
     ComponentPtr Component::getChildByName(const std::string & theName) const {
         return ComponentPtr();
     }

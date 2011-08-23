@@ -1,22 +1,7 @@
-#include "Geometry.h"
+#include "Element.h"
 
-#include <masl/Logger.h>
-#include "openGL_functions.h"
 
 namespace mar {
-
-    /////////////////////////////////////////////////////////////Shape
-    void Shape::render(const matrix & theMatrix) const {
-        for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
-                                                      it != elementList.end(); ++it) {
-            ElementPtr element = *it;
-            element->loadData(theMatrix);
-            glDrawArrays(GL_TRIANGLES, 0, element->numVertices);
-            element->unloadData();
-            checkGlError("glDrawElements");
-        }
-    }
-
     /////////////////////////////////////////////////////////////Element
     Element::Element() {
         _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE));
