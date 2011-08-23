@@ -27,6 +27,15 @@ namespace masl {
     XMLNode::~XMLNode() {
     }
 
+    std::string XMLNode::getStringValue(const std::string & theKey, const std::string & theDefault) const {
+        std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
+        if ( it != attributes.end()) {
+            return (it->second);
+        } else {
+            return theDefault;
+        }
+    }
+
     float XMLNode::getFloatValue(const std::string & theKey, const float theDefault) const {
         std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
         if ( it != attributes.end()) {
@@ -44,16 +53,7 @@ namespace masl {
             return theDefault;
         }
     }
-    
-    const std::string & XMLNode::getStringValue(const std::string & theKey, const std::string theDefault) const {
-        std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
-        if ( it != attributes.end()) {
-            return it->second;
-        } else {
-            return theDefault;
-        }
-    }
-    
+        
     vector4 XMLNode::getVector4Value(const std::string & theKey, const vector4 theDefault) const {
         vector4 myReturnValue = theDefault;
         std::vector<float> myValues = XMLNode::getFloatArrayValue(theKey);

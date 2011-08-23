@@ -1,6 +1,7 @@
 #include "Viewport.h"
 
 #include "openGL_functions.h"
+#include <masl/Logger.h>
 
 
 namespace mar {

@@ -6,10 +6,12 @@ set(HEADERS
     TestAndroid.h
 )
 
-add_library(testAndroid SHARED ${SOURCES} ${HEADERS})
-include_directories (${Boost_INCLUDE_DIRS})
+set(EXTERNS Boost)
 
-include_directories(${PROJECT_SOURCE_DIR}/core/src)
-include_directories(${LIBZIP_INCLUDE_DIR})
-
-target_link_libraries(testAndroid android masl zip)
+ac_add_library(
+    testAndroid testAndroid
+    SOURCES ${SOURCES}
+    HEADERS ${HEADERS}
+    EXTERNS ${EXTERNS}
+    DEPENDS masl android zip
+)

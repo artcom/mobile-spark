@@ -1,11 +1,3 @@
-//
-//  SparkViewerAppDelegate.m
-//  SparkViewer
-//
-//  Created by Arvid Hansen Diaz on 15.08.11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
 #import "SparkViewerAppDelegate.h"
 #import "GLView.h"
 

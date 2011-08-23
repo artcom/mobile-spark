@@ -10,6 +10,7 @@
 #include <animation/SequenceAnimation.h>
 #include <animation/DelayAnimation.h>
 #include <animation/Easing.h>
+
 #include "Rectangle.h"
 
 /////////////////// Application code, this should be in java or script language later...
@@ -29,12 +30,12 @@ namespace spark {
     bool DemoApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
         //add looping sequence animation
-        ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
+        /*ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
-        /*RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
-        WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));
+        RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 8, 500));
         WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 2, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
+                new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 8, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
         animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(2000));
         animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         mySequence->add(myAnimation1);
@@ -51,15 +52,15 @@ namespace spark {
     void DemoApp::onTouch() {
 
         //add two parallel animations
-        /*ComponentPtr myTransform = window->getChildByName("transformA");
+        /*ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 5, 1000,
+                new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 100, 1000,
                     //animation::EasingFnc(animation::easeInBack)));
                     animation::EasingFnc(animation::easeInOutElastic)));
 
-        myTransform = window->getChildByName("transformB");
+        myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         myObject = myTransform->getChildByName("objectA");
         myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimationA = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setRotationZ, 0, 6.28, 5000));
@@ -67,8 +68,7 @@ namespace spark {
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myParallel->add(myAnimationC);
         myParallel->add(myAnimationA);
-        animation::AnimationManager::get().play(myParallel);
-        */
+        animation::AnimationManager::get().play(myParallel);*/
     }
 }
 

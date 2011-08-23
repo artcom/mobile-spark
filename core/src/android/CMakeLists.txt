@@ -1,12 +1,15 @@
-add_subdirectory(Tests)
 
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
 
-add_library(android SHARED ${SOURCES} ${HEADERS})
+set(EXTERNS Boost)
 
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${LIBZIP_INCLUDE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/core/src)
+ac_add_library(
+    android android
+    SOURCES ${SOURCES}
+    HEADERS ${HEADERS}
+    EXTERNS ${EXTERNS}
+    DEPENDS masl mar zip png
+)
 
-target_link_libraries(android masl zip)
+add_subdirectory(Tests)

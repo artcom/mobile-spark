@@ -183,9 +183,15 @@ set( CMAKE_STRIP        ${ANDROID_NDK_TOOLCHAIN_ROOT}/bin/arm-linux-androideabi-
 set( CMAKE_RANLIB       ${ANDROID_NDK_TOOLCHAIN_ROOT}/bin/arm-linux-androideabi-ranlib${TOOL_OS_SUFFIX}  CACHE PATH "ranlib" FORCE )
 
 #setup build targets, mutually exclusive
+set( ARM_TARGET $ENV{ARM_TARGET} )
 set( PossibleArmTargets "armeabi;armeabi-v7a;armeabi-v7a with NEON;armeabi-v7a with VFPV3" )
-set( ARM_TARGET "armeabi-v7a" CACHE STRING "the arm target for android, recommend armeabi-v7a for floating point support and NEON." )
+if( NOT DEFINED ARM_TARGET )
+    set( ARM_TARGET "armeabi-v7a")
+endif()
+set( ARM_TARGET ${ARM_TARGET} CACHE STRING "the arm target for android, recommend armeabi-v7a for floating point support and NEON." )
 set_property( CACHE ARM_TARGET PROPERTY STRINGS ${PossibleArmTargets} )
+
+message( STATUS "Using ARM_TARGET ${ARM_TARGET}" )
 
 #set these flags for client use
 if( ARM_TARGET STREQUAL "armeabi" )
