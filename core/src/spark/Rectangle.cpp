@@ -23,37 +23,16 @@ namespace spark {
         if (_myColor.size() == 3) {
             _myColor.push_back(1.0f);
         }
-
         _myShape = ShapePtr(new Shape());
         ElementPtr element = ElementPtr(new Element());
         size_t dataPerVertex = 3;
         element->numVertices = 6;
         element->vertexData = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
-        (element->vertexData)[0] = 0.0f;
-        (element->vertexData)[1] = 0.0f;
-        (element->vertexData)[2] = 0.0f;
-        (element->vertexData)[3] = width;
-        (element->vertexData)[4] = 0.0f;
-        (element->vertexData)[5] = 0.0f;
-        (element->vertexData)[6] = 0.0f;
-        (element->vertexData)[7] = height;
-        (element->vertexData)[8] = 0.0f;
-        (element->vertexData)[9] = width;
-        (element->vertexData)[10] = 0.0f;
-        (element->vertexData)[11] = 0.0f;
-        (element->vertexData)[12] = width;
-        (element->vertexData)[13] = height;
-        (element->vertexData)[14] = 0.0f;
-        (element->vertexData)[15] = 0.0f;
-        (element->vertexData)[16] = height;
-        (element->vertexData)[17] = 0.0f;
+        setVertexData(element, width, height);
         _myShape->elementList.push_back(element);
-
         element->material = MaterialPtr(new Material(_myApp->assetProvider));
         element->material->diffuse = _myColor;
         element->material->createShader();
- 
-        //_myShape->materialMap["xxx"] = element->material; //XXX: needed?
     }
 
     Rectangle::~Rectangle() {
@@ -61,5 +40,26 @@ namespace spark {
 
     void Rectangle::renderShape() const {
         _myApp->window->renderShape(_myShape);
+    }
+
+    void Rectangle::setVertexData(ElementPtr theElement, const float theWidth, const float theHeight) {
+        (theElement->vertexData)[0] = 0.0f;
+        (theElement->vertexData)[1] = 0.0f;
+        (theElement->vertexData)[2] = 0.0f;
+        (theElement->vertexData)[3] = theWidth;
+        (theElement->vertexData)[4] = 0.0f;
+        (theElement->vertexData)[5] = 0.0f;
+        (theElement->vertexData)[6] = 0.0f;
+        (theElement->vertexData)[7] = theHeight;
+        (theElement->vertexData)[8] = 0.0f;
+        (theElement->vertexData)[9] = theWidth;
+        (theElement->vertexData)[10] = 0.0f;
+        (theElement->vertexData)[11] = 0.0f;
+        (theElement->vertexData)[12] = theWidth;
+        (theElement->vertexData)[13] = theHeight;
+        (theElement->vertexData)[14] = 0.0f;
+        (theElement->vertexData)[15] = 0.0f;
+        (theElement->vertexData)[16] = theHeight;
+        (theElement->vertexData)[17] = 0.0f;
     }
 }
