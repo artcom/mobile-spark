@@ -1,11 +1,3 @@
-//
-//  GLView.m
-//  mobile-spark
-//
-//  Created by Arvid Hansen Diaz on 15.08.11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
 #import "GLView.h"
 #include <spark/DemoApp.h>
 
@@ -75,7 +67,7 @@ spark::DemoApp *myDemoApp;
 - (void)render:(id)sender 
 {
     //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    NSLog(@"displaylink: %f",(displayLink.timestamp*1000.0));
+    //NSLog(@"displaylink: %f",(displayLink.timestamp*1000.0));
     myDemoApp->onFrame((displayLink.timestamp*1000.0));
     
     //glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
