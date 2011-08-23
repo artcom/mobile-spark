@@ -4,10 +4,12 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "GlHeaders.h"
+
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <masl/MatrixStack.h>
 
 #include "AssetProvider.h"
+#include "GlHeaders.h"
 
 //shader program handles
 #define VERTEX_POS_INDEX       0
@@ -25,6 +27,7 @@ namespace mar {
     public:
         virtual ~Material();
         virtual void createShader();
+        virtual void loadShader(const matrix & theMatrix);
 
         GLuint shaderProgram;
         GLuint mvpHandle;
@@ -44,6 +47,7 @@ namespace mar {
     public:
         UnlitColoredMaterial(const AssetProviderPtr theAssetProvider);
         virtual ~UnlitColoredMaterial();
+        virtual void loadShader(const matrix & theMatrix);
 
         //material (from obj)
         std::vector<float> ambient;
@@ -65,6 +69,7 @@ namespace mar {
     public:
         UnlitTexturedMaterial(const AssetProviderPtr theAssetProvider);
         virtual ~UnlitTexturedMaterial();
+        virtual void loadShader(const matrix & theMatrix);
 
         std::string textureFile; //needed?
         GLuint textureId;
