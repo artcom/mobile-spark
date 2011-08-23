@@ -16,6 +16,7 @@ namespace spark {
 
             virtual bool setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
             virtual void onFrame(const long theCurrentMillis);
+            virtual void onSizeChanged(int theWidth, int theHeight);
             virtual void onTouch();
 
             spark::WindowPtr window; 

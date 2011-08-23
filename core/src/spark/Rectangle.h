@@ -19,6 +19,7 @@ namespace spark {
     private:
         ShapePtr _myShape;
         std::vector<float> _myColor;
+        void setVertexData(ElementPtr theElement, const float theWidth, const float theHeight);
     };
 
     typedef boost::shared_ptr<Rectangle> RectanglePtr;
