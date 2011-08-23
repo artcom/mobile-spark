@@ -30,8 +30,9 @@ namespace spark {
         element->vertexData = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
         setVertexData(element, width, height);
         _myShape->elementList.push_back(element);
-        element->material = MaterialPtr(new Material(_myApp->assetProvider));
-        element->material->diffuse = _myColor;
+        UnlitColoredMaterialPtr myMaterial = UnlitColoredMaterialPtr(new UnlitColoredMaterial(_myApp->assetProvider));
+        myMaterial->diffuse = _myColor;
+        element->material = myMaterial;
         element->material->createShader();
     }
 

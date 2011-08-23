@@ -23,13 +23,13 @@ namespace spark {
         size_t dataPerVertex = 3 + 2;
         element->numVertices = 6;
         element->vertexData = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
-        //TODO: material inheritance?
-        element->material = MaterialPtr(new Material(_myApp->assetProvider, UNLIT_TEXTURED_MATERIAL));
-        loadTextureFromPNG(theApp->assetProvider, _mySrc, element->material);
-        float width = _myXMLNode->getFloatValue("width", element->material->width);
-        float height = _myXMLNode->getFloatValue("height", element->material->height);
+        UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(_myApp->assetProvider));
+        loadTextureFromPNG(theApp->assetProvider, _mySrc, myMaterial);
+        float width = _myXMLNode->getFloatValue("width", myMaterial->width);
+        float height = _myXMLNode->getFloatValue("height", myMaterial->height);
         setVertexData(element, width, height);
         _myShape->elementList.push_back(element);
+        element->material = myMaterial;
         //material is ready -> create shader now
         element->material->createShader();
     }

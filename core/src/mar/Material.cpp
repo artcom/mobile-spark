@@ -5,46 +5,47 @@
 
 
 namespace mar {
-    Material::Material(const AssetProviderPtr theAssetProvider, GLuint theMaterialMode) 
-        : _myMaterialMode(theMaterialMode), _myAssetProvider(theAssetProvider) {
+    Material::Material(const AssetProviderPtr theAssetProvider) 
+        : _myAssetProvider(theAssetProvider) {
     }
-
     Material::~Material() {
     }
-
     void Material::createShader() {
-        std::string vertexShader, fragmentShader;
-
-        vertexShader = _myAssetProvider->getStringFromFile(DEFAULT_VERTEX_SHADER); 
-
-        //TODO: material inheritance?
-        if (_myMaterialMode == UNLIT_COLORED_MATERIAL) {
-            fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_FRAGMENT_SHADER); 
-        } else if (_myMaterialMode ==  UNLIT_TEXTURED_MATERIAL) {
-            fragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
-        } else {
-            AC_ERROR << "unknown material mode";
-            return;
-        }
-
-        shaderProgram = createProgram(vertexShader.c_str(), fragmentShader.c_str());
+        setShader();
+        shaderProgram = createProgram(_myVertexShader, _myFragmentShader);
         if (!shaderProgram) {
             AC_ERROR << "Could not create program.";
             return;
         }
-
+        setHandles();
+    }
+    void Material::setShader() {
+        _myVertexShader = _myAssetProvider->getStringFromFile(DEFAULT_VERTEX_SHADER); 
+    }
+    void Material::setHandles() {
         mvpHandle = glGetUniformLocation(shaderProgram, "u_mvpMatrix");
+    }
 
-        //TODO: material inheritance?
-        if (_myMaterialMode == UNLIT_COLORED_MATERIAL) {
-            colorHandle = glGetUniformLocation(shaderProgram, "a_color");
-        } else if (_myMaterialMode ==  UNLIT_TEXTURED_MATERIAL) {
-            //why is this not needed?
-            //textureHandle = glGetUniformLocation(shaderProgram, "s_textureMap");
-        } else {
-            AC_ERROR << "unknown material mode";
-            return;
-        }
+    UnlitColoredMaterial::UnlitColoredMaterial(const AssetProviderPtr theAssetProvider) : Material(theAssetProvider) {
+    }
+    UnlitColoredMaterial::~UnlitColoredMaterial() {
+    }
+    void UnlitColoredMaterial::setShader() {
+        Material::setShader();
+        _myFragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_COLORED_FRAGMENT_SHADER); 
+    }
+    void UnlitColoredMaterial::setHandles() {
+        Material::setHandles();
+        colorHandle = glGetUniformLocation(shaderProgram, "a_color");
+    }
+
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const AssetProviderPtr theAssetProvider) : Material(theAssetProvider) {
+    }
+    UnlitTexturedMaterial::~UnlitTexturedMaterial() {
+    }
+    void UnlitTexturedMaterial::setShader() {
+        Material::setShader();
+        _myFragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
     }
 }
 
