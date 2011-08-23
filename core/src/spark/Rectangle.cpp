@@ -23,17 +23,16 @@ namespace spark {
         if (_myColor.size() == 3) {
             _myColor.push_back(1.0f);
         }
+
         _myShape = ShapePtr(new Shape());
         ElementPtr element = ElementPtr(new Element());
-        size_t dataPerVertex = 3;
-        element->numVertices = 6;
-        element->vertexData = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
-        setVertexData(element, width, height);
-        _myShape->elementList.push_back(element);
         UnlitColoredMaterialPtr myMaterial = UnlitColoredMaterialPtr(new UnlitColoredMaterial(_myApp->assetProvider));
         myMaterial->diffuse = _myColor;
         element->material = myMaterial;
         element->material->createShader();
+        
+        setVertexData(element, width, height);
+        _myShape->elementList.push_back(element);
     }
 
     Rectangle::~Rectangle() {
@@ -44,6 +43,9 @@ namespace spark {
     }
 
     void Rectangle::setVertexData(ElementPtr theElement, const float theWidth, const float theHeight) {
+        size_t dataPerVertex = 3;
+        theElement->numVertices = 6;
+        theElement->vertexData = boost::shared_array<float>(new float[(theElement->numVertices) * dataPerVertex]);
         (theElement->vertexData)[0] = 0.0f;
         (theElement->vertexData)[1] = 0.0f;
         (theElement->vertexData)[2] = 0.0f;

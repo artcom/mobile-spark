@@ -16,24 +16,22 @@ namespace mar {
         }
     }
 
-
+    /////////////////////////////////////////////////////////////Element
     void Element::loadData(const matrix & theMatrix) const {
+        material->loadShader(theMatrix);
+
         glEnableVertexAttribArray(VERTEX_POS_INDEX);
         glVertexAttribPointer(VERTEX_POS_INDEX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, 0, (vertexData.get()));
-        glBindAttribLocation(material->shaderProgram, 0, "a_position");
-        glLinkProgram(material->shaderProgram);
-        glUseProgram(material->shaderProgram);
-        checkGlError("glUseProgram");
-
-        glUniformMatrix4fv(material->mvpHandle, 1, GL_FALSE, theMatrix.data());
-        UnlitColoredMaterialPtr myMaterial = boost::static_pointer_cast<UnlitColoredMaterial>(material);
-        glUniform4fv(myMaterial->colorHandle, 1, &(myMaterial->diffuse[0]));
     }
+
     void Element::unloadData() const {
         glDisableVertexAttribArray(VERTEX_POS_INDEX);
     }
 
+    /////////////////////////////////////////////////////////////ElementWithNormals
     void ElementWithNormals::loadData(const matrix & theMatrix) const {
+        material->loadShader(theMatrix);
+
         int offset = 0;
         int stride = NORMAL_VERTEX_SIZE * (sizeof(float));
         glEnableVertexAttribArray(VERTEX_POS_INDEX);
@@ -44,17 +42,15 @@ namespace mar {
         glVertexAttribPointer(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE, GL_FLOAT, GL_FALSE, 
                                 stride, (vertexData.get() + offset));
     }
+
     void ElementWithNormals::unloadData() const {
         glDisableVertexAttribArray(VERTEX_POS_INDEX);
         glDisableVertexAttribArray(VERTEX_NORMAL_INDEX);
     }
 
+    /////////////////////////////////////////////////////////////ElementWithTexture
     void ElementWithTexture::loadData(const matrix & theMatrix) const {
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(material);
-        GLuint textureId = myMaterial->textureId;
-        if (textureId) {
-            glBindTexture(GL_TEXTURE_2D, textureId);
-        }
+        material->loadShader(theMatrix);
 
         int offset = 0;
         int stride = TEXTURED_VERTEX_SIZE;
@@ -65,19 +61,6 @@ namespace mar {
         glEnableVertexAttribArray(VERTEX_TEXCOORD0_INDEX);
         glVertexAttribPointer(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, 
                                 stride, (vertexData.get() + offset));
-
-
-
-
-//TODO: refactor
-
-        glBindAttribLocation(material->shaderProgram, 0, "a_position");
-        glBindAttribLocation(material->shaderProgram, 1, "a_texCoord0");
-        
-        glLinkProgram(material->shaderProgram);
-        glUseProgram(material->shaderProgram);
-        checkGlError("glUseProgram");
-        glUniformMatrix4fv(material->mvpHandle, 1, GL_FALSE, theMatrix.data());
     }
 
     void ElementWithTexture::unloadData() const {
@@ -85,12 +68,10 @@ namespace mar {
         glDisableVertexAttribArray(VERTEX_TEXCOORD0_INDEX);
     }
 
+    /////////////////////////////////////////////////////////////ElementWithNormalsAndTexture
     void ElementWithNormalsAndTexture::loadData(const matrix & theMatrix) const {
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(material);
-        GLuint textureId = myMaterial->textureId;
-        if (textureId) {
-            glBindTexture(GL_TEXTURE_2D, textureId);
-        }
+        material->loadShader(theMatrix);
+
         int offset = 0;
         int stride = TEXTURED_NORMAL_VERTEX_SIZE * (sizeof(float));
         glEnableVertexAttribArray(VERTEX_POS_INDEX);
