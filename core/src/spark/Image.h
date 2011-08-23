@@ -19,6 +19,7 @@ namespace spark {
     private:
         ShapePtr _myShape;
         std::string _mySrc;
+        void setVertexData(ElementPtr theElement, const float theWidth, const float theHeight);
     };
 
     typedef boost::shared_ptr<Image> ImagePtr;
