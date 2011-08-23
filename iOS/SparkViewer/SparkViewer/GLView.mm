@@ -60,7 +60,7 @@ spark::DemoApp *myDemoApp;
         NSString *path = [[NSBundle mainBundle] resourcePath];
         myDemoApp = new spark::DemoApp();
         myDemoApp->setup((displayLink.timestamp*1000.0),[path UTF8String], "assets/layouts/main.spark");
-        myDemoApp->onSizeChanged(320,460);
+        myDemoApp->onSizeChanged(width, height);
         
     }
     return self;
