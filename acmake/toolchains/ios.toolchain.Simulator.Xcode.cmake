@@ -2,31 +2,33 @@ SET(TARGET_PLATFORM iPhoneSimulator)
 SET(IOS True)
 
 # SDK Info
-SET (CMAKE_SYSTEM_NAME Darwin)
-SET (SDKVER "4.3")
-SET (DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
-SET (SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATFORM}${SDKVER}.sdk")
-SET (CMAKE_OSX_SYSROOT "${SDKROOT}")
-SET(MACOSX_DEPLOYMENT_TARGET "Compiler Default")
+SET(SDKVER "4.3")
+SET(DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
+SET(SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATFORM}${SDKVER}.sdk")
+SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
+SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "Compiler Default")
+
+
+#set target device: "1" -> iPhone, "2" -> iPad, "1,2 " -> both (remember the <whitespace> after the '2' !!!)
+SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2")
 
 SET(CMAKE_SYSTEM_PROCESSOR i386)
 SET(CMAKE_OSX_ARCHITECTURES i386)
 
 # Skip the platform compiler checks for cross compiling 
-set (CMAKE_CXX_COMPILER_WORKS TRUE)
-set (CMAKE_C_COMPILER_WORKS TRUE)
+SET(CMAKE_CXX_COMPILER_WORKS TRUE)
+SET(CMAKE_C_COMPILER_WORKS TRUE)
 
-set ( CMAKE_C_FLAGS "-m32 ${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
-set ( CMAKE_CXX_FLAGS "-m32 ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
+SET( CMAKE_C_FLAGS "-m32 ${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
+SET( CMAKE_CXX_FLAGS "-m32 ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
 
-# Definitions
-#builds a 32bit app
-ADD_DEFINITIONS("-m32")
+# Flags
 ADD_DEFINITIONS("-arch i386")
 ADD_DEFINITIONS("-no-cpp-precomp")
 ADD_DEFINITIONS("--sysroot=${SDKROOT}")
 ADD_DEFINITIONS("-miphoneos-version-min=${SDKVER}")
 
+# Header
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/System/Library/Frameworks")
 

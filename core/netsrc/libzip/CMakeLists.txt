@@ -3,11 +3,13 @@ set (HEADERS
 zip.h
 )
 
-find_library(ZLIB_LIBRARY
+find_library(ZLIB_LIBRARY_DIRS
    NAMES z zlib
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/..)
-add_library(zip STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(zip ${ZLIB_LIBRARY})
+ac_add_library(zip zip 
+    SOURCES ${SOURCES} 
+    HEADERS ${HEADERS}
+    EXTERNS ZLIB
+    STATIC )
 

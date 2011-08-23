@@ -4,28 +4,46 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "GlHeaders.h"
+
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <masl/MatrixStack.h>
 
 #include "AssetProvider.h"
-
-//shader program handles
-#define VERTEX_POS_INDEX       0
-#define VERTEX_TEXCOORD0_INDEX 1
-#define VERTEX_NORMAL_INDEX    2
-
+#include "GlHeaders.h"
 
 namespace mar {
 
     const std::string DEFAULT_VERTEX_SHADER = "assets/shaders/default_vertex.glsl";
-    const std::string DEFAULT_FRAGMENT_SHADER = "assets/shaders/default_fragment.glsl";
+    const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "assets/shaders/default_colored_fragment.glsl";
+    const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "assets/shaders/default_textured_fragment.glsl";
 
-    struct Material {
-        Material(const AssetProviderPtr theAssetProvider);
-        ~Material();
+    class Material {
+    public:
+        virtual ~Material();
+        virtual void createShader();
+        virtual void loadShader(const matrix & theMatrix);
 
-        void createShader();
+        GLuint shaderProgram;
+        GLuint mvpHandle;
 
+    protected:
+        Material(const AssetProviderPtr theAssetProvider); 
+        virtual void setShader();
+        virtual void setHandles();
+
+        const AssetProviderPtr _myAssetProvider;
+        std::string _myFragmentShader;
+        std::string _myVertexShader;
+    };
+    typedef boost::shared_ptr<Material> MaterialPtr;
+
+    class UnlitColoredMaterial : public Material {
+    public:
+        UnlitColoredMaterial(const AssetProviderPtr theAssetProvider);
+        virtual ~UnlitColoredMaterial();
+        virtual void loadShader(const matrix & theMatrix);
+
+        //material (from obj)
         std::vector<float> ambient;
         std::vector<float> diffuse;
         std::vector<float> specular;
@@ -33,16 +51,30 @@ namespace mar {
         float shininess;
         short illuminationModel;
 
-        std::string textureFile;
-        GLuint textureId;
-        GLuint shaderProgram;
-        GLuint mvpHandle;
         GLuint colorHandle;
-        bool rgb;
-        const AssetProviderPtr _myAssetProvider;
-    };
 
-    typedef boost::shared_ptr<Material> MaterialPtr;
+    private:
+        virtual void setShader();
+        virtual void setHandles();
+    };
+    typedef boost::shared_ptr<UnlitColoredMaterial> UnlitColoredMaterialPtr;
+
+    class UnlitTexturedMaterial : public Material {
+    public:
+        UnlitTexturedMaterial(const AssetProviderPtr theAssetProvider);
+        virtual ~UnlitTexturedMaterial();
+        virtual void loadShader(const matrix & theMatrix);
+
+        std::string textureFile; //needed?
+        GLuint textureId;
+        GLuint width;
+        GLuint height;
+        bool rgb;  //image mode
+
+    private:
+        virtual void setShader();
+    };
+    typedef boost::shared_ptr<UnlitTexturedMaterial> UnlitTexturedMaterialPtr;
 };
 
 #endif 

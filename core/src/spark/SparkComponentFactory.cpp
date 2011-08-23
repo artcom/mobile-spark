@@ -9,11 +9,13 @@
 #include "World.h"
 #include "Transform.h"
 #include "Rectangle.h"
+#include "Image.h"
 
 using namespace masl;
 
 namespace spark {
     
+    //TODO: decentralize this again
     void SparkComponentFactory::setupFactory() {
         AC_PRINT << "SparkComponentFactory setup";
         bool registered = registerComponent("Window", spark::createWindow);
@@ -21,8 +23,9 @@ namespace spark {
         registered = registerComponent("World", spark::createWorld);
         registered = registerComponent("Transform", spark::createTransform);
         registered = registerComponent("Rectangle", spark::createRectangle);
-        AC_PRINT << "SparkComponentFactory setup done";
 
+        registered = registerComponent("Image", spark::createImage);
+        AC_PRINT << "SparkComponentFactory setup done";
     };
     
     SparkComponentFactory::SparkComponentFactory() {

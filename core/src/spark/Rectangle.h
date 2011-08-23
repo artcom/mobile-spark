@@ -13,11 +13,9 @@ namespace spark {
         Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Rectangle();
 
-    protected:
-        //virtual void renderShape() const;
     private:
-        //ShapePtr _myShape;
         std::vector<float> _myColor;
+        void setVertexData(ElementPtr theElement, const float theWidth, const float theHeight);
     };
 
     typedef boost::shared_ptr<Rectangle> RectanglePtr;
