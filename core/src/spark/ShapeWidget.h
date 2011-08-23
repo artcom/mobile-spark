@@ -10,7 +10,8 @@ namespace spark {
         public: 
             ShapeWidget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
             virtual ~ShapeWidget();
-            virtual void render(MatrixStack& theCurrentMatrixStack, matrix theProjectionMatrix) const;            
+            virtual void renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const;
+            
             mar::ShapePtr _myShape;            
         private:
     };
