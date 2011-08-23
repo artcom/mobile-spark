@@ -15,8 +15,7 @@ namespace android {
         virtual ~AndroidAssetProvider();
 
         virtual std::string getStringFromFile(const std::string & theFileName) const;        
-
-        zip* getAPK() { return _myApkArchive;};
+        virtual bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb);
 
     private:
         zip * _myApkArchive;

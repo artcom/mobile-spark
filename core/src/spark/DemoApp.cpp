@@ -12,7 +12,6 @@
 #include <animation/Easing.h>
 
 #include "Rectangle.h"
-#include "Image.h"
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {

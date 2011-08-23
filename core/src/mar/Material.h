@@ -31,6 +31,14 @@ namespace mar {
 
         void createShader();
 
+        GLuint _myMaterialMode;  //TODO: use inheritance instead?
+        bool rgb;
+        const AssetProviderPtr _myAssetProvider;
+        GLuint shaderProgram;
+        GLuint mvpHandle;
+        GLuint colorHandle;
+
+        //material (from obj)
         std::vector<float> ambient;
         std::vector<float> diffuse;
         std::vector<float> specular;
@@ -38,16 +46,11 @@ namespace mar {
         float shininess;
         short illuminationModel;
 
-        GLuint _myMaterialMode;
-
-        std::string textureFile;
+        //texture
+        std::string textureFile; //needed?
         GLuint textureId;
-        GLuint shaderProgram;
-        GLuint mvpHandle;
-        GLuint colorHandle;
-
-        bool rgb;
-        const AssetProviderPtr _myAssetProvider;
+        GLuint width;
+        GLuint height;
     };
 
     typedef boost::shared_ptr<Material> MaterialPtr;

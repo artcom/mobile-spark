@@ -66,11 +66,10 @@ namespace spark {
 
         _myShape->elementList.push_back(element);
 
+        //TODO: material inheritance?
         element->material = MaterialPtr(new Material(_myApp->assetProvider, UNLIT_TEXTURED_MATERIAL));
+        loadTextureFromPNG(theApp->assetProvider, _mySrc, element->material);
 
-        //TODO: zip should be android
-        zip* myPackage = boost::static_pointer_cast<android::AndroidAssetProvider>(theApp->assetProvider)->getAPK();
-        loadTextureFromPNG(myPackage, _mySrc, element->material);
         //material is ready -> create shader now
         element->material->createShader();
     }
