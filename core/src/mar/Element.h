@@ -1,10 +1,9 @@
-#ifndef _ac_mobile_masl_Geometry_h_included_
-#define _ac_mobile_masl_Geometry_h_included_
+#ifndef _ac_mobile_mar_Element_h_included_
+#define _ac_mobile_mar_Element_h_included_
 
 #include <map>
 #include <vector>
 #include <string>
-#include "GlHeaders.h"
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/shared_array.hpp>
 
@@ -64,15 +63,6 @@ namespace mar {
         ElementWithNormalsAndTexture();
         virtual ~ElementWithNormalsAndTexture();
     };
-
-    class Shape {
-    public:
-        std::vector<ElementPtr> elementList; 
-
-        virtual void render(const matrix & theMvp) const;
-    };
-
-    typedef boost::shared_ptr<Shape> ShapePtr;
 };
 
 #endif 
