@@ -25,18 +25,12 @@ namespace mar {
     const GLuint UNLIT_COLORED_MATERIAL = 0;
     const GLuint UNLIT_TEXTURED_MATERIAL = 1;
 
-    struct Material {
+    class Material {
+    public:
         Material(const AssetProviderPtr theAssetProvider, const GLuint theMaterialMode = UNLIT_COLORED_MATERIAL);
         ~Material();
 
         void createShader();
-
-        GLuint _myMaterialMode;  //TODO: use inheritance instead?
-        bool rgb;
-        const AssetProviderPtr _myAssetProvider;
-        GLuint shaderProgram;
-        GLuint mvpHandle;
-        GLuint colorHandle;
 
         //material (from obj)
         std::vector<float> ambient;
@@ -51,6 +45,16 @@ namespace mar {
         GLuint textureId;
         GLuint width;
         GLuint height;
+
+        GLuint shaderProgram;
+        GLuint mvpHandle;
+        GLuint colorHandle;
+        bool rgb;
+
+    private:
+        GLuint _myMaterialMode;  //TODO: use inheritance instead?
+        const AssetProviderPtr _myAssetProvider;
+
     };
 
     typedef boost::shared_ptr<Material> MaterialPtr;
