@@ -1,16 +1,14 @@
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
 
-if($ENV{IS_TARGET_PLATFORM_ANDROID})
-	add_library(animation SHARED ${SOURCES} ${HEADERS})
-elseif($ENV{IS_TARGET_PLATFORM_IOS})
-	add_library(animation STATIC ${SOURCES} ${HEADERS})
-endif()
+set(EXTERNS Boost)
 
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${PROJECT_SOURCE_DIR}/core/src)
-
-target_link_libraries(animation masl)
-
+ac_add_library(
+    animation animation
+    SOURCES ${SOURCES}
+    HEADERS ${HEADERS}
+    EXTERNS ${EXTERNS}
+    DEPENDS masl 
+)
 add_subdirectory(Tests)
 
