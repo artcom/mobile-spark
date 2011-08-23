@@ -4,7 +4,6 @@
 
 namespace mar {
 
-    /////////////////////////////////////////////////////////////Shape
     void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
