@@ -43,8 +43,8 @@ ADD_FRAMEWORK(${APP_NAME} QuartzCore)
 ADD_FRAMEWORK(${APP_NAME} OpenGLES)
 
 include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${LIBXML2_INCLUDE_DIRS})
-include_directories(${CML_INCLUDE_DIR})
+include_directories(${libXML2_INCLUDE_DIRS})
+include_directories(${Cml_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/core/src)
 	
 target_link_libraries(${APP_NAME} spark)
