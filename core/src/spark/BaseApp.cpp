@@ -42,7 +42,7 @@ namespace spark {
     }
 
     void BaseApp::onFrame(const long theCurrentMillis) {
-        AC_PRINT << "onFrame " << theCurrentMillis;
+        // AC_PRINT << "onFrame " << theCurrentMillis;
         if (_myAnimate) {
             animation::AnimationManager::get().doFrame(theCurrentMillis);
         }
