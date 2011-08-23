@@ -30,7 +30,7 @@ namespace spark {
     bool DemoApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
         //add looping sequence animation
-        /*ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
+        ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 8, 500));
@@ -45,14 +45,14 @@ namespace spark {
         animation::AnimationManager::get().play(mySequence);
 
         mySequence->setOnPlay(WidgetCallbackPtr(new WidgetCallback( myRectangle, &Widget::test)));
-        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));*/
+        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));
         return myBaseReturn;
     }
 
     void DemoApp::onTouch() {
 
         //add two parallel animations
-        /*ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
+        ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
@@ -68,7 +68,7 @@ namespace spark {
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myParallel->add(myAnimationC);
         myParallel->add(myAnimationA);
-        animation::AnimationManager::get().play(myParallel);*/
+        animation::AnimationManager::get().play(myParallel);
     }
 }
 

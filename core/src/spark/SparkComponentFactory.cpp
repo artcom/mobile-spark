@@ -23,7 +23,6 @@ namespace spark {
         registered = registerComponent("World", spark::createWorld);
         registered = registerComponent("Transform", spark::createTransform);
         registered = registerComponent("Rectangle", spark::createRectangle);
-
         registered = registerComponent("Image", spark::createImage);
         AC_PRINT << "SparkComponentFactory setup done";
     };
