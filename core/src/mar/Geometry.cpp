@@ -5,6 +5,7 @@
 
 namespace mar {
 
+    /////////////////////////////////////////////////////////////Shape
     void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
@@ -16,98 +17,58 @@ namespace mar {
         }
     }
 
+    /////////////////////////////////////////////////////////////Element
+    Element::Element() {
+        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE));
+        _myStride = 0;
+    }
+
+    Element::~Element() {
+    }
 
     void Element::loadData(const matrix & theMatrix) const {
-        glEnableVertexAttribArray(VERTEX_POS_INDEX);
-        glVertexAttribPointer(VERTEX_POS_INDEX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, 0, (vertexData.get()));
-
-        glBindAttribLocation(material->shaderProgram, 0, "a_position");
-        
-        glLinkProgram(material->shaderProgram);
-        glUseProgram(material->shaderProgram);
-        checkGlError("glUseProgram");
-
-        glUniformMatrix4fv(material->mvpHandle, 1, GL_FALSE, theMatrix.data());
-        glUniform4fv(material->colorHandle, 1, &(material->diffuse[0]));
+        material->loadShader(theMatrix);
+        int offset = 0;
+        for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
+            glEnableVertexAttribArray(it->first);
+            glVertexAttribPointer(it->first, it->second, GL_FLOAT, GL_FALSE, _myStride, (vertexData.get() + offset));
+            offset += it->second;
+        }
     }
+
     void Element::unloadData() const {
-        glDisableVertexAttribArray(VERTEX_POS_INDEX);
-    }
-
-    void ElementWithNormals::loadData(const matrix & theMatrix) const {
-        int offset = 0;
-        int stride = NORMAL_VERTEX_SIZE * (sizeof(float));
-        glEnableVertexAttribArray(VERTEX_POS_INDEX);
-        glVertexAttribPointer(VERTEX_POS_INDEX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, 
-                                stride, (vertexData.get()));
-        offset += VERTEX_POS_SIZE;
-        glEnableVertexAttribArray(VERTEX_NORMAL_INDEX);
-        glVertexAttribPointer(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE, GL_FLOAT, GL_FALSE, 
-                                stride, (vertexData.get() + offset));
-    }
-    void ElementWithNormals::unloadData() const {
-        glDisableVertexAttribArray(VERTEX_POS_INDEX);
-        glDisableVertexAttribArray(VERTEX_NORMAL_INDEX);
-    }
-
-    void ElementWithTexture::loadData(const matrix & theMatrix) const {
-        GLuint textureId = material->textureId;
-        if (textureId) {
-            glBindTexture(GL_TEXTURE_2D, textureId);
+        for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
+            glDisableVertexAttribArray(it->first);
         }
-
-        int offset = 0;
-        int stride = TEXTURED_VERTEX_SIZE;
-        glEnableVertexAttribArray(VERTEX_POS_INDEX);
-        glVertexAttribPointer(VERTEX_POS_INDEX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, 
-                                stride, (vertexData.get()));
-        offset += VERTEX_POS_SIZE;
-        glEnableVertexAttribArray(VERTEX_TEXCOORD0_INDEX);
-        glVertexAttribPointer(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, 
-                                stride, (vertexData.get() + offset));
-
-
-
-
-//TODO: refactor
-
-        glBindAttribLocation(material->shaderProgram, 0, "a_position");
-        glBindAttribLocation(material->shaderProgram, 1, "a_texCoord0");
-        
-        glLinkProgram(material->shaderProgram);
-        glUseProgram(material->shaderProgram);
-        checkGlError("glUseProgram");
-        glUniformMatrix4fv(material->mvpHandle, 1, GL_FALSE, theMatrix.data());
     }
 
-    void ElementWithTexture::unloadData() const {
-        glDisableVertexAttribArray(VERTEX_POS_INDEX);
-        glDisableVertexAttribArray(VERTEX_TEXCOORD0_INDEX);
+    /////////////////////////////////////////////////////////////ElementWithNormals
+    ElementWithNormals::ElementWithNormals() : Element() {
+        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE));
+        _myStride = NORMAL_VERTEX_SIZE;
     }
 
-    void ElementWithNormalsAndTexture::loadData(const matrix & theMatrix) const {
-        GLuint textureId = material->textureId;
-        if (textureId) {
-            glBindTexture(GL_TEXTURE_2D, textureId);
-        }
-        int offset = 0;
-        int stride = TEXTURED_NORMAL_VERTEX_SIZE * (sizeof(float));
-        glEnableVertexAttribArray(VERTEX_POS_INDEX);
-        glVertexAttribPointer(VERTEX_POS_INDEX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, 
-                                stride, (vertexData.get()));
-        offset += VERTEX_POS_SIZE;
-        glEnableVertexAttribArray(VERTEX_NORMAL_INDEX);
-        glVertexAttribPointer(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE, GL_FLOAT, GL_FALSE, 
-                                stride, (vertexData.get() + offset));
-        offset += VERTEX_NORMAL_SIZE;
-        glEnableVertexAttribArray(VERTEX_TEXCOORD0_INDEX);
-        glVertexAttribPointer(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, 
-                                stride, (vertexData.get() + offset));
+    ElementWithNormals::~ElementWithNormals() {
     }
-    void ElementWithNormalsAndTexture::unloadData() const {
-        glDisableVertexAttribArray(VERTEX_POS_INDEX);
-        glDisableVertexAttribArray(VERTEX_TEXCOORD0_INDEX);
-        glDisableVertexAttribArray(VERTEX_NORMAL_INDEX);
+
+    /////////////////////////////////////////////////////////////ElementWithTexture
+    ElementWithTexture::ElementWithTexture() : Element() {
+        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE));
+        _myStride = TEXTURED_VERTEX_SIZE;
     }
+
+    ElementWithTexture::~ElementWithTexture() {
+    }
+
+    /////////////////////////////////////////////////////////////ElementWithNormalsAndTexture
+    ElementWithNormalsAndTexture::ElementWithNormalsAndTexture() : Element() {
+        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE));
+        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE));
+        _myStride = TEXTURED_NORMAL_VERTEX_SIZE;
+    }
+
+    ElementWithNormalsAndTexture::~ElementWithNormalsAndTexture() {
+    }
+
 }
 

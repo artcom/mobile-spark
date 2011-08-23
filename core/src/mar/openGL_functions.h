@@ -12,7 +12,7 @@ namespace mar {
 
     ///////////////////////////////////////////////////////////////// Shaders
     GLuint loadShader(GLenum shaderType, const char* pSource);
-    GLuint createProgram(const char* pVertexSource, const char* pFragmentSource);
+    GLuint createProgram(const std::string & pVertexSource, const std::string & pFragmentSource);
     GLuint getShaderVariableHandle(GLuint theProgram, std::string theVariableName, bool theUniformFlag);
     GLuint getShaderVariableHandleAttribute(GLuint theProgram, std::string theVariableName);
     GLuint getShaderVariableHandleUniform(GLuint theProgram, std::string theVariableName);

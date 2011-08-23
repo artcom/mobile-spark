@@ -18,20 +18,18 @@ namespace spark {
     Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent) {
         _mySrc = _myXMLNode->getStringValue("src");
+
         _myShape = ShapePtr(new Shape());
         ElementPtr element = ElementPtr(new ElementWithTexture());
-        size_t dataPerVertex = 3 + 2;
-        element->numVertices = 6;
-        element->vertexData = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
-        //TODO: material inheritance?
-        element->material = MaterialPtr(new Material(_myApp->assetProvider, UNLIT_TEXTURED_MATERIAL));
-        loadTextureFromPNG(theApp->assetProvider, _mySrc, element->material);
-        float width = _myXMLNode->getFloatValue("width", element->material->width);
-        float height = _myXMLNode->getFloatValue("height", element->material->height);
+        UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(_myApp->assetProvider));
+        loadTextureFromPNG(theApp->assetProvider, _mySrc, myMaterial);
+        element->material = myMaterial;
+        element->material->createShader();
+
+        float width = _myXMLNode->getFloatValue("width", myMaterial->width);
+        float height = _myXMLNode->getFloatValue("height", myMaterial->height);
         setVertexData(element, width, height);
         _myShape->elementList.push_back(element);
-        //material is ready -> create shader now
-        element->material->createShader();
     }
 
     Image::~Image() {
@@ -42,6 +40,9 @@ namespace spark {
     }
 
     void Image::setVertexData(ElementPtr theElement, const float theWidth, const float theHeight) {
+        size_t dataPerVertex = 3 + 2;
+        theElement->numVertices = 6;
+        theElement->vertexData = boost::shared_array<float>(new float[(theElement->numVertices) * dataPerVertex]);
         (theElement->vertexData)[0] = 0.0f;
         (theElement->vertexData)[1] = 0.0f;
         (theElement->vertexData)[2] = 0.0f;

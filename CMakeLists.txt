@@ -8,15 +8,19 @@ list(INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR})
 add_subdirectory(acmake)
 find_package(AcMake)
 
+set(REQUIRED_PACKAGES Boost Cml libXML2)
+foreach(PACKAGE ${REQUIRED_PACKAGES})
+    find_package(${PACKAGE})
+endforeach()
+
 add_subdirectory(core)
 
 if(ANDROID)
-    #test for ANDROID and look for stuff not relevant to android.
-    #if(NOT ANDROID)
-    #   #jni is available by default on android
-    #   find_package(JNI REQUIRED)
-    #   include_directories(${JNI_INCLUDE_DIRS})
-    #endif()
+    # add imported target
+    add_library(LIBXML2 STATIC IMPORTED)
+    # point the imported target at the real file
+    set_property(TARGET LIBXML2 PROPERTY
+                IMPORTED_LOCATION ${LIBXML2_LIBRARY_DIRS})
 elseif(IOS)
     add_subdirectory(iOS)
 endif()

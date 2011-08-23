@@ -9,5 +9,5 @@
         <Image name="imageA" x="2" z="1" height="100" src="assets/textures/texture.png"/>
     </Transform>
     <Rectangle name="objectB" y="0" width="10" height="10" z="10" color="[1,1,1]"/>
-        <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
+    <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
 </Window>

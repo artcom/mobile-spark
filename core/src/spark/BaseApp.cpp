@@ -27,7 +27,6 @@ namespace spark {
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
 
-//TODO: AssetProvider for ios?
 #ifdef __ANDROID__
         assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath));
 #endif
