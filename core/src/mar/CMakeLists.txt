@@ -1,23 +1,22 @@
-
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
 
-if($ENV{IS_TARGET_PLATFORM_ANDROID})
-	add_library(mar SHARED ${SOURCES} ${HEADERS})
-elseif($ENV{IS_TARGET_PLATFORM_IOS})
-	add_library(mar STATIC ${SOURCES} ${HEADERS})
-endif()
+set(EXTERNS Boost Cml libXML2)
+if(ANDROID)
+	find_library(GLES20_LIBRARY_DIRS GLESv2)
+    list(APPEND DEPENDS android)
+    list(APPEND EXTERNS GLES20)
+endif(ANDROID)
 
-include_directories(${PROJECT_SOURCE_DIR}/core/src)
-include_directories (${Boost_INCLUDE_DIRS})
-include_directories (${CML_INCLUDE_DIR})
-include_directories (${LIBXML2_INCLUDE_DIRS})
-
-if($ENV{IS_TARGET_PLATFORM_ANDROID})
-	find_library(OPENGL_ES_20 GLESv2)
-	target_link_libraries(mar masl android ${OPENGL_ES_20})
-elseif($ENV{IS_TARGET_PLATFORM_IOS})
-	target_link_libraries(mar masl)
+ac_add_library(
+    mar mar
+    SOURCES ${SOURCES}
+    HEADERS ${HEADERS}
+    EXTERNS ${EXTERNS}
+    DEPENDS masl
+)
+if(IOS)
 	ADD_FRAMEWORK(mar OpenGLES)
-endif()
+endif(IOS)
+
 
