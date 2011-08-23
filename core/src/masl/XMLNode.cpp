@@ -26,10 +26,28 @@ namespace masl {
     XMLNode::~XMLNode() {
     }
 
+    std::string XMLNode::getStringValue(const std::string & theKey, const std::string & theDefault) const {
+        std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
+        if ( it != attributes.end()) {
+            return (it->second);
+        } else {
+            return theDefault;
+        }
+    }
+
     float XMLNode::getFloatValue(const std::string & theKey, const float theDefault) const {
         std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
         if ( it != attributes.end()) {
             return as<float>(it->second);
+        } else {
+            return theDefault;
+        }
+    }
+    
+    bool XMLNode::getBoolValue(const std::string & theKey, const bool theDefault) const {
+        std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
+        if ( it != attributes.end()) {
+            return as<bool>(it->second);
         } else {
             return theDefault;
         }

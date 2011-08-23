@@ -11,13 +11,16 @@ namespace animation {
     
     void AnimationManager::doFrame(const long theCurrentMillis) {
         _myAnimationTime = theCurrentMillis;
+        //AC_PRINT << "AnimationManager::doFrame";
         for (std::vector<AnimationPtr>::iterator it = _myAnimations.begin(); it != _myAnimations.end(); ++it) {
             AnimationPtr myAnimation = (*it);
             if (myAnimation->isRunning()) {
                 myAnimation->doFrame(_myAnimationTime);
             }
         }
+        //AC_PRINT << "AnimationManager::doFrame 1";
         removeFinished();
+        //AC_PRINT << "AnimationManager::doFrame 2";
     }
 
     void AnimationManager::removeFinished() {

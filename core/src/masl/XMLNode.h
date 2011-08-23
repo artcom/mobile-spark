@@ -16,7 +16,10 @@ namespace masl {
             virtual ~XMLNode();
             void print() const;
             void printTree() const;
+            std::string getStringValue(const std::string & theKey, const std::string & theDefault = "") const;
             float getFloatValue(const std::string & theKey, const float theDefault = 0.0f) const;
+            bool getBoolValue(const std::string & theKey, const bool theDefault = true) const;
+                
             std::vector<float> getFloatArrayValue(const std::string & theKey) const;
 
             std::string nodeName;

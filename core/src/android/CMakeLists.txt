@@ -9,4 +9,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${LIBZIP_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/core/src)
 
-target_link_libraries(android masl zip)
+find_library(OPENGL_ES_20 GLESv2)
+
+target_link_libraries(android masl zip png ${OPENGL_ES_20})
