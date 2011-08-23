@@ -32,7 +32,7 @@ namespace spark {
         //add looping sequence animation
         ComponentPtr myTransform = window->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
-        /*RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));
         WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 2, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
@@ -45,18 +45,18 @@ namespace spark {
         animation::AnimationManager::get().play(mySequence);
 
         mySequence->setOnPlay(WidgetCallbackPtr(new WidgetCallback( myRectangle, &Widget::test)));
-        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));*/
+        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));
         return myBaseReturn;
     }
 
     void DemoApp::onTouch() {
 
         //add two parallel animations
-        /*ComponentPtr myTransform = window->getChildByName("transformA");
+        ComponentPtr myTransform = window->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 5, 1000,
+                new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 100, 1000,
                     //animation::EasingFnc(animation::easeInBack)));
                     animation::EasingFnc(animation::easeInOutElastic)));
 
@@ -69,7 +69,6 @@ namespace spark {
         myParallel->add(myAnimationC);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
-        */
     }
 }
 
