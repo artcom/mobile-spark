@@ -2,7 +2,7 @@
 #define _included_mobile_spark_ShapeWidget_
 
 #include "Widget.h"
-#include <mar/Geometry.h>
+#include <mar/Shape.h>
 
 namespace spark {
 
