@@ -31,7 +31,7 @@ namespace mar {
         int offset = 0;
         for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
             glEnableVertexAttribArray(it->first);
-            glVertexAttribPointer(it->first, it->second, GL_FLOAT, GL_FALSE, _myStride, (vertexData.get()));
+            glVertexAttribPointer(it->first, it->second, GL_FLOAT, GL_FALSE, _myStride, (vertexData.get() + offset));
             offset += it->second;
         }
     }
@@ -43,8 +43,7 @@ namespace mar {
     }
 
     /////////////////////////////////////////////////////////////ElementWithNormals
-    ElementWithNormals::ElementWithNormals() {
-        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE));
+    ElementWithNormals::ElementWithNormals() : Element() {
         _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE));
         _myStride = NORMAL_VERTEX_SIZE;
     }
@@ -53,8 +52,7 @@ namespace mar {
     }
 
     /////////////////////////////////////////////////////////////ElementWithTexture
-    ElementWithTexture::ElementWithTexture() {
-        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE));
+    ElementWithTexture::ElementWithTexture() : Element() {
         _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE));
         _myStride = TEXTURED_VERTEX_SIZE;
     }
@@ -63,8 +61,7 @@ namespace mar {
     }
 
     /////////////////////////////////////////////////////////////ElementWithNormalsAndTexture
-    ElementWithNormalsAndTexture::ElementWithNormalsAndTexture() {
-        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE));
+    ElementWithNormalsAndTexture::ElementWithNormalsAndTexture() : Element() {
         _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE));
         _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE));
         _myStride = TEXTURED_NORMAL_VERTEX_SIZE;
