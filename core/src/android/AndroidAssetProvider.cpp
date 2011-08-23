@@ -1,5 +1,6 @@
 #include "AndroidAssetProvider.h"
 #include "APK_functions.h"
+#include "png_functions.h"
 
 namespace android {
 
@@ -15,6 +16,10 @@ namespace android {
 
     std::string AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {
         return readFromPackage(_myApkArchive, theFileName);
+    }
+
+    bool AndroidAssetProvider::loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) {
+        return android::loadTextureFromPNG(_myApkArchive, filename, textureId, width, height, rgb);
     }
 }
 
