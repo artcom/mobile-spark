@@ -1,9 +1,13 @@
 file(GLOB SOURCES *.cpp *.mm *.m)
 file(GLOB HEADERS *.h)
 
-add_library(iOS STATIC ${SOURCES} ${HEADERS})
+set(EXTERNS Boost)
 
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${PROJECT_SOURCE_DIR}/core/src)
+ac_add_library(
+    iOS iOS
+    SOURCES ${SOURCES}
+    HEADERS ${HEADERS}
+    EXTERNS ${EXTERNS}
+    DEPENDS masl
+)
 
-target_link_libraries(iOS masl)

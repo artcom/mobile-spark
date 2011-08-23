@@ -37,18 +37,22 @@ endif(ACMAKE_LOCKED_AND_LOADED)
 
 ### LOAD STANDARD MODULES
 
-include(FindPkgConfig)
+#include(FindPkgConfig)
 
 
 ### LOAD ACMAKE
 
+include(AcGlobal)
+include(AcBoostUtils)
 include(AcVariableUtils)
+include(AcTarget)
 include(AcPlatform)
 include(AcCompiler)
 include(AcBuildConfiguration)
 if (IOS)
     include(AcIOSUtils)
 endif()
+include(AcAddLibrary)
 
 ac_done_registering_build_types()
 
