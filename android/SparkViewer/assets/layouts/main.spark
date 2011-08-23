@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
-<Window name="ourWindow" fullscreen="true" width="300" height="300" clearColor="[0,0.2,0.1,1]">
-    <Transform name="transformB" x="0" y="0" rotationZ="0">
-        <Rectangle name="objectA" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
-        <Rectangle name="objectB" y="5" width="10" height="40" z="1" color="[1,0.0,0.0]"/>
-    </Transform>
-    <Transform name="transformA" x="0" y="0" scaleX="1" >
-        <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
-    </Transform>
-    <Rectangle name="objectB" y="5" width="10" height="40" z="10" color="[1,0.0,0.0]"/>
+<Window name="ourWindow" fullscreen="true" width="300" height="300" clearColor="[1,0.2,0.1,1]">
+    <View name="mainView" world="world1" x="0" width="0.5" height="0.2"/>
+    <World name="world1">    
+        <Transform name="transformB" x="0" y="0" rotationZ="0">
+            <Rectangle name="objectA" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
+            <Rectangle name="objectB" y="5" width="10" height="40" z="1" color="[1,0.0,0.0]"/>
+        </Transform>
+        <Transform name="transformA" x="0" y="0" scaleX="1" >
+            <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
+        </Transform>
+        <Rectangle name="objectB" y="5" width="10" height="40" z="10" color="[1,0.0,0.0]"/>
+    </World>        
 </Window>

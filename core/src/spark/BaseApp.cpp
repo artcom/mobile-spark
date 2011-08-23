@@ -13,6 +13,8 @@
 
 #include "SparkComponentFactory.h"
 
+using namespace mar;
+
 namespace spark {
 
     BaseApp::BaseApp(): _myAnimate(true) {
@@ -35,14 +37,17 @@ namespace spark {
         assetProvider = ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath));
 #endif
         //load layout
-        window = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));
+        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));
+            
+        _myGLCanvas = CanvasPtr( new Canvas());
+        _myGLCanvas->initGLState();
         return true;
     }
 
     void BaseApp::onSizeChanged(int theWidth, int theHeight) {
         AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
-        if (window) {
-            window->onSizeChanged(theWidth, theHeight);
+        if (_mySparkWindow) {
+            _mySparkWindow->onSizeChanged(theWidth, theHeight);
         }
     }
     
@@ -51,7 +56,8 @@ namespace spark {
         if (_myAnimate) {
             animation::AnimationManager::get().doFrame(theCurrentMillis);
         }
-        window->render();
+        _myGLCanvas->preRender(_mySparkWindow->getClearColor());
+        _mySparkWindow->render();
     }
 
     void BaseApp::onTouch() {

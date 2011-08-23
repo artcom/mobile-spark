@@ -17,7 +17,7 @@ namespace spark {
         AC_PRINT << "delete " + _myName;
     }
 
-    void Component::render() const {
+    void Component::render(MatrixStack& theCurrentMatrixStack, matrix theProjectionMatrix) const {
     }
 
     void Component::renderShape() const {
@@ -26,4 +26,10 @@ namespace spark {
     ComponentPtr Component::getChildByName(const std::string & theName) const {
         return ComponentPtr();
     }
+    
+    const std::string & 
+    Component::getType() const {
+        return _myXMLNode->nodeName;
+    }
+
 }

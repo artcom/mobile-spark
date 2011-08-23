@@ -6,6 +6,7 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/XMLNode.h>
+#include <masl/MatrixStack.h>
 
 using namespace masl;
 
@@ -19,9 +20,10 @@ namespace spark {
         Component();
         Component(const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Component();
-        virtual void render() const ;
+        virtual void render(MatrixStack& theCurrentMatrixStack, matrix theProjectionMatrix) const ;
         
         const std::string & getName() const { return _myName; };
+        const std::string & getType() const;
         virtual ComponentPtr getChildByName(const std::string & theName) const; 
     protected:
         const XMLNodePtr _myXMLNode;

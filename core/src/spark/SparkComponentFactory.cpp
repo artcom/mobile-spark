@@ -4,8 +4,10 @@
 #include <masl/Logger.h>
 #include <masl/XMLUtils.h>
 
-#include "Transform.h"
 #include "Window.h"
+#include "View.h"
+#include "World.h"
+#include "Transform.h"
 #include "Rectangle.h"
 
 using namespace masl;
@@ -15,8 +17,11 @@ namespace spark {
     void SparkComponentFactory::setupFactory() {
         AC_PRINT << "SparkComponentFactory setup";
         bool registered = registerComponent("Window", spark::createWindow);
+        registered = registerComponent("View", spark::createView);
+        registered = registerComponent("World", spark::createWorld);
         registered = registerComponent("Transform", spark::createTransform);
         registered = registerComponent("Rectangle", spark::createRectangle);
+        AC_PRINT << "SparkComponentFactory setup done";
 
     };
     

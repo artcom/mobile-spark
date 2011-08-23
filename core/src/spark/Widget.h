@@ -16,7 +16,7 @@ namespace spark {
     public: 
         Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Widget();
-        virtual void render() const;
+        virtual void render(MatrixStack& theCurrentMatrixStack, matrix theProjectionMatrix) const;
 
         void setX(const float theX) { _x = theX; updateMatrix();};
         void setY(const float theY) { _y = theY; updateMatrix();};
@@ -32,9 +32,9 @@ namespace spark {
         void test() {
             AC_PRINT << "test callback";
         }
+        MatrixStack _myLocalMatrixStack; //scale, roation and translation of this node
         
     protected:
-        MatrixStack _myLocalMatrixStack; //scale, roation and translation of this node
     private:
         float _x,_y,_z;
         float _scaleX, _scaleY, _scaleZ;
