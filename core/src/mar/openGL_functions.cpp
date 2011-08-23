@@ -50,13 +50,13 @@ namespace mar {
         return shader;
     }
 
-    GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
-        GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource);
+    GLuint createProgram(const std::string & pVertexSource, const std::string & pFragmentSource) {
+        GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource.c_str());
         if (!vertexShader) {
             return 0;
         }
 
-        GLuint pixelShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource);
+        GLuint pixelShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource.c_str());
         if (!pixelShader) {
             return 0;
         }

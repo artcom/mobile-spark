@@ -1,22 +1,18 @@
-
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
 
-if($ENV{IS_TARGET_PLATFORM_ANDROID})
-	add_library(spark SHARED ${SOURCES} ${HEADERS})
-elseif($ENV{IS_TARGET_PLATFORM_IOS})
-	add_library(spark STATIC ${SOURCES} ${HEADERS})
-endif()
+set(EXTERNS Boost Cml libXML2)
+set(DEPENDS animation mar)
+if(ANDROID)
+    list(APPEND DEPENDS android)
+else(ANDROID)
+    list(APPEND DEPENDS iOS)
+endif(ANDROID)
 
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${LIBXML2_INCLUDE_DIRS})
-include_directories(${CML_INCLUDE_DIR})
-
-include_directories(${PROJECT_SOURCE_DIR}/core/src)
-
-if($ENV{IS_TARGET_PLATFORM_ANDROID})
-	include_directories(${LIBZIP_INCLUDE_DIR})
-	target_link_libraries(spark animation android mar)
-elseif($ENV{IS_TARGET_PLATFORM_IOS})
-	target_link_libraries(spark animation iOS mar)
-endif()
+ac_add_library(
+    spark spark
+    SOURCES ${SOURCES}
+    HEADERS ${HEADERS}
+    EXTERNS ${EXTERNS}
+    DEPENDS ${DEPENDS}
+)

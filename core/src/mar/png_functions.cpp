@@ -2,7 +2,7 @@
 
 namespace mar {
 
-GLuint loadTextureFromPNG(AssetProviderPtr theAssetProvider, const std::string & filename, MaterialPtr theMaterial) {
+GLuint loadTextureFromPNG(AssetProviderPtr theAssetProvider, const std::string & filename, UnlitTexturedMaterialPtr theMaterial) {
 
     theMaterial->textureFile = filename;
     GLuint textureId;

@@ -7,8 +7,8 @@ public class NativeBinding {
   static {
       System.loadLibrary("masl");
       System.loadLibrary("animation");
-      System.loadLibrary("android");
       System.loadLibrary("mar");
+      System.loadLibrary("android");
       System.loadLibrary("spark");
   }
 
