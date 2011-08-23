@@ -1,10 +1,10 @@
 add_subdirectory(masl)
 add_subdirectory(mar)
-if($ENV{IS_TARGET_PLATFORM_ANDROID})
+if(ANDROID)
 	add_subdirectory(android)
-elseif($ENV{IS_TARGET_PLATFORM_IOS})
+else(ANDROID)
 	add_subdirectory(iOS)
-endif()
+endif(ANDROID)
 add_subdirectory(animation)
 add_subdirectory(spark)
 

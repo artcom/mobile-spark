@@ -1,14 +1,13 @@
 file(GLOB SOURCES *.c)
+file(GLOB HEADERS *.h)
 
-set (GLOB HEADERS *.h)
+#find_library(ZLIB_LIBRARY_DIRS
+#   NAMES z zlib
+#)
 
-find_library(ZLIB_LIBRARY
-   NAMES z zlib
-)
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/..)
-
-add_library(png STATIC ${SOURCES} ${HEADERS})
-
-target_link_libraries(png zip ${ZLIB_LIBRARY})
+ac_add_library(png png 
+    SOURCES ${SOURCES} 
+    HEADERS ${HEADERS}
+    #EXTERNS ZLIB
+    STATIC )
 
