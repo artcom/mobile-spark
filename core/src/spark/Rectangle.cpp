@@ -14,7 +14,7 @@ namespace spark {
 
 
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        Widget(theApp, theXMLNode, theParent) {
+        ShapeWidget(theApp, theXMLNode, theParent) {
 
         float width = _myXMLNode->getFloatValue("width");
         float height = _myXMLNode->getFloatValue("height");
@@ -59,7 +59,7 @@ namespace spark {
     Rectangle::~Rectangle() {
     }
 
-    void Rectangle::renderShape() const {
+    /*void Rectangle::renderShape() const {
         _myApp->window->renderShape(_myShape);
-    }
+    }*/
 }

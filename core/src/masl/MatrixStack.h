@@ -3,12 +3,8 @@
 
 #include <stack>
 #include <cmath>
-#include <cml/cml.h>
-#include <cml/mathlib/typedef.h>
+#include "numeric_functions.h"
 
-typedef cml::matrix44f_c matrix;
-typedef cml::vector3f vector;
-typedef cml::quaternionf quaternion;
 
 class MatrixStack {
 private:
@@ -36,8 +32,8 @@ public:
     void pop();
     void push();
  
-    void rotateAxis(const vector vector, const float angle);  
-    void rotateAxisLocal(const vector vector, const float angle);
+    void rotateAxis(const vector3 vector, const float angle);  
+    void rotateAxisLocal(const vector3 vector, const float angle);
     void rotateXAxis(const float angle);  
     void rotateXAxisLocal(const float angle);
     void rotateYAxis(const float angle);  

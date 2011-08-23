@@ -10,6 +10,7 @@
 namespace spark {
     class BaseApp;
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;
+    typedef std::vector<ComponentPtr> VectorOfComponentPtr;
 }
 
 namespace spark {
@@ -18,10 +19,11 @@ namespace spark {
     public: 
         Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Container();
+        virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
         virtual ComponentPtr getChildByName(const std::string & theName) const; 
     protected:
         const BaseAppPtr _myApp;
-        std::vector<ComponentPtr> _myChildren;
+        VectorOfComponentPtr _myChildren;
     private:
 
     };

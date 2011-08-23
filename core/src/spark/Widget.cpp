@@ -31,15 +31,9 @@ namespace spark {
         _myLocalMatrixStack.scale(_scaleX, _scaleY, _scaleZ);
     };
 
-    void Widget::render() const {
-        _myApp->window->matrixStack.push();
-        _myApp->window->matrixStack.multMatrix(_myLocalMatrixStack.getTop());
-
-        renderShape();
+    void Widget::render(MatrixStack& theCurrentMatrixStack, matrix theProjectionMatrix) const {
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-            (*it)->render();
+            (*it)->render(theCurrentMatrixStack, theProjectionMatrix);
         }
-
-        _myApp->window->matrixStack.pop();
     }
 }

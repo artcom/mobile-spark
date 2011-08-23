@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Window name="ourWindow" width="320" height="460" clearColor="[0,0.2,0.1,1]">
+    <View world="hbf" x="50" width="0.5" height="0.2">
+        <Camera type="perspective"/>
+    <View>        
+    <View world="world1" x="0" width="0.5" height="0.2"/>
+        <Camera type="orthogonal"/>
+    <View>        
+    <World id="world1">
+        <Canvas world="hbf"/>
+            <Camera type="perspective"/>
+        </Canvas>            
+        <Transform name="transformB" x="0" y="-2" rotationZ="-1">
+            <Rectangle name="objectA" x="2" y="0" width="3" height="10" color="[0,0.0,1.0]"/>
+            <Rectangle name="objectB" y="5" width="10" height="3" color="[1,0.0,0.0]"/>
+        </Transform>
+        <Transform name="transformA" x="-5" y="0" scaleX="2" >
+            <Rectangle name="objectC" width="2" height="20" color="[0.0,1,0.0]"/>
+            <Image name="imageA" x="2" width="4" height="10" src="assets/textures/texture.png"/>
+        </Transform>
+    </World>
+    <World id="hbf">
+    </World>
+</Window>
+
+
+
+
+
+do() {
+
+fb = new framebuffer(100,100);
+fb.render(ourWorlds.findWorld("hbf"), per_camera);
+
+mainwindow.findWidget("hbf_image").setImage(fb.imge);
+
+}
+
+

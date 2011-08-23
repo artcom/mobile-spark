@@ -28,9 +28,8 @@ namespace spark {
 
     bool DemoApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
-
         //add looping sequence animation
-        ComponentPtr myTransform = window->getChildByName("transformB");
+        ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
         /*RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 2, 500));

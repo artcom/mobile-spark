@@ -70,41 +70,41 @@ void MatrixStack::push() {
 }
  
 // Rotates around an arbitrary vector axis. (world space)
-void MatrixStack::rotateAxis(const vector vector, const float angle) {
+void MatrixStack::rotateAxis(const vector3 vector, const float angle) {
     matrix rotMatrix;
     matrix_rotation_axis_angle(rotMatrix, vector, angle);
     stack.top() = stack.top() * rotMatrix;
 }
  
 // Rotates around an arbitrary vector axis. (local space)
-void MatrixStack::rotateAxisLocal(const vector vector, const float angle) {
+void MatrixStack::rotateAxisLocal(const vector3 vector, const float angle) {
     matrix rotMatrix;
     matrix_rotation_axis_angle(rotMatrix, vector, angle);
     stack.top() = rotMatrix * stack.top();
 }
 
 void MatrixStack::rotateXAxis(const float angle) {
-    vector v(1,0,0);
+    vector3 v(1,0,0);
     rotateAxis(v,angle);
 }
 void MatrixStack::rotateYAxis(const float angle) {
-    vector v(0,1,0);
+    vector3 v(0,1,0);
     rotateAxis(v,angle);
 }
 void MatrixStack::rotateZAxis(const float angle) {
-    vector v(0,0,1);
+    vector3 v(0,0,1);
     rotateAxisLocal(v,angle);
 }
 void MatrixStack::rotateXAxisLocal(const float angle) {
-    vector v(1,0,0);
+    vector3 v(1,0,0);
     rotateAxisLocal(v,angle);
 }
 void MatrixStack::rotateYAxisLocal(const float angle) {
-    vector v(0,1,0);
+    vector3 v(0,1,0);
     rotateAxisLocal(v,angle);
 }
 void MatrixStack::rotateZAxisLocal(const float angle) {
-    vector v(0,0,1);
+    vector3 v(0,0,1);
     rotateAxisLocal(v,angle);
 }
 

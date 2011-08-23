@@ -4,7 +4,10 @@
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <mar/AssetProvider.h>
+#include <mar/Canvas.h>
+
 #include "Window.h"
+
 
 
 namespace spark {
@@ -19,10 +22,12 @@ namespace spark {
             virtual void onSizeChanged(int theWidth, int theHeight);
             virtual void onTouch();
 
-            spark::WindowPtr window; 
+            spark::WindowPtr _mySparkWindow; 
             mar::AssetProviderPtr assetProvider;
         protected:
             bool _myAnimate;
+        private:
+            mar::CanvasPtr _myGLCanvas;            
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;
