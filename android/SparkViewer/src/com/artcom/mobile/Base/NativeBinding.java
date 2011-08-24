@@ -5,10 +5,10 @@ package com.artcom.mobile.Base;
 public class NativeBinding {
 
   static {
-      System.loadLibrary("masl");
-      System.loadLibrary("animation");
-      System.loadLibrary("mar");
-      System.loadLibrary("android");
+      //System.loadLibrary("masl");
+      //System.loadLibrary("animation");
+      //System.loadLibrary("mar");
+      //System.loadLibrary("android");
       System.loadLibrary("spark");
   }
 

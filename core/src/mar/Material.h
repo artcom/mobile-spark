@@ -8,7 +8,6 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/MatrixStack.h>
 
-#include "AssetProvider.h"
 #include "GlHeaders.h"
 
 namespace mar {
@@ -27,11 +26,10 @@ namespace mar {
         GLuint mvpHandle;
 
     protected:
-        Material(const AssetProviderPtr theAssetProvider); 
+        Material(); 
         virtual void setShader();
         virtual void setHandles();
 
-        const AssetProviderPtr _myAssetProvider;
         std::string _myFragmentShader;
         std::string _myVertexShader;
     };
@@ -39,7 +37,7 @@ namespace mar {
 
     class UnlitColoredMaterial : public Material {
     public:
-        UnlitColoredMaterial(const AssetProviderPtr theAssetProvider);
+        UnlitColoredMaterial();
         virtual ~UnlitColoredMaterial();
         virtual void loadShader(const matrix & theMatrix);
 
@@ -61,7 +59,7 @@ namespace mar {
 
     class UnlitTexturedMaterial : public Material {
     public:
-        UnlitTexturedMaterial(const AssetProviderPtr theAssetProvider);
+        UnlitTexturedMaterial();
         virtual ~UnlitTexturedMaterial();
         virtual void loadShader(const matrix & theMatrix);
 

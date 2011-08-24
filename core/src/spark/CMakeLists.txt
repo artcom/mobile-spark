@@ -15,4 +15,5 @@ ac_add_library(
     HEADERS ${HEADERS}
     EXTERNS ${EXTERNS}
     DEPENDS ${DEPENDS}
+    SHARED
 )
