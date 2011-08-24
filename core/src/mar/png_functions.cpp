@@ -13,7 +13,7 @@ GLuint loadTextureFromPNG(const std::string & filename, UnlitTexturedMaterialPtr
     AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb);
 
     theMaterial->textureId = textureId;
-    theMaterial->rgb = rgb;
+    theMaterial->transparency = !rgb;
     theMaterial->width = width;
     theMaterial->height = height;
 

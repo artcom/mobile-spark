@@ -22,4 +22,11 @@ namespace ios
         masl::readFile(_myAssetFolderPath + "/" + theFile, content);
         return content;
     }
+
+    std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const
+    {
+        std::vector<std::string> myLines;
+        //TODO
+        return myLines;
+    }
 }
