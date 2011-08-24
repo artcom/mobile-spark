@@ -17,12 +17,12 @@ cd -
 cd SparkViewer
 
 # update android project
-$ANDROID_TOOL update project --target android-9 --name SparkViewer --path . 
+$ANDROID_TOOL --silent update project --target android-9 --name SparkViewer --path . 
 
 # build java
-ant compile
+ant -quiet compile
 
 # build apk && upload
-ant install
+ant -quiet install
 
 cd -
