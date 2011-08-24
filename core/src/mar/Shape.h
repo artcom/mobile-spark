@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/Singleton.h>
@@ -13,19 +14,17 @@
 
 namespace mar {
 
-    class Shape {
+    class Shape : public boost::enable_shared_from_this<Shape> {
     public:
-        Shape(const bool theTexturedFlag);
+        Shape(const bool theTexturedFlag = false);
         ~Shape();
         virtual void render(const matrix & theMvp) const;
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
 
         std::vector<ElementPtr> elementList; 
     protected:
-        bool _myTextureFlag;
+        bool _myTextureFlag;   //XXX does not make any sense, texture is decided at element level
         size_t _myDataPerVertex;
-    private:
-        virtual void setVertexData() = 0;
     };
     typedef boost::shared_ptr<Shape> ShapePtr;
 
@@ -39,14 +38,19 @@ namespace mar {
         virtual void setVertexData();
     };
 
-
+    class ObjShape : public Shape {
+    public:
+        ObjShape(const std::string & theFile);
+        virtual ~ObjShape();
+        virtual void setDimensions(const float theWidth, const float theHeight) {};
+    };
 
 
     class ShapeFactory : public masl::Singleton<ShapeFactory> {
     public:
         ShapePtr createRectangle(const bool theTexturedFlag);
         //ShapePtr createNinePatch();
-        //ShapePtr createObj();
+        ShapePtr createObj(const std::string & theFile);
     };
 };
 
