@@ -10,7 +10,7 @@ fi
 
 cd ../_build
 cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchains/android.toolchain.cmake ..
-$MAKE_TOOL
+$MAKE_TOOL $1
 
 cd -
 

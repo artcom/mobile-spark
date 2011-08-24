@@ -1,4 +1,7 @@
 #include "AndroidAssetProvider.h"
+
+#include <masl/Logger.h>
+
 #include "APK_functions.h"
 #include "png_functions.h"
 

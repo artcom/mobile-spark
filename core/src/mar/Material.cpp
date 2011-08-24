@@ -1,12 +1,13 @@
 #include "Material.h"
 
 #include <masl/Logger.h>
+
+#include "AssetProvider.h"
 #include "openGL_functions.h"
 
 
 namespace mar {
-    Material::Material(const AssetProviderPtr theAssetProvider) 
-        : _myAssetProvider(theAssetProvider) {
+    Material::Material() {
     }
     
     Material::~Material() {
@@ -31,7 +32,7 @@ namespace mar {
     }
 
     void Material::setShader() {
-        _myVertexShader = _myAssetProvider->getStringFromFile(DEFAULT_VERTEX_SHADER); 
+        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_VERTEX_SHADER); 
     }
 
     void Material::setHandles() {
@@ -39,7 +40,7 @@ namespace mar {
     }
 
     //////////////////////////////////////////////////// UnlitColoredMaterial
-    UnlitColoredMaterial::UnlitColoredMaterial(const AssetProviderPtr theAssetProvider) : Material(theAssetProvider) {
+    UnlitColoredMaterial::UnlitColoredMaterial(){
     }
 
     UnlitColoredMaterial::~UnlitColoredMaterial() {
@@ -52,7 +53,7 @@ namespace mar {
 
     void UnlitColoredMaterial::setShader() {
         Material::setShader();
-        _myFragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_COLORED_FRAGMENT_SHADER); 
+        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_COLORED_FRAGMENT_SHADER); 
     }
 
     void UnlitColoredMaterial::setHandles() {
@@ -61,7 +62,7 @@ namespace mar {
     }
 
     //////////////////////////////////////////////////// UnlitTexturedMaterial
-    UnlitTexturedMaterial::UnlitTexturedMaterial(const AssetProviderPtr theAssetProvider) : Material(theAssetProvider) {
+    UnlitTexturedMaterial::UnlitTexturedMaterial() {
     }
 
     UnlitTexturedMaterial::~UnlitTexturedMaterial() {
@@ -75,7 +76,7 @@ namespace mar {
 
     void UnlitTexturedMaterial::setShader() {
         Material::setShader();
-        _myFragmentShader = _myAssetProvider->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
+        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
     }
 }
 
