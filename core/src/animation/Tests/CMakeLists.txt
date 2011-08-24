@@ -14,4 +14,5 @@ ac_add_library(
     HEADERS ${HEADERS}
     EXTERNS ${EXTERNS}
     DEPENDS animation masl 
+    SHARED
 )

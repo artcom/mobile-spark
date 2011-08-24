@@ -3,6 +3,7 @@
 
 #include <masl/Logger.h>
 #include <masl/XMLUtils.h>
+#include <mar/AssetProvider.h>
 
 #include "Window.h"
 #include "View.h"
@@ -52,7 +53,7 @@ namespace spark {
 
     ComponentPtr SparkComponentFactory::loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath) {
         
-        std::string myLayout = theApp->assetProvider->getStringFromFile(thePath);
+        std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
         xmlDocPtr doc = loadXMLFromMemory(myLayout);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));

@@ -3,7 +3,6 @@
 
 
 #include <boost/smart_ptr/shared_ptr.hpp>
-#include <mar/AssetProvider.h>
 #include <mar/Canvas.h>
 
 #include "Window.h"
@@ -23,7 +22,6 @@ namespace spark {
             virtual void onTouch();
 
             spark::WindowPtr _mySparkWindow; 
-            mar::AssetProviderPtr assetProvider;
         protected:
             bool _myAnimate;
         private:
