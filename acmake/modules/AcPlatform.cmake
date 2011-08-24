@@ -33,7 +33,7 @@ if(ANDROID)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${ARMEABI_NDK_NAME}")
 
     add_definitions(-DANDROID)
-    set(BUILD_SHARED_LIBS true)
+    set(BUILD_SHARED_LIBS false)
 elseif(IOS)
     add_definitions(-DiOS)
 

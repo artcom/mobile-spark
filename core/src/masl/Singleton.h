@@ -13,8 +13,8 @@
 //
 //=============================================================================
 
-#ifndef _ac_mobile_asl_Singleton_h_included_
-#define _ac_mobile_asl_Singleton_h_included_
+#ifndef _ac_mobile_masl_Singleton_h_included_
+#define _ac_mobile_masl_Singleton_h_included_
 
 namespace masl {
 

@@ -2,6 +2,8 @@
 #define _ac_mobile_masl_AssetProvider_h_included_
 
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <masl/Singleton.h>
+#include <masl/Logger.h>
 
 #include "GlHeaders.h"
 
@@ -12,8 +14,20 @@ namespace mar {
         virtual bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) = 0;
 
     };
-
     typedef boost::shared_ptr<AssetProvider> AssetProviderPtr;
+
+
+    class AssetProviderSingleton : public masl::Singleton<AssetProviderSingleton> {
+    friend class masl::Singleton<AssetProviderSingleton>;
+    public:
+
+        void setAssetProvider(AssetProviderPtr theAssetProvider) { _myAssetProvider = theAssetProvider;};
+        const AssetProviderPtr & ap() const { return _myAssetProvider;};
+
+    private:
+        AssetProviderPtr _myAssetProvider;
+    };
+
 };
 
 #endif

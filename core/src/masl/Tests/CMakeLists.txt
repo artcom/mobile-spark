@@ -14,4 +14,5 @@ ac_add_library(
     HEADERS ${HEADERS}
     DEPENDS masl
     EXTERNS ${EXTERNS}
+    SHARED
 )
