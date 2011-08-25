@@ -61,10 +61,15 @@ spark::DemoApp *myDemoApp;
         myDemoApp = new spark::DemoApp();
         myDemoApp->setup((displayLink.timestamp*1000.0),[path UTF8String], "assets/layouts/main.spark");
         myDemoApp->onSizeChanged(width, height);
+
+        
         
     }
     return self;
 }
+
+
+
 
 - (void)render:(id)sender 
 {

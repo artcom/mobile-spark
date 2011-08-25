@@ -35,7 +35,6 @@ namespace masl {
 
     /// read a complete file into a string
     bool readFile(const std::string & theUTF8Filename, std::string & theContent) {
-        
         FILE * pFile;
         char *myCharBuffer;
         pFile = fopen (theUTF8Filename.c_str(),"r");
