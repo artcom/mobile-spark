@@ -17,7 +17,7 @@ namespace spark {
         AC_PRINT << "delete " + _myName;
     }
 
-    void Component::render(MatrixStack& theCurrentMatrixStack, matrix theProjectionMatrix) const {
+    void Component::render(MatrixStack& theCurrentMatrixStack, matrix & theProjectionMatrix) const {
     }
 
     ComponentPtr Component::getChildByName(const std::string & theName) const {

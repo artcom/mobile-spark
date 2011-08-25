@@ -25,6 +25,7 @@ namespace mar {
         GLuint shaderProgram;
         GLuint mvpHandle;
 
+        float transparency;
     protected:
         Material(); 
         virtual void setShader();
@@ -45,7 +46,6 @@ namespace mar {
         std::vector<float> ambient;
         std::vector<float> diffuse;
         std::vector<float> specular;
-        float transparency;
         float shininess;
         short illuminationModel;
 
@@ -67,7 +67,6 @@ namespace mar {
         GLuint textureId;
         GLuint width;
         GLuint height;
-        bool rgb;  //image mode
 
     private:
         virtual void setShader();

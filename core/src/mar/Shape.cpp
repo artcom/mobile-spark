@@ -2,6 +2,7 @@
 
 #include <masl/Logger.h>
 #include "openGL_functions.h"
+#include "ObjImporter.h"
 
 namespace mar {
 
@@ -70,9 +71,22 @@ namespace mar {
         myElement->vertexData[_myDataPerVertex*5 + 1] = theHeight;
     }
 
+    //////////////////////////////////////////////////////////////ObjShape
+    ObjShape::ObjShape() {
+    }
+
+    ObjShape::~ObjShape() {
+    }
+
     //////////////////////////////////////////////////////////////ShapeFactory
     ShapePtr ShapeFactory::createRectangle(const bool theTextureFlag) {
         return ShapePtr(new RectangleShape(theTextureFlag));
+    }
+
+    ShapePtr ShapeFactory::createObj(const std::string & theFile) {
+        ShapePtr myShape = ShapePtr(new ObjShape());
+        ObjImporter::get().importObj(theFile, myShape);
+        return myShape;
     }
 }
 
