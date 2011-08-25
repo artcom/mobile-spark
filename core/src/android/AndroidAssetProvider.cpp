@@ -21,6 +21,11 @@ namespace android {
         return readFromPackage(_myApkArchive, theFileName);
     }
 
+    std::vector<std::string> AndroidAssetProvider::getLineByLineFromFile(const std::string & theFileName) const
+    {
+        return readLineByLineFromPackage(_myApkArchive, theFileName);
+    }
+
     bool AndroidAssetProvider::loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) {
         return android::loadTextureFromPNG(_myApkArchive, filename, textureId, width, height, rgb);
     }

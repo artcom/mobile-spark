@@ -6,7 +6,7 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/function.hpp>
 
-#include "Callback.h"
+#include <masl/Callback.h>
 
 namespace animation {
     
@@ -36,9 +36,9 @@ namespace animation {
         long getDuration() const { return _myDuration;};
         unsigned int getId() const { return _myId; };
 
-        void setOnPlay(CallbackPtr theOnPlay) { _myOnPlay = theOnPlay; };
-        void setOnFinish(CallbackPtr theOnFinish) { _myOnFinish = theOnFinish; };
-        void setOnCancel(CallbackPtr theOnCancel) { _myOnCancel = theOnCancel; };
+        void setOnPlay(masl::CallbackPtr theOnPlay) { _myOnPlay = theOnPlay; };
+        void setOnFinish(masl::CallbackPtr theOnFinish) { _myOnFinish = theOnFinish; };
+        void setOnCancel(masl::CallbackPtr theOnCancel) { _myOnCancel = theOnCancel; };
 
     protected:
         virtual void finishAnimation(const long theTime);
@@ -55,9 +55,9 @@ namespace animation {
         bool _myLoop;
         AnimationWeakPtr _myParent;
 
-        CallbackPtr _myOnPlay;
-        CallbackPtr _myOnFinish;
-        CallbackPtr _myOnCancel;
+        masl::CallbackPtr _myOnPlay;
+        masl::CallbackPtr _myOnFinish;
+        masl::CallbackPtr _myOnCancel;
 
         static unsigned int idCounter;
     };
