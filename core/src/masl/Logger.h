@@ -77,8 +77,7 @@ namespace masl {
     };
 
 
-//#ifdef __ANDROID__
-#ifdef _WIN32
+#ifdef __ANDROID__
     #define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
     #define AC_ERROR const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_ERROR, __FILE__ ,__LINE__).stream) )    
     #define AC_WARNING const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_WARNING, __FILE__ ,__LINE__).stream) )    
