@@ -61,12 +61,24 @@ spark::DemoApp *myDemoApp;
         myDemoApp = new spark::DemoApp();
         myDemoApp->setup((displayLink.timestamp*1000.0),[path UTF8String], "assets/layouts/main.spark");
         myDemoApp->onSizeChanged(width, height);
-
         
+        UITapGestureRecognizer *singleFingerTap = 
+        [[UITapGestureRecognizer alloc] initWithTarget:self 
+                                                action:@selector(handleSingleTap:)];
+
+        [self addGestureRecognizer:singleFingerTap];
+       
         
     }
     return self;
 }
+
+//The event handling method
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    myDemoApp->onTouch();
+}
+
 
 
 
