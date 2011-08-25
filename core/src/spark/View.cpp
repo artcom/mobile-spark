@@ -20,11 +20,11 @@ namespace spark {
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent){
         _myWorldName  = theXMLNode->getStringValue("world");
-        vector2 myPos = theXMLNode->getVector2Value("pos", vector2(0,0));
-        vector2 mySize = theXMLNode->getVector2Value("size", vector2(1,1));
-        AC_PRINT << "view Pos : " << myPos[0] << " / " << myPos[1];
-        AC_PRINT << "view size : " << mySize[0] << " / " << mySize[1];
-        _myGLViewport = ViewportPtr(new Viewport(mySize[0],mySize[1], myPos[0],myPos[1]));
+        _myPos = theXMLNode->getVector2Value("pos", vector2(0,0));
+        _mySize = theXMLNode->getVector2Value("size", vector2(1,1));
+        AC_PRINT << "view Pos : " << _myPos[0] << " / " << _myPos[1];
+        AC_PRINT << "view size : " << _mySize[0] << " / " << _mySize[1];
+        _myGLViewport = ViewportPtr(new Viewport(_mySize[0],_mySize[1], _myPos[0],_myPos[1]));
         
     }
 
@@ -42,7 +42,8 @@ namespace spark {
         matrixStack.clear();
         //create projection matrix
         matrixStack.push();
-        matrixStack.loadOrtho(0.0f, theCanvasWidth, 0.0f, theCanvasHeight, -0.1f, 100.0f);
+        matrixStack.loadOrtho(0.0f, _mySize[0] *theCanvasWidth , 0.0f, _mySize[1] *theCanvasWidth, -0.1f, 100.0f);
+        //matrixStack.loadOrtho(0.0f, theCanvasWidth, 0.0f, theCanvasHeight, -0.1f, 100.0f);
 
         projectionMatrix = matrixStack.getTop();
         matrixStack.pop();

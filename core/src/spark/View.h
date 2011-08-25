@@ -25,6 +25,8 @@ namespace spark {
         
         mar::ViewportPtr _myGLViewport;
         std::string _myWorldName;
+        vector2 _myPos;
+        vector2 _mySize;            
     };
 
     typedef boost::shared_ptr<View> ViewPtr;
