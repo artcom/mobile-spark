@@ -20,7 +20,11 @@ namespace spark {
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent){
         _myWorldName  = theXMLNode->getStringValue("world");
-        _myGLViewport = ViewportPtr(new Viewport(1,1,0,0));
+        vector2 myPos = theXMLNode->getVector2Value("pos", vector2(0,0));
+        vector2 mySize = theXMLNode->getVector2Value("size", vector2(1,1));
+        AC_PRINT << "view Pos : " << myPos[0] << " / " << myPos[1];
+        AC_PRINT << "view size : " << mySize[0] << " / " << mySize[1];
+        _myGLViewport = ViewportPtr(new Viewport(mySize[0],mySize[1], myPos[0],myPos[1]));
         
     }
 

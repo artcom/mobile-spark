@@ -1,9 +1,12 @@
 #include "BaseEntry.h"
 #include "Logger.h"
+#include "string_functions.h"
+#include "SingletonManager.h"
+
 #include "XMLUtils.h"
+#include <dlfcn.h>
 
 namespace masl {
-
     bool loadSpark(const std::string & theFilename) {
         AC_PRINT << "load file: " << theFilename.c_str();
         //test xml-loading
@@ -32,6 +35,7 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,
                                                                           jstring theLogString);
                                                                           
+                                                                          
 };
 
 JNIEXPORT bool JNICALL Java_com_artcom_mobile_Base_NativeBinding_loadSpark(JNIEnv * env, jobject obj,
@@ -46,7 +50,7 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * en
                                                               int theLineNumber, jstring theMessage) {
     jboolean isCopy;
     const char* myMessage = env->GetStringUTFChars(theMessage, &isCopy);                                                                    
-    const char* myFilename = env->GetStringUTFChars(theFilename, &isCopy);                                                                    
+    const char* myFilename = env->GetStringUTFChars(theFilename, &isCopy);  
     masl::Logger::get().log(/*myTime,*/ masl::SEV_PRINT, myFilename, theLineNumber, myMessage);
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,

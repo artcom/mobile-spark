@@ -1,15 +1,16 @@
 package com.artcom.mobile.Base;
 
 //Wrapper for native library
-
+import com.artcom.mobile.Base.AC_Log;
 public class NativeBinding {
-
+  
   static {
-      System.loadLibrary("masl");
-      System.loadLibrary("animation");
-      System.loadLibrary("mar");
-      System.loadLibrary("android");
-      System.loadLibrary("spark");
+	  
+	  System.loadLibrary("masl");
+	  System.loadLibrary("animation");
+	  System.loadLibrary("mar");
+	  System.loadLibrary("android");
+	  System.loadLibrary("spark");
   }
 
   

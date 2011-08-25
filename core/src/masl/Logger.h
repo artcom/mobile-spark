@@ -44,7 +44,7 @@ namespace masl {
         //friend class Singleton< Logger >;  //needed for what?
         public:
             Logger();            
-            void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
+            virtual void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
             void setLoggerTopLevelTag(const std::string & theTagString);               
         private:
             std::string _myTopLevelLogTag;                
@@ -58,7 +58,7 @@ namespace masl {
         MessagePort(Severity theSeverity, const char * theModule, int theId)
             : mySeverity(theSeverity), myModule(theModule), myId(theId)
         {}
-        ~MessagePort() {
+        ~MessagePort() {            
             Logger::get().log(/*myTime,*/ mySeverity, myModule, myId, stream.str());
         }
         /* This getter is used in the gcc branch to avoid printing of the first message token

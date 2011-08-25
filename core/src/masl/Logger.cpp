@@ -45,7 +45,7 @@
 #endif
 
 namespace masl {
-    Logger::Logger() {}
+    Logger::Logger() { _myTopLevelLogTag = "Unset";}
         
         
     void Logger::setLoggerTopLevelTag(const std::string & theTagString) {
@@ -54,8 +54,7 @@ namespace masl {
     void Logger::log(/*Time theTime, */ Severity theSeverity, const char * theModule, int theId, const std::string & theText) {
         char buf[20];
         sprintf(buf,"%i",theId);
-        std::string myLogTag("/");
-        myLogTag += _myTopLevelLogTag;
+        std::string myLogTag(_myTopLevelLogTag);
         myLogTag += "/";
         if (theSeverity == SEV_TESTRESULT) {
             myLogTag += "TestResult";

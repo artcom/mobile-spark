@@ -38,52 +38,37 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 */
 //
-//    $RCSfile: Singleton.h,v $
+//    $RCSfile: SingletonBase.h,v $
 //
 //     $Author: christian $
 //
-//   $Revision: 1.5 $
+//   $Revision: 1.3 $
 //
 // Description:
 //
 //=============================================================================
 
-#ifndef _SINGLETON_INCLUDED_
-#define _SINGLETON_INCLUDED_
+#ifndef _SINGLETON_BASE_INCLUDED_
+#define _SINGLETON_BASE_INCLUDED_
 
-#include "SingletonManager.h"
 
 namespace masl {
 
-/*
-template <class T>
- class Singleton {
-   public:
-      static T& get()
-      {
-         static T ourInstance ;
-         return ourInstance ;
-      }
 
-   protected:
-      Singleton(){}
+/*! \addtogroup aslbase */
+/* @{ */
 
-   private:
-      Singleton( const Singleton& ) ;
-      Singleton& operator=( const Singleton& ) {return *this;}
- };
-*/
-
-template<class T>
-class Singleton : public SingletonBase {
+class  SingletonBase {
 public:
-	static T& get() {
-		// A Singleton caches the instance returned by SingletonManager
-		// in a local static variable.
-		static T& myInstance(SingletonManager::get().SingletonManager::getSingletonInstance<T>());
-		return myInstance;
-	}
+    // The Singleton Manager will call this method on all singletons before it starts deleting them.
+    // This way singletons can correctly shut down, independent of the order of destruction.
+    virtual void stop() {};
+
+	virtual ~SingletonBase() {}
 };
+
+/* @} */
+
 
 }
 

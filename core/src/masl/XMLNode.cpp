@@ -62,6 +62,15 @@ namespace masl {
         }
         return myReturnValue;
     }
+    
+    vector2 XMLNode::getVector2Value(const std::string & theKey, const vector2 theDefault) const {
+        vector2 myReturnValue = theDefault;
+        std::vector<float> myValues = XMLNode::getFloatArrayValue(theKey);
+        for (int i = 0; i < minimum(int(myValues.size()), 2); i++) {
+            myReturnValue[i] = myValues[i];
+        }
+        return myReturnValue;
+    }
 
     std::vector<float> XMLNode::getFloatArrayValue(const std::string & theKey) const {
         std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
