@@ -20,7 +20,7 @@ namespace mar {
     
     void
     Viewport::activate(float theCanvasWidth, float theCanvasHeight) {
-        glViewport(_myPos[0], _myPos[1], theCanvasWidth * _mySize[0], theCanvasHeight * _mySize[1]);
+        glViewport(theCanvasWidth * _myPos[0], theCanvasHeight * _myPos[1], theCanvasWidth * _mySize[0], theCanvasHeight * _mySize[1]);
         checkGlError("glViewport");        
     }
 

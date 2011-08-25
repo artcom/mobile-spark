@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Window name="ourWindow" fullscreen="true" clearColor="[0.1,0.1,0.1,1]">
-    <View name="mainView" world="world1" pos="[0,0]" size="[0.5,0.5]"/>
-    <!--View name="mainView" world="world1" pos="[0.5,0.5]" size="[0.5,0.5]"/-->
+    <View name="mainView" world="world1" pos="[0,0]" size="[1.0,0.95]"/>
+    <View name="secondView" world="world2" pos="[0.0,0.95]" size="[1.0,0.05]"/>
     <World name="world1">    
         <Transform name="transformB" x="170" y="170" rotationZ="0.3">
             <Rectangle name="objectA" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
@@ -17,4 +17,7 @@
         <Rectangle name="objectB" y="0" width="10" height="10" z="10" color="[1,1,1]"/>
         <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
     </World>        
+    <World name="world2">    
+        <Rectangle name="Balken" height="10" width="400" color="[0.0,1,0.0]"/>
+    </World>            
 </Window>
