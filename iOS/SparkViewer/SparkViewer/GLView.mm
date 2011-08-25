@@ -63,8 +63,7 @@ spark::DemoApp *myDemoApp;
         myDemoApp->onSizeChanged(width, height);
         
         UITapGestureRecognizer *singleFingerTap = 
-        [[UITapGestureRecognizer alloc] initWithTarget:self 
-                                                action:@selector(handleSingleTap:)];
+        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
 
         [self addGestureRecognizer:singleFingerTap];
        
@@ -75,7 +74,8 @@ spark::DemoApp *myDemoApp;
 
 //The event handling method
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    CGPoint location = [recognizer locationInView:self];
+    NSLog(@"Touched on  :   %f, %f", location.x, location.y);
     myDemoApp->onTouch();
 }
 
