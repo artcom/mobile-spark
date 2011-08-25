@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/Singleton.h>
@@ -14,7 +13,7 @@
 
 namespace mar {
 
-    class Shape : public boost::enable_shared_from_this<Shape> {
+    class Shape {
     public:
         Shape(const bool theTexturedFlag = false);
         ~Shape();
@@ -40,7 +39,7 @@ namespace mar {
 
     class ObjShape : public Shape {
     public:
-        ObjShape(const std::string & theFile);
+        ObjShape();
         virtual ~ObjShape();
         virtual void setDimensions(const float theWidth, const float theHeight) {};
     };

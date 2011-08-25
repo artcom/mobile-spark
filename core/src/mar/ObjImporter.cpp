@@ -7,6 +7,14 @@
 
 namespace mar {
 
+    ////////////////////////////////Assumptions
+    //obj is exported with normals and texcoords
+    //obj can consist of multiple elements with diverse materials
+    //geometry is triangulated
+    //filename is given with extension
+    //material file .mtl has the same name as .obj file
+    //color of textured materials is ignored
+
     void ObjImporter::faceParseHelper(std::vector<int> &theFaceData, const std::string & theData) {
         size_t pos1 = theData.find_first_of("/");
         size_t pos2 = theData.find_last_of("/");
@@ -46,15 +54,22 @@ namespace mar {
             if (type == "newmtl") {
                 if (myMaterial) {  //save old material in map
                     materialMap[myMaterialId] = myMaterial;
+                    myMaterial->createShader();
                 }
                 myMaterialId = data;
                 myMaterial = MaterialPtr(new UnlitColoredMaterial()); //XXX: here we do not know if we need textures
             } else if (type == "Ka") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->ambient = getFloatTriple(data);
+                std::vector<float> myColor = getFloatTriple(data);
+                myColor.push_back(1);
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->ambient = myColor;
             } else if (type == "Kd") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->diffuse = getFloatTriple(data);
+                std::vector<float> myColor = getFloatTriple(data);
+                myColor.push_back(1);
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->diffuse = myColor;
             } else if (type == "Ks") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->specular = getFloatTriple(data);
+                std::vector<float> myColor = getFloatTriple(data);
+                myColor.push_back(1);
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->specular = myColor;
             } else if (type == "d") {
                 boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->transparency = atof(data.c_str());
             } else if (type == "Tr") {
@@ -66,7 +81,7 @@ namespace mar {
             } else if (type == "map_Kd") {
                 //XXX: here we know that we need textures
                 myMaterial = MaterialPtr(new UnlitTexturedMaterial());
-                loadTextureFromPNG("assets/modelTextures/" + data, boost::static_pointer_cast<UnlitTexturedMaterial>(myMaterial));
+                loadTextureFromPNG("assets/models/textures/" + data, boost::static_pointer_cast<UnlitTexturedMaterial>(myMaterial));
                 //needed?
                 //glBindTexture(GL_TEXTURE_2D, myTextureID);
                 ////non-clamp wrap-modes do only work with power-of-2-textures
@@ -78,6 +93,7 @@ namespace mar {
         }
         if (myMaterial) {
             materialMap[myMaterialId] = myMaterial;
+            myMaterial->createShader();
         }
         AC_PRINT << "num materials " << materialMap.size();
     }
@@ -142,10 +158,12 @@ namespace mar {
 
 
     void ObjImporter::importObj(std::string theObjFileName, ShapePtr theShape) {
+        //AC_PRINT << "import obj " << theObjFileName;
         const std::vector<std::string> theObjFile = 
             AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".obj"));
         const std::vector<std::string> theMtlFile = 
             AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".mtl"));
+        //AC_PRINT << "got data from files " << theObjFile.size() << "  " << theMtlFile.size();
         importMaterialMap(theMtlFile);
 
         ElementPtr element;
@@ -177,7 +195,7 @@ namespace mar {
                 if (element) {
                     createElementVertices(theShape, element, startFaceIndex);
                 }
-                element = ElementPtr(new Element());
+                element = ElementPtr(new ElementWithNormalsAndTexture());
                 element->material = materialMap[data];
                 startFaceIndex = faces.size();
             } else if (type == "f") {
