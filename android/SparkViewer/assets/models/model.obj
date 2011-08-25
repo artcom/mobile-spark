@@ -1,6 +1,6 @@
 # Blender3D v249 OBJ File: materialtest.blend
 # www.blender3d.org
-mtllib materialtest.mtl
+mtllib model.mtl
 v -1.487090 2.256543 2.381167
 v -1.610819 2.105007 2.368634
 v -1.702759 1.932120 2.359321

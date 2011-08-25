@@ -72,8 +72,7 @@ namespace mar {
     }
 
     //////////////////////////////////////////////////////////////ObjShape
-    ObjShape::ObjShape(const std::string & theFile) {
-        ObjImporter::get().importObj(theFile, shared_from_this());
+    ObjShape::ObjShape() {
     }
 
     ObjShape::~ObjShape() {
@@ -85,7 +84,9 @@ namespace mar {
     }
 
     ShapePtr ShapeFactory::createObj(const std::string & theFile) {
-        return ShapePtr(new ObjShape(theFile));
+        ShapePtr myShape = ShapePtr(new ObjShape());
+        ObjImporter::get().importObj(theFile, myShape);
+        return myShape;
     }
 }
 
