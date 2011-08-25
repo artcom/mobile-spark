@@ -13,6 +13,8 @@
 
 #include "SparkComponentFactory.h"
 
+#include <masl/BaseEntry.h>
+
 using namespace mar;
 
 namespace spark {
