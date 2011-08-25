@@ -8,11 +8,21 @@ TestAnimation.h
 
 set(EXTERNS Boost)
 
-ac_add_library(
-    testAnimation testAnimation
-    SOURCES ${SOURCES}
-    HEADERS ${HEADERS}
-    EXTERNS ${EXTERNS}
-    DEPENDS animation masl 
-    SHARED
-)
+if(ANDROID)
+    ac_add_library(
+        testAnimation testAnimation
+        SOURCES ${SOURCES}
+        HEADERS ${HEADERS}
+        EXTERNS ${EXTERNS}
+        DEPENDS animation masl 
+        SHARED
+    )
+else(ANDROID)
+    ac_add_library(
+        testAnimation testAnimation
+        SOURCES ${SOURCES}
+        HEADERS ${HEADERS}
+        EXTERNS ${EXTERNS}
+        DEPENDS animation masl 
+    )
+endif(ANDROID)
