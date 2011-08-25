@@ -64,6 +64,16 @@
 #include <boost/pointer_cast.hpp>
 
 
+#ifdef __APPLE__
+    //iOS
+    #include <iostream>
+#elif __ANDROID__
+    //Android
+    #include <android/log.h>
+#endif
+
+#include "string_functions.h"
+
 namespace masl {
 
 
@@ -108,6 +118,7 @@ public:
 
     template<class T>
     T& getSingletonInstance() const {
+        //__android_log_print(ANDROID_LOG_WARN, "SingletonManager type: ", typeid(T).name());            
         // NOTE: this is only called once per module and Singleton class,
         // so performance doesn't really matter.
         if (_myDelegate) {

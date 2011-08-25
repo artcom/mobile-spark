@@ -3,6 +3,7 @@
 
 #include <masl/Logger.h>
 #include <masl/XMLUtils.h>
+#include <mar/AssetProvider.h>
 
 #include "Window.h"
 #include "View.h"
@@ -10,6 +11,7 @@
 #include "Transform.h"
 #include "Rectangle.h"
 #include "Image.h"
+#include "Shape3D.h"
 
 using namespace masl;
 
@@ -24,13 +26,15 @@ namespace spark {
         registered = registerComponent("Transform", spark::createTransform);
         registered = registerComponent("Rectangle", spark::createRectangle);
         registered = registerComponent("Image", spark::createImage);
+        registered = registerComponent("Shape3D", spark::createShape3D);
         AC_PRINT << "SparkComponentFactory setup done";
     };
     
     SparkComponentFactory::SparkComponentFactory() {
         setupFactory();
     }
-    
+    SparkComponentFactory::~SparkComponentFactory() {}
+
     // Returns 'true' if registration was successful
     bool SparkComponentFactory::registerComponent(const std::string & theComponentName,
                     const CreateComponentCallback theCreateFn) {
@@ -43,6 +47,7 @@ namespace spark {
     }
 
     ComponentPtr SparkComponentFactory::createComponent(const std::string & theComponentName, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
+        AC_PRINT << "create component : " << theComponentName;
         CallbackMap::const_iterator i = _myCreateCallbackMap.find(theComponentName);
         if (i == _myCreateCallbackMap.end()) {
             throw std::runtime_error("Unknown Component Name: " + theComponentName);
@@ -52,7 +57,7 @@ namespace spark {
 
     ComponentPtr SparkComponentFactory::loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath) {
         
-        std::string myLayout = theApp->assetProvider->getStringFromFile(thePath);
+        std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
         xmlDocPtr doc = loadXMLFromMemory(myLayout);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));

@@ -4,8 +4,7 @@ package com.artcom.mobile.Base;
 import com.artcom.mobile.Base.AC_Log;
 public class NativeBinding {
   
-  static {
-	  
+  static {	  
 	  System.loadLibrary("masl");
 	  System.loadLibrary("animation");
 	  System.loadLibrary("mar");

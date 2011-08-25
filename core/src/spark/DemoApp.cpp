@@ -12,6 +12,7 @@
 #include <animation/Easing.h>
 
 #include "Rectangle.h"
+#include "Shape3D.h"
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
@@ -29,7 +30,7 @@ namespace spark {
 
     bool DemoApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
-        //add looping sequence animation
+        //add looping animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
@@ -42,10 +43,23 @@ namespace spark {
         mySequence->add(myAnimation2);
         mySequence->add(myDelay);
         mySequence->setLoop(true);
+        mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
+        mySequence->setOnFinish(masl::CallbackPtr(new masl::FreeFunctionCallback(freeFunction)));
         animation::AnimationManager::get().play(mySequence);
 
-        mySequence->setOnPlay(WidgetCallbackPtr(new WidgetCallback( myRectangle, &Widget::test)));
-        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));
+        myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA")->getChildByName("objTransform");
+        myObject = myTransform->getChildByName("objShape");
+        Shape3DPtr myShape = boost::static_pointer_cast<spark::Shape3D>(myObject);
+        WidgetPropertyAnimationPtr myXRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationX, 0, 6.28, 7000));
+        myXRotate->setLoop(true);
+        WidgetPropertyAnimationPtr myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, 6.28, 9000));
+        myYRotate->setLoop(true);
+        WidgetPropertyAnimationPtr myZRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationZ, 0, 6.28, 13000));
+        myZRotate->setLoop(true);
+        animation::AnimationManager::get().play(myXRotate);
+        animation::AnimationManager::get().play(myYRotate);
+        animation::AnimationManager::get().play(myZRotate);
+        
         return myBaseReturn;
     }
 
@@ -69,6 +83,7 @@ namespace spark {
         myParallel->add(myAnimationC);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
+        
     }
 }
 

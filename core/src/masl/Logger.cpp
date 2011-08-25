@@ -46,7 +46,8 @@
 
 namespace masl {
     Logger::Logger() { _myTopLevelLogTag = "Unset";}
-        
+    Logger::~Logger() {}
+
         
     void Logger::setLoggerTopLevelTag(const std::string & theTagString) {
         _myTopLevelLogTag = theTagString;
