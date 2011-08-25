@@ -16,7 +16,7 @@ namespace mar {
     class Shape {
     public:
         Shape(const bool theTexturedFlag = false);
-        ~Shape();
+        virtual ~Shape();
         virtual void render(const matrix & theMvp) const;
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
 
