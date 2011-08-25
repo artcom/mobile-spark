@@ -1,10 +1,10 @@
-#ifndef _ac_mobile_animation_Callback_h_included_
-#define _ac_mobile_animation_Callback_h_included_
+#ifndef _ac_mobile_masl_Callback_h_included_
+#define _ac_mobile_masl_Callback_h_included_
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/Logger.h>
 
-namespace animation {
+namespace masl {
     class Callback {
     public:
         virtual ~Callback() {};
@@ -31,6 +31,23 @@ namespace animation {
         FreeFunctionPtr _myFunctionPointer; 
     };
     typedef boost::shared_ptr<FreeFunctionCallback> FreeFunctionCallbackPtr;
+
+    template < typename BASE, typename DERIVED = BASE>
+    class MemberFunctionCallback : public Callback {
+    public:
+        MemberFunctionCallback(DERIVED theObject, void (BASE::*theFunctionPtr)()): 
+            _myObjectPtr(theObject),
+            _myFunctionPointer(theFunctionPtr) {
+        };
+        virtual ~MemberFunctionCallback() {};
+
+        virtual void execute() const {
+            (_myObjectPtr.get()->*_myFunctionPointer)();
+        };
+    private:
+        DERIVED _myObjectPtr;
+        void (BASE::*_myFunctionPointer)();
+    };
 };
 
 #endif

@@ -43,8 +43,8 @@ namespace spark {
         mySequence->add(myAnimation2);
         mySequence->add(myDelay);
         mySequence->setLoop(true);
-        mySequence->setOnPlay(WidgetCallbackPtr(new WidgetCallback( myRectangle, &Widget::test)));
-        mySequence->setOnFinish(animation::FreeFunctionCallbackPtr(new animation::FreeFunctionCallback(freeFunction)));
+        mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
+        mySequence->setOnFinish(masl::CallbackPtr(new masl::FreeFunctionCallback(freeFunction)));
         animation::AnimationManager::get().play(mySequence);
 
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA")->getChildByName("objTransform");
@@ -59,7 +59,6 @@ namespace spark {
         animation::AnimationManager::get().play(myXRotate);
         animation::AnimationManager::get().play(myYRotate);
         animation::AnimationManager::get().play(myZRotate);
-
 
         return myBaseReturn;
     }

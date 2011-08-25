@@ -5,8 +5,8 @@
 
 #include <masl/Logger.h>
 #include <masl/MatrixStack.h>
+#include <masl/Callback.h>
 #include <animation/PropertyAnimation.h>
-#include <animation/Callback.h>
 
 #include "Container.h"
 
@@ -29,7 +29,7 @@ namespace spark {
         void setRotationZ(const float theRotationZ) { _rotationZ = theRotationZ; updateMatrix();};
         void setAlpha(const float theAlpha)  { _alpha = theAlpha; };
 
-        void test() {
+        virtual void test() {
             AC_PRINT << "test callback";
         }
         MatrixStack _myLocalMatrixStack; //scale, roation and translation of this node
@@ -53,23 +53,6 @@ namespace spark {
     typedef void (Widget::* WidgetMemberFunction)();
     typedef animation::PropertyAnimation<WidgetPtr, WidgetPropertySetterFunction> WidgetPropertyAnimation;
     typedef boost::shared_ptr<WidgetPropertyAnimation>  WidgetPropertyAnimationPtr;
-
-    class WidgetCallback : public animation::Callback {
-    public:
-        WidgetCallback(WidgetPtr theWidget, WidgetMemberFunction theFunctionPtr): 
-            animation::Callback(),
-            _myWidgetPtr(theWidget),
-            _myFunctionPointer(theFunctionPtr) {
-        };
-        virtual ~WidgetCallback() {};
-
-        virtual void execute() const {
-            (_myWidgetPtr.get()->*_myFunctionPointer)();
-        };
-    private:
-        WidgetPtr _myWidgetPtr;
-        WidgetMemberFunction _myFunctionPointer;
-    };
-    typedef boost::shared_ptr<WidgetCallback> WidgetCallbackPtr;
+    typedef boost::shared_ptr<MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
 };
 #endif
