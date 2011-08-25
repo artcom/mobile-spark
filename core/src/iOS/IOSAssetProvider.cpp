@@ -23,7 +23,7 @@ namespace ios
         return content;
     }
 
-    std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const
+    std::vector<std::string> IOSAssetProvider::getLineByLineFromFile(const std::string & theFile) const
     {
         std::vector<std::string> myLines;
         //TODO
