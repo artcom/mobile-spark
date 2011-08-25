@@ -6,7 +6,8 @@ SET(SDKVER "4.3")
 SET(DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
 SET(SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATFORM}${SDKVER}.sdk")
 SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
-SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "Compiler Default")
+SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "")
+
 
 
 #set target device: "1" -> iPhone, "2" -> iPad, "1,2 " -> both (remember the <whitespace> after the '2' !!!)

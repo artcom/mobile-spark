@@ -48,31 +48,12 @@
 //
 //=============================================================================
 
-#ifndef _SINGLETON_INCLUDED_
-#define _SINGLETON_INCLUDED_
+#ifndef _ac_mobile_masl_Singleton_h_included_
+#define _ac_mobile_masl_Singleton_h_included_
 
 #include "SingletonManager.h"
 
 namespace masl {
-
-/*
-template <class T>
- class Singleton {
-   public:
-      static T& get()
-      {
-         static T ourInstance ;
-         return ourInstance ;
-      }
-
-   protected:
-      Singleton(){}
-
-   private:
-      Singleton( const Singleton& ) ;
-      Singleton& operator=( const Singleton& ) {return *this;}
- };
-*/
 
 template<class T>
 class Singleton : public SingletonBase {

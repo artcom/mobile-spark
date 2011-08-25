@@ -41,10 +41,11 @@ namespace masl {
     enum Severity {SEV_PRINT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_TESTRESULT, SEV_DISABLED};
     
     class Logger : public Singleton<Logger> {
-        //friend class Singleton< Logger >;  //needed for what?
         public:
-            Logger();            
-            virtual void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
+            Logger();  
+            ~Logger();
+                      
+            void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
             void setLoggerTopLevelTag(const std::string & theTagString);               
         private:
             std::string _myTopLevelLogTag;                
@@ -76,6 +77,7 @@ namespace masl {
     };
 
 
+//#ifdef __ANDROID__
 #ifdef _WIN32
     #define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
     #define AC_ERROR const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_ERROR, __FILE__ ,__LINE__).stream) )    

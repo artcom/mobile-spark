@@ -49,7 +49,7 @@ macro(ac_add_library LIBRARY_NAME LIBRARY_PATH)
     # put arguments into the THIS_LIBRARY namespace
     parse_arguments(THIS_LIBRARY
         "SOURCES;HEADERS;DEPENDS;EXTERNS"
-        "STATIC;IMPORTED;IMPORTED_LOCATION"
+        "STATIC;SHARED;IMPORTED;IMPORTED_LOCATION"
         ${ARGN}
     )
     

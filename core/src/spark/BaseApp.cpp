@@ -11,6 +11,7 @@
     #include <ios/IOSAssetProvider.h>
 #endif
 
+#include <mar/AssetProvider.h>
 #include "SparkComponentFactory.h"
 
 #include <masl/BaseEntry.h>
@@ -32,10 +33,10 @@ namespace spark {
         animation::AnimationManager::get().init(theCurrentMillis);
 
 #ifdef __ANDROID__
-        assetProvider = android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath));
+        AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
 #endif
 #if __APPLE__
-        assetProvider = ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath));
+        AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
 #endif
         //load layout
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));

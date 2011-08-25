@@ -1,7 +1,6 @@
 #ifndef _included_mobile_spark_Rectangle_
 #define _included_mobile_spark_Rectangle_
 
-#include <mar/Shape.h>
 #include "ShapeWidget.h"
 
 using namespace mar;
@@ -15,7 +14,6 @@ namespace spark {
 
     private:
         std::vector<float> _myColor;
-        void setVertexData(ElementPtr theElement, const float theWidth, const float theHeight);
     };
 
     typedef boost::shared_ptr<Rectangle> RectanglePtr;
