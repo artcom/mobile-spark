@@ -11,18 +11,34 @@ fi
 cd ../_build
 cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchains/android.toolchain.cmake ..
 $MAKE_TOOL
+BUILD_OK=$?
 
 cd -
 
-cd SparkViewer
+if [ $BUILD_OK == "0" ] 
+then
+    cd SparkViewer
+    
+    # update android project
+    $ANDROID_TOOL update project --target android-9 --name SparkViewer --path . 
+    BUILD_OK=$?
+fi
 
-# update android project
-$ANDROID_TOOL update project --target android-9 --name SparkViewer --path . 
-
-# build java
-ant compile
-
-# build apk && upload
-ant install
-
+if [ $BUILD_OK == "0" ] 
+then
+    
+    # build java
+    ant compile
+    BUILD_OK=$?
+fi
+    
+if [ $BUILD_OK == "0" ] 
+then
+    # build apk && upload
+    ant install
+    BUILD_OK=$?
+fi
+    
 cd -
+
+echo "build done"
