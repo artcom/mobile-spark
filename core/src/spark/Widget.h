@@ -15,8 +15,8 @@ namespace spark {
     class Widget : public Container {
     public: 
         Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
-        virtual ~Widget();
-        virtual void render(MatrixStack& theCurrentMatrixStack, matrix theProjectionMatrix) const;
+        virtual ~Widget() = 0;
+        virtual void render(MatrixStack& theCurrentMatrixStack, matrix & theProjectionMatrix) const;
 
         void setX(const float theX) { _x = theX; updateMatrix();};
         void setY(const float theY) { _y = theY; updateMatrix();};
