@@ -69,6 +69,12 @@ namespace masl {
         #ifdef __APPLE__
             //iOS
         switch (theSeverity) {
+            case SEV_DEBUG:
+                std::cout << myLogTag.c_str() << " DEBUG: " << theText.c_str() << "\n";
+                break;
+            case SEV_INFO:
+                std::cout << myLogTag.c_str() << " INFO: " << theText.c_str() << "\n";
+                break;
             case SEV_WARNING:
                 std::cout << myLogTag.c_str() << " WARNING: " << theText.c_str() << "\n";
                 break;
@@ -86,9 +92,13 @@ namespace masl {
         #elif __ANDROID__
             //Android
         switch (theSeverity) {
+            case SEV_DEBUG :
+                __android_log_print(ANDROID_LOG_DEBUG, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
+                break;
             case SEV_WARNING :
                 __android_log_print(ANDROID_LOG_WARN, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
                 break;
+            case SEV_INFO :
             case SEV_PRINT :
                 __android_log_print(ANDROID_LOG_INFO, myLogTag.c_str(), theText.c_str());//__VA_ARGS__) 
                 break;
