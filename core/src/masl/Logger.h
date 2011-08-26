@@ -78,11 +78,15 @@ namespace masl {
 
 
 #ifdef __ANDROID__
+    #define AC_DEBUG const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_DEBUG, __FILE__ ,__LINE__).stream) )
+    #define AC_INFO const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_INFO, __FILE__ ,__LINE__).stream) )
     #define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
     #define AC_ERROR const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_ERROR, __FILE__ ,__LINE__).stream) )    
     #define AC_WARNING const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_WARNING, __FILE__ ,__LINE__).stream) )    
     #define AC_TEST_RESULT const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_TESTRESULT, __FILE__ ,__LINE__).stream) )                    
 #else
+    #define AC_INFO masl::MessagePort(masl::SEV_INFO, __FILE__ ,__LINE__).getStream()
+    #define AC_DEBUG masl::MessagePort(masl::SEV_DEBUG, __FILE__ ,__LINE__).getStream()
     #define AC_PRINT masl::MessagePort(masl::SEV_PRINT, __FILE__ ,__LINE__).getStream()
     #define AC_ERROR masl::MessagePort(masl::SEV_ERROR, __FILE__ ,__LINE__).getStream()
     #define AC_WARNING masl::MessagePort(masl::SEV_WARNING, __FILE__ ,__LINE__).getStream()

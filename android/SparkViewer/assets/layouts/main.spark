@@ -12,9 +12,10 @@
             <Transform name="objTransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
                 <Shape3D name="objShape" src="assets/models/model"/>
             </Transform>
-            <Image name="imageA" x="2" z="1" height="100" src="assets/textures/texture.png"/>
+            <Image name="imageA" x="2" z="1" src="assets/textures/texture.png"/>
         </Transform>
         <Rectangle name="objectB" y="0" width="10" height="10" z="10" color="[1,1,1]"/>
+        <Image name="imageA" x="0" z="0" src="assets/textures/texture.png"/>
         <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
     </World>        
     <World name="world2">    

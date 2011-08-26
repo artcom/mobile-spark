@@ -2,7 +2,7 @@
 
 #include "SparkComponentFactory.h"
 #include "Widget.h"
-
+#include <mar/openGL_functions.h>
 using namespace mar;
 
 namespace spark {
@@ -40,14 +40,11 @@ namespace spark {
     void
     View::activate(float theCanvasWidth, float theCanvasHeight) {
         matrixStack.clear();
-        //create projection matrix
+        
         matrixStack.push();
-        matrixStack.loadOrtho(0.0f, _mySize[0] *theCanvasWidth , 0.0f, _mySize[1] *theCanvasWidth, -0.1f, 100.0f);
-        //matrixStack.loadOrtho(0.0f, theCanvasWidth, 0.0f, theCanvasHeight, -0.1f, 100.0f);
-
+        matrixStack.loadOrtho(0.0f, _mySize[0] *theCanvasWidth , 0.0f, _mySize[1] *theCanvasHeight, -0.1f, 100.0f);
         projectionMatrix = matrixStack.getTop();
-        matrixStack.pop();
-          
+        matrixStack.pop();          
         _myGLViewport->activate(theCanvasWidth, theCanvasHeight);
     }    
 }
