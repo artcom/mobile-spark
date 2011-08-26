@@ -19,10 +19,12 @@ void png_zip_read(png_structp png_ptr, png_bytep data, png_size_t length) {
 }
 
 bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) {
-  AC_PRINT << "load texture file name " << filename;
-  file = zip_fopen(theAPKArchive, filename.c_str(), 0);
+  std::string myFilename = masl::trimall(filename);
+    
+  AC_PRINT << "load texture file name ' " << myFilename << "'";
+  file = zip_fopen(theAPKArchive, myFilename.c_str(), 0);
   if (!file) {
-    AC_ERROR << "Error opening " << filename << " from APK";
+    AC_ERROR << "Error opening " << myFilename << " from APK";
     return false;
   }
 
@@ -36,7 +38,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   int is_png = !png_sig_cmp(header, 0, 8);
   if (!is_png) {
     zip_fclose(file);
-    AC_ERROR << "Not a png file : " << filename;
+    AC_ERROR << "Not a png file : " << myFilename;
     return false;
   }
 
@@ -45,7 +47,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
       NULL, NULL);
   if (!png_ptr) {
     zip_fclose(file);
-    AC_ERROR << "Unable to create png struct : " << filename;
+    AC_ERROR << "Unable to create png struct : " << myFilename;
     return (false);
   }
 
@@ -53,7 +55,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   png_infop info_ptr = png_create_info_struct(png_ptr);
   if (!info_ptr) {
     png_destroy_read_struct(&png_ptr, (png_infopp) NULL, (png_infopp) NULL);
-    AC_ERROR << "Unable to create png info : " << filename;
+    AC_ERROR << "Unable to create png info : " << myFilename;
     zip_fclose(file);
     return (false);
   }
@@ -62,7 +64,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   png_infop end_info = png_create_info_struct(png_ptr);
   if (!end_info) {
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-    AC_ERROR << "Unable to create png end info : " << filename;
+    AC_ERROR << "Unable to create png end info : " << myFilename;
     zip_fclose(file);
     return (false);
   }
@@ -70,7 +72,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   //png error stuff, not sure libpng man suggests this.
   if (setjmp(png_jmpbuf(png_ptr))) {
     zip_fclose(file);
-    AC_ERROR << "Error during setjmp : " << filename;
+    AC_ERROR << "Error during setjmp : " << myFilename;
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     return (false);
   }
@@ -104,7 +106,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   if (!image_data) {
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-    AC_ERROR << "Unable to allocate image_data while loading " << filename;
+    AC_ERROR << "Unable to allocate image_data while loading " << myFilename;
     zip_fclose(file);
     return false;
   }
@@ -115,7 +117,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     delete[] image_data;
-    AC_ERROR << "Unable to allocate row_pointer while loading " << filename;
+    AC_ERROR << "Unable to allocate row_pointer while loading " << myFilename;
     zip_fclose(file);
     return false;
   }

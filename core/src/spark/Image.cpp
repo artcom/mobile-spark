@@ -18,14 +18,14 @@ namespace spark {
         ShapeWidget(theApp, theXMLNode, theParent) {
 
         _mySrc = _myXMLNode->getStringValue("src");
-        _myShape = ShapeFactory::get().createRectangle(true);
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(_myShape->elementList[0]->material);    
-        loadTextureFromPNG(_mySrc, myMaterial);
-        float width = _myXMLNode->getFloatValue("width", myMaterial->width);
-        float height = _myXMLNode->getFloatValue("height", myMaterial->height);
-        _myShape->setDimensions(width, height);
+        setShape(ShapeFactory::get().createRectangle(true, _mySrc));
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
+        //loadTextureFromPNG(_mySrc, myMaterial);
+        float width = _myXMLNode->getFloatValue("width", myMaterial->getTexture()->width);
+        float height = _myXMLNode->getFloatValue("height", myMaterial->getTexture()->height);
+        getShape()->setDimensions(width, height);
     }
 
     Image::~Image() {
-    }
+    }        
 }

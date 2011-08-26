@@ -19,6 +19,13 @@ namespace spark {
 
     void Component::render(MatrixStack& theCurrentMatrixStack, matrix & theProjectionMatrix) const {
     }
+    
+    void Component::onPause() const  {
+        AC_PRINT << "Spark::Component " << getName() << " onPause";
+    }
+    void Component::onResume() const  {
+        AC_PRINT << "Spark::Component " << getName() << " onResume";
+    }
 
     ComponentPtr Component::getChildByName(const std::string & theName) const {
         return ComponentPtr();

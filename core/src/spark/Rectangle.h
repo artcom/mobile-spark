@@ -11,7 +11,7 @@ namespace spark {
     public: 
         Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Rectangle();
-
+    
     private:
         std::vector<float> _myColor;
     };

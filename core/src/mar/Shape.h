@@ -18,6 +18,7 @@ namespace mar {
         Shape(const bool theTexturedFlag = false);
         virtual ~Shape();
         virtual void render(const matrix & theMvp) const;
+        virtual void initGL();
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
 
         std::vector<ElementPtr> elementList; 
@@ -30,7 +31,7 @@ namespace mar {
 
     class RectangleShape : public Shape {
     public:
-        RectangleShape(const bool theTexturedFlag);
+        RectangleShape(const bool theTexturedFlag, const std::string & theTextureSrc = "");
         virtual ~RectangleShape();
         virtual void setDimensions(const float theWidth, const float theHeight);
     private:
@@ -47,7 +48,7 @@ namespace mar {
 
     class ShapeFactory : public masl::Singleton<ShapeFactory> {
     public:
-        ShapePtr createRectangle(const bool theTexturedFlag);
+        ShapePtr createRectangle(const bool theTexturedFlag, const std::string & theTextureSrc = "");
         ~ShapeFactory();        
         //ShapePtr createNinePatch();
         ShapePtr createObj(const std::string & theFile);

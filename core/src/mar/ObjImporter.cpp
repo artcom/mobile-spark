@@ -81,8 +81,8 @@ namespace mar {
                 boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel = atof(data.c_str());
             } else if (type == "map_Kd") {
                 //XXX: here we know that we need textures
-                myMaterial = MaterialPtr(new UnlitTexturedMaterial());
-                loadTextureFromPNG("assets/models/textures/" + data, boost::static_pointer_cast<UnlitTexturedMaterial>(myMaterial));
+                myMaterial = MaterialPtr(new UnlitTexturedMaterial("assets/models/textures/" + data));
+                //loadTextureFromPNG("assets/models/textures/" + data, boost::static_pointer_cast<UnlitTexturedMaterial>(myMaterial));
                 //needed?
                 //glBindTexture(GL_TEXTURE_2D, myTextureID);
                 ////non-clamp wrap-modes do only work with power-of-2-textures

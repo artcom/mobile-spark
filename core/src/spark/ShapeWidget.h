@@ -11,9 +11,11 @@ namespace spark {
             ShapeWidget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
             virtual ~ShapeWidget() = 0;
             virtual void renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const;
-            
-            mar::ShapePtr _myShape;            
+            virtual void onResume() const;        
+            mar::ShapePtr getShape();            
+            void setShape( mar::ShapePtr theShapePtr);            
         private:
+            mar::ShapePtr _myShape;            
     };
     typedef boost::shared_ptr<ShapeWidget> ShapeWidgetPtr;
 };

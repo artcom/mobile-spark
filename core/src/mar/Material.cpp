@@ -4,6 +4,7 @@
 
 #include "AssetProvider.h"
 #include "openGL_functions.h"
+#include "png_functions.h"
 
 
 namespace mar {
@@ -15,6 +16,9 @@ namespace mar {
 
     void Material::createShader() {
         setShader();
+        initGL();
+    }
+    void Material::initGL() {
         shaderProgram = createProgram(_myVertexShader, _myFragmentShader);
         if (!shaderProgram) {
             AC_ERROR << "Could not create program.";
@@ -32,9 +36,7 @@ namespace mar {
     }
 
     void Material::setShader() {
-        AC_PRINT << "about to get assetprovider";
         _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_VERTEX_SHADER); 
-        AC_PRINT << "got assetprovider";
     }
 
     void Material::setHandles() {
@@ -55,9 +57,7 @@ namespace mar {
 
     void UnlitColoredMaterial::setShader() {
         Material::setShader();
-        AC_PRINT << "about to get assetprovider";
         _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_COLORED_FRAGMENT_SHADER); 
-        AC_PRINT << "got assetprovider";
             
     }
 
@@ -66,8 +66,22 @@ namespace mar {
         colorHandle = glGetUniformLocation(shaderProgram, "a_color");
     }
 
+
+    //////////////////////////////////////////////////// Texture
+    Texture::Texture() :_myTextureId(0){
+    }
+    
+    GLuint Texture::getTextureId() {
+        return _myTextureId;
+    }
+    void Texture::setTextureId(GLuint theTextureId){
+        _myTextureId = theTextureId;
+    }
+
     //////////////////////////////////////////////////// UnlitTexturedMaterial
-    UnlitTexturedMaterial::UnlitTexturedMaterial() {
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) {
+        _mySrc = theSrc;
+        _myTexture = TexturePtr(new Texture());
     }
 
     UnlitTexturedMaterial::~UnlitTexturedMaterial() {
@@ -75,16 +89,20 @@ namespace mar {
 
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
-        glBindTexture(GL_TEXTURE_2D, textureId);
+        glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
         glBindAttribLocation(shaderProgram, 1, "a_texCoord0");
     }
 
     void UnlitTexturedMaterial::setShader() {
         Material::setShader();
-        AC_PRINT << "about to get assetprovider";
         _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
-        AC_PRINT << "got assetprovider";
             
     }
+    void UnlitTexturedMaterial::initGL() {
+        Material::initGL();
+        loadTextureFromPNG(_mySrc, _myTexture);  
+        transparency = _myTexture->transparency;
+    }
+    
 }
 

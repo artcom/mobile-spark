@@ -9,18 +9,20 @@
 #include <masl/MatrixStack.h>
 
 #include "GlHeaders.h"
+#include "Texture.h"
 
 namespace mar {
 
     const std::string DEFAULT_VERTEX_SHADER = "assets/shaders/default_vertex.glsl";
     const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "assets/shaders/default_colored_fragment.glsl";
     const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "assets/shaders/default_textured_fragment.glsl";
-
+            
     class Material {
     public:
         virtual ~Material();
         virtual void createShader();
         virtual void loadShader(const matrix & theMatrix);
+        virtual void initGL();
 
         GLuint shaderProgram;
         GLuint mvpHandle;
@@ -59,17 +61,19 @@ namespace mar {
 
     class UnlitTexturedMaterial : public Material {
     public:
-        UnlitTexturedMaterial();
+        UnlitTexturedMaterial(const std::string & theSrc);
         virtual ~UnlitTexturedMaterial();
         virtual void loadShader(const matrix & theMatrix);
-
-        std::string textureFile; //needed?
-        GLuint textureId;
-        GLuint width;
-        GLuint height;
-
+        virtual void initGL();
+        TexturePtr getTexture() {return _myTexture;}
+        //GLuint textureId;
+        TexturePtr _myTexture;
+        //GLuint width;
+        //GLuint height;
     private:
         virtual void setShader();
+        std::string _mySrc;     
+                   
     };
     typedef boost::shared_ptr<UnlitTexturedMaterial> UnlitTexturedMaterialPtr;
 };

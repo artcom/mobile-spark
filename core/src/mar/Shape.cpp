@@ -22,14 +22,25 @@ namespace mar {
             checkGlError("glDrawElements");
         }
     }
+    
+    void Shape::initGL() {
+        for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
+                                                      it != elementList.end(); ++it) {
+            ElementPtr element = *it;
+            if (element && element->material ) {
+                 element->material->initGL();
+            }
+
+        }
+    }
 
     //////////////////////////////////////////////////////////////RectangleShape
-    RectangleShape::RectangleShape(const bool theTextureFlag) : Shape(theTextureFlag) {
+    RectangleShape::RectangleShape(const bool theTextureFlag, const std::string & theTextureSrc) : Shape(theTextureFlag) {
         ElementPtr myElement;
         MaterialPtr myMaterial;
         if (theTextureFlag) {
             myElement = ElementPtr(new ElementWithTexture());
-            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial());
+            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc));
         } else {
             myElement = ElementPtr(new Element());
             myMaterial = UnlitColoredMaterialPtr(new UnlitColoredMaterial());
@@ -38,6 +49,7 @@ namespace mar {
         elementList.push_back(myElement);
         myMaterial->createShader();
         setVertexData();
+        initGL();
     }
 
     RectangleShape::~RectangleShape() {
@@ -81,8 +93,8 @@ namespace mar {
     //////////////////////////////////////////////////////////////ShapeFactory
     ShapeFactory::~ShapeFactory() {}
         
-    ShapePtr ShapeFactory::createRectangle(const bool theTextureFlag) {
-        return ShapePtr(new RectangleShape(theTextureFlag));
+    ShapePtr ShapeFactory::createRectangle(const bool theTextureFlag, const std::string & theTextureSrc) {
+        return ShapePtr(new RectangleShape(theTextureFlag, theTextureSrc));
     }
 
     ShapePtr ShapeFactory::createObj(const std::string & theFile) {

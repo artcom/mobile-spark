@@ -24,13 +24,14 @@ namespace spark {
             _myColor.push_back(1.0f);
         }
 
-        _myShape = ShapeFactory::get().createRectangle(false);
+        setShape(ShapeFactory::get().createRectangle(false));
 
         //XXX
-        boost::static_pointer_cast<UnlitColoredMaterial>(_myShape->elementList[0]->material)->diffuse = _myColor;
-        _myShape->setDimensions(width, height);
+        boost::static_pointer_cast<UnlitColoredMaterial>(getShape()->elementList[0]->material)->diffuse = _myColor;
+        getShape()->setDimensions(width, height);
     }
 
     Rectangle::~Rectangle() {
     }
+    
 }

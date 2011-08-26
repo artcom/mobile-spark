@@ -4,18 +4,18 @@
 
 namespace mar {
 
-GLuint loadTextureFromPNG(const std::string & filename, UnlitTexturedMaterialPtr theMaterial) {
+GLuint loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
 
-    theMaterial->textureFile = filename;
+    //theMaterial->textureFile = filename;
     GLuint textureId;
     int width, height;
     bool rgb;
     AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb);
-
-    theMaterial->textureId = textureId;
-    theMaterial->transparency = !rgb;
-    theMaterial->width = width;
-    theMaterial->height = height;
+        
+    theTexture->setTextureId(textureId);
+    theTexture->transparency = !rgb;
+    theTexture->width = width;
+    theTexture->height = height;
 
     return textureId;
 }
