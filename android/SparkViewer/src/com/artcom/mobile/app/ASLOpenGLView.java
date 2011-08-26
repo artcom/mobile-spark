@@ -17,10 +17,10 @@ public class ASLOpenGLView extends GLSurfaceView {
     
     private EGLRenderer myRenderer;
 
-    public ASLOpenGLView(Context context) {
+    public ASLOpenGLView(Context context, boolean firstTime) {
         super(context);
-        myRenderer = new EGLRenderer(context);
-        init();
+        myRenderer = new EGLRenderer(context, firstTime);
+        init();        
     }
 
     @Override

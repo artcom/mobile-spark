@@ -91,6 +91,27 @@ namespace masl {
         return std::string("[") + lastFileNamePart(file_name) + ":" + as_string(line_number) + "]";
     }
     
+    inline std::string trimLeft (const std::string & theString, const std::string & theTrimChars = " " ) {
+        std::string myString(theString);
+        return myString.erase(0, theString.find_first_not_of ( theTrimChars ));
+    }
+
+    inline std::string trimRight (const std::string & theString, const std::string & theTrimChars = " ") {
+        std::string myString(theString);
+        return myString.erase(theString.find_last_not_of ( theTrimChars ) + 1);
+    }
+
+    inline std::string trim (const std::string & theString, const std::string & theTrimChars = " ") {
+        std::string myString(theString);
+        return trimLeft ( trimRight ( myString, theTrimChars), theTrimChars);
+    }    
+    inline std::string trimall (const std::string & theString) {
+        std::string myString(theString);
+        myString = masl::trim(myString, " ");
+        myString = masl::trim(myString, "\t");
+        myString = masl::trim(myString, "\n");
+        return masl::trim(myString, "\r");   
+    }    
 } //Namespace masl
 
 #endif

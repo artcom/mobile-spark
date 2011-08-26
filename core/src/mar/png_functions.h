@@ -6,7 +6,7 @@
 #include "Material.h"
 
 namespace mar {
-    GLuint loadTextureFromPNG (const std::string & filename, UnlitTexturedMaterialPtr theMaterial);
+    GLuint loadTextureFromPNG (const std::string & filename, TexturePtr theTexture);//UnlitTexturedMaterialPtr theMaterial);
 };
 
 #endif 

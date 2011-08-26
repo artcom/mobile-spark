@@ -20,6 +20,8 @@ namespace spark {
             virtual void onFrame(const long theCurrentMillis);
             virtual void onSizeChanged(int theWidth, int theHeight);
             virtual void onTouch();
+            virtual void onPause();
+            virtual void onResume();
 
             spark::WindowPtr _mySparkWindow; 
         protected:

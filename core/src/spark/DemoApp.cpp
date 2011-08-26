@@ -30,6 +30,7 @@ namespace spark {
 
     bool DemoApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
+        //return myBaseReturn;            
         //add looping animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
@@ -64,7 +65,7 @@ namespace spark {
     }
 
     void DemoApp::onTouch() {
-
+        //return;
         //add two parallel animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
@@ -100,6 +101,8 @@ extern "C" {
                                                                  jstring layoutFile);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj,
                                                                  jlong currentMillis);
+    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj);
+    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
                                                                  jint width, jint height);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onTouch(JNIEnv * env, jobject obj);
@@ -119,6 +122,12 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj,
                                                              jlong currentMillis) {
     ourApp.onFrame(currentMillis);
+}
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj) {
+    ourApp.onPause();
+}
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
+    ourApp.onResume();
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
                                                              jint width, jint height) {

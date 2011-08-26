@@ -11,24 +11,24 @@ import com.artcom.mobile.Base.APK;
 import com.artcom.mobile.Base.NativeBinding;
 
 public class EGLRenderer  implements GLSurfaceView.Renderer{
-	public static final String PACKAGE_NAME = "com.artcom.mobile";
-	public static final String LAYOUT_FILE = "assets/layouts/main.spark";        
     public static int numFrames = 0;
     public static long millisec = 0;
-
+	public static final String PACKAGE_NAME = "com.artcom.mobile";
+	public static final String LAYOUT_FILE = "assets/layouts/main.spark";        
+    public static boolean _myFirstTimeFlag;
     private Context context;
-    public EGLRenderer (Context context) {
+    public EGLRenderer (Context context, boolean firstTime) {
+    	_myFirstTimeFlag = firstTime;
         this.context = context;
        
-    }
-    
+    }    
     public void onDrawFrame(GL10 glUnused) {
         updateFrameCounter();
         NativeBinding.onFrame(System.currentTimeMillis());
     }
 
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {    	
-    	NativeBinding.onSizeChanged(width,height);    	
+    	NativeBinding.onSizeChanged(width,height);    
     }
     
     private void updateFrameCounter() {
@@ -49,7 +49,12 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
 
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
     	AC_Log.print("_________________________________- on surface created");
-        NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
+    	if (_myFirstTimeFlag) {
+    		NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
+    	} else {
+    		NativeBinding.onResume();
+    	}
+		
     }
 
 }

@@ -21,6 +21,8 @@ namespace spark {
         Component(const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Component() = 0;
         virtual void render(MatrixStack& theCurrentMatrixStack, matrix & theProjectionMatrix) const ;
+        virtual void onPause() const ;
+        virtual void onResume() const ;
         
         const std::string & getName() const { return _myName; };
         const std::string & getType() const;

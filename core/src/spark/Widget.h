@@ -34,7 +34,6 @@ namespace spark {
         }
         MatrixStack _myLocalMatrixStack; //scale, roation and translation of this node
         virtual void renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const {};
-        
     protected:
     private:
         float _x,_y,_z;

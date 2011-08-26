@@ -8,8 +8,20 @@ namespace spark {
     ShapeWidget::~ShapeWidget() {}
 
     void ShapeWidget::renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const {
-        //AC_PRINT << "................render shape widget " << _myName;
         _myShape->render(theCurrentMatrixStack.getTop());                
     }
+    void ShapeWidget::onResume() const {
+        if (_myShape) {
+            _myShape->initGL();
+        }            
+        Widget::onResume();
+    }
+    mar::ShapePtr ShapeWidget::getShape() {
+        return _myShape;
+    }
+    void ShapeWidget::setShape( mar::ShapePtr theShapePtr){
+        _myShape = theShapePtr;
+    }
+    
     
 }

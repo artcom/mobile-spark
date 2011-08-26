@@ -22,8 +22,6 @@ namespace spark {
         _myWorldName  = theXMLNode->getStringValue("world");
         _myPos = theXMLNode->getVector2Value("pos", vector2(0,0));
         _mySize = theXMLNode->getVector2Value("size", vector2(1,1));
-        AC_PRINT << "view Pos : " << _myPos[0] << " / " << _myPos[1];
-        AC_PRINT << "view size : " << _mySize[0] << " / " << _mySize[1];
         _myGLViewport = ViewportPtr(new Viewport(_mySize[0],_mySize[1], _myPos[0],_myPos[1]));
         
     }

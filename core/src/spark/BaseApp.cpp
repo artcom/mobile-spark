@@ -53,6 +53,17 @@ namespace spark {
         }
     }
     
+    void BaseApp::onPause() {
+        if (_mySparkWindow) {
+            _mySparkWindow->onPause();
+        }
+    }
+    void BaseApp::onResume() {
+        if (_mySparkWindow) {
+            _mySparkWindow->onResume();
+        }
+    }
+    
     void BaseApp::onFrame(const long theCurrentMillis) {
         //AC_PRINT << "onFrame " << theCurrentMillis;
         if (_myAnimate) {

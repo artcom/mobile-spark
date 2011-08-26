@@ -19,6 +19,10 @@ namespace spark {
     public: 
         Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Container() = 0;
+        
+        virtual void onPause() const ;
+        virtual void onResume() const ;
+        
         virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
         virtual ComponentPtr getChildByName(const std::string & theName) const; 
     protected:
