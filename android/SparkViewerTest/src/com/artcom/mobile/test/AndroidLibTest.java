@@ -12,18 +12,18 @@ import android.test.AndroidTestCase;
 public class AndroidLibTest  extends AndroidTestCase{
     private static String PACKAGE_NAME = "com.artcom.mobile.test";
 
-	public void testLib() throws Throwable {
-		// run libs tests method
-		String myResult = AndroidBinding.test(APK.getApkFilePath(PACKAGE_NAME, getContext())); 
-	    Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);
-	}
-	
-	public void testLibsInterface() throws Throwable {		
-		 // test bound methods
+    public void testLib() throws Throwable {
+        // run libs tests method
+        String myResult = AndroidBinding.test(APK.getApkFilePath(PACKAGE_NAME, getContext())); 
+        Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);
+    }
+    
+    public void testLibsInterface() throws Throwable {      
+         // test bound methods
    }
-	public void testJava() throws Throwable {	
-		 // test java stuff
-	    Assert.assertTrue(APK.getApkFilePath(PACKAGE_NAME, getContext()).length()>0);		
+    public void testJava() throws Throwable {   
+         // test java stuff
+        Assert.assertTrue(APK.getApkFilePath(PACKAGE_NAME, getContext()).length()>0);       
    }
 
 }

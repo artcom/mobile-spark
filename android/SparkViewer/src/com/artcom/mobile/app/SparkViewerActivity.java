@@ -23,7 +23,7 @@ public class SparkViewerActivity extends Activity {
     
     @Override protected void onStart() {
         super.onStart();
-    	_mySparkWorldIsLoaded = true;
+        _mySparkWorldIsLoaded = true;
         AC_Log.print("----------------------SparkViewer started");     
     }
     

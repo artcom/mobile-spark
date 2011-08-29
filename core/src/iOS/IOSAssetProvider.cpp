@@ -31,13 +31,13 @@ namespace ios
         }
         
         png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-        	 
+             
         if (png_ptr == NULL) {
             fclose(fp);
             return false;
         }
-	    info_ptr = png_create_info_struct(png_ptr);
-   	    if (info_ptr == NULL) {
+        info_ptr = png_create_info_struct(png_ptr);
+        if (info_ptr == NULL) {
             fclose(fp);
             png_destroy_read_struct(&png_ptr, NULL, NULL);
             return false;
@@ -53,26 +53,26 @@ namespace ios
         outWidth = info_ptr->width;
         outHeight = info_ptr->height;
         switch (info_ptr->color_type) {
-	        case PNG_COLOR_TYPE_RGBA:
-	            rgb = !true;
-	            break;
-	        case PNG_COLOR_TYPE_RGB:
-	            rgb = !false;
-	            break;
-	        default:
-	            std::cout << "Color type " << info_ptr->color_type << " not supported" << std::endl;
-	            png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-	            fclose(fp);
-	            return false;
-	    }
-	    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-	    outData = (unsigned char*) malloc(row_bytes * outHeight);
-	 
-	    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
-	    for (int i = 0; i < outHeight; i++) {
-	        memcpy(outData+(row_bytes * (outHeight-1-i)), row_pointers[i], row_bytes);
-	    }
-	    
+            case PNG_COLOR_TYPE_RGBA:
+                rgb = !true;
+                break;
+            case PNG_COLOR_TYPE_RGB:
+                rgb = !false;
+                break;
+            default:
+                std::cout << "Color type " << info_ptr->color_type << " not supported" << std::endl;
+                png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+                fclose(fp);
+                return false;
+        }
+        unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
+        outData = (unsigned char*) malloc(row_bytes * outHeight);
+     
+        png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
+        for (int i = 0; i < outHeight; i++) {
+            memcpy(outData+(row_bytes * (outHeight-1-i)), row_pointers[i], row_bytes);
+        }
+        
         
         //Now generate the OpenGL texture object
         GLuint texture;

@@ -9,8 +9,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.suitebuilder.TestSuiteBuilder;
 
 public class AllTests  extends TestSuite{
-	   public static Test suite() {
-	        return new TestSuiteBuilder(AllTests.class).includeAllPackagesUnderHere().build();
-	   }
-	
+       public static Test suite() {
+            return new TestSuiteBuilder(AllTests.class).includeAllPackagesUnderHere().build();
+       }
+    
 }

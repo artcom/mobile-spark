@@ -4,12 +4,12 @@ package com.artcom.mobile.Base;
 import com.artcom.mobile.Base.AC_Log;
 public class NativeBinding {
   
-  static {	  
-	  System.loadLibrary("masl");
-	  System.loadLibrary("animation");
-	  System.loadLibrary("mar");
-	  System.loadLibrary("android");
-	  System.loadLibrary("spark");
+  static {    
+      System.loadLibrary("masl");
+      System.loadLibrary("animation");
+      System.loadLibrary("mar");
+      System.loadLibrary("android");
+      System.loadLibrary("spark");
   }
 
   
