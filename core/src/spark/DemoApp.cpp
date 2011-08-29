@@ -65,11 +65,17 @@ namespace spark {
     }
 
     void DemoApp::onTouch() {
+       
         //return;
         //add two parallel animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        spark::EventCallbackPtr myCB(new spark::EventCallback( myRectangle, &Component::testEvent));
+        myRectangle->addEventListener("event:touch", myCB);
+        EventPtr myEvent = EventPtr(new spark::TouchEvent("event:touch", myRectangle, 100, 200));
+        myRectangle->dispatchEvent(myEvent);
+
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 100, 1000,
                     //animation::EasingFnc(animation::easeInBack)));
