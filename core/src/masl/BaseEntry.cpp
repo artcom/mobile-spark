@@ -7,7 +7,7 @@
 #include <dlfcn.h>
 
 namespace masl {
-    bool loadSpark(const std::string & theFilename) {
+    static bool loadSpark(const std::string & theFilename) {
         AC_PRINT << "load file: " << theFilename.c_str();
         //test xml-loading
         xmlDocPtr doc = loadXML(theFilename);

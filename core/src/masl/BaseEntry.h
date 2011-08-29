@@ -13,8 +13,7 @@
 #include "Logger.h"
 
 namespace masl {    
-    static bool loadSpark(const std::string & theFilename);                        
 };
 
-#endif //CPPENTRY
+#endif //BASEENTRY
 

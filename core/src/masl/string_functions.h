@@ -75,18 +75,28 @@ namespace masl {
         return myFilename;
     }
 
-    static std::string
+    inline std::string
     line_string(unsigned line_number) {
         std::string message;
         message = as_string(line_number);
         return message;
     }
-    
+
+    inline std::string 
+    file_string(const char* file_name) {
+        std::string myFilename(file_name);
+        std::string::size_type mySlash = myFilename.find_last_of("/\\");
+        if (mySlash != std::string::npos) {
+            myFilename = myFilename.substr(mySlash+1);
+        }
+        return myFilename;
+    }
+
     #define PLUS_FILE_LINE masl::location_string(__FILE__,__LINE__)
     #define JUST_FILE_LINE masl::line_string(__LINE__),masl::file_string(__FILE__)
 
         
-    static std::string
+    inline std::string
     location_string(const char* file_name, unsigned line_number) {
         return std::string("[") + lastFileNamePart(file_name) + ":" + as_string(line_number) + "]";
     }
