@@ -57,7 +57,7 @@ public:
     virtual unsigned getProfileRepeatCount() const;
     virtual void setProfileRepeatCount(unsigned theCount);
 private:
-	UnitTest();
+    UnitTest();
     UnitTest(const UnitTest &);
     const UnitTest & operator=(const UnitTest &);
 protected:
@@ -104,8 +104,8 @@ public:
         destroyMyTests();
     }
 private:
-	UnitTestSuite(UnitTestSuite const& other);
-	const UnitTestSuite & operator=(const UnitTestSuite &);
+    UnitTestSuite(UnitTestSuite const& other);
+    const UnitTestSuite & operator=(const UnitTestSuite &);
 
 public:
     virtual void addTest(UnitTest * theTest, unsigned int theProfileRepeatCount = 1) {

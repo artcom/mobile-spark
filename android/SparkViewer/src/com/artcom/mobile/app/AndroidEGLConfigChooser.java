@@ -52,9 +52,9 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
      * Gets called by the GLSurfaceView class to return the best config
      */    
     public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
-    	findConfig(egl,display);
+        findConfig(egl,display);
         logEGLConfig(choosenConfig, display, egl);
-    	return choosenConfig;
+        return choosenConfig;
     }
 
     /**
@@ -79,7 +79,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
        
         if (configurations <= 0)
         {
-        	AC_Log.error("###ERROR### ZERO EGL Configurations found, This Is a Problem");
+            AC_Log.error("###ERROR### ZERO EGL Configurations found, This Is a Problem");
         }
        
         // Loop over all configs to get the best
@@ -105,7 +105,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
                            
                             if (verbose)
                             {
-                            	AC_Log.info("** Supported EGL Configuration #" + i );                            
+                                AC_Log.info("** Supported EGL Configuration #" + i );                            
                                 logEGLConfig(conf[i], display, egl);
                             }
                         }
@@ -113,7 +113,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
                         {
                             if (verbose)
                             {
-                            	AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_OPENGL_ES2_BIT not set");                            
+                                AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_OPENGL_ES2_BIT not set");                            
                                 logEGLConfig(conf[i], display, egl);
                             }
                         }  
@@ -122,7 +122,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
                     {
                         if (verbose)
                         {
-                        	AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_DEPTH_SIZE < 16");                            
+                            AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_DEPTH_SIZE < 16");                            
                             logEGLConfig(conf[i], display, egl);
                         }
                     }
@@ -131,7 +131,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
                 {
                     if (verbose)
                     {
-                    	AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_WINDOW_BIT not set");                            
+                        AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_WINDOW_BIT not set");                            
                         logEGLConfig(conf[i], display, egl);
                     }
                 }
@@ -145,14 +145,14 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
        
         if ((type == ConfigType.BEST) && (bestConfig != null))
         {
-        	AC_Log.info("Using best EGL configuration:");
+            AC_Log.info("Using best EGL configuration:");
             choosenConfig = bestConfig;
         }
         else
         {
             if (fastestConfig != null)
             {
-            	AC_Log.info("Using fastest EGL configuration:");
+                AC_Log.info("Using fastest EGL configuration:");
             }
             choosenConfig = fastestConfig;            
         }
@@ -166,7 +166,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
         }
         else
         {
-        	AC_Log.error("###ERROR### Unable to get a valid OpenGL ES 2.0 config, nether Fastest nor Best found! Bug. Please report this.");
+            AC_Log.error("###ERROR### Unable to get a valid OpenGL ES 2.0 config, nether Fastest nor Best found! Bug. Please report this.");
             clientOpenGLESVersion = 1;
             pixelFormat = PixelFormat.UNKNOWN;
             return false;
@@ -369,7 +369,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
         int[] value = new int[1];
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_RED_SIZE, value);
-    	AC_Log.info(String.format("EGL_RED_SIZE  = %d", value[0] ) );
+        AC_Log.info(String.format("EGL_RED_SIZE  = %d", value[0] ) );
        
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_GREEN_SIZE, value);
         AC_Log.info(String.format("EGL_GREEN_SIZE  = %d", value[0] ) );

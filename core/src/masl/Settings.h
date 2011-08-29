@@ -4,10 +4,10 @@
 #if __APPLE__
     #include "TargetConditionals.h"
     #ifdef TARGET_OS_IPHONE
-    	//öskadf
+        //öskadf
          // iOS
     #elif TARGET_IPHONE_SIMULATOR
-    	//adasdasd
+        //adasdasd
         // iOS Simulator
     #elif TARGET_OS_MAC
         // Other kinds of Mac OS

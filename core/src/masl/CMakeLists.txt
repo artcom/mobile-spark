@@ -3,7 +3,7 @@ file(GLOB HEADERS *.h)
 
 set(EXTERNS Boost Cml libXML2)
 if(ANDROID)
-	find_library(log_LIBRARY_DIRS log )
+    find_library(log_LIBRARY_DIRS log )
     list(APPEND EXTERNS log)
 endif(ANDROID)
 

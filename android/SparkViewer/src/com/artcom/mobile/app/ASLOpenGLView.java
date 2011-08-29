@@ -25,12 +25,12 @@ public class ASLOpenGLView extends GLSurfaceView {
 
     @Override
     public void onSizeChanged (int w, int h, int oldw, int oldh) {
-    	NativeBinding.onSizeChanged(w,h);
+        NativeBinding.onSizeChanged(w,h);
     }
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-    	AC_Log.print("View.onTouchEvent");
+        AC_Log.print("View.onTouchEvent");
         NativeBinding.onTouch();
         return super.onTouchEvent(event);
     }
@@ -67,7 +67,7 @@ public class ASLOpenGLView extends GLSurfaceView {
     private static void checkEglError(String prompt, EGL10 egl) {
         int error;
         while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
-        	AC_Log.error(String.format("%s: EGL error: 0x%x", prompt, error));
+            AC_Log.error(String.format("%s: EGL error: 0x%x", prompt, error));
         }
     }
 }

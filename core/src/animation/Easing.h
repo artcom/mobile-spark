@@ -29,17 +29,17 @@ namespace animation {
 
   Types of easing:
 
-	  Linear
-	  Quadratic
-	  Cubic
-	  Quartic
-	  Quintic
-	  Sinusoidal
-	  Exponential
-	  Circular
-	  Elastic
-	  Back
-	  Bounce
+      Linear
+      Quadratic
+      Cubic
+      Quartic
+      Quintic
+      Sinusoidal
+      Exponential
+      Circular
+      Elastic
+      Back
+      Bounce
 
   Changes:
   1.5 - added bounce easing

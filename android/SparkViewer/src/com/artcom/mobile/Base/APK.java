@@ -9,7 +9,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 public class APK {
 
-	public static String getApkFilePath(String thePackageName, Context theContext) {
+    public static String getApkFilePath(String thePackageName, Context theContext) {
         String apkFilePath = null;
         ApplicationInfo appInfo = null;
         PackageManager packMgmr = theContext.getPackageManager();
