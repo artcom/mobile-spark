@@ -48,38 +48,14 @@ namespace spark {
     View::renderWorld(ComponentPtr theWorld) {
         ensureCamera();
         WidgetPtr myWidget = boost::static_pointer_cast<spark::Widget>(theWorld);
-        myWidget->render(matrixStack, projectionMatrix);//_myCamera->getProjectionMatrix());        
+        myWidget->render(matrixStack, _myCamera->getProjectionMatrix()); 
     }
     
     void
     View::activate(float theCanvasWidth, float theCanvasHeight) {
         ensureCamera();
         matrixStack.clear();        
-        //_myCamera->activate(_mySize[0] *theCanvasWidth ,_mySize[1] *theCanvasHeight);
-AC_PRINT << "start";        
-        Frustum myFrustum(90.0f,90.0f, 0.5f,10000.0f, PERSPECTIVE);
-        myFrustum.getProjectionMatrix(projectionMatrix);
-AC_PRINT << "frustum : " << projectionMatrix;
-        
-        /*matrixStack.push();                
-        matrixStack.loadPerspective(0 , theCanvasWidth, 0.0, theCanvasHeight, 0.1, 10000);
-        matrixStack.translate(0.0f,0.0f,100.0f);
-        projectionMatrix = matrixStack.getTop();
-        matrixStack.pop();        */
-        
-/*vector3 eye, target, up;
-eye.set(0,0,0);      // Set 'eye' to (10,10,10)
-target.set(0,0,-1);          // Set 'target' to (0,0,0)
-up.cardinal(1);         // Set 'up' to (0,1,0), the cardinal Y axis
-//matrix view;
-cml::matrix_look_at_RH(projectionMatrix, eye, target, up);        
-AC_PRINT << "matrix_look_at_RH : " << projectionMatrix;
-  */      
-//cml::matrix_perspective(projectionMatrix, -1.0f, 1.0f, -1.0f, 1.0f, 0.1f,10000.0f, cml::right_handed, cml::z_clip_zero);        
-cml::matrix_perspective(projectionMatrix, -0.5f, 0.5f, -0.5f, 0.5f, 0.1f,10000.0f, cml::right_handed, cml::z_clip_zero);        
-AC_PRINT << "matrix_perspective : " << projectionMatrix;
-        
-        myFrustum.getProjectionMatrix(projectionMatrix);
+        _myCamera->activate(_mySize[0] *theCanvasWidth ,_mySize[1] *theCanvasHeight);
         _myGLViewport->activate(theCanvasWidth, theCanvasHeight);
     }    
 }

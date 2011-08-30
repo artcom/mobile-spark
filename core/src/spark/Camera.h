@@ -6,10 +6,18 @@
 #include <masl/Frustum.h>
 #include <masl/MatrixStack.h>*/
 
-#include <masl/Frustum.h>
+#include <masl/MatrixStack.h>
 #include <masl/numeric_functions.h>
 
 #include "Widget.h"
+
+enum ProjectionType {
+    PERSPECTIVE,
+    ORTHONORMAL
+};
+static const char* PerspectiveStr = "perspective";
+static const char* OrtohonormalStr = "orthonormal";
+static const char* AutoOrthonormalStr = "auto";
 
 namespace spark {
     
@@ -22,8 +30,8 @@ namespace spark {
         void activate(float theCanvasWidth, float theCanvasHeight);
         const matrix & getProjectionMatrix();            
     private:                
-        masl::Frustum _myFrustum;            
         matrix _myProjectionMatrix;
+        MatrixStack matrixStack;
         ProjectionType _myProjectionType;
         bool _myAutoProjection;
         vector4 _myFrustumParams;        

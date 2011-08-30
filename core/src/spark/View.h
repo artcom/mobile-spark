@@ -3,7 +3,6 @@
 
 #include <mar/Viewport.h>
 #include <masl/XMLNode.h>
-#include <masl/Frustum.h>
 #include <masl/MatrixStack.h>
 
 #include "Container.h"
@@ -26,7 +25,6 @@ namespace spark {
                       
         MatrixStack matrixStack;
         matrix projectionMatrix;
-        masl::Frustum _myFrustum;
         CameraPtr _myCamera;
         mar::ViewportPtr _myGLViewport;
         std::string _myWorldName;

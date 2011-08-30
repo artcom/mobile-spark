@@ -6,6 +6,7 @@
 
 using namespace std;
 using namespace mar;
+using namespace masl;
 
 namespace spark {
 
@@ -65,19 +66,23 @@ namespace spark {
     }
 
     void
-    Camera::activate(float theCameraWidth, float theCameraHeight) {        
+    Camera::activate(float theCameraWidth, float theCameraHeight) {   
+        matrixStack.push();
+             
         if (_myProjectionType == ORTHONORMAL) {
             if (_myAutoProjection) {
-                AC_PRINT << "############### activate auto aorthonormal frustum";
-                _myFrustum = Frustum(0.0f, theCameraWidth , 0.0f, theCameraHeight, -0.1f, 100.0f, ORTHONORMAL);
+                //AC_PRINT << "############### activate auto aorthonormal frustum";
+                matrixStack.loadOrtho(0, theCameraWidth, 0.0 , theCameraHeight, -0.1, 1000);
             } else {
             } 
         } else {
-            AC_PRINT << "############### activate projective frustum";
-            _myFrustum = Frustum(_myFrustumParams[0], _myFrustumParams[1], _myFrustumParams[2], _myFrustumParams[3], PERSPECTIVE);
+            //AC_PRINT << "############### activate projective frustum";            
+            float myRatio = (float)theCameraWidth/(float)theCameraHeight;
+            matrixStack.loadPerspective(-0.1*myRatio, 0.1*myRatio, -0.1*myRatio , 0.1*myRatio, 0.1, 1000);
+            matrixStack.translate(0,0,20);
         }
-        _myFrustum.getProjectionMatrix(_myProjectionMatrix);
-        
+        _myProjectionMatrix = matrixStack.getTop();
+        matrixStack.pop();
         
     }    
 }
