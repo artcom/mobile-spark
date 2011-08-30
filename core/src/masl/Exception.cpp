@@ -39,7 +39,6 @@ namespace masl {
 
     // TODO: make this a static function
     bool abortOnThrow() {
-        bool myDummy;
         static bool myAbortOnThrowFlag = false;//masl::get_environment_var_as("AC_ABORT_ON_THROW", myDummy);
         return myAbortOnThrowFlag;
     }

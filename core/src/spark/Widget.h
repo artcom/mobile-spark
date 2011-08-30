@@ -29,8 +29,12 @@ namespace spark {
         void setRotationZ(const float theRotationZ) { _rotationZ = theRotationZ; updateMatrix();};
         void setAlpha(const float theAlpha)  { _alpha = theAlpha; };
 
-        virtual void test() {
+        void test() {
             AC_PRINT << "test callback";
+        }
+        virtual void testEvent(EventPtr theEvent) {
+            TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent> (theEvent);
+            AC_PRINT << "test eventcallback "<< myEvent->getX() << " , "<< myEvent->getY();
         }
         MatrixStack _myLocalMatrixStack; //scale, roation and translation of this node
         virtual void renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const {};

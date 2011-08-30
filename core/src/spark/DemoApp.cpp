@@ -78,11 +78,13 @@ namespace spark {
     }
 
     void DemoApp::onTouch() {
+       
         //return;
         //add two parallel animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 100, 1000,
                     //animation::EasingFnc(animation::easeInBack)));
