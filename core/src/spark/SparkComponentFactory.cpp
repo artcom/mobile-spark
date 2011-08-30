@@ -7,6 +7,7 @@
 
 #include "Window.h"
 #include "View.h"
+#include "Camera.h"
 #include "World.h"
 #include "Transform.h"
 #include "Rectangle.h"
@@ -22,6 +23,7 @@ namespace spark {
         AC_PRINT << "SparkComponentFactory setup";
         bool registered = registerComponent("Window", spark::createWindow);
         registered = registerComponent("View", spark::createView);
+        registered = registerComponent("Camera", spark::createCamera);
         registered = registerComponent("World", spark::createWorld);
         registered = registerComponent("Transform", spark::createTransform);
         registered = registerComponent("Rectangle", spark::createRectangle);

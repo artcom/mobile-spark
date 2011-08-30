@@ -3,9 +3,11 @@
 
 #include <mar/Viewport.h>
 #include <masl/XMLNode.h>
+#include <masl/Frustum.h>
 #include <masl/MatrixStack.h>
 
 #include "Container.h"
+#include "Camera.h"
 
 namespace spark {
     
@@ -19,10 +21,13 @@ namespace spark {
         const std::string & getWorldName() { return _myWorldName;}
         void renderWorld(ComponentPtr theWorld);
             
-    private:                
+    private:      
+        void ensureCamera();
+                      
         MatrixStack matrixStack;
         matrix projectionMatrix;
-        
+        masl::Frustum _myFrustum;
+        CameraPtr _myCamera;
         mar::ViewportPtr _myGLViewport;
         std::string _myWorldName;
         vector2 _myPos;
