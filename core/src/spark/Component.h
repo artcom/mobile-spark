@@ -8,6 +8,8 @@
 #include <masl/XMLNode.h>
 #include <masl/MatrixStack.h>
 
+#include "EventDispatcher.h"
+
 using namespace masl;
 
 namespace spark {
@@ -15,7 +17,7 @@ namespace spark {
     class Component;
     typedef boost::shared_ptr<Component> ComponentPtr;
 
-    class Component {
+    class Component : public EventDispatcher {
     public: 
         Component();
         Component(const XMLNodePtr theXMLNode, ComponentPtr theParent);
@@ -24,10 +26,12 @@ namespace spark {
         virtual void onPause() const ;
         virtual void onResume() const ;
         
+        virtual void testEvent(EventPtr theEvent) {};
         const std::string & getName() const { return _myName; };
         const std::string & getType() const;
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
         Component* getRoot();
+        const ComponentPtr & getParent() const {return _myParent; };
     protected:
         const XMLNodePtr _myXMLNode;
         std::string _myName;

@@ -9,6 +9,7 @@ namespace masl {
     public:
         virtual ~Callback() {};
         virtual void execute() const = 0;
+        virtual void operator() () {execute();}
     };
 
     typedef boost::shared_ptr<Callback> CallbackPtr;

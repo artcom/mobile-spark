@@ -4,10 +4,11 @@
 
 namespace spark {
 
-    Component::Component(): _myParent(ComponentPtr()) {
+    Component::Component(): EventDispatcher(), _myParent(ComponentPtr()) {
     }
 
     Component::Component(const XMLNodePtr theXMLNode, ComponentPtr theParent): 
+        EventDispatcher(),
         _myXMLNode(theXMLNode),
         _myName(theXMLNode->name),
         _myParent(theParent) {
