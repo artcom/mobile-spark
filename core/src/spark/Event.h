@@ -2,7 +2,6 @@
 #define _ac_mobile_spark_Event_h_included_
 
 #include <boost/smart_ptr/shared_ptr.hpp>
-#include <boost/enum.hpp>
 #include <masl/Logger.h>
 #include <masl/Callback.h>
 
