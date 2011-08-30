@@ -49,8 +49,8 @@ namespace spark {
                 theEvent->dispatchTo(*it, Event::CAPTURING);
                 EventListenerMap myListeners = (*it)->getEventListeners();
                 std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = myListeners.equal_range(myCaptureKey);
-                for (EventListenerMap::const_iterator it = itp.first; it != itp.second; ++it) {
-                    (*(*it).second)(theEvent);
+                for (EventListenerMap::const_iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
+                    (*(*mapIt).second)(theEvent);
                     if (!theEvent->isDispatching()) {
                         return;
                     }
