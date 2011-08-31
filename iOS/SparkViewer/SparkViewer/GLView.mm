@@ -66,6 +66,8 @@
         motionManager = [[CMMotionManager alloc] init];
         motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
         
+        [[EventManager alloc] initWithSourceView:self targetApp:myDemoApp];
+        
         
     }
     return self;
