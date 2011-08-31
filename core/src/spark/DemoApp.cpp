@@ -77,10 +77,9 @@ namespace spark {
 
         //create a component in code
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
-        ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(BaseAppPtr(this), 
-                "<Rectangle color=\"[1.0,1,0,0.0,1.0]\"/>");  //XXX: boost shared_from_this?
+        ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(shared_from_this(), 
+                "<Rectangle width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0,1.0]\"/>"); 
         myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
-        
         myTransform = _mySparkWindow->getChildByName("world2")->getChildByName("objTransform2");
         ComponentPtr myObject2 = myTransform->getChildByName("objShape2");
         Shape3DPtr myShape2 = boost::static_pointer_cast<spark::Shape3D>(myObject2);
@@ -98,8 +97,7 @@ namespace spark {
     }
 
     void DemoApp::onTouch() {
-       
-        //return;
+        AC_PRINT << "....................... demo app on touch";
         //add two parallel animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
@@ -107,7 +105,6 @@ namespace spark {
 
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 100, 1000,
-                    //animation::EasingFnc(animation::easeInBack)));
                     animation::EasingFnc(animation::easeInOutElastic)));
 
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
@@ -119,7 +116,6 @@ namespace spark {
         myParallel->add(myAnimationC);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
-        
     }
 }
 
