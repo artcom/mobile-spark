@@ -8,21 +8,20 @@
             <Rectangle name="objectA" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
             <Rectangle name="objectB" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
         </Transform>
-        <Image name="imageA" x="0" z="0" src="assets/textures/texture.png"/>
         <Transform name="transformA" x="100" y="10" >
             <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
-            <Transform name="objTransform" x="200" y="150" z="-50" scaleX="40" scaleY="40" scaleZ="40">
-                <Shape3D name="objShape" src="/sdcard/model"/>
-            </Transform>
+            <Transform name="objTransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
+                <Shape3D name="objShape" src="/model"/>
+>           </Transform>
             <Image name="imageA" x="2" z="1" src="assets/textures/texture.png"/>
         </Transform>
-        <Rectangle name="objectB" y="0" width="10" height="10" z="10" color="[0,1,0]"/>
+        <Rectangle name="here_is_origin" y="0" width="10" height="10" z="10" color="[1,1,1]"/>
         <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
     </World>        
     <World name="world2">    
         <Camera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[54,54,0.1,10000]"/>    
         <Transform name="objTransform1" x="0" y="-70" z="-120" scaleX="0.3" scaleY="0.3" scaleZ="0.3">
-            <Shape3D name="objShape1" src="/sdcard/amazone"/>
+            <Shape3D name="objShape1" src="/amazone"/>
         </Transform>
     </World>            
 </Window>
