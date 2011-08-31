@@ -3,10 +3,6 @@
 
 @implementation GLView
 
-spark::DemoApp *myDemoApp;
-
-// You must implement this method
-
 + (Class) layerClass
 {    
     return [CAEAGLLayer class];
@@ -20,8 +16,7 @@ spark::DemoApp *myDemoApp;
         // Apple changed EGL a lot, it is not possible to render to the display directly. 
         // We have to render into a framebuffer, which is displayed to the user
         NSLog(@"in initWithFrame");
-        
-        
+
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         eaglLayer.opaque = TRUE;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -39,7 +34,6 @@ spark::DemoApp *myDemoApp;
                 [self release];
                 return nil;
             }
-
         }
         
         [EAGLContext setCurrentContext:glContext];
@@ -56,17 +50,21 @@ spark::DemoApp *myDemoApp;
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
         
+        //DemoApp
         NSLog(@"width: %d,  height: %d ", width, height);
         NSString *path = [[NSBundle mainBundle] resourcePath];
         myDemoApp = new spark::DemoApp();
         myDemoApp->setup((displayLink.timestamp*1000.0),[path UTF8String], "assets/layouts/main.spark");
         myDemoApp->onSizeChanged(width, height);
         
+        //Motion Events
         UITapGestureRecognizer *singleFingerTap = 
         [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-
         [self addGestureRecognizer:singleFingerTap];
        
+        motionManager = [[CMMotionManager alloc] init];
+        motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
+        
         
     }
     return self;
@@ -79,31 +77,34 @@ spark::DemoApp *myDemoApp;
     myDemoApp->onTouch();
 }
 
-
-
-
-
 - (void)render:(id)sender 
 {
-    //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    //NSLog(@"displaylink: %f",(displayLink.timestamp*1000.0));
-    myDemoApp->onFrame((displayLink.timestamp*1000.0));
+    CMAttitude *attitude = motionManager.deviceMotion.attitude;
+    //NSLog(@"Euler Angles roll: %f pitch: %f yaw: %f", attitude.roll, attitude.pitch, attitude.yaw);
     
-    //glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-    
-    [glContext presentRenderbuffer:GL_RENDERBUFFER];
-    
-}
+    myDemoApp->onFrame((displayLink.timestamp*1000.0));    
 
+
+    
+    [glContext presentRenderbuffer:GL_RENDERBUFFER];    
+}
 
 - (void)startAnimation
 {
     if (!animating)
     {
-        //init Animation loop. fires at 60 hz
+        //init Animation loop. fires at 30 hz
         displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render:)];
+        [displayLink setFrameInterval:2];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        
         animating = TRUE;
+    }
+    
+    //works only on phones with gyroscope(iPhone4, iPad2)
+    if (motionManager.deviceMotionAvailable)
+    {
+        [motionManager startDeviceMotionUpdates];
     }
 }
 
@@ -114,6 +115,11 @@ spark::DemoApp *myDemoApp;
         [displayLink invalidate];
         displayLink = nil;
         animating = FALSE;
+    }
+    
+    if (motionManager.deviceMotionActive)
+    {
+        [motionManager stopDeviceMotionUpdates];
     }
 }
 
@@ -134,6 +140,9 @@ spark::DemoApp *myDemoApp;
     
     [glContext release];
     glContext = nil;
+    
+    [motionManager release];
+    motionManager = nil;
     
     [super dealloc];
 }
