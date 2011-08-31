@@ -35,17 +35,28 @@ namespace spark {
     Window::~Window() {
     }
     
-    void Window::onTouch(EventPtr theEvent) { 
+    void 
+    Window::onTouch(EventPtr theEvent) { 
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         AC_PRINT<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
+
+        //picking!!!
+        ComponentPtr myPicked = pick2DBoxStyle(myEvent->getX(), myEvent->getY());
+        if (myPicked) {
+            AC_PRINT << "picked " << myPicked->getName();
+        } else {
+            AC_PRINT << "nothing picked";
+        }
     }
 
-    void Window::onSizeChanged(int theWidth, int theHeight) {
+    void 
+    Window::onSizeChanged(int theWidth, int theHeight) {
         _myWidth = theWidth; 
         _myHeight = theHeight;
     }
 
-    void Window::render() const {        
+    void 
+    Window::render() const {        
         // get all views
         VectorOfComponentPtr myViews = getChildrenByType("View");
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
@@ -56,4 +67,15 @@ namespace spark {
             myView->renderWorld(getChildByName(myView->getWorldName()));
         }        
     }
+
+
+    //////////////picking
+    ComponentPtr
+    Window::pick2DBoxStyle(const unsigned int x, const unsigned int y) {
+        AC_PRINT << "pick at " << x << ", " << y;
+
+        //mock:
+        return shared_from_this();
+    }
+
 }
