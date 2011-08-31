@@ -25,7 +25,7 @@ namespace android {
         if (theFileName.size() > 0 && theFileName[0] == '/') {  
             //unzipped, read from sdcard
             std::string myContent;
-            masl::readFile(theFileName, myContent);
+            masl::readFile("/sdcard" + theFileName, myContent);
             return myContent;
         }
         return readFromPackage(_myApkArchive, theFileName);
@@ -36,7 +36,7 @@ namespace android {
         if (theFileName.size() > 0 && theFileName[0] == '/') {  
             //unzipped, read from sdcard
             std::vector<std::string> myContent;
-            masl::readFileLineByLine(theFileName, myContent);
+            masl::readFileLineByLine("/sdcard" + theFileName, myContent);
             return myContent;
         } 
         return readLineByLineFromPackage(_myApkArchive, theFileName);

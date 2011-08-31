@@ -12,7 +12,7 @@
 
 namespace spark {
 
-    class BaseApp {
+    class BaseApp : public boost::enable_shared_from_this<BaseApp> {
         public: 
             BaseApp();
             virtual ~BaseApp();

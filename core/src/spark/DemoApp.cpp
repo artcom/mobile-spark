@@ -13,6 +13,7 @@
 
 #include "Rectangle.h"
 #include "Shape3D.h"
+#include "SparkComponentFactory.h"
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
@@ -72,14 +73,18 @@ namespace spark {
         myZRotate->setLoop(true);
         //animation::AnimationManager::get().play(myXRotate);
         animation::AnimationManager::get().play(myYRotate);
-        //animation::AnimationManager::get().play(myZRotate);
-        
+
+        //create a component in code
+        myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
+        ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(shared_from_this(), 
+                "<Rectangle width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0,1.0]\"/>"); 
+        myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
+
         return myBaseReturn;
     }
 
     void DemoApp::onTouch() {
-       
-        //return;
+        AC_PRINT << "....................... demo app on touch";
         //add two parallel animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
@@ -87,7 +92,6 @@ namespace spark {
 
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 100, 1000,
-                    //animation::EasingFnc(animation::easeInBack)));
                     animation::EasingFnc(animation::easeInOutElastic)));
 
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
@@ -99,7 +103,6 @@ namespace spark {
         myParallel->add(myAnimationC);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
-        
     }
 }
 
