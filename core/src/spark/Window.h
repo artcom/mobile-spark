@@ -23,6 +23,8 @@ namespace spark {
         int _myHeight;
         bool _myFullScreenFlag;
         vector4 _myClearColor;
+
+        ComponentPtr pick2DBoxStyle(const unsigned int x, const unsigned int y) ;
     };
 
     typedef boost::shared_ptr<Window> WindowPtr;
