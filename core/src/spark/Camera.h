@@ -11,17 +11,15 @@
 
 #include "Widget.h"
 
-enum ProjectionType {
-    PERSPECTIVE,
-    ORTHONORMAL
-};
-
-static const char* PerspectiveStr = "perspective";
-static const char* OrtohonormalStr = "orthonormal";
-static const char* AutoOrthonormalStr = "auto";
 
 namespace spark {
     
+    enum ProjectionType {
+        PERSPECTIVE,
+        ORTHONORMAL
+    };
+
+
     ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     
     class Camera : public Widget {
@@ -36,6 +34,10 @@ namespace spark {
         ProjectionType _myProjectionType;
         bool _myAutoProjection;
         vector4 _myFrustumParams;        
+
+        static const char* PerspectiveStr;
+        static const char* OrtohonormalStr;
+        static const char* AutoOrthonormalStr;
     };
 
     typedef boost::shared_ptr<Camera> CameraPtr;

@@ -10,6 +10,11 @@ using namespace masl;
 
 namespace spark {
 
+    const char* Camera::PerspectiveStr = "perspective";
+    const char* Camera::OrtohonormalStr = "orthonormal";
+    const char* Camera::AutoOrthonormalStr = "auto";
+
+
     //needed for component factory
     //namespace  {
         ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
