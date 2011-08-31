@@ -43,10 +43,12 @@
 #include "Exception.h"
 
 #include <string>
+#include <vector>
 
 namespace masl {
     /// read a complete file into a string
     bool readFile(const std::string & theUTF8Filename, std::string & theContent);
+    bool readFileLineByLine(const std::string & theUTF8Filename, std::vector<std::string> & theContent);
 }
 
 #endif

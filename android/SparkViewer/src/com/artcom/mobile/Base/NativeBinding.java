@@ -19,6 +19,8 @@ public class NativeBinding {
   public static native void onTouch();
   public static native void onPause();
   public static native void onResume();
+  public static native void onEvent(String theEvent);
+
   
   public static native void log(int theSeverity, String theFilename, int theLineNumber, String theMessage);
   public static native void setLoggerTopLevelTag(String theTagString);

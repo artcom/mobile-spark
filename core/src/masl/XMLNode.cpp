@@ -86,10 +86,17 @@ namespace masl {
     }
 
     void XMLNode::print() const {
-        AC_PRINT << "node " << name;
+        std::ostringstream os;
+        AC_PRINT << print(os);
+    }
+
+    std::ostream & XMLNode::print(std::ostream & os) const {
+        os << "<" << nodeName;
         for (std::map<std::string, std::string>::const_iterator it = attributes.begin(); it != attributes.end(); ++it) {
-            AC_PRINT << "   " << (*it).first << ": "<< (*it).second;
+            os << " " << (*it).first << "='"<< (*it).second<<"'";
         }
+        os << "/>";
+        return os;
     }
 
     void XMLNode::printTree() const {
