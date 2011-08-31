@@ -33,10 +33,10 @@ namespace masl {
     };
     typedef boost::shared_ptr<FreeFunctionCallback> FreeFunctionCallbackPtr;
 
-    template < typename BASE, typename DERIVED = BASE>
+    template < typename T, typename TP>
     class MemberFunctionCallback : public Callback {
     public:
-        MemberFunctionCallback(DERIVED theObject, void (BASE::*theFunctionPtr)()): 
+        MemberFunctionCallback(TP theObject, void (T::*theFunctionPtr)()): 
             _myObjectPtr(theObject),
             _myFunctionPointer(theFunctionPtr) {
         };
@@ -46,9 +46,10 @@ namespace masl {
             (_myObjectPtr.get()->*_myFunctionPointer)();
         };
     private:
-        DERIVED _myObjectPtr;
-        void (BASE::*_myFunctionPointer)();
+        TP _myObjectPtr;
+        void (T::*_myFunctionPointer)();
     };
+
 };
 
 #endif

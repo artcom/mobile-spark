@@ -14,7 +14,7 @@ namespace spark {
         Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Window();
 
-        void onTouch(EventPtr theEvent) const;
+        void onTouch(EventPtr theEvent);
         virtual void render() const;
         virtual void onSizeChanged(int theWidth, int theHeight);
         vector4 getClearColor() const { return _myClearColor;};
