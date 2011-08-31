@@ -39,6 +39,7 @@ namespace spark {
         xmlNode *root_node = NULL;
         root_node = xmlDocGetRootElement(doc);
         XMLNodePtr myXMLNode(new XMLNode(root_node));
+        //AC_PRINT<<"handleEvent "<<*myXMLNode;
         CallbackMap::const_iterator i = _myCreateCallbackMap.find(myXMLNode->nodeName);
         if (i == _myCreateCallbackMap.end()) {
             throw EventFactoryException("Unknown Event: " + myXMLNode->nodeName, PLUS_FILE_LINE);

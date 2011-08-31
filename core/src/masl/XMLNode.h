@@ -2,6 +2,7 @@
 #define _included_mobile_asl_xmlnode_
 
 #include <string>
+#include <sstream>
 #include <map>
 #include <vector>
 
@@ -17,7 +18,11 @@ namespace masl {
             XMLNode(xmlNode* theNode);
             virtual ~XMLNode();
             void print() const;
+            std::ostream & print(std::ostream & os) const;
             void printTree() const;
+            friend inline std::ostream& operator<<(std::ostream& os, const XMLNode& n) {
+                return n.print(os);
+            }
             
             std::string getStringValue(const std::string & theKey, const std::string & theDefault = "") const;
             float getFloatValue(const std::string & theKey, const float theDefault = 0.0f) const;
