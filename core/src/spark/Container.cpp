@@ -50,12 +50,19 @@ namespace spark {
         return myResult;
     }
 
-    ComponentPtr Container::getChildByName(const std::string & theName) const {
+    ComponentPtr Container::getChildByName(const std::string & theName, bool theDeepFlag) const {
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             if ((*it)->getName() == theName) {
                 return (*it);
+            } else {
+                if (theDeepFlag) {
+                    ComponentPtr myChildTraversal = (*it)->getChildByName(theName, theDeepFlag);
+                    if (myChildTraversal) {
+                        return myChildTraversal;
+                    }
+                }
             }
-        }
+        }        
         return ComponentPtr();
     }
 }

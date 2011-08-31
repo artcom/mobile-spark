@@ -23,6 +23,7 @@
 
 #include <cml/cml.h>
 #include <cml/mathlib/typedef.h>
+#include <cml/vector/vector_ops.h>
 
 typedef cml::matrix44f_c matrix;
 typedef cml::vector4f vector4;
@@ -53,6 +54,10 @@ static const double EULER = 2.7182818284590452354;
 inline double radFromDeg(double theDegree)  { return (theDegree * PI) / 180.0; }
 inline double degFromRad(double theRadiant) { return (theRadiant * 180.0) / PI; }
 
+
+inline float distance(const vector3 & a, const vector3 & b) {
+    return (b - a).length();
+}
 
 template<class T>
 inline

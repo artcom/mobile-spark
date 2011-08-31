@@ -24,7 +24,7 @@ namespace spark {
         virtual void onResume() const ;
         
         virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
-        virtual ComponentPtr getChildByName(const std::string & theName) const; 
+        virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const; 
     protected:
         const BaseAppPtr _myApp;
         VectorOfComponentPtr _myChildren;

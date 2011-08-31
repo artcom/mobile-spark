@@ -32,7 +32,7 @@ namespace spark {
     };
     
     
-    void Widget::render(MatrixStack& theCurrentMatrixStack, matrix & theProjectionMatrix) const {
+    void Widget::render(MatrixStack& theCurrentMatrixStack, const matrix & theProjectionMatrix) const {
         theCurrentMatrixStack.push();
         theCurrentMatrixStack.multMatrix(_myLocalMatrixStack.getTop());
 

@@ -1,9 +1,14 @@
 #include "View.h"
 
+#include <string>
+
 #include "SparkComponentFactory.h"
 #include "Widget.h"
 #include <mar/openGL_functions.h>
+#include <string>
+
 using namespace mar;
+using namespace std;
 
 namespace spark {
 
@@ -23,26 +28,34 @@ namespace spark {
         _myPos = theXMLNode->getVector2Value("pos", vector2(0,0));
         _mySize = theXMLNode->getVector2Value("size", vector2(1,1));
         _myGLViewport = ViewportPtr(new Viewport(_mySize[0],_mySize[1], _myPos[0],_myPos[1]));
-        
+        ensureCamera();
     }
 
     View::~View() {
-    }        
+    }
+            
+    void 
+    View::ensureCamera() {
+        if (_myCamera) {
+            return;
+        }
+        string myCameraName = _myXMLNode->getStringValue("cameraName");        
+        // find camera
+        _myCamera = boost::static_pointer_cast<spark::Camera>(getRoot()->getChildByName(myCameraName, true));
+    }
     
     void
     View::renderWorld(ComponentPtr theWorld) {
+        ensureCamera();
         WidgetPtr myWidget = boost::static_pointer_cast<spark::Widget>(theWorld);
-        myWidget->render(matrixStack, projectionMatrix);        
+        myWidget->render(matrixStack, _myCamera->getProjectionMatrix()); 
     }
     
     void
     View::activate(float theCanvasWidth, float theCanvasHeight) {
-        matrixStack.clear();
-        
-        matrixStack.push();
-        matrixStack.loadOrtho(0.0f, _mySize[0] *theCanvasWidth , 0.0f, _mySize[1] *theCanvasHeight, -0.1f, 100.0f);
-        projectionMatrix = matrixStack.getTop();
-        matrixStack.pop();          
+        ensureCamera();
+        matrixStack.clear();        
+        _myCamera->activate(_mySize[0] *theCanvasWidth ,_mySize[1] *theCanvasHeight);
         _myGLViewport->activate(theCanvasWidth, theCanvasHeight);
     }    
 }

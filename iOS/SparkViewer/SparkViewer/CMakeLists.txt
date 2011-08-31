@@ -28,7 +28,11 @@ add_executable(${APP_NAME}
     ${HEADERS}
     ${SOURCES}
 )
-    
+ 
+#Release and Debug Build path
+SET_TARGET_PROPERTIES(${APP_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin/")
+SET_TARGET_PROPERTIES(${APP_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/bin/")
+  
 # Set a custom plist file for the app bundle
 #SET_TARGET_PROPERTIES(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST Info.plist)
 #SET_TARGET_PROPERTIES(${APP_NAME} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer: xxx")
@@ -52,12 +56,11 @@ target_link_libraries(${APP_NAME} spark)
 #This copies the asset folder into the iOS app, 
 #as well as if you drag and drop the folder into the Xcodeproject 
 #or into the final app by opening it with the packetmanager.
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(RES_DIR ${PROJECT_SOURCE_DIR}/android/SparkViewer/assets)
 add_custom_command( 
     TARGET ${APP_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${RES_DIR} ${EXECUTABLE_OUTPUT_PATH}/${APP_NAME}.app
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${RES_DIR} ${CMAKE_BINARY_DIR}/bin/${APP_NAME}.app
 )
     
 

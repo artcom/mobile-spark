@@ -21,6 +21,7 @@
 
 // own header
 #include "string_functions.h"
+#include "logger.h"
 
 using namespace std;
 
@@ -57,5 +58,44 @@ namespace masl {
         }
         return false;
     }
+    
+    bool createFloatBinFromString(const std::string & theString, vector<float> & theBin) {        
+        theBin.clear();
+        size_t myStartIndex = 0;
+        size_t myEndIndex = theString.find(",", myStartIndex);
+        while (myEndIndex != string::npos) {            
+            theBin.push_back(as_float(theString.substr(myStartIndex, myEndIndex-myStartIndex)));
+            myStartIndex = myEndIndex+1;
+            myEndIndex = theString.find(",", myStartIndex);            
+            if (myEndIndex == string::npos) {
+                theBin.push_back(as_float(theString.substr(myStartIndex, theString.size()-myStartIndex)));                
+            }
+        }
+        return true;
+    }
+    
+    bool fromString(const std::string & theString, vector4 & outValue) {
+        vector<float> myBin;
+        createFloatBinFromString(theString, myBin);
+        if (myBin.size() != 4 ) {
+            return false;
+        }
+        for(int i = 0; i < myBin.size(); i++) {
+            outValue[i] = myBin[i];
+        }
+        return true;
+    }
+    bool fromString(const std::string & theString, vector3 & outValue) {
+        vector<float> myBin;
+        createFloatBinFromString(theString, myBin);
+        if (myBin.size() != 3 ) {
+            return false;
+        }
+        for(int i = 0; i < myBin.size(); i++) {
+            outValue[i] = myBin[i];
+        }
+        return true;
+    }
+    
 }
 

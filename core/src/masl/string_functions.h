@@ -23,6 +23,7 @@
 
 #include <sstream>
 #include "Exception.h"
+#include "numeric_functions.h"
 
 namespace masl {
 
@@ -45,6 +46,8 @@ namespace masl {
 
 
     bool fromString(const std::string & theString, bool & outValue);
+    bool fromString(const std::string & theString, vector4 & outValue);
+    bool fromString(const std::string & theString, vector3 & outValue);
 
     inline
     bool fromString(const std::string & theString, std::string & outValue) {
