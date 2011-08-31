@@ -20,7 +20,8 @@ namespace android {
         //delete _myApkArchive; //warnings?
     }
 
-    std::string AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {
+    std::string 
+    AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {
         if (theFileName.size() > 0 && theFileName[0] == '/') {  
             //unzipped, read from sdcard
             std::string myContent;
@@ -30,12 +31,19 @@ namespace android {
         return readFromPackage(_myApkArchive, theFileName);
     }
 
-    std::vector<std::string> AndroidAssetProvider::getLineByLineFromFile(const std::string & theFileName) const
-    {
+    std::vector<std::string> 
+    AndroidAssetProvider::getLineByLineFromFile(const std::string & theFileName) const {
+        if (theFileName.size() > 0 && theFileName[0] == '/') {  
+            //unzipped, read from sdcard
+            std::vector<std::string> myContent;
+            masl::readFileLineByLine(theFileName, myContent);
+            return myContent;
+        } 
         return readLineByLineFromPackage(_myApkArchive, theFileName);
     }
 
-    bool AndroidAssetProvider::loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) {
+    bool 
+    AndroidAssetProvider::loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) {
         return android::loadTextureFromPNG(_myApkArchive, filename, textureId, width, height, rgb);
     }
 }

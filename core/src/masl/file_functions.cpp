@@ -34,7 +34,8 @@ namespace masl {
 
 
     /// read a complete file into a string
-    bool readFile(const std::string & theUTF8Filename, std::string & theContent) {
+    bool 
+    readFile(const std::string & theUTF8Filename, std::string & theContent) {
         FILE * pFile;
         char *myCharBuffer;
         pFile = fopen (theUTF8Filename.c_str(),"r");
@@ -53,6 +54,37 @@ namespace masl {
         }
         return true;
 
+    }
+
+    bool 
+    readFileLineByLine(const std::string & theUTF8Filename, std::vector<std::string> & theContent) {
+        const size_t MAX_LENGTH = 1000;
+        char buffer[MAX_LENGTH];
+        std::string newPart;
+        FILE *file;
+        if ((file = fopen(theUTF8Filename.c_str(), "rb")) == NULL) {
+            throw Exception("Error opening file");
+        }
+        size_t size = fread(buffer, 1, MAX_LENGTH,file);
+        bool endedWithNewLine = false;
+        while (size > 0) {
+            newPart = std::string(buffer, size);
+            std::stringstream stream(newPart);
+            std::string item;
+            bool first = true;
+            while (std::getline(stream, item, '\n')) {
+                if (first && !endedWithNewLine && theContent.size() >0) {
+                    theContent.back().append(item);
+                } else {
+                    theContent.push_back(item);
+                }
+                first = false;
+            }
+            endedWithNewLine = (item.size() == 0);
+            size = fread(buffer, 1, MAX_LENGTH,file);
+        }
+        fclose(file);
+        return true;
     }
 }
 
