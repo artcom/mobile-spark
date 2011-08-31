@@ -6,7 +6,7 @@
 namespace animation {
     class DelayAnimation : public Animation {
     public:
-        DelayAnimation(const long theDuration=1000);
+        DelayAnimation(const masl::UInt64 theDuration=1000);
         virtual ~DelayAnimation();
     };
 

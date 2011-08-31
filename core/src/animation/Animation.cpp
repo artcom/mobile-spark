@@ -6,7 +6,7 @@ namespace animation {
 
     unsigned int Animation::idCounter = 0;
 
-    Animation::Animation(const long theDuration, EasingFunctionPtr theEasing) : 
+    Animation::Animation(const masl::UInt64 theDuration, EasingFunctionPtr theEasing) : 
         _myDuration(theDuration),
         _myEasingFunction(theEasing),
         _myId(idCounter++),
@@ -19,7 +19,7 @@ namespace animation {
         //AC_PRINT << "destruct animation " << _myId;
     }
 
-    void Animation::doFrame(const long theCurrentMillis) {
+    void Animation::doFrame(const masl::UInt64 theCurrentMillis) {
         _myProgressTime = theCurrentMillis - _myStartTime;
         _myProgress = _myEasingFunction(_myProgressTime/(float)_myDuration);
         if (_myProgressTime >= _myDuration) {
@@ -28,7 +28,7 @@ namespace animation {
         }
     }
 
-    void Animation::play(const long theStartTime, const bool theComeToAnEndFlag) {
+    void Animation::play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag) {
         //AC_PRINT << _myId << "..........play it";
         _myStartTime = theStartTime;
         _myProgressTime = 0.0;
@@ -46,7 +46,7 @@ namespace animation {
         if (_myOnCancel) { _myOnCancel->execute(); }
     }
 
-    void Animation::finish(const long theTime) {
+    void Animation::finish(const masl::UInt64 theTime) {
         //AC_PRINT << _myId << "..........finish it";
         if (_myFinished) {
             return;
@@ -59,7 +59,7 @@ namespace animation {
         finishAnimation(theTime);
     }
 
-    void Animation::finishAnimation(const long theTime) {
+    void Animation::finishAnimation(const masl::UInt64 theTime) {
         //AC_PRINT << _myId << "..........finish animation";
         _myProgressTime = _myDuration;
         _myProgress = _myEasingFunction(1.0); 

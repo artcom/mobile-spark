@@ -17,17 +17,14 @@ namespace spark {
             BaseApp();
             virtual ~BaseApp();
 
-            virtual bool setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
-            virtual void onFrame(const long theCurrentMillis);
+            virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
+            virtual void onFrame(EventPtr theEvent);
             virtual void onSizeChanged(int theWidth, int theHeight);
-            virtual void onTouch();
             virtual void onPause();
             virtual void onResume();
             virtual void onEvent(std::string theEventString);
 
             spark::WindowPtr _mySparkWindow; 
-        protected:
-            bool _myAnimate;
         private:
             mar::CanvasPtr _myGLCanvas;            
     };

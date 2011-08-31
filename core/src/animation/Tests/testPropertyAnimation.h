@@ -25,7 +25,7 @@
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with ART+COM Y60.  If not, see <http://www.gnu.org/licenses/>.
+// amasl::UInt64 with ART+COM Y60.  If not, see <http://www.gnu.org/licenses/>.
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 //
 */

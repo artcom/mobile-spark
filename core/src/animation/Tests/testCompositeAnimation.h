@@ -25,7 +25,7 @@
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with ART+COM Y60.  If not, see <http://www.gnu.org/licenses/>.
+// amasl::UInt64 with ART+COM Y60.  If not, see <http://www.gnu.org/licenses/>.
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 //
 */
@@ -118,8 +118,8 @@ namespace animation {
             ENSURE_MSG(mySequence, "mySequence should not be null");
 
             ObjectPtr myObject = ObjectPtr(new Object());
-            long myDuration1 = 5;
-            long myDuration2 = 10;
+            masl::UInt64 myDuration1 = 5;
+            masl::UInt64 myDuration2 = 10;
             ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
             ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,0,1,myDuration2));
             mySequence->add(myAnimation1);
@@ -168,8 +168,8 @@ namespace animation {
             ENSURE_MSG(myParallel, "myParallel should not be null");
 
             ObjectPtr myObject = ObjectPtr(new Object());
-            long myDuration1 = 5;
-            long myDuration2 = 10;
+            masl::UInt64 myDuration1 = 5;
+            masl::UInt64 myDuration2 = 10;
             ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
             ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,0,1,myDuration2));
             myParallel->add(myAnimation1);
@@ -214,8 +214,8 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
             SequenceAnimationPtr mySequence = SequenceAnimationPtr(new SequenceAnimation);
             ObjectPtr myObject = ObjectPtr(new Object());
-            long myDuration1 = 5;
-            long myDuration2 = 10;
+            masl::UInt64 myDuration1 = 5;
+            masl::UInt64 myDuration2 = 10;
             ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
             ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
             mySequence->add(myAnimation1);
@@ -242,8 +242,8 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
             SequenceAnimationPtr mySequence = SequenceAnimationPtr(new SequenceAnimation);
             ObjectPtr myObject = ObjectPtr(new Object());
-            long myDuration1 = 5;
-            long myDuration2 = 10;
+            masl::UInt64 myDuration1 = 5;
+            masl::UInt64 myDuration2 = 10;
             ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
             ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
             mySequence->add(myAnimation1);
@@ -271,8 +271,8 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
             SequenceAnimationPtr mySequence = SequenceAnimationPtr(new SequenceAnimation);
             ObjectPtr myObject = ObjectPtr(new Object());
-            long myDuration1 = 5;
-            long myDuration2 = 10;
+            masl::UInt64 myDuration1 = 5;
+            masl::UInt64 myDuration2 = 10;
             ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
             ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
             mySequence->add(myAnimation1);
@@ -300,8 +300,8 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
             ParallelAnimationPtr myParallel = ParallelAnimationPtr(new ParallelAnimation);
             ObjectPtr myObject = ObjectPtr(new Object());
-            long myDuration1 = 5;
-            long myDuration2 = 10;
+            masl::UInt64 myDuration1 = 5;
+            masl::UInt64 myDuration2 = 10;
             ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
             ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
             myParallel->add(myAnimation1);
@@ -328,8 +328,8 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
             ParallelAnimationPtr myParallel = ParallelAnimationPtr(new ParallelAnimation);
             ObjectPtr myObject = ObjectPtr(new Object());
-            long myDuration1 = 5;
-            long myDuration2 = 10;
+            masl::UInt64 myDuration1 = 5;
+            masl::UInt64 myDuration2 = 10;
             ObjectPropertyAnimationPtr myAnimation1 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setX,0,1,myDuration1));
             ObjectPropertyAnimationPtr myAnimation2 = ObjectPropertyAnimationPtr(new ObjectPropertyAnimation(myObject, &Object::setY,23,42,myDuration2));
             myParallel->add(myAnimation1);
