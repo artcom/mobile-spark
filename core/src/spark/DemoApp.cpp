@@ -13,6 +13,7 @@
 
 #include "Rectangle.h"
 #include "Shape3D.h"
+#include "SparkComponentFactory.h"
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
@@ -73,6 +74,12 @@ namespace spark {
         animation::AnimationManager::get().play(myXRotate);
         animation::AnimationManager::get().play(myYRotate);
         animation::AnimationManager::get().play(myZRotate);
+
+        //create a component in code
+        myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
+        ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(BaseAppPtr(this), 
+                "<Rectangle color=\"[1.0,1,0,0.0,1.0]\"/>");  //XXX: boost shared_from_this?
+        myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
         
         return myBaseReturn;
     }

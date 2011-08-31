@@ -2,6 +2,8 @@
 
 #include <masl/Logger.h>
 
+#include "Container.h"
+
 namespace spark {
 
     Component::Component(): EventDispatcher(), _myParent(ComponentPtr()) {
@@ -44,4 +46,8 @@ namespace spark {
         return _myXMLNode->nodeName;
     }
 
+    void Component::insertAtParent(ContainerPtr theParent) {
+        _myParent = theParent;
+        theParent->insertChild(ComponentPtr(this));  //XXX: boost shared_from_this?
+    }
 }

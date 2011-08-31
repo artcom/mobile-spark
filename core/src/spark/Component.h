@@ -16,6 +16,8 @@ namespace spark {
 
     class Component;
     typedef boost::shared_ptr<Component> ComponentPtr;
+    class Container;
+    typedef boost::shared_ptr<Container> ContainerPtr;
 
     class Component : public EventDispatcher {
     public: 
@@ -32,6 +34,7 @@ namespace spark {
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
         Component* getRoot();
         const ComponentPtr & getParent() const {return _myParent; };
+        void insertAtParent(ContainerPtr theParent);
     protected:
         const XMLNodePtr _myXMLNode;
         std::string _myName;

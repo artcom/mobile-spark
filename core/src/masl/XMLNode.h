@@ -32,6 +32,7 @@ namespace masl {
             std::map<std::string, std::string> attributes;
 
             const xmlNode* node;
+
     };
 
     typedef boost::shared_ptr<XMLNode> XMLNodePtr;

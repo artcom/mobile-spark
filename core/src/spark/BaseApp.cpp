@@ -39,7 +39,7 @@ namespace spark {
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
 #endif
         //load layout
-        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));
+        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayoutFromFile(BaseAppPtr(this), theLayoutFile));
             
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
