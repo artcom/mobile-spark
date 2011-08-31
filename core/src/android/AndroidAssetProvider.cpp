@@ -1,6 +1,7 @@
 #include "AndroidAssetProvider.h"
 
 #include <masl/Logger.h>
+#include <masl/file_functions.h>
 
 #include "APK_functions.h"
 #include "png_functions.h"
@@ -20,6 +21,12 @@ namespace android {
     }
 
     std::string AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {
+        if (theFileName.size() > 0 && theFileName[0] == '/') {  
+            //unzipped, read from sdcard
+            std::string myContent;
+            masl::readFile(theFileName, myContent);
+            return myContent;
+        }
         return readFromPackage(_myApkArchive, theFileName);
     }
 
