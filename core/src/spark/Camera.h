@@ -15,6 +15,7 @@ enum ProjectionType {
     PERSPECTIVE,
     ORTHONORMAL
 };
+
 static const char* PerspectiveStr = "perspective";
 static const char* OrtohonormalStr = "orthonormal";
 static const char* AutoOrthonormalStr = "auto";

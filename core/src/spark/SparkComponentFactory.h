@@ -20,7 +20,8 @@ namespace spark {
         bool unregisterComponent(const std::string & theComponentName);
         ComponentPtr createComponent(const std::string & theComponentName, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr()) const;
 
-        ComponentPtr loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath);
+        ComponentPtr loadSparkLayoutFromFile(const BaseAppPtr theApp, const std::string & thePath);
+        ComponentPtr loadSparkLayoutFromString(const BaseAppPtr theApp, const std::string & theNode);
 
     private:
         CallbackMap _myCreateCallbackMap;
