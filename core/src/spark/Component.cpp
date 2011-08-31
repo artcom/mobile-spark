@@ -18,7 +18,7 @@ namespace spark {
         AC_PRINT << "delete " + _myName;
     }
 
-    void Component::render(MatrixStack& theCurrentMatrixStack, matrix & theProjectionMatrix) const {
+    void Component::render(MatrixStack& theCurrentMatrixStack, const matrix & theProjectionMatrix) const {
     }
     
     void Component::onPause() const  {
@@ -28,8 +28,15 @@ namespace spark {
         AC_PRINT << "Spark::Component " << getName() << " onResume";
     }
 
-    ComponentPtr Component::getChildByName(const std::string & theName) const {
+    ComponentPtr Component::getChildByName(const std::string & theName, bool theDeepFlag) const {
         return ComponentPtr();
+    }
+    Component* Component::getRoot() {
+        if (_myParent) {
+            return _myParent->getRoot();
+        } else {
+            return this;
+        }
     }
     
     const std::string & 
