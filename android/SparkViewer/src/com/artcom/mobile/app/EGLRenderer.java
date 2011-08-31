@@ -14,7 +14,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static int numFrames = 0;
     public static long millisec = 0;
     public static final String PACKAGE_NAME = "com.artcom.mobile";
-    public static final String LAYOUT_FILE = "assets/layouts/main.spark";        
+    public static final String LAYOUT_FILE = "/sdcard/main.spark";//"assets/layouts/main.spark";        
     public static boolean _myFirstTimeFlag;
     private Context context;
     public EGLRenderer (Context context, boolean firstTime) {
@@ -24,6 +24,8 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     }    
     public void onDrawFrame(GL10 glUnused) {
         updateFrameCounter();
+        String myEvent = "<StageEvent type='frame' time='" + System.currentTimeMillis() + "'/>";
+        NativeBinding.onEvent(myEvent);
         NativeBinding.onFrame(System.currentTimeMillis());
     }
 

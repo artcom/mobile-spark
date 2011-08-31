@@ -6,12 +6,13 @@
 #include <mar/Canvas.h>
 
 #include "Window.h"
+#include "EventFactory.h"
 
 
 
 namespace spark {
 
-    class BaseApp {
+    class BaseApp : public boost::enable_shared_from_this<BaseApp> {
         public: 
             BaseApp();
             virtual ~BaseApp();
@@ -22,6 +23,7 @@ namespace spark {
             virtual void onTouch();
             virtual void onPause();
             virtual void onResume();
+            virtual void onEvent(std::string theEventString);
 
             spark::WindowPtr _mySparkWindow; 
         protected:

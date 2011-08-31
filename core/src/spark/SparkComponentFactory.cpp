@@ -57,10 +57,13 @@ namespace spark {
         return (i->second)(theApp, theNode, theParent);
     }
 
-    ComponentPtr SparkComponentFactory::loadSparkLayout(const BaseAppPtr theApp, const std::string & thePath) {
-        
+    ComponentPtr SparkComponentFactory::loadSparkLayoutFromFile(const BaseAppPtr theApp, const std::string & thePath) {
         std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
-        xmlDocPtr doc = loadXMLFromMemory(myLayout);
+        return loadSparkLayoutFromString(theApp, myLayout);
+    }
+
+    ComponentPtr SparkComponentFactory::loadSparkLayoutFromString(const BaseAppPtr theApp, const std::string & theNode) {
+        xmlDocPtr doc = loadXMLFromMemory(theNode);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));
         ComponentPtr myComponentPtr = createComponent(myNode->nodeName, theApp, myNode);

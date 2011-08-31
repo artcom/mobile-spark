@@ -1,7 +1,13 @@
 
 #include "BaseApp.h"
 
+#include <boost/enable_shared_from_this.hpp>
+
 #include <masl/Logger.h>
+#include <masl/BaseEntry.h>
+#include <masl/XMLNode.h>
+
+#include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
 
 #ifdef __ANDROID__
@@ -11,14 +17,16 @@
     #include <ios/IOSAssetProvider.h>
 #endif
 
-#include <mar/AssetProvider.h>
 #include "SparkComponentFactory.h"
-
-#include <masl/BaseEntry.h>
+#include "EventFactory.h"
 
 using namespace mar;
 
 namespace spark {
+
+    void testFreeFunctionEvent(EventPtr theEvent) {
+        AC_PRINT<<"testFreeFunctionEvent "<<theEvent->getType();
+    }
 
     BaseApp::BaseApp(): _myAnimate(true) {
     }
@@ -39,8 +47,14 @@ namespace spark {
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
 #endif
         //load layout
-        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));
-            
+        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayoutFromFile(BaseAppPtr(this), theLayoutFile));
+
+        //register for events
+        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
+        _mySparkWindow->addEventListener("TouchEvent", myCB);
+        spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(testFreeFunctionEvent));
+        _mySparkWindow->addEventListener("TouchEvent", myFreeCB);
+
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
         return true;
@@ -58,6 +72,13 @@ namespace spark {
             _mySparkWindow->onPause();
         }
     }
+
+    void BaseApp::onEvent(std::string theEventString) {
+        EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
+        myEvent->connect(_mySparkWindow);
+        (*myEvent)();
+    }
+    
     void BaseApp::onResume() {
         if (_mySparkWindow) {
             _mySparkWindow->onResume();
