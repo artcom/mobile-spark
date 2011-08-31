@@ -6,6 +6,7 @@
 #include <mar/Canvas.h>
 
 #include "Window.h"
+#include "EventFactory.h"
 
 
 
@@ -22,6 +23,7 @@ namespace spark {
             virtual void onTouch();
             virtual void onPause();
             virtual void onResume();
+            virtual void onEvent(std::string theEventString);
 
             spark::WindowPtr _mySparkWindow; 
         protected:

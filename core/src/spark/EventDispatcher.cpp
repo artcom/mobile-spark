@@ -35,13 +35,15 @@ namespace spark {
         theEvent->startDispatch();
 
         ComponentPtr myCurrent = theEvent->getTarget();
+        //AC_PRINT<<"event target "<<myCurrent->getName();
         // collect dispatchers to capture on
         std::list<ComponentPtr> myCaptureList;
         while (myCurrent->getParent()) {
             myCurrent = myCurrent->getParent();
             myCaptureList.push_front(myCurrent);
         }
-        
+       
+        //AC_PRINT<<" capturelist empty "<<myCaptureList.empty();
         // capture phase
         EventListenerKey myCaptureKey(theEvent->getType(), true);
         for (std::list<ComponentPtr>::iterator it = myCaptureList.begin(); it != myCaptureList.end(); ++it) {
@@ -64,6 +66,7 @@ namespace spark {
         EventListenerKey myKey(theEvent->getType(), false);
         std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = _myListenersMap.equal_range(myKey);
         for (EventListenerMap::const_iterator it = itp.first; it != itp.second; ++it) {
+            //AC_PRINT<<"listener: "<<(*it).second;
             (*(*it).second)(theEvent);
             if (!theEvent->isDispatching()) {
                 return;

@@ -24,6 +24,8 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     }    
     public void onDrawFrame(GL10 glUnused) {
         updateFrameCounter();
+        String myEvent = "<StageEvent type='frame' time='" + System.currentTimeMillis() + "'/>";
+        NativeBinding.onEvent(myEvent);
         NativeBinding.onFrame(System.currentTimeMillis());
     }
 

@@ -2,27 +2,31 @@
 #define _ac_mobile_spark_Event_h_included_
 
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <masl/Settings.h>
 #include <masl/Logger.h>
 #include <masl/Callback.h>
+#include <masl/XMLNode.h>
 
 namespace spark {
 
     class Component;
     typedef boost::shared_ptr<Component> ComponentPtr;
 
-    class Event {
+    class Event : public boost::enable_shared_from_this<Event> {
         public:
 
             Event(const std::string & theType, ComponentPtr theTarget);
+            Event(const masl::XMLNodePtr theXMLNode);
             virtual ~Event() = 0;
 
             enum EventPhase {
                 IDLE,
                 CAPTURING,
-                TARGET,
-                BUBBLING
+                TARGET
             };
 
+            void operator () ();
             void cancelDispatch();
             void startDispatch();
             void finishDispatch();
@@ -31,6 +35,7 @@ namespace spark {
             const std::string & getType() const {return type_;};
             const ComponentPtr & getTarget() const {return target_;};
             bool isDispatching() const {return dispatching_;};
+            void connect(ComponentPtr theComponent) {target_ = theComponent;};
 
         private:
             std::string type_;
@@ -46,10 +51,11 @@ namespace spark {
     class StageEvent : public Event {
         public:
 
-            StageEvent(const std::string & theType, ComponentPtr theTarget, const long theCurrentTime);
+            StageEvent(const std::string & theType, ComponentPtr theTarget, const masl::UInt64 theCurrentTime);
+            StageEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~StageEvent();
 
-            long currenttime_;
+            masl::UInt64 currenttime_;
     };
 
     typedef boost::shared_ptr<StageEvent> StageEventPtr;
@@ -58,6 +64,7 @@ namespace spark {
         public:
 
             TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY);
+            TouchEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~TouchEvent();
 
             unsigned int getX() const { return x_;};
@@ -69,6 +76,9 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<TouchEvent> TouchEventPtr;
+
+    EventPtr createStageEvent(const masl::XMLNodePtr theXMLNode);
+    EventPtr createTouchEvent(const masl::XMLNodePtr theXMLNode);
 
     class EventCallback {
     public:

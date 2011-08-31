@@ -1,12 +1,34 @@
+#include "Component.h"
 #include "Event.h"
+
+using namespace masl;
 
 namespace spark {
 
-    Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
+    EventPtr createStageEvent(const masl::XMLNodePtr theXMLNode) {
+        return EventPtr(new StageEvent(theXMLNode));
     }
 
-    Event::~Event() {}
+    EventPtr createTouchEvent(const masl::XMLNodePtr theXMLNode) {
+        return EventPtr(new TouchEvent(theXMLNode));
+    }
 
+    Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
+    }
+    Event::Event(const masl::XMLNodePtr theXMLNode) {
+        type_ = theXMLNode->getStringValue("type", theXMLNode->nodeName);
+    }
+
+    Event::~Event() {
+    }
+
+
+    void 
+    Event::operator () () {
+        if (target_) {
+            target_->dispatchEvent(shared_from_this());
+        }
+    }
     void
     Event::startDispatch() {
         dispatching_ = true;
@@ -39,13 +61,24 @@ namespace spark {
     };
 
 
-    StageEvent::StageEvent(const std::string & theType, ComponentPtr theTarget, const long theCurrentTime) :
+    StageEvent::StageEvent(const std::string & theType, ComponentPtr theTarget, const UInt64 theCurrentTime) :
         Event(theType, theTarget), currenttime_(theCurrentTime) 
     {}
+    StageEvent::StageEvent(const masl::XMLNodePtr theXMLNode) :
+        Event(theXMLNode)
+    {
+        currenttime_ = as<UInt64>(theXMLNode->getStringValue("time", "-1")); 
+    }
     StageEvent::~StageEvent() {}
 
     TouchEvent::TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY) :
         Event(theType, theTarget), x_(theX), y_(theY) 
     {}
+    TouchEvent::TouchEvent(const masl::XMLNodePtr theXMLNode) :
+        Event(theXMLNode),
+        x_(as<unsigned int>(theXMLNode->attributes["x"])), 
+        y_(as<unsigned int>(theXMLNode->attributes["y"]))
+    {}
+
     TouchEvent::~TouchEvent() {}
 }
