@@ -19,7 +19,7 @@ namespace spark {
     class Container;
     typedef boost::shared_ptr<Container> ContainerPtr;
 
-    class Component : public EventDispatcher {
+    class Component : public EventDispatcher, public boost::enable_shared_from_this<Component> {
     public: 
         Component();
         Component(const XMLNodePtr theXMLNode, ComponentPtr theParent);

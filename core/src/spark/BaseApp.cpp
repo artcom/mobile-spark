@@ -1,6 +1,8 @@
 
 #include "BaseApp.h"
 
+#include <boost/enable_shared_from_this.hpp>
+
 #include <masl/Logger.h>
 #include <masl/BaseEntry.h>
 #include <masl/XMLNode.h>

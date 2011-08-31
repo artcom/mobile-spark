@@ -48,6 +48,6 @@ namespace spark {
 
     void Component::insertAtParent(ContainerPtr theParent) {
         _myParent = theParent;
-        theParent->insertChild(ComponentPtr(this));  //XXX: boost shared_from_this?
+        theParent->insertChild(shared_from_this()); 
     }
 }
