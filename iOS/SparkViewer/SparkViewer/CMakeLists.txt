@@ -45,6 +45,7 @@ ADD_FRAMEWORK(${APP_NAME} UIKit)
 ADD_FRAMEWORK(${APP_NAME} Foundation)
 ADD_FRAMEWORK(${APP_NAME} QuartzCore)
 ADD_FRAMEWORK(${APP_NAME} OpenGLES)
+ADD_FRAMEWORK(${APP_NAME} CoreMotion)
 
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${libXML2_INCLUDE_DIRS})
