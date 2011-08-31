@@ -82,21 +82,52 @@ namespace spark {
 
     class EventCallback {
     public:
-        EventCallback(ComponentPtr theObject, void (Component::*theFunctionPtr)(EventPtr)): 
+        virtual ~EventCallback() {};
+        virtual void execute(EventPtr theEvent) const = 0;
+        virtual void operator() (EventPtr theEvent) {execute(theEvent);};
+    };
+
+    typedef boost::shared_ptr<EventCallback> EventCallbackPtr;
+
+
+
+
+    typedef void (*FreeFunctionEventPtr)(EventPtr);
+
+    class FreeFunctionEventCallback : public EventCallback {
+    public:
+        FreeFunctionEventCallback(FreeFunctionEventPtr theFunctionPtr): 
+            EventCallback(),
+            _myFunctionPointer(theFunctionPtr) {
+        };
+        virtual ~FreeFunctionEventCallback() {};
+
+        virtual void execute(EventPtr theEvent) const {
+            _myFunctionPointer(theEvent);
+        };
+    private:
+        FreeFunctionEventPtr _myFunctionPointer; 
+    };
+    typedef boost::shared_ptr<FreeFunctionEventCallback> FreeFunctionEventCallbackPtr;
+
+
+
+    template < typename T, typename TP>
+    class MemberFunctionEventCallback : public EventCallback {
+    public:
+        MemberFunctionEventCallback(TP theObject, void (T::*theFunctionPtr)(EventPtr)): 
             _myObjectPtr(theObject),
             _myFunctionPointer(theFunctionPtr) {
         };
-        virtual ~EventCallback() {};
+        virtual ~MemberFunctionEventCallback() {};
 
-        void execute(EventPtr theEvent) const {
+        virtual void execute(EventPtr theEvent) const {
             (_myObjectPtr.get()->*_myFunctionPointer)(theEvent);
         };
-        virtual void operator() (EventPtr theEvent) {execute(theEvent);}
     private:
-        ComponentPtr _myObjectPtr;
-        void (Component::*_myFunctionPointer)(EventPtr);
+        TP _myObjectPtr;
+        void (T::*_myFunctionPointer)(EventPtr);
     };
-    typedef boost::shared_ptr<EventCallback> EventCallbackPtr;
 
 }
 #endif

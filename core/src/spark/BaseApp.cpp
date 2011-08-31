@@ -22,6 +22,10 @@ using namespace mar;
 
 namespace spark {
 
+    void testFreeFunctionEvent(EventPtr theEvent) {
+        AC_PRINT<<"testFreeFunctionEvent "<<theEvent->getType();
+    }
+
     BaseApp::BaseApp(): _myAnimate(true) {
     }
 
@@ -42,9 +46,12 @@ namespace spark {
 #endif
         //load layout
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));
-        spark::EventCallbackPtr myCB(new spark::EventCallback( _mySparkWindow, &Component::testEvent));
+        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener("TouchEvent", myCB);
             
+        spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(testFreeFunctionEvent));
+        _mySparkWindow->addEventListener("TouchEvent", myFreeCB);
+
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
         return true;

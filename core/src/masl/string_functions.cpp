@@ -21,7 +21,7 @@
 
 // own header
 #include "string_functions.h"
-#include "logger.h"
+#include "Logger.h"
 
 using namespace std;
 

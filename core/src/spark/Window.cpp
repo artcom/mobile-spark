@@ -35,7 +35,7 @@ namespace spark {
     Window::~Window() {
     }
     
-    void Window::onTouch(EventPtr theEvent) const { 
+    void Window::onTouch(EventPtr theEvent) { 
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         AC_PRINT<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
     }
