@@ -61,8 +61,8 @@ namespace spark {
         animation::AnimationManager::get().play(myYRotate);
         animation::AnimationManager::get().play(myZRotate);
 
-        myTransform = _mySparkWindow->getChildByName("world2")->getChildByName("objTransform");
-        myObject = myTransform->getChildByName("objShape");
+        myTransform = _mySparkWindow->getChildByName("world2")->getChildByName("objTransform1");
+        myObject = myTransform->getChildByName("objShape1");
         myShape = boost::static_pointer_cast<spark::Shape3D>(myObject);
         myXRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationX, 0, 6.28, 7000));
         myXRotate->setLoop(true);
@@ -74,6 +74,19 @@ namespace spark {
         animation::AnimationManager::get().play(myYRotate);
         animation::AnimationManager::get().play(myZRotate);
         
+        myTransform = _mySparkWindow->getChildByName("world2")->getChildByName("objTransform2");
+        ComponentPtr myObject2 = myTransform->getChildByName("objShape2");
+        Shape3DPtr myShape2 = boost::static_pointer_cast<spark::Shape3D>(myObject2);
+        myXRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape2, &Widget::setRotationX, 0, 6.28, 7000));
+        myXRotate->setLoop(true);
+        myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape2, &Widget::setRotationY, 0, 6.28, 9000));
+        myYRotate->setLoop(true);
+        myZRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape2, &Widget::setRotationZ, 0, 6.28, 13000));
+        myZRotate->setLoop(true);
+        animation::AnimationManager::get().play(myXRotate);
+        animation::AnimationManager::get().play(myYRotate);
+        animation::AnimationManager::get().play(myZRotate);
+
         return myBaseReturn;
     }
 
