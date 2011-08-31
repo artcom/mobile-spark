@@ -28,7 +28,7 @@ namespace spark {
         virtual void onPause() const ;
         virtual void onResume() const ;
         
-        virtual void testEvent(EventPtr theEvent) {};
+        virtual void testEvent(EventPtr theEvent) {AC_PRINT<<"event callback";};
         const std::string & getName() const { return _myName; };
         const std::string & getType() const;
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;

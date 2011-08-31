@@ -159,6 +159,11 @@ namespace mar {
 
 
     void ObjImporter::importObj(std::string theObjFileName, ShapePtr theShape) {
+        vertices.clear();
+        normals.clear();
+        texData.clear();
+        faces.clear();
+        materialMap.clear();
         //AC_PRINT << "import obj " << theObjFileName;
         const std::vector<std::string> theObjFile = 
             AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".obj"));

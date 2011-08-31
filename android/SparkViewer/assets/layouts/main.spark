@@ -12,7 +12,7 @@
         <Transform name="transformA" x="100" y="10" >
             <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
             <Transform name="objTransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
-                <Shape3D name="objShape" src="assets/models/model"/>
+                <Shape3D name="objShape" src="/sdcard/model"/>
             </Transform>
             <Image name="imageA" x="2" z="1" src="assets/textures/texture.png"/>
         </Transform>
@@ -21,8 +21,11 @@
     </World>        
     <World name="world2">    
         <Camera name="3dcamera" position="[2.0,1.0,2.0]" scale="[1,1,1]" frustum="perspective[54,54,0.1,10000]"/>    
-        <Transform name="objTransform" x="0" y="0" z="-50" scaleX="40" scaleY="40" scaleZ="40">
-            <Shape3D name="objShape" src="assets/models/model"/>
+        <Transform name="objTransform1" x="-30" y="-50" z="-50" scaleX="0.2" scaleY="0.2" scaleZ="0.02">
+            <Shape3D name="objShape1" src="/sdcard/amazone"/>
+        </Transform>
+        <Transform name="objTransform2" x="30" y="-50" z="-50" scaleX="0.2" scaleY="0.2" scaleZ="0.02">
+            <Shape3D name="objShape2" src="/sdcard/loewenkaempfer"/>
         </Transform>
     </World>            
 </Window>

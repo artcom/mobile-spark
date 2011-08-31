@@ -35,6 +35,11 @@ namespace spark {
     Window::~Window() {
     }
     
+    void Window::onTouch(EventPtr theEvent) { 
+        TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
+        AC_PRINT<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
+    }
+
     void Window::onSizeChanged(int theWidth, int theHeight) {
         _myWidth = theWidth; 
         _myHeight = theHeight;

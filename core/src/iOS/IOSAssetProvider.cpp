@@ -105,47 +105,18 @@ namespace ios
     }
     
     
-    std::string IOSAssetProvider::getStringFromFile(const std::string & theFile) const 
-    {
+    std::string 
+    IOSAssetProvider::getStringFromFile(const std::string & theFile) const {
         std::string content = "";
         masl::readFile(_myAssetFolderPath + "/" + theFile, content);
-       
         return content;
     }
 
 
-    std::vector<std::string> IOSAssetProvider::getLineByLineFromFile(const std::string & theFile) const
-    {
-        std::vector<std::string> myLines;
+    std::vector<std::string> 
+    IOSAssetProvider::getLineByLineFromFile(const std::string & theFile) const {
         std::vector<std::string> content;
-        const size_t MAX_LENGTH = 1000;
-        char buffer[MAX_LENGTH];
-        std::string newPart;
-        std::string filepath =  _myAssetFolderPath + "/" + theFile;
-        FILE *file;
-        if ((file = fopen(filepath.c_str(), "rb")) == NULL) {
-            AC_PRINT << " Error opening ";
-            return content;
-        }
-        size_t size = std::fread(buffer, 1, MAX_LENGTH,file);
-        bool endedWithNewLine = false;
-        while (size > 0) {
-            newPart = std::string(buffer, size);
-            std::stringstream stream(newPart);
-            std::string item;
-            bool first = true;
-            while (std::getline(stream, item, '\n')) {
-                if (first && !endedWithNewLine && content.size() >0) {
-                    content.back().append(item);
-                } else {
-                    content.push_back(item);
-                }
-                first = false;
-            }
-            endedWithNewLine = (item.size() == 0);
-            size = std::fread(buffer, 1, MAX_LENGTH,file);
-        }
-        fclose(file);
+        masl::readFileLineByLine(_myAssetFolderPath + "/" + theFile, content);
         return content;
     }
 }
