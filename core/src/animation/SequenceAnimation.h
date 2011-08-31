@@ -8,9 +8,9 @@ namespace animation {
     public:
         SequenceAnimation();
         virtual ~SequenceAnimation();
-        virtual void doFrame(const long theTime);
+        virtual void doFrame(const masl::UInt64 theTime);
         virtual void childDurationChanged();
-        virtual void play(const long theStartTime, const bool theComeToAnEndFlag = false);
+        virtual void play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag = false);
     private:
         unsigned int _myCurrent;
     };

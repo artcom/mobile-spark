@@ -55,6 +55,7 @@ namespace spark {
             StageEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~StageEvent();
 
+            masl::UInt64 getCurrentTime() const { return currenttime_;};
             masl::UInt64 currenttime_;
     };
 

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <masl/Singleton.h>
+#include <masl/Settings.h>
 #include "Animation.h"
 
 namespace animation {
@@ -12,12 +13,12 @@ namespace animation {
         virtual unsigned int animationCount() const { return _myAnimations.size(); };
         void play(AnimationPtr theAnimation);
         bool isPlaying() const { return _myAnimations.size() > 0; };
-        void doFrame(const long theCurrentMillis);
-        void init(const long theCurrentMillis) { _myAnimationTime = theCurrentMillis; };
+        void doFrame(const masl::UInt64 theCurrentMillis);
+        void init(const masl::UInt64 theCurrentMillis) { _myAnimationTime = theCurrentMillis; };
 
     private:
         std::vector<AnimationPtr> _myAnimations;
-        long _myAnimationTime;
+        masl::UInt64 _myAnimationTime;
 
         void removeFinished();
     };

@@ -10,9 +10,9 @@ namespace animation {
 
     // duration = max(map(children, duration))
     void ParallelAnimation::childDurationChanged() {
-        long d = 0;
+        masl::UInt64 d = 0;
         for (std::vector<AnimationPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-            long c = (*it)->getDuration();
+            masl::UInt64 c = (*it)->getDuration();
             if (c > d) {
                 d = c;
             }
@@ -20,7 +20,7 @@ namespace animation {
         _myDuration = d;
     }
 
-    void ParallelAnimation::play(const long theStartTime, const bool theComeToAnEndFlag) {
+    void ParallelAnimation::play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag) {
         CompositeAnimation::play(theStartTime, theComeToAnEndFlag);
         if (!theComeToAnEndFlag) {
             for (std::vector<AnimationPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
@@ -31,7 +31,7 @@ namespace animation {
         }
     }
 
-    void ParallelAnimation::doFrame(const long theTime) {
+    void ParallelAnimation::doFrame(const masl::UInt64 theTime) {
         bool notFinished = false;
         for (std::vector<AnimationPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             if (isRunning() && (*it)->isRunning()) {

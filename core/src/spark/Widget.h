@@ -18,6 +18,9 @@ namespace spark {
         virtual ~Widget() = 0;
         virtual void render(MatrixStack& theCurrentMatrixStack, const matrix & theProjectionMatrix) const;
 
+        float getX() const { return _x;};
+        float getY() const { return _y;};
+        float getZ() const { return _z;};
         void setX(const float theX) { _x = theX; updateMatrix();};
         void setY(const float theY) { _y = theY; updateMatrix();};
         void setZ(const float theZ) { _z = theZ; updateMatrix();};
