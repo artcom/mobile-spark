@@ -17,3 +17,5 @@ ac_add_library(
     EXTERNS ${EXTERNS}
     DEPENDS ${DEPENDS}
 )
+
+add_subdirectory(Tests)

@@ -21,7 +21,7 @@
 
 // own header
 #include "string_functions.h"
-#include "logger.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -80,7 +80,7 @@ namespace masl {
         if (myBin.size() != 4 ) {
             return false;
         }
-        for(int i = 0; i < myBin.size(); i++) {
+        for(size_t i = 0; i < myBin.size(); i++) {
             outValue[i] = myBin[i];
         }
         return true;
@@ -91,7 +91,7 @@ namespace masl {
         if (myBin.size() != 3 ) {
             return false;
         }
-        for(int i = 0; i < myBin.size(); i++) {
+        for(size_t i = 0; i < myBin.size(); i++) {
             outValue[i] = myBin[i];
         }
         return true;
