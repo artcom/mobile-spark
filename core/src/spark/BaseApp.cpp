@@ -2,6 +2,10 @@
 #include "BaseApp.h"
 
 #include <masl/Logger.h>
+#include <masl/BaseEntry.h>
+#include <masl/XMLNode.h>
+
+#include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
 
 #ifdef __ANDROID__
@@ -11,10 +15,8 @@
     #include <ios/IOSAssetProvider.h>
 #endif
 
-#include <mar/AssetProvider.h>
 #include "SparkComponentFactory.h"
-
-#include <masl/BaseEntry.h>
+#include "EventFactory.h"
 
 using namespace mar;
 
@@ -40,6 +42,8 @@ namespace spark {
 #endif
         //load layout
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayout(BaseAppPtr(this), theLayoutFile));
+        spark::EventCallbackPtr myCB(new spark::EventCallback( _mySparkWindow, &Component::testEvent));
+        _mySparkWindow->addEventListener("TouchEvent", myCB);
             
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
@@ -58,6 +62,13 @@ namespace spark {
             _mySparkWindow->onPause();
         }
     }
+
+    void BaseApp::onEvent(std::string theEventString) {
+        EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
+        myEvent->connect(_mySparkWindow);
+        (*myEvent)();
+    }
+    
     void BaseApp::onResume() {
         if (_mySparkWindow) {
             _mySparkWindow->onResume();

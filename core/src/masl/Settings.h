@@ -16,4 +16,9 @@
     #endif
     
 #endif
+
+namespace masl {
+    typedef unsigned long long UInt64;
+}
+
 #endif
