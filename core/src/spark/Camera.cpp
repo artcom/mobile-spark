@@ -71,15 +71,15 @@ namespace spark {
              
         if (_myProjectionType == ORTHONORMAL) {
             if (_myAutoProjection) {
-                //AC_PRINT << "############### activate auto aorthonormal frustum";
                 matrixStack.loadOrtho(0, theCameraWidth, 0.0 , theCameraHeight, -0.1, 1000);
             } else {
             } 
         } else {
-            //AC_PRINT << "############### activate projective frustum";            
             float myRatio = (float)theCameraWidth/(float)theCameraHeight;
             matrixStack.loadPerspective(-0.1*myRatio, 0.1*myRatio, -0.1*myRatio , 0.1*myRatio, 0.1, 1000);
-            matrixStack.translate(0,0,20);
+            matrix myCameraMatrix = _myLocalMatrixStack.getTop();
+            myCameraMatrix.inverse();
+            matrixStack.multMatrix(myCameraMatrix);
         }
         _myProjectionMatrix = matrixStack.getTop();
         matrixStack.pop();
