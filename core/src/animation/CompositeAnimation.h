@@ -12,7 +12,7 @@ namespace animation {
         virtual ~CompositeAnimation();
         void add(AnimationPtr theAnimation);
         virtual void childDurationChanged() = 0;
-        virtual void finish(const long theTime);
+        virtual void finish(const masl::UInt64 theTime);
         virtual void cancel();
 
     protected:

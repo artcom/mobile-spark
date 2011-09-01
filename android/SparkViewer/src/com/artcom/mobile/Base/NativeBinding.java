@@ -14,9 +14,7 @@ public class NativeBinding {
 
   
   public static native void setup(long currentMillis, String apkFilePath, String layoutFile);
-  public static native void onFrame(long currentMillis);
   public static native void onSizeChanged(int theWidth, int theHeight);
-  public static native void onTouch();
   public static native void onPause();
   public static native void onResume();
   public static native void onEvent(String theEvent);

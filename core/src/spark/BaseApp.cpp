@@ -28,13 +28,13 @@ namespace spark {
         AC_PRINT<<"testFreeFunctionEvent "<<theEvent->getType();
     }
 
-    BaseApp::BaseApp(): _myAnimate(true) {
+    BaseApp::BaseApp() {
     }
 
     BaseApp::~BaseApp() {
     }
 
-    bool BaseApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
+    bool BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         //AC_PRINT << "setup";
         //init animationManager with setup-time 
         //(needed for animations created on setup)
@@ -50,6 +50,8 @@ namespace spark {
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkLayoutFromFile(BaseAppPtr(this), theLayoutFile));
 
         //register for events
+        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
+        _mySparkWindow->addEventListener("frame", myFrameCB);
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener("TouchEvent", myCB);
         spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(testFreeFunctionEvent));
@@ -85,18 +87,12 @@ namespace spark {
         }
     }
     
-    void BaseApp::onFrame(const long theCurrentMillis) {
-        //AC_PRINT << "onFrame " << theCurrentMillis;
-        if (_myAnimate) {
-            animation::AnimationManager::get().doFrame(theCurrentMillis);
-        }
+    void BaseApp::onFrame(EventPtr theEvent) {
+        StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
+        animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _myGLCanvas->preRender(_mySparkWindow->getClearColor());
         _mySparkWindow->render();
     }
 
-    void BaseApp::onTouch() {
-        AC_PRINT << "BaseApp::onTOUCH";
-        //_myAnimate = !_myAnimate;
-    }
 }
 
