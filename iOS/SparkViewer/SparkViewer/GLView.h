@@ -13,6 +13,8 @@
     #include <spark/DemoApp.h>
 #endif
 
+#import "EventManager.h"
+
 @interface GLView : UIView {
     
     @private
@@ -28,7 +30,7 @@
 #endif
     
     BOOL animating;
-    
+    EventManager *eventManager;
     CADisplayLink *displayLink;
     CMMotionManager *motionManager;
     

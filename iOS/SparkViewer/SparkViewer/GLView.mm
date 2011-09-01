@@ -1,6 +1,5 @@
 #import "GLView.h"
 #include <spark/DemoApp.h>
-#import "EventManager.h"
 
 @implementation GLView
 
@@ -66,7 +65,7 @@
         motionManager = [[CMMotionManager alloc] init];
         motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
         
-        [[EventManager alloc] initWithSourceView:self targetApp:myDemoApp];
+        eventManager = [[EventManager alloc] initWithSourceView:self targetApp:myDemoApp];
         
         
     }
@@ -78,8 +77,10 @@
 {
     CMAttitude *attitude = motionManager.deviceMotion.attitude;
     //NSLog(@"Euler Angles roll: %f pitch: %f yaw: %f", attitude.roll, attitude.pitch, attitude.yaw);
-    
-    myDemoApp->onFrame((displayLink.timestamp*1000.0));    
+
+    std::ostringstream myEvent;
+    myEvent << "<StageEvent type='frame' time='" << (displayLink.timestamp*1000.0) << "'/>";
+    myDemoApp->onEvent(myEvent.str());    
 
 
     
@@ -137,6 +138,9 @@
     
     [glContext release];
     glContext = nil;
+    
+    [eventManager release];
+    eventManager = nil;
     
     [motionManager release];
     motionManager = nil;
