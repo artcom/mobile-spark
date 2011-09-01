@@ -24,10 +24,15 @@ namespace spark {
         bool _myFullScreenFlag;
         vector4 _myClearColor;
 
+        //picking -> move to other compilation unit?
         ComponentPtr pick2DBoxStyle(const unsigned int x, const unsigned int y) ;
+        void runThroughTreeAndCollectPickedComponents(std::vector<std::pair<ComponentPtr, float> > & theList);
     };
 
     typedef boost::shared_ptr<Window> WindowPtr;
+
+    //picking
+    bool sortByZ(std::pair<ComponentPtr, float> i, std::pair<ComponentPtr, float> j);  
 };
 
 #endif
