@@ -45,6 +45,7 @@ ADD_FRAMEWORK(${APP_NAME} UIKit)
 ADD_FRAMEWORK(${APP_NAME} Foundation)
 ADD_FRAMEWORK(${APP_NAME} QuartzCore)
 ADD_FRAMEWORK(${APP_NAME} OpenGLES)
+ADD_FRAMEWORK(${APP_NAME} CoreMotion)
 
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${libXML2_INCLUDE_DIRS})
@@ -56,12 +57,23 @@ target_link_libraries(${APP_NAME} spark)
 #This copies the asset folder into the iOS app, 
 #as well as if you drag and drop the folder into the Xcodeproject 
 #or into the final app by opening it with the packetmanager.
-set(RES_DIR ${PROJECT_SOURCE_DIR}/android/SparkViewer/assets)
+
+#copy assets folder
+set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/android/SparkViewer/assets)
 add_custom_command( 
     TARGET ${APP_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${RES_DIR} ${CMAKE_BINARY_DIR}/bin/${APP_NAME}.app
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${APP_NAME}.app/
 )
+
+#copy dataToPush content
+set(DATA_TO_PUSH_DIR ${PROJECT_SOURCE_DIR}/android/dataToPush)
+add_custom_command( 
+    TARGET ${APP_NAME} 
+    POST_BUILD 
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${DATA_TO_PUSH_DIR} ${CMAKE_BINARY_DIR}/bin/${APP_NAME}.app
+)
+
     
 
     ###### InterFaceBuilder not tested yet

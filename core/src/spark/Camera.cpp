@@ -14,7 +14,6 @@ namespace spark {
     const char* Camera::OrtohonormalStr = "orthonormal";
     const char* Camera::AutoOrthonormalStr = "auto";
 
-
     //needed for component factory
     //namespace  {
         ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
@@ -36,9 +35,7 @@ namespace spark {
              if (myOpening != string::npos && myClosing != string::npos) {
                  string myParams = myFrustum.substr(myOpening+1, myClosing-myOpening-1);
                  if (myParams == AutoOrthonormalStr) {
-                    //AC_PRINT << "Create camera with : " << OrtohonormalStr << " : " << myOpening << " / " << myClosing << "->" << myParams;
-                    _myProjectionType = ORTHONORMAL;
-                    _myAutoProjection = true;
+                    _myProjectionType = AUTO_ORTHONORMAL;
                     myFrustumSpecified = true;
                 }
             }
@@ -49,16 +46,15 @@ namespace spark {
                  size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
                  if (myOpening != string::npos && myClosing != string::npos) {
                      string myParamsStr = myFrustum.substr(myOpening+1, myClosing-myOpening-1);
-                     fromString(myParamsStr, _myFrustumParams);
-                     //AC_PRINT << "Create camera with : " << PerspectiveStr << " : " << myOpening << " / " << myClosing << "->" << _myFrustumParams;
+                     fromString(myParamsStr, _myPerspectiveParams);
                      _myProjectionType = PERSPECTIVE;
+                     myFrustumSpecified = true;
                  }
             }
         }
-        if (myFrustumSpecified) {
+        if (!myFrustumSpecified) {
             AC_WARNING << "Create camera with : unknown frustum: " << myFrustum << ", using auto orthonormal";
-            _myProjectionType = ORTHONORMAL;
-            _myAutoProjection = true;
+            _myProjectionType = AUTO_ORTHONORMAL;
         }
     }
 
@@ -74,18 +70,16 @@ namespace spark {
     Camera::activate(float theCameraWidth, float theCameraHeight) {   
         matrixStack.push();
              
-        if (_myProjectionType == ORTHONORMAL) {
-            if (_myAutoProjection) {
-                matrixStack.loadOrtho(0, theCameraWidth, 0.0 , theCameraHeight, -0.1, 1000);
-            } else {
-            } 
-        } else {
+        if (_myProjectionType == AUTO_ORTHONORMAL) {
+            matrixStack.loadOrtho(0, theCameraWidth, 0.0 , theCameraHeight, -0.1, 1000);
+        } else if (_myProjectionType == PERSPECTIVE) {
+            float myWing = _myPerspectiveParams[1] * tanf(radFromDeg(_myPerspectiveParams[0]) / 2.0);            
             float myRatio = (float)theCameraWidth/(float)theCameraHeight;
-            matrixStack.loadPerspective(-0.1*myRatio, 0.1*myRatio, -0.1*myRatio , 0.1*myRatio, 0.1, 1000);
-            matrix myCameraMatrix = _myLocalMatrixStack.getTop();
-            myCameraMatrix.inverse();
-            matrixStack.multMatrix(myCameraMatrix);
+            matrixStack.loadPerspective(-myWing, myWing, -myWing / myRatio, myWing / myRatio, _myPerspectiveParams[1], _myPerspectiveParams[2]);
         }
+        matrix myCameraMatrix = _myLocalMatrixStack.getTop();
+        myCameraMatrix.inverse();
+        matrixStack.multMatrix(myCameraMatrix);
         _myProjectionMatrix = matrixStack.getTop();
         matrixStack.pop();
         

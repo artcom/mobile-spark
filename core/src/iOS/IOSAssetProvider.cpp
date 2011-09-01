@@ -108,6 +108,10 @@ namespace ios
     std::string 
     IOSAssetProvider::getStringFromFile(const std::string & theFile) const {
         std::string content = "";
+        if (theFile.size() > 0 && theFile[0] == '/') {  
+            masl::readFile(_myAssetFolderPath + "/dataToPush/" + theFile, content);
+            return content;
+        }    
         masl::readFile(_myAssetFolderPath + "/" + theFile, content);
         return content;
     }
@@ -116,6 +120,10 @@ namespace ios
     std::vector<std::string> 
     IOSAssetProvider::getLineByLineFromFile(const std::string & theFile) const {
         std::vector<std::string> content;
+        if (theFile.size() > 0 && theFile[0] == '/') {  
+            masl::readFileLineByLine(_myAssetFolderPath + "/dataToPush/" + theFile, content);
+            return content;
+        }  
         masl::readFileLineByLine(_myAssetFolderPath + "/" + theFile, content);
         return content;
     }
