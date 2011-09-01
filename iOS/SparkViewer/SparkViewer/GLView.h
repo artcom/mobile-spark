@@ -33,7 +33,6 @@
     EventManager *eventManager;
     CADisplayLink *displayLink;
     CMMotionManager *motionManager;
-    
 
 }
 
