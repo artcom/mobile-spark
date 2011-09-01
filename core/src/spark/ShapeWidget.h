@@ -11,7 +11,6 @@ namespace spark {
             ShapeWidget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
             virtual ~ShapeWidget() = 0;
             virtual void renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const;
-            virtual void onResume() const;        
             mar::ShapePtr getShape();            
             void setShape( mar::ShapePtr theShapePtr);            
         private:
