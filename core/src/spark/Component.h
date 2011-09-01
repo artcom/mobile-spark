@@ -26,16 +26,16 @@ namespace spark {
         Component(const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Component() = 0;
         virtual void render(MatrixStack& theCurrentMatrixStack, const matrix & theProjectionMatrix) const ;
+        void insertAtParent(ContainerPtr theParent);
 
-        virtual void testEvent(EventPtr theEvent) {AC_PRINT<<"event callback";};
         const std::string & getName() const { return _myName; };
         const std::string & getType() const;
         virtual const VectorOfComponentPtr & getChildren() { return _myEmptyChildren; };
-
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
         ComponentPtr getRoot();
         const ComponentPtr & getParent() const {return _myParent; };
-        void insertAtParent(ContainerPtr theParent);
+
+        virtual void testEvent(EventPtr theEvent) {AC_PRINT<<"event callback";};
     protected:
         const XMLNodePtr _myXMLNode;
         std::string _myName;
