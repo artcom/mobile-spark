@@ -23,9 +23,15 @@ namespace spark {
         int _myHeight;
         bool _myFullScreenFlag;
         vector4 _myClearColor;
+
+        //picking -> move to other compilation unit?
+        ComponentPtr pick2DAABBStyle(const unsigned int x, const unsigned int y) ;
     };
 
     typedef boost::shared_ptr<Window> WindowPtr;
+
+    //picking
+    bool sortByZ(std::pair<ComponentPtr, float> i, std::pair<ComponentPtr, float> j);  
 };
 
 #endif

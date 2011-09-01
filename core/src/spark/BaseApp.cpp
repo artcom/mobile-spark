@@ -19,6 +19,7 @@
 
 #include "SparkComponentFactory.h"
 #include "EventFactory.h"
+#include "Visitors.h"
 
 using namespace mar;
 
@@ -69,21 +70,23 @@ namespace spark {
         }
     }
     
-    void BaseApp::onPause() {
-        if (_mySparkWindow) {
-            _mySparkWindow->onPause();
-        }
-    }
-
     void BaseApp::onEvent(std::string theEventString) {
         EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
         myEvent->connect(_mySparkWindow);
         (*myEvent)();
     }
     
+    void BaseApp::onPause() {
+        if (_mySparkWindow) {
+            OnPauseComponentVisitor myVisitor;
+            visitComponents(myVisitor, _mySparkWindow);   
+        }
+    }
+
     void BaseApp::onResume() {
         if (_mySparkWindow) {
-            _mySparkWindow->onResume();
+            OnResumeComponentVisitor myVisitor;
+            visitComponents(myVisitor, _mySparkWindow);
         }
     }
     

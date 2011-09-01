@@ -10,12 +10,13 @@ namespace spark {
     void ShapeWidget::renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const {
         _myShape->render(theCurrentMatrixStack.getTop());                
     }
-    void ShapeWidget::onResume() const {
-        if (_myShape) {
-            _myShape->initGL();
-        }            
-        Widget::onResume();
+
+    bool ShapeWidget::AABBcontains(const unsigned int x, const unsigned int y) const {
+        //TODO
+
+        return true;
     }
+
     mar::ShapePtr ShapeWidget::getShape() {
         return _myShape;
     }
