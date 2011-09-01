@@ -12,9 +12,11 @@ namespace spark {
     void EventFactory::setupFactory() {
         bool registered = registerEvent("StageEvent", spark::createStageEvent);
         registered = registerEvent("TouchEvent", spark::createTouchEvent);
+        registered = registerEvent("GestureEvent", spark::createGestureEvent);
     };
     
-    EventFactory::EventFactory() {
+    EventFactory::EventFactory() : _myXmlCx(NULL) {
+        _myXmlCx = xmlNewParserCtxt();
         setupFactory();
     }
     EventFactory::~EventFactory() {}
@@ -32,10 +34,10 @@ namespace spark {
 
     EventPtr EventFactory::handleEvent(const std::string & theEventString) const {
         //AC_PRINT << "handle event : " << theEventString;
-        xmlParserCtxtPtr ctxt; 
+        //xmlParserCtxtPtr ctxt; 
         xmlDocPtr doc;
-        ctxt = xmlNewParserCtxt();
-        doc = xmlCtxtReadMemory(ctxt, theEventString.c_str(), strlen(theEventString.c_str()), "", NULL, XML_PARSE_DTDATTR);
+        //ctxt = xmlNewParserCtxt();
+        doc = xmlCtxtReadMemory(_myXmlCx, theEventString.c_str(), strlen(theEventString.c_str()), "", NULL, XML_PARSE_DTDATTR);
         xmlNode *root_node = NULL;
         root_node = xmlDocGetRootElement(doc);
         XMLNodePtr myXMLNode(new XMLNode(root_node));
