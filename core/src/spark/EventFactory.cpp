@@ -12,6 +12,7 @@ namespace spark {
     void EventFactory::setupFactory() {
         bool registered = registerEvent("StageEvent", spark::createStageEvent);
         registered = registerEvent("TouchEvent", spark::createTouchEvent);
+        registered = registerEvent("GestureEvent", spark::createGestureEvent);
     };
     
     EventFactory::EventFactory() : _myXmlCx(NULL) {

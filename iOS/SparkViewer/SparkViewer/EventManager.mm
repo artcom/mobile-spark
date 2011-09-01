@@ -77,20 +77,20 @@
     CGPoint translation = [recognizer translationInView:_myView];
     CGPoint location = [recognizer locationInView:_myView];
     NSLog(@"Pan-Translation  :   started at: %f, %f   translation:  %f, %f", location.x, location.y, translation.x, translation.y);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pan' x='%f' y='%f' dx='f' dy='f'/>", location.x, _myHeight-location.y, translation.x, _myHeight-translation.y]];
+    [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pan' x='%f' y='%f' dx='%f' dy='%f'/>", location.x, _myHeight-location.y, translation.x, _myHeight-translation.y]];
 }
 
 
 - (void)handlePinchGesture:(UIGestureRecognizer *)recognizer {
     CGFloat factor = [(UIPinchGestureRecognizer *)recognizer scale];
     NSLog(@"Pinch-Zoom-Scale :   %f", factor);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pinch' scale='%f'/>", factor]];
+    [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pinch' factor='%f'/>", factor]];
 }
 
 - (void)handleRotationGesture:(UIRotationGestureRecognizer *)recognizer {
     CGFloat rotation = [recognizer rotation] *-1;
     NSLog(@"Rotation   :  %f", rotation);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='rotation' angle='%f'/>", rotation]];
+    [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='rotation' factor='%f'/>", rotation]];
 }
 
 
