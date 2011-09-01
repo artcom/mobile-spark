@@ -9,7 +9,7 @@ namespace animation {
         theAnimation->play(_myAnimationTime);
     }
     
-    void AnimationManager::doFrame(const long theCurrentMillis) {
+    void AnimationManager::doFrame(const masl::UInt64 theCurrentMillis) {
         _myAnimationTime = theCurrentMillis;
         //AC_PRINT << "AnimationManager::doFrame";
         for (std::vector<AnimationPtr>::iterator it = _myAnimations.begin(); it != _myAnimations.end(); ++it) {

@@ -10,7 +10,7 @@ namespace animation {
     
     // duration = sum(map(children, duration))
     void SequenceAnimation::childDurationChanged() {
-        long d = 0;
+        masl::UInt64 d = 0;
         for (std::vector<AnimationPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             d += (*it)->getDuration();
         }
@@ -19,7 +19,7 @@ namespace animation {
 
     // start to play this animation
     // plays the first animation
-    void SequenceAnimation::play(const long theStartTime, const bool theComeToAnEndFlag) {
+    void SequenceAnimation::play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag) {
         CompositeAnimation::play(theStartTime, theComeToAnEndFlag);
         if (!theComeToAnEndFlag && isRunning()) {
             _myCurrent = 0;
@@ -30,7 +30,7 @@ namespace animation {
     }
 
     // iterate through child animations
-    void SequenceAnimation::doFrame(const long theTime) {
+    void SequenceAnimation::doFrame(const masl::UInt64 theTime) {
         if (_myCurrent >= _myChildren.size()) {
             finishAnimation(theTime);
             return;

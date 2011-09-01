@@ -10,12 +10,12 @@ namespace animation {
     template <class O, class T>
     class PropertyAnimation : public Animation {
     public:
-        PropertyAnimation(const O theObject, const T thePropertySetter, const float theStartValue = 0.0f, const float theEndValue = 1.0f, const long theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
+        PropertyAnimation(const O theObject, const T thePropertySetter, const float theStartValue = 0.0f, const float theEndValue = 1.0f, const masl::UInt64 theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
         virtual ~PropertyAnimation();
-        virtual void doFrame(const long theTime);
+        virtual void doFrame(const masl::UInt64 theTime);
 
-        virtual void play(const long theTime, const bool theComeToAnEndFlag = false);
-        virtual void finish(const long theTime);
+        virtual void play(const masl::UInt64 theTime, const bool theComeToAnEndFlag = false);
+        virtual void finish(const masl::UInt64 theTime);
 
     private:
         const O _myObjectPtr;
@@ -33,7 +33,7 @@ namespace animation {
         const T thePropertySetter, 
         const float theStartValue, 
         const float theEndValue, 
-        const long theDuration,
+        const masl::UInt64 theDuration,
         const EasingFunctionPtr theEasing): 
             Animation(theDuration, theEasing),
             _myObjectPtr(theObjectPtr),
@@ -46,7 +46,7 @@ namespace animation {
     PropertyAnimation<O, T>::~PropertyAnimation(){}
 
     template <class O,class T>
-    void PropertyAnimation<O, T>::doFrame(const long theCurrentMillis) {
+    void PropertyAnimation<O, T>::doFrame(const masl::UInt64 theCurrentMillis) {
         Animation::doFrame(theCurrentMillis);
         //AC_PRINT << "progress " << _myProgress;
         float value = _myStartValue + (_myEndValue - _myStartValue) * _myProgress;
@@ -55,14 +55,14 @@ namespace animation {
     }
 
     template <class O, class T>
-    void PropertyAnimation<O, T>::play(const long theTime, const bool theComeToAnEndFlag) {
+    void PropertyAnimation<O, T>::play(const masl::UInt64 theTime, const bool theComeToAnEndFlag) {
         Animation::play(theTime, theComeToAnEndFlag);
         //AC_PRINT << "property animation set value to start value " << _myStartValue;
         (_myObjectPtr.get()->*_myPropertyCallback)(_myStartValue);
     }
 
     template <class O, class T>
-    void PropertyAnimation<O, T>::finish(const long theTime) {
+    void PropertyAnimation<O, T>::finish(const masl::UInt64 theTime) {
         Animation::finish(theTime);
         (_myObjectPtr.get()->*_myPropertyCallback)(_myEndValue);
     }
