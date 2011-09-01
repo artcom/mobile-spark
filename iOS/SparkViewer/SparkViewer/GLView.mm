@@ -54,7 +54,7 @@
         NSLog(@"width: %d,  height: %d ", width, height);
         NSString *path = [[NSBundle mainBundle] resourcePath];
         myDemoApp = new spark::DemoApp();
-        myDemoApp->setup((displayLink.timestamp*1000.0),[path UTF8String], "assets/layouts/main.spark");
+        myDemoApp->setup((0.0),[path UTF8String], "assets/layouts/main.spark");
         myDemoApp->onSizeChanged(width, height);
         
         //Motion Events
@@ -66,8 +66,6 @@
         motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
         
         eventManager = [[EventManager alloc] initWithSourceView:self targetApp:myDemoApp];
-        
-        
     }
     return self;
 }
@@ -77,12 +75,8 @@
 {
     CMAttitude *attitude = motionManager.deviceMotion.attitude;
     //NSLog(@"Euler Angles roll: %f pitch: %f yaw: %f", attitude.roll, attitude.pitch, attitude.yaw);
-
-    std::ostringstream myEvent;
-    myEvent << "<StageEvent type='frame' time='" << (displayLink.timestamp*1000.0) << "'/>";
-    myDemoApp->onEvent(myEvent.str());    
-
-
+    NSString *myEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
+    myDemoApp->onEvent([myEvent UTF8String]);    
     
     [glContext presentRenderbuffer:GL_RENDERBUFFER];    
 }
@@ -91,9 +85,9 @@
 {
     if (!animating)
     {
-        //init Animation loop. fires at 30 hz
+        //init Animation loop. fires at 60 hz
         displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render:)];
-        [displayLink setFrameInterval:2];
+        [displayLink setFrameInterval:1];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         
         animating = TRUE;
