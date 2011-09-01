@@ -4,6 +4,8 @@
     #include <jni.h>
 #endif
 
+#include <boost/smart_ptr/shared_ptr.hpp>
+
 #include <masl/Logger.h>
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
@@ -11,9 +13,13 @@
 #include <animation/DelayAnimation.h>
 #include <animation/Easing.h>
 
+#include "Event.h"
 #include "Rectangle.h"
 #include "Shape3D.h"
 #include "SparkComponentFactory.h"
+
+/////////////////////////////////////////////////////////////////////////App-Instance
+spark::DemoApp ourApp;
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
@@ -29,9 +35,13 @@ namespace spark {
         AC_PRINT << "hello from free function";
     }
 
-    bool DemoApp::setup(const long theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
+    bool DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
-        //return myBaseReturn;            
+        //return myBaseReturn;
+
+        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::shared_ptr<DemoApp>(&ourApp), &DemoApp::onTouch));
+        _mySparkWindow->addEventListener("TouchEvent", myCB); 
+
         //add looping animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
@@ -71,42 +81,34 @@ namespace spark {
         myYRotate->setLoop(true);
         myZRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationZ, 0, 6.28, 13000));
         myZRotate->setLoop(true);
-        animation::AnimationManager::get().play(myXRotate);
+        //animation::AnimationManager::get().play(myXRotate);
         animation::AnimationManager::get().play(myYRotate);
-        animation::AnimationManager::get().play(myZRotate);
 
         //create a component in code
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(shared_from_this(), 
                 "<Rectangle width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0,1.0]\"/>"); 
         myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
-        myTransform = _mySparkWindow->getChildByName("world2")->getChildByName("objTransform2");
-        ComponentPtr myObject2 = myTransform->getChildByName("objShape2");
-        Shape3DPtr myShape2 = boost::static_pointer_cast<spark::Shape3D>(myObject2);
-        myXRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape2, &Widget::setRotationX, 0, 6.28, 7000));
-        myXRotate->setLoop(true);
-        myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape2, &Widget::setRotationY, 0, 6.28, 9000));
-        myYRotate->setLoop(true);
-        myZRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape2, &Widget::setRotationZ, 0, 6.28, 13000));
-        myZRotate->setLoop(true);
-        animation::AnimationManager::get().play(myXRotate);
-        animation::AnimationManager::get().play(myYRotate);
-        animation::AnimationManager::get().play(myZRotate);
 
         return myBaseReturn;
     }
 
-    void DemoApp::onTouch() {
-        AC_PRINT << "....................... demo app on touch";
+    void DemoApp::onTouch(EventPtr theEvent) {
+        TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
+        AC_PRINT<<myEvent->getType()<<" x:"<<myEvent->getX()<<" ,y:"<<myEvent->getY();
+        //
         //add two parallel animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myObject = myTransform->getChildByName("objectC");
         RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
 
         WidgetPropertyAnimationPtr myAnimationC = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myRectangle, &Widget::setX, 0, 100, 1000,
+                new WidgetPropertyAnimation(myRectangle, &Widget::setX, myRectangle->getX(), myEvent->getX(), 1000,
                     animation::EasingFnc(animation::easeInOutElastic)));
 
+        WidgetPropertyAnimationPtr myAnimationY = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setY, myRectangle->getY(), myEvent->getY(), 1000,
+                    animation::EasingFnc(animation::easeInOutElastic)));
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         myObject = myTransform->getChildByName("objectA");
         myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
@@ -114,13 +116,12 @@ namespace spark {
         
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myParallel->add(myAnimationC);
+        myParallel->add(myAnimationY);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
     }
 }
 
-/////////////////////////////////////////////////////////////////////////App-Instance
-spark::DemoApp ourApp;
 
 #ifdef __ANDROID__
     
@@ -130,14 +131,10 @@ extern "C" {
                                                                  jlong currentMillis,
                                                                  jstring apkFile,
                                                                  jstring layoutFile);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj,
-                                                                 jlong currentMillis);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
                                                                  jint width, jint height);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onTouch(JNIEnv * env, jobject obj);
-
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt);
     
 };
@@ -152,10 +149,6 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
     ourApp.setup(currentMillis, myAssetPath, myLayoutFile);
 }
 
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onFrame(JNIEnv * env, jobject obj,
-                                                             jlong currentMillis) {
-    ourApp.onFrame(currentMillis);
-}
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj) {
     ourApp.onPause();
 }
@@ -165,10 +158,6 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
                                                              jint width, jint height) {
     ourApp.onSizeChanged(width, height);
-}
-
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onTouch(JNIEnv * env, jobject obj) {
-    ourApp.onTouch();
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt )

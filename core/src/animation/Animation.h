@@ -7,6 +7,7 @@
 #include <boost/function.hpp>
 
 #include <masl/Callback.h>
+#include <masl/Settings.h>
 
 namespace animation {
     
@@ -20,12 +21,12 @@ namespace animation {
     typedef boost::weak_ptr<Animation> AnimationWeakPtr;
     class Animation : public boost::enable_shared_from_this<Animation> {
     public: 
-        Animation(const long theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
+        Animation(const masl::UInt64 theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
         virtual ~Animation();
-        virtual void doFrame(const long theTime);
+        virtual void doFrame(const masl::UInt64 theTime);
 
-        virtual void play(const long theStartTime, const bool theComeToAnEndFlag = false);
-        virtual void finish(const long theTime);
+        virtual void play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag = false);
+        virtual void finish(const masl::UInt64 theTime);
         virtual void cancel();
 
         bool isRunning() const { return _myRunning; };
@@ -33,7 +34,7 @@ namespace animation {
     
         void setLoop(const bool theLoop) { _myLoop = theLoop; };
         void setParent(AnimationWeakPtr theParent) { _myParent = theParent; };
-        long getDuration() const { return _myDuration;};
+        masl::UInt64 getDuration() const { return _myDuration;};
         unsigned int getId() const { return _myId; };
 
         void setOnPlay(masl::CallbackPtr theOnPlay) { _myOnPlay = theOnPlay; };
@@ -41,9 +42,9 @@ namespace animation {
         void setOnCancel(masl::CallbackPtr theOnCancel) { _myOnCancel = theOnCancel; };
 
     protected:
-        virtual void finishAnimation(const long theTime);
-        long _myDuration; //millisecs
-        long _myStartTime;
+        virtual void finishAnimation(const masl::UInt64 theTime);
+        masl::UInt64 _myDuration; //millisecs
+        masl::UInt64 _myStartTime;
         float _myProgress;
         EasingFunctionPtr _myEasingFunction;
 

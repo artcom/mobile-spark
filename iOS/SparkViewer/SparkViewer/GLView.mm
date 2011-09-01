@@ -1,5 +1,6 @@
 #import "GLView.h"
 #include <spark/DemoApp.h>
+#import "EventManager.h"
 
 @implementation GLView
 
@@ -62,22 +63,12 @@ spark::DemoApp *myDemoApp;
         myDemoApp->setup((displayLink.timestamp*1000.0),[path UTF8String], "assets/layouts/main.spark");
         myDemoApp->onSizeChanged(width, height);
         
-        UITapGestureRecognizer *singleFingerTap = 
-        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-
-        [self addGestureRecognizer:singleFingerTap];
-       
-        
+        [[EventManager alloc] initWithSourceView:self targetApp:myDemoApp];
+                
     }
     return self;
 }
 
-//The event handling method
-- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    CGPoint location = [recognizer locationInView:self];
-    NSLog(@"Touched on  :   %f, %f", location.x, location.y);
-    myDemoApp->onTouch();
-}
 
 
 
