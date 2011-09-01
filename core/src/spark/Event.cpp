@@ -90,7 +90,7 @@ namespace spark {
 
 
 
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const int theX, const int theY, const int dx, const int dy)
+    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY, const int dx, const int dy)
          : Event(theType, theTarget), x_(theX), y_(theY), dx_(dx), dy_(dy)
     {}
     GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theFactor)
