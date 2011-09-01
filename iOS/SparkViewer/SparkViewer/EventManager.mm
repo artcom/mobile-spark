@@ -57,7 +57,7 @@
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
     CGPoint location = [recognizer locationInView:_myView];
     NSLog(@"Touched on  :   %f, %f", location.x, location.y);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='tap' x='%f' y='%f'/>", location.x, location.y]];
+    [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='tap' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
 }
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer {

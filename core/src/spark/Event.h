@@ -78,8 +78,37 @@ namespace spark {
 
     typedef boost::shared_ptr<TouchEvent> TouchEventPtr;
 
+    class GestureEvent : public Event {
+        public:
+
+            GestureEvent(const std::string & theType, ComponentPtr theTarget, const int theX, const int theY, const int dx, const int dy);
+            GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theScale);
+            GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theAngle);
+            GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection);
+            GestureEvent(const masl::XMLNodePtr theXMLNode);
+            virtual ~GestureEvent();
+
+            unsigned int getX() const { return x_;};
+            unsigned int getY() const { return y_;};
+
+        private:
+            unsigned int x_;
+            unsigned int y_;
+            float scale_;
+            float angle_;
+            std::string direction_;
+            int dy_;
+            int dx_;
+    };
+
+    typedef boost::shared_ptr<TouchEvent> TouchEventPtr;
     EventPtr createStageEvent(const masl::XMLNodePtr theXMLNode);
     EventPtr createTouchEvent(const masl::XMLNodePtr theXMLNode);
+    EventPtr createGestureEvent(const masl::XMLNodePtr theXMLNode);
+
+
+
+
 
     class EventCallback {
     public:
