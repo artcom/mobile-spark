@@ -1,9 +1,10 @@
 #include "Window.h"
 
+#include <algorithm>
+#include <masl/Logger.h>
+
 #include "SparkComponentFactory.h"
 #include "View.h"
-
-#include <masl/Logger.h>
 
 using namespace mar;
 
@@ -68,14 +69,26 @@ namespace spark {
         }        
     }
 
-
     //////////////picking
+    
     ComponentPtr
     Window::pick2DBoxStyle(const unsigned int x, const unsigned int y) {
         AC_PRINT << "pick at " << x << ", " << y;
+        std::vector<std::pair<ComponentPtr, float> > myPickedComponentList;  //pairs of components and z
+        runThroughTreeAndCollectPickedComponents(myPickedComponentList);  //do it with vistor pattern?
+        sort(myPickedComponentList.begin(), myPickedComponentList.end(), sortByZ);
+        return myPickedComponentList.begin()->first;
+    }
 
-        //mock:
-        return shared_from_this();
+    void 
+    Window::runThroughTreeAndCollectPickedComponents(std::vector<std::pair<ComponentPtr, float> > & theList) {
+        //mock
+        theList.push_back(std::pair<ComponentPtr, float>(shared_from_this(), 0));
+    }
+
+    bool 
+    sortByZ(std::pair<ComponentPtr, float> i, std::pair<ComponentPtr, float> j) { 
+        return (i.second < j.second); 
     }
 
 }
