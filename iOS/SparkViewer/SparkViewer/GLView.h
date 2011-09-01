@@ -7,26 +7,32 @@
 #import <OpenGLES/ES1/glext.h>
 
 #import <QuartzCore/QuartzCore.h>
+#import <CoreMotion/CMMotionManager.h>
 
-//@class DemoApp;
+#ifdef __cplusplus
+    #include <spark/DemoApp.h>
+#endif
+
+#import "EventManager.h"
 
 @interface GLView : UIView {
     
     @private
         
-    EAGLContext *glContext;
-    
+    EAGLContext *glContext;    
     GLuint framebuffer;
     GLuint colorRenderbuffer;
-    CADisplayLink *displayLink;
-    
     GLint width;
     GLint height;
     
+#ifdef __cplusplus
+    spark::DemoApp *myDemoApp;
+#endif
+    
     BOOL animating;
-    
-    //spark::DemoApp *myDemoApp;
-    
+    EventManager *eventManager;
+    CADisplayLink *displayLink;
+    CMMotionManager *motionManager;
 
 }
 

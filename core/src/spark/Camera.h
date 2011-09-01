@@ -16,9 +16,9 @@ namespace spark {
     
     enum ProjectionType {
         PERSPECTIVE,
-        ORTHONORMAL
+        ORTHONORMAL,
+        AUTO_ORTHONORMAL
     };
-
 
     ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     
@@ -32,8 +32,7 @@ namespace spark {
         matrix _myProjectionMatrix;
         MatrixStack matrixStack;
         ProjectionType _myProjectionType;
-        bool _myAutoProjection;
-        vector4 _myFrustumParams;        
+        vector3 _myPerspectiveParams;        
 
         static const char* PerspectiveStr;
         static const char* OrtohonormalStr;
