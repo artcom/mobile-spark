@@ -5,6 +5,7 @@
 
 #include "SparkComponentFactory.h"
 #include "View.h"
+#include "Visitors.h"
 
 using namespace mar;
 
@@ -82,6 +83,9 @@ namespace spark {
 
     void 
     Window::runThroughTreeAndCollectPickedComponents(std::vector<std::pair<ComponentPtr, float> > & theList) {
+        PrintComponentVisitor myVisitor;
+        visitComponents(myVisitor, shared_from_this());
+
         //mock
         theList.push_back(std::pair<ComponentPtr, float>(shared_from_this(), 0));
     }
