@@ -42,10 +42,9 @@ namespace spark {
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         AC_PRINT<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
 
-        //picking!!!
-        ComponentPtr myPicked = pick2DBoxStyle(myEvent->getX(), myEvent->getY());
+        ComponentPtr myPicked = pick2DAABBStyle(myEvent->getX(), myEvent->getY());
         if (myPicked) {
-            AC_PRINT << "picked " << myPicked->getName();
+            AC_PRINT << "______________________________________picked " << myPicked->getName();
         } else {
             AC_PRINT << "nothing picked";
         }
@@ -70,29 +69,24 @@ namespace spark {
         }        
     }
 
+
+
+
     //////////////picking
-    
     ComponentPtr
-    Window::pick2DBoxStyle(const unsigned int x, const unsigned int y) {
+    Window::pick2DAABBStyle(const unsigned int x, const unsigned int y) {
         AC_PRINT << "pick at " << x << ", " << y;
         std::vector<std::pair<ComponentPtr, float> > myPickedComponentList;  //pairs of components and z
-        runThroughTreeAndCollectPickedComponents(myPickedComponentList);  //do it with vistor pattern?
+        CollectAABBComponentVisitor myVisitor(myPickedComponentList, x, y);
+        visitComponents(myVisitor, shared_from_this());
+        AC_PRINT << "collected " << myPickedComponentList.size() << " components";
         sort(myPickedComponentList.begin(), myPickedComponentList.end(), sortByZ);
         return myPickedComponentList.begin()->first;
     }
 
-    void 
-    Window::runThroughTreeAndCollectPickedComponents(std::vector<std::pair<ComponentPtr, float> > & theList) {
-        PrintComponentVisitor myVisitor;
-        visitComponents(myVisitor, shared_from_this());
-
-        //mock
-        theList.push_back(std::pair<ComponentPtr, float>(shared_from_this(), 0));
-    }
-
     bool 
     sortByZ(std::pair<ComponentPtr, float> i, std::pair<ComponentPtr, float> j) { 
-        return (i.second < j.second); 
+        return (i.second > j.second); 
     }
 
 }
