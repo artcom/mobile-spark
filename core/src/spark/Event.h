@@ -93,10 +93,10 @@ namespace spark {
         private:
             unsigned int x_;
             unsigned int y_;
-            float factor_;
-            std::string direction_;
             int dx_;
             int dy_;
+            float factor_;
+            std::string direction_;
         
     };
 
