@@ -25,7 +25,7 @@ namespace animation {
     }
 
 
-    void CompositeAnimation::finish(const long theTime) {
+    void CompositeAnimation::finish(const masl::UInt64 theTime) {
         for (std::vector<AnimationPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             (*it)->finish(theTime);
         }

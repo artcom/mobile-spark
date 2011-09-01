@@ -16,6 +16,8 @@ public class ASLOpenGLView extends GLSurfaceView {
     
     
     private EGLRenderer myRenderer;
+    private int width;
+    private int height;
 
     public ASLOpenGLView(Context context, boolean firstTime) {
         super(context);
@@ -26,12 +28,14 @@ public class ASLOpenGLView extends GLSurfaceView {
     @Override
     public void onSizeChanged (int w, int h, int oldw, int oldh) {
         NativeBinding.onSizeChanged(w,h);
+        width = w;
+        height = h;
     }
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         AC_Log.print("View.onTouchEvent");
-        String myEvent = "<TouchEvent x='" + event.getX() + "' y='" + event.getY() + "'/>";
+        String myEvent = "<TouchEvent x='" + event.getX() + "' y='" + (height - event.getY()) + "'/>";
         NativeBinding.onEvent(myEvent);
         return super.onTouchEvent(event);
     }
