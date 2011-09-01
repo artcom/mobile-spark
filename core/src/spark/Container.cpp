@@ -23,22 +23,7 @@ namespace spark {
 
     Container::~Container() {
     }
-    void Container::onPause() const  {
-        Component::onPause();
-        AC_PRINT << "Spark::Container " << getName() << " onPause";
-        for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-            (*it)->onPause();
-        }
-        
-    }
-    void Container::onResume() const  {
-        Component::onResume();
-        AC_PRINT << "Spark::Container " << getName() << " onResume";
-        for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-            (*it)->onResume();
-        }
-    }
-    
+
     VectorOfComponentPtr 
     Container::getChildrenByType(const std::string & theType) const {
         VectorOfComponentPtr myResult;
@@ -50,7 +35,8 @@ namespace spark {
         return myResult;
     }
 
-    ComponentPtr Container::getChildByName(const std::string & theName, bool theDeepFlag) const {
+    ComponentPtr 
+    Container::getChildByName(const std::string & theName, bool theDeepFlag) const {
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             if ((*it)->getName() == theName) {
                 return (*it);
