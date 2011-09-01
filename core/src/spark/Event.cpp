@@ -19,8 +19,10 @@ namespace spark {
 
     Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
     }
-    Event::Event(const masl::XMLNodePtr theXMLNode) {
-        type_ = theXMLNode->getStringValue("type", theXMLNode->nodeName);
+    Event::Event(const masl::XMLNodePtr theXMLNode)
+         : type_(theXMLNode->getStringValue("type", theXMLNode->nodeName)) 
+    {
+        
     }
 
     Event::~Event() {
@@ -69,10 +71,9 @@ namespace spark {
         Event(theType, theTarget), currenttime_(theCurrentTime) 
     {}
     StageEvent::StageEvent(const masl::XMLNodePtr theXMLNode) :
-        Event(theXMLNode)
-    {
-        currenttime_ = as<UInt64>(theXMLNode->getStringValue("time", "-1")); 
-    }
+        Event(theXMLNode),
+        currenttime_(as<UInt64>(theXMLNode->getStringValue("time", "0")))
+    {}
     StageEvent::~StageEvent() {}
 
     TouchEvent::TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY) :
@@ -80,8 +81,8 @@ namespace spark {
     {}
     TouchEvent::TouchEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
-        x_(as<unsigned int>(theXMLNode->attributes["x"])), 
-        y_(as<unsigned int>(theXMLNode->attributes["y"]))
+        x_(as<unsigned int>(theXMLNode->getStringValue("x", "0"))), 
+        y_(as<unsigned int>(theXMLNode->getStringValue("y", "0")))
     {}
 
     TouchEvent::~TouchEvent() {}
@@ -89,20 +90,24 @@ namespace spark {
 
 
 
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const int theX, const int theY, const int dx, const int dy) : Event(theType, theTarget), x_(theX), y_(theY), dx_(dx), dy_(dy)
-    { }
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theFactor) : Event(theType, theTarget), factor_(theFactor)
-    { }
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection) : Event(theType, theTarget), direction_(theDirection)
-    { }
-    GestureEvent::GestureEvent(const masl::XMLNodePtr theXMLNode) :
-    Event(theXMLNode),
-    x_(as<unsigned int>(theXMLNode->getStringValue("x", "0"))), 
-    y_(as<unsigned int>(theXMLNode->getStringValue("y", "0"))),
-    dx_(as<int>(theXMLNode->getStringValue("dx", "0"))),
-    dy_(as<int>(theXMLNode->getStringValue("dy", "0"))),
-    factor_(as<float>(theXMLNode->getStringValue("factor", "0.0"))),
-    direction_(theXMLNode->getStringValue("direction", ""))
+    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const int theX, const int theY, const int dx, const int dy)
+         : Event(theType, theTarget), x_(theX), y_(theY), dx_(dx), dy_(dy)
     {}
+    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theFactor)
+         : Event(theType, theTarget), factor_(theFactor)
+    { }
+    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection)
+         : Event(theType, theTarget), direction_(theDirection)
+    { }
+    GestureEvent::GestureEvent(const masl::XMLNodePtr theXMLNode)
+         : Event(theXMLNode),
+           x_(as<unsigned int>(theXMLNode->getStringValue("x", "0"))), 
+           y_(as<unsigned int>(theXMLNode->getStringValue("y", "0"))),
+           dx_(as<int>(theXMLNode->getStringValue("dx", "0"))),
+           dy_(as<int>(theXMLNode->getStringValue("dy", "0"))),
+           factor_(as<float>(theXMLNode->getStringValue("factor", "0.0"))),
+           direction_(theXMLNode->getStringValue("direction", ""))
+    {}
+    
     GestureEvent::~GestureEvent() {}
 }
