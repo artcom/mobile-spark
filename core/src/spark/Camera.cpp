@@ -77,11 +77,10 @@ namespace spark {
             float myRatio = (float)theCameraWidth/(float)theCameraHeight;
             matrixStack.loadPerspective(-myWing, myWing, -myWing / myRatio, myWing / myRatio, _myPerspectiveParams[1], _myPerspectiveParams[2]);
         }
-        matrix myCameraMatrix = _myLocalMatrixStack.getTop();
+        matrix myCameraMatrix = _myLocalMatrix;
         myCameraMatrix.inverse();
         matrixStack.multMatrix(myCameraMatrix);
         _myProjectionMatrix = matrixStack.getTop();
         matrixStack.pop();
-        
     }    
 }

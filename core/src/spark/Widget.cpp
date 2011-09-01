@@ -23,25 +23,22 @@ namespace spark {
     }
 
     void Widget::updateMatrix() {
-        _myLocalMatrixStack.loadIdentity();
-        _myLocalMatrixStack.rotateXAxis(_rotationX);
-        _myLocalMatrixStack.rotateYAxis(_rotationY);
-        _myLocalMatrixStack.rotateZAxis(_rotationZ);
-        _myLocalMatrixStack.translate(_x, _y, _z);
-        _myLocalMatrixStack.scale(_scaleX, _scaleY, _scaleZ);
+        MatrixStack helpMatrixStack;
+        helpMatrixStack.loadIdentity();
+        helpMatrixStack.rotateXAxis(_rotationX);
+        helpMatrixStack.rotateYAxis(_rotationY);
+        helpMatrixStack.rotateZAxis(_rotationZ);
+        helpMatrixStack.translate(_x, _y, _z);
+        helpMatrixStack.scale(_scaleX, _scaleY, _scaleZ);
+        _myLocalMatrix = helpMatrixStack.getTop();
     };
     
     
     void Widget::render(MatrixStack& theCurrentMatrixStack, const matrix & theProjectionMatrix) const {
         theCurrentMatrixStack.push();
-        theCurrentMatrixStack.multMatrix(_myLocalMatrixStack.getTop());
+        theCurrentMatrixStack.multMatrix(_myLocalMatrix);
 
-        theCurrentMatrixStack.push();
-        theCurrentMatrixStack.multMatrixLocal(theProjectionMatrix);
-        
-        renderWithLocalMatrix(theCurrentMatrixStack);
-                
-        theCurrentMatrixStack.pop();            
+        renderWithLocalMatrix(theCurrentMatrixStack.getTop(), theProjectionMatrix);
         
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             (*it)->render(theCurrentMatrixStack, theProjectionMatrix);

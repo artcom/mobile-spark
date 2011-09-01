@@ -7,8 +7,9 @@ namespace spark {
 
     ShapeWidget::~ShapeWidget() {}
 
-    void ShapeWidget::renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const {
-        _myShape->render(theCurrentMatrixStack.getTop());                
+    void ShapeWidget::renderWithLocalMatrix(const matrix & theMV, const matrix & theP) const {
+        matrix mvp = theP * theMV;
+        _myShape->render(mvp);                
     }
 
     bool ShapeWidget::AABBcontains(const unsigned int x, const unsigned int y) const {
@@ -23,6 +24,4 @@ namespace spark {
     void ShapeWidget::setShape( mar::ShapePtr theShapePtr){
         _myShape = theShapePtr;
     }
-    
-    
 }
