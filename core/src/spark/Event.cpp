@@ -91,10 +91,18 @@ namespace spark {
 
     GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const int theX, const int theY, const int dx, const int dy) : Event(theType, theTarget), x_(theX), y_(theY), dx_(dx), dy_(dy)
     { }
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theScale) : Event(theType, theTarget), scale_(theScale)
-    { }
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theAngle) : Event(theType, theTarget), angle_(theAngle)
+    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theFactor) : Event(theType, theTarget), factor_(theFactor)
     { }
     GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection) : Event(theType, theTarget), direction_(theDirection)
     { }
+    GestureEvent::GestureEvent(const masl::XMLNodePtr theXMLNode) :
+    Event(theXMLNode),
+    x_(as<unsigned int>(theXMLNode->getStringValue("x", "0"))), 
+    y_(as<unsigned int>(theXMLNode->getStringValue("y", "0"))),
+    dx_(as<int>(theXMLNode->getStringValue("dx", "0"))),
+    dy_(as<int>(theXMLNode->getStringValue("dy", "0"))),
+    factor_(as<float>(theXMLNode->getStringValue("factor", "0.0"))),
+    direction_(theXMLNode->getStringValue("direction", ""))
+    {}
+    GestureEvent::~GestureEvent() {}
 }
