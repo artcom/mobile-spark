@@ -90,7 +90,7 @@ namespace mar {
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
-        glBindAttribLocation(shaderProgram, 1, "a_texCoord0");
+        glBindAttribLocation(shaderProgram, 2, "a_texCoord0");
     }
 
     void UnlitTexturedMaterial::setShader() {
