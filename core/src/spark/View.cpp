@@ -47,8 +47,9 @@ namespace spark {
     void
     View::renderWorld(ComponentPtr theWorld) {
         ensureCamera();
-        WidgetPtr myWidget = boost::static_pointer_cast<spark::Widget>(theWorld);
-        myWidget->render(matrixStack, _myCamera->getProjectionMatrix()); 
+        WidgetPtr myWorld = boost::static_pointer_cast<spark::Widget>(theWorld);
+        myWorld->prerender(matrixStack);
+        myWorld->render(_myCamera->getProjectionMatrix()); 
     }
     
     void
