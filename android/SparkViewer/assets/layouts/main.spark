@@ -12,7 +12,7 @@
             <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
             <Transform name="objTransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
                 <Shape3D name="objShape" src="/model"/>
->           </Transform>
+            </Transform>
             <Image name="imageA" x="2" z="1" src="assets/textures/texture.png"/>
         </Transform>
         <Rectangle name="here_is_origin" y="0" width="10" height="10" z="10" color="[1,1,1]"/>

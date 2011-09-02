@@ -22,6 +22,7 @@
     EAGLContext *glContext;    
     GLuint framebuffer;
     GLuint colorRenderbuffer;
+    GLuint depthRenderbuffer;
     GLint width;
     GLint height;
     

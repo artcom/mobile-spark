@@ -28,6 +28,17 @@ namespace spark {
         virtual void visit(ComponentPtr theComponent);
     };
 
+    class CollectAABBComponentVisitor : public ComponentVisitor {
+    public:
+        CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList, 
+                                const unsigned int x, const unsigned int y);
+        virtual void visit(ComponentPtr theComponent);
+    private:
+        std::vector<std::pair<ComponentPtr, float> > & list_;
+        const unsigned int x_;
+        const unsigned int y_;
+    };
+
 
     template<class VISITOR> void 
     visitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {

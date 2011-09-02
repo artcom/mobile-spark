@@ -26,5 +26,20 @@ namespace spark {
             myShapeWidget->getShape()->initGL();
         }
     }
+
+    CollectAABBComponentVisitor::CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList, 
+                              const unsigned int x, const unsigned int y) : 
+                             ComponentVisitor(),
+                             list_(theList), x_(x), y_(y) {
+    }
+
+    void 
+    CollectAABBComponentVisitor::visit(ComponentPtr theComponent) {
+        ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(theComponent);
+        if (myShapeWidget && myShapeWidget->getShape() && myShapeWidget->AABBcontains(x_,y_)) {
+            list_.push_back(std::make_pair(myShapeWidget, myShapeWidget->getZ()));
+            AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();
+        }
+    }
 }
 

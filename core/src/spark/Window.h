@@ -25,8 +25,7 @@ namespace spark {
         vector4 _myClearColor;
 
         //picking -> move to other compilation unit?
-        ComponentPtr pick2DBoxStyle(const unsigned int x, const unsigned int y) ;
-        void runThroughTreeAndCollectPickedComponents(std::vector<std::pair<ComponentPtr, float> > & theList);
+        ComponentPtr pick2DAABBStyle(const unsigned int x, const unsigned int y) ;
     };
 
     typedef boost::shared_ptr<Window> WindowPtr;
