@@ -5,18 +5,6 @@ using namespace masl;
 
 namespace spark {
 
-    EventPtr createStageEvent(const masl::XMLNodePtr theXMLNode) {
-        return EventPtr(new StageEvent(theXMLNode));
-    }
-
-    EventPtr createTouchEvent(const masl::XMLNodePtr theXMLNode) {
-        return EventPtr(new TouchEvent(theXMLNode));
-    }
-
-    EventPtr createGestureEvent(const masl::XMLNodePtr theXMLNode) {
-        return EventPtr(new GestureEvent(theXMLNode));
-    }
-
     Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
     }
     Event::Event(const masl::XMLNodePtr theXMLNode)
@@ -35,6 +23,7 @@ namespace spark {
             target_->dispatchEvent(shared_from_this());
         }
     }
+
     void
     Event::startDispatch() {
         dispatching_ = true;

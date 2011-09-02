@@ -10,9 +10,9 @@ namespace spark {
     
     //TODO: decentralize this again
     void EventFactory::setupFactory() {
-        bool registered = registerEvent("StageEvent", spark::createStageEvent);
-        registered = registerEvent("TouchEvent", spark::createTouchEvent);
-        registered = registerEvent("GestureEvent", spark::createGestureEvent);
+        bool registered = registerEvent("StageEvent", spark::createEvent<StageEvent>);
+        registered = registerEvent("TouchEvent", spark::createEvent<TouchEvent>);
+        registered = registerEvent("GestureEvent", spark::createEvent<GestureEvent>);
     };
     
     EventFactory::EventFactory() : _myXmlCx(NULL) {

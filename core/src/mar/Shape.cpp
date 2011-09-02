@@ -8,6 +8,8 @@ namespace mar {
 
     //////////////////////////////////////////////////////////////Shape
     Shape::Shape(const bool theTextureFlag) : _myTextureFlag(theTextureFlag) {
+        _myBoundingBox.min.zero(); _myBoundingBox.min[3] = 1;
+        _myBoundingBox.max.zero(); _myBoundingBox.max[3] = 1;
     }
     Shape::~Shape() {
     }
@@ -34,8 +36,14 @@ namespace mar {
         }
     }
 
+    void Shape::setBoundingBox(vector4 theMin, vector4 theMax) {
+        _myBoundingBox.min = theMin;
+        _myBoundingBox.max = theMax;
+    }
+
     //////////////////////////////////////////////////////////////RectangleShape
-    RectangleShape::RectangleShape(const bool theTextureFlag, const std::string & theTextureSrc) : Shape(theTextureFlag) {
+    RectangleShape::RectangleShape(const bool theTextureFlag, const std::string & theTextureSrc) 
+        : Shape(theTextureFlag) {
         ElementPtr myElement;
         MaterialPtr myMaterial;
         if (theTextureFlag) {
@@ -49,6 +57,7 @@ namespace mar {
         elementList.push_back(myElement);
         myMaterial->createShader();
         setVertexData();
+        _myBoundingBox.max[0] = _myBoundingBox.max[1] = 1.0f;
         initGL();
     }
 
@@ -74,6 +83,7 @@ namespace mar {
     }
 
     void RectangleShape::setDimensions(const float theWidth, const float theHeight) {
+        AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;
         ElementPtr myElement = elementList[0];
         myElement->vertexData[_myDataPerVertex] = theWidth;
         myElement->vertexData[_myDataPerVertex*3] = theWidth;
@@ -81,10 +91,13 @@ namespace mar {
         myElement->vertexData[_myDataPerVertex*2 + 1] = theHeight;
         myElement->vertexData[_myDataPerVertex*4 + 1] = theHeight;
         myElement->vertexData[_myDataPerVertex*5 + 1] = theHeight;
+        _myBoundingBox.max[0] = theWidth;
+        _myBoundingBox.max[1] = theHeight;
+        AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;
     }
 
     //////////////////////////////////////////////////////////////ObjShape
-    ObjShape::ObjShape() {
+    ObjShape::ObjShape() : Shape() {
     }
 
     ObjShape::~ObjShape() {

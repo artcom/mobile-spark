@@ -18,11 +18,6 @@ namespace spark {
         return EventPtr(new T(theXMLNode));
     }
 
-    EventPtr createStageEvent(const masl::XMLNodePtr theXMLNode);
-    EventPtr createTouchEvent(const masl::XMLNodePtr theXMLNode);
-    EventPtr createGestureEvent(const masl::XMLNodePtr theXMLNode);
-
-    
     class Component;
     typedef boost::shared_ptr<Component> ComponentPtr;
 

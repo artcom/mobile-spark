@@ -13,6 +13,11 @@
 
 namespace mar {
 
+    struct BoundingBox {
+        vector4 min;
+        vector4 max;
+    };
+
     class Shape {
     public:
         Shape(const bool theTexturedFlag = false);
@@ -20,11 +25,14 @@ namespace mar {
         virtual void render(const matrix & theMvp) const;
         virtual void initGL();
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
+        BoundingBox & getBoundingBox() { return _myBoundingBox;};
+        void setBoundingBox(const vector4 theMin, const vector4 theMax);
 
         std::vector<ElementPtr> elementList; 
     protected:
         bool _myTextureFlag;   //XXX does not make any sense, texture is decided at element level
         size_t _myDataPerVertex;
+        BoundingBox _myBoundingBox;
     };
     typedef boost::shared_ptr<Shape> ShapePtr;
 
@@ -53,6 +61,7 @@ namespace mar {
         //ShapePtr createNinePatch();
         ShapePtr createObj(const std::string & theFile);
     };
+
 };
 
 #endif 

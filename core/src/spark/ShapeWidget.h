@@ -10,11 +10,13 @@ namespace spark {
         public: 
             ShapeWidget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
             virtual ~ShapeWidget() = 0;
-            virtual void renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const;
-            virtual bool AABBcontains(const unsigned int x, const unsigned int y) const;
+            virtual void renderWithLocalMatrix(const matrix & theMV, const matrix & theP) const;
+            virtual bool AABB2Dcontains(const float x, const float y,
+                                        const matrix theProjectionMatrix) const;
 
             mar::ShapePtr getShape();            
             void setShape( mar::ShapePtr theShapePtr);            
+            float getWorldZ() const;
         private:
             mar::ShapePtr _myShape;            
     };
