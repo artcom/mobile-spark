@@ -33,7 +33,7 @@ namespace spark {
         _myLocalMatrix = helpMatrixStack.getTop();
     };
     
-    
+    //TODO: use visitor? 
     void Widget::prerender(MatrixStack& theCurrentMatrixStack) {
         theCurrentMatrixStack.push();
         theCurrentMatrixStack.multMatrix(_myLocalMatrix);
@@ -44,6 +44,7 @@ namespace spark {
         theCurrentMatrixStack.pop();
     }
 
+    //TODO: use visitor? 
     void Widget::render(const matrix & theProjectionMatrix) const {
         renderWithLocalMatrix(_myWorldMVMatrix, theProjectionMatrix);
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {

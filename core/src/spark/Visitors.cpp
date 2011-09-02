@@ -3,7 +3,6 @@
 namespace spark {
 
     ComponentVisitor::~ComponentVisitor() {
-        AC_PRINT << "delete componentVisitor";
     }
 
     void
@@ -28,16 +27,19 @@ namespace spark {
     }
 
     CollectAABBComponentVisitor::CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList, 
-                              const unsigned int x, const unsigned int y) : 
+                              const float x, const float y, 
+                              const matrix theProjectionMatrix) : 
                              ComponentVisitor(),
-                             list_(theList), x_(x), y_(y) {
+                             list_(theList), x_(x), y_(y),
+                             projectionMatrix_(theProjectionMatrix) {
     }
 
     void 
     CollectAABBComponentVisitor::visit(ComponentPtr theComponent) {
         ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(theComponent);
-        if (myShapeWidget && myShapeWidget->getShape() && myShapeWidget->AABBcontains(x_,y_)) {
-            list_.push_back(std::make_pair(myShapeWidget, myShapeWidget->getZ()));
+        if (myShapeWidget && myShapeWidget->getShape() && 
+            myShapeWidget->AABB2Dcontains(x_,y_,projectionMatrix_)) {
+            list_.push_back(std::make_pair(myShapeWidget, myShapeWidget->getWorldZ()));
             //AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();
         }
     }

@@ -43,13 +43,13 @@ namespace spark {
         }
         matrix _myLocalMatrix; //scale, roation and translation of this node
     protected:
+        matrix _myWorldMVMatrix;
     private:
         float _x,_y,_z;
         float _scaleX, _scaleY, _scaleZ;
         float _rotationX, _rotationY, _rotationZ;
         float _alpha;
         bool _visible;
-        matrix _myWorldMVMatrix;
 
         void updateMatrix();
     };
