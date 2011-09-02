@@ -14,6 +14,8 @@ namespace mar {
             Viewport(float theWidth, float theHeight, float theXPos, float theYPos);
             ~Viewport();
             void activate(float theCanvasWidth, float theCanvasHeight);
+            vector2 getPos() const { return _myPos; };
+            vector2 getSize() const { return _mySize; };
         private:           
             vector2 _myPos;
             vector2 _mySize; 
