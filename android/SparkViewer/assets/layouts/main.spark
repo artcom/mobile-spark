@@ -15,7 +15,8 @@
             </Transform>
             <Image name="imageA" x="2" z="1" src="assets/textures/texture.png"/>
         </Transform>
-        <Rectangle name="here_is_origin" y="0" width="10" height="10" z="10" color="[1,1,1]"/>
+        <Rectangle name="here_is_origin" width="10" height="10" z="10" color="[1,1,1]"/>
+        <Rectangle name="here_is_up_right_corner" x="790" y="1221" width="10" height="10" z="10" color="[1,1,1]"/>
         <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
     </World>        
     <World name="world2">    

@@ -31,12 +31,15 @@ namespace spark {
     class CollectAABBComponentVisitor : public ComponentVisitor {
     public:
         CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList, 
-                                const unsigned int x, const unsigned int y);
+                                const float x, const float y,
+                                const matrix theProjectionMatrix);
         virtual void visit(ComponentPtr theComponent);
     private:
         std::vector<std::pair<ComponentPtr, float> > & list_;
-        const unsigned int x_;
-        const unsigned int y_;
+        //relative coordinates
+        const float x_;
+        const float y_;
+        matrix projectionMatrix_;
     };
 
 
