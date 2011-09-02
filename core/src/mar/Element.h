@@ -16,8 +16,8 @@ namespace mar {
 
     //shader program handles
     const unsigned int VERTEX_POS_INDEX       = 0;
-    const unsigned int VERTEX_TEXCOORD0_INDEX = 1;
-    const unsigned int VERTEX_NORMAL_INDEX    = 2;
+    const unsigned int VERTEX_TEXCOORD0_INDEX = 2;
+    const unsigned int VERTEX_NORMAL_INDEX    = 1;
 
     //vertex data size
     const unsigned int VERTEX_POS_SIZE       = 3; //x, y, z
