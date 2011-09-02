@@ -16,7 +16,9 @@ namespace spark {
     public: 
         Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Widget() = 0;
-        virtual void render(MatrixStack& theCurrentMatrixStack, const matrix & theProjectionMatrix) const;
+        virtual void prerender(MatrixStack& theCurrentMatrixStack);
+        virtual void render(const matrix & theProjectionMatrix) const;
+        virtual void renderWithLocalMatrix(const matrix & theMV, const matrix & theP) const {};
 
         float getX() const { return _x;};
         float getY() const { return _y;};
@@ -39,9 +41,9 @@ namespace spark {
             TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent> (theEvent);
             AC_PRINT << "test eventcallback "<< myEvent->getX() << " , "<< myEvent->getY();
         }
-        MatrixStack _myLocalMatrixStack; //scale, roation and translation of this node
-        virtual void renderWithLocalMatrix(MatrixStack& theCurrentMatrixStack) const {};
+        matrix _myLocalMatrix; //scale, roation and translation of this node
     protected:
+        matrix _myWorldMVMatrix;
     private:
         float _x,_y,_z;
         float _scaleX, _scaleY, _scaleZ;

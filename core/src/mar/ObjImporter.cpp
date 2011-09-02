@@ -40,6 +40,20 @@ namespace mar {
         return triple;
     }
 
+    void ObjImporter::checkBB(std::vector<float> theVertex) {
+        if (theVertex.size() != 3) {
+            throw WrongDimensionException("expected vector<float> with size 3", PLUS_FILE_LINE);
+        }
+        for (size_t i = 0; i < 3; ++i) {
+            if (theVertex[i] < min_[i]) {
+                min_[i] = theVertex[i];
+            }
+            if (theVertex[i] > max_[i]) {
+                max_[i] = theVertex[i];
+            }
+        }
+    }
+
     void ObjImporter::importMaterialMap(const std::vector<std::string> & theMtlFile) {
         MaterialPtr myMaterial;
         std::string myMaterialId;
@@ -119,6 +133,7 @@ namespace mar {
             int texId = (*it)[1]-1;
             element->vertexData[myIndex * stride + 6] = (texId == -1 ? 0 : texData[texId][0]);
             element->vertexData[myIndex * stride + 7] = (texId == -1 ? 0 : texData[texId][1]);
+            checkBB(vertices[(*it)[0]-1]);
 
             //AC_PRINT << "indices " << (*it)[3]-1 << "  " << (*it)[4]-1 << "  " << (*it)[5]-1;
             element->vertexData[myIndex * stride + 8] = vertices[(*it)[3]-1][0];
@@ -130,6 +145,7 @@ namespace mar {
             texId = (*it)[4]-1;
             element->vertexData[myIndex * stride + 14] = (texId == -1 ? 0 : texData[(*it)[4]-1][0]);
             element->vertexData[myIndex * stride + 15] = (texId == -1 ? 0 : texData[(*it)[4]-1][1]);
+            checkBB(vertices[(*it)[3]-1]);
 
             //AC_PRINT << "indices " << (*it)[6]-1 << "  " << (*it)[7]-1 << "  " << (*it)[8]-1;
             element->vertexData[myIndex * stride + 16] = vertices[(*it)[6]-1][0];
@@ -141,6 +157,7 @@ namespace mar {
             texId = (*it)[7]-1;
             element->vertexData[myIndex * stride + 22] = (texId == -1 ? 0 : texData[(*it)[7]-1][0]);
             element->vertexData[myIndex * stride + 23] = (texId == -1 ? 0 : texData[(*it)[7]-1][1]);
+            checkBB(vertices[(*it)[6]-1]);
             myIndex++;
         }
         theShape->elementList.push_back(element);
@@ -164,6 +181,9 @@ namespace mar {
         texData.clear();
         faces.clear();
         materialMap.clear();
+        min_[0] = min_[1] = min_[2] = FLT_MAX;
+        max_[0] = max_[1] = max_[2] = FLT_MIN;
+        min_[3] = max_[3] = 1;
         //AC_PRINT << "import obj " << theObjFileName;
         const std::vector<std::string> theObjFile = 
             AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".obj"));
@@ -226,5 +246,6 @@ namespace mar {
         std::sort(theShape->elementList.begin(), theShape->elementList.end(), sortByTransparencyFunction);
         AC_PRINT << "vertex size " << vertices.size() << " normals size " << normals.size() << " tex size " << texData.size();
         AC_PRINT << "faces size " << faces.size() << " objectParts " << theShape->elementList.size();
+        theShape->setBoundingBox(min_, max_);
     }
 }
