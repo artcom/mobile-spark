@@ -11,6 +11,12 @@ namespace spark {
         _myShape->render(theCurrentMatrixStack.getTop());                
     }
 
+    bool ShapeWidget::AABBcontains(const unsigned int x, const unsigned int y) const {
+        //TODO
+
+        return true;
+    }
+
     mar::ShapePtr ShapeWidget::getShape() {
         return _myShape;
     }
