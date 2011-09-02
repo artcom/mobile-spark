@@ -20,10 +20,6 @@ namespace spark {
         AC_PRINT << ".................delete " + _myName;
     }
 
-    void 
-    Component::render(MatrixStack& theCurrentMatrixStack, const matrix & theProjectionMatrix) const {
-    }
-
     ComponentPtr 
     Component::getChildByName(const std::string & theName, bool theDeepFlag) const {
         return ComponentPtr();

@@ -38,7 +38,7 @@ namespace spark {
         ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(theComponent);
         if (myShapeWidget && myShapeWidget->getShape() && myShapeWidget->AABBcontains(x_,y_)) {
             list_.push_back(std::make_pair(myShapeWidget, myShapeWidget->getZ()));
-            AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();
+            //AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();
         }
     }
 }
