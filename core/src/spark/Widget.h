@@ -16,7 +16,8 @@ namespace spark {
     public: 
         Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Widget() = 0;
-        virtual void render(MatrixStack& theCurrentMatrixStack, const matrix & theProjectionMatrix) const;
+        virtual void prerender(MatrixStack& theCurrentMatrixStack);
+        virtual void render(const matrix & theProjectionMatrix) const;
         virtual void renderWithLocalMatrix(const matrix & theMV, const matrix & theP) const {};
 
         float getX() const { return _x;};
@@ -48,6 +49,7 @@ namespace spark {
         float _rotationX, _rotationY, _rotationZ;
         float _alpha;
         bool _visible;
+        matrix _myWorldMVMatrix;
 
         void updateMatrix();
     };
