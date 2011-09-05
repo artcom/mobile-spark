@@ -181,8 +181,8 @@ namespace mar {
         texData.clear();
         faces.clear();
         materialMap.clear();
-        min_[0] = min_[1] = min_[2] = FLT_MAX;
-        max_[0] = max_[1] = max_[2] = FLT_MIN;
+        min_[0] = min_[1] = min_[2] = std::numeric_limits<float>::max();
+        max_[0] = max_[1] = max_[2] = std::numeric_limits<float>::min();
         min_[3] = max_[3] = 1;
         //AC_PRINT << "import obj " << theObjFileName;
         const std::vector<std::string> theObjFile = 
