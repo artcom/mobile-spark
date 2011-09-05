@@ -27,7 +27,7 @@ if(CMAKE_CONFIGURATION_TYPES)
     set_global(ACMAKE_BUILD_CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES})
     option(ACMAKE_ENFORCE_DEFAULT_BUILD_CONFIG
             "Enforce the AcMake default configuration even for multi configuration generators"
-            OFF)
+            ON)
 else(CMAKE_CONFIGURATION_TYPES)
     # single config generator
     set_global(ACMAKE_BUILD_CONFIGURATIONS Debug Release RelWithDebInfo MinSizeRel)
@@ -89,11 +89,17 @@ function(ac_done_registering_build_types)
     get_global(ACMAKE_BUILD_CONFIGURATIONS BUILD_CONFIGS)
     foreach(BCONFIG ${BUILD_CONFIGS})
         set(BUILD_CONFIG_MSG "${BUILD_CONFIG_MSG} ${BCONFIG}")
+        if(DEFINED BUILD_CONFIG_OPTIONS)
+            set(BUILD_CONFIG_OPTIONS "${BUILD_CONFIG_OPTIONS};${BCONFIG}")
+        else(DEFINED BUILD_CONFIG_OPTIONS)
+            set(BUILD_CONFIG_OPTIONS "${BCONFIG}")
+        endif(DEFINED BUILD_CONFIG_OPTIONS)
     endforeach(BCONFIG ${BUILD_CONFIGS})
     set(BUILD_CONFIG_MSG "${BUILD_CONFIG_MSG}.")
 
     # enforce a default. Ok, according to CMake FAQ
     set(CMAKE_BUILD_TYPE ${FINAL_CONFIG} CACHE STRING "${BUILD_CONFIG_MSG}" FORCE)
+    set_property( CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${BUILD_CONFIG_OPTIONS}" )
 
 endfunction(ac_done_registering_build_types)
 
