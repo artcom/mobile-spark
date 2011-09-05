@@ -4,7 +4,7 @@
 
 namespace spark {
     Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _visible(false) 
+        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _visible(false), _sensible(true) 
     { 
         _x = _myXMLNode->getFloatValue("x");
         _y = _myXMLNode->getFloatValue("y");
@@ -46,7 +46,6 @@ namespace spark {
 
     //TODO: use visitor? 
     void Widget::render(const matrix & theProjectionMatrix) const {
-        renderWithLocalMatrix(_myWorldMVMatrix, theProjectionMatrix);
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             (*it)->render(theProjectionMatrix);
         }

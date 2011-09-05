@@ -4,6 +4,15 @@
 using namespace masl;
 
 namespace spark {
+    const char * const StageEvent::FRAME = "frame";
+    const char * const TouchEvent::TAP = "tap";
+    const char * const TouchEvent::DOUBLETAP = "doubletap";
+    const char * const TouchEvent::LONGPRESS = "longpress";
+    const char * const GestureEvent::PAN = "pan";
+    const char * const GestureEvent::PINCH = "pinch";
+    const char * const GestureEvent::ROTATE = "rotate";
+    const char * const GestureEvent::SWIPE_LEFT = "swipe-left";
+    const char * const GestureEvent::SWIPE_RIGHT = "swipe-right";
 
     Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
     }
