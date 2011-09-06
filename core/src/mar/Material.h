@@ -71,7 +71,7 @@ namespace mar {
         virtual ~UnlitTexturedMaterial();
         virtual void loadShader(const matrix & theMatrix);
         virtual void initGL();
-        TexturePtr getTexture() {return _myTexture;}
+        TexturePtr getTexture() const {return _myTexture;}
         TexturePtr _myTexture;
     private:
         virtual void setShader();

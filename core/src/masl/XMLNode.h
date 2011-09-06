@@ -49,10 +49,6 @@ namespace masl {
                 }
             }
 
-            std::vector<float> getFloatArrayValue(const std::string & theKey) const;
-            vector4 getVector4Value(const std::string & theKey, const vector4 theDefault = vector4(0,0,0,0)) const;
-            vector2 getVector2Value(const std::string & theKey, const vector2 theDefault = vector2(0,0)) const;
-
             std::string nodeName;
             std::string name;
             std::map<std::string, std::string> attributes;
