@@ -113,7 +113,7 @@ namespace mar {
         AC_PRINT << "num materials " << materialMap.size();
     }
 
-    void ObjImporter::createElementVertices(ShapePtr theShape, ElementPtr element,
+    void ObjImporter::createElementVertices(ObjShapePtr theShape, ElementPtr element,
                                          size_t startFaceIndex) {
         size_t dataPerVertex = 3 + 3 + 2;
         size_t stride = dataPerVertex * 3;
@@ -175,7 +175,7 @@ namespace mar {
 
 
 
-    void ObjImporter::importObj(std::string theObjFileName, ShapePtr theShape) {
+    void ObjImporter::importObj(std::string theObjFileName, ObjShapePtr theShape) {
         vertices.clear();
         normals.clear();
         texData.clear();
