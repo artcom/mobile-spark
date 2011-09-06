@@ -27,7 +27,7 @@ namespace spark {
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent){     
         bool myFrustumSpecified = false;            
-        string myFrustum = theXMLNode->getStringValue("frustum");                           
+        string myFrustum = theXMLNode->getAttributeAs<std::string>("frustum", "");
         size_t myIndex  = myFrustum.find(OrtohonormalStr);
         if (myIndex == 0) {
              size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());

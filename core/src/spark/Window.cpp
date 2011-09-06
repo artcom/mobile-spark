@@ -25,12 +25,12 @@ namespace spark {
         Container(theApp, theXMLNode, theParent), 
         _myWidth(0), _myHeight(0){
             
-        _myFullScreenFlag = _myXMLNode->getBoolValue("fullscreen", false);
+        _myFullScreenFlag = _myXMLNode->getAttributeAs<bool>("fullscreen", false);
         _myClearColor = _myXMLNode->getVector4Value("clearColor", vector4(1,1,1,1));
 
         // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
         //if (!_myFullScreenFlag) {
-            onSizeChanged(_myXMLNode->getFloatValue("width",100), _myXMLNode->getFloatValue("height",100));
+            onSizeChanged(_myXMLNode->getAttributeAs<float>("width",100), _myXMLNode->getAttributeAs<float>("height",100));
         //}        
     }
 

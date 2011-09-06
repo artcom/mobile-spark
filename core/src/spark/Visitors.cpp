@@ -27,8 +27,8 @@ namespace spark {
     }
 
     CollectAABBComponentVisitor::CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList, 
-                              const float x, const float y, 
-                              const matrix theProjectionMatrix) : 
+                             const float x, const float y, 
+                             const matrix theProjectionMatrix) : 
                              ComponentVisitor(),
                              list_(theList), x_(x), y_(y),
                              projectionMatrix_(theProjectionMatrix) {

@@ -16,8 +16,8 @@ namespace spark {
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
 
-        float width = _myXMLNode->getFloatValue("width");
-        float height = _myXMLNode->getFloatValue("height");
+        float width = _myXMLNode->getAttributeAs<float>("width");
+        float height = _myXMLNode->getAttributeAs<float>("height");
         _myColor = _myXMLNode->getFloatArrayValue("color");
         _myColor = _myColor.size() > 2 ? _myColor : std::vector<float>(4,1.0f);
         if (_myColor.size() == 3) {

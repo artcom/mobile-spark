@@ -9,10 +9,14 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <masl/string_functions.h>
 
 #include "numeric_functions.h"
 
 namespace masl {
+
+    DEFINE_EXCEPTION(XMLNodeException, Exception);
+
     class XMLNode {
         public:
             XMLNode(xmlNode* theNode);
@@ -20,14 +24,31 @@ namespace masl {
             void print() const;
             std::ostream & print(std::ostream & os) const;
             void printTree() const;
+
             friend inline std::ostream& operator<<(std::ostream& os, const XMLNode& n) {
                 return n.print(os);
             }
-            
-            std::string getStringValue(const std::string & theKey, const std::string & theDefault = "") const;
-            float getFloatValue(const std::string & theKey, const float theDefault = 0.0f) const;
-            bool getBoolValue(const std::string & theKey, const bool theDefault = true) const;
-                                
+
+            template < typename T>
+            T getAttributeAs(const std::string & theKey, const T & theDefault) const {
+                std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
+                if ( it != attributes.end()) {
+                    return masl::as<T>(it->second);
+                } else {
+                    return theDefault;
+                }
+            }
+
+            template < typename T>
+            T getAttributeAs(const std::string & theKey) const {
+                std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
+                if ( it != attributes.end()) {
+                    return masl::as<T>(it->second);
+                } else {
+                    throw XMLNodeException("getAttributeAs<> " + nodeName + std::string(" name='") + name + std::string("' requires attribute ") + theKey, PLUS_FILE_LINE);
+                }
+            }
+
             std::vector<float> getFloatArrayValue(const std::string & theKey) const;
             vector4 getVector4Value(const std::string & theKey, const vector4 theDefault = vector4(0,0,0,0)) const;
             vector2 getVector2Value(const std::string & theKey, const vector2 theDefault = vector2(0,0)) const;

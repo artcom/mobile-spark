@@ -17,7 +17,7 @@ namespace spark {
     Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
     }
     Event::Event(const masl::XMLNodePtr theXMLNode)
-         : type_(theXMLNode->getStringValue("type", theXMLNode->nodeName)) 
+         : type_(theXMLNode->getAttributeAs<std::string>("type", theXMLNode->nodeName)) 
     {
         
     }
@@ -70,7 +70,7 @@ namespace spark {
     {}
     StageEvent::StageEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
-        currenttime_(as<UInt64>(theXMLNode->getStringValue("time", "0")))
+        currenttime_(theXMLNode->getAttributeAs<UInt64>("time", 0))
     {}
     StageEvent::~StageEvent() {}
 
@@ -79,8 +79,8 @@ namespace spark {
     {}
     TouchEvent::TouchEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
-        x_(as<unsigned int>(theXMLNode->getStringValue("x", "0"))), 
-        y_(as<unsigned int>(theXMLNode->getStringValue("y", "0")))
+        x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)), 
+        y_(theXMLNode->getAttributeAs<unsigned int>("y", 0))
     {}
 
     TouchEvent::~TouchEvent() {}
@@ -99,12 +99,12 @@ namespace spark {
     { }
     GestureEvent::GestureEvent(const masl::XMLNodePtr theXMLNode)
          : Event(theXMLNode),
-           x_(as<unsigned int>(theXMLNode->getStringValue("x", "0"))), 
-           y_(as<unsigned int>(theXMLNode->getStringValue("y", "0"))),
-           dx_(as<int>(theXMLNode->getStringValue("dx", "0"))),
-           dy_(as<int>(theXMLNode->getStringValue("dy", "0"))),
-           factor_(as<float>(theXMLNode->getStringValue("factor", "0.0"))),
-           direction_(theXMLNode->getStringValue("direction", ""))
+           x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)), 
+           y_(theXMLNode->getAttributeAs<unsigned int>("y", 0)),
+           dx_(theXMLNode->getAttributeAs<int>("dx", 0)), 
+           dy_(theXMLNode->getAttributeAs<int>("dy", 0)),
+           factor_(theXMLNode->getAttributeAs<float>("factor", 0.0)),
+           direction_(theXMLNode->getAttributeAs<std::string>("direction", ""))
     {}
     
     GestureEvent::~GestureEvent() {}
