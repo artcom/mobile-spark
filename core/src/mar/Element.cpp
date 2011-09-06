@@ -7,6 +7,29 @@ namespace mar {
     Element::Element() {
         _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE));
         _myStride = VERTEX_SIZE;
+        testVertices = boost::shared_array<float>(new float[12]);
+        testVertices[0] = 5.5;
+        testVertices[1] = -5.5;
+        testVertices[2] = 0.0;
+        
+        testVertices[3] = 5.5;
+        testVertices[4] = 5.5;
+        testVertices[5] = 0.0;
+        
+        testVertices[6] = -5.5;
+        testVertices[7] = 5.5;
+        testVertices[8] = 0.0;
+        
+        testVertices[9] = -5.5;
+        testVertices[10] = -5.5;
+        testVertices[11] = 0.0;
+        
+        testIndices = boost::shared_array<GLushort>(new GLushort[4]);
+        testIndices[0] = 3;
+        testIndices[1] = 0;
+        testIndices[2] = 2;
+        testIndices[3] = 1;
+
     }
 
     Element::~Element() {
@@ -27,7 +50,7 @@ namespace mar {
 
     void Element::unloadData() const {
         for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
-            glDisableVertexAttribArray(it->first);
+            //glDisableVertexAttribArray(it->first);
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -46,11 +69,11 @@ namespace mar {
         
         glGenBuffers(1, &indexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numVertices * sizeof(GLuint)), indexDataVBO.get(), GL_STATIC_DRAW); 
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numVertices * sizeof(GLushort)), indexDataVBO.get(), GL_STATIC_DRAW); 
         
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        AC_PRINT << "sizeof indices: " <<   (numVertices * sizeof(GLuint));
+        AC_PRINT << "sizeof indices: " <<   (numVertices * sizeof(GLushort));
 
         int offset = 0;
         for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 

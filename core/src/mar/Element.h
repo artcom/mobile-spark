@@ -39,10 +39,10 @@ namespace mar {
 
     
     const vertexStruct vertices[] = {
-        {{0.5, -0.5, 0}},
-        {{0.5, 0.5, 0}},
-        {{-0.5, 0.5, 0}},
-        {{-0.5, -0.5, 0}}
+        {{5.5, -5.5, 0}},
+        {{5.5, 5.5, 0}},
+        {{-5.5, 5.5, 0}},
+        {{-5.5, -5.5, 0}}
     };
     
     const GLubyte indices[] = {
@@ -62,8 +62,10 @@ namespace mar {
         boost::shared_array<float> vertexData;    //interleaved
         
         //for VBO's
-        boost::shared_array<GLuint> indexDataVBO;
+        boost::shared_array<GLushort> indexDataVBO;
         
+        boost::shared_array<float> testVertices;
+        boost::shared_array<GLushort> testIndices;
         GLuint vertexBuffer;
         GLuint indexBuffer;
         

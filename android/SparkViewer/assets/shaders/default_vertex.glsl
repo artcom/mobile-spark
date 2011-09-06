@@ -8,9 +8,10 @@ varying vec2 v_texCoord;
  
 void main() {
     // Pass the texture coordinate attribute to a varying.
-    v_texCoord = a_texCoord0;
+    //v_texCoord = a_texCoord0;
  
     // Here we set the final position to this vertex.
     gl_Position = u_mvpMatrix * a_position;
+    //gl_Position = a_position;
 }
 
