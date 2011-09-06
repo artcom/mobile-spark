@@ -9,7 +9,7 @@ namespace mar {
     class Texture {
         public:
             Texture();
-            GLuint getTextureId();
+            GLuint getTextureId() const ;
             void setTextureId(GLuint theTextureId);
 
             GLuint width_;
