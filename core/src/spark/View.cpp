@@ -24,7 +24,7 @@ namespace spark {
     View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent){
-        _myWorldName  = theXMLNode->getStringValue("world");
+        _myWorldName  = theXMLNode->getAttributeAs<std::string>("world", "");
         vector2 myPos = theXMLNode->getVector2Value("pos", vector2(0,0));
         vector2 mySize = theXMLNode->getVector2Value("size", vector2(1,1));
         _myGLViewport = ViewportPtr(new Viewport(mySize[0],mySize[1], myPos[0],myPos[1]));
@@ -39,7 +39,7 @@ namespace spark {
         if (_myCamera) {
             return;
         }
-        string myCameraName = _myXMLNode->getStringValue("cameraName");        
+        string myCameraName = _myXMLNode->getAttributeAs<std::string>("cameraName", "");
         // find camera
         _myCamera = boost::static_pointer_cast<spark::Camera>(getRoot()->getChildByName(myCameraName, true));
     }
