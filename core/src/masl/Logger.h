@@ -43,7 +43,7 @@ namespace masl {
     class Logger : public Singleton<Logger> {
         public:
             Logger();  
-            ~Logger();
+            virtual ~Logger();
                       
             void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
             void setLoggerTopLevelTag(const std::string & theTagString);               
