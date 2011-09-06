@@ -29,11 +29,11 @@ namespace mar {
     }
 
     void Material::loadShader(const matrix & theMatrix) {
-        glLinkProgram(shaderProgram);
+        //glLinkProgram(shaderProgram);
         glUseProgram(shaderProgram);
         checkGlError("glUseProgram");
-        glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, theMatrix.data());
-        glBindAttribLocation(shaderProgram, VERTEX_POS_INDEX, "a_position");
+        //glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, theMatrix.data());
+        //glBindAttribLocation(shaderProgram, VERTEX_POS_INDEX, "a_position");
     }
 
     void Material::setShader() {

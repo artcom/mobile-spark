@@ -13,8 +13,8 @@
 
 namespace mar {
 
-    const std::string DEFAULT_VERTEX_SHADER = "assets/shaders/default_vertex.glsl";
-    const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "assets/shaders/default_colored_fragment.glsl";
+    const std::string DEFAULT_VERTEX_SHADER = "assets/shaders/template_vertex.glsl";
+    const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "assets/shaders/template_fragment.glsl";
     const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "assets/shaders/default_textured_fragment.glsl";
             
     class Material {
