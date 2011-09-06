@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Window name="ourWindow" fullscreen="true" clearColor="[0.1,0.1,0.1,1]">
+    <View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
     <View name="mainView" world="world1" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
-    <!--View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/-->            
     <World name="world1">    
         <Camera name="2dcamera" frustum="orthonormal[auto]"/>    
         <Transform name="transformB" x="170" y="170" rotationZ="0.3">
