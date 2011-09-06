@@ -19,12 +19,12 @@ namespace mar {
     public:
         virtual ~ObjImporter();
         
-        void importObj(std::string theObjFileName, ShapePtr theShape);
+        void importObj(std::string theObjFileName, ObjShapePtr theShape);
     private:
         void faceParseHelper(std::vector<int> &theFaceData, const std::string & theData);
         std::vector<float> getFloatTriple(const std::string & theString); 
         void importMaterialMap(const std::vector<std::string> & theMtlFile); 
-        void createElementVertices(ShapePtr theShape, ElementPtr element,
+        void createElementVertices(ObjShapePtr theShape, ElementPtr element,
                                          size_t startFaceIndex);
         void checkBB(std::vector<float> theVertex);
         static bool sortByTransparencyFunction(ElementPtr i,ElementPtr j); 
