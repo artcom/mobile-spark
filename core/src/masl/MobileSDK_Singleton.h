@@ -47,7 +47,7 @@ namespace masl {
         public:
             MobileSDK_Singleton();  
             virtual ~MobileSDK_Singleton();                      
-            int renderText(const std::string & theMessage, int theTextureId);
+            int renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor);
             
 #ifdef __ANDROID__
             JNIEnv * env;

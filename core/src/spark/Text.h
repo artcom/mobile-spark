@@ -15,6 +15,8 @@ namespace spark {
     private:
         std::string _myText;
         bool _myDirtyFlag;
+        int _myFontSize;
+        vector4 _myTextColor;
     };
 
     typedef boost::shared_ptr<Text> TextPtr;
