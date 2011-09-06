@@ -4,6 +4,7 @@ package com.artcom.mobile.Base;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -30,14 +31,13 @@ public class NativeBinding {
   public static native void onPause();
   public static native void onResume();
   public static native void onEvent(String theEvent);
-
   
   public static native void log(int theSeverity, String theFilename, int theLineNumber, String theMessage);
   public static native void setLoggerTopLevelTag(String theTagString);
   public static native boolean loadSpark(String theFilename);
   
     
-  public static int renderText(String theMessage, int theTextureId) {	
+  public static int renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor) {	
 	Bitmap myBitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
 	Canvas myCanvas = new Canvas(myBitmap);
 	
@@ -45,9 +45,10 @@ public class NativeBinding {
 	myBitmap.eraseColor(Color.TRANSPARENT);
 	// Draw the text
 	Paint textPaint = new Paint();
-	textPaint.setTextSize(32);
+	textPaint.setTextSize(theFontSize);
 	textPaint.setAntiAlias(true);
-	textPaint.setARGB(0xff, 0xff, 0x00, 0x00);
+	//textPaint.setARGB(0xff, 0xff, 0x00, 0x00);
+	textPaint.setARGB(theColor[3], theColor[0], theColor[1], theColor[2]);
 	// draw the text centered
 	myCanvas.drawText(theMessage, 16,112, textPaint);
 	
