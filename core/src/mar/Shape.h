@@ -33,7 +33,7 @@ namespace mar {
         virtual void render(const matrix & theMvp) const;
         virtual void initGL();
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
-        BoundingBox & getBoundingBox() { return _myBoundingBox;};
+        const BoundingBox & getBoundingBox() const { return _myBoundingBox;};
         void setBoundingBox(const vector4 theMin, const vector4 theMax);
         bool isTransparent();
 
