@@ -42,7 +42,7 @@ namespace spark {
         //return myBaseReturn;
 
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::shared_ptr<DemoApp>(&ourApp), &DemoApp::onTouch));
-        _mySparkWindow->addEventListener("TouchEvent", myCB); 
+        _mySparkWindow->addEventListener(TouchEvent::TAP, myCB); 
 
         //add looping animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");

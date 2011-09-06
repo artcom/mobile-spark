@@ -7,9 +7,10 @@ namespace spark {
 
     ShapeWidget::~ShapeWidget() {}
 
-    void ShapeWidget::renderWithLocalMatrix(const matrix & theMV, const matrix & theP) const {
-        matrix mvp = theP * theMV;
-        _myShape->render(mvp);                
+    void ShapeWidget::render(const matrix & theP) const {
+        matrix mvp = theP * _myWorldMVMatrix;
+        _myShape->render(mvp);
+        Widget::render(theP);
     }
 
     bool ShapeWidget::AABB2Dcontains(const float x, const float y, 
