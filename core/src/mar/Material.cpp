@@ -101,8 +101,10 @@ namespace mar {
     }
     void UnlitTexturedMaterial::initGL() {
         Material::initGL();
-        loadTextureFromPNG(_mySrc, _myTexture);  
-        transparency = _myTexture->transparency;
+        if (_mySrc != "") {
+            loadTextureFromPNG(_mySrc, _myTexture);  
+            transparency = _myTexture->transparency;
+        }
     }
     
 }

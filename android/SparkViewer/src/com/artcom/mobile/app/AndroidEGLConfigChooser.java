@@ -106,7 +106,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
                             if (verbose)
                             {
                                 AC_Log.info("** Supported EGL Configuration #" + i );                            
-                                logEGLConfig(conf[i], display, egl);
+                                //logEGLConfig(conf[i], display, egl);
                             }
                         }
                         else
@@ -114,7 +114,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
                             if (verbose)
                             {
                                 AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_OPENGL_ES2_BIT not set");                            
-                                logEGLConfig(conf[i], display, egl);
+                                //logEGLConfig(conf[i], display, egl);
                             }
                         }  
                     }
@@ -123,7 +123,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
                         if (verbose)
                         {
                             AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_DEPTH_SIZE < 16");                            
-                            logEGLConfig(conf[i], display, egl);
+                            //logEGLConfig(conf[i], display, egl);
                         }
                     }
                 }
@@ -132,7 +132,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
                     if (verbose)
                     {
                         AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_WINDOW_BIT not set");                            
-                        logEGLConfig(conf[i], display, egl);
+                        //logEGLConfig(conf[i], display, egl);
                     }
                 }
             }
@@ -145,7 +145,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
        
         if ((type == ConfigType.BEST) && (bestConfig != null))
         {
-            AC_Log.info("Using best EGL configuration:");
+            //AC_Log.info("Using best EGL configuration:");
             choosenConfig = bestConfig;
         }
         else
@@ -159,7 +159,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
        
         if (choosenConfig != null)
         {
-            logEGLConfig(choosenConfig, display, egl);              
+            //logEGLConfig(choosenConfig, display, egl);              
             pixelFormat = getPixelFormat(choosenConfig, display, egl);
             clientOpenGLESVersion = getOpenGLVersion(choosenConfig, display, egl);
             return true;

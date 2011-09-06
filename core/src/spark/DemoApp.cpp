@@ -7,6 +7,8 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/Logger.h>
+#include <masl/MobileSDK_Singleton.h>
+
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
 #include <animation/SequenceAnimation.h>
@@ -55,8 +57,8 @@ namespace spark {
         mySequence->add(myAnimation2);
         mySequence->add(myDelay);
         mySequence->setLoop(true);
-        mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
-        mySequence->setOnFinish(masl::CallbackPtr(new masl::FreeFunctionCallback(freeFunction)));
+        //mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
+        //mySequence->setOnFinish(masl::CallbackPtr(new masl::FreeFunctionCallback(freeFunction)));
         animation::AnimationManager::get().play(mySequence);
 
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA")->getChildByName("objTransform");
@@ -94,6 +96,8 @@ namespace spark {
     }
 
     void DemoApp::onTouch(EventPtr theEvent) {
+        return;
+
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         AC_PRINT<<myEvent->getType()<<" x:"<<myEvent->getX()<<" ,y:"<<myEvent->getY();
         //
@@ -119,6 +123,8 @@ namespace spark {
         myParallel->add(myAnimationY);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
+            
+            
     }
 }
 
@@ -143,6 +149,9 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
                                                              jlong currentMillis,
                                                              jstring apkFile,
                                                              jstring layoutFile) {
+    MobileSDK_Singleton::get().env = env;
+    MobileSDK_Singleton::get().obj = obj;
+                                                                
     jboolean isCopy;
     const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
     const char* myLayoutFile = env->GetStringUTFChars(layoutFile, &isCopy);

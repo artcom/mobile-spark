@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <Window name="ourWindow" fullscreen="true" clearColor="[0.1,0.1,0.1,1]">
     <View name="mainView" world="world1" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
-    <View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
+    <!--View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/-->            
     <World name="world1">    
-        <Camera name="2dcamera"  frustum="orthonormal[auto]"/>    
+        <Camera name="2dcamera" frustum="orthonormal[auto]"/>    
         <Transform name="transformB" x="170" y="170" rotationZ="0.3">
             <Rectangle name="objectA" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
             <Rectangle name="objectB" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
@@ -17,7 +17,8 @@
         </Transform>
         <Rectangle name="here_is_origin" width="10" height="10" z="10" color="[1,1,1]"/>
         <Rectangle name="here_is_up_right_corner" x="790" y="1221" width="10" height="10" z="10" color="[1,1,1]"/>
-        <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
+        <Image name="transparent_image" z="1" width="10" height="10" src="assets/textures/transparenttexture.png"/>
+        <Text name="" z="12" text="TestMessage"/>
     </World>        
     <World name="world2">    
         <Camera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    

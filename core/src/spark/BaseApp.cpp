@@ -95,7 +95,6 @@ namespace spark {
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _myGLCanvas->preRender(_mySparkWindow->getClearColor());
         _mySparkWindow->render();
-    }
-
+    }    
 }
 
