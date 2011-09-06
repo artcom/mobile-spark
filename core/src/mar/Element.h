@@ -30,23 +30,19 @@ namespace mar {
     
     enum {
         ATTRIB_VERTEX,
-        ATTRIB_COLOR,
         NUM_ATTRIBUTES };
     
     typedef struct {
         float position[3];
-        float color[4];
     } vertexStruct;
     
-    GLfloat vVertices[] = {  0.0f,  0.5f, 0.0f, 
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f };
+
     
     const vertexStruct vertices[] = {
-        {{0.5, -0.5, 0}, {1, 0, 0, 1}},
-        {{0.5, 0.5, 0}, {0, 1, 0, 1}},
-        {{-0.5, 0.5, 0}, {0, 0, 1, 1}},
-        {{-0.5, -0.5, 0}, {0, 0, 0, 1}}
+        {{0.5, -0.5, 0}},
+        {{0.5, 0.5, 0}},
+        {{-0.5, 0.5, 0}},
+        {{-0.5, -0.5, 0}}
     };
     
     const GLubyte indices[] = {

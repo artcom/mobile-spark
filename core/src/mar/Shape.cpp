@@ -26,8 +26,6 @@ namespace mar {
             glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, sizeof(vertexStruct), 0);        
             glEnableVertexAttribArray(ATTRIB_VERTEX);  
             
-            glVertexAttribPointer(ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(vertexStruct), (GLvoid*) (sizeof(float) * 3));
-            glEnableVertexAttribArray(ATTRIB_COLOR);
             
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element->indexBuffer);
             
@@ -54,10 +52,10 @@ namespace mar {
                  element->material->initGL();
             }
             glBindAttribLocation(element->material->shaderProgram, ATTRIB_VERTEX, "position");
-            glBindAttribLocation(element->material->shaderProgram, ATTRIB_COLOR, "color");
+
             
             AC_PRINT << "ATTRIB_VERTEX: " << ATTRIB_VERTEX;
-            AC_PRINT << "ATTRIB_COLOR: " << ATTRIB_COLOR;            
+      
             
             //element->createVertexBuffers();
             
