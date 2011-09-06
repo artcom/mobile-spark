@@ -19,7 +19,8 @@ namespace mar {
                                                       it != elementList.end(); ++it) {
             ElementPtr element = *it;
             element->loadData(theMatrix);
-            glDrawArrays(GL_TRIANGLES, 0, element->numVertices);
+            //glDrawArrays(GL_TRIANGLES, 0, element->numVertices);
+            glDrawElements(GL_TRIANGLES, element->numVertices, GL_UNSIGNED_BYTE, 0);
             element->unloadData();
             checkGlError("glDrawElements");
         }
@@ -28,10 +29,12 @@ namespace mar {
     void Shape::initGL() {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
+            
             ElementPtr element = *it;
             if (element && element->material ) {
                  element->material->initGL();
             }
+            element->createVertexBuffers();
 
         }
     }
@@ -69,6 +72,7 @@ namespace mar {
         _myDataPerVertex = 3 + (_myTextureFlag ? 2 : 0);
         myElement->numVertices = 6;
         myElement->vertexData = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
+        myElement->indexDataVBO = boost::shared_array<GLuint>(new GLuint[myElement->numVertices]);
         int myXYCoords[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 
         for (size_t i = 0, l = myElement->numVertices; i < l; ++i) {
@@ -79,6 +83,8 @@ namespace mar {
                 (myElement->vertexData)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0];
                 (myElement->vertexData)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1];
             }
+            myElement->indexDataVBO[i] = i;
+            
         }
     }
 
