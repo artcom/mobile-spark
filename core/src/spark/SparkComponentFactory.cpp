@@ -13,6 +13,7 @@
 #include "Rectangle.h"
 #include "Image.h"
 #include "Shape3D.h"
+#include "NinePatch.h"
 
 using namespace masl;
 
@@ -29,6 +30,7 @@ namespace spark {
         registered = registerComponent("Rectangle", spark::createRectangle);
         registered = registerComponent("Image", spark::createImage);
         registered = registerComponent("Shape3D", spark::createShape3D);
+        registered = registerComponent("NinePatch", spark::createNinePatch);
         AC_PRINT << "SparkComponentFactory setup done";
     };
     

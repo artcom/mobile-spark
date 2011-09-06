@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<Window name="ourWindow" fullscreen="true" clearColor="[0.1,0.1,0.1,1]">
-    <View name="mainView" world="world1" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
+<Window name="ourWindow" fullscreen="true" clearColor="[0.8,0.8,0.8,1]">
     <View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
+    <View name="mainView" world="world1" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
     <World name="world1">    
         <Camera name="2dcamera"  frustum="orthonormal[auto]"/>    
         <Transform name="transformB" x="170" y="170" rotationZ="0.3">
@@ -18,6 +18,9 @@
         <Rectangle name="here_is_origin" width="10" height="10" z="10" color="[1,1,1]"/>
         <Rectangle name="here_is_up_right_corner" x="790" y="1221" width="10" height="10" z="10" color="[1,1,1]"/>
         <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
+        <NinePatch name="button_normal" x="40" y="100" z="20" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
+        <NinePatch name="button_normal" x="40" y="200" z="20" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_roll.png"/>
+        <NinePatch name="button_normal" x="40" y="300" z="20" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_visited.png"/>
     </World>        
     <World name="world2">    
         <Camera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    
