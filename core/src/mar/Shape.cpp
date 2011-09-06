@@ -18,9 +18,9 @@ namespace mar {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
             ElementPtr element = *it;
-            element->loadData(theMatrix);
+            //element->loadData(theMatrix);
             
-            /*
+            
             element->material->loadShader(theMatrix);
             glBindBuffer(GL_ARRAY_BUFFER, element->vertexBuffer);
             glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, sizeof(vertexStruct), 0);        
@@ -35,10 +35,10 @@ namespace mar {
             
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-            */
             
-            glDrawElements(GL_TRIANGLES, element->numVertices, GL_UNSIGNED_BYTE, 0);
-            element->unloadData();
+            
+            //glDrawElements(GL_TRIANGLES, element->numVertices, GL_UNSIGNED_BYTE, 0);
+            //element->unloadData();
             
             
             checkGlError("glDrawElements");
@@ -53,9 +53,25 @@ namespace mar {
             if (element && element->material ) {
                  element->material->initGL();
             }
-            //glBindAttribLocation(element->material->shaderProgram, ATTRIB_VERTEX, "position");
-            //glBindAttribLocation(element->material->shaderProgram, ATTRIB_COLOR, "color");
-            element->createVertexBuffers();
+            glBindAttribLocation(element->material->shaderProgram, ATTRIB_VERTEX, "position");
+            glBindAttribLocation(element->material->shaderProgram, ATTRIB_COLOR, "color");
+            
+            AC_PRINT << "ATTRIB_VERTEX: " << ATTRIB_VERTEX;
+            AC_PRINT << "ATTRIB_COLOR: " << ATTRIB_COLOR;            
+            
+            //element->createVertexBuffers();
+            
+            glGenBuffers(1, &element->vertexBuffer);
+            glBindBuffer(GL_ARRAY_BUFFER, element->vertexBuffer);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            
+            
+            glGenBuffers(1, &element->indexBuffer);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element->indexBuffer);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); 
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 
         }
     }
