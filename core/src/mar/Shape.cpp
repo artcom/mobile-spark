@@ -18,7 +18,9 @@ namespace mar {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
             ElementPtr element = *it;
-            //element->loadData(theMatrix);
+            element->loadData(theMatrix);
+            
+            /*
             element->material->loadShader(theMatrix);
             glBindBuffer(GL_ARRAY_BUFFER, element->vertexBuffer);
             glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, sizeof(vertexStruct), 0);        
@@ -30,9 +32,13 @@ namespace mar {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element->indexBuffer);
             
             glDrawElements(GL_TRIANGLE_STRIP, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, 0);
-            //glDrawArrays(GL_TRIANGLES, 0, element->numVertices);
-            //glDrawElements(GL_TRIANGLES, element->numVertices, GL_UNSIGNED_BYTE, 0);
-            //element->unloadData();
+            
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            */
+            
+            glDrawElements(GL_TRIANGLES, element->numVertices, GL_UNSIGNED_BYTE, 0);
+            element->unloadData();
             
             
             checkGlError("glDrawElements");
@@ -47,8 +53,8 @@ namespace mar {
             if (element && element->material ) {
                  element->material->initGL();
             }
-            glBindAttribLocation(element->material->shaderProgram, ATTRIB_VERTEX, "position");
-            glBindAttribLocation(element->material->shaderProgram, ATTRIB_COLOR, "color");
+            //glBindAttribLocation(element->material->shaderProgram, ATTRIB_VERTEX, "position");
+            //glBindAttribLocation(element->material->shaderProgram, ATTRIB_COLOR, "color");
             element->createVertexBuffers();
 
         }

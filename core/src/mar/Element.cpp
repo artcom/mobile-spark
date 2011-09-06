@@ -29,6 +29,9 @@ namespace mar {
         for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
             glDisableVertexAttribArray(it->first);
         }
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        
     }
     
     void Element::createVertexBuffers() {
@@ -36,6 +39,8 @@ namespace mar {
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, (numVertices * _myStride), vertexData.get(), GL_STATIC_DRAW);
         
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
         AC_PRINT << "_myStride: " << _myStride;
         AC_PRINT << "sizeof vertices: " << (numVertices * _myStride);
         
@@ -43,6 +48,8 @@ namespace mar {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numVertices * sizeof(GLuint)), indexDataVBO.get(), GL_STATIC_DRAW); 
         
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
         AC_PRINT << "sizeof indices: " <<   (numVertices * sizeof(GLuint));
 
         int offset = 0;
