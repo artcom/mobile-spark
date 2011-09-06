@@ -27,37 +27,6 @@ namespace masl {
     XMLNode::~XMLNode() {
     }
 
-    vector4 XMLNode::getVector4Value(const std::string & theKey, const vector4 theDefault) const {
-        vector4 myReturnValue = theDefault;
-        std::vector<float> myValues = XMLNode::getFloatArrayValue(theKey);
-        for (int i = 0; i < minimum(int(myValues.size()), 4); i++) {
-            myReturnValue[i] = myValues[i];
-        }
-        return myReturnValue;
-    }
-    
-    vector2 XMLNode::getVector2Value(const std::string & theKey, const vector2 theDefault) const {
-        vector2 myReturnValue = theDefault;
-        std::vector<float> myValues = XMLNode::getFloatArrayValue(theKey);
-        for (int i = 0; i < minimum(int(myValues.size()), 2); i++) {
-            myReturnValue[i] = myValues[i];
-        }
-        return myReturnValue;
-    }
-
-    std::vector<float> XMLNode::getFloatArrayValue(const std::string & theKey) const {
-        std::map<std::string, std::string>::const_iterator it = attributes.find(theKey);
-        std::vector<float> floatVector;
-        if ( it != attributes.end()) {
-            char* part = strtok(const_cast<char *>(it->second.c_str()), "[], ");
-            while (part != NULL) {
-                floatVector.push_back(as<float>(part));
-                part = strtok(NULL, "[], ");
-            }
-        }
-        return floatVector;
-    }
-
     void XMLNode::print() const {
         std::ostringstream os;
         AC_PRINT << print(os);
