@@ -11,6 +11,7 @@
 #include "World.h"
 #include "Transform.h"
 #include "Rectangle.h"
+#include "Text.h"
 #include "Image.h"
 #include "Shape3D.h"
 
@@ -28,6 +29,7 @@ namespace spark {
         registered = registerComponent("Transform", spark::createTransform);
         registered = registerComponent("Rectangle", spark::createRectangle);
         registered = registerComponent("Image", spark::createImage);
+        registered = registerComponent("Text", spark::createText);
         registered = registerComponent("Shape3D", spark::createShape3D);
         AC_PRINT << "SparkComponentFactory setup done";
     };

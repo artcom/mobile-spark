@@ -16,7 +16,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static final String PACKAGE_NAME = "com.artcom.mobile";
     public static final String LAYOUT_FILE = "/main.spark";//"assets/layouts/main.spark";        
     public static boolean _myFirstTimeFlag;
-    private Context context;
+    private Context context;    
     public EGLRenderer (Context context, boolean firstTime) {
         _myFirstTimeFlag = firstTime;
         this.context = context;
@@ -40,7 +40,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
             //AC_Log.print("num Frames " + numFrames);
             //AC_Log.print("time " + (now- millisec));
             float fps = (float)numFrames/(float)(now-millisec) * 1000.0f;
-            AC_Log.print("fps " + fps);
+            //AC_Log.print("fps " + fps);
             millisec = now;
             numFrames = 0;
         }
