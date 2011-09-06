@@ -101,17 +101,22 @@
     
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     [glContext presentRenderbuffer:GL_RENDERBUFFER];    
+
 }
 
+- (void)onResume
+{
+    
+
+}
 - (void)startAnimation
 {
     if (!animating)
-    {
+    {   
         //init Animation loop. fires at 60 hz
         displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render:)];
         [displayLink setFrameInterval:1];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        
         animating = TRUE;
     }
     

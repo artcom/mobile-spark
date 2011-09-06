@@ -11,18 +11,18 @@
         <Transform name="transformA" x="100" y="10" >
             <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
             <Transform name="objTransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
-                <Shape3D name="objShape" src="/model"/>
+                <!--Shape3D name="objShape" src="/model"/-->
             </Transform>
-            <Image name="imageA" x="2" z="1" src="assets/textures/texture.png"/>
+            <!--Image name="imageA" x="2" z="1" src="assets/textures/texture.png"/-->
         </Transform>
         <Rectangle name="here_is_origin" width="10" height="10" z="10" color="[1,1,1]"/>
         <Rectangle name="here_is_up_right_corner" x="790" y="1221" width="10" height="10" z="10" color="[1,1,1]"/>
-        <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
+        <!--Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/-->
     </World>        
     <World name="world2">    
         <Camera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    
         <Transform name="objTransform1" x="0" y="-70" z="-120" scaleX="0.3" scaleY="0.3" scaleZ="0.3">
-            <Shape3D name="objShape1" src="/amazone"/>
+            <!--Shape3D name="objShape1" src="/amazone"/-->
         </Transform>
     </World>            
 </Window>
