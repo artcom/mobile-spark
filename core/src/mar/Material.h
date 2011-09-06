@@ -27,7 +27,7 @@ namespace mar {
         GLuint shaderProgram;
         GLuint mvpHandle;
 
-        float transparency;
+        bool transparency_;
     protected:
         Material(); 
         virtual void setShader();
@@ -43,14 +43,20 @@ namespace mar {
         UnlitColoredMaterial();
         virtual ~UnlitColoredMaterial();
         virtual void loadShader(const matrix & theMatrix);
+        void setDiffuseColor(const vector4 & theColor) {
+            diffuse_ = theColor;
+            transparency_ = (diffuse_[3] != 1.0);
+        }
+        vector4 getDiffuseColor() const {
+            return diffuse_;
+        }
 
-        //material (from obj)
-        std::vector<float> ambient;
-        std::vector<float> diffuse;
-        std::vector<float> specular;
+        vector4 ambient;
+        vector4 specular;
         float shininess;
-        short illuminationModel;
-
+        int illuminationModel;
+    private:
+        vector4 diffuse_;
         GLuint colorHandle;
 
     private:
@@ -66,10 +72,7 @@ namespace mar {
         virtual void loadShader(const matrix & theMatrix);
         virtual void initGL();
         TexturePtr getTexture() {return _myTexture;}
-        //GLuint textureId;
         TexturePtr _myTexture;
-        //GLuint width;
-        //GLuint height;
     private:
         virtual void setShader();
         std::string _mySrc;     

@@ -42,6 +42,22 @@ namespace spark {
         matrix projectionMatrix_;
     };
 
+    struct RenderKey {
+        RenderKey(float theZ, bool theTransparency) : z_(theZ), transparency_(theTransparency) {};
+        float z_;
+        bool transparency_;
+    };
+
+    typedef std::vector<std::pair<ComponentPtr, RenderKey> > RenderList;
+
+    class CollectVisibleNodesVisitor : public ComponentVisitor {
+    public:
+        CollectVisibleNodesVisitor(RenderList & theList);
+        virtual void visit(ComponentPtr theComponent);
+    private:
+        RenderList & list_;
+    };
+
 
     template<class VISITOR> void 
     visitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {

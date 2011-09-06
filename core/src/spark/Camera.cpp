@@ -33,7 +33,7 @@ namespace spark {
              size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());
              size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
              if (myOpening != string::npos && myClosing != string::npos) {
-                 string myParams = myFrustum.substr(myOpening+1, myClosing-myOpening-1);
+                 string myParams = myFrustum.substr(myOpening, myClosing-myOpening);
                  if (myParams == AutoOrthonormalStr) {
                     _myProjectionType = AUTO_ORTHONORMAL;
                     myFrustumSpecified = true;
@@ -45,7 +45,7 @@ namespace spark {
                  size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());
                  size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
                  if (myOpening != string::npos && myClosing != string::npos) {
-                     string myParamsStr = myFrustum.substr(myOpening+1, myClosing-myOpening-1);
+                     string myParamsStr = myFrustum.substr(myOpening, myClosing-myOpening);
                      fromString(myParamsStr, _myPerspectiveParams);
                      _myProjectionType = PERSPECTIVE;
                      myFrustumSpecified = true;

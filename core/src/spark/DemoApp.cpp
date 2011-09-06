@@ -89,7 +89,7 @@ namespace spark {
         //create a component in code
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(shared_from_this(), 
-                "<Rectangle name=\"created_from_code\" width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0,1.0]\"/>"); 
+                "<Rectangle name=\"created_from_code\" width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0]\"/>"); 
         myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
 
         return myBaseReturn;

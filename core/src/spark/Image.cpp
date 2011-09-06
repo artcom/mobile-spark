@@ -21,8 +21,8 @@ namespace spark {
         setShape(ShapeFactory::get().createRectangle(true, _mySrc));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         //loadTextureFromPNG(_mySrc, myMaterial);
-        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->width);
-        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->height);
+        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->width_);
+        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->height_);
         getShape()->setDimensions(width, height);
     }
 

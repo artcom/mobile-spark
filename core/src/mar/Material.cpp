@@ -9,7 +9,7 @@
 
 
 namespace mar {
-    Material::Material() {
+    Material::Material() : transparency_(false) {
     }
     
     Material::~Material() {
@@ -53,7 +53,7 @@ namespace mar {
 
     void UnlitColoredMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
-        glUniform4fv(colorHandle, 1, &(diffuse[0]));
+        glUniform4fv(colorHandle, 1, &(diffuse_[0]));
     }
 
     void UnlitColoredMaterial::setShader() {
@@ -69,16 +69,6 @@ namespace mar {
 
 
     //////////////////////////////////////////////////// Texture
-    Texture::Texture() :_myTextureId(0){
-    }
-    
-    GLuint Texture::getTextureId() {
-        return _myTextureId;
-    }
-    void Texture::setTextureId(GLuint theTextureId){
-        _myTextureId = theTextureId;
-    }
-
     //////////////////////////////////////////////////// UnlitTexturedMaterial
     UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) {
         _mySrc = theSrc;
@@ -103,7 +93,7 @@ namespace mar {
         Material::initGL();
         if (_mySrc != "") {
             loadTextureFromPNG(_mySrc, _myTexture);  
-            transparency = _myTexture->transparency;
+            transparency_ = _myTexture->transparency_;
         }
     }
     
