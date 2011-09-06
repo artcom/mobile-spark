@@ -37,7 +37,7 @@ namespace spark {
     void 
     CollectAABBComponentVisitor::visit(ComponentPtr theComponent) {
         ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(theComponent);
-        if (myShapeWidget && myShapeWidget->getShape() && 
+        if (myShapeWidget && myShapeWidget->isSensible() && myShapeWidget->getShape() && 
             myShapeWidget->AABB2Dcontains(x_,y_,projectionMatrix_)) {
             list_.push_back(std::make_pair(myShapeWidget, myShapeWidget->getWorldZ()));
             //AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();

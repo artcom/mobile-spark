@@ -36,7 +36,7 @@ public class ASLOpenGLView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         AC_Log.print("View.onTouchEvent");
-        String myEvent = "<TouchEvent x='" + event.getX() + "' y='" + (height - event.getY()) + "'/>";
+        String myEvent = "<TouchEvent type='tap' x='" + event.getX() + "' y='" + (height - event.getY()) + "'/>";
         NativeBinding.onEvent(myEvent);
         return super.onTouchEvent(event);
     }
