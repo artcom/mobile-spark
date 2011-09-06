@@ -2,6 +2,7 @@ package com.artcom.mobile.app;
 
 import com.artcom.mobile.Base.*; 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -46,8 +47,8 @@ public class ASLOpenGLView extends GLSurfaceView {
          * If we want a translucent one, we should change the surface's
          * format here, using PixelFormat.TRANSLUCENT for GL Surfaces
          * is interpreted as any 32-bit surface with alpha by SurfaceFlinger.
-           this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
          */
+        //this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         setEGLConfigChooser(new AndroidEGLConfigChooser(AndroidEGLConfigChooser.ConfigType.BEST, false));
         setEGLContextFactory(new ContextFactory());
         setRenderer(myRenderer);
