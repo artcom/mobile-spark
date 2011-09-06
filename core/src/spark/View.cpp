@@ -26,8 +26,8 @@ namespace spark {
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent){
         _myWorldName  = theXMLNode->getAttributeAs<std::string>("world", "");
-        vector2 myPos = theXMLNode->getVector2Value("pos", vector2(0,0));
-        vector2 mySize = theXMLNode->getVector2Value("size", vector2(1,1));
+        vector2 myPos = theXMLNode->getAttributeAs<vector2>("pos", vector2(0,0));
+        vector2 mySize = theXMLNode->getAttributeAs<vector2>("size", vector2(1,1));
         _myGLViewport = ViewportPtr(new Viewport(mySize[0],mySize[1], myPos[0],myPos[1]));
         ensureCamera();
     }
