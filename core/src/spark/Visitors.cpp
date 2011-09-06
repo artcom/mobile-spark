@@ -43,5 +43,21 @@ namespace spark {
             //AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();
         }
     }
+
+    CollectVisibleNodesVisitor::CollectVisibleNodesVisitor(
+            RenderList & theList) : 
+                             ComponentVisitor(),
+                             list_(theList) {
+    }
+    void 
+    CollectVisibleNodesVisitor::visit(ComponentPtr theComponent) {
+        ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(theComponent);
+        if (myShapeWidget && myShapeWidget->isVisible() && myShapeWidget->getShape())
+        {
+            RenderKey myKey(myShapeWidget->getWorldZ(), myShapeWidget->getShape()->isTransparent());
+            list_.push_back(std::make_pair(myShapeWidget, myKey));
+            //AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();
+        }
+    }
 }
 

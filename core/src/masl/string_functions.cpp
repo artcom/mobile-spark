@@ -61,14 +61,16 @@ namespace masl {
     
     bool createFloatBinFromString(const std::string & theString, vector<float> & theBin) {        
         theBin.clear();
-        size_t myStartIndex = 0;
+        size_t myStartIndex = 1;
         size_t myEndIndex = theString.find(",", myStartIndex);
         while (myEndIndex != string::npos) {            
-            theBin.push_back(as_float(theString.substr(myStartIndex, myEndIndex-myStartIndex)));
+            std::string s = theString.substr(myStartIndex, myEndIndex-myStartIndex);
+            float f = as_float(s);
+            theBin.push_back(f);
             myStartIndex = myEndIndex+1;
             myEndIndex = theString.find(",", myStartIndex);            
             if (myEndIndex == string::npos) {
-                theBin.push_back(as_float(theString.substr(myStartIndex, theString.size()-myStartIndex)));                
+                theBin.push_back(as_float(theString.substr(myStartIndex, theString.size()-1-myStartIndex)));                
             }
         }
         return true;
@@ -89,6 +91,17 @@ namespace masl {
         vector<float> myBin;
         createFloatBinFromString(theString, myBin);
         if (myBin.size() != 3 ) {
+            return false;
+        }
+        for(size_t i = 0; i < myBin.size(); i++) {
+            outValue[i] = myBin[i];
+        }
+        return true;
+    }
+    bool fromString(const std::string & theString, vector2 & outValue) {
+        vector<float> myBin;
+        createFloatBinFromString(theString, myBin);
+        if (myBin.size() != 2 ) {
             return false;
         }
         for(size_t i = 0; i < myBin.size(); i++) {

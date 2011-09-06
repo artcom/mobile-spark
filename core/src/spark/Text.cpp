@@ -17,7 +17,7 @@ namespace spark {
     Text::Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
 
-        _myText = _myXMLNode->getStringValue("text");
+        _myText = _myXMLNode->getAttributeAs<std::string>("text", "");
 
         setShape(ShapeFactory::get().createRectangle(true));
 
@@ -38,6 +38,7 @@ namespace spark {
             UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
             int myTextureId = MobileSDK_Singleton::get().renderText(_myText, myMaterial->getTexture()->getTextureId());                                       
             myMaterial->getTexture()->setTextureId(myTextureId);                    
+            myMaterial->transparency_ = true;
         }
     }    
 }

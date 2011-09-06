@@ -8,12 +8,11 @@
 
 #include <masl/Singleton.h>
 #include <masl/Exception.h>
+#include <masl/numeric_functions.h>
 #include "Shape.h"
 #include "Material.h"
 
 namespace mar {
-
-    DEFINE_EXCEPTION(WrongDimensionException, masl::Exception);
 
     class ObjImporter : public masl::Singleton<ObjImporter> {
     public:
@@ -22,18 +21,19 @@ namespace mar {
         void importObj(std::string theObjFileName, ShapePtr theShape);
     private:
         void faceParseHelper(std::vector<int> &theFaceData, const std::string & theData);
-        std::vector<float> getFloatTriple(const std::string & theString); 
+        vector3 getVector3(const std::string & theString); 
+        vector4 getColor(const std::string & theString); 
         void importMaterialMap(const std::vector<std::string> & theMtlFile); 
         void createElementVertices(ShapePtr theShape, ElementPtr element,
                                          size_t startFaceIndex);
-        void checkBB(std::vector<float> theVertex);
+        void checkBB(const vector3 & theVertex);
         static bool sortByTransparencyFunction(ElementPtr i,ElementPtr j); 
 
-        std::vector<std::vector<float> > vertices;
-        std::vector<std::vector<float> > normals;
-        std::vector<std::vector<float> > texData;
-        std::vector<std::vector<int> > faces;
-        std::map<std::string, MaterialPtr> materialMap;
+        std::vector<vector3 > vertices_;
+        std::vector<vector3 > normals_;
+        std::vector<vector2> texData_;
+        std::vector<std::vector<int> > faces_;
+        std::map<std::string, MaterialPtr> materialMap_;
         vector4 min_;
         vector4 max_;
     };

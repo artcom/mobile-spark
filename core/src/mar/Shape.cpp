@@ -7,7 +7,7 @@
 namespace mar {
 
     //////////////////////////////////////////////////////////////Shape
-    Shape::Shape(const bool theTextureFlag) : _myTextureFlag(theTextureFlag) {
+    Shape::Shape(const bool theTextureFlag) : _myTextureFlag(theTextureFlag), _myTransparency(Transparency::UNKNOWN) {
         _myBoundingBox.min.zero(); _myBoundingBox.min[3] = 1;
         _myBoundingBox.max.zero(); _myBoundingBox.max[3] = 1;
     }
@@ -41,6 +41,23 @@ namespace mar {
         _myBoundingBox.max = theMax;
     }
 
+    bool Shape::isTransparent() {
+        if (_myTransparency != Transparency::UNKNOWN) {
+            return (_myTransparency == Transparency::TRANSPARENT);
+        } else {
+            for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
+                                                          it != elementList.end(); ++it) {
+                ElementPtr element = *it;
+                if (element->material->transparency_) {
+                    _myTransparency = Transparency::TRANSPARENT;
+                    return true;
+                }
+            }
+            _myTransparency = Transparency::OPAQUE;
+            return false;
+        }
+    }
+
     //////////////////////////////////////////////////////////////RectangleShape
     RectangleShape::RectangleShape(const bool theTextureFlag, const std::string & theTextureSrc) 
         : Shape(theTextureFlag) {
@@ -68,16 +85,16 @@ namespace mar {
         ElementPtr myElement = elementList[0];
         _myDataPerVertex = 3 + (_myTextureFlag ? 2 : 0);
         myElement->numVertices = 6;
-        myElement->vertexData = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
+        myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
         int myXYCoords[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 
         for (size_t i = 0, l = myElement->numVertices; i < l; ++i) {
-            (myElement->vertexData)[i * _myDataPerVertex + 0] = myXYCoords[i * 2 + 0];
-            (myElement->vertexData)[i * _myDataPerVertex + 1] = myXYCoords[i * 2 + 1];
-            (myElement->vertexData)[i * _myDataPerVertex + 2] = 0;
+            (myElement->vertexData_)[i * _myDataPerVertex + 0] = myXYCoords[i * 2 + 0];
+            (myElement->vertexData_)[i * _myDataPerVertex + 1] = myXYCoords[i * 2 + 1];
+            (myElement->vertexData_)[i * _myDataPerVertex + 2] = 0;
             if (_myTextureFlag) {
-                (myElement->vertexData)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0];
-                (myElement->vertexData)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1];
+                (myElement->vertexData_)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0];
+                (myElement->vertexData_)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1];
             }
         }
     }
@@ -85,12 +102,12 @@ namespace mar {
     void RectangleShape::setDimensions(const float theWidth, const float theHeight) {
         AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;
         ElementPtr myElement = elementList[0];
-        myElement->vertexData[_myDataPerVertex] = theWidth;
-        myElement->vertexData[_myDataPerVertex*3] = theWidth;
-        myElement->vertexData[_myDataPerVertex*4] = theWidth;
-        myElement->vertexData[_myDataPerVertex*2 + 1] = theHeight;
-        myElement->vertexData[_myDataPerVertex*4 + 1] = theHeight;
-        myElement->vertexData[_myDataPerVertex*5 + 1] = theHeight;
+        myElement->vertexData_[_myDataPerVertex] = theWidth;
+        myElement->vertexData_[_myDataPerVertex*3] = theWidth;
+        myElement->vertexData_[_myDataPerVertex*4] = theWidth;
+        myElement->vertexData_[_myDataPerVertex*2 + 1] = theHeight;
+        myElement->vertexData_[_myDataPerVertex*4 + 1] = theHeight;
+        myElement->vertexData_[_myDataPerVertex*5 + 1] = theHeight;
         _myBoundingBox.max[0] = theWidth;
         _myBoundingBox.max[1] = theHeight;
         AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;

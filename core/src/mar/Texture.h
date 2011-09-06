@@ -2,6 +2,7 @@
 #define _ac_mobile_masl_Texture_h_included_
 
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include "openGL_functions.h"
 
 namespace mar {
         
@@ -11,11 +12,11 @@ namespace mar {
             GLuint getTextureId();
             void setTextureId(GLuint theTextureId);
 
-            GLuint width;
-            GLuint height;
-            float transparency;            
+            GLuint width_;
+            GLuint height_;
+            bool transparency_;            
         private:
-            GLuint _myTextureId;                                    
+            GLuint textureId_;
     };
     typedef boost::shared_ptr<Texture> TexturePtr;
     

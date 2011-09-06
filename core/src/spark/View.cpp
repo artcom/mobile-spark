@@ -4,6 +4,7 @@
 
 #include "SparkComponentFactory.h"
 #include "Widget.h"
+#include "Visitors.h"
 #include <mar/openGL_functions.h>
 #include <string>
 
@@ -49,7 +50,15 @@ namespace spark {
         ensureCamera();
         WidgetPtr myWorld = boost::static_pointer_cast<spark::Widget>(theWorld);
         myWorld->prerender(matrixStack);
-        myWorld->render(_myCamera->getProjectionMatrix()); 
+        RenderList myRenderList; 
+        CollectVisibleNodesVisitor myVisitor(myRenderList);
+        visitComponents(myVisitor, myWorld);
+        AC_PRINT<<"renderlist size: "<<myRenderList.size();
+        for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
+            AC_PRINT<<"render component "<<it->first->getType()<<" , "<<it->first->getName();
+            it->first->render(_myCamera->getProjectionMatrix());
+        }
+        //myWorld->render(_myCamera->getProjectionMatrix()); 
     }
     
     void

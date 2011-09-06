@@ -38,7 +38,7 @@ namespace mar {
         
         MaterialPtr material;
         unsigned int numVertices;
-        boost::shared_array<float> vertexData;    //interleaved
+        boost::shared_array<float> vertexData_;    //interleaved
     protected:
         std::vector<std::pair<unsigned int, unsigned int> > _myConfig;
         unsigned int _myStride;

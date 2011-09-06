@@ -16,7 +16,7 @@ namespace mar {
         int offset = 0;
         for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
             glEnableVertexAttribArray(it->first);
-            glVertexAttribPointer(it->first, it->second, GL_FLOAT, GL_FALSE, _myStride, (vertexData.get() + offset));
+            glVertexAttribPointer(it->first, it->second, GL_FLOAT, GL_FALSE, _myStride, (vertexData_.get() + offset));
             offset += it->second;
         }
     }
