@@ -53,12 +53,11 @@ namespace spark {
         RenderList myRenderList; 
         CollectVisibleNodesVisitor myVisitor(myRenderList);
         visitComponents(myVisitor, myWorld);
-        AC_PRINT<<"renderlist size: "<<myRenderList.size();
+        sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
-            AC_PRINT<<"render component "<<it->first->getType()<<" , "<<it->first->getName();
+            ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(it->first);
             it->first->render(_myCamera->getProjectionMatrix());
         }
-        //myWorld->render(_myCamera->getProjectionMatrix()); 
     }
     
     void
@@ -69,4 +68,5 @@ namespace spark {
         _myCamera->activate(mySize[0] * theCanvasWidth, mySize[1] * theCanvasHeight);
         _myGLViewport->activate(theCanvasWidth, theCanvasHeight);
     }    
+
 }

@@ -15,6 +15,8 @@ namespace spark {
         _rotationX = _myXMLNode->getAttributeAs<float>("rotationX", 0);
         _rotationY = _myXMLNode->getAttributeAs<float>("rotationY", 0);
         _rotationZ = _myXMLNode->getAttributeAs<float>("rotationZ", 0);
+        _visible = _myXMLNode->getAttributeAs<bool>("visible", _visible);
+        _sensible = _myXMLNode->getAttributeAs<bool>("sensible", _sensible);
 
         updateMatrix();
     }
