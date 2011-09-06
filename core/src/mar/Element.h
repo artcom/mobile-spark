@@ -27,6 +27,15 @@ namespace mar {
     const unsigned int TEXTURED_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
     const unsigned int TEXTURED_NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
 
+    typedef struct _vertexElement {
+        float position[3];
+        float normals[3];
+        float texCo[2];
+    } vertexElement;
+    
+    typedef struct _indexElement {
+        GLuint index[3];
+    } indexElement;
 
     class Element {
     public:
@@ -35,11 +44,18 @@ namespace mar {
 
         virtual void loadData(const matrix & theMatrix) const;
         virtual void unloadData() const;
-        
+        virtual void createVertexBuffers();
         MaterialPtr material;
         unsigned int numVertices;
         boost::shared_array<float> vertexData;    //interleaved
+        
+        //for VBO's
+        boost::shared_array<GLuint> indexDataVBO;
+        
     protected:
+        GLuint vertexBuffer;
+        GLuint indexBuffer;
+        
         std::vector<std::pair<unsigned int, unsigned int> > _myConfig;
         unsigned int _myStride;
     };
