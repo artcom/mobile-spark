@@ -18,9 +18,9 @@
         <Rectangle name="here_is_origin" width="10" height="10" z="10" color="[1,1,1]"/>
         <Rectangle name="here_is_up_right_corner" x="790" y="1221" width="10" height="10" z="10" color="[1,1,1]"/>
         <Image name="transparent_image" x="2" z="1" src="assets/textures/transparenttexture.png"/>
-        <NinePatch name="button_normal" x="400" y="100" z="20" heigh="40" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
-        <NinePatch name="button_normal" x="400" y="200" z="20" heigh="40" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_roll.png"/>
-        <NinePatch name="button_normal" x="400" y="300" z="20" heigh="40" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_visited.png"/>
+        <NinePatch name="button_normal" x="400" y="100" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
+        <NinePatch name="button_normal" x="400" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_roll.png"/>
+        <NinePatch name="button_normal" x="400" y="300" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_visited.png"/>
     </World>        
     <World name="world2">    
         <Camera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    
