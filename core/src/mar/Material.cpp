@@ -3,12 +3,13 @@
 #include <masl/Logger.h>
 
 #include "AssetProvider.h"
+#include "Element.h"
 #include "openGL_functions.h"
 #include "png_functions.h"
 
 
 namespace mar {
-    Material::Material() {
+    Material::Material() : transparency_(false) {
     }
     
     Material::~Material() {
@@ -32,7 +33,7 @@ namespace mar {
         glUseProgram(shaderProgram);
         checkGlError("glUseProgram");
         glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, theMatrix.data());
-        glBindAttribLocation(shaderProgram, 0, "a_position");
+        glBindAttribLocation(shaderProgram, VERTEX_POS_INDEX, "a_position");
     }
 
     void Material::setShader() {
@@ -52,7 +53,7 @@ namespace mar {
 
     void UnlitColoredMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
-        glUniform4fv(colorHandle, 1, &(diffuse[0]));
+        glUniform4fv(colorHandle, 1, &(diffuse_[0]));
     }
 
     void UnlitColoredMaterial::setShader() {
@@ -68,16 +69,6 @@ namespace mar {
 
 
     //////////////////////////////////////////////////// Texture
-    Texture::Texture() :_myTextureId(0){
-    }
-    
-    GLuint Texture::getTextureId() {
-        return _myTextureId;
-    }
-    void Texture::setTextureId(GLuint theTextureId){
-        _myTextureId = theTextureId;
-    }
-
     //////////////////////////////////////////////////// UnlitTexturedMaterial
     UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) {
         _mySrc = theSrc;
@@ -90,7 +81,7 @@ namespace mar {
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
-        glBindAttribLocation(shaderProgram, 2, "a_texCoord0");
+        glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
     }
 
     void UnlitTexturedMaterial::setShader() {
@@ -100,8 +91,10 @@ namespace mar {
     }
     void UnlitTexturedMaterial::initGL() {
         Material::initGL();
-        loadTextureFromPNG(_mySrc, _myTexture);  
-        transparency = _myTexture->transparency;
+        if (_mySrc != "") {
+            loadTextureFromPNG(_mySrc, _myTexture);  
+            transparency_ = _myTexture->transparency_;
+        }
     }
     
 }

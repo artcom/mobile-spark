@@ -17,19 +17,18 @@ namespace spark {
         View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~View();
         void activate(float theCanvasWidth, float theCanvasHeight);
-        const std::string & getWorldName() { return _myWorldName;}
+        const std::string & getWorldName() const { return _myWorldName;}
         void renderWorld(ComponentPtr theWorld);
+        CameraPtr getCamera() const { return _myCamera; };
+        mar::ViewportPtr getViewport() const { return _myGLViewport; };
             
     private:      
         void ensureCamera();
                       
         MatrixStack matrixStack;
-        matrix projectionMatrix;
         CameraPtr _myCamera;
         mar::ViewportPtr _myGLViewport;
         std::string _myWorldName;
-        vector2 _myPos;
-        vector2 _mySize;            
     };
 
     typedef boost::shared_ptr<View> ViewPtr;

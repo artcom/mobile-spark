@@ -7,6 +7,8 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/Logger.h>
+#include <masl/MobileSDK_Singleton.h>
+
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
 #include <animation/SequenceAnimation.h>
@@ -15,6 +17,7 @@
 
 #include "Event.h"
 #include "Rectangle.h"
+#include "Transform.h"
 #include "Shape3D.h"
 #include "SparkComponentFactory.h"
 
@@ -24,7 +27,7 @@ spark::DemoApp ourApp;
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
 
-    DemoApp::DemoApp():BaseApp() {
+    DemoApp::DemoApp():BaseApp(), _myCurrentSlide(0) {
     }
 
     DemoApp::~DemoApp() {
@@ -40,8 +43,23 @@ namespace spark {
         //return myBaseReturn;
 
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::shared_ptr<DemoApp>(&ourApp), &DemoApp::onTouch));
-        _mySparkWindow->addEventListener("TouchEvent", myCB); 
+        _mySparkWindow->addEventListener(TouchEvent::TAP, myCB); 
 
+        const VectorOfComponentPtr & myChildren = _mySparkWindow->getChildByName("world1")->getChildren();
+        for (int i = 0; i < myChildren.size(); i++) {
+            if (myChildren[i]->getType() == TRANSFORM_TYPE) {
+                TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(myChildren[i]);
+                if (myTransform) {
+                    _mySlides.push_back(myTransform);
+                    myTransform->setVisible(false);
+                }
+                AC_PRINT << "add slide to slides : " << myTransform->getName();
+            }
+        }
+        _myCurrentSlide = 0;
+        _mySlides[_myCurrentSlide]->setVisible(true);
+        AC_PRINT << "found #" << _mySlides.size() << " slides";
+        return myBaseReturn;
         //add looping animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
@@ -55,8 +73,8 @@ namespace spark {
         mySequence->add(myAnimation2);
         mySequence->add(myDelay);
         mySequence->setLoop(true);
-        mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
-        mySequence->setOnFinish(masl::CallbackPtr(new masl::FreeFunctionCallback(freeFunction)));
+        //mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
+        //mySequence->setOnFinish(masl::CallbackPtr(new masl::FreeFunctionCallback(freeFunction)));
         animation::AnimationManager::get().play(mySequence);
 
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA")->getChildByName("objTransform");
@@ -87,13 +105,23 @@ namespace spark {
         //create a component in code
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(shared_from_this(), 
-                "<Rectangle name=\"created_from_code\" width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0,1.0]\"/>"); 
+                "<Rectangle name=\"created_from_code\" width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0]\"/>"); 
         myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
 
         return myBaseReturn;
     }
 
-    void DemoApp::onTouch(EventPtr theEvent) {
+    void DemoApp::onTouch(EventPtr theEvent) {        
+        _mySlides[_myCurrentSlide]->setVisible(false);
+        _myCurrentSlide++;
+        if (_myCurrentSlide >= _mySlides.size()) {
+            _myCurrentSlide = 0;
+        }
+        AC_PRINT << "activate slide: " << _mySlides[_myCurrentSlide]->getName();
+        
+        _mySlides[_myCurrentSlide]->setVisible(true);        
+        return;
+
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         AC_PRINT<<myEvent->getType()<<" x:"<<myEvent->getX()<<" ,y:"<<myEvent->getY();
         //
@@ -119,6 +147,8 @@ namespace spark {
         myParallel->add(myAnimationY);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
+            
+            
     }
 }
 
@@ -143,6 +173,9 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
                                                              jlong currentMillis,
                                                              jstring apkFile,
                                                              jstring layoutFile) {
+    MobileSDK_Singleton::get().env = env;
+    MobileSDK_Singleton::get().obj = obj;
+                                                                
     jboolean isCopy;
     const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
     const char* myLayoutFile = env->GetStringUTFChars(layoutFile, &isCopy);

@@ -27,13 +27,13 @@ namespace spark {
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent){     
         bool myFrustumSpecified = false;            
-        string myFrustum = theXMLNode->getStringValue("frustum");                           
+        string myFrustum = theXMLNode->getAttributeAs<std::string>("frustum", "");
         size_t myIndex  = myFrustum.find(OrtohonormalStr);
         if (myIndex == 0) {
              size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());
              size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
              if (myOpening != string::npos && myClosing != string::npos) {
-                 string myParams = myFrustum.substr(myOpening+1, myClosing-myOpening-1);
+                 string myParams = myFrustum.substr(myOpening, myClosing-myOpening);
                  if (myParams == AutoOrthonormalStr) {
                     _myProjectionType = AUTO_ORTHONORMAL;
                     myFrustumSpecified = true;
@@ -45,7 +45,7 @@ namespace spark {
                  size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());
                  size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
                  if (myOpening != string::npos && myClosing != string::npos) {
-                     string myParamsStr = myFrustum.substr(myOpening+1, myClosing-myOpening-1);
+                     string myParamsStr = myFrustum.substr(myOpening, myClosing-myOpening);
                      fromString(myParamsStr, _myPerspectiveParams);
                      _myProjectionType = PERSPECTIVE;
                      myFrustumSpecified = true;
@@ -77,11 +77,10 @@ namespace spark {
             float myRatio = (float)theCameraWidth/(float)theCameraHeight;
             matrixStack.loadPerspective(-myWing, myWing, -myWing / myRatio, myWing / myRatio, _myPerspectiveParams[1], _myPerspectiveParams[2]);
         }
-        matrix myCameraMatrix = _myLocalMatrixStack.getTop();
+        matrix myCameraMatrix = _myLocalMatrix;
         myCameraMatrix.inverse();
         matrixStack.multMatrix(myCameraMatrix);
         _myProjectionMatrix = matrixStack.getTop();
         matrixStack.pop();
-        
     }    
 }
