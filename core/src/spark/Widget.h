@@ -19,6 +19,7 @@ namespace spark {
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void render(const matrix & theProjectionMatrix) const;
 
+        inline void setVisible(bool theFlag) { _visible = theFlag;};
         inline bool isVisible() const { return _visible;};
         inline bool isSensible() const { return _sensible;};
         float getX() const { return _x;};
