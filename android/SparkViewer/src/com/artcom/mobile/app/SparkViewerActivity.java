@@ -5,6 +5,7 @@ import com.artcom.mobile.Base.*;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 public class SparkViewerActivity extends Activity {
 
@@ -18,7 +19,8 @@ public class SparkViewerActivity extends Activity {
         AC_Log.setTopLevelTag(LOG_TAG);
         AC_Log.print("SparkViewer created, ready to call native [cpp logger].");
         mView = new ASLOpenGLView(getApplication(), !_mySparkWorldIsLoaded);        
-        setContentView(mView);        
+        setContentView(mView);      
+
     }
     
     @Override protected void onStart() {
