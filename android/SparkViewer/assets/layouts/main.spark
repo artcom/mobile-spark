@@ -21,6 +21,7 @@
         <NinePatch name="button_normal" x="400" y="100" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
         <NinePatch name="button_normal" x="400" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_roll.png"/>
         <NinePatch name="button_normal" x="400" y="300" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_visited.png"/>
+        <NinePatch name="button_normal" x="400" y="400" z="20" height="80" width="175" edgeTop="5" edgeRight="10" edgeBottom="15" edgeLeft="20" src="assets/textures/ninepatchtest.png"/>
     </World>        
     <World name="world2">    
         <Camera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    
