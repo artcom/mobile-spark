@@ -116,5 +116,29 @@ public class NativeBinding {
 	  bb.position(0);
 	  return bb;
   }   
+  
+  public static int updateCameraTexture() {
+	  CameraTexture.bindTexture();
+	  return CameraTexture.getTextureParams()[0];
+  }
+  
+  public static int getCameraWidth() {
+	  return CameraTexture.getTextureParams()[1];
+  }
+  
+  public static int getCameraHeight() {
+	  return CameraTexture.getTextureParams()[2];
+  }
+  
+  public static void startCamera() {
+	  CameraTexture.startCamera();
+	  //return 0;
+  }
+  
+  public static void stopCamera() {
+	  CameraTexture.closeCamera();
+	  //return 0;
+  }
+  
 }
 
