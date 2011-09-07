@@ -1,25 +1,40 @@
 <?xml version="1.0"?>
 <Window name="ourWindow" fullscreen="true" clearColor="[0.1,0.1,0.1,1]">
-    <View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
+    <!--View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/-->            
     <View name="mainView" world="world1" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
     <World visible="true" name="world1">    
         <Camera name="2dcamera" frustum="orthonormal[auto]"/>    
-        <Text name="testtext" z="12" text="Roter Text" color="[1,0,0,1]" fontsize="16" />
-        <Text name="testtext" y="160" z="13" text="Text" color="[0,1,0,1]" fontsize="32"/>
-        <Transform name="transformB" visible="false" x="170" y="170" rotationZ="0.3">
-            <Rectangle name="objectA" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
-            <Rectangle name="objectB" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
-        </Transform>
-        <Transform name="transformA" x="100" y="10" >
-            <Rectangle name="objectC" width="30" height="400" color="[0.0,1,0.0]"/>
-            <Transform name="objTransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
-                <Shape3D name="objShape" src="/model"/>
+        <Transform name="Rectangle">
+            <Text name="SlideTitle" x="10" y="450" z="12" text="Rectangles" color="[1,1,1,1]" fontsize="16" />
+            <Transform name="transformB" visible="true" x="170" y="170" rotationZ="0.3">
+                <Rectangle name="objectA" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
+                <Rectangle name="objectB" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
             </Transform>
-            <Image name="imageA" x="2" z="1" src="assets/textures/texture.png"/>
         </Transform>
-        <Rectangle name="here_is_origin" width="10" height="10" z="10" color="[1,1,1]"/>
-        <Rectangle name="here_is_up_right_corner" x="790" y="1221" width="10" height="10" z="10" color="[1,1,1]"/>
-        <Image name="transparent_image" z="1" width="10" height="10" src="assets/textures/transparenttexture.png"/>
+        <Transform name="AnimatedRectangle" visible="false">
+            <Text name="SlideTitle" x="10" y="450" z="12" text="AnimatedRectangle" color="[1,1,1,1]" fontsize="16" />
+        </Transform>
+        <Transform name="Images" visible="false">
+            <Text name="SlideTitle" x="10" y="450" z="12" text="Images" color="[1,1,1,1]" fontsize="16" />
+            <Image name="imageA" x="2" z="0" src="assets/textures/texture.png"/>
+            <Image name="transparent_image" z="1" width="10" height="10" src="assets/textures/transparenttexture.png"/>
+        </Transform>
+        <Transform name="3D" visible="false">
+            <Text name="SlideTitle" x="10" y="450" z="12" text="3D" color="[1,1,1,1]" fontsize="16" />
+            <Transform name="transformA" x="100" y="10" >
+                <Transform name="objTransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
+                    <Shape3D name="objShape" src="/model"/>
+                </Transform>
+            </Transform>
+        </Transform>
+        <Transform name="Text" visible="false">
+            <Text name="SlideTitle" x="10" y="450" z="12" text="Text" color="[1,1,1,1]" fontsize="16" />
+            <Text name="testtext" z="12" text="Roter Text" color="[1,0,0,1]" fontsize="16" />
+            <Text name="testtext" y="160" z="13" text="Text" color="[0,1,0,1]" fontsize="32"/>
+        </Transform>    
+        <Transform name="Buttons" visible="false">
+            <Text name="SlideTitle" x="10" y="450" z="12" text="Buttons" color="[1,1,1,1]" fontsize="16" />
+        </Transform>
     </World>        
     <World name="world2">    
         <Camera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    
