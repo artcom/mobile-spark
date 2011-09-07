@@ -63,6 +63,8 @@ namespace mar {
         float topEdge_;
         float rightEdge_;
         float bottomEdge_;
+        float imageWidth_;
+        float imageHeight_;
     };
 
     class ObjShape : public Shape {

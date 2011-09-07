@@ -22,6 +22,7 @@ namespace spark {
         edgeTop_ = _myXMLNode->getFloatValue("edgeTop", 0);
         edgeRight_ = _myXMLNode->getFloatValue("edgeRight", 0);
         edgeBottom_ = _myXMLNode->getFloatValue("edgeBottom", 0);
+        AC_PRINT << " create ninepatch with edges " << edgeLeft_ << " " << edgeTop_ << " " << edgeRight_ << "  " << edgeBottom_;
         
         float width = _myXMLNode->getFloatValue("width", -1);
         float height = _myXMLNode->getFloatValue("height", -1);

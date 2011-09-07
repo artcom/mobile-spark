@@ -97,12 +97,18 @@ namespace mar {
     NinePatchShape::NinePatchShape(const std::string & theTextureSrc, 
         const float theLeftEdge, const float theTopEdge,  const float theRightEdge, const float theBottomEdge, 
         const float theWidth, const float theHeight):
-        Shape(true), width_(theWidth), height_(theHeight), leftEdge_(0), topEdge_(0), rightEdge_(0), bottomEdge_(0) {
+        Shape(true), width_(theWidth), height_(theHeight), 
+        leftEdge_(theLeftEdge), topEdge_(theTopEdge), rightEdge_(theRightEdge), bottomEdge_(theBottomEdge) {
         ElementPtr myElement = ElementPtr(new ElementWithTexture());
-        MaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc));
+        UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc));
         myElement->material = myMaterial;
         elementList.push_back(myElement);
         myMaterial->createShader();
+
+        imageWidth_ = myMaterial->getTexture()->width;
+        imageWidth_ = imageWidth_ > 0 ? imageWidth_ : 1;
+        imageHeight_ = myMaterial->getTexture()->height;
+        imageHeight_ = imageHeight_ > 0 ? imageHeight_ : 1;
         setVertexData();
         initGL();
     }
@@ -115,35 +121,59 @@ namespace mar {
         _myDataPerVertex = 5;
         size_t vertices_per_side = 4;
         myElement->numVertices = 54; //9 quads * 2 triangles per quad * 3 vertices per triangle
-        myElement->vertexData = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
+        float gridData[vertices_per_side * vertices_per_side][_myDataPerVertex]; //helpstructure
         for (size_t i = 0, l = vertices_per_side; i < l; ++i) {
             for (size_t j = 0, m = vertices_per_side; j < m; ++j) {
-                size_t v = i * vertices_per_side + j;
                 float myX, myY; //TODO: origin stuff?
+                float myS, myT;
                 if (j== 0) {
                     myX = 0;
+                    myS = 0;
                 } else if (j == vertices_per_side - 3) {
                     myX = masl::clamp(leftEdge_ ,0.0f , width_);
+                    myS = masl::clamp(leftEdge_/imageWidth_, 0.0f, 1.0f);
                 } else if (j == vertices_per_side - 2) {
                     myX = masl::clamp(width_ - rightEdge_, std::min(leftEdge_, width_), width_);
+                    myS = masl::clamp((imageWidth_ - rightEdge_)/imageWidth_, 0.0f, 1.0f);
                 } else if (j == vertices_per_side - 1) {
                     myX = masl::clamp(width_, std::min(leftEdge_, width_), width_);
+                    myS = 1.0f;
                 }
                 if (i == 0) {
                     myY = 0;
+                    myT = 0.0f;
                 } else if (i == vertices_per_side - 3) {
                     myY = masl::clamp(bottomEdge_,0.0f,height_);
+                    myT = masl::clamp(bottomEdge_/imageHeight_, 0.0f, 1.0f);
                 } else if (i == vertices_per_side - 2) {
                     myY = masl::clamp(height_ - topEdge_, std::min(bottomEdge_,height_),height_);
+                    myT = masl::clamp((imageHeight_-topEdge_)/imageHeight_, 0.0f, 1.0f);
                 } else if (i == vertices_per_side - 1) {
                     myY = masl::clamp(height_, std::min(bottomEdge_,height_),height_);
+                    myT = 1.0f;
                 }
 
-                (myElement->vertexData)[v + 0] = myX;
-                (myElement->vertexData)[v + 1] = myY;
-                (myElement->vertexData)[v + 2] = 0;
-                (myElement->vertexData)[v + 3] = width_ > 0 ? myX/width_ : 0;
-                (myElement->vertexData)[v + 4] = height_ > 0 ? myY/height_ : 0;
+                gridData[i * vertices_per_side + j][0] = myX;
+                gridData[i * vertices_per_side + j][1] = myY;
+                gridData[i * vertices_per_side + j][2] = 0;
+                gridData[i * vertices_per_side + j][3] = myS;
+                gridData[i * vertices_per_side + j][4] = myT;
+                //AC_PRINT << i << " " << j << " " << myX << " " << myY << " tex " << myS << " " << myT;
+            }
+        }
+        myElement->vertexData = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
+        int indices[] = { 0, 1, 4, 4, 1, 5,
+                          1, 2, 5, 5, 2, 6,
+                          2, 3, 6, 6, 3, 7,
+                          4, 5, 8, 8, 5, 9,
+                          5, 6, 9, 9, 6,10,
+                          6, 7,10,10, 7,11,
+                          8, 9,12,12, 9,13,
+                          9,10,13,13,10,14,
+                         10,11,14,14,11,15 }; 
+        for (size_t i = 0; i < myElement->numVertices; ++i) {
+            for (size_t j = 0; j < _myDataPerVertex; ++j) {
+                (myElement->vertexData)[i * _myDataPerVertex + j] = gridData[indices[i]][j];
             }
         }
     }
