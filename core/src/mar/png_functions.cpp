@@ -13,9 +13,9 @@ GLuint loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb);
         
     theTexture->setTextureId(textureId);
-    theTexture->transparency = !rgb;
-    theTexture->width = width;
-    theTexture->height = height;
+    theTexture->transparency_ = !rgb;
+    theTexture->width_ = width;
+    theTexture->height_ = height;
 
     return textureId;
 }

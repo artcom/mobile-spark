@@ -52,11 +52,11 @@ namespace spark {
 
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
-        _mySparkWindow->addEventListener("frame", myFrameCB);
+        _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
-        _mySparkWindow->addEventListener("TouchEvent", myCB);
+        _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
         spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(testFreeFunctionEvent));
-        _mySparkWindow->addEventListener("TouchEvent", myFreeCB);
+        _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
 
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
@@ -95,7 +95,6 @@ namespace spark {
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _myGLCanvas->preRender(_mySparkWindow->getClearColor());
         _mySparkWindow->render();
-    }
-
+    }    
 }
 

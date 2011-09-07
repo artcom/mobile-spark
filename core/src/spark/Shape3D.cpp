@@ -16,7 +16,7 @@ namespace spark {
     Shape3D::Shape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
 
-        _mySrc = _myXMLNode->getStringValue("src");
+        _mySrc = _myXMLNode->getAttributeAs<std::string>("src", "");
         setShape(ShapeFactory::get().createObj(_mySrc));
     }
 
