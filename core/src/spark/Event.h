@@ -10,6 +10,14 @@
 
 namespace spark {
 
+    class Event;
+    typedef boost::shared_ptr<Event> EventPtr;
+
+    template<typename T>
+    EventPtr createEvent(const masl::XMLNodePtr theXMLNode) {
+        return EventPtr(new T(theXMLNode));
+    }
+
     class Component;
     typedef boost::shared_ptr<Component> ComponentPtr;
 
@@ -46,14 +54,15 @@ namespace spark {
             bool cancelable_;
     };
 
-    typedef boost::shared_ptr<Event> EventPtr;
-
+    
     class StageEvent : public Event {
         public:
 
             StageEvent(const std::string & theType, ComponentPtr theTarget, const masl::UInt64 theCurrentTime);
             StageEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~StageEvent();
+
+            static const char * const FRAME;
 
             masl::UInt64 getCurrentTime() const { return currenttime_;};
             masl::UInt64 currenttime_;
@@ -67,6 +76,9 @@ namespace spark {
             TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY);
             TouchEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~TouchEvent();
+            static const char * const TAP;
+            static const char * const DOUBLETAP;
+            static const char * const LONGPRESS;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};
@@ -81,11 +93,17 @@ namespace spark {
     class GestureEvent : public Event {
         public:
 
-            GestureEvent(const std::string & theType, ComponentPtr theTarget, const int theX, const int theY, const int dx, const int dy);
+            GestureEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY, const int dx, const int dy);
             GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theFactor);
             GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection);
             GestureEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~GestureEvent();
+
+            static const char * const PAN;
+            static const char * const PINCH;
+            static const char * const ROTATE;
+            static const char * const SWIPE_LEFT;
+            static const char * const SWIPE_RIGHT;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};
@@ -101,14 +119,11 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<GestureEvent> GestureEventPtr;
-    EventPtr createStageEvent(const masl::XMLNodePtr theXMLNode);
-    EventPtr createTouchEvent(const masl::XMLNodePtr theXMLNode);
-    EventPtr createGestureEvent(const masl::XMLNodePtr theXMLNode);
+    
 
-
-
-
-
+    ////////////////////////////////////////////////////////////////////////
+    //Event Callbacks //////////////////////////////////////////////////////
+    
     class EventCallback {
     public:
         virtual ~EventCallback() {};

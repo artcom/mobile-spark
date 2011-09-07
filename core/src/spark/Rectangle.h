@@ -13,7 +13,7 @@ namespace spark {
         virtual ~Rectangle();
     
     private:
-        std::vector<float> _myColor;
+        vector4 _myColor;
     };
 
     typedef boost::shared_ptr<Rectangle> RectanglePtr;

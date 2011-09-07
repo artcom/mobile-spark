@@ -3,6 +3,9 @@
 
 /////////////////// Application code, this should be in java or script language later...
 #include "BaseApp.h"
+#include "Transform.h"
+
+//#include <vector>
 
 namespace spark {
     class DemoApp: public BaseApp {
@@ -11,6 +14,8 @@ namespace spark {
             virtual ~DemoApp();
             virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
             void onTouch(EventPtr theEvent);
+            std::vector<TransformPtr> _mySlides;
+            unsigned _myCurrentSlide;
     };
 
     typedef boost::shared_ptr<DemoApp> DemoAppPtr;

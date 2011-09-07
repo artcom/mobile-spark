@@ -8,6 +8,9 @@
 #include "Window.h"
 #include "EventFactory.h"
 
+#ifdef __ANDROID__
+    #include <jni.h>
+#endif
 
 
 namespace spark {
@@ -25,8 +28,12 @@ namespace spark {
             virtual void onEvent(std::string theEventString);
 
             spark::WindowPtr _mySparkWindow; 
+            void renderText(std::string theMessage, int theOpenGLTextureId);
+
         private:
-            mar::CanvasPtr _myGLCanvas;            
+            JNIEnv * env;
+            jobject obj;
+            mar::CanvasPtr _myGLCanvas;      
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;

@@ -10,9 +10,9 @@ namespace spark {
     
     //TODO: decentralize this again
     void EventFactory::setupFactory() {
-        bool registered = registerEvent("StageEvent", spark::createStageEvent);
-        registered = registerEvent("TouchEvent", spark::createTouchEvent);
-        registered = registerEvent("GestureEvent", spark::createGestureEvent);
+        bool registered = registerEvent("StageEvent", spark::createEvent<StageEvent>);
+        registered = registerEvent("TouchEvent", spark::createEvent<TouchEvent>);
+        registered = registerEvent("GestureEvent", spark::createEvent<GestureEvent>);
     };
     
     EventFactory::EventFactory() : _myXmlCx(NULL) {
@@ -27,16 +27,14 @@ namespace spark {
         return _myCreateCallbackMap.insert(CallbackMap::value_type(theEventName, theCreateFn)).second;
     }
 
-    // Returns 'true' if the ShapeId was registered before
+    // Returns 'true' if the event name was registered before
     bool EventFactory::unregisterEvent(const std::string & theEventName) {
         return _myCreateCallbackMap.erase(theEventName) == 1;
     }
 
     EventPtr EventFactory::handleEvent(const std::string & theEventString) const {
         //AC_PRINT << "handle event : " << theEventString;
-        //xmlParserCtxtPtr ctxt; 
         xmlDocPtr doc;
-        //ctxt = xmlNewParserCtxt();
         doc = xmlCtxtReadMemory(_myXmlCx, theEventString.c_str(), strlen(theEventString.c_str()), "", NULL, XML_PARSE_DTDATTR);
         xmlNode *root_node = NULL;
         root_node = xmlDocGetRootElement(doc);
