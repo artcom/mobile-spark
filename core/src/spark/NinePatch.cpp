@@ -18,17 +18,22 @@ namespace spark {
         ShapeWidget(theApp, theXMLNode, theParent) {
 
         src_ = _myXMLNode->getStringValue("src");
-        setShape(ShapeFactory::get().createRectangle(true, src_));
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
-        //loadTextureFromPNG(_mySrc, myMaterial);
-        float width = _myXMLNode->getFloatValue("width", myMaterial->getTexture()->width);
-        float height = _myXMLNode->getFloatValue("height", myMaterial->getTexture()->height);
-        getShape()->setDimensions(width, height);
+        edgeLeft_ = _myXMLNode->getFloatValue("edgeLeft", 0);
+        edgeTop_ = _myXMLNode->getFloatValue("edgeTop", 0);
+        edgeRight_ = _myXMLNode->getFloatValue("edgeRight", 0);
+        edgeBottom_ = _myXMLNode->getFloatValue("edgeBottom", 0);
+        
+        float width = _myXMLNode->getFloatValue("width", -1);
+        float height = _myXMLNode->getFloatValue("height", -1);
 
-        edgeLeft_ = _myXMLNode->getFloatValue("edgeLeft");
-        edgeTop_ = _myXMLNode->getFloatValue("edgeTop");
-        edgeRight_ = _myXMLNode->getFloatValue("edgeRight");
-        edgeBottom_ = _myXMLNode->getFloatValue("edgeBottom");
+        setShape(ShapeFactory::get().createNinePatch(src_, edgeLeft_, edgeTop_, edgeRight_, edgeBottom_, 
+                    width >= 0 ? width : 0, height >= 0 ? height : 0));
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
+        if (width == -1 || height == -1) {
+            width = width == -1 ? myMaterial->getTexture()->width : width;
+            height = height == -1 ? myMaterial->getTexture()->height : height;
+            getShape()->setDimensions(width, height);
+        }
     }
 
     NinePatch::~NinePatch() {

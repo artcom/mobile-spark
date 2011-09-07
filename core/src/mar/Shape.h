@@ -38,21 +38,31 @@ namespace mar {
 
     class RectangleShape : public Shape {
     public:
-        RectangleShape(const bool theTexturedFlag, const std::string & theTextureSrc = "");
+        RectangleShape(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, 
+                       const std::string & theTextureSrc = "");
         virtual ~RectangleShape();
         virtual void setDimensions(const float theWidth, const float theHeight);
     private:
         virtual void setVertexData();
+        float width_;
+        float height_;
     };
 
     class NinePatchShape : public Shape {
     public:
         NinePatchShape(const std::string & theTextureSrc, const float theLeftEdge, 
-                const float theTopEdge, const float theRightEdge, const float theBottomEdge);
+                const float theTopEdge, const float theRightEdge, const float theBottomEdge,
+                const float theWidth = 0, const float theHeight = 0);
         virtual ~NinePatchShape();
         virtual void setDimensions(const float theWidth, const float theHeight);
     private:
         virtual void setVertexData();
+        float width_;
+        float height_;
+        float leftEdge_;
+        float topEdge_;
+        float rightEdge_;
+        float bottomEdge_;
     };
 
     class ObjShape : public Shape {
@@ -67,10 +77,11 @@ namespace mar {
 
     class ShapeFactory : public masl::Singleton<ShapeFactory> {
     public:
-        ShapePtr createRectangle(const bool theTexturedFlag, const std::string & theTextureSrc = "");
+        ShapePtr createRectangle(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, const std::string & theTextureSrc = "");
         ~ShapeFactory();        
-        ShapePtr createNinePatch(const std::string & theTextureSrc, const float theLeftEdge, 
-                const float theTopEdge, const float theRightEdge, const float theBottomEdge);
+        ShapePtr createNinePatch(const std::string & theTextureSrc, const float theLeftEdge = 0, 
+                const float theTopEdge = 0, const float theRightEdge = 0, const float theBottomEdge = 0, 
+                const float theWidth = 0, const float theHeight = 0);
         ShapePtr createObj(const std::string & theFile);
     };
 
