@@ -48,7 +48,7 @@ namespace spark {
         ComponentPtr myWorld1 = _mySparkWindow->getChildByName("world1");
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(myWorld1);
         const VectorOfComponentPtr & myChildren = myContainer->getChildrenByType(Transform::SPARK_TYPE);
-        for (int i = 0; i < myChildren.size(); i++) {
+        for (size_t i = 0; i < myChildren.size(); i++) {
             TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(myChildren[i]);
             if (myTransform) {
                 _mySlides.push_back(myTransform);
@@ -58,7 +58,7 @@ namespace spark {
         }
         
         const VectorOfComponentPtr & myWindowChildren = _mySparkWindow->getChildrenByType(View::SPARK_TYPE);
-        for (int i = 0; i < myWindowChildren.size(); i++) {
+        for (size_t i = 0; i < myWindowChildren.size(); i++) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(myWindowChildren[i]);
             if (myView) {
                 _myViews.push_back(myView);
