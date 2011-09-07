@@ -14,6 +14,7 @@ import android.opengl.GLES10;
 import android.opengl.GLUtils;
 
 import com.artcom.mobile.Base.AC_Log;
+import com.artcom.mobile.Base.NativeException;
 public class NativeBinding {
   
   static {    

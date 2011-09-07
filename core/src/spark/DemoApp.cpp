@@ -131,6 +131,25 @@ namespace spark {
 
 #ifdef __ANDROID__
     
+#define CALL_NATIVE(THE_CALL) \
+    std::string myMessage = ""; \
+    jclass Exception = env->FindClass("com/artcom/mobile/Base/NativeException"); \
+    try { \
+        THE_CALL; \
+    } catch(masl::Exception & ex) { \
+        AC_ERROR << "masl::Exception caught "<< ex; \
+        myMessage = ex.what() + " : " + ex.where(); \
+    } catch(std::exception & ex) { \
+        AC_ERROR << "std::exception caught "<< ex.what(); \
+        myMessage = ex.what(); \
+    } catch(...) { \
+        AC_ERROR << "unknown exception caught "; \
+        myMessage = "unknown exception caught"; \
+    } \
+    if (myMessage != "") { \
+        env->ThrowNew(Exception, myMessage.c_str()); \
+    }
+
 /////////////////////////////////////////////////////////////////////////JNI
 extern "C" {
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
@@ -155,25 +174,25 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
     jboolean isCopy;
     const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
     const char* myLayoutFile = env->GetStringUTFChars(layoutFile, &isCopy);
-    ourApp.setup(currentMillis, myAssetPath, myLayoutFile);
+    CALL_NATIVE(ourApp.setup(currentMillis, myAssetPath, myLayoutFile));
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj) {
-    ourApp.onPause();
+    CALL_NATIVE(ourApp.onPause());
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
-    ourApp.onResume();
+    CALL_NATIVE(ourApp.onResume());
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
                                                              jint width, jint height) {
-    ourApp.onSizeChanged(width, height);
+    CALL_NATIVE(ourApp.onSizeChanged(width, height));
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt )
 {
     jboolean isCopy;
     const char* myEvent = env->GetStringUTFChars(evt, &isCopy);
-    ourApp.onEvent(myEvent);
+    CALL_NATIVE(ourApp.onEvent(myEvent));
 }
 #endif
 
