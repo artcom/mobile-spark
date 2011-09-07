@@ -66,6 +66,8 @@
             
         }
         
+        
+        
         //DemoApp
         NSLog(@"width: %d,  height: %d ", width, height);
         NSString *path = [[NSBundle mainBundle] resourcePath];
@@ -100,23 +102,20 @@
     myDemoApp->onEvent([myEvent UTF8String]);    
     
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-    [glContext presentRenderbuffer:GL_RENDERBUFFER];    
-
-}
-
-- (void)onResume
-{
+    [glContext presentRenderbuffer:GL_RENDERBUFFER];  
     
-
+    
 }
+
 - (void)startAnimation
 {
     if (!animating)
-    {   
+    {
         //init Animation loop. fires at 60 hz
         displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render:)];
         [displayLink setFrameInterval:1];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        
         animating = TRUE;
     }
     
