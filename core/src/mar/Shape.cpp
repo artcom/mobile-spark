@@ -17,11 +17,10 @@ namespace mar {
     void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
-            ElementPtr element = *it;
+            ElementPtr element = *it;   
             element->loadData(theMatrix);
             glDrawElements(GL_TRIANGLES, element->numIndices, GL_UNSIGNED_SHORT, 0);
             element->unloadData();
-             
             checkGlError("render");
         }
     }
@@ -34,7 +33,6 @@ namespace mar {
             if (element && element->material ) {
                  element->material->initGL();
             }
-
             element->createVertexBuffers();
         }
     }
@@ -81,6 +79,7 @@ namespace mar {
             (myElement->vertexData)[i * _myDataPerVertex + 0] = myXYCoords[i * 2 + 0];
             (myElement->vertexData)[i * _myDataPerVertex + 1] = myXYCoords[i * 2 + 1];
             (myElement->vertexData)[i * _myDataPerVertex + 2] = 0;
+        
             if (_myTextureFlag) {
                 (myElement->vertexData)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0];
                 (myElement->vertexData)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1];
@@ -93,7 +92,6 @@ namespace mar {
     }
 
     void RectangleShape::setDimensions(const float theWidth, const float theHeight) {
-        AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;
         ElementPtr myElement = elementList[0];
         myElement->vertexData[_myDataPerVertex] = theWidth;
         myElement->vertexData[_myDataPerVertex*3] = theWidth;
@@ -102,7 +100,6 @@ namespace mar {
         _myBoundingBox.max[0] = theWidth;
         _myBoundingBox.max[1] = theHeight;
         myElement->updateCompleteVertexBuffersContent();
-        AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;
     }
 
     //////////////////////////////////////////////////////////////ObjShape
@@ -122,6 +119,7 @@ namespace mar {
     ShapePtr ShapeFactory::createObj(const std::string & theFile) {
         ShapePtr myShape = ShapePtr(new ObjShape());
         ObjImporter::get().importObj(theFile, myShape);
+        myShape->initGL();
         return myShape;
     }
     

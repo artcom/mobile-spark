@@ -24,7 +24,6 @@ namespace mar {
             offset += it->get<2>();
         }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-
     }
 
     void Element::unloadData() const {
@@ -33,7 +32,6 @@ namespace mar {
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        
     }
     
     void Element::createVertexBuffers() {
@@ -46,7 +44,6 @@ namespace mar {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO.get(), GL_STATIC_DRAW); 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
     }
     
     void Element::updateCompleteVertexBuffersContent() {

@@ -41,9 +41,8 @@ namespace mar {
         MaterialPtr material;
         unsigned int numVertices;
         unsigned int numIndices;
-        boost::shared_array<float> vertexData;    //interleaved
         
-        //for VBO's
+        boost::shared_array<float> vertexData;    //interleaved
         boost::shared_array<GLushort> indexDataVBO;
 
         GLuint vertexBuffer;

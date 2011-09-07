@@ -37,7 +37,7 @@ namespace spark {
 
     bool DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
-        return myBaseReturn;
+        //return myBaseReturn;
 
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::shared_ptr<DemoApp>(&ourApp), &DemoApp::onTouch));
         _mySparkWindow->addEventListener("TouchEvent", myCB); 

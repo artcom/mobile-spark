@@ -17,7 +17,6 @@ namespace mar {
 
     void Material::createShader() {
         setShader();
-        initGL();
     }
     void Material::initGL() {
         shaderProgram = createProgram(_myVertexShader, _myFragmentShader);
@@ -95,7 +94,6 @@ namespace mar {
     }
 
     void UnlitTexturedMaterial::setShader() {
-        AC_PRINT << "set textured shader";
         _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_VERTEX_SHADER); 
         _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
             
@@ -105,6 +103,8 @@ namespace mar {
         loadTextureFromPNG(_mySrc, _myTexture);  
         transparency = _myTexture->transparency;
         glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
+
+
     }
     
 }
