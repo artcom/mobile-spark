@@ -27,6 +27,9 @@
 # __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 #
 
+if(OSX) 
+    add_definitions(-DOSX)
+endif(OSX)
 if(ANDROID)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${ARMEABI_NDK_NAME}")
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${ARMEABI_NDK_NAME}")

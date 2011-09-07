@@ -16,11 +16,11 @@ public class SparkViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CameraTexture.init(this);
         AC_Log.setTopLevelTag(LOG_TAG);
         AC_Log.print("SparkViewer created, ready to call native [cpp logger].");
         mView = new ASLOpenGLView(getApplication(), !_mySparkWorldIsLoaded);        
-        setContentView(mView);      
-
+        setContentView(mView);         
     }
     
     @Override protected void onStart() {
@@ -35,6 +35,7 @@ public class SparkViewerActivity extends Activity {
         NativeBinding.onPause();
         String myEvent = "<StageEvent type='pause'/>";
         NativeBinding.onEvent(myEvent);
+        CameraTexture.closeCamera();
         AC_Log.print("----------------------SparkViewer paused");     
     }
     @Override protected void onStop() {
