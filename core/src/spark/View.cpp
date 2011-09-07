@@ -12,7 +12,9 @@ using namespace mar;
 using namespace std;
 
 namespace spark {
-
+    
+    const char * View::SPARK_TYPE = "View";
+    
     //needed for component factory
     //namespace  {
         ComponentPtr createView(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
@@ -24,7 +26,7 @@ namespace spark {
 
     View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
-        Container(theApp, theXMLNode, theParent){
+        Widget(theApp, theXMLNode, theParent){
         _myWorldName  = theXMLNode->getAttributeAs<std::string>("world", "");
         vector2 myPos = theXMLNode->getAttributeAs<vector2>("pos", vector2(0,0));
         vector2 mySize = theXMLNode->getAttributeAs<vector2>("size", vector2(1,1));
@@ -42,7 +44,7 @@ namespace spark {
         }
         string myCameraName = _myXMLNode->getAttributeAs<std::string>("cameraName", "");
         // find camera
-        _myCamera = boost::static_pointer_cast<spark::Camera>(getRoot()->getChildByName(myCameraName, true));
+        _myCamera = boost::static_pointer_cast<spark::RenderCamera>(getRoot()->getChildByName(myCameraName, true));
     }
     
     void
