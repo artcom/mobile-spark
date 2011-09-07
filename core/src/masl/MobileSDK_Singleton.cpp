@@ -62,4 +62,13 @@ namespace masl {
 #endif        
         return myTextureId;
     }        
+    int MobileSDK_Singleton::renderCamera() {
+        int myTextureId = -1;
+#ifdef __ANDROID__        
+        if (env) {
+        }
+#endif        
+        return myTextureId;
+    }
+
 };

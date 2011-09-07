@@ -62,10 +62,12 @@ namespace spark {
         VectorOfComponentPtr myViews = getChildrenByType("View");
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
-            //AC_PRINT << "render with : " << _myWidth << "/" << _myHeight;
-            myView->activate(_myWidth, _myHeight);
-            // find world and render it
-            myView->renderWorld(getChildByName(myView->getWorldName()));
+            if (myView->isVisible()) {
+                //AC_PRINT << "render with : " << _myWidth << "/" << _myHeight;
+                myView->activate(_myWidth, _myHeight);
+                // find world and render it
+                myView->renderWorld(getChildByName(myView->getWorldName()));
+            }
         }        
     }
 
@@ -76,7 +78,7 @@ namespace spark {
     ComponentPtr
     Window::pick2DAABBStyle(const unsigned int x, const unsigned int y) {
         AC_PRINT << "pick at " << x << ", " << y;
-        VectorOfComponentPtr myViews = getChildrenByType("View");
+        VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
         std::vector<std::pair<ComponentPtr, float> > myPickedComponentList;  //pairs of components and z
         //pick through worlds of all views
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {

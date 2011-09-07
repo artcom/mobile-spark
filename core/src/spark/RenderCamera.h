@@ -1,5 +1,5 @@
-#ifndef _included_mobile_spark_Camera_
-#define _included_mobile_spark_Camera_
+#ifndef _included_mobile_spark_RenderCamera_
+#define _included_mobile_spark_RenderCamera_
 
 /*#include <mar/Viewport.h>
 #include <masl/XMLNode.h>
@@ -20,14 +20,17 @@ namespace spark {
         AUTO_ORTHONORMAL
     };
 
-    ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+
+    ComponentPtr createRenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     
-    class Camera : public Widget {
+    class RenderCamera : public Widget {
     public: 
-        Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
-        virtual ~Camera();
+        RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        virtual ~RenderCamera();
         void activate(float theCanvasWidth, float theCanvasHeight);
         const matrix & getProjectionMatrix();            
+
+        static const char* SPARK_TYPE;
     private:                
         matrix _myProjectionMatrix;
         MatrixStack matrixStack;
@@ -39,6 +42,6 @@ namespace spark {
         static const char* AutoOrthonormalStr;
     };
 
-    typedef boost::shared_ptr<Camera> CameraPtr;
+    typedef boost::shared_ptr<RenderCamera> RenderCameraPtr;
 };
 #endif

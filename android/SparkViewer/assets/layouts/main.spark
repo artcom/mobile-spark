@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
 <Window name="ourWindow" fullscreen="true" clearColor="[0.1,0.1,0.1,1]">
-    <!--View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/-->            
     <View name="mainView" world="world1" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
+    <View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
     <World visible="true" name="world1">    
-        <Camera name="2dcamera" frustum="orthonormal[auto]"/>    
+        <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
+        <Transform name="Rectangle">
+            <Text name="SlideTitle" x="10" y="450" z="12" text="Camera" color="[1,1,1,1]" fontsize="16" />            
+            <Camera/>
+        </Transform>
         <Transform name="Rectangle">
             <Text name="SlideTitle" x="10" y="450" z="12" text="Rectangles" color="[1,1,1,1]" fontsize="16" />
             <Transform name="transformB" visible="true" x="170" y="170" rotationZ="0.3">
@@ -37,7 +41,7 @@
         </Transform>
     </World>        
     <World name="world2">    
-        <Camera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    
+        <RenderCamera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    
         <Transform sensible="false" name="objTransform1" x="0" y="-70" z="-120" scaleX="0.3" scaleY="0.3" scaleZ="0.3">
             <Shape3D name="objShape1" src="/amazone"/>
         </Transform>
