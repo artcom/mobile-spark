@@ -18,8 +18,10 @@ namespace spark {
         virtual ~Widget() = 0;
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void render(const matrix & theProjectionMatrix) const;
-        virtual void renderWithLocalMatrix(const matrix & theMV, const matrix & theP) const {};
 
+        inline void setVisible(bool theFlag) { _visible = theFlag;};
+        inline bool isVisible() const { return _visible;};
+        inline bool isSensible() const { return _sensible;};
         float getX() const { return _x;};
         float getY() const { return _y;};
         float getZ() const { return _z;};
@@ -50,6 +52,7 @@ namespace spark {
         float _rotationX, _rotationY, _rotationZ;
         float _alpha;
         bool _visible;
+        bool _sensible;
 
         void updateMatrix();
     };

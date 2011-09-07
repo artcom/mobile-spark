@@ -62,6 +62,8 @@ namespace spark {
             StageEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~StageEvent();
 
+            static const char * const FRAME;
+
             masl::UInt64 getCurrentTime() const { return currenttime_;};
             masl::UInt64 currenttime_;
     };
@@ -74,6 +76,9 @@ namespace spark {
             TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY);
             TouchEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~TouchEvent();
+            static const char * const TAP;
+            static const char * const DOUBLETAP;
+            static const char * const LONGPRESS;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};
@@ -93,6 +98,12 @@ namespace spark {
             GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection);
             GestureEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~GestureEvent();
+
+            static const char * const PAN;
+            static const char * const PINCH;
+            static const char * const ROTATE;
+            static const char * const SWIPE_LEFT;
+            static const char * const SWIPE_RIGHT;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};

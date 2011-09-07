@@ -8,6 +8,7 @@ import android.opengl.GLSurfaceView;
 
 import com.artcom.mobile.Base.AC_Log;
 import com.artcom.mobile.Base.APK;
+import com.artcom.mobile.Base.CameraTexture;
 import com.artcom.mobile.Base.NativeBinding;
 
 public class EGLRenderer  implements GLSurfaceView.Renderer{
@@ -16,7 +17,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static final String PACKAGE_NAME = "com.artcom.mobile";
     public static final String LAYOUT_FILE = "/main.spark";//"assets/layouts/main.spark";        
     public static boolean _myFirstTimeFlag;
-    private Context context;
+    private Context context;    
     public EGLRenderer (Context context, boolean firstTime) {
         _myFirstTimeFlag = firstTime;
         this.context = context;
@@ -40,7 +41,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
             //AC_Log.print("num Frames " + numFrames);
             //AC_Log.print("time " + (now- millisec));
             float fps = (float)numFrames/(float)(now-millisec) * 1000.0f;
-            AC_Log.print("fps " + fps);
+            //AC_Log.print("fps " + fps);
             millisec = now;
             numFrames = 0;
         }
@@ -48,7 +49,8 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     }
 
 
-    public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+    public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
+    	CameraTexture.initWithContext(glContext);
         AC_Log.print("_________________________________- on surface created");
         if (_myFirstTimeFlag) {
             NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
