@@ -28,27 +28,6 @@ namespace mar {
     const unsigned int TEXTURED_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
     const unsigned int TEXTURED_NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
     
-    enum {
-        ATTRIB_VERTEX,
-        NUM_ATTRIBUTES };
-    
-    typedef struct {
-        float position[3];
-    } vertexStruct;
-    
-
-    
-    const vertexStruct vertices[] = {
-        {{5.5, -5.5, 0}},
-        {{5.5, 5.5, 0}},
-        {{-5.5, 5.5, 0}},
-        {{-5.5, -5.5, 0}}
-    };
-    
-    const GLubyte indices[] = {
-        3, 0, 2, 1
-    };
-
     class Element {
     public:
         Element();
@@ -57,15 +36,14 @@ namespace mar {
         virtual void loadData(const matrix & theMatrix) const;
         virtual void unloadData() const;
         virtual void createVertexBuffers();
+        virtual void updateCompleteVertexBuffersContent();
         MaterialPtr material;
         unsigned int numVertices;
         boost::shared_array<float> vertexData;    //interleaved
         
         //for VBO's
         boost::shared_array<GLushort> indexDataVBO;
-        
-        boost::shared_array<float> testVertices;
-        boost::shared_array<GLushort> testIndices;
+
         GLuint vertexBuffer;
         GLuint indexBuffer;
         

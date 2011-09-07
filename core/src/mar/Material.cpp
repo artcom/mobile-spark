@@ -96,7 +96,8 @@ namespace mar {
     }
 
     void UnlitTexturedMaterial::setShader() {
-        Material::setShader();
+        AC_PRINT << "set textured shader";
+        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_VERTEX_SHADER); 
         _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
             
     }
