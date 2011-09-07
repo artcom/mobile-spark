@@ -158,7 +158,7 @@ namespace mar {
                 gridData[i * vertices_per_side + j][2] = 0;
                 gridData[i * vertices_per_side + j][3] = myS;
                 gridData[i * vertices_per_side + j][4] = myT;
-                //AC_PRINT << i << " " << j << " " << myX << " " << myY << " tex " << myS << " " << myT;
+                AC_PRINT << i << " " << j << " " << myX << " " << myY << " tex " << myS << " " << myT;
             }
         }
         myElement->vertexData = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
