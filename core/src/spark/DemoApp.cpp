@@ -27,7 +27,7 @@ spark::DemoApp ourApp;
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
 
-    DemoApp::DemoApp():BaseApp(), _myCurrentSlide(0) {
+    DemoApp::DemoApp():BaseApp(), _myCurrentSlide(0), _myCurrentView(0) {
     }
 
     DemoApp::~DemoApp() {
@@ -45,19 +45,31 @@ namespace spark {
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::shared_ptr<DemoApp>(&ourApp), &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB); 
 
-        const VectorOfComponentPtr & myChildren = _mySparkWindow->getChildByName("world1")->getChildren();
+        ComponentPtr myWorld1 = _mySparkWindow->getChildByName("world1");
+        ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(myWorld1);
+        const VectorOfComponentPtr & myChildren = myContainer->getChildrenByType(Transform::SPARK_TYPE);
         for (int i = 0; i < myChildren.size(); i++) {
-            if (myChildren[i]->getType() == TRANSFORM_TYPE) {
-                TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(myChildren[i]);
-                if (myTransform) {
-                    _mySlides.push_back(myTransform);
-                    myTransform->setVisible(false);
-                }
-                AC_PRINT << "add slide to slides : " << myTransform->getName();
+            TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(myChildren[i]);
+            if (myTransform) {
+                _mySlides.push_back(myTransform);
+                myTransform->setVisible(false);
             }
+            AC_PRINT << "add slide to slides : " << myTransform->getName();
+        }
+        
+        const VectorOfComponentPtr & myWindowChildren = _mySparkWindow->getChildrenByType(View::SPARK_TYPE);
+        for (int i = 0; i < myWindowChildren.size(); i++) {
+            ViewPtr myView = boost::static_pointer_cast<spark::View>(myWindowChildren[i]);
+            if (myView) {
+                _myViews.push_back(myView);
+                myView->setVisible(false);
+            }
+            AC_PRINT << "add view to views : " << myView->getName();
         }
         _myCurrentSlide = 0;
+        _myCurrentView = 0;
         _mySlides[_myCurrentSlide]->setVisible(true);
+        _myViews[_myCurrentView]->setVisible(true);
         AC_PRINT << "found #" << _mySlides.size() << " slides";
         return myBaseReturn;
         //add looping animations
@@ -111,15 +123,24 @@ namespace spark {
         return myBaseReturn;
     }
 
-    void DemoApp::onTouch(EventPtr theEvent) {        
-        _mySlides[_myCurrentSlide]->setVisible(false);
-        _myCurrentSlide++;
-        if (_myCurrentSlide >= _mySlides.size()) {
-            _myCurrentSlide = 0;
+    void DemoApp::onTouch(EventPtr theEvent) {       
+        if (_myCurrentView == 0) { 
+            _mySlides[_myCurrentSlide]->setVisible(false);
+            _myCurrentSlide++;
+            if (_myCurrentSlide >= _mySlides.size()) {
+                _myCurrentSlide = 0;
+                _myViews[_myCurrentView]->setVisible(false);        
+                _myCurrentView = 1;
+                _myViews[_myCurrentView]->setVisible(true);        
+            }
+            AC_PRINT << "activate slide: " << _mySlides[_myCurrentSlide]->getName();
+            
+            _mySlides[_myCurrentSlide]->setVisible(true);        
+        } else {
+            _myViews[_myCurrentView]->setVisible(false);        
+            _myCurrentView = 0;
+            _myViews[_myCurrentSlide]->setVisible(true);        
         }
-        AC_PRINT << "activate slide: " << _mySlides[_myCurrentSlide]->getName();
-        
-        _mySlides[_myCurrentSlide]->setVisible(true);        
         return;
 
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);

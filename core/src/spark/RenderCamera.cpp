@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "RenderCamera.h"
 
 #include "SparkComponentFactory.h"
 
@@ -10,20 +10,21 @@ using namespace masl;
 
 namespace spark {
 
-    const char* Camera::PerspectiveStr = "perspective";
-    const char* Camera::OrtohonormalStr = "orthonormal";
-    const char* Camera::AutoOrthonormalStr = "auto";
+    const char* RenderCamera::SPARK_TYPE = "RenderCamera";
+    const char* RenderCamera::PerspectiveStr = "perspective";
+    const char* RenderCamera::OrtohonormalStr = "orthonormal";
+    const char* RenderCamera::AutoOrthonormalStr = "auto";
 
     //needed for component factory
     //namespace  {
-        ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return CameraPtr(new Camera(theApp, theXMLNode, theParent));
+        ComponentPtr createRenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
+            return RenderCameraPtr(new RenderCamera(theApp, theXMLNode, theParent));
         };
         //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
     //}
 
 
-    Camera::Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
+    RenderCamera::RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent){     
         bool myFrustumSpecified = false;            
@@ -53,33 +54,33 @@ namespace spark {
             }
         }
         if (!myFrustumSpecified) {
-            AC_WARNING << "Create camera with : unknown frustum: " << myFrustum << ", using auto orthonormal";
+            AC_WARNING << "Create RenderCamera with : unknown frustum: " << myFrustum << ", using auto orthonormal";
             _myProjectionType = AUTO_ORTHONORMAL;
         }
     }
 
-    Camera::~Camera() {
+    RenderCamera::~RenderCamera() {
     }        
     
     const matrix & 
-    Camera::getProjectionMatrix() {
+    RenderCamera::getProjectionMatrix() {
         return _myProjectionMatrix;
     }
 
     void
-    Camera::activate(float theCameraWidth, float theCameraHeight) {   
+    RenderCamera::activate(float theRenderCameraWidth, float theRenderCameraHeight) {   
         matrixStack.push();
              
         if (_myProjectionType == AUTO_ORTHONORMAL) {
-            matrixStack.loadOrtho(0, theCameraWidth, 0.0 , theCameraHeight, -0.1, 1000);
+            matrixStack.loadOrtho(0, theRenderCameraWidth, 0.0 , theRenderCameraHeight, -0.1, 1000);
         } else if (_myProjectionType == PERSPECTIVE) {
             float myWing = _myPerspectiveParams[1] * tanf(radFromDeg(_myPerspectiveParams[0]) / 2.0);            
-            float myRatio = (float)theCameraWidth/(float)theCameraHeight;
+            float myRatio = (float)theRenderCameraWidth/(float)theRenderCameraHeight;
             matrixStack.loadPerspective(-myWing, myWing, -myWing / myRatio, myWing / myRatio, _myPerspectiveParams[1], _myPerspectiveParams[2]);
         }
-        matrix myCameraMatrix = _myLocalMatrix;
-        myCameraMatrix.inverse();
-        matrixStack.multMatrix(myCameraMatrix);
+        matrix myRenderCameraMatrix = _myLocalMatrix;
+        myRenderCameraMatrix.inverse();
+        matrixStack.multMatrix(myRenderCameraMatrix);
         _myProjectionMatrix = matrixStack.getTop();
         matrixStack.pop();
     }    
