@@ -6,9 +6,9 @@
 namespace spark {
     ComponentPtr createTransform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
 
-    static const char* TRANSFORM_TYPE = "Transform";
     class Transform : public Widget {
     public: 
+        static const char* SPARK_TYPE;
         Transform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Transform();
     };

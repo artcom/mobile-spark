@@ -6,27 +6,29 @@
 #include <masl/MatrixStack.h>
 
 #include "Container.h"
-#include "Camera.h"
+#include "RenderCamera.h"
 
 namespace spark {
     
     ComponentPtr createView(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     
-    class View : public Container {
+    
+    class View : public Widget {
     public: 
         View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~View();
         void activate(float theCanvasWidth, float theCanvasHeight);
         const std::string & getWorldName() const { return _myWorldName;}
         void renderWorld(ComponentPtr theWorld);
-        CameraPtr getCamera() const { return _myCamera; };
+        RenderCameraPtr getCamera() { ensureCamera(); return _myCamera; };
         mar::ViewportPtr getViewport() const { return _myGLViewport; };
             
+        static const char* SPARK_TYPE;
     private:      
         void ensureCamera();
                       
         MatrixStack matrixStack;
-        CameraPtr _myCamera;
+        RenderCameraPtr _myCamera;
         mar::ViewportPtr _myGLViewport;
         std::string _myWorldName;
     };
