@@ -98,7 +98,30 @@ namespace mar {
             }
         }
     }
+    
+    void RectangleShape::setTexCoords(vector2 theUV0, vector2 theUV1, vector2 theUV2, vector2 theUV3) {
+        ElementPtr myElement = elementList[0];
+        if (_myTextureFlag) {
+            (myElement->vertexData_)[0 * _myDataPerVertex + 3] = theUV0[0];
+            (myElement->vertexData_)[0 * _myDataPerVertex + 4] = theUV0[1];
+            
+            (myElement->vertexData_)[1 * _myDataPerVertex + 3] = theUV1[0];
+            (myElement->vertexData_)[1 * _myDataPerVertex + 4] = theUV1[1];
+            
+            (myElement->vertexData_)[2 * _myDataPerVertex + 3] = theUV2[0];
+            (myElement->vertexData_)[2 * _myDataPerVertex + 4] = theUV2[1];
+            
+            (myElement->vertexData_)[3 * _myDataPerVertex + 3] = theUV1[0];
+            (myElement->vertexData_)[3 * _myDataPerVertex + 4] = theUV1[1];
 
+            (myElement->vertexData_)[4 * _myDataPerVertex + 3] = theUV3[0];
+            (myElement->vertexData_)[4 * _myDataPerVertex + 4] = theUV3[1];
+
+            (myElement->vertexData_)[5 * _myDataPerVertex + 3] = theUV2[0];
+            (myElement->vertexData_)[5 * _myDataPerVertex + 4] = theUV2[1];
+        }    
+    }
+    
     void RectangleShape::setDimensions(const float theWidth, const float theHeight) {
         AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;
         ElementPtr myElement = elementList[0];

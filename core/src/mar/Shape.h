@@ -33,6 +33,7 @@ namespace mar {
         virtual void render(const matrix & theMvp) const;
         virtual void initGL();
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
+        virtual void setTexCoords(vector2 theUV0, vector2 theUV1, vector2 theUV2, vector2 theUV3) {}
         const BoundingBox & getBoundingBox() const { return _myBoundingBox;};
         void setBoundingBox(const vector4 theMin, const vector4 theMax);
         bool isTransparent();
@@ -53,6 +54,7 @@ namespace mar {
     public:
         RectangleShape(const bool theTexturedFlag, const std::string & theTextureSrc = "");
         virtual ~RectangleShape();
+        void setTexCoords(vector2 theUV0, vector2 theUV1, vector2 theUV2, vector2 theUV3);
         virtual void setDimensions(const float theWidth, const float theHeight);
     private:
         virtual void setVertexData();

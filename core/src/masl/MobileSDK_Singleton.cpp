@@ -61,14 +61,78 @@ namespace masl {
         }
 #endif        
         return myTextureId;
-    }        
-    int MobileSDK_Singleton::renderCamera() {
-        int myTextureId = -1;
+    }     
+    
+    CameraInfo MobileSDK_Singleton::renderCamera() {
+        CameraInfo myCameraInfo;
+        myCameraInfo.textureID=0;
+	
+	
 #ifdef __ANDROID__        
         if (env) {
+           jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "updateCameraTexture", "()I");
+            if(myMethodId != 0) {
+               jvalue myArgs[0];
+                myCameraInfo.textureID = env->CallStaticIntMethodA (cls, myMethodId, myArgs);
+            } else {
+                AC_WARNING  << "Sorry, java-updateCameraTextures not found";                
+            }
+            
+            myMethodId = env->GetStaticMethodID(cls, "getCameraWidth", "()I");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                myCameraInfo.width = env->CallStaticIntMethodA (cls, myMethodId, myArgs); 
+            } else {
+                AC_WARNING  << "Sorry, java-getCameraWidth not found";                
+            }
+
+            myMethodId = env->GetStaticMethodID(cls, "getCameraHeight", "()I");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                myCameraInfo.height = env->CallStaticIntMethodA (cls, myMethodId, myArgs);
+            } else {
+                AC_WARNING  << "Sorry, java-getCameraHeight not found";                
+            }
+
+
+
         }
 #endif        
-        return myTextureId;
+        return myCameraInfo;
     }
+    
+    void MobileSDK_Singleton::startCameraCapture() {
+#ifdef __ANDROID__        
+        if (env) {
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "startCamera", "()V");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+            } else {
+                AC_WARNING  << "Sorry, java-startCamera not found";                
+            }
+        }
+#endif        
+
+    }
+        
+    void MobileSDK_Singleton::stopCameraCapture() {
+#ifdef __ANDROID__        
+            if (env) {
+                jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+                jmethodID myMethodId = env->GetStaticMethodID(cls, "stopCamera", "()V");
+                if(myMethodId != 0) {
+                    jvalue myArgs[0];
+                    env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+                } else {
+                    AC_WARNING  << "Sorry, java-stopCamera not found";                
+                }
+            }
+#endif        
+                
+    }
+
 
 };
