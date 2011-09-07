@@ -19,10 +19,10 @@ namespace mar {
                                                       it != elementList.end(); ++it) {
             ElementPtr element = *it;
             element->loadData(theMatrix);
-            glDrawElements(GL_TRIANGLES, element->numVertices, GL_UNSIGNED_SHORT, 0);
+            glDrawElements(GL_TRIANGLES, element->numIndices, GL_UNSIGNED_SHORT, 0);
             element->unloadData();
              
-            checkGlError("glDrawElements 2");
+            checkGlError("render");
         }
     }
     
@@ -35,11 +35,7 @@ namespace mar {
                  element->material->initGL();
             }
 
-            glBindAttribLocation(element->material->shaderProgram, VERTEX_POS_INDEX, "a_position");
-
             element->createVertexBuffers();
-
-
         }
     }
 
@@ -74,10 +70,12 @@ namespace mar {
     void RectangleShape::setVertexData() {
         ElementPtr myElement = elementList[0];
         _myDataPerVertex = 3 + (_myTextureFlag ? 2 : 0);
-        myElement->numVertices = 6;
+        myElement->numVertices = 4;
+        myElement->numIndices = 6;
         myElement->vertexData = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
-        myElement->indexDataVBO = boost::shared_array<GLushort>(new GLushort[myElement->numVertices]);
-        int myXYCoords[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
+        GLushort indices[] = {0, 1, 2, 2, 1, 3};
+        myElement->indexDataVBO = boost::shared_array<GLushort>(new GLushort[myElement->numIndices]);        
+        int myXYCoords[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
         for (size_t i = 0, l = myElement->numVertices; i < l; ++i) {
             (myElement->vertexData)[i * _myDataPerVertex + 0] = myXYCoords[i * 2 + 0];
@@ -87,8 +85,10 @@ namespace mar {
                 (myElement->vertexData)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0];
                 (myElement->vertexData)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1];
             }
-            myElement->indexDataVBO[i] = i;
-            
+        }
+        
+        for (size_t i = 0; i < myElement->numIndices; i++) {
+            myElement->indexDataVBO[i] = indices[i];
         }
     }
 
@@ -97,10 +97,8 @@ namespace mar {
         ElementPtr myElement = elementList[0];
         myElement->vertexData[_myDataPerVertex] = theWidth;
         myElement->vertexData[_myDataPerVertex*3] = theWidth;
-        myElement->vertexData[_myDataPerVertex*4] = theWidth;
         myElement->vertexData[_myDataPerVertex*2 + 1] = theHeight;
-        myElement->vertexData[_myDataPerVertex*4 + 1] = theHeight;
-        myElement->vertexData[_myDataPerVertex*5 + 1] = theHeight;
+        myElement->vertexData[_myDataPerVertex*3 + 1] = theHeight;
         _myBoundingBox.max[0] = theWidth;
         _myBoundingBox.max[1] = theHeight;
         myElement->updateCompleteVertexBuffersContent();

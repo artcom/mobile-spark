@@ -5,7 +5,7 @@
 namespace mar {
     /////////////////////////////////////////////////////////////Element
     Element::Element() {
-        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE));
+        _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE, VERTEX_POS_SIZE * sizeof(float)));
         _myStride = VERTEX_SIZE;
     }
 
@@ -18,18 +18,18 @@ namespace mar {
         material->loadShader(theMatrix);
         int offset = 0;
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
-            glVertexAttribPointer(it->first, it->second, GL_FLOAT, GL_FALSE, _myStride, (GLvoid*)offset);
-            glEnableVertexAttribArray(it->first);
-            offset += it->second;
+        for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
+            glVertexAttribPointer(it->get<0>(), it->get<1>(), GL_FLOAT, GL_FALSE, _myStride, (GLvoid*)offset);
+            glEnableVertexAttribArray(it->get<0>());
+            offset += it->get<2>();
         }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
     }
 
     void Element::unloadData() const {
-        for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
-            glDisableVertexAttribArray(it->first);
+        for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
+            glDisableVertexAttribArray(it->get<0>());
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -42,23 +42,10 @@ namespace mar {
         glBufferData(GL_ARRAY_BUFFER, (numVertices * _myStride), vertexData.get(), GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        AC_PRINT << "_myStride: " << _myStride;
-        AC_PRINT << "sizeof vertices: " << (numVertices * _myStride);
-        
         glGenBuffers(1, &indexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numVertices * sizeof(GLushort)), indexDataVBO.get(), GL_STATIC_DRAW); 
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO.get(), GL_STATIC_DRAW); 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        AC_PRINT << "sizeof indices: " <<   (numVertices * sizeof(GLushort));
-
-        int offset = 0;
-        for (std::vector<std::pair<unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
-            AC_PRINT << "ATRIBUTE " << it->first;
-            AC_PRINT << "offset: " << (GLvoid*)offset;
-            offset += it->second;
-
-        }
 
     }
     
@@ -70,7 +57,7 @@ namespace mar {
 
     /////////////////////////////////////////////////////////////ElementWithNormals
     ElementWithNormals::ElementWithNormals() : Element() {
-        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE));
+        _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE, VERTEX_NORMAL_SIZE * sizeof(float)));
         _myStride = NORMAL_VERTEX_SIZE;
     }
 
@@ -79,7 +66,7 @@ namespace mar {
 
     /////////////////////////////////////////////////////////////ElementWithTexture
     ElementWithTexture::ElementWithTexture() : Element() {
-        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE));
+        _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE, VERTEX_TEXCOORD0_SIZE * sizeof(float)));
         _myStride = TEXTURED_VERTEX_SIZE;
     }
 
@@ -88,8 +75,8 @@ namespace mar {
 
     /////////////////////////////////////////////////////////////ElementWithNormalsAndTexture
     ElementWithNormalsAndTexture::ElementWithNormalsAndTexture() : Element() {
-        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE));
-        _myConfig.push_back(std::pair<unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE));
+        _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE, VERTEX_NORMAL_SIZE * sizeof(float)));
+        _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE, VERTEX_TEXCOORD0_SIZE * sizeof(float)));
         _myStride = TEXTURED_NORMAL_VERTEX_SIZE;
     }
 
