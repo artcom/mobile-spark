@@ -6,6 +6,7 @@
 #include <string>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/shared_array.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include <masl/MatrixStack.h>
 
@@ -39,6 +40,7 @@ namespace mar {
         virtual void updateCompleteVertexBuffersContent();
         MaterialPtr material;
         unsigned int numVertices;
+        unsigned int numIndices;
         boost::shared_array<float> vertexData;    //interleaved
         
         //for VBO's
@@ -48,7 +50,7 @@ namespace mar {
         GLuint indexBuffer;
         
     protected:
-        std::vector<std::pair<unsigned int, unsigned int> > _myConfig;
+        std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
         unsigned int _myStride;
     };
 

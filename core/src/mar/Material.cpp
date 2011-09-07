@@ -25,15 +25,15 @@ namespace mar {
             AC_ERROR << "Could not create program.";
             return;
         }
+        glBindAttribLocation(shaderProgram, VERTEX_POS_INDEX, "a_position");
         setHandles();
     }
 
     void Material::loadShader(const matrix & theMatrix) {
-        //glLinkProgram(shaderProgram);
+        glLinkProgram(shaderProgram);
         glUseProgram(shaderProgram);
         checkGlError("glUseProgram");
         glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, theMatrix.data());
-        //glBindAttribLocation(shaderProgram, VERTEX_POS_INDEX, "a_position");
     }
 
     void Material::setShader() {
@@ -92,7 +92,6 @@ namespace mar {
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
-        glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
     }
 
     void UnlitTexturedMaterial::setShader() {
@@ -105,6 +104,7 @@ namespace mar {
         Material::initGL();
         loadTextureFromPNG(_mySrc, _myTexture);  
         transparency = _myTexture->transparency;
+        glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
     }
     
 }
