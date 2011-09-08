@@ -47,6 +47,9 @@ namespace mar {
 
         GLuint vertexBuffer;
         GLuint indexBuffer;
+        #if __APPLE__
+        GLuint vertexArrayObject;
+        #endif
         
     protected:
         std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
