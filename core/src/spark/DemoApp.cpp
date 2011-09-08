@@ -27,7 +27,7 @@ spark::DemoApp ourApp;
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
 
-    DemoApp::DemoApp():BaseApp(), _myCurrentSlide(0), _myCurrentView(0) {
+    DemoApp::DemoApp():BaseApp(), _myCurrentSlide(0) {
     }
 
     DemoApp::~DemoApp() {
@@ -40,13 +40,24 @@ namespace spark {
 
     bool DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
-        //return myBaseReturn;
 
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::shared_ptr<DemoApp>(&ourApp), &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB); 
 
-        ComponentPtr myWorld1 = _mySparkWindow->getChildByName("world1");
-        ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(myWorld1);
+        //animation of amazone
+        ComponentPtr myComponent = _mySparkWindow->getChildByName("3dworld");
+        AC_PRINT << myComponent;
+        myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform");
+        AC_PRINT << myComponent;
+        myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
+        AC_PRINT << myComponent;
+        Shape3DPtr myShape = boost::static_pointer_cast<spark::Shape3D>(myComponent);
+        WidgetPropertyAnimationPtr myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, 6.28, 9000));
+        myYRotate->setLoop(true);
+        animation::AnimationManager::get().play(myYRotate);
+
+        ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
+        ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(my2DWorld);
         const VectorOfComponentPtr & myChildren = myContainer->getChildrenByType(Transform::SPARK_TYPE);
         for (size_t i = 0; i < myChildren.size(); i++) {
             TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(myChildren[i]);
@@ -62,16 +73,18 @@ namespace spark {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(myWindowChildren[i]);
             if (myView) {
                 _myViews.push_back(myView);
-                myView->setVisible(false);
+                myView->setVisible(true);
             }
             AC_PRINT << "add view to views : " << myView->getName();
         }
         _myCurrentSlide = 0;
-        _myCurrentView = 0;
         _mySlides[_myCurrentSlide]->setVisible(true);
-        _myViews[_myCurrentView]->setVisible(true);
         AC_PRINT << "found #" << _mySlides.size() << " slides";
         return myBaseReturn;
+
+
+        //TODO
+/*
         //add looping animations
         ComponentPtr myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformB");
         ComponentPtr myObject = myTransform->getChildByName("objectB");
@@ -102,18 +115,6 @@ namespace spark {
         animation::AnimationManager::get().play(myYRotate);
         animation::AnimationManager::get().play(myZRotate);
 
-        myTransform = _mySparkWindow->getChildByName("world2")->getChildByName("objTransform1");
-        myObject = myTransform->getChildByName("objShape1");
-        myShape = boost::static_pointer_cast<spark::Shape3D>(myObject);
-        myXRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationX, 0, 6.28, 7000));
-        myXRotate->setLoop(true);
-        myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, 6.28, 9000));
-        myYRotate->setLoop(true);
-        myZRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationZ, 0, 6.28, 13000));
-        myZRotate->setLoop(true);
-        //animation::AnimationManager::get().play(myXRotate);
-        animation::AnimationManager::get().play(myYRotate);
-
         //create a component in code
         myTransform = _mySparkWindow->getChildByName("world1")->getChildByName("transformA");
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(shared_from_this(), 
@@ -121,26 +122,17 @@ namespace spark {
         myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
 
         return myBaseReturn;
+        */
     }
 
     void DemoApp::onTouch(EventPtr theEvent) {  
-        if (_myCurrentView == 0) { 
-            _mySlides[_myCurrentSlide]->setVisible(false);
-            _myCurrentSlide++;
-            if (_myCurrentSlide >= _mySlides.size()) {
-                _myCurrentSlide = 0;
-                _myViews[_myCurrentView]->setVisible(false);        
-                _myCurrentView = 1;
-                _myViews[_myCurrentView]->setVisible(true);        
-            }
-            AC_PRINT << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
-            _mySlides[_myCurrentSlide]->setVisible(true);        
-        } else {
-            AC_PRINT << ">>>>> switch views";
-            _myViews[_myCurrentView]->setVisible(false);        
-            _myCurrentView = 0;
-            _myViews[_myCurrentSlide]->setVisible(true);        
+        _mySlides[_myCurrentSlide]->setVisible(false);
+        _myCurrentSlide++;
+        if (_myCurrentSlide >= _mySlides.size()) {
+            _myCurrentSlide = 0;
         }
+        AC_PRINT << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
+        _mySlides[_myCurrentSlide]->setVisible(true);        
         return;
 
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);

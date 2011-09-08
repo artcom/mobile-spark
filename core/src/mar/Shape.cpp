@@ -147,7 +147,6 @@ namespace mar {
         Shape(true), width_(theWidth), height_(theHeight), 
         leftEdge_(theLeftEdge), topEdge_(theTopEdge), rightEdge_(theRightEdge), bottomEdge_(theBottomEdge) {
         ElementPtr myElement = ElementPtr(new ElementWithTexture());
-        AC_PRINT << "create material with texture " <<  theTextureSrc;
         UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc));
         myElement->material = myMaterial;
         myMaterial->createShader();
@@ -158,7 +157,6 @@ namespace mar {
         imageHeight_ = myMaterial->getTexture()->height_;
         imageHeight_ = imageHeight_ > 0 ? imageHeight_ : 1;
 
-        AC_PRINT << " edges " << theLeftEdge << "  w&h " << width_ << "  " << height_ << "  image " << imageWidth_ << " " << imageHeight_;
         setVertexData();
         initGL();
     }
@@ -211,7 +209,7 @@ namespace mar {
                 myElement->vertexData_[v * _myDataPerVertex + 2] = 0;
                 myElement->vertexData_[v * _myDataPerVertex + 3] = myS;
                 myElement->vertexData_[v * _myDataPerVertex + 4] = myT;
-                AC_PRINT << v << " " << myX << " " << myY << " tex " << myS << " " << myT;
+                //AC_PRINT << v << " " << myX << " " << myY << " tex " << myS << " " << myT;
             }
         }
         int indices[] = { 0, 1, 4, 4, 1, 5,
