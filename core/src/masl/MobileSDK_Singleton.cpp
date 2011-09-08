@@ -76,16 +76,23 @@ namespace masl {
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
 
-                jobject myInt0 = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
-                jclass myIntegerClass = env->GetObjectClass(myInt0);
+                jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
+                jclass myIntegerClass = env->GetObjectClass(myInt);
                 jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");                
-                myCameraInfo.textureID = (jint)env->CallIntMethod(myInt0, intValueMethod, 0);      
+                myCameraInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
 
-                jobject myInt1 = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
-                myCameraInfo.width = (jint)env->CallIntMethod(myInt1, intValueMethod, 0);      
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
+                myCameraInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
                     
-                jobject myInt2 = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
-                myCameraInfo.height = (jint)env->CallIntMethod(myInt2, intValueMethod, 0);                      
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
+                myCameraInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
+                
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);                
+                myCameraInfo.texturewidth = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
+                
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);                
+                myCameraInfo.textureheight = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
+                                     
             } else {
                 AC_WARNING  << "Sorry, java-getCameraParams not found";                
             }
@@ -117,6 +124,7 @@ namespace masl {
             if(myMethodId != 0) {
                 jvalue myArgs[0];
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+                AC_PRINT << "start camera capture";
             } else {
                 AC_WARNING  << "Sorry, java-startCamera not found";                
             }
@@ -133,12 +141,29 @@ namespace masl {
                 if(myMethodId != 0) {
                     jvalue myArgs[0];
                     env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+                    AC_PRINT << "stop camera capture";
                 } else {
                     AC_WARNING  << "Sorry, java-stopCamera not found";                
                 }
             }
 #endif        
                 
+    }
+    bool MobileSDK_Singleton::isCameraCapturing() {
+        bool myResult = false;
+#ifdef __ANDROID__        
+            if (env) {
+                jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+                jmethodID myMethodId = env->GetStaticMethodID(cls, "isCameraCapturing", "()Z");
+                if(myMethodId != 0) {
+                    jvalue myArgs[0];
+                    myResult = env->CallStaticBooleanMethod (cls, myMethodId, myArgs);
+                } else {
+                    AC_WARNING  << "Sorry, java-isCameraCapturing not found";                
+                }
+            }
+#endif        
+        return myResult;
     }
 
 
