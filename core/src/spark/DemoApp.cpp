@@ -48,7 +48,7 @@ namespace spark {
         ComponentPtr myWorld1 = _mySparkWindow->getChildByName("world1");
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(myWorld1);
         const VectorOfComponentPtr & myChildren = myContainer->getChildrenByType(Transform::SPARK_TYPE);
-        for (int i = 0; i < myChildren.size(); i++) {
+        for (size_t i = 0; i < myChildren.size(); i++) {
             TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(myChildren[i]);
             if (myTransform) {
                 _mySlides.push_back(myTransform);
@@ -58,7 +58,7 @@ namespace spark {
         }
         
         const VectorOfComponentPtr & myWindowChildren = _mySparkWindow->getChildrenByType(View::SPARK_TYPE);
-        for (int i = 0; i < myWindowChildren.size(); i++) {
+        for (size_t i = 0; i < myWindowChildren.size(); i++) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(myWindowChildren[i]);
             if (myView) {
                 _myViews.push_back(myView);
@@ -123,23 +123,26 @@ namespace spark {
         return myBaseReturn;
     }
 
-    void DemoApp::onTouch(EventPtr theEvent) {       
+    void DemoApp::onTouch(EventPtr theEvent) {  
+        AC_PRINT << "onTouch 0";     
         if (_myCurrentView == 0) { 
-            _mySlides[_myCurrentSlide]->setVisible(false);
+            AC_PRINT << "vor dem visible setter 0";
+            //_mySlides[_myCurrentSlide]->setVisible(false);
+            AC_PRINT << "nach dem visible setter 0";
             _myCurrentSlide++;
             if (_myCurrentSlide >= _mySlides.size()) {
                 _myCurrentSlide = 0;
-                _myViews[_myCurrentView]->setVisible(false);        
+                //_myViews[_myCurrentView]->setVisible(false);        
                 _myCurrentView = 1;
-                _myViews[_myCurrentView]->setVisible(true);        
+                //_myViews[_myCurrentView]->setVisible(true);        
             }
-            AC_PRINT << "activate slide: " << _mySlides[_myCurrentSlide]->getName();
-            
-            _mySlides[_myCurrentSlide]->setVisible(true);        
+            AC_PRINT << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
+            //_mySlides[_myCurrentSlide]->setVisible(true);        
         } else {
-            _myViews[_myCurrentView]->setVisible(false);        
+            AC_PRINT << ">>>>> switch views";
+            //_myViews[_myCurrentView]->setVisible(false);        
             _myCurrentView = 0;
-            _myViews[_myCurrentSlide]->setVisible(true);        
+            //_myViews[_myCurrentSlide]->setVisible(true);        
         }
         return;
 

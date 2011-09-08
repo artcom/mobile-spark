@@ -71,9 +71,11 @@ namespace spark {
     }
     
     void BaseApp::onEvent(std::string theEventString) {
+        //AC_PRINT << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
         myEvent->connect(_mySparkWindow);
         (*myEvent)();
+        //AC_PRINT << "ate Event";
     }
     
     void BaseApp::onPause() {
@@ -84,6 +86,7 @@ namespace spark {
     }
 
     void BaseApp::onResume() {
+        AC_PRINT << "onResume yyy";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);

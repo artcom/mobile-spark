@@ -1,6 +1,9 @@
 package com.artcom.mobile.Base;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.hardware.Camera;
@@ -49,9 +52,13 @@ public class CameraTexture implements SurfaceHolder.Callback {
     }
 	//-------------------------------------------------------------------------
     // returns [0]-textureID; [1]-preview width; [2]-preview height
-    public static int[] getTextureParams() {
+    public static List<Integer> getTextureParams() {
 		if (INSTANCE == null ) return null;
-    	return new int[]{INSTANCE._myTextureID, INSTANCE._myCamWidth, INSTANCE._myCamHeight};
+		List<Integer> myResult = new ArrayList<Integer>();
+		myResult.add(INSTANCE._myTextureID);
+		myResult.add(INSTANCE._myCamWidth);
+		myResult.add(INSTANCE._myCamHeight);		  
+    	return myResult;
     }
     //--------- MEMBER --------------------------------------------------------
     //-------------------------------------------------------------------------
