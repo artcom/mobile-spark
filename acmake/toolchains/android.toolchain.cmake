@@ -96,6 +96,7 @@ set( TOOL_OS_SUFFIX "" )
 
 if( APPLE )
     set( NDKSYSTEM "darwin-x86" )
+    set(OSX TRUE)
 elseif( WIN32 )
     set( NDKSYSTEM "windows" )
     set( TOOL_OS_SUFFIX ".exe" )

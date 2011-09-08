@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <Window name="ourWindow" fullscreen="true" clearColor="[0.8,0.8,0.8,1]">
 
+    <View name="mainView" world="world1" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
     <View name="3dView" world="world2" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
 
     <World visible="true" name="world1">    
@@ -8,7 +9,7 @@
 
         <Transform name="Rectangle">
             <Text name="SlideTitle" x="10" y="450" z="12" text="Camera" color="[1,1,1,1]" fontsize="16" />            
-            <Camera/>
+            <Camera scaleX="0.5" scaleY="0.5"/>
         </Transform>
 
         <Transform name="Rectangle">
@@ -44,13 +45,13 @@
             <Text name="testtext" y="160" z="13" text="Text" color="[0,1,0,1]" fontsize="32"/>
         </Transform>    
 
-        <Transform name="Buttons" visible="false">
+        <!--Transform name="Buttons" visible="false">
             <Text name="SlideTitle" x="10" y="450" z="12" text="Buttons" color="[1,1,1,1]" fontsize="16" />
             <NinePatch name="button_normal" x="400" y="100" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
             <NinePatch name="button_normal" x="400" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_roll.png"/>
             <NinePatch name="button_normal" x="400" y="300" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_visited.png"/>
             <NinePatch name="button_normal" x="400" y="400" z="20" height="80" width="175" edgeTop="5" edgeRight="10" edgeBottom="15" edgeLeft="20" src="assets/textures/ninepatchtest.png"/>
-        </Transform>
+        </Transform-->
     </World>        
 
     <World name="world2">    

@@ -8,6 +8,7 @@ import android.opengl.GLSurfaceView;
 
 import com.artcom.mobile.Base.AC_Log;
 import com.artcom.mobile.Base.APK;
+import com.artcom.mobile.Base.CameraTexture;
 import com.artcom.mobile.Base.NativeBinding;
 
 public class EGLRenderer  implements GLSurfaceView.Renderer{
@@ -48,7 +49,8 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     }
 
 
-    public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+    public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
+    	CameraTexture.initWithContext(glContext);
         AC_Log.print("_________________________________- on surface created");
         if (_myFirstTimeFlag) {
             NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);

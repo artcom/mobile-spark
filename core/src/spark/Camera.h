@@ -7,6 +7,8 @@ using namespace mar;
 
 namespace spark {
     ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+    
+
     class Camera : public ShapeWidget {
     public: 
         Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
@@ -14,7 +16,8 @@ namespace spark {
         virtual void prerender(MatrixStack& theCurrentMatrixStack);   
         static const char* SPARK_TYPE;             
     private:
-        bool _myDirtyFlag;
+	    bool _myCameraCaptureStartedFlag;
+        bool _myCameraReadyFlag;
     };
 
     typedef boost::shared_ptr<Camera> CameraPtr;
