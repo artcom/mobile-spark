@@ -78,6 +78,8 @@ namespace mar {
         myMaterial->createShader();
         setVertexData();
         initGL();
+        _myBoundingBox.max[0] = theWidth;
+        _myBoundingBox.max[1] = theHeight;
     }
 
     RectangleShape::~RectangleShape() {
@@ -159,6 +161,8 @@ namespace mar {
 
         setVertexData();
         initGL();
+        _myBoundingBox.max[0] = theWidth;
+        _myBoundingBox.max[1] = theHeight;
     }
 
     NinePatchShape::~NinePatchShape() {
