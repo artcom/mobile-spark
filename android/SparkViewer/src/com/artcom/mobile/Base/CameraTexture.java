@@ -51,13 +51,15 @@ public class CameraTexture implements SurfaceHolder.Callback {
     	if (INSTANCE != null ) INSTANCE.bind();
     }
 	//-------------------------------------------------------------------------
-    // returns [0]-textureID; [1]-preview width; [2]-preview height
+    // returns [0]-textureID; [1]-preview width; [2]-preview height; [3]-texture width; [4]-texture height
     public static List<Integer> getTextureParams() {
 		if (INSTANCE == null ) return null;
 		List<Integer> myResult = new ArrayList<Integer>();
 		myResult.add(INSTANCE._myTextureID);
 		myResult.add(INSTANCE._myCamWidth);
-		myResult.add(INSTANCE._myCamHeight);		  
+		myResult.add(INSTANCE._myCamHeight);
+		myResult.add(INSTANCE._myTextureHeight);
+		myResult.add(INSTANCE._myTextureWidth);		  
     	return myResult;
     }
     //--------- MEMBER --------------------------------------------------------
