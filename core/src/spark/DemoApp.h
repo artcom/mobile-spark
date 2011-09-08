@@ -17,7 +17,6 @@ namespace spark {
             std::vector<TransformPtr> _mySlides;
             std::vector<ViewPtr> _myViews;
             unsigned _myCurrentSlide;
-            unsigned _myCurrentView;
     };
 
     typedef boost::shared_ptr<DemoApp> DemoAppPtr;
