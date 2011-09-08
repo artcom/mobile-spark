@@ -22,9 +22,7 @@ namespace spark {
         _myFontSize = _myXMLNode->getAttributeAs<int>("fontsize", 32);
         _myTextColor = _myXMLNode->getAttributeAs<vector4>("color", vector4(1,1,1,1));
         
-        setShape(ShapeFactory::get().createRectangle(true));
-
-        getShape()->setDimensions(500, 500);
+        setShape(ShapeFactory::get().createRectangle(true,500,500));
         _myDirtyFlag = true;
     }
 
