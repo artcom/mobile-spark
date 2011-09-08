@@ -79,6 +79,9 @@ namespace masl {
         return myFilename;
     }
 
+    std::string getExtension(const std::string & thePath);
+    std::string removeExtension(const std::string & theFileName);
+
     inline std::string
     line_string(unsigned line_number) {
         std::string message;
