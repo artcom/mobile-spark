@@ -76,16 +76,23 @@ namespace masl {
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
 
-                jobject myInt0 = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
-                jclass myIntegerClass = env->GetObjectClass(myInt0);
+                jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
+                jclass myIntegerClass = env->GetObjectClass(myInt);
                 jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");                
-                myCameraInfo.textureID = (jint)env->CallIntMethod(myInt0, intValueMethod, 0);      
+                myCameraInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
 
-                jobject myInt1 = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
-                myCameraInfo.width = (jint)env->CallIntMethod(myInt1, intValueMethod, 0);      
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
+                myCameraInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
                     
-                jobject myInt2 = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
-                myCameraInfo.height = (jint)env->CallIntMethod(myInt2, intValueMethod, 0);                      
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
+                myCameraInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
+                
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);                
+                myCameraInfo.texturewidth = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
+                
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);                
+                myCameraInfo.textureheight = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
+                                     
             } else {
                 AC_WARNING  << "Sorry, java-getCameraParams not found";                
             }
