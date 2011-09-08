@@ -29,7 +29,6 @@ namespace mar {
     }
 
     void Material::loadShader(const matrix & theMatrix) {
-        glLinkProgram(shaderProgram);
         glUseProgram(shaderProgram);
         checkGlError("glUseProgram");
         glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, theMatrix.data());
