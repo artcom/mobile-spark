@@ -12,8 +12,51 @@ namespace mar {
     Element::~Element() {
         glDeleteBuffers(1, &vertexBuffer);
         glDeleteBuffers(1, &indexBuffer);
+#if __APPLE__
+        glDeleteVertexArraysOES(1, &vertexArrayObject);
+#endif
     }
+    
+#if __APPLE__
+    void Element::loadData(const matrix & theMatrix) const {
+        material->loadShader(theMatrix);
+    } 
+    
+    void Element::unloadData() const {
 
+    }
+    
+    void Element::createVertexBuffers() {
+        glGenBuffers(1, &vertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, (numVertices * _myStride), vertexData_.get(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        
+        glGenBuffers(1, &indexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW); 
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        
+        
+        //Initialize the Vertex Array Object.
+        glGenVertexArraysOES(1, &vertexArrayObject);
+        glBindVertexArrayOES(vertexArrayObject);
+        
+        int offset = 0;
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
+            glVertexAttribPointer(it->get<0>(), it->get<1>(), GL_FLOAT, GL_FALSE, _myStride, (GLvoid*)offset);
+            glEnableVertexAttribArray(it->get<0>());
+            offset += it->get<2>();
+        }
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+ 
+        //glBindBuffer(GL_ARRAY_BUFFER, 0);
+        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindVertexArrayOES(0);
+    }
+#endif
+#ifdef __ANDROID__
     void Element::loadData(const matrix & theMatrix) const {
         material->loadShader(theMatrix);
         int offset = 0;
@@ -25,7 +68,7 @@ namespace mar {
         }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     }
-
+    
     void Element::unloadData() const {
         for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
             glDisableVertexAttribArray(it->get<0>());
@@ -39,12 +82,14 @@ namespace mar {
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, (numVertices * _myStride), vertexData_.get(), GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+        
         glGenBuffers(1, &indexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW); 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
+#endif
+
     
     void Element::updateCompleteVertexBuffersContent() {
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
