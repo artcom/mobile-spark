@@ -19,7 +19,7 @@ namespace mar {
     
 #if __APPLE__
     void Element::loadData(const matrix & theMatrix) const {
-        material->loadShader(theMatrix);
+        
     } 
     
     void Element::unloadData() const {
@@ -27,32 +27,26 @@ namespace mar {
     }
     
     void Element::createVertexBuffers() {
-        glGenBuffers(1, &vertexBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, (numVertices * _myStride), vertexData_.get(), GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        
-        glGenBuffers(1, &indexBuffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW); 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        
-        
+
         //Initialize the Vertex Array Object.
         glGenVertexArraysOES(1, &vertexArrayObject);
         glBindVertexArrayOES(vertexArrayObject);
         
-        int offset = 0;
+        glGenBuffers(1, &vertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, (numVertices * _myStride), vertexData_.get(), GL_STATIC_DRAW);
+                
+        int offset = 0;
         for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) { 
             glVertexAttribPointer(it->get<0>(), it->get<1>(), GL_FLOAT, GL_FALSE, _myStride, (GLvoid*)offset);
             glEnableVertexAttribArray(it->get<0>());
             offset += it->get<2>();
         }
+        
+        glGenBuffers(1, &indexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
- 
-        //glBindBuffer(GL_ARRAY_BUFFER, 0);
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW);  
+        
         glBindVertexArrayOES(0);
     }
 #endif
