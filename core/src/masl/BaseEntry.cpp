@@ -30,11 +30,12 @@ extern "C" {
     JNIEXPORT bool JNICALL Java_com_artcom_mobile_Base_NativeBinding_loadSpark(JNIEnv * env, jobject obj,
                                                                           jstring filename);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * env, jobject obj,
-                                                                  int theSeverity, jstring theFilename, 
+                                                                  jobject theSeverity, jstring theFilename, 
                                                                   int theLineNumber, jstring theMessage);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,
                                                                           jstring theLogString);
-                                                                          
+    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setSeverity(JNIEnv * env, jobject obj,
+                                                                          jobject theSeverity);
                                                                           
 };
 
@@ -46,12 +47,15 @@ JNIEXPORT bool JNICALL Java_com_artcom_mobile_Base_NativeBinding_loadSpark(JNIEn
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * env, jobject obj,
-                                                              int theSeverity, jstring theFilename, 
+                                                              jobject theSeverity, jstring theFilename, 
                                                               int theLineNumber, jstring theMessage) {
     jboolean isCopy;
     const char* myMessage = env->GetStringUTFChars(theMessage, &isCopy);                                                                    
     const char* myFilename = env->GetStringUTFChars(theFilename, &isCopy);  
-    masl::Logger::get().log(/*myTime,*/ masl::SEV_PRINT, myFilename, theLineNumber, myMessage);
+    jclass enumClass = env->FindClass("com/artcom/mobile/Base/Severity");
+    jmethodID getOrdinalMethod = env->GetMethodID(enumClass, "ordinal", "()I");
+    int value = env->CallIntMethod(theSeverity, getOrdinalMethod);
+    masl::Logger::get().log(/*myTime,*/ (masl::Severity)value, myFilename, theLineNumber, myMessage);
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,
                                                                          jstring theLogString) {
@@ -60,6 +64,14 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLev
     masl::Logger::get().setLoggerTopLevelTag(myLogString);
 }
 
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setSeverity(JNIEnv * env, jobject obj,
+                                                                         jobject theSeverity) {
+    jclass enumClass = env->FindClass("com/artcom/mobile/Base/Severity");
+    jmethodID getOrdinalMethod = env->GetMethodID(enumClass, "ordinal", "()I");
+    int value = env->CallIntMethod(theSeverity, getOrdinalMethod);
+    masl::Severity mySeverity = (masl::Severity)value;
+    masl::Logger::get().setSeverity(mySeverity);
+}
 #endif
 
 

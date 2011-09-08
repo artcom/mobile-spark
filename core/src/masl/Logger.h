@@ -38,17 +38,22 @@
 #include "Singleton.h"
 
 namespace masl {
-    enum Severity {SEV_PRINT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_TESTRESULT, SEV_DISABLED};
+    enum Severity {SEV_PRINT = 0, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_TESTRESULT, SEV_DISABLED};
     
     class Logger : public Singleton<Logger> {
         public:
-            Logger();  
+            Logger();
             virtual ~Logger();
                       
+            inline bool ifLog(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId) {
+                return theSeverity <= _myGlobalSeverity;
+            }
             void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
-            void setLoggerTopLevelTag(const std::string & theTagString);               
+            void setLoggerTopLevelTag(const std::string & theTagString);
+            void setSeverity(const Severity theSeverity) { _myGlobalSeverity = theSeverity;};
         private:
-            std::string _myTopLevelLogTag;                
+            std::string _myTopLevelLogTag;
+            Severity _myGlobalSeverity;
     };
     
     /**
@@ -76,21 +81,15 @@ namespace masl {
         const int myId;
     };
 
+#define AC_LOG_CHECK(SEVERITY,MODULE,MSGID) masl::Logger::get().ifLog(SEVERITY,MODULE,MSGID) && (masl::MessagePort(SEVERITY,MODULE,MSGID).getStream())
 
-#ifdef __ANDROID__
-    #define AC_DEBUG const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_DEBUG, __FILE__ ,__LINE__).stream) )
-    #define AC_INFO const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_INFO, __FILE__ ,__LINE__).stream) )
-    #define AC_PRINT const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_PRINT, __FILE__ ,__LINE__).stream) )
-    #define AC_ERROR const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_ERROR, __FILE__ ,__LINE__).stream) )    
-    #define AC_WARNING const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_WARNING, __FILE__ ,__LINE__).stream) )    
-    #define AC_TEST_RESULT const_cast<std::ostream&>( static_cast<const std::ostream&>(masl::MessagePort(masl::SEV_TESTRESULT, __FILE__ ,__LINE__).stream) )                    
-#else
-    #define AC_INFO masl::MessagePort(masl::SEV_INFO, __FILE__ ,__LINE__).getStream()
-    #define AC_DEBUG masl::MessagePort(masl::SEV_DEBUG, __FILE__ ,__LINE__).getStream()
-    #define AC_PRINT masl::MessagePort(masl::SEV_PRINT, __FILE__ ,__LINE__).getStream()
-    #define AC_ERROR masl::MessagePort(masl::SEV_ERROR, __FILE__ ,__LINE__).getStream()
-    #define AC_WARNING masl::MessagePort(masl::SEV_WARNING, __FILE__ ,__LINE__).getStream()
-    #define AC_TEST_RESULT masl::MessagePort(masl::SEV_TESTRESULT, __FILE__ ,__LINE__).getStream()
-#endif
+#define AC_INFO AC_LOG_CHECK(masl::SEV_INFO, __FILE__ ,__LINE__)
+#define AC_TRACE AC_LOG_CHECK(masl::SEV_TRACE, __FILE__ ,__LINE__)
+#define AC_DEBUG AC_LOG_CHECK(masl::SEV_DEBUG, __FILE__ ,__LINE__)
+#define AC_PRINT AC_LOG_CHECK(masl::SEV_PRINT, __FILE__ ,__LINE__)
+#define AC_ERROR AC_LOG_CHECK(masl::SEV_ERROR, __FILE__ ,__LINE__)
+#define AC_WARNING AC_LOG_CHECK(masl::SEV_WARNING, __FILE__ ,__LINE__)
+#define AC_TEST_RESULT AC_LOG_CHECK(masl::SEV_TESTRESULT, __FILE__ ,__LINE__)
+
 };
 #endif

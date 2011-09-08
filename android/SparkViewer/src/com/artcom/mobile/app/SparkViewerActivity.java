@@ -3,11 +3,13 @@ package com.artcom.mobile.app;
 
 import com.artcom.mobile.Base.*;
 
+import java.lang.System;
 import android.app.Activity;
 import android.os.Bundle;
 
 public class SparkViewerActivity extends Activity {
 
+    private static String GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
     private static String LOG_TAG = "SparkViewerActivity";
     private static boolean _mySparkWorldIsLoaded = false; 
     ASLOpenGLView mView;
@@ -16,7 +18,9 @@ public class SparkViewerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AC_Log.setTopLevelTag(LOG_TAG);
-        AC_Log.print("SparkViewer created, ready to call native [cpp logger].");
+        String myVerbosity = System.getenv(GLOBAL_VERBOSITY_ENV);
+        AC_Log.setSeverity(Severity.SEV_WARNING);
+        AC_Log.print("SparkViewer created, ready to call native [cpp logger]. " + myVerbosity);
         mView = new ASLOpenGLView(getApplication(), !_mySparkWorldIsLoaded);        
         setContentView(mView);        
     }

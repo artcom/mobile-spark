@@ -40,13 +40,13 @@ namespace spark {
     void 
     Window::onTouch(EventPtr theEvent) { 
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
-        AC_PRINT<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
+        AC_INFO<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
 
         ComponentPtr myPicked = pick2DAABBStyle(myEvent->getX(), myEvent->getY());
         if (myPicked) {
             AC_PRINT << "______________________________________picked " << myPicked->getName();
         } else {
-            AC_PRINT << "nothing picked";
+            AC_TRACE << "nothing picked";
         }
     }
 
