@@ -17,7 +17,6 @@ namespace mar {
 
     void Material::createShader() {
         setShader();
-        initGL();
     }
     void Material::initGL() {
         shaderProgram = createProgram(_myVertexShader, _myFragmentShader);
@@ -25,15 +24,14 @@ namespace mar {
             AC_ERROR << "Could not create program.";
             return;
         }
+        glBindAttribLocation(shaderProgram, VERTEX_POS_INDEX, "a_position");
         setHandles();
     }
 
     void Material::loadShader(const matrix & theMatrix) {
-        glLinkProgram(shaderProgram);
         glUseProgram(shaderProgram);
         checkGlError("glUseProgram");
         glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, theMatrix.data());
-        glBindAttribLocation(shaderProgram, VERTEX_POS_INDEX, "a_position");
     }
 
     void Material::setShader() {
@@ -67,12 +65,15 @@ namespace mar {
         colorHandle = glGetUniformLocation(shaderProgram, "a_color");
     }
 
-
-    //////////////////////////////////////////////////// Texture
     //////////////////////////////////////////////////// UnlitTexturedMaterial
     UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) {
         _mySrc = theSrc;
         _myTexture = TexturePtr(new Texture());
+
+        if (_mySrc != "") {
+            loadTextureFromPNG(_mySrc, _myTexture);  
+            transparency_ = _myTexture->transparency_;
+        }
     }
 
     UnlitTexturedMaterial::~UnlitTexturedMaterial() {
@@ -81,20 +82,16 @@ namespace mar {
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
-        glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
     }
 
     void UnlitTexturedMaterial::setShader() {
-        Material::setShader();
+        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_VERTEX_SHADER); 
         _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
             
     }
     void UnlitTexturedMaterial::initGL() {
         Material::initGL();
-        if (_mySrc != "") {
-            loadTextureFromPNG(_mySrc, _myTexture);  
-            transparency_ = _myTexture->transparency_;
-        }
+        glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
     }
     
 }

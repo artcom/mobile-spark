@@ -37,6 +37,23 @@
             }
         }
         
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         [EAGLContext setCurrentContext:glContext];
         
         //create framebuffer
@@ -100,7 +117,9 @@
     myDemoApp->onEvent([myEvent UTF8String]);    
     
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-    [glContext presentRenderbuffer:GL_RENDERBUFFER];    
+    [glContext presentRenderbuffer:GL_RENDERBUFFER];  
+    
+    
 }
 
 - (void)startAnimation

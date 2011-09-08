@@ -8,6 +8,7 @@ namespace spark {
     const char * const TouchEvent::TAP = "tap";
     const char * const TouchEvent::DOUBLETAP = "doubletap";
     const char * const TouchEvent::LONGPRESS = "longpress";
+    const char * const TouchEvent::PICKED = "picked";
     const char * const GestureEvent::PAN = "pan";
     const char * const GestureEvent::PINCH = "pinch";
     const char * const GestureEvent::ROTATE = "rotate";
@@ -17,14 +18,12 @@ namespace spark {
     Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
     }
     Event::Event(const masl::XMLNodePtr theXMLNode)
-         : type_(theXMLNode->getAttributeAs<std::string>("type", theXMLNode->nodeName)) 
-    {
+         : type_(theXMLNode->getAttributeAs<std::string>("type", theXMLNode->nodeName)) {
         
     }
 
     Event::~Event() {
     }
-
 
     void 
     Event::operator () () {

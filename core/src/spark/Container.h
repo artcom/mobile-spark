@@ -18,6 +18,7 @@ namespace spark {
         virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const; 
         void insertChild(ComponentPtr theChild) { _myChildren.push_back(theChild);};
+        void removeChild(ComponentPtr theChild);
         virtual const VectorOfComponentPtr & getChildren() { return _myChildren; };
         
     protected:

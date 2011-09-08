@@ -1,5 +1,6 @@
 #include "ObjImporter.h"
 
+#include <boost/tuple/tuple_comparison.hpp>
 #include <masl/Logger.h>
 #include <masl/string_functions.h>
 
@@ -121,52 +122,50 @@ namespace mar {
         AC_PRINT << "num materials " << materialMap_.size();
     }
 
-    void ObjImporter::createElementVertices(ShapePtr theShape, ElementPtr element,
+    void ObjImporter::createElementVertices(ObjShapePtr theShape, ElementPtr element,
                                          size_t startFaceIndex) {
         size_t dataPerVertex = 3 + 3 + 2;
-        size_t stride = dataPerVertex * 3;
-        element->numVertices = (faces_.size() - startFaceIndex) * 3;
-        element->vertexData_ = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
+        element->numIndices = (faces_.size() - startFaceIndex) * 3;
+        element->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[element->numIndices]);
+        std::vector<float> temporaryVertexData;
+        std::map<boost::tuple<int, int, int>, int> indexMap;
         int myIndex = 0;
+        int indexDataPosition = 0;
         std::vector<std::vector<int> >::iterator it = faces_.begin();
         advance(it,startFaceIndex);
         for (; it != faces_.end(); ++it) {
-            //AC_PRINT << "indices " << (*it)[0]-1 << "  " << (*it)[1]-1 << "  " << (*it)[2]-1;
-            element->vertexData_[myIndex * stride + 0] = vertices_[(*it)[0]-1][0];
-            element->vertexData_[myIndex * stride + 1] = vertices_[(*it)[0]-1][1];
-            element->vertexData_[myIndex * stride + 2] = vertices_[(*it)[0]-1][2];
-            element->vertexData_[myIndex * stride + 3] = normals_[(*it)[2]-1][0];
-            element->vertexData_[myIndex * stride + 4] = normals_[(*it)[2]-1][1];
-            element->vertexData_[myIndex * stride + 5] = normals_[(*it)[2]-1][2];
-            int texId = (*it)[1]-1;
-            element->vertexData_[myIndex * stride + 6] = (texId == -1 ? 0 : texData_[texId][0]);
-            element->vertexData_[myIndex * stride + 7] = (texId == -1 ? 0 : texData_[texId][1]);
-            checkBB(vertices_[(*it)[0]-1]);
+            for (size_t i = 0; i < 3; i++) {
+            
+                boost::tuple<int, int, int> key = boost::make_tuple((*it)[i * 3 + 0], (*it)[i * 3 + 1], (*it)[i * 3 + 2]);
+                if (indexMap.find(key) != indexMap.end()) {
+                    element->indexDataVBO_[indexDataPosition] = indexMap.at(key);
+                    indexDataPosition++;
+                }
+                else {
+                    indexMap[key] = myIndex;
+                    element->indexDataVBO_[indexDataPosition] = myIndex;
+                    myIndex++;
+                    indexDataPosition++;
+                
+                    temporaryVertexData.push_back(vertices_[(*it)[i * 3 + 0]-1][0]);
+                    temporaryVertexData.push_back(vertices_[(*it)[i * 3 + 0]-1][1]);
+                    temporaryVertexData.push_back(vertices_[(*it)[i * 3 + 0]-1][2]);
+                    temporaryVertexData.push_back(normals_[(*it)[i * 3 + 2]-1][0]);
+                    temporaryVertexData.push_back(normals_[(*it)[i * 3 + 2]-1][1]);
+                    temporaryVertexData.push_back(normals_[(*it)[i * 3 + 2]-1][2]);
 
-            //AC_PRINT << "indices " << (*it)[3]-1 << "  " << (*it)[4]-1 << "  " << (*it)[5]-1;
-            element->vertexData_[myIndex * stride + 8] = vertices_[(*it)[3]-1][0];
-            element->vertexData_[myIndex * stride + 9] = vertices_[(*it)[3]-1][1];
-            element->vertexData_[myIndex * stride + 10] = vertices_[(*it)[3]-1][2];
-            element->vertexData_[myIndex * stride + 11] = normals_[(*it)[5]-1][0];
-            element->vertexData_[myIndex * stride + 12] = normals_[(*it)[5]-1][1];
-            element->vertexData_[myIndex * stride + 13] = normals_[(*it)[5]-1][2];
-            texId = (*it)[4]-1;
-            element->vertexData_[myIndex * stride + 14] = (texId == -1 ? 0 : texData_[(*it)[4]-1][0]);
-            element->vertexData_[myIndex * stride + 15] = (texId == -1 ? 0 : texData_[(*it)[4]-1][1]);
-            checkBB(vertices_[(*it)[3]-1]);
-
-            //AC_PRINT << "indices " << (*it)[6]-1 << "  " << (*it)[7]-1 << "  " << (*it)[8]-1;
-            element->vertexData_[myIndex * stride + 16] = vertices_[(*it)[6]-1][0];
-            element->vertexData_[myIndex * stride + 17] = vertices_[(*it)[6]-1][1];
-            element->vertexData_[myIndex * stride + 18] = vertices_[(*it)[6]-1][2];
-            element->vertexData_[myIndex * stride + 19] = normals_[(*it)[8]-1][0];
-            element->vertexData_[myIndex * stride + 20] = normals_[(*it)[8]-1][1];
-            element->vertexData_[myIndex * stride + 21] = normals_[(*it)[8]-1][2];
-            texId = (*it)[7]-1;
-            element->vertexData_[myIndex * stride + 22] = (texId == -1 ? 0 : texData_[(*it)[7]-1][0]);
-            element->vertexData_[myIndex * stride + 23] = (texId == -1 ? 0 : texData_[(*it)[7]-1][1]);
-            checkBB(vertices_[(*it)[6]-1]);
-            myIndex++;
+                    int texId = (*it)[i * 3 + 1]-1;
+                    temporaryVertexData.push_back((texId == -1 ? 0 : texData_[texId][0]));
+                    temporaryVertexData.push_back((texId == -1 ? 0 : texData_[texId][1]));
+                    checkBB(vertices_[(*it)[i * 3 + 0]-1]);
+                }
+            }
+        }
+        element->numVertices = myIndex;
+        element->vertexData_ = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
+        int vertexDataIndex = 0;
+        for (std::vector<float>::const_iterator it = temporaryVertexData.begin(); it != temporaryVertexData.end(); ++it) {
+            element->vertexData_[vertexDataIndex++] = *it;
         }
         theShape->elementList.push_back(element);
         //AC_PRINT << "num parts " << theShape->elementList.size();
@@ -183,12 +182,13 @@ namespace mar {
 
 
 
-    void ObjImporter::importObj(std::string theObjFileName, ShapePtr theShape) {
+    void ObjImporter::importObj(std::string theObjFileName, ObjShapePtr theShape) {
         vertices_.clear();
         normals_.clear();
         texData_.clear();
         faces_.clear();
         materialMap_.clear();
+
         min_[0] = min_[1] = min_[2] = std::numeric_limits<float>::max();
         max_[0] = max_[1] = max_[2] = std::numeric_limits<float>::min();
         min_[3] = max_[3] = 1;
@@ -229,7 +229,7 @@ namespace mar {
                 if (element) {
                     createElementVertices(theShape, element, startFaceIndex);
                 }
-                element = ElementPtr(new ElementWithNormalsAndTexture());
+                element = ElementPtr(new ElementWithNormalsAndTexture());                
                 element->material = materialMap_[data];
                 startFaceIndex = faces_.size();
             } else if (type == "f") {

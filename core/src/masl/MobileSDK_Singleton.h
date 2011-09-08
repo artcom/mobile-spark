@@ -42,12 +42,24 @@
 #endif
 
 namespace masl {
+    struct CameraInfo{
+        int textureID;
+        int width;
+        int height;
+        int texturewidth;
+        int textureheight;
+    };
     
     class MobileSDK_Singleton : public Singleton<MobileSDK_Singleton> {
         public:
             MobileSDK_Singleton();  
             virtual ~MobileSDK_Singleton();                      
-            int renderText(const std::string & theMessage, int theTextureId);
+            int renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor);
+            void updateCameraTexture();
+            CameraInfo getCameraSpec();             
+            void startCameraCapture();
+            void stopCameraCapture();
+            bool isCameraCapturing();
             
 #ifdef __ANDROID__
             JNIEnv * env;

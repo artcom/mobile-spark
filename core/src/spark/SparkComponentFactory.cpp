@@ -7,13 +7,15 @@
 
 #include "Window.h"
 #include "View.h"
-#include "Camera.h"
+#include "RenderCamera.h"
 #include "World.h"
 #include "Transform.h"
 #include "Rectangle.h"
 #include "Text.h"
 #include "Image.h"
 #include "Shape3D.h"
+#include "Camera.h"
+#include "NinePatch.h"
 
 using namespace masl;
 
@@ -23,14 +25,16 @@ namespace spark {
     void SparkComponentFactory::setupFactory() {
         AC_PRINT << "SparkComponentFactory setup";
         bool registered = registerComponent("Window", spark::createWindow);
-        registered = registerComponent("View", spark::createView);
-        registered = registerComponent("Camera", spark::createCamera);
+        registered = registerComponent(View::SPARK_TYPE, spark::createView);
+        registered = registerComponent(RenderCamera::SPARK_TYPE, spark::createRenderCamera);
         registered = registerComponent("World", spark::createWorld);
-        registered = registerComponent("Transform", spark::createTransform);
+        registered = registerComponent(Transform::SPARK_TYPE, spark::createTransform);
         registered = registerComponent("Rectangle", spark::createRectangle);
         registered = registerComponent("Image", spark::createImage);
-        registered = registerComponent("Text", spark::createText);
+        registered = registerComponent(Text::SPARK_TYPE, spark::createText);
+        registered = registerComponent(Camera::SPARK_TYPE, spark::createCamera);
         registered = registerComponent("Shape3D", spark::createShape3D);
+        registered = registerComponent("NinePatch", spark::createNinePatch);
         AC_PRINT << "SparkComponentFactory setup done";
     };
     

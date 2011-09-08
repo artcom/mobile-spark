@@ -20,11 +20,13 @@ namespace masl {
 
 #ifdef __ANDROID__
 
+#ifndef OSX 
 // XXX: fixes linker warning: "type and size of dynamic symbol `__dso_handle' are not defined"
 extern "C"
 {
     void *__dso_handle = NULL;
 }
+#endif
 /////////////////////////////////////////////////////////////////////////JNI
 extern "C" {
     JNIEXPORT bool JNICALL Java_com_artcom_mobile_Base_NativeBinding_loadSpark(JNIEnv * env, jobject obj,
