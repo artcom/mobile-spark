@@ -24,11 +24,10 @@ namespace spark {
         _myColor[2] = myColor[2];
         _myColor[3] = 1; //TODO: use alpha
 
-        setShape(ShapeFactory::get().createRectangle(false));
+        setShape(ShapeFactory::get().createRectangle(false, width, height));
 
         //XXX
         boost::static_pointer_cast<UnlitColoredMaterial>(getShape()->elementList[0]->material)->setDiffuseColor(_myColor);
-        getShape()->setDimensions(width, height);
     }
 
     Rectangle::~Rectangle() {
