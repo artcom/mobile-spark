@@ -20,10 +20,10 @@ public class CameraTexture implements SurfaceHolder.Callback {
 	private SurfaceHolder _mySurfaceHolder;
 	private Camera _myCamera;
 	private Activity _myActivity;
-	private int _myCamWidth, _myCamHeight;
+	private int _myCamWidth, _myCamHeight, _myTextureWidth, _myTextureHeight;
     private int _myTextureID;
-	private int[] cameraTexture;
-	private static byte camData[] = new byte[0];
+	private int[] _myCameraTextures;
+	private static byte _myCamData[] = new byte[0];
 	private GL10 gl;
 	
 	//--------- STATIC --------------------------------------------------------
@@ -51,13 +51,15 @@ public class CameraTexture implements SurfaceHolder.Callback {
     	if (INSTANCE != null ) INSTANCE.bind();
     }
 	//-------------------------------------------------------------------------
-    // returns [0]-textureID; [1]-preview width; [2]-preview height
+    // returns [0]-textureID; [1]-preview width; [2]-preview height; [3]-texture width; [4]-texture height
     public static List<Integer> getTextureParams() {
 		if (INSTANCE == null ) return null;
 		List<Integer> myResult = new ArrayList<Integer>();
 		myResult.add(INSTANCE._myTextureID);
 		myResult.add(INSTANCE._myCamWidth);
-		myResult.add(INSTANCE._myCamHeight);		  
+		myResult.add(INSTANCE._myCamHeight);
+		myResult.add(INSTANCE._myTextureHeight);
+		myResult.add(INSTANCE._myTextureWidth);		  
     	return myResult;
     }
     //--------- MEMBER --------------------------------------------------------
@@ -89,31 +91,30 @@ public class CameraTexture implements SurfaceHolder.Callback {
         }
     	_myCamWidth = _myCamera.getParameters().getPreviewSize().width;
 		_myCamHeight= _myCamera.getParameters().getPreviewSize().height;
-		camData = new byte[_myCamWidth * _myCamHeight * 3 / 2];
-				_myCamera.setPreviewCallback( new PreviewCallback() {
+		_myTextureWidth = (int) Math.pow( 2,(int)( Math.log(_myCamWidth) / Math.log(2) ) + 1);
+		_myTextureHeight = (int) Math.pow( 2, (int)(Math.log(_myCamHeight) / Math.log(2) ) + 1);
+		_myCamera.setPreviewCallback( new PreviewCallback() {
                 // preview callback:
 				public void onPreviewFrame( byte[] data, Camera camera ) {
-                	camData=data;
-                }	
-                	
-                });
+                	_myCamData=data;
+                }});
 		 _myCamera.startPreview();
     }
 	//-------------------------------------------------------------------------
     public void bind() {
     	gl.glBindTexture(GL10.GL_TEXTURE_2D, _myTextureID);
-    	gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_LUMINANCE, 1024, 512, 0, GL10.GL_LUMINANCE, GL10.GL_UNSIGNED_BYTE, null);
-		gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, _myCamWidth, _myCamHeight, GL10.GL_LUMINANCE, GL10.GL_UNSIGNED_BYTE, ByteBuffer.wrap(camData));
+    	gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_LUMINANCE, _myTextureWidth, _myTextureHeight, 0, GL10.GL_LUMINANCE, GL10.GL_UNSIGNED_BYTE, null);
+		gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, _myCamWidth, _myCamHeight, GL10.GL_LUMINANCE, GL10.GL_UNSIGNED_BYTE, ByteBuffer.wrap(_myCamData));
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
     }
 	//-------------------------------------------------------------------------
 	private int createTextureID() {
-		if (cameraTexture==null)
-			cameraTexture=new int[1];
+		if (_myCameraTextures==null)
+			_myCameraTextures=new int[1];
 		else
-			gl.glDeleteTextures(1, cameraTexture, 0);
-		gl.glGenTextures(1, cameraTexture, 0);
-		return _myTextureID = cameraTexture[0];
+			gl.glDeleteTextures(1, _myCameraTextures, 0);
+		gl.glGenTextures(1, _myCameraTextures, 0);
+		return _myTextureID = _myCameraTextures[0];
 	}
 	//-------------------------------------------------------------------------
 	public void close() {
