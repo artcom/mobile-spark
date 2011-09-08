@@ -66,6 +66,8 @@
             
         }
         
+        
+        
         //DemoApp
         NSLog(@"width: %d,  height: %d ", width, height);
         NSString *path = [[NSBundle mainBundle] resourcePath];
@@ -100,7 +102,9 @@
     myDemoApp->onEvent([myEvent UTF8String]);    
     
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-    [glContext presentRenderbuffer:GL_RENDERBUFFER];    
+    [glContext presentRenderbuffer:GL_RENDERBUFFER];  
+    
+    
 }
 
 - (void)startAnimation

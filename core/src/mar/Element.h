@@ -6,6 +6,7 @@
 #include <string>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/shared_array.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include <masl/MatrixStack.h>
 
@@ -23,11 +24,11 @@ namespace mar {
     const unsigned int VERTEX_POS_SIZE       = 3; //x, y, z
     const unsigned int VERTEX_NORMAL_SIZE    = 3; //x, y, z
     const unsigned int VERTEX_TEXCOORD0_SIZE = 2;  //s, t
+    const unsigned int VERTEX_SIZE = VERTEX_POS_SIZE * sizeof(float);
     const unsigned int NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE) * (sizeof(float)));
     const unsigned int TEXTURED_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
     const unsigned int TEXTURED_NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
-
-
+    
     class Element {
     public:
         Element();
@@ -35,12 +36,20 @@ namespace mar {
 
         virtual void loadData(const matrix & theMatrix) const;
         virtual void unloadData() const;
-        
+        virtual void createVertexBuffers();
+        virtual void updateCompleteVertexBuffersContent();
         MaterialPtr material;
         unsigned int numVertices;
+        unsigned int numIndices;
+        
         boost::shared_array<float> vertexData_;    //interleaved
+        boost::shared_array<GLushort> indexDataVBO_;
+
+        GLuint vertexBuffer;
+        GLuint indexBuffer;
+        
     protected:
-        std::vector<std::pair<unsigned int, unsigned int> > _myConfig;
+        std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
         unsigned int _myStride;
     };
 

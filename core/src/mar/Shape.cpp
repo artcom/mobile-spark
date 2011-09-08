@@ -17,9 +17,9 @@ namespace mar {
     void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
-            ElementPtr element = *it;
+            ElementPtr element = *it;   
             element->loadData(theMatrix);
-            glDrawArrays(GL_TRIANGLES, 0, element->numVertices);
+            glDrawElements(GL_TRIANGLES, element->numIndices, GL_UNSIGNED_SHORT, 0);
             element->unloadData();
             checkGlError("glDrawElements");
         }
@@ -28,11 +28,12 @@ namespace mar {
     void Shape::initGL() {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
+            
             ElementPtr element = *it;
             if (element && element->material ) {
                  element->material->initGL();
             }
-
+            element->createVertexBuffers();
         }
     }
 
@@ -84,18 +85,26 @@ namespace mar {
     void RectangleShape::setVertexData() {
         ElementPtr myElement = elementList[0];
         _myDataPerVertex = 3 + (_myTextureFlag ? 2 : 0);
-        myElement->numVertices = 6;
+        myElement->numVertices = 4;
+        myElement->numIndices = 6;
         myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
-        int myXYCoords[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
+        GLushort indices[] = {0, 1, 2, 2, 1, 3};
+        myElement->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[myElement->numIndices]);        
+        int myXYCoords[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
         for (size_t i = 0, l = myElement->numVertices; i < l; ++i) {
             (myElement->vertexData_)[i * _myDataPerVertex + 0] = myXYCoords[i * 2 + 0];
             (myElement->vertexData_)[i * _myDataPerVertex + 1] = myXYCoords[i * 2 + 1];
             (myElement->vertexData_)[i * _myDataPerVertex + 2] = 0;
+        
             if (_myTextureFlag) {
                 (myElement->vertexData_)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0];
                 (myElement->vertexData_)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1];
             }
+        }
+        
+        for (size_t i = 0; i < myElement->numIndices; i++) {
+            myElement->indexDataVBO_[i] = indices[i];
         }
     }
     
@@ -123,17 +132,14 @@ namespace mar {
     }
     
     void RectangleShape::setDimensions(const float theWidth, const float theHeight) {
-        AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;
         ElementPtr myElement = elementList[0];
         myElement->vertexData_[_myDataPerVertex] = theWidth;
         myElement->vertexData_[_myDataPerVertex*3] = theWidth;
-        myElement->vertexData_[_myDataPerVertex*4] = theWidth;
         myElement->vertexData_[_myDataPerVertex*2 + 1] = theHeight;
-        myElement->vertexData_[_myDataPerVertex*4 + 1] = theHeight;
-        myElement->vertexData_[_myDataPerVertex*5 + 1] = theHeight;
+        myElement->vertexData_[_myDataPerVertex*3 + 1] = theHeight;
         _myBoundingBox.max[0] = theWidth;
         _myBoundingBox.max[1] = theHeight;
-        AC_PRINT << "setDimensions " << theWidth << ", " << theHeight << " " << _myBoundingBox.min << ", " << _myBoundingBox.max;
+        myElement->updateCompleteVertexBuffersContent();
     }
 
     //////////////////////////////////////////////////////////////ObjShape
@@ -153,6 +159,7 @@ namespace mar {
     ShapePtr ShapeFactory::createObj(const std::string & theFile) {
         ShapePtr myShape = ShapePtr(new ObjShape());
         ObjImporter::get().importObj(theFile, myShape);
+        myShape->initGL();
         return myShape;
     }
     
