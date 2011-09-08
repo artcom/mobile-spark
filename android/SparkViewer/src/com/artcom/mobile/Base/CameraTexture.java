@@ -68,8 +68,8 @@ public class CameraTexture implements SurfaceHolder.Callback {
 		myResult.add(INSTANCE._myTextureID);
 		myResult.add(INSTANCE._myCamWidth);
 		myResult.add(INSTANCE._myCamHeight);
-		myResult.add(INSTANCE._myTextureHeight);
 		myResult.add(INSTANCE._myTextureWidth);		  
+		myResult.add(INSTANCE._myTextureHeight);
     	return myResult;
     }
     //--------- MEMBER --------------------------------------------------------

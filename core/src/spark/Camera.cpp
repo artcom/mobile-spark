@@ -29,8 +29,8 @@ namespace spark {
     void 
     Camera::prerender(MatrixStack& theCurrentMatrixStack) {
         ShapeWidget::prerender(theCurrentMatrixStack);    
-        AC_PRINT << "camera is rendered : " << isRendered();
-        AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
+        //AC_PRINT << "camera is rendered : " << isRendered();
+        //AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
         if (isRendered()) {
             if (!MobileSDK_Singleton::get().isCameraCapturing()) {
     			MobileSDK_Singleton::get().startCameraCapture();
@@ -41,7 +41,9 @@ namespace spark {
             		UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         			myMaterial->getTexture()->setTextureId(myCameraInfo.textureID);
         			getShape()->setDimensions(width, height);
-                    getShape()->setTexCoords(vector2(0,0), vector2(width/1024,0), vector2(0,height/512), vector2(width/1024,height/512));
+                    getShape()->setTexCoords(vector2(0,0), vector2(width/myCameraInfo.texturewidth,0), 
+                                                     vector2(0,height/myCameraInfo.textureheight), 
+                                                     vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight));
         			AC_PRINT<< " ####### Camera width x height : " << width << " x " << height; 
                 }
             }

@@ -46,6 +46,8 @@ namespace masl {
         int textureID;
         int width;
         int height;
+        int texturewidth;
+        int textureheight;
     };
     
     class MobileSDK_Singleton : public Singleton<MobileSDK_Singleton> {
