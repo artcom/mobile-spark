@@ -63,43 +63,50 @@ namespace masl {
         return myTextureId;
     }     
     
-    CameraInfo MobileSDK_Singleton::renderCamera() {
+    CameraInfo MobileSDK_Singleton::getCameraSpec() {
         CameraInfo myCameraInfo;
         myCameraInfo.textureID=0;
-	
+#ifdef __ANDROID__        
+        if (env) {
+           jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");                        
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "getCameraParams", "()Ljava/util/List;");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                jobject myList = env->CallStaticObjectMethod (cls, myMethodId, myArgs);
+                jclass listClass = env->GetObjectClass(myList);
+                jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
+
+                jobject myInt0 = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
+                jclass myIntegerClass = env->GetObjectClass(myInt0);
+                jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");                
+                myCameraInfo.textureID = (jint)env->CallIntMethod(myInt0, intValueMethod, 0);      
+
+                jobject myInt1 = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
+                myCameraInfo.width = (jint)env->CallIntMethod(myInt1, intValueMethod, 0);      
+                    
+                jobject myInt2 = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
+                myCameraInfo.height = (jint)env->CallIntMethod(myInt2, intValueMethod, 0);                      
+            } else {
+                AC_WARNING  << "Sorry, java-getCameraParams not found";                
+            }
+        }
+#endif                
+        return myCameraInfo;
+    }
+    void MobileSDK_Singleton::updateCameraTexture() {
 	
 #ifdef __ANDROID__        
         if (env) {
            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
-            jmethodID myMethodId = env->GetStaticMethodID(cls, "updateCameraTexture", "()I");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "updateCameraTexture", "()V");
             if(myMethodId != 0) {
                jvalue myArgs[0];
-                myCameraInfo.textureID = env->CallStaticIntMethodA (cls, myMethodId, myArgs);
+                env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
             } else {
                 AC_WARNING  << "Sorry, java-updateCameraTextures not found";                
-            }
-            
-            myMethodId = env->GetStaticMethodID(cls, "getCameraWidth", "()I");
-            if(myMethodId != 0) {
-                jvalue myArgs[0];
-                myCameraInfo.width = env->CallStaticIntMethodA (cls, myMethodId, myArgs); 
-            } else {
-                AC_WARNING  << "Sorry, java-getCameraWidth not found";                
-            }
-
-            myMethodId = env->GetStaticMethodID(cls, "getCameraHeight", "()I");
-            if(myMethodId != 0) {
-                jvalue myArgs[0];
-                myCameraInfo.height = env->CallStaticIntMethodA (cls, myMethodId, myArgs);
-            } else {
-                AC_WARNING  << "Sorry, java-getCameraHeight not found";                
-            }
-
-
-
+            }            
         }
 #endif        
-        return myCameraInfo;
     }
     
     void MobileSDK_Singleton::startCameraCapture() {

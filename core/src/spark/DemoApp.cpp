@@ -125,27 +125,26 @@ namespace spark {
 
     void DemoApp::onTouch(EventPtr theEvent) {  
         AC_PRINT << "onTouch 0";     
-        return;
         if (_myCurrentView == 0) { 
             AC_PRINT << "vor dem visible setter 0";
-            _mySlides[_myCurrentSlide]->setVisible(false);
+            //_mySlides[_myCurrentSlide]->setVisible(false);
             AC_PRINT << "nach dem visible setter 0";
             _myCurrentSlide++;
             if (_myCurrentSlide >= _mySlides.size()) {
                 _myCurrentSlide = 0;
-                _myViews[_myCurrentView]->setVisible(false);        
+                //_myViews[_myCurrentView]->setVisible(false);        
                 _myCurrentView = 1;
-                _myViews[_myCurrentView]->setVisible(true);        
+                //_myViews[_myCurrentView]->setVisible(true);        
             }
             AC_PRINT << "activate slide: " << _mySlides[_myCurrentSlide]->getName();
             
             AC_PRINT << "vor dem visible setter 1";
-            _mySlides[_myCurrentSlide]->setVisible(true);        
+            //_mySlides[_myCurrentSlide]->setVisible(true);        
             AC_PRINT << "nach dem visible setter 1-> "<< _mySlides[_myCurrentSlide]->getName();
         } else {
-            _myViews[_myCurrentView]->setVisible(false);        
+            //_myViews[_myCurrentView]->setVisible(false);        
             _myCurrentView = 0;
-            _myViews[_myCurrentSlide]->setVisible(true);        
+            //_myViews[_myCurrentSlide]->setVisible(true);        
         }
         return;
 
