@@ -78,7 +78,7 @@ public class CameraTexture implements SurfaceHolder.Callback {
     //--------- MEMBER --------------------------------------------------------
     //-------------------------------------------------------------------------
 	private CameraTexture(Activity activity) {
-		if (theActivity ==null) {
+		if (theActivity == null || theActivity != activity) {
 			theActivity=activity;
 			theSurfaceView = new SurfaceView(theActivity);
 			theActivity.addContentView(theSurfaceView, new LayoutParams(1,1));
