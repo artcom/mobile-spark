@@ -64,10 +64,11 @@ namespace spark {
     }
 
     void BaseApp::onSizeChanged(int theWidth, int theHeight) {
-        AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
+        //AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
         if (_mySparkWindow) {
             _mySparkWindow->onSizeChanged(theWidth, theHeight);
         }
+        //AC_PRINT << "BaseApp::onSizeChanged done";
     }
     
     void BaseApp::onEvent(std::string theEventString) {
@@ -86,18 +87,21 @@ namespace spark {
     }
 
     void BaseApp::onResume() {
-        AC_PRINT << "onResume yyy";
+        //AC_PRINT << "onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
         }
+        //AC_PRINT << "onResume done";
     }
     
     void BaseApp::onFrame(EventPtr theEvent) {
+        //AC_PRINT << ".";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _myGLCanvas->preRender(_mySparkWindow->getClearColor());
         _mySparkWindow->render();
+        //AC_PRINT << ". done";
     }    
 }
 

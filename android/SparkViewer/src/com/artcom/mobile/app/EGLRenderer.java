@@ -27,6 +27,9 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
         updateFrameCounter();
         String myEvent = "<StageEvent type='frame' time='" + System.currentTimeMillis() + "'/>";
         NativeBinding.onEvent(myEvent);
+        //myEvent = "<TouchEvent type='tap' x='10' y='20'/>";
+        //NativeBinding.onEvent(myEvent);
+        
     }
 
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {        
