@@ -50,7 +50,7 @@ namespace spark {
 		    MobileSDK_Singleton::get().updateCameraTexture();
         } else {
             if (MobileSDK_Singleton::get().isCameraCapturing()) {
-    			//MobileSDK_Singleton::get().stopCameraCapture();
+    			MobileSDK_Singleton::get().stopCameraCapture();
             }
         }
     }    
