@@ -25,9 +25,6 @@ using namespace mar;
 
 namespace spark {
 
-    void testFreeFunctionEvent(EventPtr theEvent) {
-        AC_PRINT<<"testFreeFunctionEvent "<<theEvent->getType();
-    }
 
     BaseApp::BaseApp() {
     }
@@ -55,8 +52,6 @@ namespace spark {
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
-        spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(testFreeFunctionEvent));
-        _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
 
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
