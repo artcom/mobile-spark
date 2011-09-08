@@ -6,6 +6,7 @@ import com.artcom.mobile.Base.*;
 import java.lang.System;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 public class SparkViewerActivity extends Activity {
 
@@ -17,12 +18,13 @@ public class SparkViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CameraTexture.init(this);
         AC_Log.setTopLevelTag(LOG_TAG);
         String myVerbosity = System.getenv(GLOBAL_VERBOSITY_ENV);
         AC_Log.setSeverity(Severity.SEV_WARNING);
         AC_Log.print("SparkViewer created, ready to call native [cpp logger]. " + myVerbosity);
         mView = new ASLOpenGLView(getApplication(), !_mySparkWorldIsLoaded);        
-        setContentView(mView);        
+        setContentView(mView);         
     }
     
     @Override protected void onStart() {
@@ -37,7 +39,8 @@ public class SparkViewerActivity extends Activity {
         NativeBinding.onPause();
         String myEvent = "<StageEvent type='pause'/>";
         NativeBinding.onEvent(myEvent);
-        AC_Log.print("----------------------SparkViewer paused");     
+        CameraTexture.closeCamera();
+        AC_Log.print("----------------------SparkViewer paused");
     }
     @Override protected void onStop() {
         super.onStop();

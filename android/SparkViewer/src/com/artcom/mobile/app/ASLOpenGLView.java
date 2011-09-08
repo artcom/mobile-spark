@@ -24,6 +24,7 @@ public class ASLOpenGLView extends GLSurfaceView {
         super(context);
         myRenderer = new EGLRenderer(context, firstTime);
         init();        
+        setKeepScreenOn(true);        
     }
 
     @Override

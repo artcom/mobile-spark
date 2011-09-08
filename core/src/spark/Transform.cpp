@@ -4,6 +4,8 @@
 
 
 namespace spark {
+    const char * Transform::SPARK_TYPE = "Transform";
+
     //needed for component factory
     //namespace  {
         ComponentPtr createTransform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {

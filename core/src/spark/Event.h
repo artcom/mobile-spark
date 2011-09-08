@@ -73,12 +73,13 @@ namespace spark {
     class TouchEvent : public Event {
         public:
 
-            TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY);
+            TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX=0, const unsigned int theY=0);
             TouchEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~TouchEvent();
             static const char * const TAP;
             static const char * const DOUBLETAP;
             static const char * const LONGPRESS;
+            static const char * const PICKED;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};

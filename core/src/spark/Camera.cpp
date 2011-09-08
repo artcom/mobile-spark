@@ -1,86 +1,58 @@
 #include "Camera.h"
+#include "BaseApp.h"
 
 #include "SparkComponentFactory.h"
-
-#include <string>
-
-using namespace std;
-using namespace mar;
-using namespace masl;
+#include <masl/MobileSDK_Singleton.h>
 
 namespace spark {
-
-    const char* Camera::PerspectiveStr = "perspective";
-    const char* Camera::OrtohonormalStr = "orthonormal";
-    const char* Camera::AutoOrthonormalStr = "auto";
-
     //needed for component factory
     //namespace  {
         ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
             return CameraPtr(new Camera(theApp, theXMLNode, theParent));
         };
-        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
+    //    const bool registered = spark::SparkComponentFactory::get().registerComponent("Rectangle", spark::createRectangle);
     //}
 
+    const char * Camera::SPARK_TYPE = "Camera";
 
-    Camera::Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
-                   ComponentPtr theParent):
-        Widget(theApp, theXMLNode, theParent){     
-        bool myFrustumSpecified = false;            
-        string myFrustum = theXMLNode->getAttributeAs<std::string>("frustum", "");
-        size_t myIndex  = myFrustum.find(OrtohonormalStr);
-        if (myIndex == 0) {
-             size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());
-             size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
-             if (myOpening != string::npos && myClosing != string::npos) {
-                 string myParams = myFrustum.substr(myOpening, myClosing-myOpening);
-                 if (myParams == AutoOrthonormalStr) {
-                    _myProjectionType = AUTO_ORTHONORMAL;
-                    myFrustumSpecified = true;
-                }
-            }
-        } else {
-            myIndex = myFrustum.find(PerspectiveStr);
-            if (myIndex == 0) {
-                 size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());
-                 size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
-                 if (myOpening != string::npos && myClosing != string::npos) {
-                     string myParamsStr = myFrustum.substr(myOpening, myClosing-myOpening);
-                     fromString(myParamsStr, _myPerspectiveParams);
-                     _myProjectionType = PERSPECTIVE;
-                     myFrustumSpecified = true;
-                 }
-            }
-        }
-        if (!myFrustumSpecified) {
-            AC_WARNING << "Create camera with : unknown frustum: " << myFrustum << ", using auto orthonormal";
-            _myProjectionType = AUTO_ORTHONORMAL;
-        }
+    Camera::Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
+        ShapeWidget(theApp, theXMLNode, theParent) {
+        
+        setShape(ShapeFactory::get().createRectangle(true));
+
+        getShape()->setDimensions(500, 500);
     }
 
     Camera::~Camera() {
-    }        
-    
-    const matrix & 
-    Camera::getProjectionMatrix() {
-        return _myProjectionMatrix;
     }
-
-    void
-    Camera::activate(float theCameraWidth, float theCameraHeight) {   
-        matrixStack.push();
-             
-        if (_myProjectionType == AUTO_ORTHONORMAL) {
-            matrixStack.loadOrtho(0, theCameraWidth, 0.0 , theCameraHeight, -0.1, 1000);
-        } else if (_myProjectionType == PERSPECTIVE) {
-            float myWing = _myPerspectiveParams[1] * tanf(radFromDeg(_myPerspectiveParams[0]) / 2.0);            
-            float myRatio = (float)theCameraWidth/(float)theCameraHeight;
-            matrixStack.loadPerspective(-myWing, myWing, -myWing / myRatio, myWing / myRatio, _myPerspectiveParams[1], _myPerspectiveParams[2]);
+    
+    void 
+    Camera::prerender(MatrixStack& theCurrentMatrixStack) {
+        ShapeWidget::prerender(theCurrentMatrixStack);    
+        //AC_PRINT << "camera is rendered : " << isRendered();
+        //AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
+        if (isRendered()) {
+            if (!MobileSDK_Singleton::get().isCameraCapturing()) {
+    			MobileSDK_Singleton::get().startCameraCapture();
+                masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
+                if (myCameraInfo.textureID != 0) {
+        			float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
+        			float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
+            		UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
+        			myMaterial->getTexture()->setTextureId(myCameraInfo.textureID);
+        			getShape()->setDimensions(width, height);
+                    getShape()->setTexCoords(vector2(0,height/myCameraInfo.textureheight),
+                    						 vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight) , 
+                                             vector2(0,0), 
+                                             vector2(width/myCameraInfo.texturewidth,0));
+        			AC_PRINT<< " ####### Camera width x height : " << width << " x " << height; 
+                }
+            }
+		    MobileSDK_Singleton::get().updateCameraTexture();
+        } else {
+            if (MobileSDK_Singleton::get().isCameraCapturing()) {
+    			MobileSDK_Singleton::get().stopCameraCapture();
+            }
         }
-        matrix myCameraMatrix = _myLocalMatrix;
-        myCameraMatrix.inverse();
-        matrixStack.multMatrix(myCameraMatrix);
-        _myProjectionMatrix = matrixStack.getTop();
-        matrixStack.pop();
     }    
 }

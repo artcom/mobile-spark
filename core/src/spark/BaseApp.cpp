@@ -25,9 +25,6 @@ using namespace mar;
 
 namespace spark {
 
-    void testFreeFunctionEvent(EventPtr theEvent) {
-        AC_PRINT<<"testFreeFunctionEvent "<<theEvent->getType();
-    }
 
     BaseApp::BaseApp() {
     }
@@ -55,8 +52,6 @@ namespace spark {
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
-        spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(testFreeFunctionEvent));
-        _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
 
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
@@ -64,16 +59,19 @@ namespace spark {
     }
 
     void BaseApp::onSizeChanged(int theWidth, int theHeight) {
-        AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
+        //AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
         if (_mySparkWindow) {
             _mySparkWindow->onSizeChanged(theWidth, theHeight);
         }
+        //AC_PRINT << "BaseApp::onSizeChanged done";
     }
     
     void BaseApp::onEvent(std::string theEventString) {
+        //AC_PRINT << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
         myEvent->connect(_mySparkWindow);
         (*myEvent)();
+        //AC_PRINT << "ate Event";
     }
     
     void BaseApp::onPause() {
@@ -84,17 +82,21 @@ namespace spark {
     }
 
     void BaseApp::onResume() {
+        //AC_PRINT << "onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
         }
+        //AC_PRINT << "onResume done";
     }
     
     void BaseApp::onFrame(EventPtr theEvent) {
+        //AC_PRINT << ".";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _myGLCanvas->preRender(_mySparkWindow->getClearColor());
         _mySparkWindow->render();
+        //AC_PRINT << ". done";
     }    
 }
 
