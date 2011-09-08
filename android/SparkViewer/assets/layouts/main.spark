@@ -66,7 +66,7 @@
     </World>        
 
     <World name="3dworld">    
-        <RenderCamera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,0.1,10000]"/>    
+        <RenderCamera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,20,10000]"/>    
         <Transform sensible="false" name="transform" x="0" y="-50" z="-120" scaleX="0.15" scaleY="0.15" scaleZ="0.15" alpha="0.5">
             <Shape3D name="theAmazone" src="/amazone"/>
         </Transform>
