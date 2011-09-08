@@ -33,26 +33,29 @@ namespace spark {
     DemoApp::~DemoApp() {
     }
 
-
     void freeFunction() {
         AC_PRINT << "hello from free function";
+    }
+    void freeFunctionEventCB(EventPtr theEvent) {
+        AC_PRINT << "hello from free function event callback for eventtype " << theEvent->getType();
     }
 
     bool DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
 
-        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::shared_ptr<DemoApp>(&ourApp), &DemoApp::onTouch));
-        _mySparkWindow->addEventListener(TouchEvent::TAP, myCB); 
+        //test free function on touch
+        spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
+        _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
+
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
+        spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, DemoAppPtr> (ptr, &DemoApp::onNextButton));
+        ComponentPtr myNextButton = _mySparkWindow->getChildByName("nextbutton", true);
+        myNextButton->addEventListener(TouchEvent::PICKED, myPickedCB);
 
         //animation of amazone
-        ComponentPtr myComponent = _mySparkWindow->getChildByName("3dworld");
-        AC_PRINT << myComponent;
-        myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform");
-        AC_PRINT << myComponent;
-        myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
-        AC_PRINT << myComponent;
+        ComponentPtr myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
         Shape3DPtr myShape = boost::static_pointer_cast<spark::Shape3D>(myComponent);
-        WidgetPropertyAnimationPtr myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, 6.28, 9000));
+        WidgetPropertyAnimationPtr myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, M_PI * 2, 90000));
         myYRotate->setLoop(true);
         animation::AnimationManager::get().play(myYRotate);
 
@@ -64,6 +67,7 @@ namespace spark {
             if (myTransform) {
                 _mySlides.push_back(myTransform);
                 myTransform->setVisible(false);
+                myTransform->setSensible(false);
             }
             AC_PRINT << "add slide to slides : " << myTransform->getName();
         }
@@ -125,16 +129,20 @@ namespace spark {
         */
     }
 
-    void DemoApp::onTouch(EventPtr theEvent) {  
+    void DemoApp::onNextButton(EventPtr theEvent) {
+        AC_PRINT << "on next button";
         _mySlides[_myCurrentSlide]->setVisible(false);
+        _mySlides[_myCurrentSlide]->setSensible(false);
         _myCurrentSlide++;
         if (_myCurrentSlide >= _mySlides.size()) {
             _myCurrentSlide = 0;
         }
         AC_PRINT << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
         _mySlides[_myCurrentSlide]->setVisible(true);        
-        return;
+        _mySlides[_myCurrentSlide]->setSensible(true);        
+    }
 
+    void DemoApp::onTouch(EventPtr theEvent) {  
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         AC_PRINT<<myEvent->getType()<<" x:"<<myEvent->getX()<<" ,y:"<<myEvent->getY();
         //
@@ -160,8 +168,6 @@ namespace spark {
         myParallel->add(myAnimationY);
         myParallel->add(myAnimationA);
         animation::AnimationManager::get().play(myParallel);
-            
-            
     }
 }
 
