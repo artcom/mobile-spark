@@ -14,13 +14,17 @@ namespace spark {
             virtual ~DemoApp();
             virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
             void onNextButton(EventPtr theEvent);
+            void onCreationButton(EventPtr theEvent);
             void onTouch(EventPtr theEvent);
+
+        private:
             std::vector<TransformPtr> _mySlides;
             std::vector<ViewPtr> _myViews;
             unsigned _myCurrentSlide;
     };
 
     typedef boost::shared_ptr<DemoApp> DemoAppPtr;
+    typedef MemberFunctionEventCallback<DemoApp, DemoAppPtr> DemoEventCB;
 
 };
 
