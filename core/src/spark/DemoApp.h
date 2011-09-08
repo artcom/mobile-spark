@@ -13,6 +13,7 @@ namespace spark {
             DemoApp();
             virtual ~DemoApp();
             virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
+            void onNextButton(EventPtr theEvent);
             void onTouch(EventPtr theEvent);
             std::vector<TransformPtr> _mySlides;
             std::vector<ViewPtr> _myViews;

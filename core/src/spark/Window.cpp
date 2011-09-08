@@ -40,10 +40,10 @@ namespace spark {
     void 
     Window::onTouch(EventPtr theEvent) { 
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
-        AC_PRINT<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
-
         ComponentPtr myPicked = pick2DAABBStyle(myEvent->getX(), myEvent->getY());
         if (myPicked) {
+            EventPtr myEvent = EventPtr(new TouchEvent(TouchEvent::PICKED, myPicked));
+            (*myEvent)();
             AC_PRINT << "______________________________________picked " << myPicked->getName();
         } else {
             AC_PRINT << "nothing picked";
@@ -77,7 +77,7 @@ namespace spark {
     //////////////picking
     ComponentPtr
     Window::pick2DAABBStyle(const unsigned int x, const unsigned int y) {
-        AC_PRINT << "pick at " << x << ", " << y;
+        //AC_PRINT << "pick at " << x << ", " << y;
         VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
         std::vector<std::pair<ComponentPtr, float> > myPickedComponentList;  //pairs of components and z
         //pick through worlds of all views
@@ -88,7 +88,7 @@ namespace spark {
                                                   myView->getCamera()->getProjectionMatrix());
             visitComponents(myVisitor, getChildByName(myView->getWorldName()));
         }
-        AC_PRINT << "collected " << myPickedComponentList.size() << " components";
+        //AC_PRINT << "collected " << myPickedComponentList.size() << " components";
         if (myPickedComponentList.size() > 0) {
             sort(myPickedComponentList.begin(), myPickedComponentList.end(), sortByZ);
             return myPickedComponentList.begin()->first;

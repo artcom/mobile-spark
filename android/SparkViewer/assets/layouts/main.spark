@@ -59,9 +59,10 @@
 
         <Transform name="CameraSlide">
             <Text name="SlideTitle" x="10" y="400" z="12" text="Camera" color="[1,1,1,1]" fontsize="16" />            
-            <Camera scaleX="0.5" scaleY="0.5"/>
+            <Camera name="camera" x="300" y="300" scaleX="0.5" scaleY="0.5"/>
         </Transform>
 
+        <Image name="nextbutton" x="20" y="20" z="0" src="assets/textures/next.png"/>
     </World>        
 
     <World name="3dworld">    
