@@ -117,6 +117,7 @@ namespace masl {
             if(myMethodId != 0) {
                 jvalue myArgs[0];
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+                AC_PRINT << "start camera capture";
             } else {
                 AC_WARNING  << "Sorry, java-startCamera not found";                
             }
@@ -133,12 +134,29 @@ namespace masl {
                 if(myMethodId != 0) {
                     jvalue myArgs[0];
                     env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+                    AC_PRINT << "stop camera capture";
                 } else {
                     AC_WARNING  << "Sorry, java-stopCamera not found";                
                 }
             }
 #endif        
                 
+    }
+    bool MobileSDK_Singleton::isCameraCapturing() {
+        bool myResult = false;
+#ifdef __ANDROID__        
+            if (env) {
+                jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+                jmethodID myMethodId = env->GetStaticMethodID(cls, "isCameraCapturing", "()Z");
+                if(myMethodId != 0) {
+                    jvalue myArgs[0];
+                    myResult = env->CallStaticBooleanMethod (cls, myMethodId, myArgs);
+                } else {
+                    AC_WARNING  << "Sorry, java-isCameraCapturing not found";                
+                }
+            }
+#endif        
+        return myResult;
     }
 
 

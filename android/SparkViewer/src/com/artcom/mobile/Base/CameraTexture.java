@@ -57,6 +57,9 @@ public class CameraTexture implements SurfaceHolder.Callback {
     public static void bindTexture() {
     	if (INSTANCE != null ) INSTANCE.bind();
     }
+    public static boolean isCapturing() {
+    	return INSTANCE._myCamera != null;
+    }
 	//-------------------------------------------------------------------------
     // returns [0]-textureID; [1]-preview width; [2]-preview height; [3]-texture width; [4]-texture height
     public static List<Integer> getTextureParams() {

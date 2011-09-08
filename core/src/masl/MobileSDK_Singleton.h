@@ -57,7 +57,7 @@ namespace masl {
             CameraInfo getCameraSpec();             
             void startCameraCapture();
             void stopCameraCapture();
-            
+            bool isCameraCapturing();
             
 #ifdef __ANDROID__
             JNIEnv * env;

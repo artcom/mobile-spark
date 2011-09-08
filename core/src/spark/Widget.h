@@ -22,6 +22,7 @@ namespace spark {
         inline void setVisible(bool theFlag) { _visible = theFlag;};
         inline bool isVisible() const { return _visible;};
         inline bool isSensible() const { return _sensible;};
+        bool isRendered() const;
         float getX() const { return _x;};
         float getY() const { return _y;};
         float getZ() const { return _z;};
