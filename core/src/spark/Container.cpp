@@ -51,4 +51,15 @@ namespace spark {
         }        
         return ComponentPtr();
     }
+
+    void
+    Container::removeChild(ComponentPtr theComponent) {
+        theComponent->deleteParent();
+        for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            if (*it == theComponent) {
+                _myChildren.erase(it);
+                break;
+            }
+        }
+    }
 }

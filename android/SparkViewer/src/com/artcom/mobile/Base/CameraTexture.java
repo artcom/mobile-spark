@@ -7,6 +7,7 @@ import java.util.List;
 import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,10 +16,10 @@ import android.view.ViewGroup.LayoutParams;
 public class CameraTexture implements SurfaceHolder.Callback {
 	
     private static CameraTexture INSTANCE;
-	private static Activity _myActivity;
+	private static Activity theActivity;
+	private static SurfaceView theSurfaceView;
 	private static GL10 gl;
 
-	private SurfaceView _mySurfaceView;
 	private SurfaceHolder _mySurfaceHolder;
 	private Camera _myCamera;
 	private int _myCamWidth, _myCamHeight, _myTextureWidth, _myTextureHeight;
@@ -37,7 +38,8 @@ public class CameraTexture implements SurfaceHolder.Callback {
 	}
 	//-------------------------------------------------------------------------
 	public static void startCamera() {
-		if (_myActivity == null) {
+		AC_Log.print("--------------------- start Cam");
+		if (theActivity == null) {
 			AC_Log.print("CameraTexure not initialized, please call init() before");
 			return;
 		}
@@ -45,11 +47,12 @@ public class CameraTexture implements SurfaceHolder.Callback {
 			AC_Log.print("CameraTexure has no openGL-context, please call initWithContext() before");
 			return;
 		}
-		init(_myActivity);
+		init(theActivity);
 		INSTANCE.start();
 	}
 	//-------------------------------------------------------------------------
     public static void closeCamera() {
+    	AC_Log.print("--------------------- close Cam");
     	if (INSTANCE != null) INSTANCE.close();
     	INSTANCE=null;
     }
@@ -58,7 +61,7 @@ public class CameraTexture implements SurfaceHolder.Callback {
     	if (INSTANCE != null ) INSTANCE.bind();
     }
     public static boolean isCapturing() {
-    	return INSTANCE._myCamera != null;
+    	return (INSTANCE != null) && (INSTANCE._myCamera != null);
     }
 	//-------------------------------------------------------------------------
     // returns [0]-textureID; [1]-preview width; [2]-preview height; [3]-texture width; [4]-texture height
@@ -75,11 +78,13 @@ public class CameraTexture implements SurfaceHolder.Callback {
     //--------- MEMBER --------------------------------------------------------
     //-------------------------------------------------------------------------
 	private CameraTexture(Activity activity) {
-		_myActivity=activity;
-		this._mySurfaceView = new SurfaceView(_myActivity);
-		_myActivity.addContentView(_mySurfaceView, new LayoutParams(1,1));
+		if (theActivity == null || theActivity != activity) {
+			theActivity=activity;
+			theSurfaceView = new SurfaceView(theActivity);
+			theActivity.addContentView(theSurfaceView, new LayoutParams(1,1));
+		}
 	}
-	//private CameraTexture() {} // hide constructor
+	private CameraTexture() {} // hide constructor
 	//-------------------------------------------------------------------------
 	private void start() {
 		if(INSTANCE != null) close(); 
@@ -87,10 +92,13 @@ public class CameraTexture implements SurfaceHolder.Callback {
 		if(_myTextureID==0) {
 			_myTextureID = createTextureID();
 		}
-		_mySurfaceHolder = _mySurfaceView.getHolder();
+		_mySurfaceHolder = theSurfaceView.getHolder();
 		_mySurfaceHolder.setType( SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS );
         _mySurfaceHolder.addCallback( this );
         _myCamera = Camera.open();
+        Parameters params = _myCamera.getParameters();
+        params.setRotation(90);
+        _myCamera.setParameters(params);
 		if ( _myCamera == null ) { 
 	        AC_Log.print( "CameraTexture: Camera is null" ); 
 	        return; 
