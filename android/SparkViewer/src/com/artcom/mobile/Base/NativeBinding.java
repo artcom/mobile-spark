@@ -133,6 +133,9 @@ public class NativeBinding {
   public static void stopCamera() {
 	  CameraTexture.closeCamera();
   }
+  public static boolean isCameraCapturing() {
+	  return CameraTexture.isCapturing();
+  }
   
 }
 

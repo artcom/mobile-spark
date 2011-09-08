@@ -16,8 +16,6 @@ namespace spark {
         virtual void prerender(MatrixStack& theCurrentMatrixStack);   
         static const char* SPARK_TYPE;             
     private:
-	    bool _myCameraCaptureStartedFlag;
-        bool _myCameraReadyFlag;
     };
 
     typedef boost::shared_ptr<Camera> CameraPtr;

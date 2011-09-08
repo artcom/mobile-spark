@@ -45,6 +45,17 @@ namespace spark {
         }
         theCurrentMatrixStack.pop();
     }
+    bool Widget::isRendered() const {
+        if (!_visible) {
+            return false;
+        } else {
+            if (getParent()) {
+                return getParent()->isRendered();
+            } else {
+                return _visible;
+            }
+        }
+    }
 
     //TODO: use visitor? 
     void Widget::render(const matrix & theProjectionMatrix) const {
