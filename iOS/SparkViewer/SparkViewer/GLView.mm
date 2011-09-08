@@ -37,6 +37,23 @@
             }
         }
         
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         [EAGLContext setCurrentContext:glContext];
         
         //create framebuffer
@@ -65,8 +82,6 @@
             NSLog(@"failed to make complete framebuffer object %x", status);
             
         }
-        
-        
         
         //DemoApp
         NSLog(@"width: %d,  height: %d ", width, height);
