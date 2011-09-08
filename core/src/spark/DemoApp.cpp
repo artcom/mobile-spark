@@ -142,13 +142,25 @@ namespace spark {
 
     void DemoApp::onCreationButton(EventPtr theEvent) {
         AC_PRINT << "on creation button";
-        /*
-        //TODO: if not available create, remove otherwise
+        ComponentPtr myTransform = _mySparkWindow->getChildByName("2dworld")->getChildByName("ObjectCreationSlide");
+        ComponentPtr myCreated = myTransform->getChildByName("created_from_code");
+        if (myCreated) {
+            boost::static_pointer_cast<spark::Container>(myTransform)->removeChild(myCreated);
+        } else {
+            //TRICK: this has to be done on main thread -> use delay animation with 0 duration achieve this
+            animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(0));
+            DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
+            myDelay->setOnFinish(masl::CallbackPtr(
+                        new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::insertCreatedComponent)));
+            animation::AnimationManager::get().play(myDelay);
+        }
+    }
+
+    void DemoApp::insertCreatedComponent() {
         ComponentPtr myTransform = _mySparkWindow->getChildByName("2dworld")->getChildByName("ObjectCreationSlide");
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(shared_from_this(), 
                 "<Rectangle name=\"created_from_code\" width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0]\"/>"); 
         myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
-        */
     }
 
     void DemoApp::onTouch(EventPtr theEvent) {
