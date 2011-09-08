@@ -4,6 +4,7 @@ package com.artcom.mobile.Base;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Bitmap;
@@ -117,27 +118,20 @@ public class NativeBinding {
 	  return bb;
   }   
   
-  public static int updateCameraTexture() {
+  public static void updateCameraTexture() {
 	  CameraTexture.bindTexture();
-	  return CameraTexture.getTextureParams()[0];
   }
   
-  public static int getCameraWidth() {
-	  return CameraTexture.getTextureParams()[1];
-  }
-  
-  public static int getCameraHeight() {
-	  return CameraTexture.getTextureParams()[2];
+  public static List<Integer> getCameraParams() {
+	  return CameraTexture.getTextureParams();
   }
   
   public static void startCamera() {
 	  CameraTexture.startCamera();
-	  //return 0;
   }
   
   public static void stopCamera() {
 	  CameraTexture.closeCamera();
-	  //return 0;
   }
   
 }

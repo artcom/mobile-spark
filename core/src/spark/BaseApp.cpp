@@ -71,11 +71,11 @@ namespace spark {
     }
     
     void BaseApp::onEvent(std::string theEventString) {
-        AC_PRINT << "a string event came in :" << theEventString;
+        //AC_PRINT << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
         myEvent->connect(_mySparkWindow);
         (*myEvent)();
-        AC_PRINT << "ate Event";
+        //AC_PRINT << "ate Event";
     }
     
     void BaseApp::onPause() {
