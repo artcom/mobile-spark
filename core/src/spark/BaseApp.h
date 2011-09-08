@@ -31,8 +31,10 @@ namespace spark {
             void renderText(std::string theMessage, int theOpenGLTextureId);
 
         private:
+#ifdef __ANDROID__
             JNIEnv * env;
             jobject obj;
+#endif
             mar::CanvasPtr _myGLCanvas;      
     };
 

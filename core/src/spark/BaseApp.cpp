@@ -84,6 +84,7 @@ namespace spark {
     }
 
     void BaseApp::onResume() {
+        AC_PRINT << "onResume yyy";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);

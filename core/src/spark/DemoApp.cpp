@@ -133,10 +133,10 @@ namespace spark {
                 _myCurrentView = 1;
                 _myViews[_myCurrentView]->setVisible(true);        
             }
-            AC_PRINT << "activate slide: " << _mySlides[_myCurrentSlide]->getName();
-            
+            AC_PRINT << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
             _mySlides[_myCurrentSlide]->setVisible(true);        
         } else {
+            AC_PRINT << ">>>>> switch views";
             _myViews[_myCurrentView]->setVisible(false);        
             _myCurrentView = 0;
             _myViews[_myCurrentSlide]->setVisible(true);        

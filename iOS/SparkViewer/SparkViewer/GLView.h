@@ -38,6 +38,7 @@
 }
 
 - (void) render:(id)sender;
+- (void) onResume;
 - (void) startAnimation;
 - (void) stopAnimation;
 

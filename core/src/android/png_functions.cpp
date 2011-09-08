@@ -138,7 +138,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
           GL_UNSIGNED_BYTE, (GLvoid*) image_data);
       rgb = false;
   } else if (color_type == PNG_COLOR_TYPE_RGB) {
-      AC_PRINT << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> no alpha";
+      AC_PRINT << "no alpha";
       //glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB,
           GL_UNSIGNED_BYTE, (GLvoid*) image_data);
