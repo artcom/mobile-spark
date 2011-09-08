@@ -60,7 +60,7 @@ namespace mar {
         }
     }
 
-    //////////////////////////////////////////////////////////////RectangleShape
+    /////////////////////////////////////////////////////////////RectangleShape
     RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight,
                                    const std::string & theTextureSrc) 
         : Shape(theTextureFlag), width_(theWidth), height_(theHeight) {
@@ -121,14 +121,8 @@ namespace mar {
             (myElement->vertexData_)[2 * _myDataPerVertex + 3] = theUV2[0];
             (myElement->vertexData_)[2 * _myDataPerVertex + 4] = theUV2[1];
             
-            (myElement->vertexData_)[3 * _myDataPerVertex + 3] = theUV1[0];
-            (myElement->vertexData_)[3 * _myDataPerVertex + 4] = theUV1[1];
-
-            (myElement->vertexData_)[4 * _myDataPerVertex + 3] = theUV3[0];
-            (myElement->vertexData_)[4 * _myDataPerVertex + 4] = theUV3[1];
-
-            (myElement->vertexData_)[5 * _myDataPerVertex + 3] = theUV2[0];
-            (myElement->vertexData_)[5 * _myDataPerVertex + 4] = theUV2[1];
+            (myElement->vertexData_)[3 * _myDataPerVertex + 3] = theUV3[0];
+            (myElement->vertexData_)[3 * _myDataPerVertex + 4] = theUV3[1];
         }    
     }
     
@@ -152,15 +146,18 @@ namespace mar {
         Shape(true), width_(theWidth), height_(theHeight), 
         leftEdge_(theLeftEdge), topEdge_(theTopEdge), rightEdge_(theRightEdge), bottomEdge_(theBottomEdge) {
         ElementPtr myElement = ElementPtr(new ElementWithTexture());
+        AC_PRINT << "create material with texture " <<  theTextureSrc;
         UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc));
         myElement->material = myMaterial;
-        elementList.push_back(myElement);
         myMaterial->createShader();
+        elementList.push_back(myElement);
 
         imageWidth_ = myMaterial->getTexture()->width_;
         imageWidth_ = imageWidth_ > 0 ? imageWidth_ : 1;
         imageHeight_ = myMaterial->getTexture()->height_;
         imageHeight_ = imageHeight_ > 0 ? imageHeight_ : 1;
+
+        AC_PRINT << " edges " << theLeftEdge << "  w&h " << width_ << "  " << height_ << "  image " << imageWidth_ << " " << imageHeight_;
         setVertexData();
         initGL();
     }
@@ -170,13 +167,15 @@ namespace mar {
     
     void NinePatchShape::setVertexData() {
         ElementPtr myElement = elementList[0];
-        _myDataPerVertex = 5;
+        _myDataPerVertex = 5; //position and texcoord
         size_t vertices_per_side = 4;
-        myElement->numVertices = 54; //9 quads * 2 triangles per quad * 3 vertices per triangle
-        float gridData[vertices_per_side * vertices_per_side][_myDataPerVertex]; //helpstructure
+        myElement->numIndices = 54; //9 quads * 2 triangles per quad * 3 vertices per triangle
+        myElement->numVertices = vertices_per_side * vertices_per_side; 
+        myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
+        myElement->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[(myElement->numIndices)]);
         for (size_t i = 0, l = vertices_per_side; i < l; ++i) {
             for (size_t j = 0, m = vertices_per_side; j < m; ++j) {
-                float myX, myY; //TODO: origin stuff?
+                float myX, myY; 
                 float myS, myT;
                 if (j== 0) {
                     myX = 0;
@@ -205,15 +204,15 @@ namespace mar {
                     myT = 1.0f;
                 }
 
-                gridData[i * vertices_per_side + j][0] = myX;
-                gridData[i * vertices_per_side + j][1] = myY;
-                gridData[i * vertices_per_side + j][2] = 0;
-                gridData[i * vertices_per_side + j][3] = myS;
-                gridData[i * vertices_per_side + j][4] = myT;
-                AC_PRINT << i << " " << j << " " << myX << " " << myY << " tex " << myS << " " << myT;
+                size_t v = i * vertices_per_side + j;
+                myElement->vertexData_[v * _myDataPerVertex + 0] = myX;
+                myElement->vertexData_[v * _myDataPerVertex + 1] = myY;
+                myElement->vertexData_[v * _myDataPerVertex + 2] = 0;
+                myElement->vertexData_[v * _myDataPerVertex + 3] = myS;
+                myElement->vertexData_[v * _myDataPerVertex + 4] = myT;
+                AC_PRINT << v << " " << myX << " " << myY << " tex " << myS << " " << myT;
             }
         }
-        myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
         int indices[] = { 0, 1, 4, 4, 1, 5,
                           1, 2, 5, 5, 2, 6,
                           2, 3, 6, 6, 3, 7,
@@ -223,10 +222,9 @@ namespace mar {
                           8, 9,12,12, 9,13,
                           9,10,13,13,10,14,
                          10,11,14,14,11,15 }; 
-        for (size_t i = 0; i < myElement->numVertices; ++i) {
-            for (size_t j = 0; j < _myDataPerVertex; ++j) {
-                (myElement->vertexData_)[i * _myDataPerVertex + j] = gridData[indices[i]][j];
-            }
+        for (size_t i = 0; i < myElement->numIndices; ++i) {
+            (myElement->indexDataVBO_)[i] = indices[i];
+            //AC_PRINT << "indices " << i << "  " << indices[i];
         }
     }
 
