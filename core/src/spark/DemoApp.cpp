@@ -45,14 +45,9 @@ namespace spark {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB); 
 
         //animation of amazone
-        ComponentPtr myComponent = _mySparkWindow->getChildByName("3dworld");
-        AC_PRINT << myComponent;
-        myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform");
-        AC_PRINT << myComponent;
-        myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
-        AC_PRINT << myComponent;
+        ComponentPtr myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
         Shape3DPtr myShape = boost::static_pointer_cast<spark::Shape3D>(myComponent);
-        WidgetPropertyAnimationPtr myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, 6.28, 9000));
+        WidgetPropertyAnimationPtr myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, M_PI * 2, 90000));
         myYRotate->setLoop(true);
         animation::AnimationManager::get().play(myYRotate);
 
