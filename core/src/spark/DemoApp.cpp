@@ -1,9 +1,5 @@
 #include "DemoApp.h"
 
-#ifdef __ANDROID__
-    #include <jni.h>
-#endif
-
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/Logger.h>
@@ -21,7 +17,7 @@
 #include "SparkComponentFactory.h"
 
 /////////////////////////////////////////////////////////////////////////App-Instance
-spark::DemoApp ourApp;
+spark::BaseAppPtr ourApp = boost::shared_ptr<spark::DemoApp>(new spark::DemoApp());
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
@@ -41,7 +37,7 @@ namespace spark {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
         //return myBaseReturn;
 
-        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::shared_ptr<DemoApp>(&ourApp), &DemoApp::onTouch));
+        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<DemoApp, boost::shared_ptr<DemoApp> >( boost::static_pointer_cast<DemoApp>(ourApp), &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB); 
 
         //add looping animations
@@ -128,71 +124,4 @@ namespace spark {
     }
 }
 
-
-#ifdef __ANDROID__
-    
-#define CALL_NATIVE(THE_CALL) \
-    std::string myMessage = ""; \
-    jclass Exception = env->FindClass("com/artcom/mobile/Base/NativeException"); \
-    try { \
-        THE_CALL; \
-    } catch(masl::Exception & ex) { \
-        AC_ERROR << "masl::Exception caught "<< ex; \
-        myMessage = ex.what() + " : " + ex.where(); \
-    } catch(std::exception & ex) { \
-        AC_ERROR << "std::exception caught "<< ex.what(); \
-        myMessage = ex.what(); \
-    } catch(...) { \
-        AC_ERROR << "unknown exception caught "; \
-        myMessage = "unknown exception caught"; \
-    } \
-    if (myMessage != "") { \
-        env->ThrowNew(Exception, myMessage.c_str()); \
-    }
-
-/////////////////////////////////////////////////////////////////////////JNI
-extern "C" {
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
-                                                                 jlong currentMillis,
-                                                                 jstring apkFile,
-                                                                 jstring layoutFile);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
-                                                                 jint width, jint height);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt);
-    
-};
-
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
-                                                             jlong currentMillis,
-                                                             jstring apkFile,
-                                                             jstring layoutFile) {
-    MobileSDK_Singleton::get().env = env;
-    MobileSDK_Singleton::get().obj = obj;
-                                                                
-    jboolean isCopy;
-    const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
-    const char* myLayoutFile = env->GetStringUTFChars(layoutFile, &isCopy);
-    CALL_NATIVE(ourApp.setup(currentMillis, myAssetPath, myLayoutFile));
-}
-
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj) {
-    CALL_NATIVE(ourApp.onPause());
-}
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
-    CALL_NATIVE(ourApp.onResume());
-}
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
-                                                             jint width, jint height) {
-    CALL_NATIVE(ourApp.onSizeChanged(width, height));
-}
-
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt )
-{
-    jboolean isCopy;
-    const char* myEvent = env->GetStringUTFChars(evt, &isCopy);
-    CALL_NATIVE(ourApp.onEvent(myEvent));
-}
-#endif
 
