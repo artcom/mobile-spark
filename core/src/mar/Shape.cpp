@@ -123,6 +123,7 @@ namespace mar {
             
             (myElement->vertexData_)[3 * _myDataPerVertex + 3] = theUV3[0];
             (myElement->vertexData_)[3 * _myDataPerVertex + 4] = theUV3[1];
+            myElement->updateCompleteVertexBuffersContent();
         }    
     }
     
