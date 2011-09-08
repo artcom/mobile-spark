@@ -4,13 +4,12 @@
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <mar/Canvas.h>
+#ifdef __ANDROID__
+#include "JNIBinding.h"
+#endif
 
 #include "Window.h"
 #include "EventFactory.h"
-
-#ifdef __ANDROID__
-    #include <jni.h>
-#endif
 
 
 namespace spark {
@@ -31,8 +30,6 @@ namespace spark {
             void renderText(std::string theMessage, int theOpenGLTextureId);
 
         private:
-            JNIEnv * env;
-            jobject obj;
             mar::CanvasPtr _myGLCanvas;      
     };
 
