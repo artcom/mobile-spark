@@ -37,7 +37,6 @@ public class SparkViewerActivity extends Activity {
         NativeBinding.onEvent(myEvent);
         CameraTexture.closeCamera();
         AC_Log.print("----------------------SparkViewer paused");
-        onDestroy(); 
     }
     @Override protected void onStop() {
         super.onStop();
