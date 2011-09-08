@@ -66,12 +66,15 @@ namespace mar {
         colorHandle = glGetUniformLocation(shaderProgram, "a_color");
     }
 
-
-    //////////////////////////////////////////////////// Texture
     //////////////////////////////////////////////////// UnlitTexturedMaterial
     UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) {
         _mySrc = theSrc;
         _myTexture = TexturePtr(new Texture());
+
+        if (_mySrc != "") {
+            loadTextureFromPNG(_mySrc, _myTexture);  
+            transparency_ = _myTexture->transparency_;
+        }
     }
 
     UnlitTexturedMaterial::~UnlitTexturedMaterial() {
@@ -89,12 +92,7 @@ namespace mar {
     }
     void UnlitTexturedMaterial::initGL() {
         Material::initGL();
-        if (_mySrc != "") {
-            loadTextureFromPNG(_mySrc, _myTexture);  
-            transparency_ = _myTexture->transparency_;
-            glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
-        }
-
+        glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
     }
     
 }
