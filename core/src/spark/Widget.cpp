@@ -6,7 +6,7 @@ namespace spark {
     Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
         : Container(theApp, theXMLNode, theParent), _alpha(1.0), _visible(true), _sensible(true) 
     { 
-        _x = _myXMLNode->getAttributeAs<float>("x");
+        _x = _myXMLNode->getAttributeAs<float>("x", 0);
         _y = _myXMLNode->getAttributeAs<float>("y", 0);
         _z = _myXMLNode->getAttributeAs<float>("z", 0);
         _scaleX = _myXMLNode->getAttributeAs<float>("scaleX",1);
