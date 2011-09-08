@@ -35,6 +35,7 @@ namespace spark {
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
         ComponentPtr getRoot();
         const ComponentPtr & getParent() const {return _myParent; };
+        virtual bool isRendered() const { return true;}
 
         virtual void testEvent(EventPtr theEvent) {AC_PRINT<<"event callback";};
     protected:

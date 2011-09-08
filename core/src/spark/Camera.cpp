@@ -16,11 +16,11 @@ namespace spark {
     const char * Camera::SPARK_TYPE = "Camera";
 
     Camera::Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent), _myCameraCaptureStartedFlag(false), _myCameraReadyFlag(false) {
+        ShapeWidget(theApp, theXMLNode, theParent) {
         
         setShape(ShapeFactory::get().createRectangle(true));
 
-        getShape()->setDimensions(1, 1);
+        getShape()->setDimensions(500, 500);
     }
 
     Camera::~Camera() {
@@ -29,33 +29,29 @@ namespace spark {
     void 
     Camera::prerender(MatrixStack& theCurrentMatrixStack) {
         ShapeWidget::prerender(theCurrentMatrixStack);    
-        if (isVisible()) {
-    		if  (!_myCameraCaptureStartedFlag) {
-    			_myCameraCaptureStartedFlag = true;
+        //AC_PRINT << "camera is rendered : " << isRendered();
+        //AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
+        if (isRendered()) {
+            if (!MobileSDK_Singleton::get().isCameraCapturing()) {
     			MobileSDK_Singleton::get().startCameraCapture();
-    		}
-    		if (!_myCameraReadyFlag) {
                 masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
                 if (myCameraInfo.textureID != 0) {
-        			_myCameraReadyFlag = 1;
         			float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
         			float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
             		UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         			myMaterial->getTexture()->setTextureId(myCameraInfo.textureID);
         			getShape()->setDimensions(width, height);
-                    getShape()->setTexCoords(vector2(0,0), vector2(width/1024,0), vector2(0,height/512), vector2(width/1024,height/512));
+                    getShape()->setTexCoords(vector2(0,0), vector2(width/myCameraInfo.texturewidth,0), 
+                                                     vector2(0,height/myCameraInfo.textureheight), 
+                                                     vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight));
         			AC_PRINT<< " ####### Camera width x height : " << width << " x " << height; 
                 }
-    		}
-    		if (_myCameraReadyFlag) {
-    		    MobileSDK_Singleton::get().updateCameraTexture();
-    		}                    
-            //myMaterial->transparency_ = true;
+            }
+		    MobileSDK_Singleton::get().updateCameraTexture();
         } else {
-		if  (_myCameraCaptureStartedFlag) {
-			_myCameraCaptureStartedFlag = false;
-			MobileSDK_Singleton::get().stopCameraCapture();
-		}
-	}
+            if (MobileSDK_Singleton::get().isCameraCapturing()) {
+    			//MobileSDK_Singleton::get().stopCameraCapture();
+            }
+        }
     }    
 }
