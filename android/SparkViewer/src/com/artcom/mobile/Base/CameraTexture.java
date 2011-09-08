@@ -8,7 +8,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup.LayoutParams;
@@ -16,29 +15,37 @@ import android.view.ViewGroup.LayoutParams;
 public class CameraTexture implements SurfaceHolder.Callback {
 	
     private static CameraTexture INSTANCE;
+	private static Activity _myActivity;
+	private static GL10 gl;
+
 	private SurfaceView _mySurfaceView;
 	private SurfaceHolder _mySurfaceHolder;
 	private Camera _myCamera;
-	private Activity _myActivity;
 	private int _myCamWidth, _myCamHeight, _myTextureWidth, _myTextureHeight;
     private int _myTextureID;
 	private int[] _myCameraTextures;
 	private static byte _myCamData[] = new byte[0];
-	private GL10 gl;
+	private boolean _newFrameAvailable=false;
 	
 	//--------- STATIC --------------------------------------------------------
 	public static CameraTexture init(Activity activity) {
-		AC_Log.print("static init _________________________");
 		if(INSTANCE==null) INSTANCE = new CameraTexture(activity);
 	    return INSTANCE;
 	}
 	public static void initWithContext(GL10 glContext) {
-		if (INSTANCE == null) return;
-		INSTANCE.gl=glContext;
+		gl=glContext;
 	}
 	//-------------------------------------------------------------------------
 	public static void startCamera() {
-		if (INSTANCE == null) return;
+		if (_myActivity == null) {
+			AC_Log.print("CameraTexure not initialized, please call init() before");
+			return;
+		}
+		if (gl==null) {
+			AC_Log.print("CameraTexure has no openGL-context, please call initWithContext() before");
+			return;
+		}
+		init(_myActivity);
 		INSTANCE.start();
 	}
 	//-------------------------------------------------------------------------
@@ -65,14 +72,15 @@ public class CameraTexture implements SurfaceHolder.Callback {
     //--------- MEMBER --------------------------------------------------------
     //-------------------------------------------------------------------------
 	private CameraTexture(Activity activity) {
-		this._myActivity=activity;
+		_myActivity=activity;
 		this._mySurfaceView = new SurfaceView(_myActivity);
-		this._myActivity.addContentView(_mySurfaceView, new LayoutParams(1,1));
+		_myActivity.addContentView(_mySurfaceView, new LayoutParams(1,1));
 	}
+	//private CameraTexture() {} // hide constructor
 	//-------------------------------------------------------------------------
 	private void start() {
-		if(INSTANCE != null)close(); 
-		if(this.gl == null) return; 
+		if(INSTANCE != null) close(); 
+		if(gl == null) return; 
 		if(_myTextureID==0) {
 			_myTextureID = createTextureID();
 		}
@@ -81,13 +89,13 @@ public class CameraTexture implements SurfaceHolder.Callback {
         _mySurfaceHolder.addCallback( this );
         _myCamera = Camera.open();
 		if ( _myCamera == null ) { 
-	        Log.e( "CameraTexture", "Camera is null" ); 
+	        AC_Log.print( "CameraTexture: Camera is null" ); 
 	        return; 
 	    }
 	    try { 
         	_myCamera.setPreviewDisplay( _mySurfaceHolder );
         } catch ( Throwable t ) { 
-        	Log.e( "CameraTexture", "Exception in setPreviewDisplay()", t );
+        	AC_Log.print( "CameraTexture: Exception in setPreviewDisplay()");
         }
     	_myCamWidth = _myCamera.getParameters().getPreviewSize().width;
 		_myCamHeight= _myCamera.getParameters().getPreviewSize().height;
@@ -97,14 +105,19 @@ public class CameraTexture implements SurfaceHolder.Callback {
                 // preview callback:
 				public void onPreviewFrame( byte[] data, Camera camera ) {
                 	_myCamData=data;
+                	_newFrameAvailable = true;
                 }});
 		 _myCamera.startPreview();
     }
 	//-------------------------------------------------------------------------
     public void bind() {
-    	gl.glBindTexture(GL10.GL_TEXTURE_2D, _myTextureID);
-    	gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_LUMINANCE, _myTextureWidth, _myTextureHeight, 0, GL10.GL_LUMINANCE, GL10.GL_UNSIGNED_BYTE, null);
-		gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, _myCamWidth, _myCamHeight, GL10.GL_LUMINANCE, GL10.GL_UNSIGNED_BYTE, ByteBuffer.wrap(_myCamData));
+    	if (!_newFrameAvailable) return; // only bind if new picture was token 
+   		_newFrameAvailable = false;
+   		gl.glBindTexture(GL10.GL_TEXTURE_2D, _myTextureID);
+   		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_LUMINANCE, _myTextureWidth, _myTextureHeight, 
+   					0, GL10.GL_LUMINANCE, GL10.GL_UNSIGNED_BYTE, null);
+   		gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, _myCamWidth, _myCamHeight, GL10.GL_LUMINANCE, 
+						   GL10.GL_UNSIGNED_BYTE, ByteBuffer.wrap(_myCamData));
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
     }
 	//-------------------------------------------------------------------------
@@ -132,7 +145,7 @@ public class CameraTexture implements SurfaceHolder.Callback {
 	//-------------------------------------------------------------------------
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) { }
 	//-------------------------------------------------------------------------
-    public void surfaceCreated(SurfaceHolder holder) { start(); }
+    public void surfaceCreated(SurfaceHolder holder) { startCamera(); }
 	//-------------------------------------------------------------------------
   	public void surfaceDestroyed(SurfaceHolder holder) { closeCamera(); }
 } //end
