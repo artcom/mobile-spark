@@ -57,7 +57,6 @@ namespace spark {
         }
     }
 
-    //TODO: use visitor? 
     void Widget::render(const matrix & theProjectionMatrix) const {
     }
 }

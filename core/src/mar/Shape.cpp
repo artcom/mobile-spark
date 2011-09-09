@@ -15,9 +15,28 @@ namespace mar {
     Shape::~Shape() {
     }
 
+
+#if __APPLE__
     void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
-                                                      it != elementList.end(); ++it) {
+             it != elementList.end(); ++it) {
+            
+            ElementPtr element = *it;   
+            element->material->loadShader(theMatrix);
+            
+            //Using Vertex Array Objects. not supported by android.
+            glBindVertexArrayOES(element->vertexArrayObject);
+            glDrawElements(GL_TRIANGLES, element->numIndices, GL_UNSIGNED_SHORT, (void*)0);
+            glBindVertexArrayOES(0);
+            checkGlError("glDrawElements");
+        }
+    }
+#endif
+    
+#ifdef __ANDROID__
+    void Shape::render(const matrix & theMatrix) const {
+        for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
+             it != elementList.end(); ++it) {
             ElementPtr element = *it;   
             element->loadData(theMatrix);
             glDrawElements(GL_TRIANGLES, element->numIndices, GL_UNSIGNED_SHORT, 0);
@@ -25,6 +44,7 @@ namespace mar {
             checkGlError("glDrawElements");
         }
     }
+#endif
     
     void Shape::initGL() {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
@@ -33,6 +53,7 @@ namespace mar {
             ElementPtr element = *it;
             if (element && element->material ) {
                  element->material->initGL();
+                 glLinkProgram(element->material->shaderProgram);
             }
             element->createVertexBuffers();
         }
@@ -78,6 +99,8 @@ namespace mar {
         myMaterial->createShader();
         setVertexData();
         initGL();
+        _myBoundingBox.max[0] = theWidth;
+        _myBoundingBox.max[1] = theHeight;
     }
 
     RectangleShape::~RectangleShape() {
@@ -159,6 +182,8 @@ namespace mar {
 
         setVertexData();
         initGL();
+        _myBoundingBox.max[0] = theWidth;
+        _myBoundingBox.max[1] = theHeight;
     }
 
     NinePatchShape::~NinePatchShape() {

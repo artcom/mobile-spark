@@ -40,13 +40,14 @@ namespace spark {
     void 
     Window::onTouch(EventPtr theEvent) { 
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
+        AC_INFO<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
         ComponentPtr myPicked = pick2DAABBStyle(myEvent->getX(), myEvent->getY());
         if (myPicked) {
             EventPtr myEvent = EventPtr(new TouchEvent(TouchEvent::PICKED, myPicked));
             (*myEvent)();
             AC_PRINT << "______________________________________picked " << myPicked->getName();
         } else {
-            AC_PRINT << "nothing picked";
+            AC_TRACE << "nothing picked";
         }
     }
 
@@ -63,7 +64,7 @@ namespace spark {
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             if (myView->isVisible()) {
-                //AC_PRINT << "render with : " << _myWidth << "/" << _myHeight;
+                AC_DEBUG << "render with : " << _myWidth << "/" << _myHeight;
                 myView->activate(_myWidth, _myHeight);
                 // find world and render it
                 myView->renderWorld(getChildByName(myView->getWorldName()));
@@ -77,7 +78,7 @@ namespace spark {
     //////////////picking
     ComponentPtr
     Window::pick2DAABBStyle(const unsigned int x, const unsigned int y) {
-        //AC_PRINT << "pick at " << x << ", " << y;
+        AC_DEBUG << "pick at " << x << ", " << y;
         VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
         std::vector<std::pair<ComponentPtr, float> > myPickedComponentList;  //pairs of components and z
         //pick through worlds of all views
@@ -88,7 +89,7 @@ namespace spark {
                                                   myView->getCamera()->getProjectionMatrix());
             visitComponents(myVisitor, getChildByName(myView->getWorldName()));
         }
-        //AC_PRINT << "collected " << myPickedComponentList.size() << " components";
+        AC_DEBUG << "collected " << myPickedComponentList.size() << " components";
         if (myPickedComponentList.size() > 0) {
             sort(myPickedComponentList.begin(), myPickedComponentList.end(), sortByZ);
             return myPickedComponentList.begin()->first;
