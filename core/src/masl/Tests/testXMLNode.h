@@ -122,7 +122,7 @@ namespace masl {
                 XMLNodePtr myXMLNode2(new XMLNode(root_node2));
                 xmlFreeDoc(doc);
 
-                ENSURE_EQUAL(std::string((const char*)root_node2->name), std::string("Window"));  //why is this possible???
+                //ENSURE_EQUAL(std::string((const char*)root_node2->name), std::string("Window"));  //why is this possible??? No, it's not possible!
 
                 ENSURE_MSG(myXMLNode2, "XMLNode should not be null");
                 ENSURE_EQUAL(myXMLNode2->nodeName, std::string("Window"));
@@ -135,7 +135,7 @@ namespace masl {
                 ENSURE_MSG(myXMLNode, "XMLNode should not be null");
                 ENSURE_EQUAL(myXMLNode->nodeName, std::string("document"));
 
-                ENSURE_EQUAL(std::string((const char*)root_node2->name), std::string("Window"));  //this is not possible after deleting the document
+                //ENSURE_EQUAL(std::string((const char*)root_node2->name), std::string("Window"));  //this is not possible after deleting the document
             }
     };    
 
