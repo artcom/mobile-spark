@@ -19,10 +19,10 @@ public class SparkViewerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CameraTexture.init(this);
+        parseEnvironmentVariables();
         AC_Log.setTopLevelTag(LOG_TAG);
-        String myVerbosity = System.getenv(GLOBAL_VERBOSITY_ENV);
         AC_Log.setSeverity(Severity.SEV_WARNING);
-        AC_Log.print("SparkViewer created, ready to call native [cpp logger]. " + myVerbosity);
+        AC_Log.print("SparkViewer created, ready to call native [cpp logger]. ");
         mView = new ASLOpenGLView(getApplication(), !_mySparkWorldIsLoaded);        
         setContentView(mView);         
     }
@@ -50,6 +50,23 @@ public class SparkViewerActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         mView.onResume();
+        String myVerbosity = System.getenv("ANDROID_LOG_TAGS");
+        AC_Log.setSeverity(Severity.SEV_WARNING);
+        AC_Log.print("severity: " + myVerbosity);
         AC_Log.print("------------------------SparkViewer resumed");        
     }    
+
+    private void parseEnvironmentVariables() {
+        /*Bundle extras = this.getIntent().getExtras();
+        if ( extras != null ) {
+            String myEnvVar = extras.getString("env_0");
+            for (int i = 1; myEnvVar != null; ++i) {
+                _myEnvironmentVariables
+            }
+            if ( extras.containsKey ( GLOBAL_VERBOSITY_ENV ) ) {
+                AC_Log.print ( GLOBAL_VERBOSITY_ENV + "=" + extras.getString ( GLOBAL_VERBOSITY_ENV ) );
+            }
+        }*/
+    }
+    
 }
