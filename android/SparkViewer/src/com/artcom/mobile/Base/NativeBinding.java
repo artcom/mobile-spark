@@ -53,7 +53,8 @@ public class NativeBinding {
 	textPaint.setAntiAlias(true);
 	//textPaint.setShadowLayer(3, 0, 0, Color.WHITE);
 	textPaint.setSubpixelText(true);
-	
+	textPaint.setTextAlign(Paint.Align.LEFT);
+			
 	Rect myRect = new Rect(); 
 	textPaint.getTextBounds(theMessage, 0, theMessage.length(), myRect);
 	int myTextWidth = myRect.right;
