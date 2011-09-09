@@ -16,6 +16,8 @@ namespace spark {
         const vector2 & getTextSize() const { return _myTextSize; }
         static const char* SPARK_TYPE;             
     private:
+        void build();
+        
         std::string _myText;
         bool _myDirtyFlag;
         int _myFontSize;

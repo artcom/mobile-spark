@@ -16,7 +16,7 @@
         </Controls>
 
         <Transform name="RectangleSlide">
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Rectangles" color="[1,1,1,1]" fontsize="16" />
+            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Rectangles" color="[1,1,1,1]" fontsize="36" />
             <Transform name="transform" x="170" y="170" rotationZ="0.3">
                 <Rectangle name="blueObject" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
                 <Rectangle name="redObject" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
@@ -25,13 +25,13 @@
         </Transform>
 
         <Transform name="ImagesSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Images" color="[1,1,1,1]" fontsize="16" />
+            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Images" color="[1,1,1,1]" fontsize="36" />
             <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="assets/textures/texture.png"/>
             <Image name="transparent_image" x="250" y="250" z="1" src="assets/textures/transparenttexture.png"/>
         </Transform>
 
         <Transform name="AnimatedRectangleSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="AnimatedRectangle" color="[1,1,1,1]" fontsize="16" />
+            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="AnimatedRectangle" color="[1,1,1,1]" fontsize="36" />
             <Text name="SlideTitle" sensible="false" x="10" y="350" z="13" text="touch screen to animate" color="[0,0,0,1]" fontsize="10" />
             <Transform name="transform" x="170" y="170" rotationZ="0.3">
                 <Rectangle name="blueObject" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
@@ -41,7 +41,7 @@
         </Transform>
 
         <Transform name="3DSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="3D" color="[1,1,1,1]" fontsize="16" />
+            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="3D" color="[1,1,1,1]" fontsize="36" />
             <Transform name="transform" x="100" y="10" >
                 <Transform name="rotatetransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
                     <Shape3D name="funnyShape" src="/model"/>
@@ -50,19 +50,19 @@
         </Transform>
 
         <Transform name="TextSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Text" color="[1,1,1,1]" fontsize="16" />
+            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Text" color="[1,1,1,1]" fontsize="36" />
             <Text name="testtextred" z="12" text="Roter Text" color="[1,0,0,1]" fontsize="16" />
             <Text name="testtextgreen" y="160" z="13" text="Text" color="[0,1,0,1]" fontsize="32"/>
         </Transform>    
 
         <Transform name="ObjectCreationSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Component Creation" color="[1,1,1,1]" fontsize="16" />
-            <Text name="SlideTitle" sensible="false" x="10" y="350" z="13" text="press button to create component from code" color="[0,0,0,1]" fontsize="10" />
+            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Component Creation" color="[1,1,1,1]" fontsize="36" />
+            <Text name="SlideTitle2" sensible="false" x="10" y="350" z="13" text="press button to create component from code" color="[0,0,0,1]" fontsize="10" />
             <NinePatch name="creationbutton" x="20" y="400" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
         </Transform>
 
         <Transform name="NinePatchSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="NinePatch" color="[1,1,1,1]" fontsize="16" />
+            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="NinePatch" color="[1,1,1,1]" fontsize="36" />
             <NinePatch name="button_normal" x="40" y="100" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
             <NinePatch name="button_normal" x="40" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_roll.png"/>
             <NinePatch name="button_normal" x="40" y="300" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_visited.png"/>
@@ -70,7 +70,7 @@
         </Transform>
 
         <Transform name="CameraSlide">
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Camera" color="[1,1,1,1]" fontsize="16" />            
+            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Camera" color="[1,1,1,1]" fontsize="36" />            
             <Camera name="camera" x="150" y="10" scaleX="0.5" scaleY="0.5">
                 <Image name="border" width="640" height="480" src="assets/textures/rahmen_schwarz.png" z="1"/>
             </Camera>

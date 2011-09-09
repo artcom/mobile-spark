@@ -24,6 +24,7 @@ namespace spark {
         
         setShape(ShapeFactory::get().createRectangle(true,500,500));
         _myDirtyFlag = true;
+        build();
     }
 
     Text::~Text() {
@@ -38,16 +39,21 @@ namespace spark {
     void 
     Text::prerender(MatrixStack& theCurrentMatrixStack) {
         ShapeWidget::prerender(theCurrentMatrixStack);    
+        build();
+    }    
+    
+    void
+    Text::build() {
         if (_myDirtyFlag) {
             _myDirtyFlag = false;
             UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
             TextInfo myTextInfo = MobileSDK_Singleton::get().renderText(_myText, myMaterial->getTexture()->getTextureId(), _myFontSize, _myTextColor);                                                  
             _myTextSize[0] = myTextInfo.width;
             _myTextSize[1] = myTextInfo.height;
-			getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
-			AC_PRINT << "rendered text :'" << _myText << "' has size: " << _myTextSize[0] << "/" << _myTextSize[1];
+    		getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
+    		AC_PRINT << "rendered text :'" << _myText << "' has size: " << _myTextSize[0] << "/" << _myTextSize[1];
             myMaterial->getTexture()->setTextureId(myTextInfo.textureID);                    
             myMaterial->transparency_ = true;
-        }
-    }    
+        }        
+    }
 }
