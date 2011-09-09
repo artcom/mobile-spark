@@ -1,2 +1,5 @@
 <?xml version="1.0"?>
-<Image name="nextbutton" x="20" y="20" z="20" src="assets/textures/next.png"/>
+<Transform name="controls">
+    <Image name="backbutton" src="assets/textures/back.png"/>
+    <Image name="nextbutton" x="100" src="assets/textures/next.png"/>
+</Transform>

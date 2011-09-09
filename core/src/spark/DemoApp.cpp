@@ -48,8 +48,10 @@ namespace spark {
 
         //button callbacks
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
-        spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onNextButton));
+        spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onControlButton));
+        ComponentPtr myBackButton = my2DWorld->getChildByName("backbutton", true);
         ComponentPtr myNextButton = my2DWorld->getChildByName("nextbutton", true);
+        myBackButton->addEventListener(TouchEvent::PICKED, myPickedCB);
         myNextButton->addEventListener(TouchEvent::PICKED, myPickedCB);
         spark::EventCallbackPtr myCreationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onCreationButton));
         ComponentPtr myCreationButton = my2DWorld->getChildByName("creationbutton", true);
@@ -101,7 +103,7 @@ namespace spark {
         const VectorOfComponentPtr & myChildren = myContainer->getChildrenByType(Transform::SPARK_TYPE);
         for (size_t i = 0; i < myChildren.size(); i++) {
             TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(myChildren[i]);
-            if (myTransform) {
+            if (myTransform && myTransform->getName().find("Slide") != std::string::npos) {
                 _mySlides.push_back(myTransform);
                 myTransform->setVisible(false);
                 myTransform->setSensible(false);
@@ -124,14 +126,12 @@ namespace spark {
         return myBaseReturn;
     }
 
-    void DemoApp::onNextButton(EventPtr theEvent) {
-        AC_PRINT << "on next button";
+    void DemoApp::onControlButton(EventPtr theEvent) {
+        AC_PRINT << "on control button";
         _mySlides[_myCurrentSlide]->setVisible(false);
         _mySlides[_myCurrentSlide]->setSensible(false);
-        _myCurrentSlide++;
-        if (_myCurrentSlide >= _mySlides.size()) {
-            _myCurrentSlide = 0;
-        }
+        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + 
+                          ( theEvent->getTarget()->getName() == "backbutton" ? -1 : +1)) % _mySlides.size();
         AC_PRINT << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
         _mySlides[_myCurrentSlide]->setVisible(true);        
         _mySlides[_myCurrentSlide]->setSensible(true);        

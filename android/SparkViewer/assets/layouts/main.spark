@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Window name="ourWindow" fullscreen="true" clearColor="[0.2,0.2,0.5,1]">
     <Template name="Controls" src="/controls.spark"/>
-    
+
     <!-- 3dworld provides 3d background animation and should therefore be rendered first-->
     <View name="3dView" world="3dworld" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
 
@@ -10,6 +10,8 @@
 
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
+
+        <Controls x="20" y="20" z="20"/>
 
         <Transform name="RectangleSlide">
             <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Rectangles" color="[1,1,1,1]" fontsize="16" />
@@ -73,7 +75,7 @@
             <!--Camera name="camera" x="0" y="600" scaleX="0.5" scaleY="0.5"/-->
         </Transform>
         
-        <Controls/>
+
     </World>        
 
     <World name="3dworld">    
