@@ -19,6 +19,10 @@ namespace spark {
             void onCreationButton(EventPtr theEvent);
             void onTouch(EventPtr theEvent);
             void insertCreatedComponent();
+            void onSizeChanged(int theWidth, int theHeight);
+
+
+            void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
 
             std::vector<TransformPtr> _mySlides;
             std::vector<ViewPtr> _myViews;

@@ -19,29 +19,28 @@ public class ASLOpenGLView extends GLSurfaceView {
     private EGLRenderer myRenderer;
     private int width;
     private int height;
+    private EventManager eventManager;
 
     public ASLOpenGLView(Context context, boolean firstTime) {
         super(context);
         myRenderer = new EGLRenderer(context, firstTime);
         init();        
-        setKeepScreenOn(true);        
+        setKeepScreenOn(true);   
     }
 
     @Override
     public void onSizeChanged (int w, int h, int oldw, int oldh) {
         NativeBinding.onSizeChanged(w,h);
+        eventManager.onSizeChanged(w,h);
         width = w;
         height = h;
     }
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        AC_Log.debug("View.onTouchEvent");
-        String myEvent = "<TouchEvent type='tap' x='" + event.getX() + "' y='" + (height - event.getY()) + "'/>";
-        NativeBinding.onEvent(myEvent);
-        return super.onTouchEvent(event);
+    	return eventManager.dumpTouchEvent(event);
     }
-    
+   
     private void init() {
 
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
@@ -53,6 +52,7 @@ public class ASLOpenGLView extends GLSurfaceView {
         setEGLConfigChooser(new AndroidEGLConfigChooser(AndroidEGLConfigChooser.ConfigType.BEST, false));
         setEGLContextFactory(new ContextFactory());
         setRenderer(myRenderer);
+        eventManager = new EventManager();
     }
 
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {

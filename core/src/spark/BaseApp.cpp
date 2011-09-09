@@ -61,7 +61,7 @@ namespace spark {
     }
 
     void BaseApp::onSizeChanged(int theWidth, int theHeight) {
-        //AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
+        AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
         if (_mySparkWindow) {
             _mySparkWindow->onSizeChanged(theWidth, theHeight);
         }
