@@ -14,6 +14,8 @@ namespace spark {
         Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Camera();    
         virtual void prerender(MatrixStack& theCurrentMatrixStack);   
+        virtual void onPause();
+        
         static const char* SPARK_TYPE;             
     private:
     };

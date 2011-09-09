@@ -3,7 +3,7 @@
 
 
 #include <boost/smart_ptr/shared_ptr.hpp>
-#include <mar/Canvas.h>
+//#include <mar/Canvas.h>
 #ifdef __ANDROID__
 #include "JNIBinding.h"
 #endif
@@ -22,7 +22,7 @@ namespace spark {
             virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
             virtual void onFrame(EventPtr theEvent);
             virtual void onSizeChanged(int theWidth, int theHeight);
-            virtual void onPause();
+            virtual void onPause(EventPtr theEvent);
             virtual void onResume();
             virtual void onEvent(std::string theEventString);
 
@@ -30,7 +30,7 @@ namespace spark {
             void renderText(std::string theMessage, int theOpenGLTextureId);
 
         private:
-            mar::CanvasPtr _myGLCanvas;      
+            //mar::CanvasPtr _myGLCanvas;      
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;

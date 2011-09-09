@@ -30,6 +30,12 @@ namespace spark {
     }
     
     void 
+    Text::onResume() {
+        ShapeWidget::onResume();        
+        _myDirtyFlag = true;
+    }
+    
+    void 
     Text::prerender(MatrixStack& theCurrentMatrixStack) {
         ShapeWidget::prerender(theCurrentMatrixStack);    
         if (_myDirtyFlag) {
