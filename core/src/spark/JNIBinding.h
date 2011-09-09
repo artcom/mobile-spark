@@ -3,7 +3,7 @@
 
 #ifdef __ANDROID__
     #include <jni.h>
-#endif
+
 
 #define CALL_NATIVE(THE_CALL) \
     std::string myMessage = ""; \
@@ -36,5 +36,5 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt);
     
 };
-
+#endif
 #endif
