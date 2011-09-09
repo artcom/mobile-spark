@@ -5,20 +5,25 @@ import android.view.MotionEvent;
 public class EventManager {
 	
 	private int mode=0; // 0 - none; 1-pan; 2-TwofingerTap; 3-pinch; 4-rotate
+	private int width, height;
 	private long startTime, lastTapTime;
-	private float startX, startY, dx, dy, fingerDistance, fingerDistanceStart;
+	private int startX, startY, dx, dy, fingerDistance, fingerDistanceStart;
 	
+	public void onSizeChanged(int width, int height) {
+		this.width = width;
+		this.height =height;
+	}
 	
 	public boolean dumpTouchEvent(MotionEvent event) {
-			dx = event.getX()-startX;
-			dy = event.getY()-startY;
+			dx = (int)event.getX()-startX;
+			dy = height - (int)event.getY()-startY;
 			long timeNow  = System.currentTimeMillis();
 			switch(event.getAction() & MotionEvent.ACTION_MASK) {
 				case MotionEvent.ACTION_DOWN:
 					startTime = System.currentTimeMillis();
 					mode=0;
-					startX = event.getX();
-					startY = event.getY();
+					startX = (int)event.getX();
+					startY = height - (int)event.getY();
 					break;
 				case MotionEvent.ACTION_UP:
 					if (timeNow - startTime < 400) {
@@ -57,7 +62,7 @@ public class EventManager {
 					}
 					if (mode == 3) {
 						fingerDistance = getFingerDistance(event);
-						pinchHandler();
+						if(fingerDistance>1) pinchHandler();
 						break;
 					}
 					if (mode == 4) {
@@ -82,10 +87,10 @@ public class EventManager {
 			return true;
 		}
 		//-------------------------------------------------------------------------
-		private float getFingerDistance(MotionEvent event) {
+		private int getFingerDistance(MotionEvent event) {
 			float dx2 = event.getX(0) - event.getX(1);
 			float dy2 = event.getY(0) - event.getY(1);
-			return  (float) Math.sqrt(dx2*dx2 + dy2*dy2);
+			return  (int) Math.sqrt(dx2*dx2 + dy2*dy2);
 		}
 		//-------------------------------------------------------------------------
 		private float getRotation(MotionEvent event) {
@@ -94,22 +99,32 @@ public class EventManager {
 		//-------------------------------------------------------------------------
 		private void singleTapHandler() {
 			AC_Log.print(" ########### single tap: " + startX + ", " + startY);
+			String myEvent = "<TouchEvent type='tap' x='" + startX + "' y='" + startY + "'/>";
+	        NativeBinding.onEvent(myEvent);
 		}
 		//-------------------------------------------------------------------------
 		private void doubleTapHandler() {
 			AC_Log.print(" ########### double tap: " + startX + ", " + startY);
+			String myEvent = "<TouchEvent type='doubleTap' x='" + startX + "' y='" + startY + "'/>";
+	        NativeBinding.onEvent(myEvent);
 		}
 		//-------------------------------------------------------------------------
 		private void longPressedHandler() {
 			AC_Log.print(" ########### longPressed: " + startX + ", " + startY);
+			String myEvent = "<TouchEvent type='longPressed' x='" + startX + "' y='" + startY + "'/>";
+	        NativeBinding.onEvent(myEvent);
 		}
 		//-------------------------------------------------------------------------
 		private void panHandler() {
 			AC_Log.print(" ########### pan: " + startX + ", " + startY + " translate: " + dx + ", " + dy);
+			String myEvent = "<GestureEvent type='pan' x='" + startX + "' y='" + startY + "' dx='" + dx + "' dy='"+ dy + "'/>";
+	        NativeBinding.onEvent(myEvent);
 		}
 		//-------------------------------------------------------------------------
 		private void pinchHandler() {
-			AC_Log.print(" ########### pinch: factor" + fingerDistance/fingerDistanceStart);
+			AC_Log.print(" ########### pinch: factor: " + (float)fingerDistance/fingerDistanceStart);
+			String myEvent = "<GestureEvent type='pinch' scale='" + (float)(fingerDistance)/fingerDistanceStart + "'/>";
+	        NativeBinding.onEvent(myEvent);
 		}
 		//-------------------------------------------------------------------------
 		private void rotationHandler() {
@@ -118,10 +133,14 @@ public class EventManager {
 		//-------------------------------------------------------------------------
 		private void swipeLeftHandler() {
 			AC_Log.print(" ########### swipe left");
+			String myEvent = "<GestureEvent type='swipe' direction='left'/>";
+	        NativeBinding.onEvent(myEvent);
 		}
 		//-------------------------------------------------------------------------
 		private void swipeRightHandler() {
 			AC_Log.print(" ########### swipe right");
+			String myEvent = "<GestureEvent type='swipe' direction='right'/>";
+	        NativeBinding.onEvent(myEvent);
 		}
 
 }
