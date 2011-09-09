@@ -49,15 +49,17 @@ namespace spark {
     
     void
     View::renderWorld(ComponentPtr theWorld) {
-        ensureCamera();
+       ensureCamera();
         WidgetPtr myWorld = boost::static_pointer_cast<spark::Widget>(theWorld);
         myWorld->prerender(matrixStack);
         RenderList myRenderList; 
         CollectVisibleNodesVisitor myVisitor(myRenderList);
         visitComponents(myVisitor, myWorld);
         sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
+        
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
             ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(it->first);
+            AC_DEBUG << " View::renderWorld render: " << it->first->getName();
             it->first->render(_myCamera->getProjectionMatrix());
         }
     }

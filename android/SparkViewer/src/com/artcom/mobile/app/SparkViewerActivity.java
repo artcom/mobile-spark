@@ -36,7 +36,6 @@ public class SparkViewerActivity extends Activity {
     @Override protected void onPause() {
         super.onPause();
         mView.onPause();
-        NativeBinding.onPause();
         String myEvent = "<StageEvent type='pause'/>";
         NativeBinding.onEvent(myEvent);
         CameraTexture.closeCamera();

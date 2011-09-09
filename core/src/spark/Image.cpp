@@ -18,6 +18,17 @@ namespace spark {
         ShapeWidget(theApp, theXMLNode, theParent) {
 
         _mySrc = _myXMLNode->getAttributeAs<std::string>("src","");
+        build();
+    }
+
+    void 
+    Image::onResume() {        
+        ShapeWidget::onResume();        
+        build();
+    }
+    
+    void
+    Image::build() {
         float width = _myXMLNode->getAttributeAs<float>("width", -1);
         float height = _myXMLNode->getAttributeAs<float>("height", -1);
         setShape(ShapeFactory::get().createRectangle(true, width >= 0 ? width : 0, height >= 0 ? height : 0, _mySrc));
@@ -29,7 +40,7 @@ namespace spark {
             getShape()->setDimensions(width, height);
         }
     }
-
+    
     Image::~Image() {
     }        
 }

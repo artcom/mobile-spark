@@ -63,6 +63,7 @@ namespace spark {
             virtual ~StageEvent();
 
             static const char * const FRAME;
+            static const char * const PAUSE;
 
             masl::UInt64 getCurrentTime() const { return currenttime_;};
             masl::UInt64 currenttime_;
