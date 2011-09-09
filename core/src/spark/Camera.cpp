@@ -41,16 +41,17 @@ namespace spark {
             		UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         			myMaterial->getTexture()->setTextureId(myCameraInfo.textureID);
         			getShape()->setDimensions(width, height);
-                    getShape()->setTexCoords(vector2(0,0), vector2(width/myCameraInfo.texturewidth,0), 
-                                                     vector2(0,height/myCameraInfo.textureheight), 
-                                                     vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight));
+                    getShape()->setTexCoords(vector2(0,height/myCameraInfo.textureheight),
+                    						 vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight) , 
+                                             vector2(0,0), 
+                                             vector2(width/myCameraInfo.texturewidth,0));
         			AC_PRINT<< " ####### Camera width x height : " << width << " x " << height; 
                 }
             }
 		    MobileSDK_Singleton::get().updateCameraTexture();
         } else {
             if (MobileSDK_Singleton::get().isCameraCapturing()) {
-    			//MobileSDK_Singleton::get().stopCameraCapture();
+    			MobileSDK_Singleton::get().stopCameraCapture();
             }
         }
     }    

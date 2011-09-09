@@ -41,7 +41,9 @@ namespace spark {
     SparkComponentFactory::SparkComponentFactory() {
         setupFactory();
     }
-    SparkComponentFactory::~SparkComponentFactory() {}
+    SparkComponentFactory::~SparkComponentFactory() {
+    }
+
 
     // Returns 'true' if registration was successful
     bool SparkComponentFactory::registerComponent(const std::string & theComponentName,
@@ -49,7 +51,7 @@ namespace spark {
         return _myCreateCallbackMap.insert(CallbackMap::value_type(theComponentName, theCreateFn)).second;
     }
 
-    // Returns 'true' if the ShapeId was registered before
+    // Returns 'true' if the component was registered before
     bool SparkComponentFactory::unregisterComponent(const std::string & theComponentName) {
         return _myCreateCallbackMap.erase(theComponentName) == 1;
     }
@@ -58,7 +60,7 @@ namespace spark {
         AC_PRINT << "create component : " << theComponentName;
         CallbackMap::const_iterator i = _myCreateCallbackMap.find(theComponentName);
         if (i == _myCreateCallbackMap.end()) {
-            throw std::runtime_error("Unknown Component Name: " + theComponentName);
+            throw UnknownComponentException("Unknown Component Name: " + theComponentName, PLUS_FILE_LINE);
         }
         return (i->second)(theApp, theNode, theParent);
     }
