@@ -1,3 +1,5 @@
+#ifdef __ANDROID__
+
 #include "JNIBinding.h"
 
 #include <masl/Logger.h>
@@ -37,3 +39,5 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv 
     const char* myEvent = env->GetStringUTFChars(evt, &isCopy);
     CALL_NATIVE(ourApp->onEvent(myEvent));
 }
+
+#endif
