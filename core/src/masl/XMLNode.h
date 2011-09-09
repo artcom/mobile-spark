@@ -10,6 +10,7 @@
 #include <libxml/tree.h>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/string_functions.h>
+#include <masl/Exception.h>
 
 #include "numeric_functions.h"
 

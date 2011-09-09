@@ -22,7 +22,7 @@ namespace mar {
              it != elementList.end(); ++it) {
             
             ElementPtr element = *it;   
-            element->loadData(theMatrix);
+            element->material->loadShader(theMatrix);
             
             //Using Vertex Array Objects. not supported by android.
             glBindVertexArrayOES(element->vertexArrayObject);
@@ -53,6 +53,7 @@ namespace mar {
             ElementPtr element = *it;
             if (element && element->material ) {
                  element->material->initGL();
+                 glLinkProgram(element->material->shaderProgram);
             }
             element->createVertexBuffers();
         }

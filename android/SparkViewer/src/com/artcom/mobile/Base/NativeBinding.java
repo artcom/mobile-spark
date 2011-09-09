@@ -16,6 +16,8 @@ import android.opengl.GLES10;
 import android.opengl.GLUtils;
 
 import com.artcom.mobile.Base.AC_Log;
+import com.artcom.mobile.Base.Severity;
+import com.artcom.mobile.Base.NativeException;
 public class NativeBinding {
   
   static {    
@@ -33,8 +35,9 @@ public class NativeBinding {
   public static native void onResume();
   public static native void onEvent(String theEvent);
   
-  public static native void log(int theSeverity, String theFilename, int theLineNumber, String theMessage);
+  public static native void log(Severity theSeverity, String theFilename, int theLineNumber, String theMessage);
   public static native void setLoggerTopLevelTag(String theTagString);
+  public static native void setSeverity(Severity theSeverity);
   public static native boolean loadSpark(String theFilename);
   
     
