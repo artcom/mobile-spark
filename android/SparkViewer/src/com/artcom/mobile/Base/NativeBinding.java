@@ -26,10 +26,11 @@ public class NativeBinding {
       System.loadLibrary("mar");
       System.loadLibrary("android");
       System.loadLibrary("spark");
+      System.loadLibrary("demoapp");  //XXX move to app
   }
 
   
-  public static native void setup(long currentMillis, String apkFilePath, String layoutFile);
+  public static native void setup(long currentMillis, String apkFilePath);
   public static native void onSizeChanged(int theWidth, int theHeight);
   public static native void onResume();
   public static native void initBinding();
@@ -38,7 +39,6 @@ public class NativeBinding {
   public static native void log(Severity theSeverity, String theFilename, int theLineNumber, String theMessage);
   public static native void setLoggerTopLevelTag(String theTagString);
   public static native void setSeverity(Severity theSeverity);
-  public static native boolean loadSpark(String theFilename);
   
     
   public static int renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor) {	

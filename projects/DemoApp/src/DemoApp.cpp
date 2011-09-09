@@ -11,17 +11,17 @@
 #include <animation/DelayAnimation.h>
 #include <animation/Easing.h>
 
-#include "Event.h"
-#include "Rectangle.h"
-#include "Transform.h"
-#include "Shape3D.h"
-#include "SparkComponentFactory.h"
+#include <spark/Event.h>
+#include <spark/Rectangle.h>
+#include <spark/Transform.h>
+#include <spark/Shape3D.h>
+#include <spark/SparkComponentFactory.h>
 
 /////////////////////////////////////////////////////////////////////////App-Instance
 spark::BaseAppPtr ourApp = boost::shared_ptr<spark::DemoApp>(new spark::DemoApp());
 
 /////////////////// Application code, this should be in java or script language later...
-namespace spark {
+namespace demoapp {
 
     DemoApp::DemoApp():BaseApp(), _myCurrentSlide(0) {
     }

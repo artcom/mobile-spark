@@ -7,7 +7,7 @@
 
 #include "BaseApp.h"
 
-extern spark::BaseAppPtr ourApp;
+spark::BaseAppPtr ourApp;
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
                                                              jlong currentMillis,

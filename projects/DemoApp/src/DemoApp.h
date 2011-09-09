@@ -1,13 +1,13 @@
-#ifndef _included_mobile_spark_DemoApp_
-#define _included_mobile_spark_DemoApp_
+#ifndef _included_mobile_demoapp_DemoApp_
+#define _included_mobile_demoapp_DemoApp_
 
 /////////////////// Application code, this should be in java or script language later...
-#include "BaseApp.h"
-#include "Transform.h"
-#include "View.h"
+#include <spark/BaseApp.h>
+#include <spark/Transform.h>
+#include <spark/View.h>
 
 
-namespace spark {
+namespace demoapp {
     class DemoApp: public BaseApp {
         public: 
             DemoApp();
