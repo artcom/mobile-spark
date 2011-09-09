@@ -11,8 +11,9 @@ namespace spark {
     public: 
         NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~NinePatch();
-
+        virtual void onResume();
     private:
+        void build();
         std::string src_;
         float edgeLeft_;
         float edgeTop_;
