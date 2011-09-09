@@ -69,9 +69,7 @@ namespace spark {
             for (std::map<std::string, std::string>::iterator it = theNode->attributes.begin(); it != theNode->attributes.end(); ++it) {
                 templateRoot->attributes[it->first] = it->second;
             }
-            AC_PRINT << "template has children " << templateRoot->children.size() << " root has children " << theNode->children.size();
             for (std::vector<XMLNodePtr>::iterator it = theNode->children.begin(); it != theNode->children.end(); ++it) {
-                AC_PRINT << "............... push back child to template " << (*it)->nodeName;
                 templateRoot->children.push_back(*it);
             }
             i = createCallbackMap_.find(templateRoot->nodeName);
@@ -80,6 +78,7 @@ namespace spark {
             i = createCallbackMap_.find(theNode->nodeName);
         }
         if (i == createCallbackMap_.end()) {
+            AC_ERROR << "Unknown Component name: " << node->nodeName;
             throw UnknownComponentException("Unknown Component Name: " + node->nodeName, PLUS_FILE_LINE);
         }
         return (i->second)(theApp, node, theParent);
