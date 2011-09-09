@@ -15,7 +15,6 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static int numFrames = 0;
     public static long millisec = 0;
     public static final String PACKAGE_NAME = "com.artcom.mobile";
-    public static final String LAYOUT_FILE = "/main.spark";//"assets/layouts/main.spark";        
     public static boolean _myFirstTimeFlag;
     private Context context;    
     public EGLRenderer (Context context, boolean firstTime) {
@@ -57,7 +56,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
         AC_Log.print("_________________________________- on surface created");
         NativeBinding.initBinding();
         if (_myFirstTimeFlag) {
-            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
+            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context));
         } else {
             NativeBinding.onResume();
         }
