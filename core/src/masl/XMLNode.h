@@ -18,13 +18,14 @@ namespace masl {
 
     DEFINE_EXCEPTION(XMLNodeException, Exception);
 
+    class XMLNode;
+    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
     class XMLNode {
         public:
             XMLNode(xmlNode* theNode);
             virtual ~XMLNode();
             void print() const;
             std::ostream & print(std::ostream & os) const;
-            void printTree() const;
 
             friend inline std::ostream& operator<<(std::ostream& os, const XMLNode& n) {
                 return n.print(os);
@@ -54,11 +55,9 @@ namespace masl {
             std::string name;
             std::map<std::string, std::string> attributes;
 
-            const xmlNode* node;
-
+            //this is only used during initialization and not updated afterwards, use ComponentHierachry instead
+            std::vector<XMLNodePtr> children;  
     };
-
-    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
 };
 
 #endif

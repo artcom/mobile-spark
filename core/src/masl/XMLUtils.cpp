@@ -24,8 +24,14 @@ namespace masl {
         }
     }
 
+    
     //XXX: the user should call xmlFreeDoc(doc)
     xmlDocPtr loadXML(const std::string & theFilename) {
+        /*
+        * this initialises the library and check potential ABI mismatches
+        * between the version it was compiled for and the actual shared
+        * library used.
+        */
         LIBXML_TEST_VERSION
         xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc; /* the resulting document tree */
@@ -64,6 +70,11 @@ namespace masl {
     
     //XXX: the user should call xmlFreeDoc(doc)
     xmlDocPtr loadXMLFromMemory(const std::string & theXMLString) {
+        /*
+        * this initialises the library and check potential ABI mismatches
+        * between the version it was compiled for and the actual shared
+        * library used.
+        */
         LIBXML_TEST_VERSION
         xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc; /* the resulting document tree */

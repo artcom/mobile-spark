@@ -114,8 +114,8 @@ namespace spark {
         xmlDocPtr doc = loadXMLFromMemory(theNode);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));
+        xmlFreeDoc(doc);
         resolveTemplates(theApp, myNode);
-        xmlFreeDoc(doc);    //XXX    
         return myNode;
     }
 
@@ -128,22 +128,18 @@ namespace spark {
     void 
     SparkComponentFactory::resolveTemplates(const BaseAppPtr theApp, XMLNodePtr theRoot) {
         AC_PRINT << "......................... resolve templates";
-        xmlNode* currentChild = theRoot->node->children;
-        for (; currentChild; currentChild = currentChild->next) {
-            if (currentChild->type == XML_ELEMENT_NODE && std::string(((const char*)currentChild->name)) == "Template") {
+        for (std::vector<XMLNodePtr>::iterator it = theRoot->children.begin(); it != theRoot->children.end(); ++it) {
+            if ((*it)->nodeName == "Template") {
                 std::string name;
                 std::string source;
-                xmlAttr *attribute = currentChild->properties;
-                while (attribute) {
-                    xmlNode* attrNode = attribute->children;
-                    if (std::string((const char*)attribute->name) == "name") {
-                        name = std::string((const char*)attrNode->content);
-                    } else if (std::string((const char*)attribute->name) == "src") {
-                        source = std::string((const char*)attrNode->content);
+                for (std::map<std::string, std::string>::iterator it2 = (*it)->attributes.begin(); it2 != (*it)->attributes.end(); ++it2) {
+                    if (it2->first == "name") {
+                        name = it2->second;
+                    } else if (it2->first == "src") {
+                        source = it2->second;
                     }
-                    attribute = attribute->next;
                 }
-                AC_PRINT << currentChild << " name " << name << " source " << source;
+                AC_PRINT << " name " << name << " source " << source;
                 if (templateMap_.find(name) == templateMap_.end()) {
                     XMLNodePtr templateRoot = loadXMLNodeFromFile(theApp,source);
                     templateMap_[name] = templateRoot;
