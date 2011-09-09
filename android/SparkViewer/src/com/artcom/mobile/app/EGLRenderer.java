@@ -55,12 +55,12 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
     	CameraTexture.initWithContext(glContext);
         AC_Log.print("_________________________________- on surface created");
+        NativeBinding.initBinding();
         if (_myFirstTimeFlag) {
             NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), LAYOUT_FILE);
         } else {
             NativeBinding.onResume();
         }
-        
     }
 
 }

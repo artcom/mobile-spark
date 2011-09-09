@@ -14,18 +14,14 @@ namespace spark {
     bool 
     OnPauseComponentVisitor::visit(ComponentPtr theComponent) {
         AC_PRINT << theComponent->getName() << " onPause";
+        theComponent->onPause();
         return true;
     }
 
     bool
     OnResumeComponentVisitor::visit(ComponentPtr theComponent) {
         AC_PRINT << theComponent->getName() << " onResume";
-        //special behavior for ShapeWidgets needed
-        //XXX: is there a better method than casting like this?
-        ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(theComponent);
-        if (myShapeWidget && myShapeWidget->getShape()) {
-            myShapeWidget->getShape()->initGL();
-        }
+        theComponent->onResume();
         return true;
     }
 

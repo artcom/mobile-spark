@@ -27,14 +27,22 @@ namespace spark {
     }
     
     void 
+    Camera::onPause() {
+        ShapeWidget::onPause();        
+		MobileSDK_Singleton::get().stopCameraCapture();        
+    }
+    
+    void 
     Camera::prerender(MatrixStack& theCurrentMatrixStack) {
         ShapeWidget::prerender(theCurrentMatrixStack);    
-        //AC_PRINT << "camera is rendered : " << isRendered();
         //AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
         if (isRendered()) {
             if (!MobileSDK_Singleton::get().isCameraCapturing()) {
+                AC_PRINT << "camera prerender 0";
     			MobileSDK_Singleton::get().startCameraCapture();
+                AC_PRINT << "camera prerender 1";
                 masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
+                AC_PRINT << "camera prerender 2";
                 if (myCameraInfo.textureID != 0) {
         			float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
         			float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);

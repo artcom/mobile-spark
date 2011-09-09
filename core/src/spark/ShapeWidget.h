@@ -11,6 +11,8 @@ namespace spark {
             ShapeWidget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
             virtual ~ShapeWidget() = 0;
             virtual void render(const matrix & theP) const;
+            virtual void onResume();
+            
             virtual bool AABB2Dcontains(const float x, const float y,
                                         const matrix theProjectionMatrix) const;
 
