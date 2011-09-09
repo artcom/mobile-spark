@@ -8,7 +8,6 @@ import android.util.Log;
 import junit.framework.Assert;
 
 public class BaseLibTest extends AndroidTestCase {
-    private static String LOG_TAG = "TestResult";
        
     public void testLib() throws Throwable {
         // run libs tests method        

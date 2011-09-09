@@ -13,8 +13,8 @@ public class AC_Log {
     }
 
     private static void log(Severity theSeverity, String theMessage) {
-        NativeBinding.log(theSeverity, new Throwable().getStackTrace()[1].getFileName(), 
-                         new Throwable().getStackTrace()[1].getLineNumber(), 
+        NativeBinding.log(theSeverity, new Throwable().getStackTrace()[2].getFileName(), 
+                         new Throwable().getStackTrace()[2].getLineNumber(), 
                          theMessage);   
     }
     public static void info(String theMessage) {
@@ -47,5 +47,5 @@ public class AC_Log {
             log(Severity.SEV_TRACE, theMessage);
         }
     }
-    private static Severity _myGlobalSeverity;
+    private static Severity _myGlobalSeverity = Severity.SEV_WARNING;
 }
