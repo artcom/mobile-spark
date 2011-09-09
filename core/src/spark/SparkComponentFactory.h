@@ -2,11 +2,16 @@
 #define _included_mobile_spark_SparkComponentFactory_
 
 #include <masl/Singleton.h>
+#include <masl/Exception.h>
 #include "BaseApp.h"
 
 #include "Component.h"
 
 namespace spark {
+
+    DEFINE_EXCEPTION(SparkComponentException, Exception)
+    DEFINE_EXCEPTION(UnknownComponentException, SparkComponentException)
+
     class SparkComponentFactory : public masl::Singleton<SparkComponentFactory> {
     public:
         SparkComponentFactory();

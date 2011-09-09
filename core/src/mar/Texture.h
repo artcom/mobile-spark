@@ -1,5 +1,5 @@
-#ifndef _ac_mobile_masl_Texture_h_included_
-#define _ac_mobile_masl_Texture_h_included_
+#ifndef _ac_mobile_mar_Texture_h_included_
+#define _ac_mobile_mar_Texture_h_included_
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include "openGL_functions.h"

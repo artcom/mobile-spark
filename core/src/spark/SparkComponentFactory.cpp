@@ -42,7 +42,9 @@ namespace spark {
     SparkComponentFactory::SparkComponentFactory() {
         setupFactory();
     }
-    SparkComponentFactory::~SparkComponentFactory() {}
+    SparkComponentFactory::~SparkComponentFactory() {
+    }
+
 
     // Returns 'true' if registration was successful
     bool 
@@ -76,8 +78,7 @@ namespace spark {
             i = createCallbackMap_.find(theNode->nodeName);
         }
         if (i == createCallbackMap_.end()) {
-            AC_ERROR << "Unknown Component Name: " + node->nodeName;
-            throw std::runtime_error("Unknown Component Name: " + node->nodeName);
+            throw UnknownComponentException("Unknown Component Name: " + node->nodeName, PLUS_FILE_LINE);
         }
         return (i->second)(theApp, node, theParent);
     }

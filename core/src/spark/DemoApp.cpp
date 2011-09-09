@@ -1,9 +1,5 @@
 #include "DemoApp.h"
 
-#ifdef __ANDROID__
-    #include <jni.h>
-#endif
-
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/Logger.h>
@@ -22,7 +18,7 @@
 #include "SparkComponentFactory.h"
 
 /////////////////////////////////////////////////////////////////////////App-Instance
-spark::DemoApp ourApp;
+spark::BaseAppPtr ourApp = boost::shared_ptr<spark::DemoApp>(new spark::DemoApp());
 
 /////////////////// Application code, this should be in java or script language later...
 namespace spark {
@@ -43,6 +39,7 @@ namespace spark {
     bool DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
 
+        //return myBaseReturn;
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 
         //test free function on touch
@@ -188,52 +185,4 @@ namespace spark {
 
 }
 
-
-#ifdef __ANDROID__
-    
-/////////////////////////////////////////////////////////////////////////JNI
-extern "C" {
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
-                                                                 jlong currentMillis,
-                                                                 jstring apkFile,
-                                                                 jstring layoutFile);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
-                                                                 jint width, jint height);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt);
-    
-};
-
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
-                                                             jlong currentMillis,
-                                                             jstring apkFile,
-                                                             jstring layoutFile) {
-    MobileSDK_Singleton::get().env = env;
-    MobileSDK_Singleton::get().obj = obj;
-                                                                
-    jboolean isCopy;
-    const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
-    const char* myLayoutFile = env->GetStringUTFChars(layoutFile, &isCopy);
-    ourApp.setup(currentMillis, myAssetPath, myLayoutFile);
-}
-
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj) {
-    ourApp.onPause();
-}
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
-    ourApp.onResume();
-}
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
-                                                             jint width, jint height) {
-    ourApp.onSizeChanged(width, height);
-}
-
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt )
-{
-    jboolean isCopy;
-    const char* myEvent = env->GetStringUTFChars(evt, &isCopy);
-    ourApp.onEvent(myEvent);
-}
-#endif
 
