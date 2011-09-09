@@ -6,8 +6,7 @@
 
 namespace masl {
 
-    XMLNode::XMLNode(xmlNode* theNode) : 
-        node(theNode) {
+    XMLNode::XMLNode(xmlNode* theNode) {
         xmlAttr *attribute = theNode->properties;
         nodeName = (const char*)(theNode->name);
         //AC_PRINT << "node name " << nodeName;
@@ -21,6 +20,14 @@ namespace masl {
 
         if (attributes.find("name") != attributes.end()) {
             name = attributes["name"];
+        }
+
+        xmlNode* currentChild = theNode->children;
+        for (; currentChild; currentChild = currentChild->next) {
+            if (currentChild->type == XML_ELEMENT_NODE) {
+                XMLNodePtr childXMLNode = XMLNodePtr(new XMLNode(currentChild));
+                children.push_back(childXMLNode);
+            }
         }
     }
 
@@ -39,10 +46,6 @@ namespace masl {
         }
         os << "/>";
         return os;
-    }
-
-    void XMLNode::printTree() const {
-        printXMLNode(node);
     }
 }
 

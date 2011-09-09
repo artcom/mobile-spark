@@ -6,10 +6,10 @@
 namespace masl {
 
     void printXMLNode(const xmlNode* theNode) {
-        AC_PRINT << "print xml node";
+        AC_PRINT << "print xml node " << theNode->name;
         const xmlNode *cur_node = NULL;
         for (cur_node = theNode; cur_node; cur_node = cur_node->next) {
-            AC_PRINT << " next loop";
+            AC_PRINT << " next loop " << cur_node->name;
             AC_PRINT << " type " << cur_node->type << " compare to " << XML_ELEMENT_NODE;
             if (cur_node->type == XML_ELEMENT_NODE) {
                 AC_PRINT << "node type: Element, name: " << cur_node->name;
@@ -24,8 +24,14 @@ namespace masl {
         }
     }
 
+    
     //XXX: the user should call xmlFreeDoc(doc)
     xmlDocPtr loadXML(const std::string & theFilename) {
+        /*
+        * this initialises the library and check potential ABI mismatches
+        * between the version it was compiled for and the actual shared
+        * library used.
+        */
         LIBXML_TEST_VERSION
         xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc; /* the resulting document tree */
@@ -64,6 +70,11 @@ namespace masl {
     
     //XXX: the user should call xmlFreeDoc(doc)
     xmlDocPtr loadXMLFromMemory(const std::string & theXMLString) {
+        /*
+        * this initialises the library and check potential ABI mismatches
+        * between the version it was compiled for and the actual shared
+        * library used.
+        */
         LIBXML_TEST_VERSION
         xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc; /* the resulting document tree */
