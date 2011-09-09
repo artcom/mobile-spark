@@ -22,7 +22,8 @@ using namespace masl;
 namespace spark {
     
     //TODO: decentralize this again
-    void SparkComponentFactory::setupFactory() {
+    void 
+    SparkComponentFactory::setupFactory() {
         AC_PRINT << "SparkComponentFactory setup";
         bool registered = registerComponent("Window", spark::createWindow);
         registered = registerComponent(View::SPARK_TYPE, spark::createView);
@@ -46,36 +47,106 @@ namespace spark {
 
 
     // Returns 'true' if registration was successful
-    bool SparkComponentFactory::registerComponent(const std::string & theComponentName,
+    bool 
+    SparkComponentFactory::registerComponent(const std::string & theComponentName,
                     const CreateComponentCallback theCreateFn) {
-        return _myCreateCallbackMap.insert(CallbackMap::value_type(theComponentName, theCreateFn)).second;
+        return createCallbackMap_.insert(CallbackMap::value_type(theComponentName, theCreateFn)).second;
     }
 
-    // Returns 'true' if the component was registered before
-    bool SparkComponentFactory::unregisterComponent(const std::string & theComponentName) {
-        return _myCreateCallbackMap.erase(theComponentName) == 1;
+    // Returns 'true' if the ShapeId was registered before
+    bool 
+    SparkComponentFactory::unregisterComponent(const std::string & theComponentName) {
+        return createCallbackMap_.erase(theComponentName) == 1;
     }
 
-    ComponentPtr SparkComponentFactory::createComponent(const std::string & theComponentName, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
-        AC_PRINT << "create component : " << theComponentName;
-        CallbackMap::const_iterator i = _myCreateCallbackMap.find(theComponentName);
-        if (i == _myCreateCallbackMap.end()) {
-            throw UnknownComponentException("Unknown Component Name: " + theComponentName, PLUS_FILE_LINE);
+    ComponentPtr 
+    SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
+        CallbackMap::const_iterator i;
+        XMLNodePtr node = theNode;
+        if (templateMap_.find(theNode->nodeName) != templateMap_.end()) {
+            XMLNodePtr templateRoot = templateMap_.at(theNode->nodeName);
+            //merge node
+            for (std::map<std::string, std::string>::iterator it = theNode->attributes.begin(); it != theNode->attributes.end(); ++it) {
+                templateRoot->attributes[it->first] = it->second;
+            }
+            AC_PRINT << "template has children " << templateRoot->children.size() << " root has children " << theNode->children.size();
+            for (std::vector<XMLNodePtr>::iterator it = theNode->children.begin(); it != theNode->children.end(); ++it) {
+                AC_PRINT << "............... push back child to template " << (*it)->nodeName;
+                templateRoot->children.push_back(*it);
+            }
+            i = createCallbackMap_.find(templateRoot->nodeName);
+            node = templateRoot;
+        } else {
+            i = createCallbackMap_.find(theNode->nodeName);
         }
-        return (i->second)(theApp, theNode, theParent);
+        if (i == createCallbackMap_.end()) {
+            throw UnknownComponentException("Unknown Component Name: " + node->nodeName, PLUS_FILE_LINE);
+        }
+        return (i->second)(theApp, node, theParent);
     }
 
-    ComponentPtr SparkComponentFactory::loadSparkLayoutFromFile(const BaseAppPtr theApp, const std::string & thePath) {
+    ComponentPtr 
+    SparkComponentFactory::loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath) {
         std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
-        return loadSparkLayoutFromString(theApp, myLayout);
+        return loadSparkComponentsFromString(theApp, myLayout);
     }
 
-    ComponentPtr SparkComponentFactory::loadSparkLayoutFromString(const BaseAppPtr theApp, const std::string & theNode) {
+    ComponentPtr 
+    SparkComponentFactory::loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode) {
+        XMLNodePtr myNode = prepareXMLFromString(theApp, theNode);
+        ComponentPtr myComponentPtr = createComponent(theApp, myNode);
+        return myComponentPtr;
+    }
+
+    XMLNodePtr
+    SparkComponentFactory::loadXMLNodeFromFile(const BaseAppPtr theApp, const std::string & thePath) {
+        std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
+        return loadXMLNodeFromString(theApp, myLayout);
+    }
+
+    XMLNodePtr
+    SparkComponentFactory::loadXMLNodeFromString(const BaseAppPtr theApp, const std::string & theNode) {
+        XMLNodePtr myNode = prepareXMLFromString(theApp, theNode);
+        return myNode;
+    }
+
+    XMLNodePtr
+    SparkComponentFactory::prepareXMLFromString(const BaseAppPtr theApp, const std::string & theNode) {
         xmlDocPtr doc = loadXMLFromMemory(theNode);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         XMLNodePtr myNode(new XMLNode(myRootNode));
-        ComponentPtr myComponentPtr = createComponent(myNode->nodeName, theApp, myNode);
-        xmlFreeDoc(doc);        
-        return myComponentPtr;
+        xmlFreeDoc(doc);
+        resolveTemplates(theApp, myNode);
+        return myNode;
+    }
+
+    /*
+     * assumptions: 
+     * - Template nodes should be child nodes of root node of every file
+     * - Templates should be included only once
+     * - Templates should be included before they are used
+     */
+    void 
+    SparkComponentFactory::resolveTemplates(const BaseAppPtr theApp, XMLNodePtr theRoot) {
+        for (std::vector<XMLNodePtr>::iterator it = theRoot->children.begin(); it != theRoot->children.end(); ++it) {
+            if ((*it)->nodeName == "Template") {
+                std::string name;
+                std::string source;
+                for (std::map<std::string, std::string>::iterator it2 = (*it)->attributes.begin(); it2 != (*it)->attributes.end(); ++it2) {
+                    if (it2->first == "name") {
+                        name = it2->second;
+                    } else if (it2->first == "src") {
+                        source = it2->second;
+                    }
+                }
+                if (templateMap_.find(name) == templateMap_.end()) {
+                    XMLNodePtr templateRoot = loadXMLNodeFromFile(theApp,source);
+                    templateMap_[name] = templateRoot;
+                }
+            }
+        }
     }
 }
+
+
+

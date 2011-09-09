@@ -47,7 +47,7 @@ namespace mar {
 #endif
     
     void Shape::initGL() {
-        AC_PRINT << "Shape::init GL";
+        //AC_PRINT << "Shape::init GL";
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin(); 
                                                       it != elementList.end(); ++it) {
             
