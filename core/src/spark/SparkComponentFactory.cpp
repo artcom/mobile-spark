@@ -17,6 +17,8 @@
 #include "Camera.h"
 #include "NinePatch.h"
 
+#include "Slide.h"
+
 using namespace masl;
 
 namespace spark {
@@ -36,6 +38,8 @@ namespace spark {
         registered = registerComponent(Camera::SPARK_TYPE, spark::createCamera);
         registered = registerComponent("Shape3D", spark::createShape3D);
         registered = registerComponent("NinePatch", spark::createNinePatch);
+
+        registered = registerComponent("SlideImpl", spark::createSlide);
         AC_PRINT << "SparkComponentFactory setup done";
     };
     
@@ -72,6 +76,9 @@ namespace spark {
             for (std::vector<XMLNodePtr>::iterator it = theNode->children.begin(); it != theNode->children.end(); ++it) {
                 templateRoot->children.push_back(*it);
             }
+            if (theNode->name.size() > 0) {
+                templateRoot->name = theNode->name;
+            }
             i = createCallbackMap_.find(templateRoot->nodeName);
             node = templateRoot;
         } else {
@@ -81,6 +88,7 @@ namespace spark {
             AC_ERROR << "Unknown Component name: " << node->nodeName;
             throw UnknownComponentException("Unknown Component Name: " + node->nodeName, PLUS_FILE_LINE);
         }
+        AC_DEBUG << "create component " << node->nodeName;
         return (i->second)(theApp, node, theParent);
     }
 
