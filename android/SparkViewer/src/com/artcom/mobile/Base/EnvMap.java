@@ -15,8 +15,9 @@ public class EnvMap {
         if ( theExtras != null ) {
             String myEnvVar = theExtras.getString("env_0");
             for (int i = 1; myEnvVar != null; ++i) {
-                String myKey = myEnvVar.split("=")[0];
-                String myValue = myEnvVar.split("=")[1];
+                String[] myKeyValue = myEnvVar.split("=");
+                String myKey = (myKeyValue.length > 0) ? myKeyValue[0] : "";
+                String myValue = (myKeyValue.length > 1) ? myKeyValue[1] : "";
                 AC_Log.info("found env " + myKey + " , " + myValue);
                 if (myValue != "") {
                     _myEnvironmentVariables.put(myKey, myValue);
