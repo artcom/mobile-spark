@@ -11,7 +11,9 @@
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
 
-        <Controls x="20" y="20" z="20"/>
+        <Controls x="20" y="20" z="20">
+            <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="assets/textures/deco.png"/>
+        </Controls>
 
         <Transform name="RectangleSlide">
             <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Rectangles" color="[1,1,1,1]" fontsize="16" />
