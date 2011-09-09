@@ -15,8 +15,7 @@ namespace spark {
         registered = registerEvent("GestureEvent", spark::createEvent<GestureEvent>);
     };
     
-    EventFactory::EventFactory() : _myXmlCx(NULL) {
-        _myXmlCx = xmlNewParserCtxt();
+    EventFactory::EventFactory() {
         setupFactory();
     }
     EventFactory::~EventFactory() {}
@@ -32,10 +31,11 @@ namespace spark {
         return _myCreateCallbackMap.erase(theEventName) == 1;
     }
 
-    EventPtr EventFactory::handleEvent(const std::string & theEventString) const {
+	EventPtr EventFactory::handleEvent(const std::string & theEventString) const {
         //AC_PRINT << "handle event : " << theEventString;
         xmlDocPtr doc;
-        doc = xmlCtxtReadMemory(_myXmlCx, theEventString.c_str(), strlen(theEventString.c_str()), "", NULL, XML_PARSE_DTDATTR);
+        xmlParserCtxtPtr myXmlCx = xmlNewParserCtxt();
+        doc = xmlCtxtReadMemory(myXmlCx, theEventString.c_str(), strlen(theEventString.c_str()), "", NULL, XML_PARSE_DTDATTR);
         xmlNode *root_node = NULL;
         root_node = xmlDocGetRootElement(doc);
         XMLNodePtr myXMLNode(new XMLNode(root_node));
@@ -44,7 +44,7 @@ namespace spark {
         if (i == _myCreateCallbackMap.end()) {
             throw EventFactoryException("Unknown Event: " + myXMLNode->nodeName, PLUS_FILE_LINE);
         }
-        xmlFreeDoc(doc);        
+        xmlFreeDoc(doc);   
         return (i->second)(myXMLNode);
     }
 
