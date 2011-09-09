@@ -5,6 +5,7 @@ using namespace masl;
 
 namespace spark {
     const char * const StageEvent::FRAME = "frame";
+    const char * const StageEvent::PAUSE = "pause";
     const char * const TouchEvent::TAP = "tap";
     const char * const TouchEvent::DOUBLETAP = "doubletap";
     const char * const TouchEvent::LONGPRESS = "longpress";

@@ -101,6 +101,14 @@ namespace spark {
         }
         return false;
     }
+    
+    void 
+    ShapeWidget::onResume() {
+        Widget::onResume();
+        if (_myShape) {
+            _myShape->initGL();
+        }
+    }
 
     mar::ShapePtr ShapeWidget::getShape() {
         return _myShape;

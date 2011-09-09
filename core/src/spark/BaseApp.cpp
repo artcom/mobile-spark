@@ -52,9 +52,11 @@ namespace spark {
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
+        spark::EventCallbackPtr myOnPauseCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onPause));
+        _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
 
-        _myGLCanvas = CanvasPtr( new Canvas());
-        _myGLCanvas->initGLState();
+        //_myGLCanvas = CanvasPtr( new Canvas());
+        //_myGLCanvas->initGLState();
         return true;
     }
 
@@ -67,14 +69,14 @@ namespace spark {
     }
     
     void BaseApp::onEvent(std::string theEventString) {
-        AC_PRINT << "a string event came in :" << theEventString;
+        //AC_PRINT << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
         myEvent->connect(_mySparkWindow);
         (*myEvent)();
-        AC_PRINT << "ate Event";
+        //AC_PRINT << "ate Event";
     }
     
-    void BaseApp::onPause() {
+    void BaseApp::onPause(EventPtr theEvent) {
         if (_mySparkWindow) {
             OnPauseComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);   
@@ -87,16 +89,14 @@ namespace spark {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
         }
-        AC_PRINT << "onResume done";
     }
     
     void BaseApp::onFrame(EventPtr theEvent) {
-        AC_PRINT << ".";
+        //AC_PRINT << ".";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
-        _myGLCanvas->preRender(_mySparkWindow->getClearColor());
         _mySparkWindow->render();
-        AC_PRINT << ". done";
+        //AC_PRINT << ". done";
     }    
 }
 

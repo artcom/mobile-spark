@@ -12,6 +12,8 @@ namespace spark {
         Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Text();    
         virtual void prerender(MatrixStack& theCurrentMatrixStack);   
+        virtual void onResume();
+        
         static const char* SPARK_TYPE;             
     private:
         std::string _myText;

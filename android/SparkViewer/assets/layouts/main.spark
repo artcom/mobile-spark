@@ -66,8 +66,10 @@
 
         <Transform name="CameraSlide">
             <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Camera" color="[1,1,1,1]" fontsize="16" />            
-            <Camera name="camera" x="300" y="300" scaleX="0.5" scaleY="0.5"/>
-            <Camera name="camera" x="0" y="600" scaleX="0.5" scaleY="0.5"/>
+            <Camera name="camera" x="150" y="10" scaleX="0.5" scaleY="0.5">
+                <Image name="border" width="640" height="480" src="assets/textures/rahmen_schwarz.png" z="1"/>
+            </Camera>
+            <!--Camera name="camera" x="0" y="600" scaleX="0.5" scaleY="0.5"/-->
         </Transform>
 
         <Image name="nextbutton" x="20" y="20" z="20" src="assets/textures/next.png"/>
