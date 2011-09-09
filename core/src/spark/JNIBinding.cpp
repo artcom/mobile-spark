@@ -13,8 +13,6 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
                                                              jlong currentMillis,
                                                              jstring apkFile,
                                                              jstring layoutFile) {
-    MobileSDK_Singleton::get().env = env;
-    MobileSDK_Singleton::get().obj = obj;
                                                                 
     jboolean isCopy;
     const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
@@ -22,8 +20,9 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
     CALL_NATIVE(ourApp->setup(currentMillis, myAssetPath, myLayoutFile));
 }
 
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj) {
-    CALL_NATIVE(ourApp->onPause());
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
+    MobileSDK_Singleton::get().env = env;
+    MobileSDK_Singleton::get().obj = obj;
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
     CALL_NATIVE(ourApp->onResume());

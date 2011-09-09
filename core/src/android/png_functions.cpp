@@ -146,7 +146,10 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   } else {
       AC_PRINT << "unknown color type " << color_type;
   }
+  // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);  
   AC_PRINT << "generated texture with id " << texture;
 
   //clean up memory and close stuff

@@ -11,6 +11,7 @@ namespace spark {
     public: 
         Shape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Shape3D();
+        void onResume();
     private:
         std::string _mySrc;
     };
