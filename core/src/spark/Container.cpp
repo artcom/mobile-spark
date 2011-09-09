@@ -11,13 +11,12 @@ namespace spark {
     Container::Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
         : Component(theXMLNode, theParent), _myApp(theApp)
     {
-        AC_PRINT << "container constructor " << theXMLNode->nodeName;
-
         for (std::vector<XMLNodePtr>::iterator it = theXMLNode->children.begin(); it != theXMLNode->children.end(); ++it) {
-            ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
-            if (childComponent) {
-                _myChildren.push_back(childComponent);
+            if ((*it)->nodeName == "Template") {
+                continue;
             }
+            ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
+            _myChildren.push_back(childComponent);
         }
     }
 

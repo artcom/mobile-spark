@@ -61,9 +61,6 @@ namespace spark {
 
     ComponentPtr 
     SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
-        if (theNode->nodeName == "Template") {
-            return ComponentPtr();
-        }
         CallbackMap::const_iterator i;
         XMLNodePtr node = theNode;
         if (templateMap_.find(theNode->nodeName) != templateMap_.end()) {
@@ -93,7 +90,6 @@ namespace spark {
     SparkComponentFactory::loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode) {
         XMLNodePtr myNode = prepareXMLFromString(theApp, theNode);
         ComponentPtr myComponentPtr = createComponent(theApp, myNode);
-        AC_PRINT << "created component";
         return myComponentPtr;
     }
 
