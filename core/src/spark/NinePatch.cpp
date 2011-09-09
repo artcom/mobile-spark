@@ -22,6 +22,11 @@ namespace spark {
         edgeTop_ = _myXMLNode->getAttributeAs<float>("edgeTop", 0);
         edgeRight_ = _myXMLNode->getAttributeAs<float>("edgeRight", 0);
         edgeBottom_ = _myXMLNode->getAttributeAs<float>("edgeBottom", 0);
+        build();        
+    }
+    
+    void 
+    NinePatch::build() {
         float width = _myXMLNode->getAttributeAs<float>("width", -1);
         float height = _myXMLNode->getAttributeAs<float>("height", -1);
 
@@ -32,7 +37,12 @@ namespace spark {
             width = width == -1 ? myMaterial->getTexture()->width_ : width;
             height = height == -1 ? myMaterial->getTexture()->height_ : height;
             getShape()->setDimensions(width, height);
-        }
+        }        
+    }
+    void 
+    NinePatch::onResume() {        
+        ShapeWidget::onResume();        
+        build();
     }
 
     NinePatch::~NinePatch() {
