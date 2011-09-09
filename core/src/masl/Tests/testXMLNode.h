@@ -46,6 +46,7 @@ namespace masl {
                 perform_XMLLibTest();
                 perform_XMLNodeTest();
                 perform_loadXMLTest();  
+                perform_loadMultipleXMLTest();
             }
             
             //fixtures
@@ -101,6 +102,36 @@ namespace masl {
                 ENSURE_MSG(myXMLNode2->attributes.find("width") != myXMLNode2->attributes.end(), "width should be in attributes of document");
                 ENSURE_EQUAL(myXMLNode2->attributes["width"], std::string("300"));
                 xmlFreeDoc(doc);
+            }
+
+            void perform_loadMultipleXMLTest() {
+                xmlDocPtr doc = loadXMLFromMemory(include);
+                xmlNode *root_node = xmlDocGetRootElement(doc); 
+                ENSURE_MSG(root_node,"root node should not be null");
+                ENSURE_EQUAL(std::string((const char*)root_node->name), std::string("document"));
+                XMLNode *myXMLNode = new XMLNode(root_node);
+                ENSURE_MSG(myXMLNode, "XMLNode should not be null");
+
+                doc = loadXMLFromMemory(sparkFile);
+                xmlNode *root_node2 = xmlDocGetRootElement(doc);
+
+                ENSURE_MSG(root_node2,"root_node2 should not be null");
+                XMLNodePtr myXMLNode2(new XMLNode(root_node2));
+                ENSURE_MSG(myXMLNode2, "XMLNode should not be null");
+                ENSURE_EQUAL(myXMLNode2->nodeName, std::string("Window"));
+                ENSURE_EQUAL(myXMLNode2->name, std::string("ourWindow"));
+                ENSURE_MSG(myXMLNode2->attributes.find("width") != myXMLNode2->attributes.end(), "width should be in attributes of document");
+                ENSURE_EQUAL(myXMLNode2->attributes["width"], std::string("300"));
+
+                AC_PRINT << "get node data after reading second document";
+                ENSURE_MSG(root_node,"root node should not be null");
+                ENSURE_EQUAL(std::string((const char*)root_node->name), std::string("document"));
+
+                xmlFreeDoc(doc);
+                
+                AC_PRINT << "get node data after freeing last doc";
+                ENSURE_MSG(root_node,"root node should not be null");
+                ENSURE_EQUAL(std::string((const char*)root_node->name), std::string("document"));
             }
     };    
 
