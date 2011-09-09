@@ -24,6 +24,9 @@ namespace spark {
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent), 
         _myWidth(0), _myHeight(0){
+
+        _myGLCanvas = CanvasPtr( new Canvas());
+        _myGLCanvas->initGLState();
             
         _myFullScreenFlag = _myXMLNode->getAttributeAs<bool>("fullscreen", false);
         _myClearColor = _myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1));
@@ -50,6 +53,11 @@ namespace spark {
             AC_TRACE << "nothing picked";
         }
     }
+    
+    void Window::onResume() {
+        AC_PRINT << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111";
+        _myGLCanvas->initGLState();
+    }
 
     void 
     Window::onSizeChanged(int theWidth, int theHeight) {
@@ -59,6 +67,7 @@ namespace spark {
 
     void 
     Window::render() const {        
+        _myGLCanvas->preRender(getClearColor());        
         // get all views
         VectorOfComponentPtr myViews = getChildrenByType("View");
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
