@@ -15,6 +15,7 @@
 #include "Rectangle.h"
 #include "Transform.h"
 #include "Shape3D.h"
+#include "Text.h"
 #include "SparkComponentFactory.h"
 
 /////////////////////////////////////////////////////////////////////////App-Instance
@@ -123,6 +124,7 @@ namespace spark {
         _mySlides[_myCurrentSlide]->setVisible(true);
 
         AC_PRINT << "found #" << _mySlides.size() << " slides";
+        
         return myBaseReturn;
     }
 
@@ -182,7 +184,26 @@ namespace spark {
         myParallel->add(myRotationAnimation);
         animation::AnimationManager::get().play(myParallel);
     }
-
+    
+    void
+    DemoApp::centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight) {
+        for (size_t i = 0; i < _mySlides.size(); i++) {
+            ComponentPtr myTextObject = _mySlides[i]->getChildByName("SlideTitle");                    
+            if (myTextObject) {
+                TextPtr myText = boost::static_pointer_cast<spark::Text>(myTextObject);            
+                if (myText) {
+                    vector2 myTextSize = myText->getTextSize();
+                    myText->setY(theHeight - myTextSize[1]);
+                    myText->setX((theWidth - myTextSize[0]) / 2.0);
+                }
+            }        
+        }
+    }
+    
+    void DemoApp::onSizeChanged(int theWidth, int theHeight) {
+        BaseApp::onSizeChanged(theWidth, theHeight);
+        centerSlideTitlesToNewCanvasSize(theWidth, theHeight);
+    }
 }
 
 

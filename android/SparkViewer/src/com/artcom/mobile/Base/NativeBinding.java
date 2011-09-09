@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.opengl.GLES20;
 import android.opengl.GLES10;
 import android.opengl.GLUtils;
@@ -41,21 +42,31 @@ public class NativeBinding {
   public static native boolean loadSpark(String theFilename);
   
     
-  public static int renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor) {	
-	Bitmap myBitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
-	Canvas myCanvas = new Canvas(myBitmap);
-	
-	int[] textures = new int[1];
-	myBitmap.eraseColor(Color.TRANSPARENT);
+  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor) {
+	List<Integer> myResult = new ArrayList<Integer>();
+	  
 	// Draw the text
 	Paint textPaint = new Paint();
 	textPaint.setTextSize(theFontSize);
 	textPaint.setAntiAlias(true);
-	//textPaint.setARGB(0xff, 0xff, 0x00, 0x00);
 	textPaint.setARGB(theColor[3], theColor[0], theColor[1], theColor[2]);
-	// draw the text centered
-	myCanvas.drawText(theMessage, 16,112, textPaint);
+	textPaint.setAntiAlias(true);
+	//textPaint.setShadowLayer(3, 0, 0, Color.WHITE);
+	textPaint.setSubpixelText(true);
+	textPaint.setTextAlign(Paint.Align.LEFT);
+			
+	Rect myRect = new Rect(); 
+	textPaint.getTextBounds(theMessage, 0, theMessage.length(), myRect);
+	int myTextWidth = myRect.right;
+	int myTextHeight = myRect.bottom - myRect.top;
+	int myBaseLine = myTextHeight;
 	
+	Bitmap myBitmap = Bitmap.createBitmap(myTextWidth, myTextHeight, Bitmap.Config.ARGB_8888);
+	Canvas myCanvas = new Canvas(myBitmap);
+	int[] textures = new int[1];
+	myBitmap.eraseColor(Color.TRANSPARENT);
+	// draw the text centered
+	myCanvas.drawText(theMessage,0, myBaseLine, textPaint);
 	if (theTextureId == 0) {
 		GLES20.glGenTextures(1, textures,0);
 	} else {
@@ -65,11 +76,11 @@ public class NativeBinding {
 	
 	//Create Nearest Filtered Texture
 	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+	//GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 	
 	//Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
-	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 	
 	  try {
 		  ByteBuffer bb = extract(myBitmap, false); 
@@ -80,7 +91,12 @@ public class NativeBinding {
 	  }	
 	//Clean up
 	myBitmap.recycle();
-  	return textures[0];
+
+	myResult.add(textures[0]);
+	myResult.add(myTextWidth);
+	myResult.add(myTextHeight);
+	
+  	return myResult;
   }	
   private static ByteBuffer extract(Bitmap bmp, boolean theYFlipFlag)
   {
