@@ -69,6 +69,11 @@ namespace spark {
             for (std::map<std::string, std::string>::iterator it = theNode->attributes.begin(); it != theNode->attributes.end(); ++it) {
                 templateRoot->attributes[it->first] = it->second;
             }
+            AC_PRINT << "template has children " << templateRoot->children.size() << " root has children " << theNode->children.size();
+            for (std::vector<XMLNodePtr>::iterator it = theNode->children.begin(); it != theNode->children.end(); ++it) {
+                AC_PRINT << "............... push back child to template " << (*it)->nodeName;
+                templateRoot->children.push_back(*it);
+            }
             i = createCallbackMap_.find(templateRoot->nodeName);
             node = templateRoot;
         } else {
@@ -123,7 +128,6 @@ namespace spark {
      */
     void 
     SparkComponentFactory::resolveTemplates(const BaseAppPtr theApp, XMLNodePtr theRoot) {
-        AC_PRINT << "......................... resolve templates";
         for (std::vector<XMLNodePtr>::iterator it = theRoot->children.begin(); it != theRoot->children.end(); ++it) {
             if ((*it)->nodeName == "Template") {
                 std::string name;
@@ -135,13 +139,9 @@ namespace spark {
                         source = it2->second;
                     }
                 }
-                AC_PRINT << " name " << name << " source " << source;
                 if (templateMap_.find(name) == templateMap_.end()) {
                     XMLNodePtr templateRoot = loadXMLNodeFromFile(theApp,source);
                     templateMap_[name] = templateRoot;
-                    AC_PRINT << "inserted template " << name << " in templateMap";
-                } else {
-                    AC_ERROR << "template " << name << " was already defined";
                 }
             }
         }
