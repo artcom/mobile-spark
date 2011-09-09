@@ -11,8 +11,10 @@ namespace spark {
     public: 
         Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Image();
+        void onResume();
 
     private:
+        void build();
         std::string _mySrc;
     };
 

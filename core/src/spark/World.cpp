@@ -16,6 +16,8 @@ namespace spark {
     World::World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent){
+            
+            
     }
 
     World::~World() {
