@@ -42,6 +42,7 @@ namespace masl {
     }
 
     void XMLNode::printTree() const {
+        AC_PRINT << "print XML Node Tree";
         printXMLNode(node);
     }
 }

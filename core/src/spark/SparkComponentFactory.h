@@ -18,14 +18,19 @@ namespace spark {
         bool registerComponent(const std::string & theComponentName,
                         const CreateComponentCallback theCreateFn);
         bool unregisterComponent(const std::string & theComponentName);
-        ComponentPtr createComponent(const std::string & theComponentName, const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr()) const;
+        ComponentPtr createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr()) const;
 
-        ComponentPtr loadSparkLayoutFromFile(const BaseAppPtr theApp, const std::string & thePath);
-        ComponentPtr loadSparkLayoutFromString(const BaseAppPtr theApp, const std::string & theNode);
+        ComponentPtr loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath);
+        ComponentPtr loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode);
 
     private:
-        CallbackMap _myCreateCallbackMap;
+        CallbackMap createCallbackMap_;
+        std::map<std::string, XMLNodePtr> templateMap_; //maps template name to rootXML of that template
         void setupFactory();
+        void resolveTemplates(const BaseAppPtr theApp, XMLNodePtr theRoot);
+        XMLNodePtr loadXMLNodeFromFile(const BaseAppPtr theApp, const std::string & thePath);
+        XMLNodePtr loadXMLNodeFromString(const BaseAppPtr theApp, const std::string & theNode);
+        XMLNodePtr prepareXMLFromString(const BaseAppPtr theApp, const std::string & theNode);
     };
 };
 #endif 

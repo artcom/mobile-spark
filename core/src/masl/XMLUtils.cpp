@@ -6,10 +6,10 @@
 namespace masl {
 
     void printXMLNode(const xmlNode* theNode) {
-        AC_PRINT << "print xml node";
+        AC_PRINT << "print xml node " << theNode->name;
         const xmlNode *cur_node = NULL;
         for (cur_node = theNode; cur_node; cur_node = cur_node->next) {
-            AC_PRINT << " next loop";
+            AC_PRINT << " next loop " << cur_node->name;
             AC_PRINT << " type " << cur_node->type << " compare to " << XML_ELEMENT_NODE;
             if (cur_node->type == XML_ELEMENT_NODE) {
                 AC_PRINT << "node type: Element, name: " << cur_node->name;
