@@ -11,3 +11,6 @@ ac_add_library(
     DEPENDS masl png
 )
 
+ADD_FRAMEWORK(iOS QuartzCore)
+ADD_FRAMEWORK(iOS CoreText)
+
