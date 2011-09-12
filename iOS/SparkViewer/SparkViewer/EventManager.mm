@@ -96,13 +96,13 @@
 
 - (void)handleSwipeLeftGesture:(UIGestureRecognizer *)recognizer {
     NSLog(@"Swipe Left");
-    [self throwEventToSpark:@"<GestureEvent type='swipe' direction='left'/>"];
+    [self throwEventToSpark:@"<GestureEvent type='swipe-left' direction='left'/>"];
 }
 
 
 - (void)handleSwipeRightGesture:(UIGestureRecognizer *)recognizer {
     NSLog(@"Swipe Right");
-    [self throwEventToSpark:@"<GestureEvent type='swipe' direction='right'/>"];
+    [self throwEventToSpark:@"<GestureEvent type='swipe-right' direction='right'/>"];
 }
 
 
