@@ -55,8 +55,8 @@ namespace masl {
                 jint array[] = { theColor[0] * 255, theColor[1] * 255, theColor[2] * 255, theColor[3] * 255};
                 env->SetIntArrayRegion(jI, 0 , 4, array);
                 myArgs[3].l = jI;
-                myArgs[4].i = 10;//theMaxWidth;
-                myArgs[5].i = 10;//theMaxHeight;
+                myArgs[4].i = theMaxWidth;
+                myArgs[5].i = theMaxHeight;
                 jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);                
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                

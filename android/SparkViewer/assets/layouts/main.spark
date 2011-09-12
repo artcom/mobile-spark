@@ -17,6 +17,12 @@
             <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="assets/textures/deco.png"/>
         </Controls>
 
+        <Slide name="TextSlide" title="Text">
+            <Text name="testtextred" z="12" text="Roter Text" color="[1,0,0,1]" fontsize="16" />
+            <Text name="testtextgreen" y="560" z="13" text="Text" color="[0,1,0,1]" fontsize="32"/>
+            <Text name="textblock" y="100" text="Wort0 Wort1 Wort2 Wort3 Wort4 WorteWorte1 Wort5 WortWorte11" maxWidth="150" maxHeight="0" color="[1,1,1,1]" fontsize="16"/>
+        </Slide>    
+
         <Slide name="RectangleSlide" title="Rectangles">
             <Transform name="transform" x="170" y="170" rotationZ="0.3">
                 <Rectangle name="blueObject" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
@@ -46,10 +52,6 @@
             </Transform>
         </Slide>
 
-        <Slide name="TextSlide" title="Text">
-            <Text name="testtextred" z="12" text="Roter Text" color="[1,0,0,1]" fontsize="16" />
-            <Text name="testtextgreen" y="160" z="13" text="Text" color="[0,1,0,1]" fontsize="32"/>
-        </Slide>    
 
         <Slide name="ObjectCreationSlide" title="Component Creation" subtitle="press button to create component from code">
             <NinePatch name="creationbutton" x="20" y="400" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
