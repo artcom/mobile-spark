@@ -6,7 +6,6 @@
 #include <spark/Transform.h>
 #include <spark/View.h>
 
-
 namespace demoapp {
     class DemoApp: public BaseApp {
         public: 
@@ -19,8 +18,12 @@ namespace demoapp {
             void onCreationButton(EventPtr theEvent);
             void onTouch(EventPtr theEvent);
             void insertCreatedComponent();
+            void onSizeChanged(int theWidth, int theHeight);
 
-            std::vector<TransformPtr> _mySlides;
+
+            void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
+
+            std::vector<SlideImplPtr> _mySlides;
             std::vector<ViewPtr> _myViews;
             unsigned _myCurrentSlide;
     };
