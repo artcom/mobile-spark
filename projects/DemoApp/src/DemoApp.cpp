@@ -58,8 +58,6 @@ namespace demoapp {
         spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
 
-        return;
-        
         //button callbacks
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onControlButton));

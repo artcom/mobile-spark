@@ -45,11 +45,11 @@ namespace spark {
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
 #endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/layouts");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/shaders");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/textures");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/layouts");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/shaders");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
     }
 
     void
@@ -98,11 +98,11 @@ namespace spark {
     }
     
     void BaseApp::onFrame(EventPtr theEvent) {
-        //AC_PRINT << ".";
+        AC_TRACE << "onFrame";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _mySparkWindow->render();
-        //AC_PRINT << ". done";
+        AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
     }    
 }
 

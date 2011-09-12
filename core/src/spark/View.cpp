@@ -56,7 +56,7 @@ namespace spark {
         
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
             ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(it->first);
-            AC_DEBUG << " View::renderWorld render: " << it->first->getName();
+            AC_TRACE << " View::renderWorld render: " << it->first->getName();
             it->first->render(_myCamera->getProjectionMatrix());
         }
     }
