@@ -17,6 +17,7 @@ namespace spark {
         private:
         	void onSwipeGesture(EventPtr theEvent);
         	void onPinchGesture(EventPtr theEvent);
+        	void onPanGesture(EventPtr theEvent);
             void onControlButton(EventPtr theEvent);
             void onCreationButton(EventPtr theEvent);
             void onTouch(EventPtr theEvent);
