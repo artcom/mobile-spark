@@ -37,23 +37,6 @@
             }
         }
         
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         [EAGLContext setCurrentContext:glContext];
         
         //create framebuffer
@@ -89,12 +72,8 @@
         myDemoApp = new spark::DemoApp();
         myDemoApp->setup((0.0),[path UTF8String], "assets/layouts/main.spark");
         myDemoApp->onSizeChanged(width, height);
-        
-        //Motion Events
-        UITapGestureRecognizer *singleFingerTap = 
-        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-        [self addGestureRecognizer:singleFingerTap];
-       
+               
+        //works only on phones with gyroscope(iPhone4, iPad2)
         motionManager = [[CMMotionManager alloc] init];
         motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
         
@@ -118,10 +97,11 @@
     
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     [glContext presentRenderbuffer:GL_RENDERBUFFER];  
-    
-    
+        
 }
-
+- (void)onResume
+{ 
+}
 - (void)startAnimation
 {
     if (!animating)
