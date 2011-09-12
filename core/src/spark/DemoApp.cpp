@@ -62,11 +62,13 @@ namespace spark {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myAnimationCB);
 
 		//test swipe gestures
-         //spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
         spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSwipeGesture));
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
 		_mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
 
+		//test pinch gestures
+        spark::EventCallbackPtr myPinchCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPinchGesture));
+        _mySparkWindow->addEventListener(GestureEvent::PINCH, myPinchCB);
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone
@@ -155,6 +157,16 @@ namespace spark {
         _mySlides[_myCurrentSlide]->setVisible(true);        
         _mySlides[_myCurrentSlide]->setSensible(true);        
     }
+    
+    void DemoApp::onPinchGesture(EventPtr theEvent) {
+    	AC_DEBUG << "on Pinch Gesture";
+    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+    	float myScaleFactor = myEvent->getFactor(); 
+    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
+        boost::static_pointer_cast<Widget>(my3dView)->setScaleX(myScaleFactor);
+		boost::static_pointer_cast<Widget>(my3dView)->setScaleY(myScaleFactor);
+    }
+
 
     void DemoApp::onCreationButton(EventPtr theEvent) {
         AC_DEBUG << "on creation button";
