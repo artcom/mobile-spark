@@ -43,7 +43,13 @@ namespace spark {
         ShapeWidget::prerender(theCurrentMatrixStack);    
         build();
     }    
-    
+    const vector2 & 
+    Text::getTextSize() {    
+        if (_myDirtyFlag) {
+            build(); 
+        }
+        return _myTextSize; 
+    }    
     void
     Text::build() {
         if (_myDirtyFlag) {
