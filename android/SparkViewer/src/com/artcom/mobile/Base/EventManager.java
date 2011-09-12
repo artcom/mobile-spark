@@ -1,17 +1,57 @@
 package com.artcom.mobile.Base;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.view.MotionEvent;
 
-public class EventManager {
+public class EventManager implements SensorEventListener {
 	
+	private static EventManager INSTANCE;
 	private int mode=0; // 0 - none; 1-pan; 2-TwofingerTap; 3-pinch; 4-rotate
-	private int width, height;
+	private int height;
 	private long startTime, lastTapTime;
 	private int startX, startY, dx, dy, fingerDistance, fingerDistanceStart;
+	private SensorManager _mySensorManager = null;
+	private Context _myContext;
 	
-	public void onSizeChanged(int width, int height) {
-		this.width = width;
-		this.height =height;
+	public static void enableGyrometer() {
+		if (INSTANCE != null) INSTANCE.enableGyro();
+	}
+	
+	public static void disableGyrometer() {
+		if (INSTANCE != null) INSTANCE.disableGyro();
+	}
+	
+	public static boolean dumpEvent(MotionEvent event) {
+		if (INSTANCE != null) return INSTANCE.dumpTouchEvent(event);
+		return false;
+	}
+	
+	public EventManager(Context context) {
+		_myContext = context;
+		_mySensorManager = (SensorManager) _myContext.getSystemService(Context.SENSOR_SERVICE);
+		INSTANCE = this;
+	}
+	
+	
+	public void enableGyro() {
+		_mySensorManager.registerListener(this, 
+				                          _mySensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), 
+				                          SensorManager.SENSOR_DELAY_GAME);
+	}
+	
+	public void disableGyro() {
+		_mySensorManager.unregisterListener(this, 
+											_mySensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE));
+	}
+	
+	
+	public static void onSizeChanged(int width, int height) {
+		if (INSTANCE == null) return;
+		INSTANCE.height =height;
 	}
 	
 	public boolean dumpTouchEvent(MotionEvent event) {
@@ -141,6 +181,17 @@ public class EventManager {
 			AC_Log.print(" ########### swipe right");
 			String myEvent = "<GestureEvent type='swipe-right' direction='right'/>";
 	        NativeBinding.onEvent(myEvent);
+		}
+
+
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+		public void onSensorChanged(SensorEvent event) {
+			System.out.println("GYRO: " + (int)event.values[0] + ", " + (int)event.values[1] + ", " +(int)event.values[2]);
 		}
 
 }

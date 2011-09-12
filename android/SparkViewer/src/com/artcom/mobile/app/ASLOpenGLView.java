@@ -2,9 +2,7 @@ package com.artcom.mobile.app;
 
 import com.artcom.mobile.Base.*; 
 import android.content.Context;
-import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
-import android.view.MotionEvent;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -17,9 +15,9 @@ public class ASLOpenGLView extends GLSurfaceView {
     
     
     private EGLRenderer myRenderer;
-    private int width;
-    private int height;
-    private EventManager eventManager;
+    //private int width;
+    //private int height;
+    
 
     public ASLOpenGLView(Context context, boolean firstTime) {
         super(context);
@@ -31,16 +29,12 @@ public class ASLOpenGLView extends GLSurfaceView {
     @Override
     public void onSizeChanged (int w, int h, int oldw, int oldh) {
         NativeBinding.onSizeChanged(w,h);
-        eventManager.onSizeChanged(w,h);
-        width = w;
-        height = h;
+        EventManager.onSizeChanged(w,h);
+        //width = w;
+        //height = h;
     }
     
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-    	return eventManager.dumpTouchEvent(event);
-    }
-   
+    
     private void init() {
 
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
@@ -52,7 +46,6 @@ public class ASLOpenGLView extends GLSurfaceView {
         setEGLConfigChooser(new AndroidEGLConfigChooser(AndroidEGLConfigChooser.ConfigType.BEST, false));
         setEGLContextFactory(new ContextFactory());
         setRenderer(myRenderer);
-        eventManager = new EventManager();
     }
 
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
