@@ -6,12 +6,9 @@
 
 namespace spark {
     //needed for component factory
-    //namespace  {
-        ComponentPtr createNinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return NinePatchPtr(new NinePatch(theApp, theXMLNode, theParent));
-        };
-    //    const bool registered = spark::SparkComponentFactory::get().registerComponent("NinePatch", spark::createNinePatch);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("NinePatch", spark::create<NinePatch>);
+    }
 
 
     NinePatch::NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):

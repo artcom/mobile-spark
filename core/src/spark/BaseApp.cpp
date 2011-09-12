@@ -32,7 +32,7 @@ namespace spark {
     BaseApp::~BaseApp() {
     }
 
-    bool BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
+    void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath) {
         //AC_PRINT << "setup";
         //init animationManager with setup-time 
         //(needed for animations created on setup)
@@ -44,6 +44,10 @@ namespace spark {
 #if __APPLE__
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
 #endif
+    }
+
+    void
+    BaseApp::loadLayoutAndRegisterEvents(const std::string & theLayoutFile) {
         //load layout
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), theLayoutFile));
 
@@ -54,10 +58,6 @@ namespace spark {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
         spark::EventCallbackPtr myOnPauseCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onPause));
         _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
-
-        //_myGLCanvas = CanvasPtr( new Canvas());
-        //_myGLCanvas->initGLState();
-        return true;
     }
 
     void BaseApp::onSizeChanged(int theWidth, int theHeight) {

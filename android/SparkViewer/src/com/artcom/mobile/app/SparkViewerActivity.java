@@ -35,31 +35,31 @@ public class SparkViewerActivity extends Activity {
     }
     
     @Override protected void onStart() {
+        AC_Log.print("----------------------SparkViewer started");     
         super.onStart();
         _mySparkWorldIsLoaded = true;
-        AC_Log.print("----------------------SparkViewer started");     
     }
     
     @Override protected void onPause() {
+        AC_Log.print("----------------------SparkViewer paused");
         super.onPause();
         mView.onPause();
         String myEvent = "<StageEvent type='pause'/>";
         NativeBinding.onEvent(myEvent);
         CameraTexture.closeCamera();
-        AC_Log.print("----------------------SparkViewer paused");
     }
     @Override protected void onStop() {
-        super.onStop();
         AC_Log.print("--------------------- on Stop");
+        super.onStop();
     }
 
     @Override protected void onResume() {
+        AC_Log.print("------------------------SparkViewer resumed");        
         super.onResume();
         mView.onResume();
         Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
         AC_Log.setSeverity(mySeverity);
         AC_Log.print("severity: " + mySeverity);
-        AC_Log.print("------------------------SparkViewer resumed");        
     }    
     
 }

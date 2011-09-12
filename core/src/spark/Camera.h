@@ -6,8 +6,6 @@
 using namespace mar;
 
 namespace spark {
-    ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
-    
 
     class Camera : public ShapeWidget {
     public: 

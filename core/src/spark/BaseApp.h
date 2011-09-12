@@ -19,7 +19,8 @@ namespace spark {
             BaseApp();
             virtual ~BaseApp();
 
-            virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
+            virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath);
+            void loadLayoutAndRegisterEvents(const std::string & theLayoutFile);
             virtual void onFrame(EventPtr theEvent);
             virtual void onSizeChanged(int theWidth, int theHeight);
             virtual void onPause(EventPtr theEvent);

@@ -6,12 +6,9 @@
 
 namespace spark {
     //needed for component factory
-    //namespace  {
-        ComponentPtr createText(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return TextPtr(new Text(theApp, theXMLNode, theParent));
-        };
-    //    const bool registered = spark::SparkComponentFactory::get().registerComponent("Rectangle", spark::createRectangle);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Text", spark::create<Text>);
+    }
 
     const char * Text::SPARK_TYPE = "Text";
 
