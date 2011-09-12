@@ -17,6 +17,8 @@
 #include "Camera.h"
 #include "NinePatch.h"
 
+#include "Slide.h"
+
 using namespace masl;
 
 namespace spark {
@@ -36,6 +38,8 @@ namespace spark {
         registered = registerComponent(Camera::SPARK_TYPE, spark::createCamera);
         registered = registerComponent("Shape3D", spark::createShape3D);
         registered = registerComponent("NinePatch", spark::createNinePatch);
+
+        registered = registerComponent("SlideImpl", spark::createSlide);
         AC_PRINT << "SparkComponentFactory setup done";
     };
     
@@ -62,27 +66,29 @@ namespace spark {
     ComponentPtr 
     SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
         CallbackMap::const_iterator i;
-        XMLNodePtr node = theNode;
         if (templateMap_.find(theNode->nodeName) != templateMap_.end()) {
             XMLNodePtr templateRoot = templateMap_.at(theNode->nodeName);
             //merge node
-            for (std::map<std::string, std::string>::iterator it = theNode->attributes.begin(); it != theNode->attributes.end(); ++it) {
-                templateRoot->attributes[it->first] = it->second;
+            for (std::map<std::string, std::string>::iterator it = templateRoot->attributes.begin(); it != templateRoot->attributes.end(); ++it) {
+                if (theNode->attributes.find(it->first) == theNode->attributes.end()) {
+                    theNode->attributes[it->first] = it->second;
+                }
             }
-            AC_PRINT << "template has children " << templateRoot->children.size() << " root has children " << theNode->children.size();
-            for (std::vector<XMLNodePtr>::iterator it = theNode->children.begin(); it != theNode->children.end(); ++it) {
-                AC_PRINT << "............... push back child to template " << (*it)->nodeName;
-                templateRoot->children.push_back(*it);
+            for (std::vector<XMLNodePtr>::iterator it = templateRoot->children.begin(); it != templateRoot->children.end(); ++it) {
+                theNode->children.push_back(*it);
             }
-            i = createCallbackMap_.find(templateRoot->nodeName);
-            node = templateRoot;
-        } else {
-            i = createCallbackMap_.find(theNode->nodeName);
+            if (theNode->name.size() > 0) {
+                templateRoot->name = theNode->name;
+            }
+            theNode->nodeName = templateRoot->nodeName;
         }
+        i = createCallbackMap_.find(theNode->nodeName);
         if (i == createCallbackMap_.end()) {
-            throw UnknownComponentException("Unknown Component Name: " + node->nodeName, PLUS_FILE_LINE);
+            AC_ERROR << "Unknown Component name: " << theNode->nodeName;
+            throw UnknownComponentException("Unknown Component Name: " + theNode->nodeName, PLUS_FILE_LINE);
         }
-        return (i->second)(theApp, node, theParent);
+        AC_DEBUG << "create component " << theNode->nodeName;
+        return (i->second)(theApp, theNode, theParent);
     }
 
     ComponentPtr 

@@ -14,6 +14,8 @@ namespace spark {
         virtual void prerender(MatrixStack& theCurrentMatrixStack);   
         virtual void onResume();
         const vector2 & getTextSize() const { return _myTextSize; }
+        void setText(std::string theText) { _myText = theText; _myDirtyFlag = true;};
+
         static const char* SPARK_TYPE;             
     private:
         void build();
