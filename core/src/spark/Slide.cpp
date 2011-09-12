@@ -30,11 +30,11 @@ namespace spark {
     void
     SlideImpl::centerTitles(const int theWidth, const int theHeight) {
         vector2 myTextSize = titleComponent_->getTextSize();
-        AC_PRINT << "text size " << myTextSize;
+        AC_PRINT << "..........................text size " << myTextSize;
         titleComponent_->setX(theWidth/2.0 - myTextSize[0] / 2.0);
         titleComponent_->setY(theHeight - myTextSize[1] - 100);
         myTextSize = subtitleComponent_->getTextSize();
         subtitleComponent_->setX(theWidth/2.0 - myTextSize[0] / 2.0);
-        subtitleComponent_->setY(titleComponent_->getY() - myTextSize[1] - 10);
+        subtitleComponent_->setY(titleComponent_->getY() - myTextSize[1] - 30);
     }
 }
