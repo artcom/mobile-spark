@@ -34,7 +34,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace demoapp {
 
-    DemoApp::DemoApp():BaseApp(), _myCurrentSlide(0) {
+    DemoApp::DemoApp():BaseApp("demoapp"), _myCurrentSlide(0) {
     }
 
     DemoApp::~DemoApp() {
@@ -49,7 +49,8 @@ namespace demoapp {
 
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath) {
         BaseApp::setup(theCurrentMillis, theAssetPath);
-        loadLayoutAndRegisterEvents("/demoapp/layouts/main.spark");
+
+        loadLayoutAndRegisterEvents("/main.spark");
 
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 

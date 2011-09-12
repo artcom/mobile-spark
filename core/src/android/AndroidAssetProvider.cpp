@@ -25,7 +25,10 @@ namespace android {
         if (theFileName.size() > 0 && theFileName[0] == '/') {  
             //unzipped, read from sdcard
             std::string myContent;
-            masl::readFile("/sdcard" + theFileName, myContent);
+            std::string filePath;
+            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+                masl::readFile(filePath, myContent);
+            }
             return myContent;
         }
         return readFromPackage(_myApkArchive, theFileName);
@@ -36,7 +39,10 @@ namespace android {
         if (theFileName.size() > 0 && theFileName[0] == '/') {  
             //unzipped, read from sdcard
             std::vector<std::string> myContent;
-            masl::readFileLineByLine("/sdcard" + theFileName, myContent);
+            std::string filePath;
+            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+                masl::readFileLineByLine(filePath, myContent);
+            }
             return myContent;
         } 
         return readLineByLineFromPackage(_myApkArchive, theFileName);
@@ -44,6 +50,7 @@ namespace android {
 
     bool 
     AndroidAssetProvider::loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) {
+        //TODO if not from apk
         return android::loadTextureFromPNG(_myApkArchive, filename, textureId, width, height, rgb);
     }
 }

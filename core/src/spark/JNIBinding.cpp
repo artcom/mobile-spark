@@ -10,7 +10,6 @@
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
                                                              jlong currentMillis,
                                                              jstring apkFile) {
-                                                                
     jboolean isCopy;
     const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
     CALL_NATIVE(spark::AppProvider::get().getApp()->setup(currentMillis, myAssetPath));

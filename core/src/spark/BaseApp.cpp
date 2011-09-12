@@ -26,7 +26,7 @@ using namespace mar;
 namespace spark {
 
 
-    BaseApp::BaseApp() {
+    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath) {
     }
 
     BaseApp::~BaseApp() {
@@ -44,6 +44,12 @@ namespace spark {
 #if __APPLE__
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
 #endif
+        AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/layouts");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/shaders");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/textures");
     }
 
     void
