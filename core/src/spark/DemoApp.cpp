@@ -46,6 +46,7 @@ namespace spark {
         spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
         
+               
         //button callbacks
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onControlButton));
@@ -53,11 +54,19 @@ namespace spark {
         ComponentPtr myNextButton = my2DWorld->getChildByName("nextbutton", true);
         myBackButton->addEventListener(TouchEvent::PICKED, myPickedCB);
         myNextButton->addEventListener(TouchEvent::PICKED, myPickedCB);
+        
         spark::EventCallbackPtr myCreationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onCreationButton));
         ComponentPtr myCreationButton = my2DWorld->getChildByName("creationbutton", true);
         myCreationButton->addEventListener(TouchEvent::PICKED, myCreationCB);
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myAnimationCB);
+
+		//test swipe gestures
+         //spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
+        spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSwipeGesture));
+        _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
+		_mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
+
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone
@@ -131,6 +140,17 @@ namespace spark {
         _mySlides[_myCurrentSlide]->setSensible(false);
         _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + 
                           ( theEvent->getTarget()->getName() == "backbutton" ? -1 : +1)) % _mySlides.size();
+        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
+        _mySlides[_myCurrentSlide]->setVisible(true);        
+        _mySlides[_myCurrentSlide]->setSensible(true);        
+    }
+    
+    void DemoApp::onSwipeGesture(EventPtr theEvent) {
+    	AC_DEBUG << "on Swipe Gesture";
+          _mySlides[_myCurrentSlide]->setVisible(false);
+        _mySlides[_myCurrentSlide]->setSensible(false);
+        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + ( theEvent->getType() == "swipe-right" ? -1 : 
+           +1)) % _mySlides.size();
         AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
         _mySlides[_myCurrentSlide]->setVisible(true);        
         _mySlides[_myCurrentSlide]->setSensible(true);        
