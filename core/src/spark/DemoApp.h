@@ -3,8 +3,8 @@
 
 /////////////////// Application code, this should be in java or script language later...
 #include "BaseApp.h"
-#include "Transform.h"
 #include "View.h"
+#include "Slide.h"
 
 
 namespace spark {
@@ -24,7 +24,7 @@ namespace spark {
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
 
-            std::vector<TransformPtr> _mySlides;
+            std::vector<SlideImplPtr> _mySlides;
             std::vector<ViewPtr> _myViews;
             unsigned _myCurrentSlide;
     };
