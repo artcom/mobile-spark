@@ -5,7 +5,8 @@
 .*swn
 *.apk
 .DS_Store
-_build/*
+_build/
+**/**/_build/
 **/**/bin/
 build.xml
 local.properties

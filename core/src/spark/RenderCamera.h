@@ -21,8 +21,6 @@ namespace spark {
     };
 
 
-    ComponentPtr createRenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
-    
     class RenderCamera : public Widget {
     public: 
         RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);

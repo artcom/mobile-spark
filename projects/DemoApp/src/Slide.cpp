@@ -1,14 +1,14 @@
 #include "Slide.h"
+#include <spark/SparkComponentFactory.h>
 
-namespace spark {
+using namespace spark;
+
+namespace demoapp {
 
     //needed for component factory
-    //namespace  {
-        ComponentPtr createSlide(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return SlideImplPtr(new SlideImpl(theApp, theXMLNode, theParent));
-        };
-        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Transform", spark::createTransform);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("SlideImpl", spark::create<SlideImpl>);
+    }
     
     SlideImpl::SlideImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
         : Transform(theApp, theXMLNode, theParent) {

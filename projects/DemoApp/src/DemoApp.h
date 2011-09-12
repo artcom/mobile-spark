@@ -5,18 +5,25 @@
 #include <spark/BaseApp.h>
 #include <spark/Transform.h>
 #include <spark/View.h>
+#include "Slide.h"
+
+#ifdef __ANDROID__
+extern "C" {
+    JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved);
+}
+#endif
 
 namespace demoapp {
-    class DemoApp: public BaseApp {
+    class DemoApp: public spark::BaseApp {
         public: 
             DemoApp();
             virtual ~DemoApp();
-            virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
+            virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath);
 
         private:
-            void onControlButton(EventPtr theEvent);
-            void onCreationButton(EventPtr theEvent);
-            void onTouch(EventPtr theEvent);
+            void onControlButton(spark::EventPtr theEvent);
+            void onCreationButton(spark::EventPtr theEvent);
+            void onTouch(spark::EventPtr theEvent);
             void insertCreatedComponent();
             void onSizeChanged(int theWidth, int theHeight);
 
@@ -24,12 +31,12 @@ namespace demoapp {
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
 
             std::vector<SlideImplPtr> _mySlides;
-            std::vector<ViewPtr> _myViews;
+            std::vector<spark::ViewPtr> _myViews;
             unsigned _myCurrentSlide;
     };
 
     typedef boost::shared_ptr<DemoApp> DemoAppPtr;
-    typedef MemberFunctionEventCallback<DemoApp, DemoAppPtr> DemoEventCB;
+    typedef spark::MemberFunctionEventCallback<DemoApp, DemoAppPtr> DemoEventCB;
 
 };
 

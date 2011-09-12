@@ -17,9 +17,19 @@
 #include <spark/Shape3D.h>
 #include <spark/Text.h>
 #include <spark/SparkComponentFactory.h>
+#include <spark/AppProvider.h>
+
+using namespace spark;
 
 /////////////////////////////////////////////////////////////////////////App-Instance
-spark::BaseAppPtr ourApp = boost::shared_ptr<spark::DemoApp>(new spark::DemoApp());
+#ifdef __ANDROID__
+JNIEXPORT jint JNICALL
+JNI_OnLoad(JavaVM *vm, void *reserved) {
+    spark::AppProvider::get().setApp(boost::shared_ptr<demoapp::DemoApp>(new demoapp::DemoApp()));
+    return JNI_VERSION_1_6;
+}
+#endif
+
 
 /////////////////// Application code, this should be in java or script language later...
 namespace demoapp {
@@ -37,14 +47,17 @@ namespace demoapp {
         AC_PRINT << "hello from free function event callback for eventtype " << theEvent->getType();
     }
 
-    bool DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
-        bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
+    void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath) {
+        BaseApp::setup(theCurrentMillis, theAssetPath);
+        loadLayoutAndRegisterEvents("/demoapp/layouts/main.spark");
 
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 
         //test free function on touch
         spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
+
+        return;
         
         //button callbacks
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
@@ -100,7 +113,7 @@ namespace demoapp {
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(my2DWorld);
         const VectorOfComponentPtr & myChildren = myContainer->getChildrenByType("SlideImpl");
         for (size_t i = 0; i < myChildren.size(); i++) {
-            SlideImplPtr mySlide = boost::static_pointer_cast<spark::SlideImpl>(myChildren[i]);
+            SlideImplPtr mySlide = boost::static_pointer_cast<SlideImpl>(myChildren[i]);
             if (mySlide) {
                 _mySlides.push_back(mySlide);
                 mySlide->setVisible(false);
@@ -121,8 +134,6 @@ namespace demoapp {
         _mySlides[_myCurrentSlide]->setVisible(true);
 
         AC_DEBUG << "found #" << _mySlides.size() << " slides";
-        
-        return myBaseReturn;
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {

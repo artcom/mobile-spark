@@ -5,12 +5,9 @@
 namespace spark {
 
     //needed for component factory
-    //namespace  {
-        ComponentPtr createWorld(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return WorldPtr(new World(theApp, theXMLNode, theParent));
-        };
-        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("World", spark::create<World>);
+    }
 
 
     World::World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 

@@ -5,12 +5,9 @@
 
 namespace spark {
     //needed for component factory
-    //namespace  {
-        ComponentPtr createRectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return RectanglePtr(new Rectangle(theApp, theXMLNode, theParent));
-        };
-    //    const bool registered = spark::SparkComponentFactory::get().registerComponent("Rectangle", spark::createRectangle);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Rectangle", spark::create<Rectangle>);
+    }
 
 
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):

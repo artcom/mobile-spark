@@ -2,7 +2,7 @@
 
 APPFOLDER=`pwd`
 cd ../../android
-./build.sh
+./build.sh $1
 cd $APPFOLDER
 
 ANDROID_TOOL="android"
@@ -22,6 +22,7 @@ BUILD_OK=$?
 #TODO: copy demoapp.so to _build
 cd -
 
+cp _build/lib/armeabi-v7a/libdemoapp.so ../../_build/lib/armeabi-v7a/
 
 # package java
 cd ../../android

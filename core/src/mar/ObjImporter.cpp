@@ -104,7 +104,7 @@ namespace mar {
                 boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel = masl::as<int>(data);
             } else if (type == "map_Kd") {
                 //XXX: here we know that we need textures
-                myMaterial = MaterialPtr(new UnlitTexturedMaterial("assets/models/textures/" + data));
+                myMaterial = MaterialPtr(new UnlitTexturedMaterial("/demoapp/models/textures/" + data));
                 //loadTextureFromPNG("assets/models/textures/" + data, boost::static_pointer_cast<UnlitTexturedMaterial>(myMaterial));
                 //needed?
                 //glBindTexture(GL_TEXTURE_2D, myTextureID);

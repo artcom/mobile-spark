@@ -16,12 +16,9 @@ namespace spark {
     const char * View::SPARK_TYPE = "View";
     
     //needed for component factory
-    //namespace  {
-        ComponentPtr createView(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return ViewPtr(new View(theApp, theXMLNode, theParent));
-        };
-        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("View", spark::create<View>);
+    }
 
 
     View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 

@@ -8,8 +8,6 @@
 
 namespace spark {
     
-    ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
-    
     class Window : public Container {
     public: 
         Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
