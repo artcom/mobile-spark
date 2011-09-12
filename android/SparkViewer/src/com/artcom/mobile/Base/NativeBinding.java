@@ -44,7 +44,8 @@ public class NativeBinding {
     
   public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight) {
 	List<Integer> myResult = new ArrayList<Integer>();
-AC_Log.print(String.format("java rendertext %d %d %d", theFontSize, maxWidth, maxHeight));	  
+	TextLayouter myLayouter = new TextLayouter(theMessage, theFontSize, maxWidth, maxHeight);
+	
 	// Draw the text
 	Paint textPaint = new Paint();
 	textPaint.setTextSize(theFontSize);
@@ -53,27 +54,20 @@ AC_Log.print(String.format("java rendertext %d %d %d", theFontSize, maxWidth, ma
 	textPaint.setSubpixelText(true);
 	textPaint.setAntiAlias(true);
 	textPaint.setTextAlign(Paint.Align.LEFT);
-
-	Paint.FontMetrics myMetrics = new Paint.FontMetrics();
-	textPaint.getFontMetrics(myMetrics);	
-	Rect myRect = new Rect(); 
-	textPaint.getTextBounds(theMessage, 0, theMessage.length(), myRect);
-	int myTextWidth = myRect.right;
-	int myTextHeight = (int)(myMetrics.bottom - myMetrics.top);
-	if (theMessage.length() == 0) {
-		myTextHeight = 0;
-	}
-	int myBaseLine = (int) (- myMetrics.top);
-	//int myBaseLine = (int) (myMetrics.bottom - myMetrics.top - myMetrics.bottom);
-		
-	Bitmap myBitmap = Bitmap.createBitmap(Math.max(1, myTextWidth), Math.max(1, myTextHeight), Bitmap.Config.ARGB_8888);
+	
+	List<TextLine> myLines = myLayouter.createLines(textPaint);
+	
+	//AC_Log.print(String.format("CanvasHeight: %d, %d", myLayouter.getCanvasWidth(), myLayouter.getCanvasHeight()));
+	Bitmap myBitmap = Bitmap.createBitmap(Math.max(1, myLayouter.getCanvasWidth()), Math.max(1, myLayouter.getCanvasHeight()), Bitmap.Config.ARGB_8888);
 	Canvas myCanvas = new Canvas(myBitmap);
-	int[] textures = new int[1];
 	myBitmap.eraseColor(Color.TRANSPARENT);
-	// draw the text centered
-	AC_Log.print("2");
-	myCanvas.drawText(theMessage,0, myBaseLine, textPaint);
-	AC_Log.print("3");
+	
+	// draw the text
+	for (int i = 0; i < myLines.size(); i++) {
+		myCanvas.drawText(myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos, textPaint);
+		//AC_Log.print(String.format("Line %d '%s' at (%d,%d)" , i, myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos));
+	}
+	int[] textures = new int[1];
 	if (theTextureId == 0) {
 		GLES20.glGenTextures(1, textures,0);
 	} else {
@@ -99,8 +93,8 @@ AC_Log.print(String.format("java rendertext %d %d %d", theFontSize, maxWidth, ma
 	myBitmap.recycle();
 
 	myResult.add(textures[0]);
-	myResult.add(myTextWidth);
-	myResult.add(myTextHeight);
+	myResult.add(myBitmap.getWidth());
+	myResult.add(myBitmap.getHeight());
 	
   	return myResult;
   }	
