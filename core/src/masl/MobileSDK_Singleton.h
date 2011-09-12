@@ -34,9 +34,10 @@
 
 #include "Singleton.h"
 
-#ifdef __APPLE__
+#if __APPLE__
     //iOS
-#elif __ANDROID__
+#endif
+#ifdef __ANDROID__
     //Android
     #include <jni.h>    
 #endif
