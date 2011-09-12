@@ -22,7 +22,6 @@ namespace mar {
 
 
     class AssetProviderSingleton : public masl::Singleton<AssetProviderSingleton> {
-    //friend class masl::Singleton<AssetProviderSingleton>;
         public:
             virtual ~AssetProviderSingleton();
             void setAssetProvider(AssetProviderPtr theAssetProvider);

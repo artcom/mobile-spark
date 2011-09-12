@@ -13,7 +13,7 @@ ac_add_library(
     SOURCES ${SOURCES}
     HEADERS ${HEADERS}
     EXTERNS ${EXTERNS}
-    DEPENDS masl
+    DEPENDS masl png
 )
 if(IOS)
     ADD_FRAMEWORK(mar OpenGLES)
