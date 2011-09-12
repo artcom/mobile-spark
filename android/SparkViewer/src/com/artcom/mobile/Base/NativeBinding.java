@@ -42,24 +42,25 @@ public class NativeBinding {
   public static native boolean loadSpark(String theFilename);
   
     
-  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor) {
+  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight) {
 	List<Integer> myResult = new ArrayList<Integer>();
 	  
 	// Draw the text
 	Paint textPaint = new Paint();
 	textPaint.setTextSize(theFontSize);
-	textPaint.setAntiAlias(true);
 	textPaint.setARGB(theColor[3], theColor[0], theColor[1], theColor[2]);
-	textPaint.setAntiAlias(true);
 	//textPaint.setShadowLayer(3, 0, 0, Color.WHITE);
 	textPaint.setSubpixelText(true);
+	textPaint.setAntiAlias(true);
 	textPaint.setTextAlign(Paint.Align.LEFT);
-			
+
+	Paint.FontMetrics myMetrics = new Paint.FontMetrics();
+	textPaint.getFontMetrics(myMetrics);	
 	Rect myRect = new Rect(); 
 	textPaint.getTextBounds(theMessage, 0, theMessage.length(), myRect);
 	int myTextWidth = myRect.right;
-	int myTextHeight = myRect.bottom - myRect.top;
-	int myBaseLine = myTextHeight;
+	int myTextHeight = (int)(myMetrics.bottom - myMetrics.top);
+	int myBaseLine = (int) (myMetrics.bottom - myMetrics.top - myMetrics.bottom);
 	
 	Bitmap myBitmap = Bitmap.createBitmap(myTextWidth, myTextHeight, Bitmap.Config.ARGB_8888);
 	Canvas myCanvas = new Canvas(myBitmap);
