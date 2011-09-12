@@ -15,6 +15,7 @@
 #include "Rectangle.h"
 #include "Transform.h"
 #include "Shape3D.h"
+#include "Text.h"
 #include "SparkComponentFactory.h"
 
 /////////////////////////////////////////////////////////////////////////App-Instance
@@ -39,23 +40,32 @@ namespace spark {
     bool DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile) {
         bool myBaseReturn = BaseApp::setup(theCurrentMillis, theAssetPath, theLayoutFile);
 
-        //return myBaseReturn;
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 
         //test free function on touch
         spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
-
+        
+               
         //button callbacks
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
-        spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onNextButton));
+        spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onControlButton));
+        ComponentPtr myBackButton = my2DWorld->getChildByName("backbutton", true);
         ComponentPtr myNextButton = my2DWorld->getChildByName("nextbutton", true);
+        myBackButton->addEventListener(TouchEvent::PICKED, myPickedCB);
         myNextButton->addEventListener(TouchEvent::PICKED, myPickedCB);
+        
         spark::EventCallbackPtr myCreationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onCreationButton));
         ComponentPtr myCreationButton = my2DWorld->getChildByName("creationbutton", true);
         myCreationButton->addEventListener(TouchEvent::PICKED, myCreationCB);
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myAnimationCB);
+
+		//test swipe gestures
+         //spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
+        spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSwipeGesture));
+        _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
+		_mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
 
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
@@ -95,18 +105,17 @@ namespace spark {
         //mySequence->setOnFinish(masl::CallbackPtr(new masl::FreeFunctionCallback(freeFunction)));
         animation::AnimationManager::get().play(mySequence);
 
-
         //collect slides and views
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(my2DWorld);
-        const VectorOfComponentPtr & myChildren = myContainer->getChildrenByType(Transform::SPARK_TYPE);
+        const VectorOfComponentPtr & myChildren = myContainer->getChildrenByType("SlideImpl");
         for (size_t i = 0; i < myChildren.size(); i++) {
-            TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(myChildren[i]);
-            if (myTransform) {
-                _mySlides.push_back(myTransform);
-                myTransform->setVisible(false);
-                myTransform->setSensible(false);
+            SlideImplPtr mySlide = boost::static_pointer_cast<spark::SlideImpl>(myChildren[i]);
+            if (mySlide) {
+                _mySlides.push_back(mySlide);
+                mySlide->setVisible(false);
+                mySlide->setSensible(false);
             }
-            AC_PRINT << "add slide to slides : " << myTransform->getName();
+            AC_DEBUG << "add slide to slides : " << mySlide->getName();
         }
         const VectorOfComponentPtr & myWindowChildren = _mySparkWindow->getChildrenByType(View::SPARK_TYPE);
         for (size_t i = 0; i < myWindowChildren.size(); i++) {
@@ -115,30 +124,40 @@ namespace spark {
                 _myViews.push_back(myView);
                 myView->setVisible(true);
             }
-            AC_PRINT << "add view to views : " << myView->getName();
+            AC_DEBUG << "add view to views : " << myView->getName();
         }
         _myCurrentSlide = 0;
         _mySlides[_myCurrentSlide]->setVisible(true);
 
-        AC_PRINT << "found #" << _mySlides.size() << " slides";
+        AC_DEBUG << "found #" << _mySlides.size() << " slides";
+        
         return myBaseReturn;
     }
 
-    void DemoApp::onNextButton(EventPtr theEvent) {
-        AC_PRINT << "on next button";
+    void DemoApp::onControlButton(EventPtr theEvent) {
+        AC_DEBUG << "on control button";
         _mySlides[_myCurrentSlide]->setVisible(false);
         _mySlides[_myCurrentSlide]->setSensible(false);
-        _myCurrentSlide++;
-        if (_myCurrentSlide >= _mySlides.size()) {
-            _myCurrentSlide = 0;
-        }
-        AC_PRINT << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
+        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + 
+                          ( theEvent->getTarget()->getName() == "backbutton" ? -1 : +1)) % _mySlides.size();
+        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
+        _mySlides[_myCurrentSlide]->setVisible(true);        
+        _mySlides[_myCurrentSlide]->setSensible(true);        
+    }
+    
+    void DemoApp::onSwipeGesture(EventPtr theEvent) {
+    	AC_DEBUG << "on Swipe Gesture";
+          _mySlides[_myCurrentSlide]->setVisible(false);
+        _mySlides[_myCurrentSlide]->setSensible(false);
+        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + ( theEvent->getType() == "swipe-right" ? -1 : 
+           +1)) % _mySlides.size();
+        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
         _mySlides[_myCurrentSlide]->setVisible(true);        
         _mySlides[_myCurrentSlide]->setSensible(true);        
     }
 
     void DemoApp::onCreationButton(EventPtr theEvent) {
-        AC_PRINT << "on creation button";
+        AC_DEBUG << "on creation button";
         ComponentPtr myTransform = _mySparkWindow->getChildByName("2dworld")->getChildByName("ObjectCreationSlide");
         ComponentPtr myCreated = myTransform->getChildByName("created_from_code");
         if (myCreated) {
@@ -155,14 +174,14 @@ namespace spark {
 
     void DemoApp::insertCreatedComponent() {
         ComponentPtr myTransform = _mySparkWindow->getChildByName("2dworld")->getChildByName("ObjectCreationSlide");
-        ComponentPtr myCreated = SparkComponentFactory::get().loadSparkLayoutFromString(shared_from_this(), 
+        ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(shared_from_this(), 
                 "<Rectangle name=\"created_from_code\" width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0]\"/>"); 
         myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
     }
 
     void DemoApp::onTouch(EventPtr theEvent) {
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
-        AC_PRINT << "on touch "<<myEvent->getType()<<" x:"<<myEvent->getX()<<" ,y:"<<myEvent->getY();
+        AC_DEBUG << "on touch "<<myEvent->getType()<<" x:"<<myEvent->getX()<<" ,y:"<<myEvent->getY();
         //add parallel animations
         ComponentPtr mySlide = _mySparkWindow->getChildByName("2dworld")->getChildByName("AnimatedRectangleSlide");
         ComponentPtr myObject = mySlide->getChildByName("greenObject");
@@ -182,7 +201,18 @@ namespace spark {
         myParallel->add(myRotationAnimation);
         animation::AnimationManager::get().play(myParallel);
     }
-
+    
+    void
+    DemoApp::centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight) {
+        for (std::vector<SlideImplPtr>::iterator it = _mySlides.begin(); it != _mySlides.end(); ++it) {
+            (*it)->centerTitles(theWidth, theHeight);
+        }
+    }
+    
+    void DemoApp::onSizeChanged(int theWidth, int theHeight) {
+        BaseApp::onSizeChanged(theWidth, theHeight);
+        centerSlideTitlesToNewCanvasSize(theWidth, theHeight);
+    }
 }
 
 

@@ -10,6 +10,8 @@ import android.view.WindowManager;
 
 public class SparkViewerActivity extends Activity {
 
+    private Bundle extras_;
+    private EnvMap envMap_;
     private static String GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
     private static String LOG_TAG = "SparkViewerActivity";
     private static boolean _mySparkWorldIsLoaded = false; 
@@ -18,13 +20,18 @@ public class SparkViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        extras_ = this.getIntent().getExtras();
+        envMap_ = new EnvMap();
+        envMap_.init(extras_);
+
         CameraTexture.init(this);
         AC_Log.setTopLevelTag(LOG_TAG);
-        String myVerbosity = System.getenv(GLOBAL_VERBOSITY_ENV);
-        AC_Log.setSeverity(Severity.SEV_WARNING);
-        AC_Log.print("SparkViewer created, ready to call native [cpp logger]. " + myVerbosity);
+        Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
+        AC_Log.setSeverity(mySeverity);
+        AC_Log.print("severity: " + mySeverity);
+        AC_Log.print("SparkViewer created, ready to call native [cpp logger]. ");
         mView = new ASLOpenGLView(getApplication(), !_mySparkWorldIsLoaded);        
-        setContentView(mView);         
+        setContentView(mView);
     }
     
     @Override protected void onStart() {
@@ -49,6 +56,10 @@ public class SparkViewerActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         mView.onResume();
+        Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
+        AC_Log.setSeverity(mySeverity);
+        AC_Log.print("severity: " + mySeverity);
         AC_Log.print("------------------------SparkViewer resumed");        
     }    
+    
 }

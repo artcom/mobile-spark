@@ -38,7 +38,7 @@
 #include "Singleton.h"
 
 namespace masl {
-    enum Severity {SEV_PRINT = 0, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_TESTRESULT, SEV_DISABLED};
+    enum Severity {SEV_PRINT = 0, SEV_TESTRESULT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_DISABLED};
     
     class Logger : public Singleton<Logger> {
         public:

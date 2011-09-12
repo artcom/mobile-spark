@@ -3,8 +3,8 @@
 
 /////////////////// Application code, this should be in java or script language later...
 #include "BaseApp.h"
-#include "Transform.h"
 #include "View.h"
+#include "Slide.h"
 
 
 namespace spark {
@@ -15,12 +15,17 @@ namespace spark {
             virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
 
         private:
-            void onNextButton(EventPtr theEvent);
+        	void onSwipeGesture(EventPtr theEvent);
+            void onControlButton(EventPtr theEvent);
             void onCreationButton(EventPtr theEvent);
             void onTouch(EventPtr theEvent);
             void insertCreatedComponent();
+            void onSizeChanged(int theWidth, int theHeight);
 
-            std::vector<TransformPtr> _mySlides;
+
+            void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
+
+            std::vector<SlideImplPtr> _mySlides;
             std::vector<ViewPtr> _myViews;
             unsigned _myCurrentSlide;
     };
