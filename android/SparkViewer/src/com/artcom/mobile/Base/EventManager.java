@@ -123,7 +123,7 @@ public class EventManager {
 		//-------------------------------------------------------------------------
 		private void pinchHandler() {
 			AC_Log.print(" ########### pinch: factor: " + (float)fingerDistance/fingerDistanceStart);
-			String myEvent = "<GestureEvent type='pinch' scale='" + (float)(fingerDistance)/fingerDistanceStart + "'/>";
+			String myEvent = "<GestureEvent type='pinch' factor='" + (float)(fingerDistance)/fingerDistanceStart + "'/>";
 	        NativeBinding.onEvent(myEvent);
 		}
 		//-------------------------------------------------------------------------
@@ -133,13 +133,13 @@ public class EventManager {
 		//-------------------------------------------------------------------------
 		private void swipeLeftHandler() {
 			AC_Log.print(" ########### swipe left");
-			String myEvent = "<GestureEvent type='swipe' direction='left'/>";
+			String myEvent = "<GestureEvent type='swipe-left' direction='left'/>";
 	        NativeBinding.onEvent(myEvent);
 		}
 		//-------------------------------------------------------------------------
 		private void swipeRightHandler() {
 			AC_Log.print(" ########### swipe right");
-			String myEvent = "<GestureEvent type='swipe' direction='right'/>";
+			String myEvent = "<GestureEvent type='swipe-right' direction='right'/>";
 	        NativeBinding.onEvent(myEvent);
 		}
 

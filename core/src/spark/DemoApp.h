@@ -15,6 +15,7 @@ namespace spark {
             virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
 
         private:
+        	void onSwipeGesture(EventPtr theEvent);
             void onControlButton(EventPtr theEvent);
             void onCreationButton(EventPtr theEvent);
             void onTouch(EventPtr theEvent);
