@@ -44,7 +44,7 @@ public class NativeBinding {
     
   public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight) {
 	List<Integer> myResult = new ArrayList<Integer>();
-	  
+AC_Log.print(String.format("java rendertext %d %d %d", theFontSize, maxWidth, maxHeight));	  
 	// Draw the text
 	Paint textPaint = new Paint();
 	textPaint.setTextSize(theFontSize);
@@ -60,14 +60,20 @@ public class NativeBinding {
 	textPaint.getTextBounds(theMessage, 0, theMessage.length(), myRect);
 	int myTextWidth = myRect.right;
 	int myTextHeight = (int)(myMetrics.bottom - myMetrics.top);
-	int myBaseLine = (int) (myMetrics.bottom - myMetrics.top - myMetrics.bottom);
-	
-	Bitmap myBitmap = Bitmap.createBitmap(myTextWidth, myTextHeight, Bitmap.Config.ARGB_8888);
+	if (theMessage.length() == 0) {
+		myTextHeight = 0;
+	}
+	int myBaseLine = (int) (- myMetrics.top);
+	//int myBaseLine = (int) (myMetrics.bottom - myMetrics.top - myMetrics.bottom);
+		
+	Bitmap myBitmap = Bitmap.createBitmap(Math.max(1, myTextWidth), Math.max(1, myTextHeight), Bitmap.Config.ARGB_8888);
 	Canvas myCanvas = new Canvas(myBitmap);
 	int[] textures = new int[1];
 	myBitmap.eraseColor(Color.TRANSPARENT);
 	// draw the text centered
+	AC_Log.print("2");
 	myCanvas.drawText(theMessage,0, myBaseLine, textPaint);
+	AC_Log.print("3");
 	if (theTextureId == 0) {
 		GLES20.glGenTextures(1, textures,0);
 	} else {
@@ -77,8 +83,7 @@ public class NativeBinding {
 	
 	//Create Nearest Filtered Texture
 	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-	//GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-	
+
 	//Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
 	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
 	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
