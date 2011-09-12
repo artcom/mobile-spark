@@ -59,7 +59,7 @@ namespace masl {
         public:
             MobileSDK_Singleton();  
             virtual ~MobileSDK_Singleton();                      
-            TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor);
+            TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight);
             void updateCameraTexture();
             CameraInfo getCameraSpec();             
             void startCameraCapture();

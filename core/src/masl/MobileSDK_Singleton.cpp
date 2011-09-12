@@ -38,14 +38,15 @@ namespace masl {
     MobileSDK_Singleton::MobileSDK_Singleton() {}
     MobileSDK_Singleton::~MobileSDK_Singleton() {}   
 
-    TextInfo MobileSDK_Singleton::renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor) {
+    TextInfo MobileSDK_Singleton::renderText(const std::string & theMessage, int theTextureId, int theFontSize, 
+                                             vector4 theColor, int theMaxWidth, int theMaxHeight) {
         TextInfo myTextInfo;
 #ifdef __ANDROID__        
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
             jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[I)Ljava/util/List;");
             if(myMethodId != 0) {
-               jvalue myArgs[4];
+               jvalue myArgs[6];
                 myArgs[0].l =  env->NewStringUTF(theMessage.c_str());
                 myArgs[1].i = theTextureId;
                 myArgs[2].i = theFontSize;
@@ -53,6 +54,8 @@ namespace masl {
                 jint array[] = { theColor[0] * 255, theColor[1] * 255, theColor[2] * 255, theColor[3] * 255};
                 env->SetIntArrayRegion(jI, 0 , 4, array);
                 myArgs[3].l = jI;
+                myArgs[4].i = theMaxWidth;
+                myArgs[5].i = theMaxHeight;
                 jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);                
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
