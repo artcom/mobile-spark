@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <Window name="ourWindow" fullscreen="true" clearColor="[0.2,0.2,0.5,1]">
+
     <Template name="Controls" src="/controls.spark"/>
+    <Template name="Slide" src="/slide.spark"/>
 
     <!-- 3dworld provides 3d background animation and should therefore be rendered first-->
     <View name="3dView" world="3dworld" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
@@ -15,68 +17,56 @@
             <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="assets/textures/deco.png"/>
         </Controls>
 
-        <Transform name="RectangleSlide">
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Rectangles" color="[1,1,1,1]" fontsize="16" />
+        <Slide name="RectangleSlide" title="Rectangles">
             <Transform name="transform" x="170" y="170" rotationZ="0.3">
                 <Rectangle name="blueObject" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
                 <Rectangle name="redObject" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
             </Transform>
             <Rectangle name="greenObject" width="20" height="400" z="1" color="[0,1.0,0.0]"/>
-        </Transform>
+        </Slide>
 
-        <Transform name="ImagesSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Images" color="[1,1,1,1]" fontsize="16" />
+        <Slide name="ImagesSlide" title="Images">
             <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="assets/textures/texture.png"/>
             <Image name="transparent_image" x="250" y="250" z="1" src="assets/textures/transparenttexture.png"/>
-        </Transform>
+        </Slide>
 
-        <Transform name="AnimatedRectangleSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="AnimatedRectangle" color="[1,1,1,1]" fontsize="16" />
-            <Text name="SlideTitle" sensible="false" x="10" y="350" z="13" text="touch screen to animate" color="[0,0,0,1]" fontsize="10" />
+        <Slide name="AnimatedRectangleSlide" title="Animation" subtitle="touch screen to animate">
             <Transform name="transform" x="170" y="170" rotationZ="0.3">
                 <Rectangle name="blueObject" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
                 <Rectangle name="redObject" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
             </Transform>
             <Rectangle name="greenObject" width="20" height="400" z="1" color="[0,1.0,0.0]"/>
-        </Transform>
+        </Slide>
 
-        <Transform name="3DSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="3D" color="[1,1,1,1]" fontsize="16" />
+        <Slide name="3DSlide" title="3D">
             <Transform name="transform" x="100" y="10" >
                 <Transform name="rotatetransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
                     <Shape3D name="funnyShape" src="/model"/>
                 </Transform>
             </Transform>
-        </Transform>
+        </Slide>
 
-        <Transform name="TextSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Text" color="[1,1,1,1]" fontsize="16" />
+        <Slide name="TextSlide" title="Text">
             <Text name="testtextred" z="12" text="Roter Text" color="[1,0,0,1]" fontsize="16" />
             <Text name="testtextgreen" y="160" z="13" text="Text" color="[0,1,0,1]" fontsize="32"/>
-        </Transform>    
+        </Slide>    
 
-        <Transform name="ObjectCreationSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Component Creation" color="[1,1,1,1]" fontsize="16" />
-            <Text name="SlideTitle" sensible="false" x="10" y="350" z="13" text="press button to create component from code" color="[0,0,0,1]" fontsize="10" />
+        <Slide name="ObjectCreationSlide" title="Component Creation" subtitle="press button to create component from code">
             <NinePatch name="creationbutton" x="20" y="400" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
-        </Transform>
+        </Slide>
 
-        <Transform name="NinePatchSlide" >
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="NinePatch" color="[1,1,1,1]" fontsize="16" />
-            <NinePatch name="button_normal" x="40" y="100" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
-            <NinePatch name="button_normal" x="40" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_roll.png"/>
-            <NinePatch name="button_normal" x="40" y="300" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_visited.png"/>
-            <NinePatch name="button_normal" x="40" y="400" z="20" height="80" width="175" edgeTop="5" edgeRight="10" edgeBottom="15" edgeLeft="20" src="assets/textures/ninepatchtest.png"/>
-        </Transform>
+        <Slide name="NinePatchSlide" title="NinePatch">
+            <NinePatch x="40" y="100" z="20" height="80" width="125" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_normal.png"/>
+            <NinePatch x="40" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_roll.png"/>
+            <NinePatch x="40" y="300" z="20" height="80" width="75" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="assets/textures/button_visited.png"/>
+            <NinePatch x="40" y="400" z="20" height="80" width="175" edgeTop="5" edgeRight="10" edgeBottom="15" edgeLeft="20" src="assets/textures/ninepatchtest.png"/>
+        </Slide>
 
-        <Transform name="CameraSlide">
-            <Text name="SlideTitle" sensible="false" x="10" y="400" z="12" text="Camera" color="[1,1,1,1]" fontsize="16" />            
+        <Slide name="CameraSlide" title="Camera">
             <Camera name="camera" x="150" y="10" scaleX="0.5" scaleY="0.5">
                 <Image name="border" width="640" height="480" src="assets/textures/rahmen_schwarz.png" z="1"/>
             </Camera>
-            <!--Camera name="camera" x="0" y="600" scaleX="0.5" scaleY="0.5"/-->
-        </Transform>
-        
+        </Slide>
 
     </World>        
 

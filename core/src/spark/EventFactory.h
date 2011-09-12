@@ -25,7 +25,6 @@ namespace spark {
         EventPtr handleEvent(const std::string & theEvent) const;
 
     private:
-        xmlParserCtxtPtr _myXmlCx;
         CallbackMap _myCreateCallbackMap;
         void setupFactory();
     };

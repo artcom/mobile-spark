@@ -20,6 +20,7 @@ namespace spark {
         virtual void onSizeChanged(int theWidth, int theHeight);
         virtual void onResume();        
         vector4 getClearColor() const { return _myClearColor;};
+        vector2 getSize() const { return vector2(_myWidth, _myHeight);}
     private:
         int _myWidth;
         int _myHeight;
