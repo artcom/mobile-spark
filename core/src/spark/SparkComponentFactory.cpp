@@ -66,30 +66,29 @@ namespace spark {
     ComponentPtr 
     SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
         CallbackMap::const_iterator i;
-        XMLNodePtr node = theNode;
         if (templateMap_.find(theNode->nodeName) != templateMap_.end()) {
             XMLNodePtr templateRoot = templateMap_.at(theNode->nodeName);
             //merge node
-            for (std::map<std::string, std::string>::iterator it = theNode->attributes.begin(); it != theNode->attributes.end(); ++it) {
-                templateRoot->attributes[it->first] = it->second;
+            for (std::map<std::string, std::string>::iterator it = templateRoot->attributes.begin(); it != templateRoot->attributes.end(); ++it) {
+                if (theNode->attributes.find(it->first) == theNode->attributes.end()) {
+                    theNode->attributes[it->first] = it->second;
+                }
             }
-            for (std::vector<XMLNodePtr>::iterator it = theNode->children.begin(); it != theNode->children.end(); ++it) {
-                templateRoot->children.push_back(*it);
+            for (std::vector<XMLNodePtr>::iterator it = templateRoot->children.begin(); it != templateRoot->children.end(); ++it) {
+                theNode->children.push_back(*it);
             }
             if (theNode->name.size() > 0) {
                 templateRoot->name = theNode->name;
             }
-            i = createCallbackMap_.find(templateRoot->nodeName);
-            node = templateRoot;
-        } else {
-            i = createCallbackMap_.find(theNode->nodeName);
+            theNode->nodeName = templateRoot->nodeName;
         }
+        i = createCallbackMap_.find(theNode->nodeName);
         if (i == createCallbackMap_.end()) {
-            AC_ERROR << "Unknown Component name: " << node->nodeName;
-            throw UnknownComponentException("Unknown Component Name: " + node->nodeName, PLUS_FILE_LINE);
+            AC_ERROR << "Unknown Component name: " << theNode->nodeName;
+            throw UnknownComponentException("Unknown Component Name: " + theNode->nodeName, PLUS_FILE_LINE);
         }
-        AC_DEBUG << "create component " << node->nodeName;
-        return (i->second)(theApp, node, theParent);
+        AC_DEBUG << "create component " << theNode->nodeName;
+        return (i->second)(theApp, theNode, theParent);
     }
 
     ComponentPtr 
