@@ -24,6 +24,9 @@ namespace demoapp {
         	void onSwipeGesture(spark::EventPtr theEvent);
         	void onPinchGesture(spark::EventPtr theEvent);
         	void onPanGesture(spark::EventPtr theEvent);
+        	void onSensorEvent(spark::EventPtr theEvent);
+        	void onSensorLightEvent(spark::EventPtr theEvent);
+        	void onSensorGyroEvent(spark::EventPtr theEvent);
             void onControlButton(spark::EventPtr theEvent);
             void onCreationButton(spark::EventPtr theEvent);
             void onTouch(spark::EventPtr theEvent);

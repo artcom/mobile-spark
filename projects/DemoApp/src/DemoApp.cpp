@@ -84,6 +84,16 @@ namespace demoapp {
         //test pan gestures
         spark::EventCallbackPtr myPanCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPanGesture));
         _mySparkWindow->addEventListener(GestureEvent::PAN, myPanCB);
+        
+        //test sensors
+        spark::EventCallbackPtr mySensorCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorEvent));
+        _mySparkWindow->addEventListener(SensorEvent::ORIENTATION, mySensorCB);
+        spark::EventCallbackPtr mySensorLightCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorLightEvent));
+        _mySparkWindow->addEventListener(SensorEvent::LIGHT, mySensorLightCB);
+        spark::EventCallbackPtr mySensorGyroCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorGyroEvent));
+        _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
+
+
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone
@@ -192,6 +202,33 @@ namespace demoapp {
 		boost::static_pointer_cast<Widget>(my3dView)->setY((myY + myDY) / 3);
     }
 
+	void DemoApp::onSensorEvent(EventPtr theEvent) {
+    	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
+    	float myY = myEvent->getValue1(); 
+    	float myZ = myEvent->getValue2();
+    	ComponentPtr myWhiteObject = _mySparkWindow->getChildByName("transformOrient", true);
+        TransformPtr myWhiteRectangle = boost::static_pointer_cast<spark::Transform>(myWhiteObject);
+		myWhiteRectangle->setX(myY*4+200);
+		myWhiteRectangle->setY(myZ*4+200);
+    }
+
+	void DemoApp::onSensorLightEvent(EventPtr theEvent) {
+    	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
+    	float myLight = myEvent->getValue0();
+       	ComponentPtr myLightObject = _mySparkWindow->getChildByName("transformLight", true);
+        TransformPtr myLightRectangle = boost::static_pointer_cast<spark::Transform>(myLightObject);
+		myLightRectangle->setY(myLight/10);
+    }
+    
+    void DemoApp::onSensorGyroEvent(EventPtr theEvent) {
+    	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
+    	float myX = myEvent->getValue0();
+       	float myY = myEvent->getValue1();
+       	ComponentPtr myGyroObject = _mySparkWindow->getChildByName("gyro", true);
+        RectanglePtr myGyroRectangle = boost::static_pointer_cast<spark::Rectangle>(myGyroObject);
+		myGyroRectangle->setX(myX*20-15);
+		myGyroRectangle->setY(myY*20-15);
+    }
 
     void DemoApp::onCreationButton(EventPtr theEvent) {
         AC_DEBUG << "on creation button";
