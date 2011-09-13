@@ -1,53 +1,24 @@
-/* __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-// Copyright (C) 1993-2008, ART+COM AG Berlin, Germany <www.artcom.de>
-//
-// These coded instructions, statements, and computer programs contain
-// proprietary information of ART+COM AG Berlin, and are copy protected
-// by law. They may be used, modified and redistributed under the terms
-// of GNU General Public License referenced below.
-//
-// Alternative licensing without the obligations of the GPL is
-// available upon request.
-//
-// GPL v3 Licensing:
-//
-// This file is part of the ART+COM Y60 Platform.
-//
-// ART+COM Y60 is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+#include "AndroidMobileSDK.h"
+#include <masl/Logger.h>
 
-// ART+COM Y60 is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with ART+COM Y60.  If not, see <http://www.gnu.org/licenses/>.
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-*/
-
-#include "MobileSDK_Singleton.h"
-#include "Logger.h"
-
-
-namespace masl {
-    MobileSDK_Singleton::MobileSDK_Singleton() {}
-    MobileSDK_Singleton::~MobileSDK_Singleton() {}   
-
-    TextInfo MobileSDK_Singleton::renderText(const std::string & theMessage, int theTextureId, int theFontSize, 
+namespace android {
+    AndroidMobileSDK::AndroidMobileSDK() {
+        
+    }
+    
+    AndroidMobileSDK::~AndroidMobileSDK() {
+        
+    }
+    
+    masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize, 
                                              vector4 theColor, int theMaxWidth, int theMaxHeight) {
-        TextInfo myTextInfo;
-#ifdef __ANDROID__        
+        masl::TextInfo myTextInfo;  
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
             jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[III)Ljava/util/List;");
             if(myMethodId != 0) {
-               jvalue myArgs[6];
-               AC_PRINT << "theMessage: " << theMessage;
+                jvalue myArgs[6];
+                AC_PRINT << "theMessage: " << theMessage;
                 myArgs[0].l =  env->NewStringUTF(theMessage.c_str());
                 myArgs[1].i = theTextureId;
                 myArgs[2].i = theFontSize;
@@ -60,48 +31,46 @@ namespace masl {
                 jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);                
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
-
+                
                 jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
                 jclass myIntegerClass = env->GetObjectClass(myInt);
-
+                
                 jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");                
                 myTextInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-
+                
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
                 myTextInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-                    
+                
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
                 myTextInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
                 
             } else {
                 AC_WARNING  << "Sorry, java-rendertext not found";                
             }
-        }
-#endif        
+        }      
         return myTextInfo;
     }     
     
-    CameraInfo MobileSDK_Singleton::getCameraSpec() {
-        CameraInfo myCameraInfo;
-        myCameraInfo.textureID=0;
-#ifdef __ANDROID__        
+    masl::CameraInfo AndroidMobileSDK::getCameraSpec() {
+        masl::CameraInfo myCameraInfo;
+        myCameraInfo.textureID=0;     
         if (env) {
-           jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");                        
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");                        
             jmethodID myMethodId = env->GetStaticMethodID(cls, "getCameraParams", "()Ljava/util/List;");
             if(myMethodId != 0) {
                 jvalue myArgs[0];
                 jobject myList = env->CallStaticObjectMethod (cls, myMethodId, myArgs);
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
-
+                
                 jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
                 jclass myIntegerClass = env->GetObjectClass(myInt);
                 jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");                
                 myCameraInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-
+                
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
                 myCameraInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-                    
+                
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
                 myCameraInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
                 
@@ -110,32 +79,28 @@ namespace masl {
                 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);                
                 myCameraInfo.textureheight = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
-                                     
+                
             } else {
                 AC_WARNING  << "Sorry, java-getCameraParams not found";                
             }
-        }
-#endif                
+        }            
         return myCameraInfo;
     }
-    void MobileSDK_Singleton::updateCameraTexture() {
-	
-#ifdef __ANDROID__        
+    void AndroidMobileSDK::updateCameraTexture() {
+              
         if (env) {
-           jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
             jmethodID myMethodId = env->GetStaticMethodID(cls, "updateCameraTexture", "()V");
             if(myMethodId != 0) {
-               jvalue myArgs[0];
+                jvalue myArgs[0];
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
             } else {
                 AC_WARNING  << "Sorry, java-updateCameraTextures not found";                
             }            
-        }
-#endif        
+        }      
     }
     
-    void MobileSDK_Singleton::startCameraCapture() {
-#ifdef __ANDROID__        
+    void AndroidMobileSDK::startCameraCapture() {    
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
             jmethodID myMethodId = env->GetStaticMethodID(cls, "startCamera", "()V");
@@ -146,43 +111,38 @@ namespace masl {
             } else {
                 AC_WARNING  << "Sorry, java-startCamera not found";                
             }
-        }
-#endif        
-
-    }
+        }   
         
-    void MobileSDK_Singleton::stopCameraCapture() {
-#ifdef __ANDROID__        
-            if (env) {
-                jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
-                jmethodID myMethodId = env->GetStaticMethodID(cls, "stopCamera", "()V");
-                if(myMethodId != 0) {
-                    jvalue myArgs[0];
-                    env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
-                    AC_PRINT << "stop camera capture";
-                } else {
-                    AC_WARNING  << "Sorry, java-stopCamera not found";                
-                }
-            }
-#endif        
-                
     }
-    bool MobileSDK_Singleton::isCameraCapturing() {
-        bool myResult = false;
-#ifdef __ANDROID__        
-            if (env) {
-                jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
-                jmethodID myMethodId = env->GetStaticMethodID(cls, "isCameraCapturing", "()Z");
-                if(myMethodId != 0) {
-                    jvalue myArgs[0];
-                    myResult = env->CallStaticBooleanMethod (cls, myMethodId, myArgs);
-                } else {
-                    AC_WARNING  << "Sorry, java-isCameraCapturing not found";                
-                }
+    
+    void AndroidMobileSDK::stopCameraCapture() {       
+        if (env) {
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "stopCamera", "()V");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+                AC_PRINT << "stop camera capture";
+            } else {
+                AC_WARNING  << "Sorry, java-stopCamera not found";                
             }
-#endif        
+        }    
+        
+    }
+    bool AndroidMobileSDK::isCameraCapturing() {
+        bool myResult = false;    
+        if (env) {
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "isCameraCapturing", "()Z");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                myResult = env->CallStaticBooleanMethod (cls, myMethodId, myArgs);
+            } else {
+                AC_WARNING  << "Sorry, java-isCameraCapturing not found";                
+            }
+        }
         return myResult;
     }
-
-
-};
+    
+    
+}

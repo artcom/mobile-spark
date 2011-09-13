@@ -8,9 +8,10 @@ ac_add_library(
     SOURCES ${SOURCES}
     HEADERS ${HEADERS}
     EXTERNS ${EXTERNS}
-    DEPENDS masl png
+    DEPENDS masl mar png
 )
 
+ADD_FRAMEWORK(iOS CoreGraphics)
 ADD_FRAMEWORK(iOS QuartzCore)
 ADD_FRAMEWORK(iOS CoreText)
 

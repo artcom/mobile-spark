@@ -3,7 +3,7 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/Logger.h>
-#include <masl/MobileSDK_Singleton.h>
+#include <masl/MobileSDK.h>
 
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
