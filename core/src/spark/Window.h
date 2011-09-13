@@ -3,6 +3,7 @@
 
 #include <masl/XMLNode.h>
 #include "Container.h"
+#include "Event.h"
 #include <mar/Canvas.h>
 
 
@@ -15,7 +16,7 @@ namespace spark {
 
         void onTouch(EventPtr theEvent);
         virtual void render() const;
-        virtual void onSizeChanged(int theWidth, int theHeight);
+        virtual void onSizeChanged(EventPtr theEvent);
         virtual void onResume();        
         vector4 getClearColor() const { return _myClearColor;};
         vector2 getSize() const { return vector2(_myWidth, _myHeight);}
@@ -31,6 +32,7 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<Window> WindowPtr;
+    typedef MemberFunctionEventCallback<Window, WindowPtr> WindowCB;
 
     //picking
     bool sortByZ(std::pair<ComponentPtr, float> i, std::pair<ComponentPtr, float> j);  

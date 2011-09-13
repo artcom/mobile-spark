@@ -6,10 +6,13 @@ using namespace masl;
 namespace spark {
     const char * const StageEvent::FRAME = "frame";
     const char * const StageEvent::PAUSE = "pause";
+    const char * const WindowEvent::ON_RESIZE = "on_resize";
+        
     const char * const TouchEvent::TAP = "tap";
     const char * const TouchEvent::DOUBLETAP = "doubletap";
     const char * const TouchEvent::LONGPRESS = "longpress";
     const char * const TouchEvent::PICKED = "picked";
+        
     const char * const GestureEvent::PAN = "pan";
     const char * const GestureEvent::PINCH = "pinch";
     const char * const GestureEvent::ROTATE = "rotate";
@@ -83,8 +86,29 @@ namespace spark {
     StageEvent::StageEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
         currenttime_(theXMLNode->getAttributeAs<UInt64>("time", 0))
-    {}
+    {}    
     StageEvent::~StageEvent() {}
+
+    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget, 
+                             unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight) :
+        Event(theType, theTarget)
+    {
+        size_[0] = theNewWidth;
+        size_[1] = theNewHeight;
+
+        oldsize_[0] = theOldWidth;
+        oldsize_[1] = theOldHeight;
+    }
+    WindowEvent::WindowEvent(const masl::XMLNodePtr theXMLNode) :
+        Event(theXMLNode)
+    {
+        size_ = theXMLNode->getAttributeAs<vector2>("newsize", vector2(0,0));
+        oldsize_ = theXMLNode->getAttributeAs<vector2>("oldsize", vector2(0,0));
+    }    
+
+    WindowEvent::~WindowEvent() {}
+
+
 
     TouchEvent::TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY) :
         Event(theType, theTarget), x_(theX), y_(theY) 
