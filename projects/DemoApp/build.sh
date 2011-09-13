@@ -25,13 +25,14 @@ cd -
 cp _build/lib/armeabi-v7a/libdemoapp.so ../../_build/lib/armeabi-v7a/
 
 # package java
-cd ../../android
+cd android
 if [ $BUILD_OK == "0" ] 
 then
-    cd SparkViewer
+    cd DemoAppActivity
     
     # update android project
-    $ANDROID_TOOL --silent update project --target android-9 --name SparkViewer --path . 
+    $ANDROID_TOOL update project --target android-9 --name DemoAppActivity --path . 
+    $ANDROID_TOOL update project -l ../../../../android/SparkViewerBase --target android-9 --name DemoAppActivity --path . 
     BUILD_OK=$?
 fi
 
