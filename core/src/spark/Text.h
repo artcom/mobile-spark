@@ -12,7 +12,7 @@ namespace spark {
         virtual ~Text();    
         virtual void prerender(MatrixStack& theCurrentMatrixStack);   
         virtual void onResume();
-        const vector2 & getTextSize() const { return _myTextSize; }
+        const vector2 & getTextSize();
         void setText(std::string theText) { _myText = theText; _myDirtyFlag = true;};
 
         static const char* SPARK_TYPE;             
@@ -24,6 +24,8 @@ namespace spark {
         int _myFontSize;
         vector4 _myTextColor;
         vector2 _myTextSize;
+        int _myMaxHeight;
+        int _myMaxWidth;
     };
 
     typedef boost::shared_ptr<Text> TextPtr;

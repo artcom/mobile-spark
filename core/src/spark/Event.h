@@ -109,6 +109,10 @@ namespace spark {
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};
+            int getTranslateX() const { return dx_;};
+            int getTranslateY() const { return dy_;};
+            float getFactor() const { return factor_;};
+
 
         private:
             unsigned int x_;

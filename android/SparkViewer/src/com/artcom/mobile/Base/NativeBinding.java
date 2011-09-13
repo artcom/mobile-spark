@@ -42,31 +42,32 @@ public class NativeBinding {
   public static native void setSeverity(Severity theSeverity);
   
     
-  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor) {
+  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight) {
 	List<Integer> myResult = new ArrayList<Integer>();
-	  
+	TextLayouter myLayouter = new TextLayouter(theMessage, theFontSize, maxWidth, maxHeight);
+	
 	// Draw the text
 	Paint textPaint = new Paint();
 	textPaint.setTextSize(theFontSize);
-	textPaint.setAntiAlias(true);
 	textPaint.setARGB(theColor[3], theColor[0], theColor[1], theColor[2]);
-	textPaint.setAntiAlias(true);
 	//textPaint.setShadowLayer(3, 0, 0, Color.WHITE);
 	textPaint.setSubpixelText(true);
+	textPaint.setAntiAlias(true);
 	textPaint.setTextAlign(Paint.Align.LEFT);
-			
-	Rect myRect = new Rect(); 
-	textPaint.getTextBounds(theMessage, 0, theMessage.length(), myRect);
-	int myTextWidth = myRect.right;
-	int myTextHeight = myRect.bottom - myRect.top;
-	int myBaseLine = myTextHeight;
 	
-	Bitmap myBitmap = Bitmap.createBitmap(myTextWidth, myTextHeight, Bitmap.Config.ARGB_8888);
+	List<TextLine> myLines = myLayouter.createLines(textPaint);
+	
+	//AC_Log.print(String.format("CanvasHeight: %d, %d", myLayouter.getCanvasWidth(), myLayouter.getCanvasHeight()));
+	Bitmap myBitmap = Bitmap.createBitmap(Math.max(1, myLayouter.getCanvasWidth()), Math.max(1, myLayouter.getCanvasHeight()), Bitmap.Config.ARGB_8888);
 	Canvas myCanvas = new Canvas(myBitmap);
-	int[] textures = new int[1];
 	myBitmap.eraseColor(Color.TRANSPARENT);
-	// draw the text centered
-	myCanvas.drawText(theMessage,0, myBaseLine, textPaint);
+	
+	// draw the text
+	for (int i = 0; i < myLines.size(); i++) {
+		myCanvas.drawText(myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos, textPaint);
+		//AC_Log.print(String.format("Line %d '%s' at (%d,%d)" , i, myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos));
+	}
+	int[] textures = new int[1];
 	if (theTextureId == 0) {
 		GLES20.glGenTextures(1, textures,0);
 	} else {
@@ -76,8 +77,7 @@ public class NativeBinding {
 	
 	//Create Nearest Filtered Texture
 	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-	//GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-	
+
 	//Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
 	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
 	GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
@@ -93,8 +93,8 @@ public class NativeBinding {
 	myBitmap.recycle();
 
 	myResult.add(textures[0]);
-	myResult.add(myTextWidth);
-	myResult.add(myTextHeight);
+	myResult.add(myBitmap.getWidth());
+	myResult.add(myBitmap.getHeight());
 	
   	return myResult;
   }	
