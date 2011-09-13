@@ -16,6 +16,7 @@ public class SparkViewerActivity extends Activity {
     private static boolean _mySparkWorldIsLoaded = false; 
     ASLOpenGLView mView;
     private EventManager eventManager;
+    private Sensors sensors;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,9 @@ public class SparkViewerActivity extends Activity {
      
         CameraTexture.init(this);
         eventManager = new EventManager();
-        //eventManager.enableGyro();
+        sensors = new Sensors(this);
+        sensors.enable(Sensors.GYROSCOPE);
+        //sensors.enable(Sensors.MAGNETIC_FIELD);
         AC_Log.setTopLevelTag(LOG_TAG);
         Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
         AC_Log.setSeverity(mySeverity);
@@ -53,7 +56,7 @@ public class SparkViewerActivity extends Activity {
         String myEvent = "<StageEvent type='pause'/>";
         NativeBinding.onEvent(myEvent);
         CameraTexture.closeCamera();
-        //eventManager.disableGyro();
+        Sensors.disableAllSensors();
         AC_Log.print("----------------------SparkViewer paused");
     }
     @Override protected void onStop() {
