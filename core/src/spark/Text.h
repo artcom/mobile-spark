@@ -27,6 +27,7 @@ namespace spark {
         vector2 _myTextSize;
         int _myMaxHeight;
         int _myMaxWidth;
+        std::string _myTextAlign;
     };
 
     typedef boost::shared_ptr<Text> TextPtr;

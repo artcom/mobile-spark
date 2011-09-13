@@ -17,10 +17,14 @@
             <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="assets/textures/deco.png"/>
         </Controls>
 
-        <Slide name="TextSlide" title="Text">
-            <Text name="testtextred" z="12" text="Roter Text" color="[1,0,0,1]" fontsize="16" />
-            <Text name="testtextgreen" y="560" z="13" text="Text" color="[0,1,0,1]" fontsize="32"/>
-            <Text name="textblock" y="100" text="Wort0 Wort1 Wort2 Wort3 Wort4 WorteWorte1 Wort5 WortWorte11" maxWidth="150" maxHeight="0" color="[1,1,1,1]" fontsize="16"/>
+        <Slide name="TextSlide" title="Text-Examples">
+            <Text name="testtextgreen" y="580" x="10" z="13" text="Fontsize 32" color="[0,1,0,1]" fontsize="32"/>
+            <Text name="textblock" y="520" x="10" text="left aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="left"/>
+            <Text name="textblock" y="500" x="10" text="center aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="center"/>
+            <Text name="textblock" y="480" x="10" text="right aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="right"/>
+            <Text name="textblock" y="380" x="10" text="Manueller\nUmbruch\nleft align" maxWidth="150" color="[0,1,0,1]" fontsize="16"/>
+            <Text name="textblock" y="380" x="310" text="Automatischer Umbruch right aligned" maxWidth="110" color="[0,1,0,1]" fontsize="16" align="right"/>
+            <Text name="textblock" y="90" x="10" maxWidth="350" maxHeight="0"  text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at erat arcu, quis semper arcu. Pellentesque dictum lacus non eros tristique in adipiscing sem accumsan. Pellentesque semper turpis ac arcu dapibus suscipit. Etiam ligula felis, blandit id blandit elementum, tincidunt id neque. Integer nec eros ut metus feugiat eleifend. Suspendisse." color="[1,1,1,1]" fontsize="16"/>
         </Slide>    
 
         <Slide name="RectangleSlide" title="Rectangles">
@@ -65,7 +69,7 @@
         </Slide>
 
         <Slide name="CameraSlide" title="Camera">
-            <Camera name="camera" x="150" y="10" scaleX="0.5" scaleY="0.5">
+            <Camera name="camera" x="150" y="10" scaleX="0.5" scaleY="0.5" cpu_color_conversion="true">
                 <Image name="border" width="640" height="480" src="assets/textures/rahmen_schwarz.png" z="1"/>
             </Camera>
         </Slide>
