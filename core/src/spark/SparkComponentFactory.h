@@ -12,6 +12,11 @@ namespace spark {
     DEFINE_EXCEPTION(SparkComponentException, Exception)
     DEFINE_EXCEPTION(UnknownComponentException, SparkComponentException)
 
+    template < typename T>
+    ComponentPtr create(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
+        return ComponentPtr(new T(theApp, theXMLNode, theParent));
+    };
+
     class SparkComponentFactory : public masl::Singleton<SparkComponentFactory> {
     public:
         SparkComponentFactory();

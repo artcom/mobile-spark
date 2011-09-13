@@ -2,6 +2,7 @@
 
 #include <masl/Logger.h>
 #include <masl/file_functions.h>
+#include <mar/png_functions.h>
 
 #include "APK_functions.h"
 #include "png_functions.h"
@@ -25,7 +26,10 @@ namespace android {
         if (theFileName.size() > 0 && theFileName[0] == '/') {  
             //unzipped, read from sdcard
             std::string myContent;
-            masl::readFile("/sdcard" + theFileName, myContent);
+            std::string filePath;
+            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+                masl::readFile(filePath, myContent);
+            }
             return myContent;
         }
         return readFromPackage(_myApkArchive, theFileName);
@@ -36,15 +40,25 @@ namespace android {
         if (theFileName.size() > 0 && theFileName[0] == '/') {  
             //unzipped, read from sdcard
             std::vector<std::string> myContent;
-            masl::readFileLineByLine("/sdcard" + theFileName, myContent);
+            std::string filePath;
+            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+                masl::readFileLineByLine(filePath, myContent);
+            }
             return myContent;
         } 
         return readLineByLineFromPackage(_myApkArchive, theFileName);
     }
 
     bool 
-    AndroidAssetProvider::loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) {
-        return android::loadTextureFromPNG(_myApkArchive, filename, textureId, width, height, rgb);
+    AndroidAssetProvider::loadTextureFromPNG(const std::string & theFileName, GLuint & textureId, int & width, int & height, bool & rgb) {
+        if (theFileName.size() > 0 && theFileName[0] == '/') {
+            //unzipped, read from sdcard
+            std::string filePath;
+            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+                return mar::loadTextureFromPNG(filePath, textureId, width, height, rgb);
+            }
+        }
+        return android::loadTextureFromPNG(_myApkArchive, theFileName, textureId, width, height, rgb);
     }
 }
 

@@ -6,7 +6,6 @@
 using namespace mar;
 
 namespace spark {
-    ComponentPtr createShape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     class Shape3D : public ShapeWidget {
     public: 
         Shape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());

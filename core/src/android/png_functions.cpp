@@ -133,18 +133,18 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
   if (color_type == PNG_COLOR_TYPE_RGB_ALPHA) {
-      AC_PRINT << "alpha";
+      AC_DEBUG << "alpha";
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, twidth, theight, 0, GL_RGBA,
           GL_UNSIGNED_BYTE, (GLvoid*) image_data);
       rgb = false;
   } else if (color_type == PNG_COLOR_TYPE_RGB) {
-      AC_PRINT << "no alpha";
+      AC_DEBUG << "no alpha";
       //glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB,
           GL_UNSIGNED_BYTE, (GLvoid*) image_data);
       rgb = true;
   } else {
-      AC_PRINT << "unknown color type " << color_type;
+      AC_DEBUG << "unknown color type " << color_type;
   }
   // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

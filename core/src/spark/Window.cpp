@@ -12,12 +12,9 @@ using namespace mar;
 namespace spark {
 
     //needed for component factory
-    //namespace  {
-        ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return WindowPtr(new Window(theApp, theXMLNode, theParent));
-        };
-        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::create<Window>);
+    }
 
 
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 

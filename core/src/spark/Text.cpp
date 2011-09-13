@@ -6,12 +6,9 @@
 
 namespace spark {
     //needed for component factory
-    //namespace  {
-        ComponentPtr createText(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return TextPtr(new Text(theApp, theXMLNode, theParent));
-        };
-    //    const bool registered = spark::SparkComponentFactory::get().registerComponent("Rectangle", spark::createRectangle);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Text", spark::create<Text>);
+    }
 
     const char * Text::SPARK_TYPE = "Text";
 
@@ -35,6 +32,8 @@ namespace spark {
     void 
     Text::onResume() {
         ShapeWidget::onResume();        
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
+        myMaterial->getTexture()->setTextureId(0); //new texture should be generated
         _myDirtyFlag = true;
     }
     

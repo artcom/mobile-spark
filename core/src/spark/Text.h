@@ -6,7 +6,6 @@
 using namespace mar;
 
 namespace spark {
-    ComponentPtr createText(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     class Text : public ShapeWidget {
     public: 
         Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());

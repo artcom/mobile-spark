@@ -49,6 +49,8 @@ namespace masl {
     /// read a complete file into a string
     bool readFile(const std::string & theUTF8Filename, std::string & theContent);
     bool readFileLineByLine(const std::string & theUTF8Filename, std::vector<std::string> & theContent);
+    bool searchFile(const std::string & theFileName, std::string & retPath, const bool theForce = false);
+    bool searchFile(const std::vector<std::string> & theIncludeList, const std::string & theFileName, std::string & retPath);
 }
 
 #endif
