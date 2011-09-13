@@ -146,8 +146,8 @@ namespace spark {
 			static const char * const TEMPERATURE;
            
             float getValue0() const { return value0_;};
-            float getValue1() const { return value0_;};
-            float getValue2() const { return value0_;};
+            float getValue1() const { return value1_;};
+            float getValue2() const { return value2_;};
             
         private:
             float value0_;
