@@ -4,7 +4,6 @@
 #include "Widget.h"
 
 namespace spark {
-    ComponentPtr createTransform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
 
     class Transform : public Widget {
     public: 

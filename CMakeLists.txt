@@ -5,8 +5,11 @@ project(${APP_NAME})
 
 list(INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR})
 
+set(core_SOURCE_DIR ${PROJECT_SOURCE_DIR}/core)
+
 add_subdirectory(acmake)
 find_package(AcMake)
+
 
 set(REQUIRED_PACKAGES Boost Cml libXML2)
 foreach(PACKAGE ${REQUIRED_PACKAGES})

@@ -7,8 +7,6 @@
 
 namespace spark {
     
-    ComponentPtr createWorld(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
-    
     class World : public Widget {
         public: 
             World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);

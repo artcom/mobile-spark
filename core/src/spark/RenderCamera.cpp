@@ -16,12 +16,9 @@ namespace spark {
     const char* RenderCamera::AutoOrthonormalStr = "auto";
 
     //needed for component factory
-    //namespace  {
-        ComponentPtr createRenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return RenderCameraPtr(new RenderCamera(theApp, theXMLNode, theParent));
-        };
-        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("RenderCamera", spark::create<RenderCamera>);
+    }
 
 
     RenderCamera::RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 

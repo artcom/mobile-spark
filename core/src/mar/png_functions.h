@@ -6,7 +6,8 @@
 #include "Material.h"
 
 namespace mar {
-    GLuint loadTextureFromPNG (const std::string & filename, TexturePtr theTexture);//UnlitTexturedMaterialPtr theMaterial);
+    void loadTextureFromPNG (const std::string & filename, TexturePtr theTexture);
+    bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb);
 };
 
 #endif 

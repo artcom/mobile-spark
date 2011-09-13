@@ -10,9 +10,6 @@
 
 namespace spark {
     
-    ComponentPtr createView(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
-    
-    
     class View : public Widget {
     public: 
         View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);

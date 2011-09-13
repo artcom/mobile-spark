@@ -6,7 +6,6 @@
 using namespace mar;
 
 namespace spark {
-    ComponentPtr createNinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     class NinePatch : public ShapeWidget {
     public: 
         NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
