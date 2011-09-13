@@ -65,14 +65,6 @@ namespace spark {
         spark::EventCallbackPtr myOnPauseCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onPause));
         _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
     }
-
-    void BaseApp::onSizeChanged(int theWidth, int theHeight) {
-        AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
-        if (_mySparkWindow) {
-            _mySparkWindow->onSizeChanged(theWidth, theHeight);
-        }
-        //AC_PRINT << "BaseApp::onSizeChanged done";
-    }
     
     void BaseApp::onEvent(std::string theEventString) {
         //AC_PRINT << "a string event came in :" << theEventString;
