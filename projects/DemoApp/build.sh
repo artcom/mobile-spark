@@ -25,7 +25,7 @@ cd -
 cp _build/lib/armeabi-v7a/libdemoapp.so ../../_build/lib/armeabi-v7a/
 
 # package java
-cd java
+cd android
 if [ $BUILD_OK == "0" ] 
 then
     cd DemoAppActivity
