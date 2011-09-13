@@ -55,7 +55,7 @@ namespace android {
             //unzipped, read from sdcard
             std::string filePath;
             if (masl::searchFile(includePaths_, theFileName, filePath)) {
-                mar::loadTextureFromPNG(filePath, textureId, width, height, rgb);
+                return mar::loadTextureFromPNG(filePath, textureId, width, height, rgb);
             }
         }
         return android::loadTextureFromPNG(_myApkArchive, theFileName, textureId, width, height, rgb);

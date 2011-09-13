@@ -7,7 +7,7 @@
 
 namespace mar {
     void loadTextureFromPNG (const std::string & filename, TexturePtr theTexture);
-    GLuint loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb);
+    bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb);
 };
 
 #endif 
