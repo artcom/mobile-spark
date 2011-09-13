@@ -6,15 +6,18 @@
 #include <masl/Logger.h>
 #include <masl/BaseEntry.h>
 #include <masl/XMLNode.h>
+#include <masl/MobileSDK.h>
 
 #include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
 
 #ifdef __ANDROID__
     #include <android/AndroidAssetProvider.h>
+    #include <android/AndroidMobileSDK.h>
 #endif
 #if __APPLE__
     #include <ios/IOSAssetProvider.h>
+    #include <ios/IOSMobileSDK.h>
 #endif
 
 #include "SparkComponentFactory.h"
@@ -40,9 +43,11 @@ namespace spark {
 
 #ifdef __ANDROID__
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
+        MobileSDK_Singleton::get().setMobileSDK(android::AndroidMobileSDKPtr(new android::AndroidMobileSDK()));        
 #endif
 #if __APPLE__
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
+        MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));        
 #endif
         //load layout
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), theLayoutFile));

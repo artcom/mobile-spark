@@ -13,6 +13,7 @@ namespace spark {
             DemoApp();
             virtual ~DemoApp();
             virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
+            void onSizeChanged(int theWidth, int theHeight);
 
         private:
         	void onSwipeGesture(EventPtr theEvent);
@@ -20,7 +21,6 @@ namespace spark {
             void onCreationButton(EventPtr theEvent);
             void onTouch(EventPtr theEvent);
             void insertCreatedComponent();
-            void onSizeChanged(int theWidth, int theHeight);
 
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);

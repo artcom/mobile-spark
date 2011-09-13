@@ -3,8 +3,8 @@
 #include "JNIBinding.h"
 
 #include <masl/Logger.h>
-#include <masl/MobileSDK_Singleton.h>
-
+#include <masl/MobileSDK.h>
+#include <android/AndroidMobileSDK.h>
 #include "BaseApp.h"
 
 extern spark::BaseAppPtr ourApp;
@@ -21,8 +21,10 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
-    MobileSDK_Singleton::get().env = env;
-    MobileSDK_Singleton::get().obj = obj;
+    android::AndroidMobileSDKPtr myAndroidSDK = boost::static_pointer_cast<android::AndroidMobileSDK>(MobileSDK_Singleton::get().getNative());
+
+    myAndroidSDK->env = env;
+    myAndroidSDK->obj = obj;
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
     CALL_NATIVE(ourApp->onResume());

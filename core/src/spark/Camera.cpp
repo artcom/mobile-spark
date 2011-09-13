@@ -2,7 +2,7 @@
 #include "BaseApp.h"
 
 #include "SparkComponentFactory.h"
-#include <masl/MobileSDK_Singleton.h>
+#include <masl/MobileSDK.h>
 
 namespace spark {
     //needed for component factory
@@ -29,7 +29,7 @@ namespace spark {
     void 
     Camera::onPause() {
         ShapeWidget::onPause();        
-		MobileSDK_Singleton::get().stopCameraCapture();        
+		MobileSDK_Singleton::get().getNative()->stopCameraCapture();        
     }
     
     void 
@@ -37,9 +37,9 @@ namespace spark {
         ShapeWidget::prerender(theCurrentMatrixStack);    
         //AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
         if (isRendered()) {
-            if (!MobileSDK_Singleton::get().isCameraCapturing()) {
-    			MobileSDK_Singleton::get().startCameraCapture();
-                masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
+            if (!MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
+    			MobileSDK_Singleton::get().getNative()->startCameraCapture();
+                masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getNative()->getCameraSpec();
                 if (myCameraInfo.textureID != 0) {
         			float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
         			float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
@@ -53,10 +53,10 @@ namespace spark {
         			AC_PRINT<< " ####### Camera width x height : " << width << " x " << height; 
                 }
             }
-		    MobileSDK_Singleton::get().updateCameraTexture();
+		    MobileSDK_Singleton::get().getNative()->updateCameraTexture();
         } else {
-            if (MobileSDK_Singleton::get().isCameraCapturing()) {
-    			MobileSDK_Singleton::get().stopCameraCapture();
+            if (MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
+    			MobileSDK_Singleton::get().getNative()->stopCameraCapture();
             }
         }
     }    
