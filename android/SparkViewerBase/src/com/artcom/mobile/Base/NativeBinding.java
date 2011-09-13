@@ -42,7 +42,7 @@ public class NativeBinding {
   public static native void setSeverity(Severity theSeverity);
   
     
-  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight) {
+  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight, String theAlign) {
 	List<Integer> myResult = new ArrayList<Integer>();
 	TextLayouter myLayouter = new TextLayouter(theMessage, theFontSize, maxWidth, maxHeight);
 	
@@ -64,7 +64,13 @@ public class NativeBinding {
 	
 	// draw the text
 	for (int i = 0; i < myLines.size(); i++) {
-		myCanvas.drawText(myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos, textPaint);
+		int myXOffset = 0;
+		if (theAlign.compareTo("center") == 0) {
+			myXOffset = (int) ((myBitmap.getWidth() - myLines.get(i)._myWidth) /2.0); 
+		} else if (theAlign.compareTo("right") == 0) {
+			myXOffset = (int) (myBitmap.getWidth() - myLines.get(i)._myWidth); 
+		} 
+		myCanvas.drawText(myLines.get(i)._myLineOfText, myLines.get(i)._myXPos + myXOffset, myLines.get(i)._myYPos, textPaint);
 		//AC_Log.print(String.format("Line %d '%s' at (%d,%d)" , i, myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos));
 	}
 	int[] textures = new int[1];
@@ -145,8 +151,8 @@ public class NativeBinding {
 	  return CameraTexture.getTextureParams();
   }
   
-  public static void startCamera() {
-	  CameraTexture.startCamera();
+  public static void startCamera(boolean theColorConversionFlag) {
+	  CameraTexture.startCamera(theColorConversionFlag);
   }
   
   public static void stopCamera() {

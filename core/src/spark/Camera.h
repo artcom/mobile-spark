@@ -16,6 +16,8 @@ namespace spark {
         
         static const char* SPARK_TYPE;             
     private:
+        bool _myColorConversionFlag;
+        bool _mySetupFlag;
     };
 
     typedef boost::shared_ptr<Camera> CameraPtr;
