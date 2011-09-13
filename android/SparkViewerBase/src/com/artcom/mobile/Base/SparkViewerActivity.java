@@ -27,7 +27,7 @@ public class SparkViewerActivity extends Activity {
         envMap_.init(extras_);
      
         CameraTexture.init(this);
-        eventManager = new EventManager(this);
+        eventManager = new EventManager();
         //eventManager.enableGyro();
         AC_Log.setTopLevelTag(LOG_TAG);
         Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
