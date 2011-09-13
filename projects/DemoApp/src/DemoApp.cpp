@@ -20,6 +20,7 @@
 #include <spark/AppProvider.h>
 
 using namespace spark;
+using namespace masl;
 
 /////////////////////////////////////////////////////////////////////////App-Instance
 #ifdef __ANDROID__
@@ -52,6 +53,10 @@ namespace demoapp {
 
         loadLayoutAndRegisterEvents("/main.spark");
 
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
+        EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onSizeChanged));
+        _mySparkWindow->addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
+
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 
         //test free function on touch
@@ -59,7 +64,6 @@ namespace demoapp {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
 
         //button callbacks
-        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onControlButton));
         ComponentPtr myBackButton = my2DWorld->getChildByName("backbutton", true);
         ComponentPtr myNextButton = my2DWorld->getChildByName("nextbutton", true);
@@ -246,9 +250,9 @@ namespace demoapp {
         }
     }
     
-    void DemoApp::onSizeChanged(int theWidth, int theHeight) {
-        BaseApp::onSizeChanged(theWidth, theHeight);
-        centerSlideTitlesToNewCanvasSize(theWidth, theHeight);
+    void DemoApp::onSizeChanged(EventPtr theEvent) {
+        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);            
+        centerSlideTitlesToNewCanvasSize(myEvent->size_[0], myEvent->size_[1]);
     }
 }
 

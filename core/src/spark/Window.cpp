@@ -28,10 +28,15 @@ namespace spark {
         _myFullScreenFlag = _myXMLNode->getAttributeAs<bool>("fullscreen", false);
         _myClearColor = _myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1));
 
+        //EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr > ( shared_from_this(), &Window::Window));
+
+        WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());
+        EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new WindowCB(ptr, &Window::onSizeChanged));
+        addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
+
         // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
-        //if (!_myFullScreenFlag) {
-            onSizeChanged(_myXMLNode->getAttributeAs<float>("width",100), _myXMLNode->getAttributeAs<float>("height",100));
-        //}        
+        _myWidth = _myXMLNode->getAttributeAs<float>("width",100);
+        _myHeight = _myXMLNode->getAttributeAs<float>("height",100);
     }
 
     Window::~Window() {
@@ -52,14 +57,14 @@ namespace spark {
     }
     
     void Window::onResume() {
-        AC_PRINT << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111";
         _myGLCanvas->initGLState();
     }
 
     void 
-    Window::onSizeChanged(int theWidth, int theHeight) {
-        _myWidth = theWidth; 
-        _myHeight = theHeight;
+    Window::onSizeChanged(EventPtr theEvent) {
+        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);                    
+        _myWidth = myEvent->size_[0]; 
+        _myHeight= myEvent->size_[1];
     }
 
     void 

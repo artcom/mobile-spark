@@ -28,8 +28,8 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     }
 
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {        
-        AC_Log.print("onSurfaceChanged");
-        NativeBinding.onSizeChanged(width,height);    
+        String myEvent = "<WindowEvent type='on_resize' newsize='[" + width + "," + height + "]' oldsize='[-1, -1]'/>";
+        NativeBinding.onEvent(myEvent);        
     }
     
     private void updateFrameCounter() {
