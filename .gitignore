@@ -9,6 +9,7 @@ _build
 bin
 gen
 build.xml
+proguard.cfg
 local.properties
 default.properties
 iOS/Xcode_iPad

@@ -16,23 +16,14 @@ cd -
 
 cd SparkViewerBase
 
-# update android project
-$ANDROID_TOOL --silent update project --target android-9 --name SparkViewerBase --path . 
-BUILD_OK=$?
-
-if [ $BUILD_OK == "0" ] 
-then
-    # build java
-    ant -quiet compile
-    BUILD_OK=$?
-fi
+# update Base project
+$ANDROID_TOOL --silent update lib-project --target android-9 --path . 
 
 cd -
 
-
 cd SparkViewerTest
 # update android test project
-$ANDROID_TOOL --silent update test-project -m ../SparkViewerBase -p .
+$ANDROID_TOOL --silent update test-project --main ../SparkViewerBase --path .
 
 # build test apk && upload && run test
 ant  run-tests
