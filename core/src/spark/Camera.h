@@ -6,8 +6,6 @@
 using namespace mar;
 
 namespace spark {
-    ComponentPtr createCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
-    
 
     class Camera : public ShapeWidget {
     public: 
@@ -18,6 +16,8 @@ namespace spark {
         
         static const char* SPARK_TYPE;             
     private:
+        bool _myColorConversionFlag;
+        bool _mySetupFlag;
     };
 
     typedef boost::shared_ptr<Camera> CameraPtr;

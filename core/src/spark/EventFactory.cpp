@@ -13,6 +13,8 @@ namespace spark {
         bool registered = registerEvent("StageEvent", spark::createEvent<StageEvent>);
         registered = registerEvent("TouchEvent", spark::createEvent<TouchEvent>);
         registered = registerEvent("GestureEvent", spark::createEvent<GestureEvent>);
+        registered = registerEvent("SensorEvent", spark::createEvent<SensorEvent>);
+
     };
     
     EventFactory::EventFactory() {

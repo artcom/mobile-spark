@@ -104,15 +104,7 @@ namespace mar {
                 boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel = masl::as<int>(data);
             } else if (type == "map_Kd") {
                 //XXX: here we know that we need textures
-                myMaterial = MaterialPtr(new UnlitTexturedMaterial("assets/models/textures/" + data));
-                //loadTextureFromPNG("assets/models/textures/" + data, boost::static_pointer_cast<UnlitTexturedMaterial>(myMaterial));
-                //needed?
-                //glBindTexture(GL_TEXTURE_2D, myTextureID);
-                ////non-clamp wrap-modes do only work with power-of-2-textures
-                //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                myMaterial = MaterialPtr(new UnlitTexturedMaterial("/textures/" + data));
             }        
         }
         if (myMaterial) {
