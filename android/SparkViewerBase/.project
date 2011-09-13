@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>SparkViewerTest</name>
+	<name>SparkViewerBase</name>
 	<comment></comment>
 	<projects>
-		<project>SparkViewer</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -31,11 +30,4 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>_build</name>
-			<type>2</type>
-			<location>/home/katjae/eclipse/C::/home/katjae/eclipse/D/dev/git/mobile/mobile-spark/_build</location>
-		</link>
-	</linkedResources>
 </projectDescription>

@@ -8,6 +8,7 @@
 _build/
 **/**/_build/
 **/**/bin/
+**/**/gen/
 build.xml
 local.properties
 default.properties

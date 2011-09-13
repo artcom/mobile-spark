@@ -31,7 +31,7 @@ then
     cd SparkViewer
     
     # update android project
-    $ANDROID_TOOL --silent update project --target android-9 --name SparkViewer --path . 
+    $ANDROID_TOOL --silent update project -l ../SparkViewerBase --target android-9 --name SparkViewer --path . 
     BUILD_OK=$?
 fi
 

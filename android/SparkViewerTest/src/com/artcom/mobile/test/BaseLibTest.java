@@ -1,10 +1,8 @@
 package com.artcom.mobile.test;
 
 
-import com.artcom.mobile.Base.NativeBinding;
 import com.artcom.mobile.test.BaseBinding;
 import android.test.AndroidTestCase;
-import android.util.Log;
 import junit.framework.Assert;
 
 public class BaseLibTest extends AndroidTestCase {
@@ -15,10 +13,7 @@ public class BaseLibTest extends AndroidTestCase {
         Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);
         
     }
-    public void testLibsInterface() throws Throwable {      
-         // test bound methods
-        Assert.assertTrue(NativeBinding.loadSpark("/sdcard/test.spark"));
-    }
+    
     public void testJava() throws Throwable {       
          // test java stuff
     }
