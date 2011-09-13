@@ -7,4 +7,4 @@ else
     echo "<<<<< use AC_LOG_VERBOSITY=<SEVERITY> to set a logging level"
 fi
 
-adb shell am start -a android.intent.action.MAIN -n com.artcom.mobile/com.artcom.mobile.app.SparkViewerActivity --es env_0 AC_LOG_VERBOSITY="$SEVERITY"
+adb shell am start -a android.intent.action.MAIN -n com.artcom.mobile/com.artcom.mobile.app.DemoAppActivity --es env_0 AC_LOG_VERBOSITY="$SEVERITY"

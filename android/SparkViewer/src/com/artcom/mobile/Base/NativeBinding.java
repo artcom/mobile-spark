@@ -21,16 +21,16 @@ import com.artcom.mobile.Base.Severity;
 import com.artcom.mobile.Base.NativeException;
 public class NativeBinding {
   
-  static {    
+    
+  public static void loadLibraries() {
       System.loadLibrary("masl");
       System.loadLibrary("animation");
       System.loadLibrary("mar");
       System.loadLibrary("android");
       System.loadLibrary("spark");
-      System.loadLibrary("demoapp");  //XXX move to app
+     
   }
-
-  
+   
   public static native void setup(long currentMillis, String apkFilePath);
   public static native void onSizeChanged(int theWidth, int theHeight);
   public static native void onResume();
@@ -155,6 +155,7 @@ public class NativeBinding {
   public static boolean isCameraCapturing() {
 	  return CameraTexture.isCapturing();
   }
+
   
 }
 

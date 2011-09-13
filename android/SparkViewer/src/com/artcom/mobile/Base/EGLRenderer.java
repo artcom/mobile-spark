@@ -1,4 +1,4 @@
-package com.artcom.mobile.app;
+package com.artcom.mobile.Base;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -6,10 +6,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import com.artcom.mobile.Base.AC_Log;
-import com.artcom.mobile.Base.APK;
-import com.artcom.mobile.Base.CameraTexture;
-import com.artcom.mobile.Base.NativeBinding;
 
 public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static int numFrames = 0;
