@@ -6,9 +6,9 @@
 *.apk
 .DS_Store
 _build/
-**/**/_build/
-**/**/bin/
-**/**/gen/
+_build
+bin
+gen
 build.xml
 local.properties
 default.properties

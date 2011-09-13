@@ -8,4 +8,6 @@ public class DemoAppActivity extends SparkViewerActivity {
         NativeBinding.loadLibraries();
         System.loadLibrary("demoapp"); 
     }
+    protected static String LOG_TAG = "DemoAppActivity";
+
 }
