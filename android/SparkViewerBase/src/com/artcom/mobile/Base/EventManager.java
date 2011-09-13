@@ -9,28 +9,21 @@ public class EventManager {
 	private int height;
 	private long startTime, lastTapTime;
 	private int startX, startY, dx, dy, fingerDistance, fingerDistanceStart;
-	
-	
-	
-	
+	//-------------------------------------------------------------------------
 	public static boolean dumpEvent(MotionEvent event) {
 		if (INSTANCE != null) return INSTANCE.dumpTouchEvent(event);
 		return false;
 	}
-	
+	//-------------------------------------------------------------------------
 	public EventManager() {
 		INSTANCE = this;
 	}
-	
-	
-	
-	
-	
+	//-------------------------------------------------------------------------
 	public static void onSizeChanged(int width, int height) {
 		if (INSTANCE == null) return;
 		INSTANCE.height =height;
 	}
-	
+	//-------------------------------------------------------------------------
 	public boolean dumpTouchEvent(MotionEvent event) {
 			dx = (int)event.getX()-startX;
 			dy = height - (int)event.getY()-startY;
@@ -58,8 +51,6 @@ public class EventManager {
 							if (dx > 100f) swipeRightHandler();
 							break;
 						}
-							
-						
 					} else if (mode == 0) {
 						longPressedHandler();
 						break;
@@ -162,5 +153,4 @@ public class EventManager {
 			String myEvent = "<GestureEvent type='swipe-right' direction='right'/>";
 	        NativeBinding.onEvent(myEvent);
 		}
-
 }
