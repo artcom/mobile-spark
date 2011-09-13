@@ -5,46 +5,13 @@
 #include <masl/XMLUtils.h>
 #include <mar/AssetProvider.h>
 
-#include "Window.h"
-#include "View.h"
-#include "RenderCamera.h"
-#include "World.h"
-#include "Transform.h"
-#include "Rectangle.h"
-#include "Text.h"
-#include "Image.h"
-#include "Shape3D.h"
-#include "Camera.h"
-#include "NinePatch.h"
-
-#include "Slide.h"
 
 using namespace masl;
+using namespace mar;
 
 namespace spark {
     
-    //TODO: decentralize this again
-    void 
-    SparkComponentFactory::setupFactory() {
-        AC_PRINT << "SparkComponentFactory setup";
-        bool registered = registerComponent("Window", spark::createWindow);
-        registered = registerComponent(View::SPARK_TYPE, spark::createView);
-        registered = registerComponent(RenderCamera::SPARK_TYPE, spark::createRenderCamera);
-        registered = registerComponent("World", spark::createWorld);
-        registered = registerComponent(Transform::SPARK_TYPE, spark::createTransform);
-        registered = registerComponent("Rectangle", spark::createRectangle);
-        registered = registerComponent("Image", spark::createImage);
-        registered = registerComponent(Text::SPARK_TYPE, spark::createText);
-        registered = registerComponent(Camera::SPARK_TYPE, spark::createCamera);
-        registered = registerComponent("Shape3D", spark::createShape3D);
-        registered = registerComponent("NinePatch", spark::createNinePatch);
-
-        registered = registerComponent("SlideImpl", spark::createSlide);
-        AC_PRINT << "SparkComponentFactory setup done";
-    };
-    
     SparkComponentFactory::SparkComponentFactory() {
-        setupFactory();
     }
     SparkComponentFactory::~SparkComponentFactory() {
     }

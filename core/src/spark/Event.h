@@ -109,6 +109,10 @@ namespace spark {
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};
+            int getTranslateX() const { return dx_;};
+            int getTranslateY() const { return dy_;};
+            float getFactor() const { return factor_;};
+
 
         private:
             unsigned int x_;
@@ -121,6 +125,37 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<GestureEvent> GestureEventPtr;
+    
+    class SensorEvent : public Event {
+        public:
+
+            SensorEvent(const std::string & theType, ComponentPtr theTarget, const float theValue0, const float theValue1, const float theValue2);
+            SensorEvent(const masl::XMLNodePtr theXMLNode);
+            virtual ~SensorEvent();
+
+			static const char * const ACCELEROMETER;
+			static const char * const GRAVITY;
+			static const char * const GYROSCOPE;
+			static const char * const LIGHT;
+			static const char * const LINEAR_ACCELERATION;
+			static const char * const MAGNETIC_FIELD;
+			static const char * const ORIENTATION;
+			static const char * const PRESSURE;
+			static const char * const PROXIMITY;
+			static const char * const ROTATION_VECTOR;
+			static const char * const TEMPERATURE;
+           
+            float getValue0() const { return value0_;};
+            float getValue1() const { return value0_;};
+            float getValue2() const { return value0_;};
+            
+        private:
+            float value0_;
+			float value1_;
+			float value2_;        
+    };
+
+    typedef boost::shared_ptr<SensorEvent> SensorEventPtr;
     
 
     ////////////////////////////////////////////////////////////////////////

@@ -10,16 +10,20 @@ fi
 
 cd ../_build
 cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchains/android.toolchain.cmake ..
-$MAKE_TOOL
+$MAKE_TOOL $1
 
 cd -
 
+cd SparkViewerBase
 
-adb push SparkViewerTest/assets/test.spark /sdcard/test.spark
+# update Base project
+$ANDROID_TOOL --silent update lib-project --target android-9 --path . 
+
+cd -
 
 cd SparkViewerTest
 # update android test project
-$ANDROID_TOOL --silent update test-project -m ../SparkViewer -p .
+$ANDROID_TOOL --silent update test-project --main ../SparkViewerBase --path .
 
 # build test apk && upload && run test
 ant  run-tests

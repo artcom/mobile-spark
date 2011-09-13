@@ -16,10 +16,11 @@ namespace spark {
 
     class BaseApp : public boost::enable_shared_from_this<BaseApp> {
         public: 
-            BaseApp();
+            BaseApp(const std::string & theAppPath);
             virtual ~BaseApp();
 
-            virtual bool setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, const std::string & theLayoutFile);
+            virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath);
+            void loadLayoutAndRegisterEvents(const std::string & theLayoutFile);
             virtual void onFrame(EventPtr theEvent);
             virtual void onSizeChanged(int theWidth, int theHeight);
             virtual void onPause(EventPtr theEvent);
@@ -29,8 +30,8 @@ namespace spark {
             spark::WindowPtr _mySparkWindow; 
             void renderText(std::string theMessage, int theOpenGLTextureId);
 
-        private:
-            //mar::CanvasPtr _myGLCanvas;      
+        protected:
+            std::string appPath_;
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;

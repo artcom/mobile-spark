@@ -5,12 +5,9 @@
 
 namespace spark {
     //needed for component factory
-    //namespace  {
-        ComponentPtr createShape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return Shape3DPtr(new Shape3D(theApp, theXMLNode, theParent));
-        };
-    //    const bool registered = spark::SparkComponentFactory::get().registerComponent("Image", spark::createImage);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Shape3D", spark::create<Shape3D>);
+    }
 
 
     Shape3D::Shape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):

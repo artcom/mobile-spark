@@ -36,12 +36,14 @@ namespace masl {
     /// read a complete file into a string
     bool 
     readFile(const std::string & theUTF8Filename, std::string & theContent) {
-        FILE * pFile;
-        char *myCharBuffer;
-        pFile = fopen (theUTF8Filename.c_str(),"r");
-        if (pFile == NULL) { 
-            throw Exception("Error opening file");
-        } else {
+         FILE * pFile;
+         std::string filepath;
+         searchFile(theUTF8Filename, filepath, true);
+         char *myCharBuffer;
+         pFile = fopen (filepath.c_str(),"r");
+         if (pFile == NULL) { 
+             throw Exception("Error opening file");
+         } else {
             fseek(pFile,0,SEEK_END); //go to end
             int len=ftell(pFile); //get position at end (length)
             fseek(pFile,0,SEEK_SET); //go to beg.
@@ -50,10 +52,9 @@ namespace masl {
             fread(myCharBuffer,len,1,pFile); //read into buffer
             fclose(pFile);
             theContent = std::string(myCharBuffer);
-            free (myCharBuffer);
+            free(myCharBuffer);
         }
         return true;
-
     }
 
     bool 
@@ -61,8 +62,10 @@ namespace masl {
         const size_t MAX_LENGTH = 1000;
         char buffer[MAX_LENGTH];
         std::string newPart;
+        std::string filepath;
+        searchFile(theUTF8Filename, filepath, true);
         FILE *file;
-        if ((file = fopen(theUTF8Filename.c_str(), "rb")) == NULL) {
+        if ((file = fopen(filepath.c_str(), "rb")) == NULL) {
             throw Exception("Error opening file");
         }
         size_t size = fread(buffer, 1, MAX_LENGTH,file);
@@ -85,6 +88,31 @@ namespace masl {
         }
         fclose(file);
         return true;
+    }
+
+    bool
+    searchFile(const std::string & theFileName, std::string & retPath, bool theForce) {
+        FILE * pFile;
+        pFile = fopen(theFileName.c_str(),"r");
+        if (pFile == NULL && theForce) { 
+            throw Exception("Error opening file " + theFileName);
+        }
+        if (pFile) {
+            fclose(pFile);
+            retPath = theFileName;
+            return true;
+        }
+        return false;
+    }
+
+    bool
+    searchFile(const std::vector<std::string> & theIncludeList, const std::string & theFileName, std::string & retPath) {
+        for (std::vector<std::string>::const_iterator it = theIncludeList.begin(); it != theIncludeList.end(); ++it) {
+            if (searchFile((*it) + theFileName, retPath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

@@ -108,4 +108,18 @@ namespace spark {
     {}
     
     GestureEvent::~GestureEvent() {}
+    
+    
+    SensorEvent::SensorEvent(const std::string & theType, ComponentPtr theTarget, const float theValue0, const float theValue1, const float theValue2)
+         : Event(theType, theTarget), value0_(theValue0), value1_(theValue1), value2_(theValue2)
+    {}
+    SensorEvent::SensorEvent(const masl::XMLNodePtr theXMLNode) :
+        Event(theXMLNode),
+        value0_(theXMLNode->getAttributeAs<float>("value0", 0.0)),
+        value1_(theXMLNode->getAttributeAs<float>("value1", 0.0)),
+        value2_(theXMLNode->getAttributeAs<float>("value2", 0.0))
+    {}
+    SensorEvent::~SensorEvent() {}
+
+    
 }

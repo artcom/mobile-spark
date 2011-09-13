@@ -6,12 +6,9 @@
 
 namespace spark {
     //needed for component factory
-    //namespace  {
-        ComponentPtr createImage(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return ImagePtr(new Image(theApp, theXMLNode, theParent));
-        };
-    //    const bool registered = spark::SparkComponentFactory::get().registerComponent("Image", spark::createImage);
-    //}
+    namespace  {
+        const bool registered = spark::SparkComponentFactory::get().registerComponent("Image", spark::create<Image>);
+    }
 
 
     Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
