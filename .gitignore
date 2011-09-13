@@ -12,7 +12,6 @@ gen
 build.xml
 local.properties
 default.properties
-proguard.cfg
 iOS/Xcode_iPad
 iOS/Xcode_Simulator
 _iOS_build
