@@ -42,7 +42,7 @@ if [ $BUILD_OK == "0" ]
 then
     
     # build java
-    ant -quiet compile
+    ant -quiet   compile
     BUILD_OK=$?
 fi
     

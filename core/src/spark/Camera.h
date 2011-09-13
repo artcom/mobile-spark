@@ -13,13 +13,18 @@ namespace spark {
         virtual ~Camera();    
         virtual void prerender(MatrixStack& theCurrentMatrixStack);   
         virtual void onPause();
+        virtual void onSizeChanged(EventPtr theEvent);
         
         static const char* SPARK_TYPE;             
     private:
+        void setGeometry();
         bool _myColorConversionFlag;
         bool _mySetupFlag;
+        bool _myPortraitMode;
     };
 
     typedef boost::shared_ptr<Camera> CameraPtr;
+    typedef MemberFunctionEventCallback<Camera, CameraPtr> CameraCB;
+        
 };
 #endif 
