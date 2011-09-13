@@ -15,6 +15,18 @@ namespace spark {
     const char * const GestureEvent::ROTATE = "rotate";
     const char * const GestureEvent::SWIPE_LEFT = "swipe-left";
     const char * const GestureEvent::SWIPE_RIGHT = "swipe-right";
+    const char * const SensorEvent::ACCELEROMETER = "ACCELEROMETER";
+	const char * const SensorEvent::GRAVITY = "GRAVITY";
+	const char * const SensorEvent::GYROSCOPE = "GYROSCOPE";
+	const char * const SensorEvent::LIGHT = "LIGHT";
+	const char * const SensorEvent::LINEAR_ACCELERATION = "LINEAR_ACCELERATION";
+	const char * const SensorEvent::MAGNETIC_FIELD = "MAGNETIC_FIELD";
+	const char * const SensorEvent::ORIENTATION = "ORIENTATION";
+	const char * const SensorEvent::PRESSURE = "PRESSURE";
+	const char * const SensorEvent::PROXIMITY = "PROXIMITY";
+	const char * const SensorEvent::ROTATION_VECTOR = "ROTATION_VECTOR";
+	const char * const SensorEvent::TEMPERATURE = "TEMPERATURE";
+
 
     Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
     }
