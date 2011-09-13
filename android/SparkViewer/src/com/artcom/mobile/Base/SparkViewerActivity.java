@@ -1,4 +1,4 @@
-package com.artcom.mobile.app;
+package com.artcom.mobile.Base;
 
 
 import com.artcom.mobile.Base.*;
@@ -16,6 +16,8 @@ public class SparkViewerActivity extends Activity {
     private static boolean _mySparkWorldIsLoaded = false; 
     ASLOpenGLView mView;
     private EventManager eventManager;
+    
+    
     
     @Override
     public void onCreate(Bundle savedInstanceState) {

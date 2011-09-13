@@ -1,11 +1,10 @@
-package com.artcom.mobile.app;
+package com.artcom.mobile.Base;
 
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
 
-import com.artcom.mobile.Base.AC_Log;
 
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView.EGLConfigChooser;

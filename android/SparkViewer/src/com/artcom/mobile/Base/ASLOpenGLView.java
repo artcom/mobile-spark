@@ -1,6 +1,8 @@
-package com.artcom.mobile.app;
+package com.artcom.mobile.Base;
 
 import com.artcom.mobile.Base.*; 
+import com.artcom.mobile.Base.AndroidEGLConfigChooser.ConfigType;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
@@ -9,7 +11,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
-import com.artcom.mobile.Base.AC_Log;
 
 public class ASLOpenGLView extends GLSurfaceView {
     
