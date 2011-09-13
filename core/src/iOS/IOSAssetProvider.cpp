@@ -1,5 +1,6 @@
 #include "IOSAssetProvider.h"
-
+#include <masl/file_functions.h>
+#include <mar/png_functions.h>
 
 namespace ios 
 {
