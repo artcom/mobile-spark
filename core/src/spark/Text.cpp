@@ -32,6 +32,8 @@ namespace spark {
     void 
     Text::onResume() {
         ShapeWidget::onResume();        
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
+        myMaterial->getTexture()->setTextureId(0); //new texture should be generated
         _myDirtyFlag = true;
     }
     
