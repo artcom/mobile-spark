@@ -65,11 +65,25 @@ namespace demoapp {
         ComponentPtr myNextButton = my2DWorld->getChildByName("nextbutton", true);
         myBackButton->addEventListener(TouchEvent::PICKED, myPickedCB);
         myNextButton->addEventListener(TouchEvent::PICKED, myPickedCB);
+        
         spark::EventCallbackPtr myCreationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onCreationButton));
         ComponentPtr myCreationButton = my2DWorld->getChildByName("creationbutton", true);
         myCreationButton->addEventListener(TouchEvent::PICKED, myCreationCB);
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myAnimationCB);
+
+		//test swipe gestures
+        spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSwipeGesture));
+        _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
+		_mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
+
+		//test pinch gestures
+        spark::EventCallbackPtr myPinchCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPinchGesture));
+        _mySparkWindow->addEventListener(GestureEvent::PINCH, myPinchCB);
+        
+        //test pan gestures
+        spark::EventCallbackPtr myPanCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPanGesture));
+        _mySparkWindow->addEventListener(GestureEvent::PAN, myPanCB);
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone
@@ -145,6 +159,39 @@ namespace demoapp {
         _mySlides[_myCurrentSlide]->setVisible(true);        
         _mySlides[_myCurrentSlide]->setSensible(true);        
     }
+    
+    void DemoApp::onSwipeGesture(EventPtr theEvent) {
+    	AC_DEBUG << "on Swipe Gesture";
+        _mySlides[_myCurrentSlide]->setVisible(false);
+        _mySlides[_myCurrentSlide]->setSensible(false);
+        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + ( theEvent->getType() == "swipe-right" ? -1 : 
+           +1)) % _mySlides.size();
+        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
+        _mySlides[_myCurrentSlide]->setVisible(true);        
+        _mySlides[_myCurrentSlide]->setSensible(true);        
+    }
+    
+    void DemoApp::onPinchGesture(EventPtr theEvent) {
+    	AC_DEBUG << "on Pinch Gesture";
+    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+    	float myScaleFactor = myEvent->getFactor(); 
+    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
+        boost::static_pointer_cast<Widget>(my3dView)->setScaleX(myScaleFactor);
+		boost::static_pointer_cast<Widget>(my3dView)->setScaleY(myScaleFactor);
+    }
+    
+    void DemoApp::onPanGesture(EventPtr theEvent) {
+    	AC_DEBUG << "on Pan Gesture";
+    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+    	float myDX = myEvent->getTranslateX();
+    	float myDY = myEvent->getTranslateY(); 
+    	float myX = myEvent->getX() - _mySparkWindow->getSize()[0] / 2;
+    	float myY = myEvent->getY() - _mySparkWindow->getSize()[1] / 2; 
+    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
+        boost::static_pointer_cast<Widget>(my3dView)->setX((myX + myDX) / 3);
+		boost::static_pointer_cast<Widget>(my3dView)->setY((myY + myDY) / 3);
+    }
+
 
     void DemoApp::onCreationButton(EventPtr theEvent) {
         AC_DEBUG << "on creation button";

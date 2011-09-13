@@ -3,10 +3,9 @@ package com.artcom.mobile.app;
 
 import com.artcom.mobile.Base.*;
 
-import java.lang.System;
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.WindowManager;
+import android.view.MotionEvent;
 
 public class SparkViewerActivity extends Activity {
 
@@ -16,6 +15,7 @@ public class SparkViewerActivity extends Activity {
     private static String LOG_TAG = "SparkViewerActivity";
     private static boolean _mySparkWorldIsLoaded = false; 
     ASLOpenGLView mView;
+    private EventManager eventManager;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,10 @@ public class SparkViewerActivity extends Activity {
         extras_ = this.getIntent().getExtras();
         envMap_ = new EnvMap();
         envMap_.init(extras_);
-
+     
         CameraTexture.init(this);
+        eventManager = new EventManager(this);
+        //eventManager.enableGyro();
         AC_Log.setTopLevelTag(LOG_TAG);
         Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
         AC_Log.setSeverity(mySeverity);
@@ -32,6 +34,10 @@ public class SparkViewerActivity extends Activity {
         AC_Log.print("SparkViewer created, ready to call native [cpp logger]. ");
         mView = new ASLOpenGLView(getApplication(), !_mySparkWorldIsLoaded);        
         setContentView(mView);
+    }
+    
+    public boolean onTouchEvent(MotionEvent event) {
+    	return eventManager.dumpTouchEvent(event) ;
     }
     
     @Override protected void onStart() {
@@ -47,6 +53,8 @@ public class SparkViewerActivity extends Activity {
         String myEvent = "<StageEvent type='pause'/>";
         NativeBinding.onEvent(myEvent);
         CameraTexture.closeCamera();
+        //eventManager.disableGyro();
+        AC_Log.print("----------------------SparkViewer paused");
     }
     @Override protected void onStop() {
         AC_Log.print("--------------------- on Stop");

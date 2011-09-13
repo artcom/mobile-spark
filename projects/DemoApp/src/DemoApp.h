@@ -21,6 +21,9 @@ namespace demoapp {
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath);
 
         private:
+        	void onSwipeGesture(spark::EventPtr theEvent);
+        	void onPinchGesture(spark::EventPtr theEvent);
+        	void onPanGesture(spark::EventPtr theEvent);
             void onControlButton(spark::EventPtr theEvent);
             void onCreationButton(spark::EventPtr theEvent);
             void onTouch(spark::EventPtr theEvent);
