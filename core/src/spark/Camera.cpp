@@ -16,10 +16,10 @@ namespace spark {
     const char * Camera::SPARK_TYPE = "Camera";
 
     Camera::Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent) {
+        ShapeWidget(theApp, theXMLNode, theParent),_mySetupFlag(false) {
         
         setShape(ShapeFactory::get().createRectangle(true));
-
+        _myColorConversionFlag = _myXMLNode->getAttributeAs<bool>("cpu_color_conversion", false);
         getShape()->setDimensions(500, 500);
     }
 
@@ -38,7 +38,10 @@ namespace spark {
         //AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
         if (isRendered()) {
             if (!MobileSDK_Singleton::get().isCameraCapturing()) {
-    			MobileSDK_Singleton::get().startCameraCapture();
+    			MobileSDK_Singleton::get().startCameraCapture(_myColorConversionFlag);
+			}
+			if (MobileSDK_Singleton::get().isCameraCapturing() && !_mySetupFlag) {
+			    _mySetupFlag = true;
                 masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
                 if (myCameraInfo.textureID != 0) {
         			float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
