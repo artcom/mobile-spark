@@ -14,15 +14,16 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     GLuint textureId;
     int width, height;
     bool rgb;
-    AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb);
-        
-    theTexture->setTextureId(textureId);
-    theTexture->transparency_ = !rgb;
-    theTexture->width_ = width;
-    theTexture->height_ = height;
+    if (AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb)) {
+        theTexture->setTextureId(textureId);
+        theTexture->transparency_ = !rgb;
+        theTexture->width_ = width;
+        theTexture->height_ = height;
+    }
 }
 
-GLuint loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb) {
+bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb) {
+    AC_PRINT << "load texture file name ' " << filename << "'";
     png_structp png_ptr;
     png_infop info_ptr;
     unsigned int sig_read = 0;
@@ -64,15 +65,8 @@ GLuint loadTextureFromPNG(const std::string & filename, GLuint & textureId, int 
     outWidth = twidth;
     outHeight = theight;
   
-    switch (color_type) {
-        case PNG_COLOR_TYPE_RGBA:
-            rgb = !true;
-            break;
-        case PNG_COLOR_TYPE_RGB:
-            rgb = !false;
-            break;
-        default:
-            std::cout << "Color type " << color_type << " not supported" << std::endl;
+    if (color_type != PNG_COLOR_TYPE_RGB_ALPHA && color_type != PNG_COLOR_TYPE_RGB) {
+            AC_DEBUG << "unknown color type " << color_type;
             png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
             fclose(fp);
             return false;
@@ -90,22 +84,24 @@ GLuint loadTextureFromPNG(const std::string & filename, GLuint & textureId, int 
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    AC_PRINT << "w x h : " << outWidth << ", " << outHeight;
+    AC_DEBUG << "w x h : " << outWidth << ", " << outHeight;
     if (color_type == PNG_COLOR_TYPE_RGB_ALPHA) {
-        AC_PRINT << "alpha";
+        AC_DEBUG << "alpha";
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, outWidth, outHeight, 0, GL_RGBA,
                      GL_UNSIGNED_BYTE, (GLvoid*) outData);
-        //rgb = false;
+        rgb = false;
     } else if (color_type == PNG_COLOR_TYPE_RGB) {
-        AC_PRINT << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> no alpha";
+        AC_DEBUG << "no alpha";
         //glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, outWidth, outHeight, 0, GL_RGB,
                      GL_UNSIGNED_BYTE, (GLvoid*) outData);
-        //rgb = true;
-    } else {
-        AC_PRINT << "unknown color type " << color_type;
+        rgb = true;
     }
+
+    // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);  
     AC_PRINT << "generated texture with id " << texture;
     
     //clean up memory and close stuff
