@@ -1,52 +1,29 @@
 package com.artcom.mobile.Base;
 
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.view.MotionEvent;
 
-public class EventManager implements SensorEventListener {
+public class EventManager {
 	
 	private static EventManager INSTANCE;
 	private int mode=0; // 0 - none; 1-pan; 2-TwofingerTap; 3-pinch; 4-rotate
 	private int height;
 	private long startTime, lastTapTime;
 	private int startX, startY, dx, dy, fingerDistance, fingerDistanceStart;
-	private SensorManager _mySensorManager = null;
-	private Context _myContext;
 	
-	public static void enableGyrometer() {
-		if (INSTANCE != null) INSTANCE.enableGyro();
-	}
 	
-	public static void disableGyrometer() {
-		if (INSTANCE != null) INSTANCE.disableGyro();
-	}
+	
 	
 	public static boolean dumpEvent(MotionEvent event) {
 		if (INSTANCE != null) return INSTANCE.dumpTouchEvent(event);
 		return false;
 	}
 	
-	public EventManager(Context context) {
-		_myContext = context;
-		_mySensorManager = (SensorManager) _myContext.getSystemService(Context.SENSOR_SERVICE);
+	public EventManager() {
 		INSTANCE = this;
 	}
 	
 	
-	public void enableGyro() {
-		_mySensorManager.registerListener(this, 
-				                          _mySensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), 
-				                          SensorManager.SENSOR_DELAY_GAME);
-	}
 	
-	public void disableGyro() {
-		_mySensorManager.unregisterListener(this, 
-											_mySensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE));
-	}
 	
 	
 	public static void onSizeChanged(int width, int height) {
@@ -106,6 +83,7 @@ public class EventManager implements SensorEventListener {
 						break;
 					}
 					if (mode == 4) {
+						// todo
 						rotationHandler();
 						break;
 					}
@@ -128,12 +106,14 @@ public class EventManager implements SensorEventListener {
 		}
 		//-------------------------------------------------------------------------
 		private int getFingerDistance(MotionEvent event) {
+			if (event.getPointerCount() <2 ) return 0;
 			float dx2 = event.getX(0) - event.getX(1);
 			float dy2 = event.getY(0) - event.getY(1);
 			return  (int) Math.sqrt(dx2*dx2 + dy2*dy2);
 		}
 		//-------------------------------------------------------------------------
 		private float getRotation(MotionEvent event) {
+			// todo
 			return  0;
 		}
 		//-------------------------------------------------------------------------
@@ -181,17 +161,6 @@ public class EventManager implements SensorEventListener {
 			AC_Log.print(" ########### swipe right");
 			String myEvent = "<GestureEvent type='swipe-right' direction='right'/>";
 	        NativeBinding.onEvent(myEvent);
-		}
-
-
-		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			// TODO Auto-generated method stub
-			
-		}
-
-
-		public void onSensorChanged(SensorEvent event) {
-			System.out.println("GYRO: " + (int)event.values[0] + ", " + (int)event.values[1] + ", " +(int)event.values[2]);
 		}
 
 }
