@@ -31,7 +31,8 @@ then
     cd DemoAppActivity
     
     # update android project
-    $ANDROID_TOOL --silent update project -l ../../../../android/SparkViewerBase --target android-9 --name DemoAppActivity --path . 
+    $ANDROID_TOOL update project --target android-9 --name DemoAppActivity --path . 
+    $ANDROID_TOOL update project -l ../../../../android/SparkViewerBase --target android-9 --name DemoAppActivity --path . 
     BUILD_OK=$?
     ls 
 fi
