@@ -28,7 +28,7 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & 
     png_infop info_ptr;
     unsigned int sig_read = 0;
     GLubyte *outData;
-    std::string filepath = filename;
+    std::string filepath = masl::trimall(filename);
     FILE *fp;
     if ((fp = fopen(filepath.c_str(), "rb")) == NULL) {
         AC_PRINT << " Error opening ";
