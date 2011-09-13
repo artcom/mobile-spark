@@ -23,7 +23,7 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
 }
 
 bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb) {
-    AC_PRINT << "load texture file name ' " << filename << "'";
+    AC_PRINT << "load texture file name '" << filename << "'";
     png_structp png_ptr;
     png_infop info_ptr;
     unsigned int sig_read = 0;
