@@ -33,7 +33,6 @@ then
     # update android project
     $ANDROID_TOOL --silent update project -l ../../../../android/SparkViewerBase --target android-9 --name DemoAppActivity --path . 
     BUILD_OK=$?
-    ls 
 fi
 
 if [ $BUILD_OK == "0" ] 
@@ -42,7 +41,6 @@ then
     # build java
     ant -quiet compile
     BUILD_OK=$?
-    ls 
 fi
     
 if [ $BUILD_OK == "0" ] 
@@ -50,7 +48,6 @@ then
     # build apk && upload
     ant -quiet install
     BUILD_OK=$?
-    ls
 fi
     
 cd -
