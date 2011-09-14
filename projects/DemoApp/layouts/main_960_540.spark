@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Window name="Samsung Galaxy S" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="portrait" width="800" height="480">
+<Window name="HTC Sensation" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="portrait" width="960" height="540">
 
     <Template name="Controls" src="/controls.spark"/>
     <Template name="Slide" src="/slide.spark"/>

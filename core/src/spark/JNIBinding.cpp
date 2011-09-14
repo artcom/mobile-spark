@@ -9,10 +9,12 @@
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
                                                              jlong currentMillis,
-                                                             jstring apkFile) {
+                                                             jstring apkFile,
+                                                             jint theScreenWidth,
+                                                             jint theScreenHeight) {
     jboolean isCopy;
     const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
-    CALL_NATIVE(spark::AppProvider::get().getApp()->setup(currentMillis, myAssetPath));
+    CALL_NATIVE(spark::AppProvider::get().getApp()->setup(currentMillis, myAssetPath, theScreenWidth, theScreenHeight));
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
