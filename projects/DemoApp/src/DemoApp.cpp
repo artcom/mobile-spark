@@ -19,6 +19,8 @@
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
+#include <cstdlib>
+
 using namespace spark;
 
 /////////////////////////////////////////////////////////////////////////App-Instance
@@ -52,6 +54,7 @@ namespace demoapp {
 
         loadLayoutAndRegisterEvents("/main.spark");
 
+        AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 
         //test free function on touch
