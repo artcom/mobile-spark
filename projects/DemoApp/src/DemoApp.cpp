@@ -165,45 +165,66 @@ namespace demoapp {
 
     void DemoApp::onControlButton(EventPtr theEvent) {
         AC_DEBUG << "on control button";
+    	changeSlide(theEvent->getTarget()->getName() == "backbutton" ? -1 :  +1);    }
+    
+    void DemoApp::onStartSlideSwipe() {
+        _mySlides[_myNextSlide]->setVisible(true);
+        _mySlides[_myNextSlide]->setX(_mySparkWindow->getSize()[0]);        
+    }
+    void DemoApp::onFinishSlideSwipe() {
         _mySlides[_myCurrentSlide]->setVisible(false);
         _mySlides[_myCurrentSlide]->setSensible(false);
-        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + 
-                          ( theEvent->getTarget()->getName() == "backbutton" ? -1 : +1)) % _mySlides.size();
-        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
-        _mySlides[_myCurrentSlide]->setVisible(true);        
-        _mySlides[_myCurrentSlide]->setSensible(true);        
+        _myCurrentSlide = _myNextSlide;
+        _mySlides[_myCurrentSlide]->setSensible(true);
     }
     
     void DemoApp::onSwipeGesture(EventPtr theEvent) {
     	AC_DEBUG << "on Swipe Gesture";
-        _mySlides[_myCurrentSlide]->setVisible(false);
-        _mySlides[_myCurrentSlide]->setSensible(false);
-        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + ( theEvent->getType() == "swipe-right" ? -1 : 
-           +1)) % _mySlides.size();
-        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
-        _mySlides[_myCurrentSlide]->setVisible(true);        
-        _mySlides[_myCurrentSlide]->setSensible(true);        
+    	changeSlide(theEvent->getType() == "swipe-right" ? -1 :  +1);
+    }
+    
+    void DemoApp::changeSlide(int theDirection) {
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        animation::ParallelAnimationPtr mySequence = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        mySequence->setOnPlay(masl::CallbackPtr(
+                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onStartSlideSwipe)));
+        WidgetPropertyAnimationPtr mySwipeOut = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myCurrentSlide], 
+                                                &Widget::setX, 0, _mySparkWindow->getSize()[0] * theDirection * -1, 500,
+                                                animation::EasingFnc(animation::easeInOutQuad)));
+        _myNextSlide = (_myCurrentSlide + _mySlides.size() + theDirection) % _mySlides.size();
+        WidgetPropertyAnimationPtr mySwipeIn = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myNextSlide], 
+                                                &Widget::setX, _mySparkWindow->getSize()[0] * theDirection, 0, 500,
+                                                animation::EasingFnc(animation::easeInOutQuad)));
+        mySequence->setOnFinish(masl::CallbackPtr(
+                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onFinishSlideSwipe)));
+    	mySequence->add(mySwipeOut);
+    	mySequence->add(mySwipeIn);
+        animation::AnimationManager::get().play(mySequence);
     }
     
     void DemoApp::onPinchGesture(EventPtr theEvent) {
-    	AC_DEBUG << "on Pinch Gesture";
-    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-    	float myScaleFactor = myEvent->getFactor(); 
-    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
-        boost::static_pointer_cast<Widget>(my3dView)->setScaleX(myScaleFactor);
-		boost::static_pointer_cast<Widget>(my3dView)->setScaleY(myScaleFactor);
+        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
+        	AC_DEBUG << "on Pinch Gesture";
+        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+        	float myScaleFactor = myEvent->getFactor(); 
+        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
+            boost::static_pointer_cast<Widget>(my3dView)->setScaleX(myScaleFactor);
+    		boost::static_pointer_cast<Widget>(my3dView)->setScaleY(myScaleFactor);
+		}
     }
     
     void DemoApp::onPanGesture(EventPtr theEvent) {
-    	AC_DEBUG << "on Pan Gesture";
-    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-    	float myDX = myEvent->getTranslateX();
-    	float myDY = myEvent->getTranslateY(); 
-    	float myX = myEvent->getX() - _mySparkWindow->getSize()[0] / 2;
-    	float myY = myEvent->getY() - _mySparkWindow->getSize()[1] / 2; 
-    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
-        boost::static_pointer_cast<Widget>(my3dView)->setX((myX + myDX) / 3);
-		boost::static_pointer_cast<Widget>(my3dView)->setY((myY + myDY) / 3);
+        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
+        	AC_DEBUG << "on Pan Gesture";
+        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+        	float myDX = myEvent->getTranslateX();
+        	float myDY = myEvent->getTranslateY(); 
+        	float myX = myEvent->getX() - _mySparkWindow->getSize()[0] / 2;
+        	float myY = myEvent->getY() - _mySparkWindow->getSize()[1] / 2; 
+        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
+            boost::static_pointer_cast<Widget>(my3dView)->setX((myX + myDX) / 3);
+    		boost::static_pointer_cast<Widget>(my3dView)->setY((myY + myDY) / 3);
+		}
     }
 
 	void DemoApp::onSensorEvent(EventPtr theEvent) {
