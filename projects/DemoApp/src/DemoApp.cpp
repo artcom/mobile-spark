@@ -19,6 +19,8 @@
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
+#include <cstdlib>
+
 using namespace spark;
 using namespace masl;
 
@@ -58,6 +60,8 @@ namespace demoapp {
         MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
                     
         loadLayoutAndRegisterEvents(mySparkFile);
+
+        AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
 
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onSizeChanged));
