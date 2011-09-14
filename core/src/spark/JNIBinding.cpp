@@ -17,10 +17,6 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
     CALL_NATIVE(spark::AppProvider::get().getApp()->onResume());
 }
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onSizeChanged(JNIEnv * env, jobject obj,
-                                                             jint width, jint height) {
-    CALL_NATIVE(spark::AppProvider::get().getApp()->onSizeChanged(width, height));
-}
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv * env, jobject obj, jstring evt )
 {

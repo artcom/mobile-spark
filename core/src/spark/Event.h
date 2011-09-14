@@ -64,12 +64,26 @@ namespace spark {
 
             static const char * const FRAME;
             static const char * const PAUSE;
-
             masl::UInt64 getCurrentTime() const { return currenttime_;};
             masl::UInt64 currenttime_;
     };
 
     typedef boost::shared_ptr<StageEvent> StageEventPtr;
+
+    class WindowEvent : public Event {
+        public:
+
+            WindowEvent(const std::string & theType, ComponentPtr theTarget, 
+                        unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight);
+            WindowEvent(const masl::XMLNodePtr theXMLNode);
+            virtual ~WindowEvent();
+
+            static const char * const ON_RESIZE;
+            vector2 size_;
+            vector2 oldsize_;
+    };
+
+    typedef boost::shared_ptr<WindowEvent> WindowEventPtr;
 
     class TouchEvent : public Event {
         public:
@@ -146,8 +160,8 @@ namespace spark {
 			static const char * const TEMPERATURE;
            
             float getValue0() const { return value0_;};
-            float getValue1() const { return value0_;};
-            float getValue2() const { return value0_;};
+            float getValue1() const { return value1_;};
+            float getValue2() const { return value2_;};
             
         private:
             float value0_;

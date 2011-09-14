@@ -22,6 +22,7 @@
 #include <cstdlib>
 
 using namespace spark;
+using namespace masl;
 
 /////////////////////////////////////////////////////////////////////////App-Instance
 #ifdef __ANDROID__
@@ -55,6 +56,11 @@ namespace demoapp {
         loadLayoutAndRegisterEvents("/main.spark");
 
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
+
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
+        EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onSizeChanged));
+        _mySparkWindow->addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
+
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 
         //test free function on touch
@@ -62,7 +68,6 @@ namespace demoapp {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
 
         //button callbacks
-        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onControlButton));
         ComponentPtr myBackButton = my2DWorld->getChildByName("backbutton", true);
         ComponentPtr myNextButton = my2DWorld->getChildByName("nextbutton", true);
@@ -87,6 +92,16 @@ namespace demoapp {
         //test pan gestures
         spark::EventCallbackPtr myPanCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPanGesture));
         _mySparkWindow->addEventListener(GestureEvent::PAN, myPanCB);
+        
+        //test sensors
+        spark::EventCallbackPtr mySensorCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorEvent));
+        _mySparkWindow->addEventListener(SensorEvent::ORIENTATION, mySensorCB);
+        spark::EventCallbackPtr mySensorLightCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorLightEvent));
+        _mySparkWindow->addEventListener(SensorEvent::LIGHT, mySensorLightCB);
+        spark::EventCallbackPtr mySensorGyroCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorGyroEvent));
+        _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
+
+
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone
@@ -154,47 +169,95 @@ namespace demoapp {
 
     void DemoApp::onControlButton(EventPtr theEvent) {
         AC_DEBUG << "on control button";
+    	changeSlide(theEvent->getTarget()->getName() == "backbutton" ? -1 :  +1);    }
+    
+    void DemoApp::onStartSlideSwipe() {
+        _mySlides[_myNextSlide]->setVisible(true);
+        _mySlides[_myNextSlide]->setX(_mySparkWindow->getSize()[0]);        
+    }
+    void DemoApp::onFinishSlideSwipe() {
         _mySlides[_myCurrentSlide]->setVisible(false);
         _mySlides[_myCurrentSlide]->setSensible(false);
-        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + 
-                          ( theEvent->getTarget()->getName() == "backbutton" ? -1 : +1)) % _mySlides.size();
-        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
-        _mySlides[_myCurrentSlide]->setVisible(true);        
-        _mySlides[_myCurrentSlide]->setSensible(true);        
+        _myCurrentSlide = _myNextSlide;
+        _mySlides[_myCurrentSlide]->setSensible(true);
     }
     
     void DemoApp::onSwipeGesture(EventPtr theEvent) {
     	AC_DEBUG << "on Swipe Gesture";
-        _mySlides[_myCurrentSlide]->setVisible(false);
-        _mySlides[_myCurrentSlide]->setSensible(false);
-        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + ( theEvent->getType() == "swipe-right" ? -1 : 
-           +1)) % _mySlides.size();
-        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
-        _mySlides[_myCurrentSlide]->setVisible(true);        
-        _mySlides[_myCurrentSlide]->setSensible(true);        
+    	changeSlide(theEvent->getType() == "swipe-right" ? -1 :  +1);
+    }
+    
+    void DemoApp::changeSlide(int theDirection) {
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        animation::ParallelAnimationPtr mySequence = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        mySequence->setOnPlay(masl::CallbackPtr(
+                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onStartSlideSwipe)));
+        WidgetPropertyAnimationPtr mySwipeOut = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myCurrentSlide], 
+                                                &Widget::setX, 0, _mySparkWindow->getSize()[0] * theDirection * -1, 500,
+                                                animation::EasingFnc(animation::easeInOutQuad)));
+        _myNextSlide = (_myCurrentSlide + _mySlides.size() + theDirection) % _mySlides.size();
+        WidgetPropertyAnimationPtr mySwipeIn = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myNextSlide], 
+                                                &Widget::setX, _mySparkWindow->getSize()[0] * theDirection, 0, 500,
+                                                animation::EasingFnc(animation::easeInOutQuad)));
+        mySequence->setOnFinish(masl::CallbackPtr(
+                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onFinishSlideSwipe)));
+    	mySequence->add(mySwipeOut);
+    	mySequence->add(mySwipeIn);
+        animation::AnimationManager::get().play(mySequence);
     }
     
     void DemoApp::onPinchGesture(EventPtr theEvent) {
-    	AC_DEBUG << "on Pinch Gesture";
-    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-    	float myScaleFactor = myEvent->getFactor(); 
-    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
-        boost::static_pointer_cast<Widget>(my3dView)->setScaleX(myScaleFactor);
-		boost::static_pointer_cast<Widget>(my3dView)->setScaleY(myScaleFactor);
+        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
+        	AC_DEBUG << "on Pinch Gesture";
+        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+        	float myScaleFactor = myEvent->getFactor(); 
+        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
+            boost::static_pointer_cast<Widget>(my3dView)->setScaleX(myScaleFactor);
+    		boost::static_pointer_cast<Widget>(my3dView)->setScaleY(myScaleFactor);
+		}
     }
     
     void DemoApp::onPanGesture(EventPtr theEvent) {
-    	AC_DEBUG << "on Pan Gesture";
-    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-    	float myDX = myEvent->getTranslateX();
-    	float myDY = myEvent->getTranslateY(); 
-    	float myX = myEvent->getX() - _mySparkWindow->getSize()[0] / 2;
-    	float myY = myEvent->getY() - _mySparkWindow->getSize()[1] / 2; 
-    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
-        boost::static_pointer_cast<Widget>(my3dView)->setX((myX + myDX) / 3);
-		boost::static_pointer_cast<Widget>(my3dView)->setY((myY + myDY) / 3);
+        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
+        	AC_DEBUG << "on Pan Gesture";
+        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+        	float myDX = myEvent->getTranslateX();
+        	float myDY = myEvent->getTranslateY(); 
+        	float myX = myEvent->getX() - _mySparkWindow->getSize()[0] / 2;
+        	float myY = myEvent->getY() - _mySparkWindow->getSize()[1] / 2; 
+        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
+            boost::static_pointer_cast<Widget>(my3dView)->setX((myX + myDX) / 3);
+    		boost::static_pointer_cast<Widget>(my3dView)->setY((myY + myDY) / 3);
+		}
     }
 
+	void DemoApp::onSensorEvent(EventPtr theEvent) {
+    	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
+    	float myY = myEvent->getValue1(); 
+    	float myZ = myEvent->getValue2();
+    	ComponentPtr myWhiteObject = _mySparkWindow->getChildByName("transformOrient", true);
+        TransformPtr myWhiteRectangle = boost::static_pointer_cast<spark::Transform>(myWhiteObject);
+		myWhiteRectangle->setX(myY*4+200);
+		myWhiteRectangle->setY(myZ*4+200);
+    }
+
+	void DemoApp::onSensorLightEvent(EventPtr theEvent) {
+    	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
+    	float myLight = myEvent->getValue0();
+       	ComponentPtr myLightObject = _mySparkWindow->getChildByName("transformLight", true);
+        TransformPtr myLightRectangle = boost::static_pointer_cast<spark::Transform>(myLightObject);
+		myLightRectangle->setY(myLight/10);
+    }
+    
+    void DemoApp::onSensorGyroEvent(EventPtr theEvent) {
+    	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
+    	float myX = myEvent->getValue0();
+       	float myY = myEvent->getValue1();
+       	ComponentPtr myGyroObject = _mySparkWindow->getChildByName("gyro", true);
+        RectanglePtr myGyroRectangle = boost::static_pointer_cast<spark::Rectangle>(myGyroObject);
+		myGyroRectangle->setX(myX*20-15);
+		myGyroRectangle->setY(myY*20-15);
+    }
 
     void DemoApp::onCreationButton(EventPtr theEvent) {
         AC_DEBUG << "on creation button";
@@ -249,9 +312,9 @@ namespace demoapp {
         }
     }
     
-    void DemoApp::onSizeChanged(int theWidth, int theHeight) {
-        BaseApp::onSizeChanged(theWidth, theHeight);
-        centerSlideTitlesToNewCanvasSize(theWidth, theHeight);
+    void DemoApp::onSizeChanged(EventPtr theEvent) {
+        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);            
+        centerSlideTitlesToNewCanvasSize(myEvent->size_[0], myEvent->size_[1]);
     }
 }
 
