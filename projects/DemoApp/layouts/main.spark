@@ -73,7 +73,8 @@
                 <Image name="border" visible="false" width="640" height="480" src="/rahmen_schwarz.png" z="1"/>
             </Camera>
         </Slide>
-        
+        <Slide name="3D-Viewer-Slide" title="3D-Viewer">
+        </Slide>        
         <Slide name="SensorSlide" title="Sensors">
 	        <Transform name="transformLight" x="0" y="10">
 	         	<Rectangle name="colorIndicator" x="0" y="0" width="1200" height="5" color="[0,0.5,0]"/>

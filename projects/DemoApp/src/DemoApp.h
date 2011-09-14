@@ -35,10 +35,14 @@ namespace demoapp {
 
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
-
+            void onStartSlideSwipe();
+            void onFinishSlideSwipe();
+            void changeSlide(int theDirection);
+            
             std::vector<SlideImplPtr> _mySlides;
             std::vector<spark::ViewPtr> _myViews;
             unsigned _myCurrentSlide;
+            unsigned _myNextSlide;
     };
 
     typedef boost::shared_ptr<DemoApp> DemoAppPtr;
