@@ -22,7 +22,6 @@ namespace spark {
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath);
             void loadLayoutAndRegisterEvents(const std::string & theLayoutFile);
             virtual void onFrame(EventPtr theEvent);
-            virtual void onSizeChanged(int theWidth, int theHeight);
             virtual void onPause(EventPtr theEvent);
             virtual void onResume();
             virtual void onEvent(std::string theEventString);

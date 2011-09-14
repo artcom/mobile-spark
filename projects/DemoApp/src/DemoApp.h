@@ -24,18 +24,25 @@ namespace demoapp {
         	void onSwipeGesture(spark::EventPtr theEvent);
         	void onPinchGesture(spark::EventPtr theEvent);
         	void onPanGesture(spark::EventPtr theEvent);
+        	void onSensorEvent(spark::EventPtr theEvent);
+        	void onSensorLightEvent(spark::EventPtr theEvent);
+        	void onSensorGyroEvent(spark::EventPtr theEvent);
             void onControlButton(spark::EventPtr theEvent);
             void onCreationButton(spark::EventPtr theEvent);
             void onTouch(spark::EventPtr theEvent);
             void insertCreatedComponent();
-            void onSizeChanged(int theWidth, int theHeight);
+            void onSizeChanged(spark::EventPtr theEvent);
 
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
-
+            void onStartSlideSwipe();
+            void onFinishSlideSwipe();
+            void changeSlide(int theDirection);
+            
             std::vector<SlideImplPtr> _mySlides;
             std::vector<spark::ViewPtr> _myViews;
             unsigned _myCurrentSlide;
+            unsigned _myNextSlide;
     };
 
     typedef boost::shared_ptr<DemoApp> DemoAppPtr;

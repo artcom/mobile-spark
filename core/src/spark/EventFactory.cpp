@@ -11,6 +11,7 @@ namespace spark {
     //TODO: decentralize this again
     void EventFactory::setupFactory() {
         bool registered = registerEvent("StageEvent", spark::createEvent<StageEvent>);
+        registered = registerEvent("WindowEvent", spark::createEvent<WindowEvent>);
         registered = registerEvent("TouchEvent", spark::createEvent<TouchEvent>);
         registered = registerEvent("GestureEvent", spark::createEvent<GestureEvent>);
         registered = registerEvent("SensorEvent", spark::createEvent<SensorEvent>);
