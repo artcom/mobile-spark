@@ -48,10 +48,16 @@ namespace demoapp {
         AC_PRINT << "hello from free function event callback for eventtype " << theEvent->getType();
     }
 
-    void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath) {
-        BaseApp::setup(theCurrentMillis, theAssetPath);
-
-        loadLayoutAndRegisterEvents("/main.spark");
+    void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
+        BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
+        AC_PRINT << "################# DemoApp::setup : " << theScreenWidth << "/" << theScreenHeight;
+        
+        std::string myOrientation;
+        std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
+        AC_PRINT << "################# DmyOrientation : " << myOrientation;
+        MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
+                    
+        loadLayoutAndRegisterEvents(mySparkFile);
 
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onSizeChanged));
@@ -161,6 +167,8 @@ namespace demoapp {
         _mySlides[_myCurrentSlide]->setVisible(true);
 
         AC_DEBUG << "found #" << _mySlides.size() << " slides";
+        
+        //return myOrientation;
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {

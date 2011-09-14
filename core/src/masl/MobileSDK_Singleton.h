@@ -62,6 +62,7 @@ namespace masl {
             TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, 
                                 int theMaxWidth, int theMaxHeight, const std::string & theAlign);
             void updateCameraTexture();
+            void freezeMobileOrientation(std::string theOrientation);
             CameraInfo getCameraSpec();             
             void startCameraCapture(bool theColorConversionFlag);
             void stopCameraCapture();

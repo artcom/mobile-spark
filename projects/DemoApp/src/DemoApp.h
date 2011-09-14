@@ -18,7 +18,7 @@ namespace demoapp {
         public: 
             DemoApp();
             virtual ~DemoApp();
-            virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath);
+            virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
 
         private:
         	void onSwipeGesture(spark::EventPtr theEvent);
