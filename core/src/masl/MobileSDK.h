@@ -50,10 +50,11 @@ namespace masl {
     
     class MobileSDK {
         public:
-        virtual TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight) = 0;
+        virtual TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath) = 0;
         virtual void updateCameraTexture() = 0;
-        virtual CameraInfo getCameraSpec() = 0;             
-        virtual void startCameraCapture() = 0;
+        virtual void freezeMobileOrientation(std::string theOrientation) = 0;
+        virtual CameraInfo getCameraSpec() = 0;              
+        virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
         virtual bool isCameraCapturing() = 0;
         
@@ -63,29 +64,10 @@ namespace masl {
 
     class MobileSDK_Singleton : public Singleton<MobileSDK_Singleton> {
         public:
-<<<<<<< HEAD
             virtual ~MobileSDK_Singleton();    
             void setMobileSDK(MobileSDKPtr theMobileSDK);
             const MobileSDKPtr & getNative() const { return _myMobileSDK;};
       
-=======
-            MobileSDK_Singleton();  
-            virtual ~MobileSDK_Singleton();                      
-            TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, 
-                                int theMaxWidth, int theMaxHeight, const std::string & theAlign);
-            void updateCameraTexture();
-            void freezeMobileOrientation(std::string theOrientation);
-            CameraInfo getCameraSpec();             
-            void startCameraCapture(bool theColorConversionFlag);
-            void stopCameraCapture();
-            bool isCameraCapturing();
-            
-#ifdef __ANDROID__
-            JNIEnv * env;
-            jobject obj;            
-#endif
-            
->>>>>>> master
         private:
             MobileSDKPtr _myMobileSDK;
             
