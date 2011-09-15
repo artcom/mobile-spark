@@ -9,6 +9,16 @@ namespace mar {
         _myAssetProvider = theAssetProvider;
     };
     
+    std::string 
+    AssetProvider::findFile(const std::string & theFilename) const{
+        std::string filePath;
+        if (masl::searchFile(includePaths_, theFilename, filePath)) {
+            return filePath;
+        } else {
+            return "";
+        }        
+    }
+
     std::vector<std::string> 
     AssetProvider::getFilesFromPath(const std::string & theBasename) const {
         std::vector<std::string> myFiles;
