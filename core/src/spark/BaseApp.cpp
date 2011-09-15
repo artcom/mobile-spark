@@ -33,6 +33,10 @@ namespace spark {
     }
 
     BaseApp::~BaseApp() {
+        // this has to be done only ONCE when exiting
+        xmlCleanupParser();
+        xmlMemoryDump();
+
     }
 
     void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
@@ -82,10 +86,7 @@ namespace spark {
             if (getExtension(myFiles[i]) == "spark") {
                 string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
                 string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);        
-                xmlDocPtr doc = loadXMLFromMemory(myLayout);
-                xmlNode* myRootNode = xmlDocGetRootElement(doc);
-                XMLNodePtr myNode(new XMLNode(myRootNode));
-                xmlFreeDoc(doc);
+                XMLNodePtr myNode(new XMLNode(myLayout));
                 if (myNode->nodeName == "Window") {
                     for (std::map<std::string, std::string>::iterator it = myNode->attributes.begin(); it != myNode->attributes.end(); ++it) {
                         if (it->first == "name") {     
@@ -149,8 +150,10 @@ namespace spark {
     void BaseApp::onEvent(std::string theEventString) {
         //AC_PRINT << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
-        myEvent->connect(_mySparkWindow);
-        (*myEvent)();
+        if (myEvent) {
+            myEvent->connect(_mySparkWindow);
+            (*myEvent)();
+        }
         //AC_PRINT << "ate Event";
     }
     

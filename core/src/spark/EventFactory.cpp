@@ -35,19 +35,12 @@ namespace spark {
     }
 
 	EventPtr EventFactory::handleEvent(const std::string & theEventString) const {
-        //AC_PRINT << "handle event : " << theEventString;
-        xmlDocPtr doc;
-        xmlParserCtxtPtr myXmlCx = xmlNewParserCtxt();
-        doc = xmlCtxtReadMemory(myXmlCx, theEventString.c_str(), strlen(theEventString.c_str()), "", NULL, XML_PARSE_DTDATTR);
-        xmlNode *root_node = NULL;
-        root_node = xmlDocGetRootElement(doc);
-        XMLNodePtr myXMLNode(new XMLNode(root_node));
-        //AC_PRINT<<"handleEvent "<<*myXMLNode;
+        AC_TRACE << "handle event : " << theEventString;
+        XMLNodePtr myXMLNode(new XMLNode(theEventString));
         CallbackMap::const_iterator i = _myCreateCallbackMap.find(myXMLNode->nodeName);
         if (i == _myCreateCallbackMap.end()) {
             throw EventFactoryException("Unknown Event: " + myXMLNode->nodeName, PLUS_FILE_LINE);
         }
-        xmlFreeDoc(doc);   
         return (i->second)(myXMLNode);
     }
 
