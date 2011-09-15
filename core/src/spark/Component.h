@@ -25,6 +25,7 @@ namespace spark {
         Component();
         Component(const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Component() = 0;
+        virtual void realize() {};
         virtual void onPause() {};
         virtual void onResume() {};
         virtual void prerender(MatrixStack& theCurrentMatrixStack) {};

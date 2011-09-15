@@ -20,11 +20,13 @@ namespace spark {
             virtual ~BaseApp();
 
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
+            void realize();
             void loadLayoutAndRegisterEvents(const std::string & theLayoutFile);
             std::string findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, std::string & theOrientation);
             virtual void onFrame(EventPtr theEvent);
             virtual void onPause(EventPtr theEvent);
             virtual void onResume();
+            
             virtual void onEvent(std::string theEventString);
 
             spark::WindowPtr _mySparkWindow; 
