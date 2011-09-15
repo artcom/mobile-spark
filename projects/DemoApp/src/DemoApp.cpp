@@ -19,6 +19,7 @@
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
+#include "DemoAppComponentMapInitializer.h"
 using namespace spark;
 
 /////////////////////////////////////////////////////////////////////////App-Instance
@@ -50,6 +51,8 @@ namespace demoapp {
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath) {
         BaseApp::setup(theCurrentMillis, theAssetPath);
 
+        DemoAppComponentMapInitializer::init();
+        
         loadLayoutAndRegisterEvents("/main.spark");
 
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");

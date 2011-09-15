@@ -4,11 +4,6 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Shape3D", spark::create<Shape3D>);
-    }
-
 
     Shape3D::Shape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {

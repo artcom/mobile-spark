@@ -5,10 +5,6 @@
 #include <masl/MobileSDK_Singleton.h>
 
 namespace spark {
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Camera", spark::create<Camera>);
-    }
 
     const char * Camera::SPARK_TYPE = "Camera";
 

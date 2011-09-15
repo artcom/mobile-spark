@@ -5,11 +5,6 @@
 #include <masl/MobileSDK_Singleton.h>
 
 namespace spark {
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Text", spark::create<Text>);
-    }
-
     const char * Text::SPARK_TYPE = "Text";
 
     Text::Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
