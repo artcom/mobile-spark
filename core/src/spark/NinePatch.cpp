@@ -5,12 +5,6 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("NinePatch", spark::create<NinePatch>);
-    }
-
-
     NinePatch::NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
 

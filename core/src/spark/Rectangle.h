@@ -3,14 +3,12 @@
 
 #include "ShapeWidget.h"
 
-using namespace mar;
-
 namespace spark {
     class Rectangle : public ShapeWidget {
     public: 
         Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Rectangle();
-    
+        static const char * SPARK_TYPE;
     private:
         vector4 _myColor;
     };

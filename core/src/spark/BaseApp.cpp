@@ -20,6 +20,7 @@
 #include "SparkComponentFactory.h"
 #include "EventFactory.h"
 #include "Visitors.h"
+#include "ComponentMapInitializer.h"
 
 using namespace mar;
 
@@ -33,6 +34,9 @@ namespace spark {
     }
 
     void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath) {
+        
+        ComponentMapInitializer::init();
+        
         //AC_PRINT << "setup";
         //init animationManager with setup-time 
         //(needed for animations created on setup)
