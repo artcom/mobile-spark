@@ -9,6 +9,8 @@ extern "C" {
 
 namespace mar {
 
+FILE* file;
+
 void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     GLuint textureId;
     int width, height;
@@ -19,6 +21,12 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
         theTexture->width_ = width;
         theTexture->height_ = height;
     }
+}
+
+void closeFile() {
+    closeFile();
+}
+void prepareZipReading() {
 }
 
 bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
@@ -36,7 +44,7 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
     //create png struct
     png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr) {
-        fclose(file);
+        closeFile();
         AC_ERROR << "Unable to create png struct : " << myFilename;
         return false;
     }
@@ -44,14 +52,14 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
     //create png info struct
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        fclose(file);
+        closeFile();
         png_destroy_read_struct(&png_ptr, NULL, NULL);
         AC_ERROR << "Unable to create png info : " << myFilename;
         return false;
     }
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
-      fclose(file);
+      closeFile();
       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
       AC_ERROR << "Unable to create png end info : " << myFilename;
       return false;
@@ -59,7 +67,7 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
 
     //png error stuff, not sure libpng man suggests this.
     if (setjmp(png_jmpbuf(png_ptr))) {
-        fclose(file);
+        closeFile();
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         AC_ERROR << "Error during setjmp : " << myFilename;
         return false;
@@ -83,7 +91,7 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
       //clean up memory and close stuff
       png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
       AC_ERROR << "Unable to allocate image_data while loading " << myFilename;
-      fclose(file);
+      closeFile();
       return false;
     }
  
@@ -123,7 +131,7 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     delete[] image_data;
-    fclose(file);
+    closeFile();
 
     outTextureId = texture;
     outWidth = twidth;
