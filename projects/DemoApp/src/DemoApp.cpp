@@ -242,14 +242,13 @@ namespace demoapp {
 	void DemoApp::onSensorEvent(EventPtr theEvent) {
 		if (_mySlides[_myCurrentSlide]->getName() != "3D-Viewer-Slide") return;
     	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
-    	//float myX = myEvent->getValue0(); 
-    	float myY = myEvent->getValue1(); 
-    	float myZ = myEvent->getValue2();
+    	float myX = myEvent->getValue0()*3.1417/180; 
+    	float myY = myEvent->getValue1()*3.1417/180; 
+    	//float myZ = myEvent->getValue2()*3.1417/180;
     	ComponentPtr myAmazoneObject = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
         Shape3DPtr myAmazone = boost::static_pointer_cast<spark::Shape3D>(myAmazoneObject);
-        myAmazone -> setRotationY(myAmazone->getRotationY() - myZ/180);
-		myAmazone -> setRotationX(myAmazone->getRotationX() - myY/180 - 0.2);
-
+		myAmazone -> setRotationX(-myY - 1.57);
+		myAmazone -> setRotationY(-myX * 2); // x2 for more effect
     }
 
 	void DemoApp::onSensorLightEvent(EventPtr theEvent) {
@@ -257,7 +256,7 @@ namespace demoapp {
     	float myLight = myEvent->getValue0();
        	ComponentPtr myLightObject = _mySparkWindow->getChildByName("transformLight", true);
         TransformPtr myLightRectangle = boost::static_pointer_cast<spark::Transform>(myLightObject);
-		myLightRectangle->setY(myLight/10);
+		myLightRectangle->setY(myLight / 10);
     }
     
     void DemoApp::onSensorGyroEvent(EventPtr theEvent) {

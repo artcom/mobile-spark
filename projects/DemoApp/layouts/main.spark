@@ -39,6 +39,7 @@
         <Slide name="ImagesSlide" title="Images">
             <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="/texture.png"/>
             <Image name="transparent_image" x="250" y="250" z="1" src="/transparenttexture.png"/>
+            <Image name="image_from_apk_package" x="250" y="50" z="2" src="assets/textures/sparks.png"/>
         </Slide>
 
         <Slide name="AnimatedRectangleSlide" title="Animation" subtitle="touch screen to animate">
