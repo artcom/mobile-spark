@@ -76,95 +76,66 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
         int[] value = new int[1];        
    
        
-        if (configurations <= 0)
-        {
+        if (configurations <= 0) {
             AC_Log.error("###ERROR### ZERO EGL Configurations found, This Is a Problem");
         }
        
         // Loop over all configs to get the best
-        for(int i = 0; i < configurations; i++)
-        {                    
-            if (conf[i] != null)
-            {                
+        for(int i = 0; i < configurations; i++) {                    
+            if (conf[i] != null) {                
                 egl.eglGetConfigAttrib(display, conf[i], EGL10.EGL_SURFACE_TYPE, value);
                 // check if conf is a valid gl window
-                if ((value[0] & EGL10.EGL_WINDOW_BIT) != 0)
-                {                    
+                if ((value[0] & EGL10.EGL_WINDOW_BIT) != 0) {                    
                     egl.eglGetConfigAttrib(display, conf[i], EGL10.EGL_DEPTH_SIZE, value);
                     // check if conf has a minimum depth of 16
-                    if (value[0] >= 16)
-                    {
+                    if (value[0] >= 16) {
                         egl.eglGetConfigAttrib(display, conf[i], EGL10.EGL_RENDERABLE_TYPE, value);
                         // Check if conf is OpenGL ES 2.0
-                        if ((value[0] & EGL_OPENGL_ES2_BIT) != 0)
-                        {
+                        if ((value[0] & EGL_OPENGL_ES2_BIT) != 0) {
                             clientOpenGLESVersion = 2;  // OpenGL ES 2.0 detected
                             bestConfig = better(bestConfig, conf[i], egl, display);
                             fastestConfig = faster(fastestConfig, conf[i], egl, display);
-                           
-                            if (verbose)
-                            {
-                                AC_Log.info("** Supported EGL Configuration #" + i );                            
+                            AC_Log.info("** Supported EGL Configuration #" + i );
+                            if (verbose) {
                                 //logEGLConfig(conf[i], display, egl);
                             }
-                        }
-                        else
-                        {
-                            if (verbose)
-                            {
-                                AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_OPENGL_ES2_BIT not set");                            
+                        } else {
+                            AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_OPENGL_ES2_BIT not set");
+                            if (verbose) {
                                 //logEGLConfig(conf[i], display, egl);
                             }
                         }  
-                    }
-                    else
-                    {
-                        if (verbose)
-                        {
-                            AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_DEPTH_SIZE < 16");                            
+                    } else {
+                        AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_DEPTH_SIZE < 16");
+                        if (verbose) {
                             //logEGLConfig(conf[i], display, egl);
                         }
                     }
-                }
-                else
-                {
-                    if (verbose)
-                    {
-                        AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_WINDOW_BIT not set");                            
+                } else {
+                    AC_Log.info("NOT Supported EGL Configuration #" + i + " EGL_WINDOW_BIT not set");
+                    if (verbose) {
                         //logEGLConfig(conf[i], display, egl);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 AC_Log.error("###ERROR### EGL Configuration #" + i + " is NULL");
             }
         }
    
-       
-        if ((type == ConfigType.BEST) && (bestConfig != null))
-        {
-            //AC_Log.info("Using best EGL configuration:");
+        if ((type == ConfigType.BEST) && (bestConfig != null)) {
+            AC_Log.info("Using best EGL configuration:");
             choosenConfig = bestConfig;
-        }
-        else
-        {
-            if (fastestConfig != null)
-            {
-                AC_Log.info("Using fastest EGL configuration:");
-            }
+        } else if (fastestConfig != null) {
+            AC_Log.info("Using fastest EGL configuration:");
             choosenConfig = fastestConfig;            
         }
        
-        if (choosenConfig != null)
-        {
+        if (choosenConfig != null) {
             //logEGLConfig(choosenConfig, display, egl);              
             pixelFormat = getPixelFormat(choosenConfig, display, egl);
             clientOpenGLESVersion = getOpenGLVersion(choosenConfig, display, egl);
             return true;
-        }
-        else
-        {
+        } else {
             AC_Log.error("###ERROR### Unable to get a valid OpenGL ES 2.0 config, nether Fastest nor Best found! Bug. Please report this.");
             clientOpenGLESVersion = 1;
             pixelFormat = PixelFormat.UNKNOWN;
@@ -319,8 +290,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
         int result = PixelFormat.RGB_565;
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_RED_SIZE, value);
-        if (value[0] == 8)
-        {
+        if (value[0] == 8) {
             result = PixelFormat.RGBA_8888;
             /*
             egl.eglGetConfigAttrib(display, conf, EGL10.EGL_ALPHA_SIZE, value);
@@ -334,8 +304,7 @@ public class AndroidEGLConfigChooser implements EGLConfigChooser
             }*/
         }
        
-        if (verbose)
-        {
+        if (verbose) {
             AC_Log.info("Using PixelFormat " + result);                            
         }
    
