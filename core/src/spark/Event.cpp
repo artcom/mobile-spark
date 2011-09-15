@@ -48,6 +48,10 @@ namespace spark {
         }
     }
 
+    std::ostream & Event::print(std::ostream & os) const {
+        os << "Event type: '" << type_ << "' target: '" << target_->getName() << "' currentPhase: " << currentPhase_;
+        return os;
+    }
     void
     Event::startDispatch() {
         dispatching_ = true;
