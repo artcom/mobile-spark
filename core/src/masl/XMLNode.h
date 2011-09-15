@@ -22,6 +22,7 @@ namespace masl {
     typedef boost::shared_ptr<XMLNode> XMLNodePtr;
     class XMLNode {
         public:
+            XMLNode(const std::string & theXMLString);
             XMLNode(xmlNode* theNode);
             virtual ~XMLNode();
             void print() const;
@@ -50,7 +51,9 @@ namespace masl {
                     throw XMLNodeException("getAttributeAs<> " + nodeName + std::string(" name='") + name + std::string("' requires attribute ") + theKey, PLUS_FILE_LINE);
                 }
             }
-
+        private:
+            void init(xmlNode * theNode);
+        public:
             std::string nodeName;
             std::string name;
             std::map<std::string, std::string> attributes;
