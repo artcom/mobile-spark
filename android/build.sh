@@ -14,5 +14,9 @@ $MAKE_TOOL $1
 BUILD_OK=$?
 
 cd -
-echo "build done"
+if [ $BUILD_OK == "0" ]; then
+    echo "build done"
+else
+    exit 1
+fi
 
