@@ -55,11 +55,9 @@ namespace demoapp {
 
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
-        AC_PRINT << "################# DemoApp::setup : " << theScreenWidth << "/" << theScreenHeight;
         
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
-        AC_PRINT << "################# DmyOrientation : " << myOrientation;
         MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
                     
         loadLayoutAndRegisterEvents(mySparkFile);
@@ -161,21 +159,12 @@ namespace demoapp {
             }
             AC_DEBUG << "add slide to slides : " << mySlide->getName();
         }
-        const VectorOfComponentPtr & myWindowChildren = _mySparkWindow->getChildrenByType(View::SPARK_TYPE);
-        for (size_t i = 0; i < myWindowChildren.size(); i++) {
-            ViewPtr myView = boost::static_pointer_cast<spark::View>(myWindowChildren[i]);
-            if (myView) {
-                _myViews.push_back(myView);
-                myView->setVisible(true);
-            }
-            AC_DEBUG << "add view to views : " << myView->getName();
-        }
         _myCurrentSlide = 0;
         _mySlides[_myCurrentSlide]->setVisible(true);
 
         AC_DEBUG << "found #" << _mySlides.size() << " slides";
         
-        //return myOrientation;
+        BaseApp::realize();
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {
