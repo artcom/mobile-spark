@@ -34,7 +34,6 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   
     //read the header
     zip_fread(file, header, 8);
-    AC_PRINT << header;
   
     //test if png
     int is_png = !png_sig_cmp(header, 0, 8);
@@ -82,10 +81,8 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
     /////////////////////////////////////////////////////
     //init png reading
     png_set_read_fn(png_ptr, NULL, png_zip_read);
-  
     //let libpng know you already read the first 8 bytes
     png_set_sig_bytes(png_ptr, 8);
-  
     // read all the info up to the image data
     png_read_info(png_ptr, info_ptr);
   
