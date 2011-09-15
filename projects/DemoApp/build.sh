@@ -3,6 +3,10 @@
 APPFOLDER=`pwd`
 cd ../../android
 ./build.sh $1
+BUILD_OK=$?
+if [ $BUILD_OK != "0" ]; then
+    exit 1
+fi
 cd $APPFOLDER
 
 ANDROID_TOOL="android"
