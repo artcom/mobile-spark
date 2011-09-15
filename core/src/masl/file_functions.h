@@ -49,6 +49,7 @@ namespace masl {
     
     DEFINE_EXCEPTION(OpenDirectoryFailed, Exception);        
     /// read a complete file into a string
+    bool fileExists(const std::string& theFilename);    
     bool readFile(const std::string & thePath, std::string & theContent);
     std::string getFilenamePart(const std::string & theFileName);
     std::string getDirectoryPart(const std::string & theFileName);        

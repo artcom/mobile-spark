@@ -39,14 +39,15 @@ namespace masl {
     MobileSDK_Singleton::~MobileSDK_Singleton() {}   
 
     TextInfo MobileSDK_Singleton::renderText(const std::string & theMessage, int theTextureId, int theFontSize, 
-                                             vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign) {
+                                             vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
+                                             const std::string & theFontPath) {
         TextInfo myTextInfo;
 #ifdef __ANDROID__        
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
-            jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[IIILjava/lang/String;)Ljava/util/List;");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[IIILjava/lang/String;Ljava/lang/String;)Ljava/util/List;");
             if(myMethodId != 0) {
-               jvalue myArgs[7];
+               jvalue myArgs[8];
                 myArgs[0].l =  env->NewStringUTF(theMessage.c_str());
                 myArgs[1].i = theTextureId;
                 myArgs[2].i = theFontSize;
@@ -57,6 +58,7 @@ namespace masl {
                 myArgs[4].i = theMaxWidth;
                 myArgs[5].i = theMaxHeight;
                 myArgs[6].l = env->NewStringUTF(theAlign.c_str());;
+                myArgs[7].l =  env->NewStringUTF(theFontPath.c_str());
                 jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);                
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                

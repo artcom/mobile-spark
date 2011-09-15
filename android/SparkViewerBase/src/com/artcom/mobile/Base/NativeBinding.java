@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.opengl.GLES20;
 import android.opengl.GLES10;
 import android.opengl.GLUtils;
@@ -22,7 +23,7 @@ import com.artcom.mobile.Base.Severity;
 import com.artcom.mobile.Base.NativeException;
 public class NativeBinding {
   
-    
+    	
   public static void loadLibraries() {
       System.loadLibrary("masl");
       System.loadLibrary("animation");
@@ -43,7 +44,7 @@ public class NativeBinding {
   public static native void setSeverity(Severity theSeverity);
   
     
-  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight, String theAlign) {
+  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight, String theAlign, String theFontpath) {
 	List<Integer> myResult = new ArrayList<Integer>();
 	TextLayouter myLayouter = new TextLayouter(theMessage, theFontSize, maxWidth, maxHeight);
 	
@@ -55,6 +56,13 @@ public class NativeBinding {
 	textPaint.setSubpixelText(true);
 	textPaint.setAntiAlias(true);
 	textPaint.setTextAlign(Paint.Align.LEFT);
+	Typeface myTypeFace;
+	if (theFontpath .compareTo("") != 0) {
+		myTypeFace = Typeface.createFromFile(theFontpath);
+	} else {
+		myTypeFace = Typeface.defaultFromStyle(Typeface.NORMAL);
+	}
+	textPaint.setTypeface(myTypeFace);
 	
 	List<TextLine> myLines = myLayouter.createLines(textPaint);
 	

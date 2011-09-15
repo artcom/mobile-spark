@@ -36,7 +36,6 @@ namespace spark {
     }
 
     void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
-        //AC_PRINT << "setup";
         //init animationManager with setup-time 
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
@@ -52,6 +51,7 @@ namespace spark {
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/layouts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/shaders");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/fonts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
             
         string myOrientation = "free";         
