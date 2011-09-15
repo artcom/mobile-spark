@@ -25,14 +25,6 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_putEnv(JNIEnv *
     env->ReleaseStringUTFChars(envVar, myEnvVar);
 }
 
-JNIEXPORT bool JNICALL Java_com_artcom_mobile_Base_NativeBinding_loadSpark(JNIEnv * env, jobject obj,
-                                                                 jstring filename) {
-    const char* str = env->GetStringUTFChars(filename, NULL);                                                                    
-    bool success = masl::loadSpark(str);
-    env->ReleaseStringUTFChars(filename, str);
-    return success;
-}
-
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * env, jobject obj,
                                                               jobject theSeverity, jstring theFilename, 
                                                               int theLineNumber, jstring theMessage) {
