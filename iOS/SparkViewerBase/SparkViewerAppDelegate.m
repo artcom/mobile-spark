@@ -6,12 +6,17 @@
 @synthesize window;
 @synthesize myGLView;
 
+- (void)createGLView
+{
+    myGLView = [[GLView alloc]initWithFrame:[window bounds]];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"in didFinishLaunchingWithOptions");
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
-    myGLView = [[GLView alloc]initWithFrame:[window bounds]];
-
+    [self createGLView];
+    
     [self.window addSubview:myGLView];
     [self.window makeKeyAndVisible];
     

@@ -4,11 +4,6 @@
 using namespace spark;
 
 namespace demoapp {
-
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("SlideImpl", spark::create<SlideImpl>);
-    }
     
     SlideImpl::SlideImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
         : Transform(theApp, theXMLNode, theParent) {

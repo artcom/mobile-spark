@@ -10,7 +10,7 @@
 #import <CoreMotion/CMMotionManager.h>
 
 #ifdef __cplusplus
-    #include <spark/DemoApp.h>
+    #include <spark/BaseApp.h>
 #endif
 
 #import "EventManager.h"
@@ -25,20 +25,20 @@
     GLuint depthRenderbuffer;
     GLint width;
     GLint height;
-    
-#ifdef __cplusplus
-    spark::DemoApp *myDemoApp;
-#endif
-    
     BOOL animating;
     EventManager *eventManager;
     CADisplayLink *displayLink;
     CMMotionManager *motionManager;
+    
+    @protected
+#ifdef __cplusplus
+    spark::BaseApp *myApp;
+#endif
 
 }
 
+- (void) createApp;
 - (void) render:(id)sender;
-- (void) onResume;
 - (void) startAnimation;
 - (void) stopAnimation;
 

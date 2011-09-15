@@ -4,11 +4,7 @@
 
 namespace spark {
 
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("World", spark::create<World>);
-    }
-
+    const char * World::SPARK_TYPE = "World";
 
     World::World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):

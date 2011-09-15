@@ -1,14 +1,10 @@
 #include "Rectangle.h"
-#include "BaseApp.h"
 
 #include "SparkComponentFactory.h"
 
 namespace spark {
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Rectangle", spark::create<Rectangle>);
-    }
-
+    
+    const char * Rectangle::SPARK_TYPE = "Rectangle";
 
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
@@ -21,10 +17,10 @@ namespace spark {
         _myColor[2] = myColor[2];
         _myColor[3] = 1; //TODO: use alpha
 
-        setShape(ShapeFactory::get().createRectangle(false, width, height));
+        setShape(mar::ShapeFactory::get().createRectangle(false, width, height));
 
         //XXX
-        boost::static_pointer_cast<UnlitColoredMaterial>(getShape()->elementList[0]->material)->setDiffuseColor(_myColor);
+        boost::static_pointer_cast<mar::UnlitColoredMaterial>(getShape()->elementList[0]->material)->setDiffuseColor(_myColor);
     }
 
     Rectangle::~Rectangle() {
