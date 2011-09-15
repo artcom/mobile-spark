@@ -52,7 +52,7 @@ namespace spark {
             (*myEvent)();
             AC_PRINT << "______________________________________picked " << myPicked->getName();
         } else {
-            AC_TRACE << "nothing picked";
+            AC_DEBUG << "nothing picked";
         }
     }
     
@@ -75,7 +75,7 @@ namespace spark {
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             if (myView->isVisible()) {
-                AC_DEBUG << "render with : " << _myWidth << "/" << _myHeight;
+                AC_TRACE << "render with : " << _myWidth << "/" << _myHeight;
                 myView->activate(_myWidth, _myHeight);
                 // find world and render it
                 myView->renderWorld(getChildByName(myView->getWorldName()));

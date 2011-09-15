@@ -27,6 +27,9 @@ namespace spark {
         float getX() const { return _x;};
         float getY() const { return _y;};
         float getZ() const { return _z;};
+        float getRotationX() const {return _rotationX;};
+        float getRotationY() const {return _rotationY;};
+        float getRotationZ() const {return _rotationZ;};
         void setX(const float theX) { _x = theX; updateMatrix();};
         void setY(const float theY) { _y = theY; updateMatrix();};
         void setZ(const float theZ) { _z = theZ; updateMatrix();};
