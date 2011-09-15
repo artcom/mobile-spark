@@ -22,6 +22,16 @@ namespace android {
         //delete _myApkArchive; //warnings?
     }
     
+    string 
+    AndroidAssetProvider::findFile(const std::string & theFilename) const{
+        std::string filePath;
+        if (masl::searchFile(includePaths_, theFilename, filePath)) {
+            return filePath;
+        } else {
+            return "";
+        }        
+    }
+
     vector<string> 
     AndroidAssetProvider::getFilesFromPath(const string & theBasename) const {
         vector<string> myFiles;

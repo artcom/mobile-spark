@@ -2,7 +2,7 @@
 
 
 APPNAME="demoapp"
-FOLDERS="models layouts shaders textures" 
+FOLDERS="models layouts shaders textures fonts" 
 if [ "$#" != "0" ]; then
     FOLDERS=$*
 fi

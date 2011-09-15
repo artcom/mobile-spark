@@ -14,6 +14,7 @@ namespace android {
         AndroidAssetProvider(const std::string & theApkPath);
         virtual ~AndroidAssetProvider();
 
+        virtual std::string findFile(const std::string & theFilename) const;
         virtual std::string getStringFromFile(const std::string & theFileName) const;        
         virtual std::vector<std::string> getFilesFromPath(const std::string & theBasename) const;
         virtual std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const;
