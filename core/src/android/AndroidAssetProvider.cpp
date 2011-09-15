@@ -21,27 +21,6 @@ namespace android {
     AndroidAssetProvider::~AndroidAssetProvider() {
         //delete _myApkArchive; //warnings?
     }
-    
-    string 
-    AndroidAssetProvider::findFile(const std::string & theFilename) const{
-        std::string filePath;
-        if (masl::searchFile(includePaths_, theFilename, filePath)) {
-            return filePath;
-        } else {
-            return "";
-        }        
-    }
-
-    vector<string> 
-    AndroidAssetProvider::getFilesFromPath(const string & theBasename) const {
-        vector<string> myFiles;
-        if (theBasename.size() > 0 && theBasename[0] == '/') {  
-            for (std::vector<std::string>::const_iterator it = includePaths_.begin(); it != includePaths_.end(); ++it) {            
-                masl::getDirectoryEntries((*it), myFiles, theBasename.substr(1, theBasename.size()));
-            }
-        }
-        return myFiles;
-    }
 
     std::string 
     AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {

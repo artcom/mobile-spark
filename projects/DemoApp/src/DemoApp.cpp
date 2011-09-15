@@ -1,6 +1,7 @@
 #include "DemoApp.h"
 
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <cstdlib>
 
 #include <masl/Logger.h>
 #include <masl/MobileSDK_Singleton.h>
@@ -19,7 +20,8 @@
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
-#include <cstdlib>
+#include "DemoAppComponentMapInitializer.h"
+
 
 using namespace spark;
 using namespace masl;
@@ -55,13 +57,16 @@ namespace demoapp {
 
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
-
+        
+        DemoAppComponentMapInitializer::init();
+        
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
         MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
                     
         loadLayoutAndRegisterEvents(mySparkFile);
 
+        
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
 
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());

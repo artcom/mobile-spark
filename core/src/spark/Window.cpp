@@ -11,13 +11,6 @@ using namespace mar;
 using namespace std;
 
 namespace spark {
-
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::create<Window>);
-    }
-
-
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent), 
