@@ -66,23 +66,17 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
     }
 
     //////////////////////////////////////////////
+    //init png reading
     png_init_io(png_ptr, file);
-    unsigned int sig_read = 0;
-    png_set_sig_bytes(png_ptr, sig_read);
+    png_set_sig_bytes(png_ptr, 0);
     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
-
 
     // get info about png
     int bit_depth, color_type;
     png_uint_32 twidth, theight;
     png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type, NULL, NULL, NULL);
   
-    if (color_type != PNG_COLOR_TYPE_RGB_ALPHA && color_type != PNG_COLOR_TYPE_RGB) {
-            AC_DEBUG << "unknown color type " << color_type;
-            png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-            fclose(file);
-            return false;
-    }
+    // Allocate the image_data as a big block, to be given to opengl
     unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
     GLubyte *image_data = new GLubyte[row_bytes * theight];
     if (!image_data) {
