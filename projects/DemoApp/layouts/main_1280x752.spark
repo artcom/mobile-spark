@@ -11,6 +11,7 @@
     <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
 
     <World name="2dworld">    
+        <Statistic name="stats"/>
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
 
         <Controls x="20" y="20" z="20">

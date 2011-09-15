@@ -4,6 +4,12 @@
 using namespace masl;
 
 namespace spark {
+    const char * const TouchEvent::CLASSNAME = "TouchEvent";
+    const char * const StageEvent::CLASSNAME = "StageEvent";
+    const char * const WindowEvent::CLASSNAME = "WindowEvent";
+    const char * const GestureEvent::CLASSNAME = "GestureEvent";
+    const char * const SensorEvent::CLASSNAME = "SensorEvent";
+
     const char * const StageEvent::FRAME = "frame";
     const char * const StageEvent::PAUSE = "pause";
     const char * const WindowEvent::ON_RESIZE = "on_resize";
@@ -48,6 +54,10 @@ namespace spark {
         }
     }
 
+    std::ostream & Event::print(std::ostream & os) const {
+        os << classname_() << " type: '" << type_ << "' target: '" << target_->getName() << "' currentPhase: " << currentPhase_;
+        return os;
+    }
     void
     Event::startDispatch() {
         dispatching_ = true;

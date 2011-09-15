@@ -1,6 +1,7 @@
 #include "DemoApp.h"
 
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <cstdlib>
 
 #include <masl/Logger.h>
 #include <masl/MobileSDK_Singleton.h>
@@ -19,7 +20,8 @@
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
-#include <cstdlib>
+#include "DemoAppComponentMapInitializer.h"
+
 
 using namespace spark;
 using namespace masl;
@@ -55,15 +57,16 @@ namespace demoapp {
 
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
-        AC_PRINT << "################# DemoApp::setup : " << theScreenWidth << "/" << theScreenHeight;
+        
+        DemoAppComponentMapInitializer::init();
         
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
-        AC_PRINT << "################# DmyOrientation : " << myOrientation;
         MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
                     
         loadLayoutAndRegisterEvents(mySparkFile);
 
+        
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
 
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
@@ -161,21 +164,12 @@ namespace demoapp {
             }
             AC_DEBUG << "add slide to slides : " << mySlide->getName();
         }
-        const VectorOfComponentPtr & myWindowChildren = _mySparkWindow->getChildrenByType(View::SPARK_TYPE);
-        for (size_t i = 0; i < myWindowChildren.size(); i++) {
-            ViewPtr myView = boost::static_pointer_cast<spark::View>(myWindowChildren[i]);
-            if (myView) {
-                _myViews.push_back(myView);
-                myView->setVisible(true);
-            }
-            AC_DEBUG << "add view to views : " << myView->getName();
-        }
         _myCurrentSlide = 0;
         _mySlides[_myCurrentSlide]->setVisible(true);
 
         AC_DEBUG << "found #" << _mySlides.size() << " slides";
         
-        //return myOrientation;
+        BaseApp::realize();
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {
@@ -253,14 +247,13 @@ namespace demoapp {
 	void DemoApp::onSensorEvent(EventPtr theEvent) {
 		if (_mySlides[_myCurrentSlide]->getName() != "3D-Viewer-Slide") return;
     	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
-    	//float myX = myEvent->getValue0(); 
-    	float myY = myEvent->getValue1(); 
-    	float myZ = myEvent->getValue2();
+    	float myX = myEvent->getValue0()*3.1417/180; 
+    	float myY = myEvent->getValue1()*3.1417/180; 
+    	//float myZ = myEvent->getValue2()*3.1417/180;
     	ComponentPtr myAmazoneObject = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
         Shape3DPtr myAmazone = boost::static_pointer_cast<spark::Shape3D>(myAmazoneObject);
-        myAmazone -> setRotationY(myAmazone->getRotationY() - myZ/180);
-		myAmazone -> setRotationX(myAmazone->getRotationX() - myY/180 - 0.2);
-
+		myAmazone -> setRotationX(-myY - 1.57);
+		myAmazone -> setRotationY(-myX * 2); // x2 for more effect
     }
 
 	void DemoApp::onSensorLightEvent(EventPtr theEvent) {
@@ -268,7 +261,7 @@ namespace demoapp {
     	float myLight = myEvent->getValue0();
        	ComponentPtr myLightObject = _mySparkWindow->getChildByName("transformLight", true);
         TransformPtr myLightRectangle = boost::static_pointer_cast<spark::Transform>(myLightObject);
-		myLightRectangle->setY(myLight/10);
+		myLightRectangle->setY(myLight / 10);
     }
     
     void DemoApp::onSensorGyroEvent(EventPtr theEvent) {
