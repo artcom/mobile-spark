@@ -34,6 +34,12 @@ namespace spark {
                 TARGET
             };
 
+            std::ostream & print(std::ostream & os) const;
+
+            friend inline std::ostream& operator<<(std::ostream& os, const Event& e) {
+                return e.print(os);
+            }
+
             void operator () ();
             void cancelDispatch();
             void startDispatch();
