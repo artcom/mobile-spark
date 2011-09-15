@@ -16,9 +16,6 @@ public class ASLOpenGLView extends GLSurfaceView {
     
     
     private EGLRenderer myRenderer;
-    //private int width;
-    //private int height;
-    
 
     public ASLOpenGLView(Context context, int theScreenWidth, int theScreenHeight, boolean firstTime) {
         super(context);

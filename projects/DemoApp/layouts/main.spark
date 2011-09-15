@@ -11,6 +11,7 @@
     <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
 
     <World name="2dworld">    
+        <Statistic name="stats"/>
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
 
         <Controls x="20" y="20" z="20">
@@ -70,8 +71,8 @@
         </Slide>
 
         <Slide name="CameraSlide" title="Camera">
-            <Camera name="camera" x="150" y="10" scaleX="0.5" scaleY="0.5" cpu_color_conversion="true">
-                <Image name="border" visible="false" width="640" height="480" src="/rahmen_schwarz.png" z="1"/>
+            <Camera name="camera" x="0" y="0" scaleX="1" scaleY="1" cpu_color_conversion="false">
+                <Image name="border2" visible="false" width="640" height="480" src="/rahmen_schwarz.png" z="1"/>
             </Camera>
         </Slide>
         <Slide name="3D-Viewer-Slide" title="3D-Viewer">

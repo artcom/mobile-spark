@@ -15,3 +15,5 @@ default.properties
 iOS/Xcode_iPad
 iOS/Xcode_Simulator
 _iOS_build
+projects/DemoApp/Xcode_Ipad
+

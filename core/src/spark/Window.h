@@ -19,14 +19,14 @@ namespace spark {
         virtual void onSizeChanged(EventPtr theEvent);
         virtual void onResume();        
         vector4 getClearColor() const { return _myClearColor;};
-        vector2 getSize() const { return vector2(_myWidth, _myHeight);}
+        vector2 getSize() const;
     private:
         int _myWidth;
         int _myHeight;
         bool _myFullScreenFlag;
         vector4 _myClearColor;
         mar::CanvasPtr _myGLCanvas;      
-
+        std::string _myOrientation;
         //picking -> move to other compilation unit?
         ComponentPtr pick2DAABBStyle(const unsigned int x, const unsigned int y) ;
     };

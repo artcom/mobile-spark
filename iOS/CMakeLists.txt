@@ -1,2 +1,2 @@
-add_subdirectory(SparkViewer)
+add_subdirectory(SparkViewerBase)
 

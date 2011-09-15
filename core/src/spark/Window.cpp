@@ -8,15 +8,9 @@
 #include "Visitors.h"
 
 using namespace mar;
+using namespace std;
 
 namespace spark {
-
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::create<Window>);
-    }
-
-
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent), 
@@ -28,8 +22,6 @@ namespace spark {
         _myFullScreenFlag = _myXMLNode->getAttributeAs<bool>("fullscreen", false);
         _myClearColor = _myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1));
 
-        //EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr > ( shared_from_this(), &Window::Window));
-
         WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new WindowCB(ptr, &Window::onSizeChanged));
         addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
@@ -37,10 +29,23 @@ namespace spark {
         // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
         _myWidth = _myXMLNode->getAttributeAs<float>("width",100);
         _myHeight = _myXMLNode->getAttributeAs<float>("height",100);
+        _myOrientation = _myXMLNode->getAttributeAs<string>("orientation","");
     }
 
     Window::~Window() {
     }
+    vector2 Window::getSize() const { 
+        int myScreensLargerSide = _myWidth > _myHeight ? _myWidth : _myHeight;
+        int myScreensSmallerSide = myScreensLargerSide ==  _myHeight ? _myWidth : _myHeight;
+
+        if (_myOrientation == "portrait") {
+            return vector2(myScreensSmallerSide, myScreensLargerSide);
+        } else if (_myOrientation == "landscape") {
+            return vector2(myScreensLargerSide, myScreensSmallerSide);
+        }
+        // floating
+        return vector2(_myWidth, _myHeight);
+    }    
     
     void 
     Window::onTouch(EventPtr theEvent) { 
