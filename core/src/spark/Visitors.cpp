@@ -17,6 +17,13 @@ namespace spark {
         theComponent->onPause();
         return true;
     }
+    
+    bool 
+    RealizeComponentVisitor::visit(ComponentPtr theComponent) {
+        AC_PRINT << theComponent->getName() << " realize";
+        theComponent->realize();
+        return true;
+    }
 
     bool
     OnResumeComponentVisitor::visit(ComponentPtr theComponent) {

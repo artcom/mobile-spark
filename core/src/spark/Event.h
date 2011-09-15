@@ -34,6 +34,15 @@ namespace spark {
                 TARGET
             };
 
+            static const char * const CLASSNAME;
+            virtual const char * const &  classname_() const = 0;
+
+            std::ostream & print(std::ostream & os) const;
+
+            friend inline std::ostream& operator<<(std::ostream& os, const Event& e) {
+                return e.print(os);
+            }
+
             void operator () ();
             void cancelDispatch();
             void startDispatch();
@@ -62,14 +71,32 @@ namespace spark {
             StageEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~StageEvent();
 
+            static const char * const CLASSNAME;
+            virtual const char * const &  classname_() const {return StageEvent::CLASSNAME;};
             static const char * const FRAME;
             static const char * const PAUSE;
-
             masl::UInt64 getCurrentTime() const { return currenttime_;};
             masl::UInt64 currenttime_;
     };
 
     typedef boost::shared_ptr<StageEvent> StageEventPtr;
+
+    class WindowEvent : public Event {
+        public:
+
+            WindowEvent(const std::string & theType, ComponentPtr theTarget, 
+                        unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight);
+            WindowEvent(const masl::XMLNodePtr theXMLNode);
+            virtual ~WindowEvent();
+
+            static const char * const CLASSNAME;
+            virtual const char * const &  classname_() const {return WindowEvent::CLASSNAME;};
+            static const char * const ON_RESIZE;
+            vector2 size_;
+            vector2 oldsize_;
+    };
+
+    typedef boost::shared_ptr<WindowEvent> WindowEventPtr;
 
     class TouchEvent : public Event {
         public:
@@ -77,6 +104,8 @@ namespace spark {
             TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX=0, const unsigned int theY=0);
             TouchEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~TouchEvent();
+            static const char * const CLASSNAME;
+            virtual const char * const &  classname_() const {return TouchEvent::CLASSNAME;};
             static const char * const TAP;
             static const char * const DOUBLETAP;
             static const char * const LONGPRESS;
@@ -101,6 +130,8 @@ namespace spark {
             GestureEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~GestureEvent();
 
+            static const char * const CLASSNAME;
+            virtual const char * const &  classname_() const {return GestureEvent::CLASSNAME;};
             static const char * const PAN;
             static const char * const PINCH;
             static const char * const ROTATE;
@@ -109,6 +140,10 @@ namespace spark {
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};
+            int getTranslateX() const { return dx_;};
+            int getTranslateY() const { return dy_;};
+            float getFactor() const { return factor_;};
+
 
         private:
             unsigned int x_;
@@ -121,6 +156,40 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<GestureEvent> GestureEventPtr;
+    
+    class SensorEvent : public Event {
+        public:
+
+            SensorEvent(const std::string & theType, ComponentPtr theTarget, const float theValue0, const float theValue1, const float theValue2);
+            SensorEvent(const masl::XMLNodePtr theXMLNode);
+            virtual ~SensorEvent();
+
+            static const char * const CLASSNAME;
+            virtual const char * const &  classname_() const {return SensorEvent::CLASSNAME;};
+
+			static const char * const ACCELEROMETER;
+			static const char * const GRAVITY;
+			static const char * const GYROSCOPE;
+			static const char * const LIGHT;
+			static const char * const LINEAR_ACCELERATION;
+			static const char * const MAGNETIC_FIELD;
+			static const char * const ORIENTATION;
+			static const char * const PRESSURE;
+			static const char * const PROXIMITY;
+			static const char * const ROTATION_VECTOR;
+			static const char * const TEMPERATURE;
+           
+            float getValue0() const { return value0_;};
+            float getValue1() const { return value1_;};
+            float getValue2() const { return value2_;};
+            
+        private:
+            float value0_;
+			float value1_;
+			float value2_;        
+    };
+
+    typedef boost::shared_ptr<SensorEvent> SensorEventPtr;
     
 
     ////////////////////////////////////////////////////////////////////////

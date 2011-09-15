@@ -28,6 +28,12 @@
 #include <stdio.h>
 #include "Logger.h"
 
+#include <libgen.h>
+//#include <unistd.h>
+//#include <utime.h>
+
+#include <dirent.h>
+
 using namespace std;
 
 namespace masl {
@@ -36,12 +42,14 @@ namespace masl {
     /// read a complete file into a string
     bool 
     readFile(const std::string & theUTF8Filename, std::string & theContent) {
-        FILE * pFile;
-        char *myCharBuffer;
-        pFile = fopen (theUTF8Filename.c_str(),"r");
-        if (pFile == NULL) { 
-            throw Exception("Error opening file");
-        } else {
+         FILE * pFile;
+         std::string filepath;
+         searchFile(theUTF8Filename, filepath, true);
+         char *myCharBuffer;
+         pFile = fopen (filepath.c_str(),"r");
+         if (pFile == NULL) { 
+             throw Exception("Error opening file");
+         } else {
             fseek(pFile,0,SEEK_END); //go to end
             int len=ftell(pFile); //get position at end (length)
             fseek(pFile,0,SEEK_SET); //go to beg.
@@ -50,10 +58,9 @@ namespace masl {
             fread(myCharBuffer,len,1,pFile); //read into buffer
             fclose(pFile);
             theContent = std::string(myCharBuffer);
-            free (myCharBuffer);
+            free(myCharBuffer);
         }
         return true;
-
     }
 
     bool 
@@ -61,8 +68,10 @@ namespace masl {
         const size_t MAX_LENGTH = 1000;
         char buffer[MAX_LENGTH];
         std::string newPart;
+        std::string filepath;
+        searchFile(theUTF8Filename, filepath, true);
         FILE *file;
-        if ((file = fopen(theUTF8Filename.c_str(), "rb")) == NULL) {
+        if ((file = fopen(filepath.c_str(), "rb")) == NULL) {
             throw Exception("Error opening file");
         }
         size_t size = fread(buffer, 1, MAX_LENGTH,file);
@@ -86,5 +95,81 @@ namespace masl {
         fclose(file);
         return true;
     }
+
+    std::string getFilenamePart(const std::string & theFileName) {
+        std::string myBaseName;
+        if ( ! theFileName.empty()) {
+            if (theFileName.at(theFileName.length()-1) == '/') {  // Huh? what's that for??? [DS/MS]
+                // return empty string if theFileName ends with "/"
+                return std::string("");
+            }
+
+            char * myBuffer = strdup(theFileName.c_str());
+            myBaseName = basename(myBuffer);
+            free(myBuffer);
+        }
+        return myBaseName;
+    }
+
+   void getDirectoryEntries(const string & thePath,  std::vector<string> & theDirEntries, string theFilter) {
+        DIR * myDirHandle = opendir(thePath.c_str());
+        if (!myDirHandle) {
+            throw OpenDirectoryFailed(string("thePath='") + thePath + "'not found", PLUS_FILE_LINE);
+        }
+        struct dirent *dir_entry;
+        while((dir_entry = readdir(myDirHandle)) != 0) {
+            if (std::string("..")!= dir_entry->d_name && std::string(".") != dir_entry->d_name) {
+                if (theFilter == "" || string(dir_entry->d_name).find(theFilter) != string::npos) {
+                    theDirEntries.push_back(dir_entry->d_name);
+                }
+            }
+        }
+        closedir(myDirHandle);
+    }
+    
+    bool
+    searchFile(const std::string & theFileName, std::string & retPath, bool theForce) {
+        FILE * pFile;
+        pFile = fopen(theFileName.c_str(),"r");
+        if (pFile == NULL && theForce) { 
+            throw Exception("Error opening file " + theFileName);
+        }
+        if (pFile) {
+            fclose(pFile);
+            retPath = theFileName;
+            return true;
+        }
+        return false;
+    }
+
+    bool
+    searchFile(const std::vector<std::string> & theIncludeList, const std::string & theFileName, std::string & retPath) {
+        for (std::vector<std::string>::const_iterator it = theIncludeList.begin(); it != theIncludeList.end(); ++it) {
+            if (searchFile((*it) + theFileName, retPath)) {
+                return true;
+            }
+        }
+        return false;
+    }        
+    std::string getDirectoryPart(const std::string & theFileName) {        
+        std::string myDirName;
+        if (! theFileName.empty() ) {
+            if (theFileName.at(theFileName.length()-1) == '/') {
+                return theFileName;
+            }
+
+            char * myBuffer = strdup(theFileName.c_str());
+            myDirName = dirname(myBuffer);
+            free(myBuffer);
+            if (!myDirName.empty() &&
+                myDirName.at(myDirName.length()-1) != '/')
+            {
+                myDirName += "/";
+            }
+        }
+
+        return myDirName;
+    }
+    
 }
 

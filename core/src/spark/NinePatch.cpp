@@ -5,15 +5,6 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
-    //needed for component factory
-    //namespace  {
-        ComponentPtr createNinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return NinePatchPtr(new NinePatch(theApp, theXMLNode, theParent));
-        };
-    //    const bool registered = spark::SparkComponentFactory::get().registerComponent("NinePatch", spark::createNinePatch);
-    //}
-
-
     NinePatch::NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
 
