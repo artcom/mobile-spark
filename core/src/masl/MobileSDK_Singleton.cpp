@@ -80,25 +80,41 @@ namespace masl {
 #endif        
         return myTextInfo;
     }     
+    void MobileSDK_Singleton::freezeMobileOrientation(std::string theOrientation) {
+#ifdef __ANDROID__        
+        if (env) {
+           jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");                        
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "freezeOrientation", "(Ljava/lang/String;)V");
+            if(myMethodId != 0) {
+               jvalue myArgs[1];
+                myArgs[0].l =  env->NewStringUTF(theOrientation.c_str());
+                env->CallStaticVoidMethodA (cls, myMethodId, myArgs);                                
+            } else {
+                AC_WARNING  << "Sorry, java-freezeOrientation not found";                
+            }
+        }
+#endif                                
+    }
+    
     
     CameraInfo MobileSDK_Singleton::getCameraSpec() {
         CameraInfo myCameraInfo;
         myCameraInfo.textureID=0;
-#ifdef __ANDROID__        
+#ifdef __ANDROID__       
         if (env) {
            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");                        
             jmethodID myMethodId = env->GetStaticMethodID(cls, "getCameraParams", "()Ljava/util/List;");
             if(myMethodId != 0) {
-                jvalue myArgs[0];
-                jobject myList = env->CallStaticObjectMethod (cls, myMethodId, myArgs);
-                jclass listClass = env->GetObjectClass(myList);
-                jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
-
+            	jvalue myArgs[0];
+            	jobject myList = env->CallStaticObjectMethod (cls, myMethodId, myArgs);
+				jclass listClass = env->GetObjectClass(myList);
+            	jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
+				
                 jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
                 jclass myIntegerClass = env->GetObjectClass(myInt);
                 jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");                
                 myCameraInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-
+ 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
                 myCameraInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
                     
@@ -110,7 +126,7 @@ namespace masl {
                 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);                
                 myCameraInfo.textureheight = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
-                                     
+                
             } else {
                 AC_WARNING  << "Sorry, java-getCameraParams not found";                
             }

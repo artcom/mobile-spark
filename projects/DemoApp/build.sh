@@ -34,6 +34,7 @@ then
     $ANDROID_TOOL update lib-project --target android-9 --path ../../../../android/SparkViewerBase 
 
     # update android project
+    $ANDROID_TOOL update project --target android-9 --name DemoAppActivity --path . 
     $ANDROID_TOOL update project --library ../../../../android/SparkViewerBase --target android-9 --name DemoAppActivity --path . 
     BUILD_OK=$?
 fi
