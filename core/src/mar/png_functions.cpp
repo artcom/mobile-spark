@@ -10,7 +10,6 @@ extern "C" {
 namespace mar {
 
 void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
-
     GLuint textureId;
     int width, height;
     bool rgb;
@@ -24,15 +23,15 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
 
 bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
     std::string myFilename = masl::trimall(filename);
-    AC_PRINT << "load texture file name '" << filename << "'";
+    AC_DEBUG << "load texture file name '" << myFilename << "'";
 
-    ///////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
     FILE *file;
     if ((file = fopen(myFilename.c_str(), "rb")) == NULL) {
-        AC_PRINT << " Error opening ";
+        AC_ERROR << " Error opening file " << myFilename;
         return false;   
     }
-    ///////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
     
     //create png struct
     png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -42,44 +41,37 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
         return false;
     }
 
-    AC_PRINT << "1";
     //create png info struct
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
+        fclose(file);
         png_destroy_read_struct(&png_ptr, NULL, NULL);
         AC_ERROR << "Unable to create png info : " << myFilename;
-        fclose(file);
         return false;
     }
-
-    AC_PRINT << "2";
-    //create png info struct
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
+      fclose(file);
       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
       AC_ERROR << "Unable to create png end info : " << myFilename;
-      fclose(file);
       return false;
     }
 
-    AC_PRINT << "3";
     //png error stuff, not sure libpng man suggests this.
     if (setjmp(png_jmpbuf(png_ptr))) {
+        fclose(file);
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         AC_ERROR << "Error during setjmp : " << myFilename;
-        fclose(file);
         return false;
     }
 
-    AC_PRINT << "4";
-    unsigned int sig_read = 0;
-    GLubyte *image_data;
+    //////////////////////////////////////////////
     png_init_io(png_ptr, file);
+    unsigned int sig_read = 0;
     png_set_sig_bytes(png_ptr, sig_read);
     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
 
 
-    AC_PRINT << "5";
     // get info about png
     int bit_depth, color_type;
     png_uint_32 twidth, theight;
@@ -87,20 +79,27 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
   
     if (color_type != PNG_COLOR_TYPE_RGB_ALPHA && color_type != PNG_COLOR_TYPE_RGB) {
             AC_DEBUG << "unknown color type " << color_type;
-            png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+            png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
             fclose(file);
             return false;
     }
     unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-    image_data = (unsigned char*) malloc(row_bytes * outHeight);
- 
-    AC_PRINT << "6";
-    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
-    for (int i = 0; i < outHeight; i++) {
-        memcpy(image_data+(row_bytes * (outHeight-1-i)), row_pointers[i], row_bytes);
+    GLubyte *image_data = new GLubyte[row_bytes * theight];
+    if (!image_data) {
+      //clean up memory and close stuff
+      png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+      AC_ERROR << "Unable to allocate image_data while loading " << myFilename;
+      fclose(file);
+      return false;
     }
+ 
+    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
+    for (size_t i = 0; i < theight; i++) {
+        memcpy(image_data+(row_bytes * (theight-1-i)), row_pointers[i], row_bytes);
+    }
+    ////////////////////////////////////////////////////////
+
     
-    AC_PRINT << "7";
     
     //Now generate the OpenGL texture object
     GLuint texture;
@@ -114,7 +113,7 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
         outRgb = false;
     } else if (color_type == PNG_COLOR_TYPE_RGB) {
         AC_DEBUG << "no alpha";
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, outWidth, outHeight, 0, GL_RGB,
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB,
                      GL_UNSIGNED_BYTE, (GLvoid*) image_data);
         outRgb = true;
     } else {
