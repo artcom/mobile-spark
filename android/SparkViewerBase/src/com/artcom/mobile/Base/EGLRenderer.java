@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.DisplayMetrics;
 
 
 public class EGLRenderer  implements GLSurfaceView.Renderer{
@@ -12,9 +13,13 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static long millisec = 0;
     public static final String PACKAGE_NAME = "com.artcom.mobile";
     public static boolean _myFirstTimeFlag;
+    public static int _myScreenWidth;
+    public static int _myScreenHeight;
     private Context context;    
-    public EGLRenderer (Context context, boolean firstTime) {
+    public EGLRenderer (Context context, int theScreenWidth, int theScreenHeight, boolean firstTime) {
         _myFirstTimeFlag = firstTime;
+        _myScreenWidth = theScreenWidth;
+        _myScreenHeight = theScreenHeight;
         this.context = context;
        
     }    
@@ -22,14 +27,12 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
         updateFrameCounter();
         String myEvent = "<StageEvent type='frame' time='" + System.currentTimeMillis() + "'/>";
         NativeBinding.onEvent(myEvent);
-        //myEvent = "<TouchEvent type='tap' x='10' y='20'/>";
-        //NativeBinding.onEvent(myEvent);
-        
     }
 
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {        
-        AC_Log.print("onSurfaceChanged");
-        NativeBinding.onSizeChanged(width,height);    
+        AC_Log.print("_________________________________- onSurfaceChanged");
+        String myEvent = "<WindowEvent type='on_resize' newsize='[" + width + "," + height + "]' oldsize='[-1, -1]'/>";
+        NativeBinding.onEvent(myEvent);        
     }
     
     private void updateFrameCounter() {
@@ -53,7 +56,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
         AC_Log.print("_________________________________- on surface created");
         NativeBinding.initBinding();
         if (_myFirstTimeFlag) {
-            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context));
+            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), _myScreenWidth,  _myScreenHeight);
         } else {
             NativeBinding.onResume();
         }

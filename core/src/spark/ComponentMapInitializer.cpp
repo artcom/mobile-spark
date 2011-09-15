@@ -6,6 +6,7 @@
 #include "Rectangle.h"
 #include "RenderCamera.h"
 #include "Shape3D.h"
+#include "Statistic.h"
 #include "Text.h"
 #include "Transform.h"
 #include "View.h"
@@ -20,6 +21,7 @@ namespace spark {
         SparkComponentFactory::get().registerComponent("Rectangle", spark::create<Rectangle>);
         SparkComponentFactory::get().registerComponent("RenderCamera", spark::create<RenderCamera>);
         SparkComponentFactory::get().registerComponent("Shape3D", spark::create<Shape3D>);
+        SparkComponentFactory::get().registerComponent("Statistic", spark::create<Statistic>);
         SparkComponentFactory::get().registerComponent("Text", spark::create<Text>);
         SparkComponentFactory::get().registerComponent("Transform", spark::create<Transform>);
         SparkComponentFactory::get().registerComponent("View", spark::create<View>);

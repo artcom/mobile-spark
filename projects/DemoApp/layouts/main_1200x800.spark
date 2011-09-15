@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Window name="Samsung Galaxy S" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="portrait" width="800" height="480">
+<Window name="Motorola Xoom" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="landscape" width="1200" height="800">
 
     <Template name="Controls" src="/controls.spark"/>
     <Template name="Slide" src="/slide.spark"/>
@@ -39,7 +39,7 @@
         <Slide name="ImagesSlide" title="Images">
             <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="/texture.png"/>
             <Image name="transparent_image" x="250" y="250" z="1" src="/transparenttexture.png"/>
-            <Image name="image_from_apk_package" x="250" y="50" z="2" src="assets/textures/sparks.png"/>
+            <Image name="image_from_apk_package" x="250" y="250" z="1" src="textures/sparks.png"/>
         </Slide>
 
         <Slide name="AnimatedRectangleSlide" title="Animation" subtitle="touch screen to animate">
@@ -71,8 +71,8 @@
         </Slide>
 
         <Slide name="CameraSlide" title="Camera">
-            <Camera name="camera" x="0" y="0" scaleX="1" scaleY="1" cpu_color_conversion="false">
-                <Image name="border2" visible="false" width="640" height="480" src="/rahmen_schwarz.png" z="1"/>
+            <Camera name="camera" x="150" y="10" scaleX="0.5" scaleY="0.5" cpu_color_conversion="true">
+                <Image name="border" visible="false" width="640" height="480" src="/rahmen_schwarz.png" z="1"/>
             </Camera>
         </Slide>
         <Slide name="3D-Viewer-Slide" title="3D-Viewer">
@@ -98,8 +98,8 @@
     </World>        
 
     <World name="3dworld">    
-        <RenderCamera name="3dcamera" z="120" y="-20" x="10" frustum="perspective[60,20,10000]"/>    
-        <Transform sensible="false" name="transform" x="0" y="-50" z="0" scaleX="0.15" scaleY="0.15" scaleZ="0.15" alpha="0.5">
+        <RenderCamera name="3dcamera" z="0" y="-20" x="10" frustum="perspective[60,20,10000]"/>    
+        <Transform sensible="false" name="transform" x="0" y="-50" z="-120" scaleX="0.15" scaleY="0.15" scaleZ="0.15" alpha="0.5">
             <Shape3D name="theAmazone" src="/amazone"/>
         </Transform>
     </World>            
