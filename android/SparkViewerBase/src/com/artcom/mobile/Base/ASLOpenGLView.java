@@ -16,23 +16,18 @@ public class ASLOpenGLView extends GLSurfaceView {
     
     
     private EGLRenderer myRenderer;
-    //private int width;
-    //private int height;
-    
 
-    public ASLOpenGLView(Context context, boolean firstTime) {
+    public ASLOpenGLView(Context context, int theScreenWidth, int theScreenHeight, boolean firstTime) {
         super(context);
-        myRenderer = new EGLRenderer(context, firstTime);
+        myRenderer = new EGLRenderer(context, theScreenWidth, theScreenHeight, firstTime);
         init();        
         setKeepScreenOn(true);   
     }
 
-    @Override
     public void onSizeChanged (int w, int h, int oldw, int oldh) {
-        NativeBinding.onSizeChanged(w,h);
         EventManager.onSizeChanged(w,h);
-        //width = w;
-        //height = h;
+        String myEvent = "<WindowEvent type='on_resize' newsize='[" + w + "," + h + "]' oldsize='[" + oldw + "," + oldh + "]'/>";
+        NativeBinding.onEvent(myEvent);        
     }
     
     

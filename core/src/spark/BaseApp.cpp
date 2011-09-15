@@ -6,6 +6,8 @@
 #include <masl/Logger.h>
 #include <masl/BaseEntry.h>
 #include <masl/XMLNode.h>
+#include <masl/XMLUtils.h>
+#include <masl/file_functions.h>
 
 #include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
@@ -22,6 +24,7 @@
 #include "Visitors.h"
 
 using namespace mar;
+using namespace std;
 
 namespace spark {
 
@@ -32,7 +35,7 @@ namespace spark {
     BaseApp::~BaseApp() {
     }
 
-    void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath) {
+    void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         //AC_PRINT << "setup";
         //init animationManager with setup-time 
         //(needed for animations created on setup)
@@ -50,8 +53,85 @@ namespace spark {
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/shaders");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
+            
+        string myOrientation = "free";         
+    }
+    
+    void BaseApp::realize() {
+        RealizeComponentVisitor myVisitor;
+        visitComponents(myVisitor, _mySparkWindow);   
     }
 
+    std::string
+    BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, string & theOrientation) {
+        vector<string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);   
+        int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
+        int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
+        string myBestMatch = "";
+        string myBestOrientation = "";
+        string myBestLayoutName = "";
+        int myBestLayoutWidth = 0;
+        int myBestLayoutHeight = 0;
+        
+        bool myExactMatchFlag = false;
+        int myLayoutWidth = 0;
+        int myLayoutHeight = 0;
+        string myOrientation = "";
+        string myLayoutName = "";
+        for (unsigned int i = 0; i < myFiles.size(); i++) {            
+            if (getExtension(myFiles[i]) == "spark") {
+                string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
+                string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);        
+                xmlDocPtr doc = loadXMLFromMemory(myLayout);
+                xmlNode* myRootNode = xmlDocGetRootElement(doc);
+                XMLNodePtr myNode(new XMLNode(myRootNode));
+                xmlFreeDoc(doc);
+                if (myNode->nodeName == "Window") {
+                    for (std::map<std::string, std::string>::iterator it = myNode->attributes.begin(); it != myNode->attributes.end(); ++it) {
+                        if (it->first == "name") {     
+                            myLayoutName = it->second;   
+                        }
+                        if (it->first == "width") {     
+                            myLayoutWidth = as<int>(it->second);   
+                        }
+                        if (it->first == "height") {     
+                            myLayoutHeight = as<int>(it->second);   
+                        }
+                        if (it->first == "orientation") {     
+                            myOrientation = it->second;   
+                        }
+                    }
+                }
+                if (i == 0) {
+                    myBestMatch = myChoice;
+                    myBestOrientation = myOrientation;
+                    myBestLayoutName = myLayoutName;
+                    myBestLayoutWidth = myLayoutWidth;
+                    myBestLayoutHeight = myLayoutHeight;
+                }
+                int myLayoutsLargerSide = myLayoutWidth > myLayoutHeight ? myLayoutWidth : myLayoutHeight;
+                int myLayoutsSmallerSide = myScreensLargerSide ==  myLayoutHeight ? myLayoutWidth : myLayoutHeight;
+                if (myLayoutsLargerSide == myScreensLargerSide && myLayoutsSmallerSide == myScreensSmallerSide ) {
+                    myBestMatch = myChoice;
+                    myBestOrientation = myOrientation;
+                    myBestLayoutName = myLayoutName;
+                    myBestLayoutWidth = myLayoutWidth;
+                    myBestLayoutHeight = myLayoutHeight;
+                    myExactMatchFlag = true;
+                    AC_PRINT << "Excellent we have a layout<->device match -> use layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
+                    AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight << " with orientation: '" <<  myBestOrientation << "'";
+                    break;
+                }
+            }            
+        }
+        if (!myExactMatchFlag) {
+            AC_PRINT << "Sorry, we did not find layout<->device match -> use default layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
+            AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight << " with orientation: '" <<  myBestOrientation << "'";
+        }
+        theOrientation = myBestOrientation;
+        return myBestMatch;
+    }
+    
     void
     BaseApp::loadLayoutAndRegisterEvents(const std::string & theLayoutFile) {
         //load layout
@@ -64,14 +144,6 @@ namespace spark {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
         spark::EventCallbackPtr myOnPauseCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onPause));
         _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
-    }
-
-    void BaseApp::onSizeChanged(int theWidth, int theHeight) {
-        AC_PRINT << "BaseApp::onSizeChanged(int theWidth, int theHeight) : " << theWidth << "x" << theHeight;
-        if (_mySparkWindow) {
-            _mySparkWindow->onSizeChanged(theWidth, theHeight);
-        }
-        //AC_PRINT << "BaseApp::onSizeChanged done";
     }
     
     void BaseApp::onEvent(std::string theEventString) {

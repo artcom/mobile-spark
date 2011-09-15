@@ -7,6 +7,7 @@
 #include "APK_functions.h"
 #include "png_functions.h"
 
+using namespace std;
 namespace android {
 
     AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath) 
@@ -19,6 +20,17 @@ namespace android {
 
     AndroidAssetProvider::~AndroidAssetProvider() {
         //delete _myApkArchive; //warnings?
+    }
+    
+    vector<string> 
+    AndroidAssetProvider::getFilesFromPath(const string & theBasename) const {
+        vector<string> myFiles;
+        if (theBasename.size() > 0 && theBasename[0] == '/') {  
+            for (std::vector<std::string>::const_iterator it = includePaths_.begin(); it != includePaths_.end(); ++it) {            
+                masl::getDirectoryEntries((*it), myFiles, theBasename.substr(1, theBasename.size()));
+            }
+        }
+        return myFiles;
     }
 
     std::string 
@@ -51,14 +63,15 @@ namespace android {
 
     bool 
     AndroidAssetProvider::loadTextureFromPNG(const std::string & theFileName, GLuint & textureId, int & width, int & height, bool & rgb) {
-        if (theFileName.size() > 0 && theFileName[0] == '/') {
+        std::string myFilename = masl::trimall(theFileName);        
+        if (myFilename.size() > 0 && myFilename[0] == '/') {
             //unzipped, read from sdcard
             std::string filePath;
-            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+            if (masl::searchFile(includePaths_, myFilename, filePath)) {
                 return mar::loadTextureFromPNG(filePath, textureId, width, height, rgb);
             }
         }
-        return android::loadTextureFromPNG(_myApkArchive, theFileName, textureId, width, height, rgb);
+        return android::loadTextureFromPNG(_myApkArchive, myFilename, textureId, width, height, rgb);
     }
 }
 

@@ -4,17 +4,38 @@
 using namespace masl;
 
 namespace spark {
+    const char * const TouchEvent::CLASSNAME = "TouchEvent";
+    const char * const StageEvent::CLASSNAME = "StageEvent";
+    const char * const WindowEvent::CLASSNAME = "WindowEvent";
+    const char * const GestureEvent::CLASSNAME = "GestureEvent";
+    const char * const SensorEvent::CLASSNAME = "SensorEvent";
+
     const char * const StageEvent::FRAME = "frame";
     const char * const StageEvent::PAUSE = "pause";
+    const char * const WindowEvent::ON_RESIZE = "on_resize";
+        
     const char * const TouchEvent::TAP = "tap";
     const char * const TouchEvent::DOUBLETAP = "doubletap";
     const char * const TouchEvent::LONGPRESS = "longpress";
     const char * const TouchEvent::PICKED = "picked";
+        
     const char * const GestureEvent::PAN = "pan";
     const char * const GestureEvent::PINCH = "pinch";
     const char * const GestureEvent::ROTATE = "rotate";
     const char * const GestureEvent::SWIPE_LEFT = "swipe-left";
     const char * const GestureEvent::SWIPE_RIGHT = "swipe-right";
+    const char * const SensorEvent::ACCELEROMETER = "ACCELEROMETER";
+	const char * const SensorEvent::GRAVITY = "GRAVITY";
+	const char * const SensorEvent::GYROSCOPE = "GYROSCOPE";
+	const char * const SensorEvent::LIGHT = "LIGHT";
+	const char * const SensorEvent::LINEAR_ACCELERATION = "LINEAR_ACCELERATION";
+	const char * const SensorEvent::MAGNETIC_FIELD = "MAGNETIC_FIELD";
+	const char * const SensorEvent::ORIENTATION = "ORIENTATION";
+	const char * const SensorEvent::PRESSURE = "PRESSURE";
+	const char * const SensorEvent::PROXIMITY = "PROXIMITY";
+	const char * const SensorEvent::ROTATION_VECTOR = "ROTATION_VECTOR";
+	const char * const SensorEvent::TEMPERATURE = "TEMPERATURE";
+
 
     Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
     }
@@ -33,6 +54,10 @@ namespace spark {
         }
     }
 
+    std::ostream & Event::print(std::ostream & os) const {
+        os << classname_() << " type: '" << type_ << "' target: '" << target_->getName() << "' currentPhase: " << currentPhase_;
+        return os;
+    }
     void
     Event::startDispatch() {
         dispatching_ = true;
@@ -71,8 +96,29 @@ namespace spark {
     StageEvent::StageEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
         currenttime_(theXMLNode->getAttributeAs<UInt64>("time", 0))
-    {}
+    {}    
     StageEvent::~StageEvent() {}
+
+    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget, 
+                             unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight) :
+        Event(theType, theTarget)
+    {
+        size_[0] = theNewWidth;
+        size_[1] = theNewHeight;
+
+        oldsize_[0] = theOldWidth;
+        oldsize_[1] = theOldHeight;
+    }
+    WindowEvent::WindowEvent(const masl::XMLNodePtr theXMLNode) :
+        Event(theXMLNode)
+    {
+        size_ = theXMLNode->getAttributeAs<vector2>("newsize", vector2(0,0));
+        oldsize_ = theXMLNode->getAttributeAs<vector2>("oldsize", vector2(0,0));
+    }    
+
+    WindowEvent::~WindowEvent() {}
+
+
 
     TouchEvent::TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY) :
         Event(theType, theTarget), x_(theX), y_(theY) 
