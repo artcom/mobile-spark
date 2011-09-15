@@ -1,5 +1,4 @@
 #import "GLView.h"
-#include <spark/DemoApp.h>
 #include <mar/openGL_functions.h>
 
 @implementation GLView
@@ -7,6 +6,11 @@
 + (Class) layerClass
 {    
     return [CAEAGLLayer class];
+}
+
+- (void) createApp
+{
+    //has to be implemened in child class
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -36,24 +40,7 @@
                 return nil;
             }
         }
-        
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         [EAGLContext setCurrentContext:glContext];
         
         //create framebuffer
@@ -86,9 +73,9 @@
         //DemoApp
         NSLog(@"width: %d,  height: %d ", width, height);
         NSString *path = [[NSBundle mainBundle] resourcePath];
-        myDemoApp = new spark::DemoApp();
-        myDemoApp->setup((0.0),[path UTF8String], "assets/layouts/main.spark");
-        myDemoApp->onSizeChanged(width, height);
+        [self createApp];
+        myApp->setup((0.0),[path UTF8String]);
+        myApp->onSizeChanged(width, height);
         
         //Motion Events
         UITapGestureRecognizer *singleFingerTap = 
@@ -98,7 +85,7 @@
         motionManager = [[CMMotionManager alloc] init];
         motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
         
-        eventManager = [[EventManager alloc] initWithSourceView:self targetApp:myDemoApp];
+        eventManager = [[EventManager alloc] initWithSourceView:self targetApp:myApp];
     }
     return self;
 }
@@ -114,7 +101,7 @@
     
     //render
     NSString *myEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
-    myDemoApp->onEvent([myEvent UTF8String]);    
+    myApp->onEvent([myEvent UTF8String]);    
     
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     [glContext presentRenderbuffer:GL_RENDERBUFFER];  
