@@ -9,7 +9,6 @@ extern "C" {
 
 namespace mar {
 
-FILE* file;
 
 void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     GLuint textureId;
@@ -23,43 +22,72 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     }
 }
 
-void closeFile() {
-    closeFile();
-}
-void prepareZipReading() {
+FILE* file;
+png_structp png_ptr;
+png_infop info_ptr;
+png_infop end_info;
+png_uint_32 twidth;
+png_uint_32 theight;
+unsigned int row_bytes;
+GLubyte *image_data;
+
+void 
+close() {
+    fclose(file);
 }
 
-bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
-    std::string myFilename = masl::trimall(filename);
-    AC_DEBUG << "load texture file name '" << myFilename << "'";
-
-    /////////////////////////////////////////////////////
-    FILE *file;
-    if ((file = fopen(myFilename.c_str(), "rb")) == NULL) {
-        AC_ERROR << " Error opening file " << myFilename;
+bool 
+initFileReading(const std::string & theFile) {
+    if ((file = fopen(theFile.c_str(), "rb")) == NULL) {
+        AC_ERROR << " Error opening file " << theFile;
         return false;   
     }
-    /////////////////////////////////////////////////////
+    return true;
+}
+
+void
+prePNGReading() {
+    png_init_io(png_ptr, file);
+    png_set_sig_bytes(png_ptr, 0);
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
+}
+
+bool
+postPNGReading() {
+    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
+    for (size_t i = 0; i < theight; i++) {
+        memcpy(image_data+(row_bytes * (theight-1-i)), row_pointers[i], row_bytes);
+    }
+    return true;
+}
+
+bool 
+loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
+    std::string myFilename = masl::trimall(filename);
+    AC_DEBUG << "load texture file name '" << myFilename << "'";
+    if (!initFileReading(myFilename)) {
+        return false;
+    }
     
     //create png struct
-    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr) {
-        closeFile();
+        close();
         AC_ERROR << "Unable to create png struct : " << myFilename;
         return false;
     }
 
     //create png info struct
-    png_infop info_ptr = png_create_info_struct(png_ptr);
+    info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        closeFile();
+        close();
         png_destroy_read_struct(&png_ptr, NULL, NULL);
         AC_ERROR << "Unable to create png info : " << myFilename;
         return false;
     }
-    png_infop end_info = png_create_info_struct(png_ptr);
+    end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
-      closeFile();
+      close();
       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
       AC_ERROR << "Unable to create png end info : " << myFilename;
       return false;
@@ -67,41 +95,32 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
 
     //png error stuff, not sure libpng man suggests this.
     if (setjmp(png_jmpbuf(png_ptr))) {
-        closeFile();
+        close();
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         AC_ERROR << "Error during setjmp : " << myFilename;
         return false;
     }
 
-    //////////////////////////////////////////////
-    //init png reading
-    png_init_io(png_ptr, file);
-    png_set_sig_bytes(png_ptr, 0);
-    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
+    prePNGReading();
 
     // get info about png
     int bit_depth, color_type;
-    png_uint_32 twidth, theight;
     png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type, NULL, NULL, NULL);
   
     // Allocate the image_data as a big block, to be given to opengl
-    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-    GLubyte *image_data = new GLubyte[row_bytes * theight];
+    row_bytes = png_get_rowbytes(png_ptr, info_ptr);
+    image_data = new GLubyte[row_bytes * theight];
     if (!image_data) {
       //clean up memory and close stuff
       png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
       AC_ERROR << "Unable to allocate image_data while loading " << myFilename;
-      closeFile();
+      close();
       return false;
     }
  
-    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
-    for (size_t i = 0; i < theight; i++) {
-        memcpy(image_data+(row_bytes * (theight-1-i)), row_pointers[i], row_bytes);
+    if (!postPNGReading()) {
+        return false;
     }
-    ////////////////////////////////////////////////////////
-
-    
     
     //Now generate the OpenGL texture object
     GLuint texture;
@@ -131,7 +150,7 @@ bool loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     delete[] image_data;
-    closeFile();
+    close();
 
     outTextureId = texture;
     outWidth = twidth;
