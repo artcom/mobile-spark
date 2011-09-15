@@ -53,7 +53,6 @@ namespace spark {
 
 #ifdef __ANDROID__
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
-        MobileSDK_Singleton::get().setMobileSDK(android::AndroidMobileSDKPtr(new android::AndroidMobileSDK()));        
 #endif
 #if __APPLE__
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
