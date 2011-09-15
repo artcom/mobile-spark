@@ -78,6 +78,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
       return (false);
     }
   
+    /////////////////////////////////////////////////////
     //init png reading
     png_set_read_fn(png_ptr, NULL, png_zip_read);
   
@@ -92,14 +93,11 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
     png_uint_32 twidth, theight;
     png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type, NULL, NULL, NULL);
   
-    // Update the png info struct.
-    //png_read_update_info(png_ptr, info_ptr);
-  
     // Row size in bytes.
-    int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
+    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
   
     // Allocate the image_data as a big block, to be given to opengl
-    png_byte *image_data = new png_byte[rowbytes * theight];
+    GLubyte *image_data = new GLubyte[row_bytes * theight];
     if (!image_data) {
       //clean up memory and close stuff
       png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -120,10 +118,11 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
     }
     // set the individual row_pointers to point at the correct offsets of image_data
     for (unsigned int i = 0; i < theight; ++i)
-      row_pointers[theight - 1 - i] = image_data + i * rowbytes;
+      row_pointers[theight - 1 - i] = image_data + i * row_bytes;
   
     //read the png into image_data through row_pointers
     png_read_image(png_ptr, row_pointers);
+    /////////////////////////////////////////////////////
   
     //Now generate the OpenGL texture object
     GLuint texture;
