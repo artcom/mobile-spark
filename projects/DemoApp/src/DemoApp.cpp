@@ -267,7 +267,7 @@ namespace demoapp {
     	float myLight = myEvent->getValue0();
        	ComponentPtr myLightObject = _mySparkWindow->getChildByName("transformLight", true);
         TransformPtr myLightRectangle = boost::static_pointer_cast<spark::Transform>(myLightObject);
-		myLightRectangle->setY(myLight/10);
+		myLightRectangle->setY(myLight / 10);
     }
     
     void DemoApp::onSensorGyroEvent(EventPtr theEvent) {
