@@ -22,14 +22,15 @@ namespace animation {
     void Animation::doFrame(const masl::UInt64 theCurrentMillis) {
         _myProgressTime = theCurrentMillis - _myStartTime;
         _myProgress = _myEasingFunction(_myProgressTime/(float)_myDuration);
+        AC_TRACE << _myId << " progress is now " << _myProgress;
         if (_myProgressTime >= _myDuration) {
-            //AC_PRINT << _myId << "..................... stop it";
+            AC_DEBUG << _myId << "..................... stop it";
             finish(theCurrentMillis);
         }
     }
 
     void Animation::play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag) {
-        //AC_PRINT << _myId << "..........play it";
+        AC_DEBUG << _myId << "..........play it";
         _myStartTime = theStartTime;
         _myProgressTime = 0.0;
         _myProgress = _myEasingFunction(_myProgressTime);

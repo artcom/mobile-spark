@@ -63,10 +63,29 @@ namespace masl {
 
     class MobileSDK_Singleton : public Singleton<MobileSDK_Singleton> {
         public:
+<<<<<<< HEAD
             virtual ~MobileSDK_Singleton();    
             void setMobileSDK(MobileSDKPtr theMobileSDK);
             const MobileSDKPtr & getNative() const { return _myMobileSDK;};
       
+=======
+            MobileSDK_Singleton();  
+            virtual ~MobileSDK_Singleton();                      
+            TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, 
+                                int theMaxWidth, int theMaxHeight, const std::string & theAlign);
+            void updateCameraTexture();
+            void freezeMobileOrientation(std::string theOrientation);
+            CameraInfo getCameraSpec();             
+            void startCameraCapture(bool theColorConversionFlag);
+            void stopCameraCapture();
+            bool isCameraCapturing();
+            
+#ifdef __ANDROID__
+            JNIEnv * env;
+            jobject obj;            
+#endif
+            
+>>>>>>> master
         private:
             MobileSDKPtr _myMobileSDK;
             

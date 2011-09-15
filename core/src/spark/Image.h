@@ -6,7 +6,6 @@
 using namespace mar;
 
 namespace spark {
-    ComponentPtr createImage(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     class Image : public ShapeWidget {
     public: 
         Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());

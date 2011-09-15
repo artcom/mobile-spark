@@ -8,18 +8,9 @@
 #include "Visitors.h"
 
 using namespace mar;
+using namespace std;
 
 namespace spark {
-
-    //needed for component factory
-    //namespace  {
-        ComponentPtr createWindow(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return WindowPtr(new Window(theApp, theXMLNode, theParent));
-        };
-        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
-    //}
-
-
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent), 
@@ -31,14 +22,30 @@ namespace spark {
         _myFullScreenFlag = _myXMLNode->getAttributeAs<bool>("fullscreen", false);
         _myClearColor = _myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1));
 
+        WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());
+        EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new WindowCB(ptr, &Window::onSizeChanged));
+        addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
+
         // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
-        //if (!_myFullScreenFlag) {
-            onSizeChanged(_myXMLNode->getAttributeAs<float>("width",100), _myXMLNode->getAttributeAs<float>("height",100));
-        //}        
+        _myWidth = _myXMLNode->getAttributeAs<float>("width",100);
+        _myHeight = _myXMLNode->getAttributeAs<float>("height",100);
+        _myOrientation = _myXMLNode->getAttributeAs<string>("orientation","");
     }
 
     Window::~Window() {
     }
+    vector2 Window::getSize() const { 
+        int myScreensLargerSide = _myWidth > _myHeight ? _myWidth : _myHeight;
+        int myScreensSmallerSide = myScreensLargerSide ==  _myHeight ? _myWidth : _myHeight;
+
+        if (_myOrientation == "portrait") {
+            return vector2(myScreensSmallerSide, myScreensLargerSide);
+        } else if (_myOrientation == "landscape") {
+            return vector2(myScreensLargerSide, myScreensSmallerSide);
+        }
+        // floating
+        return vector2(_myWidth, _myHeight);
+    }    
     
     void 
     Window::onTouch(EventPtr theEvent) { 
@@ -50,19 +57,19 @@ namespace spark {
             (*myEvent)();
             AC_PRINT << "______________________________________picked " << myPicked->getName();
         } else {
-            AC_TRACE << "nothing picked";
+            AC_DEBUG << "nothing picked";
         }
     }
     
     void Window::onResume() {
-        AC_PRINT << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111";
         _myGLCanvas->initGLState();
     }
 
     void 
-    Window::onSizeChanged(int theWidth, int theHeight) {
-        _myWidth = theWidth; 
-        _myHeight = theHeight;
+    Window::onSizeChanged(EventPtr theEvent) {
+        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);                    
+        _myWidth = myEvent->size_[0]; 
+        _myHeight= myEvent->size_[1];
     }
 
     void 
@@ -73,7 +80,7 @@ namespace spark {
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             if (myView->isVisible()) {
-                AC_DEBUG << "render with : " << _myWidth << "/" << _myHeight;
+                AC_TRACE << "render with : " << _myWidth << "/" << _myHeight;
                 myView->activate(_myWidth, _myHeight);
                 // find world and render it
                 myView->renderWorld(getChildByName(myView->getWorldName()));

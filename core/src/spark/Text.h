@@ -6,7 +6,6 @@
 using namespace mar;
 
 namespace spark {
-    ComponentPtr createText(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
     class Text : public ShapeWidget {
     public: 
         Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
@@ -27,6 +26,7 @@ namespace spark {
         vector2 _myTextSize;
         int _myMaxHeight;
         int _myMaxWidth;
+        std::string _myTextAlign;
     };
 
     typedef boost::shared_ptr<Text> TextPtr;

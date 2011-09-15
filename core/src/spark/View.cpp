@@ -6,7 +6,6 @@
 #include "Widget.h"
 #include "Visitors.h"
 #include <mar/openGL_functions.h>
-#include <string>
 
 using namespace mar;
 using namespace std;
@@ -15,16 +14,7 @@ namespace spark {
     
     const char * View::SPARK_TYPE = "View";
     
-    //needed for component factory
-    //namespace  {
-        ComponentPtr createView(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-            return ViewPtr(new View(theApp, theXMLNode, theParent));
-        };
-        //const bool registered = spark::SparkComponentFactory::get().registerComponent("Window", spark::createWindow);
-    //}
-
-
-    View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
+   View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent){
         _myWorldName  = theXMLNode->getAttributeAs<std::string>("world", "");
@@ -59,7 +49,7 @@ namespace spark {
         
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
             ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(it->first);
-            AC_DEBUG << " View::renderWorld render: " << it->first->getName();
+            AC_TRACE << " View::renderWorld render: " << it->first->getName();
             it->first->render(_myCamera->getProjectionMatrix());
         }
     }
