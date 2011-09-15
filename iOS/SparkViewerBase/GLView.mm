@@ -74,8 +74,8 @@
         NSLog(@"width: %d,  height: %d ", width, height);
         NSString *path = [[NSBundle mainBundle] resourcePath];
         [self createApp];
-        myApp->setup((0.0),[path UTF8String]);
-        myApp->onSizeChanged(width, height);
+        myApp->setup((0.0),[path UTF8String], width, height);
+        //myApp->onSizeChanged(width, height);
         
         //Motion Events
         UITapGestureRecognizer *singleFingerTap = 
