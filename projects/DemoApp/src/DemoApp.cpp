@@ -19,6 +19,8 @@
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
+#include <cstdlib>
+
 using namespace spark;
 using namespace masl;
 
@@ -35,6 +37,9 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace demoapp {
 
+	
+    WidgetPropertyAnimationPtr myAmazoneRotation;
+
     DemoApp::DemoApp():BaseApp("demoapp"), _myCurrentSlide(0) {
     }
 
@@ -48,10 +53,18 @@ namespace demoapp {
         AC_PRINT << "hello from free function event callback for eventtype " << theEvent->getType();
     }
 
-    void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath) {
-        BaseApp::setup(theCurrentMillis, theAssetPath);
+    void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
+        BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
+        AC_PRINT << "################# DemoApp::setup : " << theScreenWidth << "/" << theScreenHeight;
+        
+        std::string myOrientation;
+        std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
+        AC_PRINT << "################# DmyOrientation : " << myOrientation;
+        MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
+                    
+        loadLayoutAndRegisterEvents(mySparkFile);
 
-        loadLayoutAndRegisterEvents("/main.spark");
+        AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
 
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onSizeChanged));
@@ -103,9 +116,9 @@ namespace demoapp {
         //animation of amazone
         ComponentPtr myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
         Shape3DPtr myShape = boost::static_pointer_cast<spark::Shape3D>(myComponent);
-        myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, M_PI * 2, 90000));
-        myYRotate->setLoop(true);
-        animation::AnimationManager::get().play(myYRotate);
+        myAmazoneRotation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, M_PI * 2, 90000));
+        myAmazoneRotation->setLoop(true);
+        animation::AnimationManager::get().play(myAmazoneRotation);
 
         //animation of 3d object
         myComponent = my2DWorld->getChildByName("funnyShape", true);
@@ -161,59 +174,93 @@ namespace demoapp {
         _mySlides[_myCurrentSlide]->setVisible(true);
 
         AC_DEBUG << "found #" << _mySlides.size() << " slides";
+        
+        //return myOrientation;
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {
         AC_DEBUG << "on control button";
+    	changeSlide(theEvent->getTarget()->getName() == "backbutton" ? -1 :  +1);    }
+    
+    void DemoApp::onStartSlideSwipe() {
+        _mySlides[_myNextSlide]->setVisible(true);
+        _mySlides[_myNextSlide]->setX(_mySparkWindow->getSize()[0]);        
+    }
+    void DemoApp::onFinishSlideSwipe() {
+    	//turn amazone animation on when leaving 3D-Viewer-Slide:
+    	if (_mySlides[_myCurrentSlide]->getName() == "3D-Viewer-Slide") animation::AnimationManager::get().play(myAmazoneRotation);
         _mySlides[_myCurrentSlide]->setVisible(false);
         _mySlides[_myCurrentSlide]->setSensible(false);
-        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + 
-                          ( theEvent->getTarget()->getName() == "backbutton" ? -1 : +1)) % _mySlides.size();
-        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
-        _mySlides[_myCurrentSlide]->setVisible(true);        
-        _mySlides[_myCurrentSlide]->setSensible(true);        
+        _myCurrentSlide = _myNextSlide;
+        _mySlides[_myCurrentSlide]->setSensible(true);
+        if (_mySlides[_myCurrentSlide]->getName() == "3D-Viewer-Slide") myAmazoneRotation->cancel();
+        
+
     }
     
     void DemoApp::onSwipeGesture(EventPtr theEvent) {
     	AC_DEBUG << "on Swipe Gesture";
-        _mySlides[_myCurrentSlide]->setVisible(false);
-        _mySlides[_myCurrentSlide]->setSensible(false);
-        _myCurrentSlide = (_myCurrentSlide + _mySlides.size() + ( theEvent->getType() == "swipe-right" ? -1 : 
-           +1)) % _mySlides.size();
-        AC_DEBUG << ">>>>> activate slide: " << _mySlides[_myCurrentSlide]->getName();
-        _mySlides[_myCurrentSlide]->setVisible(true);        
-        _mySlides[_myCurrentSlide]->setSensible(true);        
+    	changeSlide(theEvent->getType() == "swipe-right" ? -1 :  +1);
+    }
+    
+    void DemoApp::changeSlide(int theDirection) {
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        animation::ParallelAnimationPtr mySequence = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        mySequence->setOnPlay(masl::CallbackPtr(
+                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onStartSlideSwipe)));
+        WidgetPropertyAnimationPtr mySwipeOut = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myCurrentSlide], 
+                                                &Widget::setX, 0, _mySparkWindow->getSize()[0] * theDirection * -1, 500,
+                                                animation::EasingFnc(animation::easeInOutQuad)));
+        _myNextSlide = (_myCurrentSlide + _mySlides.size() + theDirection) % _mySlides.size();
+        WidgetPropertyAnimationPtr mySwipeIn = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myNextSlide], 
+                                                &Widget::setX, _mySparkWindow->getSize()[0] * theDirection, 0, 500,
+                                                animation::EasingFnc(animation::easeInOutQuad)));
+        mySequence->setOnFinish(masl::CallbackPtr(
+                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onFinishSlideSwipe)));
+    	mySequence->add(mySwipeOut);
+    	mySequence->add(mySwipeIn);
+        animation::AnimationManager::get().play(mySequence);
     }
     
     void DemoApp::onPinchGesture(EventPtr theEvent) {
-    	AC_DEBUG << "on Pinch Gesture";
-    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-    	float myScaleFactor = myEvent->getFactor(); 
-    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
-        boost::static_pointer_cast<Widget>(my3dView)->setScaleX(myScaleFactor);
-		boost::static_pointer_cast<Widget>(my3dView)->setScaleY(myScaleFactor);
+        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
+        	AC_DEBUG << "on Pinch Gesture";
+        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+        	float myScaleFactor = myEvent->getFactor(); 
+        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
+            boost::static_pointer_cast<Shape3D>(my3dView)->setScaleX(myScaleFactor);
+    		boost::static_pointer_cast<Shape3D>(my3dView)->setScaleY(myScaleFactor);
+    		boost::static_pointer_cast<Shape3D>(my3dView)->setScaleZ(myScaleFactor);
+
+		}
     }
     
+    float beforeMovePanX, beforeMovePanY;
     void DemoApp::onPanGesture(EventPtr theEvent) {
-    	AC_DEBUG << "on Pan Gesture";
-    	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-    	float myDX = myEvent->getTranslateX();
-    	float myDY = myEvent->getTranslateY(); 
-    	float myX = myEvent->getX() - _mySparkWindow->getSize()[0] / 2;
-    	float myY = myEvent->getY() - _mySparkWindow->getSize()[1] / 2; 
-    	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld");
-        boost::static_pointer_cast<Widget>(my3dView)->setX((myX + myDX) / 3);
-		boost::static_pointer_cast<Widget>(my3dView)->setY((myY + myDY) / 3);
+        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
+        	AC_DEBUG << "on Pan Gesture";
+        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+        	float myDX = myEvent->getTranslateX();
+        	float myDY = myEvent->getTranslateY(); 
+        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform");
+            TransformPtr myTransform = boost::static_pointer_cast<Transform>(my3dView);
+    		myTransform->setX(myDX / 4);
+    		myTransform->setY(myDY / 4);
+		}
     }
 
+
 	void DemoApp::onSensorEvent(EventPtr theEvent) {
+		if (_mySlides[_myCurrentSlide]->getName() != "3D-Viewer-Slide") return;
     	SensorEventPtr myEvent = boost::static_pointer_cast<SensorEvent>(theEvent);
+    	//float myX = myEvent->getValue0(); 
     	float myY = myEvent->getValue1(); 
     	float myZ = myEvent->getValue2();
-    	ComponentPtr myWhiteObject = _mySparkWindow->getChildByName("transformOrient", true);
-        TransformPtr myWhiteRectangle = boost::static_pointer_cast<spark::Transform>(myWhiteObject);
-		myWhiteRectangle->setX(myY*4+200);
-		myWhiteRectangle->setY(myZ*4+200);
+    	ComponentPtr myAmazoneObject = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
+        Shape3DPtr myAmazone = boost::static_pointer_cast<spark::Shape3D>(myAmazoneObject);
+        myAmazone -> setRotationY(myAmazone->getRotationY() - myZ/180);
+		myAmazone -> setRotationX(myAmazone->getRotationX() - myY/180 - 0.2);
+
     }
 
 	void DemoApp::onSensorLightEvent(EventPtr theEvent) {

@@ -2,9 +2,11 @@
 #include "Logger.h"
 #include "string_functions.h"
 #include "SingletonManager.h"
+#include "MobileSDK_Singleton.h"
 
 #include "XMLUtils.h"
 #include <dlfcn.h>
+#include <cstdlib>
 
 namespace masl {
     static bool loadSpark(const std::string & theFilename) {
@@ -28,42 +30,44 @@ extern "C"
 }
 #endif
 /////////////////////////////////////////////////////////////////////////JNI
-extern "C" {
-    JNIEXPORT bool JNICALL Java_com_artcom_mobile_Base_NativeBinding_loadSpark(JNIEnv * env, jobject obj,
-                                                                          jstring filename);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * env, jobject obj,
-                                                                  jobject theSeverity, jstring theFilename, 
-                                                                  int theLineNumber, jstring theMessage);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,
-                                                                          jstring theLogString);
-    JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setSeverity(JNIEnv * env, jobject obj,
-                                                                          jobject theSeverity);
-                                                                          
-};
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
+    masl::MobileSDK_Singleton::get().env = env;
+    masl::MobileSDK_Singleton::get().obj = obj;
+}
+
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_putEnv(JNIEnv *env, jclass, jstring envVar)
+{
+    const char * myEnvVar = env->GetStringUTFChars(envVar, NULL);
+    putenv(strdup(myEnvVar));
+    env->ReleaseStringUTFChars(envVar, myEnvVar);
+}
 
 JNIEXPORT bool JNICALL Java_com_artcom_mobile_Base_NativeBinding_loadSpark(JNIEnv * env, jobject obj,
                                                                  jstring filename) {
-    jboolean isCopy;
-    const char* str = env->GetStringUTFChars(filename, &isCopy);                                                                    
-    return masl::loadSpark(str);    
+    const char* str = env->GetStringUTFChars(filename, NULL);                                                                    
+    bool success = masl::loadSpark(str);
+    env->ReleaseStringUTFChars(filename, str);
+    return success;
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * env, jobject obj,
                                                               jobject theSeverity, jstring theFilename, 
                                                               int theLineNumber, jstring theMessage) {
-    jboolean isCopy;
-    const char* myMessage = env->GetStringUTFChars(theMessage, &isCopy);                                                                    
-    const char* myFilename = env->GetStringUTFChars(theFilename, &isCopy);  
+    const char* myMessage = env->GetStringUTFChars(theMessage, NULL);
+    const char* myFilename = env->GetStringUTFChars(theFilename, NULL);
     jclass enumClass = env->FindClass("com/artcom/mobile/Base/Severity");
     jmethodID getOrdinalMethod = env->GetMethodID(enumClass, "ordinal", "()I");
     int value = env->CallIntMethod(theSeverity, getOrdinalMethod);
     masl::Logger::get().log(/*myTime,*/ (masl::Severity)value, myFilename, theLineNumber, myMessage);
+    env->ReleaseStringUTFChars(theFilename, myFilename);
+    env->ReleaseStringUTFChars(theMessage, myMessage);
+
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,
                                                                          jstring theLogString) {
-    jboolean isCopy;
-    const char* myLogString = env->GetStringUTFChars(theLogString, &isCopy);                                                                    
+    const char* myLogString = env->GetStringUTFChars(theLogString, NULL);                                                                    
     masl::Logger::get().setLoggerTopLevelTag(myLogString);
+    env->ReleaseStringUTFChars(theLogString, myLogString);
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setSeverity(JNIEnv * env, jobject obj,

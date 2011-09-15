@@ -45,7 +45,7 @@ namespace spark {
             _myPortraitMode = false;
             AC_PRINT << "Camera::onSizeChanged waagerecht";
         }
-        setGeometry();
+        _mySetupFlag = false;
     }
     
     void 
@@ -75,10 +75,10 @@ namespace spark {
      
     void
     Camera::setGeometry() {
-        masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
-		float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
+    	masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
+        float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
 		float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
-        if (_myPortraitMode) {
+		if (_myPortraitMode) {
 			getShape()->setDimensions(height, width);
             getShape()->setTexCoords(vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight) , 
                                      vector2(width/myCameraInfo.texturewidth,0),
