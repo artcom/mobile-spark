@@ -6,7 +6,6 @@
 #include "Widget.h"
 #include "Visitors.h"
 #include <mar/openGL_functions.h>
-#include <string>
 
 using namespace mar;
 using namespace std;
@@ -15,13 +14,7 @@ namespace spark {
     
     const char * View::SPARK_TYPE = "View";
     
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("View", spark::create<View>);
-    }
-
-
-    View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
+   View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent){
         _myWorldName  = theXMLNode->getAttributeAs<std::string>("world", "");

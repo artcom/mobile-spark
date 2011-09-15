@@ -21,4 +21,6 @@ endforeach()
 
 include_directories(../../core/src)
 add_subdirectory(src)
-
+if(IOS)
+    add_subdirectory(ios)
+endif()
