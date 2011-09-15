@@ -34,6 +34,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   
     //read the header
     zip_fread(file, header, 8);
+    AC_PRINT << header;
   
     //test if png
     int is_png = !png_sig_cmp(header, 0, 8);
@@ -93,10 +94,8 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
     png_uint_32 twidth, theight;
     png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type, NULL, NULL, NULL);
   
-    // Row size in bytes.
-    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-  
     // Allocate the image_data as a big block, to be given to opengl
+    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
     GLubyte *image_data = new GLubyte[row_bytes * theight];
     if (!image_data) {
       //clean up memory and close stuff
