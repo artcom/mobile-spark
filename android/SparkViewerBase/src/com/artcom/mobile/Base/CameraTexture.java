@@ -27,9 +27,11 @@ public class CameraTexture implements SurfaceHolder.Callback {
 	private int[] _myCameraTextures;
 	private static byte _myCamData[] = new byte[0];
 	private boolean _newFrameAvailable=false;
+	public static Activity _myActivity;
 	
 	//--------- STATIC --------------------------------------------------------
 	public static CameraTexture init(Activity activity) {
+		_myActivity = activity;
 		if(INSTANCE==null) INSTANCE = new CameraTexture(activity);
 	    return INSTANCE;
 	}

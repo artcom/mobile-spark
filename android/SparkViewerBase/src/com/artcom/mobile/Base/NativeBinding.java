@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Canvas;
@@ -31,8 +32,8 @@ public class NativeBinding {
      
   }
    
+  public static native void setup(long currentMillis, String apkFilePath, int theScreenWidth, int theScreenHeight);
   public static native void putEnv(String theEnvVar);
-  public static native void setup(long currentMillis, String apkFilePath);
   public static native void onResume();
   public static native void initBinding();
   public static native void onEvent(String theEvent);
@@ -158,8 +159,19 @@ public class NativeBinding {
   public static void stopCamera() {
 	  CameraTexture.closeCamera();
   }
+  
   public static boolean isCameraCapturing() {
 	  return CameraTexture.isCapturing();
+  }
+  
+  public static void freezeOrientation(String theOrientation) {
+	  // TODO clean this up
+	  AC_Log.print(theOrientation);
+	 if (theOrientation.compareTo("portrait") == 0) {
+		 CameraTexture._myActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
+	 } else if (theOrientation.compareTo("landscape") == 0) {
+		 CameraTexture._myActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
+	 }
   }
 
   
