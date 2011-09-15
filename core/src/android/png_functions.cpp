@@ -12,111 +12,66 @@ extern "C" {
 
 namespace android {
 
+zip* archive;
 zip_file* file;
+png_structp png_ptr;
+png_infop info_ptr;
+png_infop end_info;
+png_uint_32 twidth;
+png_uint_32 theight;
+unsigned int row_bytes;
+GLubyte *image_data;
 
-void png_zip_read(png_structp png_ptr, png_bytep data, png_size_t length) {
+void 
+png_zip_read(png_structp png_ptr, png_bytep data, png_size_t length) {
   zip_fread(file, data, length);
 }
 
-void closeFile() {
-    closeFile();
+void 
+close() {
+    zip_fclose(file);
 }
 
-void prepareZipReading() {
-}
-
-bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
-    std::string myFilename = masl::trimall(filename);
-    AC_PRINT << "load texture file name ' " << myFilename << "'";
-  
-    ///////////////////////////////////////////////////////////////
-    file = zip_fopen(theAPKArchive, myFilename.c_str(), 0);
+bool 
+initFileReading(const std::string & theFile) {
+    file = zip_fopen(archive, theFile.c_str(), 0);
     if (!file) {
-      AC_ERROR << "Error opening " << myFilename << " from APK";
+      AC_ERROR << "Error opening " << theFile << " from APK";
       return false;
     }
-  
     //header for testing if it is a png
     png_byte header[8];
-  
     //read the header
     zip_fread(file, header, 8);
-  
     //test if png
     int is_png = !png_sig_cmp(header, 0, 8);
     if (!is_png) {
-      closeFile();
-      AC_ERROR << "Not a png file : " << myFilename;
+      close();
+      AC_ERROR << "Not a png file : " << theFile;
       return false;
     }
-    /////////////////////////////////////////////////////////////
-  
-    //create png struct
-    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png_ptr) {
-      closeFile();
-      AC_ERROR << "Unable to create png struct : " << myFilename;
-      return false;
-    }
-  
-    //create png info struct
-    png_infop info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr) {
-      png_destroy_read_struct(&png_ptr, NULL, NULL);
-      AC_ERROR << "Unable to create png info : " << myFilename;
-      closeFile();
-      return false;
-    }
-  
-    //create png info struct
-    png_infop end_info = png_create_info_struct(png_ptr);
-    if (!end_info) {
-      png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-      AC_ERROR << "Unable to create png end info : " << myFilename;
-      closeFile();
-      return (false);
-    }
-  
-    //png error stuff, not sure libpng man suggests this.
-    if (setjmp(png_jmpbuf(png_ptr))) {
-      png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-      AC_ERROR << "Error during setjmp : " << myFilename;
-      closeFile();
-      return (false);
-    }
-  
-    /////////////////////////////////////////////////////
-    //init png reading
+    return true;
+}
+
+void
+prePNGReading() {
     png_set_read_fn(png_ptr, NULL, png_zip_read);
     //let libpng know you already read the first 8 bytes
     png_set_sig_bytes(png_ptr, 8);
     // read all the info up to the image data
     png_read_info(png_ptr, info_ptr);
-  
-    // get info about png
-    int bit_depth, color_type;
-    png_uint_32 twidth, theight;
-    png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type, NULL, NULL, NULL);
-  
-    // Allocate the image_data as a big block, to be given to opengl
-    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-    GLubyte *image_data = new GLubyte[row_bytes * theight];
-    if (!image_data) {
-      //clean up memory and close stuff
-      png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-      AC_ERROR << "Unable to allocate image_data while loading " << myFilename;
-      closeFile();
-      return false;
-    }
-  
+}
+
+bool
+postPNGReading() {
     //row_pointers is for pointing to image_data for reading the png with libpng
     png_bytep *row_pointers = new png_bytep[theight];
     if (!row_pointers) {
       //clean up memory and close stuff
       png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
       delete[] image_data;
-      AC_ERROR << "Unable to allocate row_pointer while loading " << myFilename;
-      closeFile();
+      AC_ERROR << "Unable to allocate row_pointer";
+      close();
       return false;
     }
     // set the individual row_pointers to point at the correct offsets of image_data
@@ -125,7 +80,72 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
   
     //read the png into image_data through row_pointers
     png_read_image(png_ptr, row_pointers);
-    /////////////////////////////////////////////////////
+    delete[] row_pointers;
+    return true;
+}
+
+bool 
+loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
+    archive = theAPKArchive;
+
+    std::string myFilename = masl::trimall(filename);
+    AC_DEBUG << "load texture file name ' " << myFilename << "'";
+    if (!initFileReading(myFilename)) {
+        return false;
+    }
+  
+    //create png struct
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png_ptr) {
+      close();
+      AC_ERROR << "Unable to create png struct : " << myFilename;
+      return false;
+    }
+  
+    //create png info struct
+    info_ptr = png_create_info_struct(png_ptr);
+    if (!info_ptr) {
+      png_destroy_read_struct(&png_ptr, NULL, NULL);
+      AC_ERROR << "Unable to create png info : " << myFilename;
+      close();
+      return false;
+    }
+    end_info = png_create_info_struct(png_ptr);
+    if (!end_info) {
+      png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+      AC_ERROR << "Unable to create png end info : " << myFilename;
+      close();
+      return (false);
+    }
+  
+    //png error stuff, not sure libpng man suggests this.
+    if (setjmp(png_jmpbuf(png_ptr))) {
+      png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+      AC_ERROR << "Error during setjmp : " << myFilename;
+      close();
+      return (false);
+    }
+  
+    prePNGReading();
+  
+    // get info about png
+    int bit_depth, color_type;
+    png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type, NULL, NULL, NULL);
+  
+    // Allocate the image_data as a big block, to be given to opengl
+    row_bytes = png_get_rowbytes(png_ptr, info_ptr);
+    image_data = new GLubyte[row_bytes * theight];
+    if (!image_data) {
+      //clean up memory and close stuff
+      png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+      AC_ERROR << "Unable to allocate image_data while loading " << myFilename;
+      close();
+      return false;
+    }
+  
+    if (!postPNGReading()) {
+        return false;
+    }
   
     //Now generate the OpenGL texture object
     GLuint texture;
@@ -154,8 +174,7 @@ bool loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     delete[] image_data;
-    delete[] row_pointers;
-    closeFile();
+    close();
   
     outTextureId = texture;
     outWidth = twidth;
