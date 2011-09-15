@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Window name="Motorola Xoom" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="landscape" width="1200" height="800">
+<Window name="Motorola Xoom" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="landscape" width="1280" height="752">
 
     <Template name="Controls" src="/controls.spark"/>
     <Template name="Slide" src="/slide.spark"/>
