@@ -21,6 +21,7 @@ public class EnvMap {
                 AC_Log.info("found env " + myKey + " , " + myValue);
                 if (myValue != "") {
                     _myEnvironmentVariables.put(myKey, myValue);
+                    NativeBinding.putEnv(myEnvVar);
                 }
                 myEnvVar = theExtras.getString("env_" + i);
             }
