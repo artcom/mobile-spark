@@ -10,11 +10,11 @@ namespace spark {
     
     //TODO: decentralize this again
     void EventFactory::setupFactory() {
-        bool registered = registerEvent("StageEvent", spark::createEvent<StageEvent>);
-        registered = registerEvent("WindowEvent", spark::createEvent<WindowEvent>);
-        registered = registerEvent("TouchEvent", spark::createEvent<TouchEvent>);
-        registered = registerEvent("GestureEvent", spark::createEvent<GestureEvent>);
-        registered = registerEvent("SensorEvent", spark::createEvent<SensorEvent>);
+        bool registered = registerEvent(StageEvent::CLASSNAME, spark::createEvent<StageEvent>);
+        registered = registerEvent(WindowEvent::CLASSNAME, spark::createEvent<WindowEvent>);
+        registered = registerEvent(TouchEvent::CLASSNAME, spark::createEvent<TouchEvent>);
+        registered = registerEvent(GestureEvent::CLASSNAME, spark::createEvent<GestureEvent>);
+        registered = registerEvent(SensorEvent::CLASSNAME, spark::createEvent<SensorEvent>);
 
     };
     

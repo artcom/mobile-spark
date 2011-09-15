@@ -15,14 +15,14 @@ namespace spark {
 
     void 
     EventDispatcher::addEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
-        AC_DEBUG << "addEventListener for type " << theType << " capturing: " << theUseCapture;
+        AC_INFO << "addEventListener for type " << theType << " capturing: " << theUseCapture;
         std::pair<std::string, bool> myKey(theType, theUseCapture);
         _myListenersMap.insert(std::pair<std::pair<std::string, bool>, EventCallbackPtr > (myKey, theListener));
     };
 
     void 
     EventDispatcher::removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
-        AC_DEBUG << "removeEventListener for type " << theType << " capturing: " << theUseCapture;
+        AC_INFO << "removeEventListener for type " << theType << " capturing: " << theUseCapture;
         std::pair<std::string, bool> myKey(theType, theUseCapture);
         std::pair<EventListenerMap::iterator, EventListenerMap::iterator> itp = _myListenersMap.equal_range(myKey);
         if (itp.first != itp.second) {
@@ -37,7 +37,7 @@ namespace spark {
         theEvent->startDispatch();
 
         ComponentPtr myCurrent = theEvent->getTarget();
-        AC_DEBUG << " dispatchEvent " << *theEvent << " to target " << myCurrent->getName();
+        AC_DEBUG << " dispatchEvent " << *theEvent;
         // collect dispatchers to capture on
         std::list<ComponentPtr> myCaptureList;
         while (myCurrent->getParent()) {
