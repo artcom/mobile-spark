@@ -4,9 +4,8 @@ APPFOLDER=`pwd`
 cd ../../android
 ./build.sh $1
 BUILD_OK=$?
-if [ $BUILD_OK != "0" ]; then
-    exit 1
-fi
+echo "core build exited with $BUILD_OK"
+
 cd $APPFOLDER
 
 ANDROID_TOOL="android"
@@ -16,17 +15,20 @@ if [ "`uname -o`" == "Cygwin" ]; then
     MAKE_TOOL="nmake"
 fi
 
-mkdir -p _build
-cd _build
-cmake -DCMAKE_TOOLCHAIN_FILE=../../acmake/toolchains/android.toolchain.cmake ..
-$MAKE_TOOL $1
-BUILD_OK=$?
+if [ $BUILD_OK == "0" ]
+then
+    mkdir -p _build
+    cd _build
+    cmake -DCMAKE_TOOLCHAIN_FILE=../../acmake/toolchains/android.toolchain.cmake ..
+    $MAKE_TOOL $1
+    BUILD_OK=$?
+
+    #copy demoapp.so to core _build
+    cd -
+    cp _build/lib/armeabi-v7a/libdemoapp.so ../../_build/lib/armeabi-v7a/
+fi
 
 
-#TODO: copy demoapp.so to _build
-cd -
-
-cp _build/lib/armeabi-v7a/libdemoapp.so ../../_build/lib/armeabi-v7a/
 
 # package java
 cd android
@@ -60,4 +62,11 @@ fi
     
 cd -
 
-echo "build done"
+
+if [ $BUILD_OK == "0" ] 
+then
+    echo "build done :-)"
+else
+    echo ":-( BUILD FAILED :-("
+    exit 1
+fi

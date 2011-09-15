@@ -56,6 +56,11 @@ namespace spark {
             
         string myOrientation = "free";         
     }
+    
+    void BaseApp::realize() {
+        RealizeComponentVisitor myVisitor;
+        visitComponents(myVisitor, _mySparkWindow);   
+    }
 
     std::string
     BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, string & theOrientation) {
@@ -67,6 +72,7 @@ namespace spark {
         string myBestLayoutName = "";
         int myBestLayoutWidth = 0;
         int myBestLayoutHeight = 0;
+        
         bool myExactMatchFlag = false;
         int myLayoutWidth = 0;
         int myLayoutHeight = 0;

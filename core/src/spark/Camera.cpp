@@ -84,10 +84,6 @@ namespace spark {
                                      vector2(width/myCameraInfo.texturewidth,0),
                                      vector2(0,height/myCameraInfo.textureheight),
                                      vector2(0,0));
-            /*getShape()->setTexCoords(vector2(0,height/myCameraInfo.textureheight),
-            						 vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight) , 
-                                     vector2(0,0), 
-                                     vector2(width/myCameraInfo.texturewidth,0));*/
         } else {
 			getShape()->setDimensions(width, height);
             getShape()->setTexCoords(vector2(0,height/myCameraInfo.textureheight),
