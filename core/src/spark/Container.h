@@ -20,6 +20,7 @@ namespace spark {
         void insertChild(ComponentPtr theChild) { _myChildren.push_back(theChild);};
         void removeChild(ComponentPtr theChild);
         virtual const VectorOfComponentPtr & getChildren() { return _myChildren; };
+        const BaseAppPtr getApp() { return _myApp;}
         
     protected:
         const BaseAppPtr _myApp;

@@ -40,7 +40,6 @@ namespace demoapp {
             void changeSlide(int theDirection);
             
             std::vector<SlideImplPtr> _mySlides;
-            std::vector<spark::ViewPtr> _myViews;
             unsigned _myCurrentSlide;
             unsigned _myNextSlide;
     };
