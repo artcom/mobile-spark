@@ -60,6 +60,7 @@ namespace spark {
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/layouts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/shaders");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/fonts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
             
         std::string myOrientation = "free";         
@@ -119,6 +120,7 @@ namespace spark {
                 }
                 int myLayoutsLargerSide = myLayoutWidth > myLayoutHeight ? myLayoutWidth : myLayoutHeight;
                 int myLayoutsSmallerSide = myScreensLargerSide ==  myLayoutHeight ? myLayoutWidth : myLayoutHeight;
+                //AC_PRINT << "check layout '" << myLayoutName << " width " << myLayoutWidth << "'" << " height " << myLayoutHeight << " screen :" << theScreenWidth << " x" << theScreenHeight;
                 if (myLayoutsLargerSide == myScreensLargerSide && myLayoutsSmallerSide == myScreensSmallerSide ) {
                     myBestMatch = myChoice;
                     myBestOrientation = myOrientation;

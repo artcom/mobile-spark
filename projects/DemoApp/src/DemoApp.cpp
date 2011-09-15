@@ -62,7 +62,7 @@ namespace demoapp {
         
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
-        MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
+        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
                     
         loadLayoutAndRegisterEvents(mySparkFile);
 

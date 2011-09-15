@@ -73,7 +73,7 @@ namespace spark {
      
     void
     Camera::setGeometry() {
-    	masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
+    	masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getNative()->getCameraSpec();
         float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
 		float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
 		if (_myPortraitMode) {

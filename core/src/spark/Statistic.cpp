@@ -2,19 +2,13 @@
 #include "BaseApp.h"
 
 #include "SparkComponentFactory.h"
-#include <masl/MobileSDK_Singleton.h>
 
 namespace spark {
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("Statistic", spark::create<Statistic>);
-    }
 
     const char * Statistic::SPARK_TYPE = "Statistic";
 
     Statistic::Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Transform(theApp, theXMLNode, theParent) {
-
             
     }
 
