@@ -3,8 +3,10 @@ package com.artcom.mobile.Base;
 
 import com.artcom.mobile.Base.*;
 
+import android.content.pm.ActivityInfo;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 
 public class SparkViewerActivity extends Activity {
@@ -38,8 +40,18 @@ public class SparkViewerActivity extends Activity {
         AC_Log.setSeverity(mySeverity);
         AC_Log.print("severity: " + mySeverity);
         AC_Log.print("SparkViewer created, ready to call native [cpp logger]. ");
-        mView = new ASLOpenGLView(getApplication(), !_mySparkWorldIsLoaded);        
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);        	
+        int myScreenWidth = dm.widthPixels;
+        int myScreenHeight = dm.heightPixels;
+        
+        mView = new ASLOpenGLView(getApplication(), myScreenWidth, myScreenHeight, !_mySparkWorldIsLoaded);        
         setContentView(mView);
+        
+        //---change to landscape mode---
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);        
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
     }
     
     public boolean onTouchEvent(MotionEvent event) {
@@ -50,6 +62,9 @@ public class SparkViewerActivity extends Activity {
         AC_Log.print("----------------------SparkViewer started");     
         super.onStart();
         _mySparkWorldIsLoaded = true;
+        //---change to landscape mode---
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);        
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
     }
     
     @Override protected void onPause() {
