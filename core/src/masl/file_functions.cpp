@@ -31,8 +31,20 @@
 #include <libgen.h>
 //#include <unistd.h>
 //#include <utime.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <dirent.h>
+
+#ifdef __ANDROID__
+#define STAT64 stat64
+#endif
+#if __APPLE__
+#define STAT64 stat
+#endif
+
+
 
 using namespace std;
 
@@ -110,8 +122,15 @@ namespace masl {
         }
         return myBaseName;
     }
+    bool fileExists(const std::string& theFilename) {
+        struct STAT64 myStat;
+        return stat(theFilename.c_str(), &myStat) != -1;
+    }
 
    void getDirectoryEntries(const string & thePath,  std::vector<string> & theDirEntries, string theFilter) {
+        if (!fileExists(thePath)) {
+            return;
+        }
         DIR * myDirHandle = opendir(thePath.c_str());
         if (!myDirHandle) {
             throw OpenDirectoryFailed(string("thePath='") + thePath + "'not found", PLUS_FILE_LINE);

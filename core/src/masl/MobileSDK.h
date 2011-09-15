@@ -29,17 +29,10 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 //
 */
-#ifndef _ac_mobile_asl_MobileSDK_Singleton_h_included_
-#define _ac_mobile_asl_MobileSDK_Singleton_h_included_
+#ifndef _ac_mobile_asl_MobileSDK_h_included_
+#define _ac_mobile_asl_MobileSDK_h_included_
 
 #include "Singleton.h"
-
-#ifdef __APPLE__
-    //iOS
-#elif __ANDROID__
-    //Android
-    #include <jni.h>    
-#endif
 
 namespace masl {
     struct CameraInfo{
@@ -55,25 +48,28 @@ namespace masl {
         int height;
     };
     
+    class MobileSDK {
+        public:
+        virtual TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath) = 0;
+        virtual void updateCameraTexture() = 0;
+        virtual void freezeMobileOrientation(std::string theOrientation) = 0;
+        virtual CameraInfo getCameraSpec() = 0;              
+        virtual void startCameraCapture(bool theColorConversionFlag) = 0;
+        virtual void stopCameraCapture() = 0;
+        virtual bool isCameraCapturing() = 0;
+        
+    };
+    
+    typedef boost::shared_ptr<MobileSDK> MobileSDKPtr;
+
     class MobileSDK_Singleton : public Singleton<MobileSDK_Singleton> {
         public:
-            MobileSDK_Singleton();  
-            virtual ~MobileSDK_Singleton();                      
-            TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, 
-                                int theMaxWidth, int theMaxHeight, const std::string & theAlign);
-            void updateCameraTexture();
-            void freezeMobileOrientation(std::string theOrientation);
-            CameraInfo getCameraSpec();             
-            void startCameraCapture(bool theColorConversionFlag);
-            void stopCameraCapture();
-            bool isCameraCapturing();
-            
-#ifdef __ANDROID__
-            JNIEnv * env;
-            jobject obj;            
-#endif
-            
+            virtual ~MobileSDK_Singleton();    
+            void setMobileSDK(MobileSDKPtr theMobileSDK);
+            const MobileSDKPtr & getNative() const { return _myMobileSDK;};
+      
         private:
+            MobileSDKPtr _myMobileSDK;
             
     };
     

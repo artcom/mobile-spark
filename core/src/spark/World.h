@@ -10,8 +10,9 @@ namespace spark {
     class World : public Widget {
         public: 
             World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
-            virtual ~World();        
-        private: 
+            virtual ~World();    
+            static const char* SPARK_TYPE;
+        private:
     };
 
     typedef boost::shared_ptr<World> WorldPtr;

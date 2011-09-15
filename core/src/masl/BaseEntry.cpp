@@ -2,23 +2,11 @@
 #include "Logger.h"
 #include "string_functions.h"
 #include "SingletonManager.h"
-#include "MobileSDK_Singleton.h"
+#include "MobileSDK.h"
 
 #include "XMLUtils.h"
 #include <dlfcn.h>
 #include <cstdlib>
-
-namespace masl {
-    static bool loadSpark(const std::string & theFilename) {
-        AC_PRINT << "load file: " << theFilename.c_str();
-        //test xml-loading
-        xmlDocPtr doc = loadXML(theFilename);
-        xmlFreeDoc(doc);
-        AC_PRINT << "this is cpp land"; 
-        return true;
-    }    
-}
-
 
 #ifdef __ANDROID__
 
@@ -30,11 +18,6 @@ extern "C"
 }
 #endif
 /////////////////////////////////////////////////////////////////////////JNI
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
-    masl::MobileSDK_Singleton::get().env = env;
-    masl::MobileSDK_Singleton::get().obj = obj;
-}
-
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_putEnv(JNIEnv *env, jclass, jstring envVar)
 {
     const char * myEnvVar = env->GetStringUTFChars(envVar, NULL);

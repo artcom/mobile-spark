@@ -6,6 +6,7 @@
 #include <masl/Logger.h>
 #include <masl/BaseEntry.h>
 #include <masl/XMLNode.h>
+#include <masl/MobileSDK.h>
 #include <masl/XMLUtils.h>
 #include <masl/file_functions.h>
 
@@ -14,17 +15,19 @@
 
 #ifdef __ANDROID__
     #include <android/AndroidAssetProvider.h>
+    #include <android/AndroidMobileSDK.h>
 #endif
 #if __APPLE__
     #include <ios/IOSAssetProvider.h>
+    #include <ios/IOSMobileSDK.h>
 #endif
 
 #include "SparkComponentFactory.h"
 #include "EventFactory.h"
 #include "Visitors.h"
+#include "ComponentMapInitializer.h"
 
 using namespace mar;
-using namespace std;
 
 namespace spark {
 
@@ -39,7 +42,10 @@ namespace spark {
 
     }
 
-    void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
+    void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {        
+        ComponentMapInitializer::init();
+        
+
         //AC_PRINT << "setup";
         //init animationManager with setup-time 
         //(needed for animations created on setup)
@@ -47,18 +53,21 @@ namespace spark {
 
 #ifdef __ANDROID__
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
+        MobileSDK_Singleton::get().setMobileSDK(android::AndroidMobileSDKPtr(new android::AndroidMobileSDK()));        
 #endif
 #if __APPLE__
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
+        MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));        
 #endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/textures");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/layouts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/shaders");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
+        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/fonts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
             
-        string myOrientation = "free";         
+        std::string myOrientation = "free";         
     }
     
     void BaseApp::realize() {
@@ -67,25 +76,25 @@ namespace spark {
     }
 
     std::string
-    BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, string & theOrientation) {
-        vector<string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);   
+    BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, std::string & theOrientation) {
+        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);   
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
-        string myBestMatch = "";
-        string myBestOrientation = "";
-        string myBestLayoutName = "";
+        std::string myBestMatch = "";
+        std::string myBestOrientation = "";
+        std::string myBestLayoutName = "";
         int myBestLayoutWidth = 0;
         int myBestLayoutHeight = 0;
         
         bool myExactMatchFlag = false;
         int myLayoutWidth = 0;
         int myLayoutHeight = 0;
-        string myOrientation = "";
-        string myLayoutName = "";
+        std::string myOrientation = "";
+        std::string myLayoutName = "";
         for (unsigned int i = 0; i < myFiles.size(); i++) {            
             if (getExtension(myFiles[i]) == "spark") {
-                string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
-                string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);        
+                std::string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
+                std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);        
                 XMLNodePtr myNode(new XMLNode(myLayout));
                 if (myNode->nodeName == "Window") {
                     for (std::map<std::string, std::string>::iterator it = myNode->attributes.begin(); it != myNode->attributes.end(); ++it) {
@@ -112,6 +121,7 @@ namespace spark {
                 }
                 int myLayoutsLargerSide = myLayoutWidth > myLayoutHeight ? myLayoutWidth : myLayoutHeight;
                 int myLayoutsSmallerSide = myScreensLargerSide ==  myLayoutHeight ? myLayoutWidth : myLayoutHeight;
+                //AC_PRINT << "check layout '" << myLayoutName << " width " << myLayoutWidth << "'" << " height " << myLayoutHeight << " screen :" << theScreenWidth << " x" << theScreenHeight;
                 if (myLayoutsLargerSide == myScreensLargerSide && myLayoutsSmallerSide == myScreensSmallerSide ) {
                     myBestMatch = myChoice;
                     myBestOrientation = myOrientation;

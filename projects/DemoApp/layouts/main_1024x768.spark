@@ -19,7 +19,8 @@
         </Controls>
 
         <Slide name="TextSlide" title="Text-Examples">
-            <Text name="testtextgreen" y="580" x="10" z="13" text="Fontsize 32" color="[0,1,0,1]" fontsize="32"/>
+            <Text name="testtextgreen" y="610" x="10" z="13" text="Fontsize 32 - acswissmed.ttf" color="[0,1,0,1]" fontsize="32" font="/acswissmed.ttf"/>
+            <Text name="testtextgreen" y="570" x="10" z="13" text="Fontsize 32 - defaultfont" color="[0,1,0,1]" fontsize="32"/>
             <Text name="textblock" y="520" x="10" text="left aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="left"/>
             <Text name="textblock" y="500" x="10" text="center aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="center"/>
             <Text name="textblock" y="480" x="10" text="right aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="right"/>
