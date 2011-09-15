@@ -10,7 +10,7 @@ namespace ios
 
     IOSMobileSDK::~IOSMobileSDK() {}
 
-    masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight) {
+    masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath) {
         AC_PRINT << "xxx: " << theMessage;
         masl::TextInfo textInfo;
         
@@ -28,12 +28,16 @@ namespace ios
     void IOSMobileSDK::updateCameraTexture() {
     
     }
+    
+    void IOSMobileSDK::freezeMobileOrientation(std::string theOrientation) {
+        
+    }
     masl::CameraInfo IOSMobileSDK::getCameraSpec() {
         masl::CameraInfo cameraInfo;
         
         return cameraInfo;
     }
-    void IOSMobileSDK::startCameraCapture() {
+    void IOSMobileSDK::startCameraCapture(bool theColorConversionFlag) {
     
     }
     void IOSMobileSDK::stopCameraCapture() {
