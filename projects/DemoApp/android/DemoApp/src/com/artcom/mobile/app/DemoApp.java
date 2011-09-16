@@ -3,11 +3,11 @@ package com.artcom.mobile.app;
 import com.artcom.mobile.Base.NativeBinding;
 import com.artcom.mobile.Base.SparkViewerActivity;
 
-public class DemoAppActivity extends SparkViewerActivity {
+public class DemoApp extends SparkViewerActivity {
     static {
         NativeBinding.loadLibraries();
-        System.loadLibrary("demoapp"); 
+        System.loadLibrary("DemoApp"); 
     }
-    protected static String LOG_TAG = "DemoAppActivity";
+    protected static String LOG_TAG = "DemoApp";
 
 }
