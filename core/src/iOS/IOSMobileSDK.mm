@@ -11,17 +11,15 @@ namespace ios
     IOSMobileSDK::~IOSMobileSDK() {}
 
     masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath) {
-        AC_PRINT << "xxx: " << theMessage;
-        masl::TextInfo textInfo;
+        masl::TextInfo textInfo;        
         
         TextRendererPtr test = TextRendererPtr(new TextRenderer());
-        AC_PRINT << "tex id before: " << theTextureId;
-        test.get()->renderText(theMessage, theTextureId, theFontSize, theColor, 100, 100);
-        textInfo.textureID = test.get()->getTextureID();
-        AC_PRINT << "tex id after: " << textInfo.textureID;
-        textInfo.height = 100;
-        textInfo.width = 100;
+        test.get()->renderText(theMessage, theTextureId, theFontSize, theColor, (float) theMaxWidth, (float) theMaxHeight, theAlign, theFontPath);
         
+        textInfo.textureID = test.get()->getTextureID();
+        textInfo.height = test.get()->getTextureHeight();
+        textInfo.width = test.get()->getTextureWidth();
+                
         return textInfo;
     }
 
