@@ -2,10 +2,6 @@
 
 #include "AssetProvider.h"
 
-extern "C" {
-#include <libpng/png.h>
-}
-
 
 namespace mar {
 
@@ -23,13 +19,6 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
 }
 
 FILE* file;
-png_structp png_ptr;
-png_infop info_ptr;
-png_infop end_info;
-png_uint_32 twidth;
-png_uint_32 theight;
-unsigned int row_bytes;
-GLubyte *image_data;
 
 void 
 close() {
@@ -37,88 +26,99 @@ close() {
 }
 
 bool 
-initFileReading(const std::string & theFile) {
-    if ((file = fopen(theFile.c_str(), "rb")) == NULL) {
-        AC_ERROR << " Error opening file " << theFile;
+initFileReading(pngData & thePngData) {
+    AC_DEBUG << "--init file reading for " << thePngData.filename;
+    if ((file = fopen(thePngData.filename.c_str(), "rb")) == NULL) {
+        AC_ERROR << " Error opening file " << thePngData.filename;
         return false;   
     }
     return true;
 }
 
 void
-prePNGReading() {
-    png_init_io(png_ptr, file);
-    png_set_sig_bytes(png_ptr, 0);
-    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
+prePNGReading(pngData & thePngData) {
+    png_init_io(thePngData.png_ptr, file);
+    png_set_sig_bytes(thePngData.png_ptr, 0);
+    png_read_png(thePngData.png_ptr, thePngData.info_ptr, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
 }
 
 bool
-postPNGReading() {
-    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
-    for (size_t i = 0; i < theight; i++) {
-        memcpy(image_data+(row_bytes * (theight-1-i)), row_pointers[i], row_bytes);
+postPNGReading(pngData & thePngData) {
+    png_bytepp row_pointers = png_get_rows(thePngData.png_ptr, thePngData.info_ptr);
+    for (size_t i = 0; i < thePngData.theight; i++) {
+        memcpy(thePngData.image_data+(thePngData.row_bytes * (thePngData.theight-1-i)), 
+                row_pointers[i], thePngData.row_bytes);
     }
     return true;
 }
 
-bool 
-loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
-    std::string myFilename = masl::trimall(filename);
-    AC_DEBUG << "load texture file name '" << myFilename << "'";
-    if (!initFileReading(myFilename)) {
+
+bool
+loadTextureFromPNGSkeleton(const std::string & filename, GLuint & outTextureId, 
+                           int & outWidth, int & outHeight, bool & outRgb, 
+                           pngData & thePngData,
+                           void (*close)(void),
+                           bool (*initFileReading)(pngData & thePngData),
+                           void (*prePNGReading)(pngData & thePngData),
+                           bool (*postPNGReading)(pngData & thePngData)) {
+    thePngData.filename = masl::trimall(filename);
+    AC_DEBUG << "load texture file name '" << thePngData.filename << "'";
+
+    if (!initFileReading(thePngData)) {
         return false;
     }
-    
+
     //create png struct
-    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png_ptr) {
+    thePngData.png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!thePngData.png_ptr) {
         close();
-        AC_ERROR << "Unable to create png struct : " << myFilename;
+        AC_ERROR << "Unable to create png struct : " << thePngData.filename;
         return false;
     }
 
     //create png info struct
-    info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr) {
+    thePngData.info_ptr = png_create_info_struct(thePngData.png_ptr);
+    if (!thePngData.info_ptr) {
         close();
-        png_destroy_read_struct(&png_ptr, NULL, NULL);
-        AC_ERROR << "Unable to create png info : " << myFilename;
+        png_destroy_read_struct(&thePngData.png_ptr, NULL, NULL);
+        AC_ERROR << "Unable to create png info : " << thePngData.filename;
         return false;
     }
-    end_info = png_create_info_struct(png_ptr);
-    if (!end_info) {
+    thePngData.end_info = png_create_info_struct(thePngData.png_ptr);
+    if (!thePngData.end_info) {
       close();
-      png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-      AC_ERROR << "Unable to create png end info : " << myFilename;
+      png_destroy_read_struct(&thePngData.png_ptr, &thePngData.info_ptr, NULL);
+      AC_ERROR << "Unable to create png end info : " << thePngData.filename;
       return false;
     }
 
     //png error stuff, not sure libpng man suggests this.
-    if (setjmp(png_jmpbuf(png_ptr))) {
+    if (setjmp(png_jmpbuf(thePngData.png_ptr))) {
         close();
-        png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        AC_ERROR << "Error during setjmp : " << myFilename;
+        png_destroy_read_struct(&thePngData.png_ptr, &thePngData.info_ptr, &thePngData.end_info);
+        AC_ERROR << "Error during setjmp : " << thePngData.filename;
         return false;
     }
 
-    prePNGReading();
+    prePNGReading(thePngData);
 
     // get info about png
     int bit_depth, color_type;
-    png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type, NULL, NULL, NULL);
+    png_get_IHDR(thePngData.png_ptr, thePngData.info_ptr, &thePngData.twidth, &thePngData.theight, 
+                 &bit_depth, &color_type, NULL, NULL, NULL);
   
     // Allocate the image_data as a big block, to be given to opengl
-    row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-    image_data = new GLubyte[row_bytes * theight];
-    if (!image_data) {
+    thePngData.row_bytes = png_get_rowbytes(thePngData.png_ptr, thePngData.info_ptr);
+    thePngData.image_data = new GLubyte[thePngData.row_bytes * thePngData.theight];
+    if (!thePngData.image_data) {
       //clean up memory and close stuff
-      png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-      AC_ERROR << "Unable to allocate image_data while loading " << myFilename;
+      png_destroy_read_struct(&thePngData.png_ptr, &thePngData.info_ptr, &thePngData.end_info);
+      AC_ERROR << "Unable to allocate image_data while loading " << thePngData.filename;
       close();
       return false;
     }
  
-    if (!postPNGReading()) {
+    if (!postPNGReading(thePngData)) {
         return false;
     }
     
@@ -126,16 +126,16 @@ loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int & ou
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    AC_DEBUG << "w x h : " << twidth << ", " << theight;
+    AC_DEBUG << "w x h : " << thePngData.twidth << ", " << thePngData.theight;
     if (color_type == PNG_COLOR_TYPE_RGB_ALPHA) {
         AC_DEBUG << "alpha";
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, twidth, theight, 0, GL_RGBA,
-                     GL_UNSIGNED_BYTE, (GLvoid*) image_data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, thePngData.twidth, thePngData.theight, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, (GLvoid*) thePngData.image_data);
         outRgb = false;
     } else if (color_type == PNG_COLOR_TYPE_RGB) {
         AC_DEBUG << "no alpha";
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, twidth, theight, 0, GL_RGB,
-                     GL_UNSIGNED_BYTE, (GLvoid*) image_data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, thePngData.twidth, thePngData.theight, 0, GL_RGB,
+                     GL_UNSIGNED_BYTE, (GLvoid*) thePngData.image_data);
         outRgb = true;
     } else {
         AC_DEBUG << "unknown color type " << color_type;
@@ -148,14 +148,21 @@ loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int & ou
     AC_DEBUG << "generated texture with id " << texture;
     
     //clean up memory and close stuff
-    png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-    delete[] image_data;
+    png_destroy_read_struct(&thePngData.png_ptr, &thePngData.info_ptr, &thePngData.end_info);
+    delete[] thePngData.image_data;
     close();
 
     outTextureId = texture;
-    outWidth = twidth;
-    outHeight = theight;
+    outWidth = thePngData.twidth;
+    outHeight = thePngData.theight;
     return true;
+}
+
+bool 
+loadTextureFromPNG(const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
+    pngData myData;
+    return loadTextureFromPNGSkeleton(filename, outTextureId, outWidth, outHeight, outRgb, myData,
+            close, initFileReading, prePNGReading, postPNGReading);
 }
 
 } //namespace mar
