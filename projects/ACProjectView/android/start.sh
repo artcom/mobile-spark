@@ -1,6 +1,6 @@
 #/bin/bash
 
-PROJECT_NAME="TemplateApp"
+PROJECT_NAME="ACProjectView"
 PROJECT_NAME_SMALL=$(echo $PROJECT_NAME | awk '{print tolower($1)}')
 
 cd ..

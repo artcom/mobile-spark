@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 FOLDERS="models layouts shaders textures fonts" 
 if [ "$#" != "0" ]; then
     FOLDERS=$*
