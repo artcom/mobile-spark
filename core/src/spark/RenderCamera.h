@@ -28,16 +28,17 @@ namespace spark {
         void activate(float theCanvasWidth, float theCanvasHeight);
         const matrix & getProjectionMatrix();            
 
-        static const char* SPARK_TYPE;
-    private:                
+        static const char * const SPARK_TYPE;             
+        virtual const char * const & getType() const { return RenderCamera::SPARK_TYPE;};
+    private:
         matrix _myProjectionMatrix;
         MatrixStack matrixStack;
         ProjectionType _myProjectionType;
         vector3 _myPerspectiveParams;        
 
-        static const char* PerspectiveStr;
-        static const char* OrtohonormalStr;
-        static const char* AutoOrthonormalStr;
+        static const char * const PerspectiveStr;
+        static const char * const OrtohonormalStr;
+        static const char * const AutoOrthonormalStr;
     };
 
     typedef boost::shared_ptr<RenderCamera> RenderCameraPtr;

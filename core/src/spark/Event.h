@@ -34,7 +34,6 @@ namespace spark {
                 TARGET
             };
 
-            static const char * const CLASSNAME;
             virtual const char * const &  classname_() const = 0;
 
             std::ostream & print(std::ostream & os) const;
@@ -51,6 +50,7 @@ namespace spark {
             void dispatch();
             const std::string & getType() const {return type_;};
             const ComponentPtr & getTarget() const {return target_;};
+            const ComponentPtr & getCurrentTarget() const {return currentTarget_;};
             bool isDispatching() const {return dispatching_;};
             void connect(ComponentPtr theComponent) {target_ = theComponent;};
 

@@ -12,9 +12,9 @@ using namespace std;
 
 namespace spark {
     
-    const char * View::SPARK_TYPE = "View";
+    const char * const View::SPARK_TYPE = "View";
     
-   View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
+    View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Widget(theApp, theXMLNode, theParent){
         _myWorldName  = theXMLNode->getAttributeAs<std::string>("world", "");
