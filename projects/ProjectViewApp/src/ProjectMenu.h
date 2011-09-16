@@ -1,0 +1,19 @@
+#ifndef _included_mobile_projectviewapp_ProjectMenu_
+#define _included_mobile_projectviewapp_ProjectMenu_
+
+#include <spark/Transform.h>
+
+namespace projectviewapp {
+
+    class ProjectMenu : public spark::Transform {
+        public: 
+            ProjectMenu(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
+            virtual ~ProjectMenu();
+            void arrangeProjects(const int theWidth, const int theHeight);
+        private:
+            
+    };
+    typedef boost::shared_ptr<ProjectMenu> ProjectMenuPtr;
+};
+
+#endif
