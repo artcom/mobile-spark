@@ -105,10 +105,11 @@
     
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     [glContext presentRenderbuffer:GL_RENDERBUFFER];  
-    
-    
+        
 }
-
+- (void)onResume
+{ 
+}
 - (void)startAnimation
 {
     if (!animating)

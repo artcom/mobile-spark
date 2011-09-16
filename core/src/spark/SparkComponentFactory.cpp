@@ -66,7 +66,8 @@ namespace spark {
 
     ComponentPtr 
     SparkComponentFactory::loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode) {
-        XMLNodePtr myNode = prepareXMLFromString(theApp, theNode);
+        XMLNodePtr myNode(new XMLNode(theNode));
+        resolveTemplates(theApp, myNode);
         ComponentPtr myComponentPtr = createComponent(theApp, myNode);
         return myComponentPtr;
     }
@@ -79,16 +80,7 @@ namespace spark {
 
     XMLNodePtr
     SparkComponentFactory::loadXMLNodeFromString(const BaseAppPtr theApp, const std::string & theNode) {
-        XMLNodePtr myNode = prepareXMLFromString(theApp, theNode);
-        return myNode;
-    }
-
-    XMLNodePtr
-    SparkComponentFactory::prepareXMLFromString(const BaseAppPtr theApp, const std::string & theNode) {
-        xmlDocPtr doc = loadXMLFromMemory(theNode);
-        xmlNode* myRootNode = xmlDocGetRootElement(doc);
-        XMLNodePtr myNode(new XMLNode(myRootNode));
-        xmlFreeDoc(doc);
+        XMLNodePtr myNode(new XMLNode(theNode));
         resolveTemplates(theApp, myNode);
         return myNode;
     }

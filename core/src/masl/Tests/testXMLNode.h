@@ -42,6 +42,11 @@ namespace masl {
     class XMLNode_UnitTest : public UnitTest {
         public:
             XMLNode_UnitTest() : UnitTest("XMLNode_UnitTest") {  }
+            ~XMLNode_UnitTest() {
+                xmlCleanupParser();
+                xmlMemoryDump();
+            }
+
             void run() {
                 perform_XMLLibTest();
                 perform_XMLNodeTest();
@@ -66,8 +71,7 @@ namespace masl {
                 ENSURE_MSG(root_node,"root node should not be null");
                 ENSURE_EQUAL(std::string((const char*)root_node->name), std::string("document"));
                 xmlFreeDoc(doc);
-                xmlCleanupParser();
-                xmlMemoryDump();
+                xmlFreeParserCtxt(ctxt);
             }
 
             void perform_XMLNodeTest() {                
@@ -86,6 +90,8 @@ namespace masl {
                 ENSURE_EQUAL(myXMLNode2->name, std::string("ourWindow"));
                 ENSURE_MSG(myXMLNode2->attributes.find("width") != myXMLNode2->attributes.end(), "width should be in attributes of document");
                 ENSURE_EQUAL(myXMLNode2->attributes["width"], std::string("300"));
+                xmlFreeDoc(doc);
+                xmlFreeParserCtxt(ctxt);
             }
 
             void perform_loadXMLTest() {

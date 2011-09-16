@@ -5,6 +5,8 @@
 #include <masl/Logger.h>
 
 #include "AppProvider.h"
+#include <masl/MobileSDK.h>
+#include <android/AndroidMobileSDK.h>
     
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
                                                              jlong currentMillis,
@@ -15,6 +17,14 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
     const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
     CALL_NATIVE(spark::AppProvider::get().getApp()->setup(currentMillis, myAssetPath, theScreenWidth, theScreenHeight));
     env->ReleaseStringUTFChars(apkFile, myAssetPath);
+}
+
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
+    android::AndroidMobileSDKPtr myAndroidSDK = android::AndroidMobileSDKPtr(new android::AndroidMobileSDK());
+    MobileSDK_Singleton::get().setMobileSDK(myAndroidSDK);        
+    
+    myAndroidSDK->env = env;
+    myAndroidSDK->obj = obj;
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
