@@ -1,17 +1,13 @@
 <?xml version="1.0"?>
-<Window name="Template" fullscreen="true" clearColor="[0,0,0,1]" orientation="landscape" width="800" height="480">
-
-   
+<Window name="TemplateApp" fullscreen="true" clearColor="[0,0,0,1]" orientation="landscape" width="800" height="480">
     <!-- userinterface is located in 2dworld -->
     <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
 
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
-
        
         <Transform name="transform">
             <Text name="testtextgreen" y="580" x="10" z="13" text="Hello World" color="[0,1,0,1]" fontsize="32"/>
         </Transform>    
-
     </World>        
 </Window>

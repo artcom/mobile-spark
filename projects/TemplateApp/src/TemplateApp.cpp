@@ -4,12 +4,13 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/Logger.h>
-#include <masl/MobileSDK_Singleton.h>
+#include <masl/MobileSDK.h>
 
 #include <spark/Event.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
+#include "TemplateAppComponentMapInitializer.h"
 
 using namespace spark;
 using namespace masl;
@@ -39,7 +40,7 @@ namespace templateapp {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
-        MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
+        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
         loadLayoutAndRegisterEvents(mySparkFile);
     }
 
