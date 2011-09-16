@@ -1,3 +1,3 @@
 #! /bin/bash
 
-JAVA_ACTIVITY="TemplateActivity" LIB_ACTIVITY="templateapp" ../../../android/build_project.sh
+PROJECT_NAME="TemplateApp" ../../../android/build_project.sh

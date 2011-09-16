@@ -1,11 +1,11 @@
 #import "TemplateAppDelegate.h"
-#import "TemplateGLView.h"
+#import "TemplateAppGLView.h"
 
 @implementation TemplateAppDelegate
 
 - (void)createGLView
 {
-    myGLView = [[TemplateGLView alloc]initWithFrame:[window bounds]];
+    myGLView = [[TemplateAppGLView alloc]initWithFrame:[window bounds]];
 }
 
 - (void)dealloc

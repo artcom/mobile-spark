@@ -25,7 +25,7 @@ include_directories(${Cml_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/core/src)  
 include_directories(../src)
 
-set(EXECUTABLE_NAME demo)
+set(EXECUTABLE_NAME TemplateApp)
 #Builds the *.app
 set(APP_TYPE MACOSX_BUNDLE)
 add_executable(${EXECUTABLE_NAME}
@@ -56,7 +56,7 @@ ADD_FRAMEWORK(${EXECUTABLE_NAME} QuartzCore)
 ADD_FRAMEWORK(${EXECUTABLE_NAME} CoreText)
 
 #Link libraries
-target_link_libraries(${EXECUTABLE_NAME} demoapp)
+target_link_libraries(${EXECUTABLE_NAME} TemplateApp)
 target_link_libraries(${EXECUTABLE_NAME} ${masl_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${mar_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${animation_LIBRARY_DIRS})

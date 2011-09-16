@@ -1,7 +1,7 @@
 #import <SparkViewerBase/GLView.h>
 
 
-@interface TemplateGLView : GLView {
+@interface TemplateAppGLView : GLView {
 
 }
 

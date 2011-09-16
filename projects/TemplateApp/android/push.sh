@@ -2,7 +2,7 @@
 
 cd ..
 
-APP_NAME="templateapp" ../../android/push_project.sh $*
+APP_NAME="TemplateApp" ../../android/push_project.sh $*
 
 cd -
 
