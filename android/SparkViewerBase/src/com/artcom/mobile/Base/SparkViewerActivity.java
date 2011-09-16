@@ -15,12 +15,11 @@ public class SparkViewerActivity extends Activity {
     private EnvMap envMap_;
     private static String GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
     protected static String LOG_TAG = "SparkViewerActivity";
+    protected String _myPackageExtension; //should be set by child classes
     private static boolean _mySparkWorldIsLoaded = false; 
     ASLOpenGLView mView;
     private EventManager eventManager;
     private Sensors sensors;
-    
-    
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class SparkViewerActivity extends Activity {
         int myScreenWidth = dm.widthPixels;
         int myScreenHeight = dm.heightPixels;
         
-        mView = new ASLOpenGLView(getApplication(), myScreenWidth, myScreenHeight, !_mySparkWorldIsLoaded);        
+        mView = new ASLOpenGLView(getApplication(), _myPackageExtension, myScreenWidth, myScreenHeight, !_mySparkWorldIsLoaded);        
         setContentView(mView);
         
         //---change to landscape mode---
