@@ -1,6 +1,6 @@
 #/bin/bash
 
-APP_NAME="TemplateApp"
+PROJECT_NAME="TemplateApp"
 
 cd ..
 SEVERITY=""
@@ -10,7 +10,7 @@ else
     echo "<<<<< use AC_LOG_VERBOSITY=<SEVERITY> to set a logging level"
 fi
 
-adb shell am start -a android.intent.action.MAIN -n com.artcom.mobile/com.artcom.mobile.app.$APP_NAME --es env_0 AC_LOG_VERBOSITY="$SEVERITY"
+adb shell am start -a android.intent.action.MAIN -n com.artcom.mobile/com.artcom.mobile.app.$PROJECT_NAME --es env_0 AC_LOG_VERBOSITY="$SEVERITY"
 
 cd -
 
