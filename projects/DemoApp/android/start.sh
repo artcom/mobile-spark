@@ -1,5 +1,7 @@
 #/bin/bash
 
+cd ..
+
 SEVERITY=""
 if [ -n "$AC_LOG_VERBOSITY" ]; then 
     SEVERITY=$AC_LOG_VERBOSITY
@@ -8,3 +10,6 @@ else
 fi
 
 adb shell am start -a android.intent.action.MAIN -n com.artcom.mobile/com.artcom.mobile.app.DemoAppActivity --es env_0 AC_LOG_VERBOSITY="$SEVERITY"
+
+cd -
+
