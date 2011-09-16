@@ -15,7 +15,8 @@ namespace spark {
         const vector2 & getTextSize();
         void setText(std::string theText) { _myText = theText; _myDirtyFlag = true;};
 
-        static const char* SPARK_TYPE;             
+        static const char * const SPARK_TYPE;             
+        virtual const char * const & getType() const { return Text::SPARK_TYPE;};
     private:
         void build();
         

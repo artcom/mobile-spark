@@ -11,6 +11,8 @@ using namespace mar;
 using namespace std;
 
 namespace spark {
+    const char * const Window::SPARK_TYPE = "Window";
+
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent), 
@@ -76,7 +78,7 @@ namespace spark {
     Window::render() const {        
         _myGLCanvas->preRender(getClearColor());        
         // get all views
-        VectorOfComponentPtr myViews = getChildrenByType("View");
+        VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             if (myView->isVisible()) {

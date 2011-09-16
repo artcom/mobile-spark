@@ -54,14 +54,17 @@ namespace spark {
         }
     }
 
-    std::ostream & Event::print(std::ostream & os) const {
+    std::ostream & 
+    Event::print(std::ostream & os) const {
         os << classname_() << " type: '" << type_ << "' target: '" << target_->getName() << "' currentPhase: " << currentPhase_;
         return os;
     }
+
     void
     Event::startDispatch() {
         dispatching_ = true;
         currentPhase_  = Event::IDLE;
+        currentTarget_ = ComponentPtr();
     };
 
     void
@@ -75,6 +78,7 @@ namespace spark {
     Event::finishDispatch() {
         dispatching_ = false;
         currentPhase_ = Event::IDLE;
+        currentTarget_ = ComponentPtr();
     };
 
     void

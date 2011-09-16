@@ -20,6 +20,8 @@ namespace spark {
         virtual void onResume();        
         vector4 getClearColor() const { return _myClearColor;};
         vector2 getSize() const;
+        static const char * const SPARK_TYPE;             
+        virtual const char * const & getType() const { return Window::SPARK_TYPE;};
     private:
         int _myWidth;
         int _myHeight;

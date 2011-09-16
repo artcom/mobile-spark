@@ -10,10 +10,10 @@ using namespace masl;
 
 namespace spark {
 
-    const char* RenderCamera::SPARK_TYPE = "RenderCamera";
-    const char* RenderCamera::PerspectiveStr = "perspective";
-    const char* RenderCamera::OrtohonormalStr = "orthonormal";
-    const char* RenderCamera::AutoOrthonormalStr = "auto";
+    const char * const RenderCamera::SPARK_TYPE = "RenderCamera";
+    const char * const RenderCamera::PerspectiveStr = "perspective";
+    const char * const RenderCamera::OrtohonormalStr = "orthonormal";
+    const char * const RenderCamera::AutoOrthonormalStr = "auto";
     
     RenderCamera::RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
                    ComponentPtr theParent):
