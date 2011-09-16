@@ -26,7 +26,7 @@ then
 
     #copy demoapp.so to core _build
     cd -
-    cp _build/lib/armeabi-v7a/lib$LIB_ACTIVITY.so ../../_build/lib/armeabi-v7a/
+    cp _build/lib/armeabi-v7a/lib$PROJECT_NAME.so ../../_build/lib/armeabi-v7a/
 fi
 
 
@@ -35,14 +35,14 @@ fi
 cd android
 if [ $BUILD_OK == "0" ] 
 then
-    cd $JAVA_ACTIVITY
+    cd $PROJECT_NAME
     
     # update Base project
     $ANDROID_TOOL update lib-project --target android-9 --path ../../../../android/SparkViewerBase 
 
     # update android project
-    $ANDROID_TOOL update project --target android-9 --name $JAVA_ACTIVITY --path . 
-    $ANDROID_TOOL update project --library ../../../../android/SparkViewerBase --target android-9 --name $JAVA_ACTIVITY --path . 
+    $ANDROID_TOOL update project --target android-9 --name $PROJECT_NAME --path . 
+    $ANDROID_TOOL update project --library ../../../../android/SparkViewerBase --target android-9 --name $PROJECT_NAME --path . 
     BUILD_OK=$?
 fi
 

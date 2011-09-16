@@ -1,8 +1,8 @@
-#import "TemplateGLView.h"
+#import "TemplateAppGLView.h"
 #include <TemplateApp.h>
 
 
-@implementation TemplateGLView
+@implementation TemplateAppGLView
 
 - (void) createApp
 {
