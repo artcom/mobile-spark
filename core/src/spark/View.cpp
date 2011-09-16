@@ -45,7 +45,7 @@ namespace spark {
         RenderList myRenderList; 
         CollectVisibleNodesVisitor myVisitor(myRenderList);
         visitComponents(myVisitor, myWorld);
-        sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
+        stable_sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
         
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
             ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(it->first);
