@@ -11,7 +11,7 @@
 #endif
 
 #include "SparkComponentFactory.h"
-#include <masl/MobileSDK_Singleton.h>
+#include <masl/MobileSDK.h>
 
 using namespace std;
 namespace spark {
@@ -63,9 +63,9 @@ namespace spark {
         if (_myDirtyFlag) {
             _myDirtyFlag = false;
             UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
-                               
-            TextInfo myTextInfo = MobileSDK_Singleton::get().renderText(_myText, myMaterial->getTexture()->getTextureId(), _myFontSize, 
+            TextInfo myTextInfo = MobileSDK_Singleton::get().getNative()->renderText(_myText, myMaterial->getTexture()->getTextureId(), _myFontSize, 
                                              _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath);
+                               
             _myTextSize[0] = myTextInfo.width;
             _myTextSize[1] = myTextInfo.height;
     		getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);

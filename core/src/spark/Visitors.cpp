@@ -13,21 +13,21 @@ namespace spark {
 
     bool 
     OnPauseComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_PRINT << theComponent->getName() << " onPause";
+        AC_DEBUG << theComponent->getName() << " onPause";
         theComponent->onPause();
         return true;
     }
     
     bool 
     RealizeComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_PRINT << theComponent->getName() << " realize";
+        AC_DEBUG << theComponent->getName() << " realize";
         theComponent->realize();
         return true;
     }
 
     bool
     OnResumeComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_PRINT << theComponent->getName() << " onResume";
+        AC_DEBUG << theComponent->getName() << " onResume";
         theComponent->onResume();
         return true;
     }

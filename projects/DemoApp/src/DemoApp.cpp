@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 #include <masl/Logger.h>
-#include <masl/MobileSDK_Singleton.h>
+#include <masl/MobileSDK.h>
 
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
@@ -62,7 +62,7 @@ namespace demoapp {
         
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
-        MobileSDK_Singleton::get().freezeMobileOrientation(myOrientation);
+        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
                     
         loadLayoutAndRegisterEvents(mySparkFile);
 

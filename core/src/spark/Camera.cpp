@@ -2,7 +2,7 @@
 #include "BaseApp.h"
 
 #include "SparkComponentFactory.h"
-#include <masl/MobileSDK_Singleton.h>
+#include <masl/MobileSDK.h>
 
 namespace spark {
 
@@ -27,7 +27,7 @@ namespace spark {
     void 
     Camera::onPause() {
         ShapeWidget::onPause();        
-		MobileSDK_Singleton::get().stopCameraCapture();        
+		MobileSDK_Singleton::get().getNative()->stopCameraCapture();        
     }
     
     void 
@@ -49,29 +49,31 @@ namespace spark {
         ShapeWidget::prerender(theCurrentMatrixStack);    
         //AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
         if (isRendered()) {
-            if (!MobileSDK_Singleton::get().isCameraCapturing()) {
-    			MobileSDK_Singleton::get().startCameraCapture(_myColorConversionFlag);
-			}
-			if (MobileSDK_Singleton::get().isCameraCapturing() && !_mySetupFlag) {
-			    _mySetupFlag = true;
-                masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
+            if (!MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
+    			MobileSDK_Singleton::get().getNative()->startCameraCapture(_myColorConversionFlag);
+            }
+            if (MobileSDK_Singleton::get().getNative()->isCameraCapturing() && !_mySetupFlag) {
+                _mySetupFlag = true;
+                masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getNative()->getCameraSpec();
                 if (myCameraInfo.textureID != 0) {
             		UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         			myMaterial->getTexture()->setTextureId(myCameraInfo.textureID);
                     setGeometry();
                 }
             }
-		    MobileSDK_Singleton::get().updateCameraTexture();
+                
+                
+		    MobileSDK_Singleton::get().getNative()->updateCameraTexture();
         } else {
-            if (MobileSDK_Singleton::get().isCameraCapturing()) {
-    			MobileSDK_Singleton::get().stopCameraCapture();
+            if (MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
+    			MobileSDK_Singleton::get().getNative()->stopCameraCapture();
             }
         }
     }   
      
     void
     Camera::setGeometry() {
-    	masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getCameraSpec();
+    	masl::CameraInfo myCameraInfo = MobileSDK_Singleton::get().getNative()->getCameraSpec();
         float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
 		float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
 		if (_myPortraitMode) {
