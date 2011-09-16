@@ -1,7 +1,8 @@
 #! /bin/bash
 
-APPFOLDER=`pwd`
-cd ../../android
+APPFOLDER=`pwd`/..
+echo $APPFOLDER
+cd ../../../android
 ./build.sh $1
 BUILD_OK=$?
 echo "core build exited with $BUILD_OK"
@@ -25,7 +26,7 @@ then
 
     #copy demoapp.so to core _build
     cd -
-    cp _build/lib/armeabi-v7a/libdemoapp.so ../../_build/lib/armeabi-v7a/
+    cp ../_build/lib/armeabi-v7a/libdemoapp.so ../../../_build/lib/armeabi-v7a/
 fi
 
 

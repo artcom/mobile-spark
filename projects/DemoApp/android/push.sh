@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd ..
 
 APPNAME="demoapp"
 FOLDERS="models layouts shaders textures fonts" 
@@ -22,5 +23,5 @@ do
     done
 done
 
-
+cd -
 
