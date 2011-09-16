@@ -25,6 +25,9 @@ cd SparkViewerTest
 # update android test project
 $ANDROID_TOOL --silent update test-project --main ../SparkViewerBase --path .
 
+# update test.spark
+adb push assets/test.spark /sdcard/test.spark
+
 # build test apk && upload && run test
 ant  run-tests
 

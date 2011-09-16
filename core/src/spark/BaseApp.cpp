@@ -6,6 +6,7 @@
 #include <masl/Logger.h>
 #include <masl/BaseEntry.h>
 #include <masl/XMLNode.h>
+#include <masl/MobileSDK.h>
 #include <masl/XMLUtils.h>
 #include <masl/file_functions.h>
 
@@ -14,9 +15,11 @@
 
 #ifdef __ANDROID__
     #include <android/AndroidAssetProvider.h>
+    #include <android/AndroidMobileSDK.h>
 #endif
 #if __APPLE__
     #include <ios/IOSAssetProvider.h>
+    #include <ios/IOSMobileSDK.h>
 #endif
 
 #include "SparkComponentFactory.h"
@@ -33,6 +36,10 @@ namespace spark {
     }
 
     BaseApp::~BaseApp() {
+        // this has to be done only ONCE when exiting
+        xmlCleanupParser();
+        xmlMemoryDump();
+
     }
 
     void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {        
@@ -49,6 +56,7 @@ namespace spark {
 #endif
 #if __APPLE__
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
+        MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));        
 #endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/textures");
@@ -86,10 +94,7 @@ namespace spark {
             if (getExtension(myFiles[i]) == "spark") {
                 std::string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
                 std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);        
-                xmlDocPtr doc = loadXMLFromMemory(myLayout);
-                xmlNode* myRootNode = xmlDocGetRootElement(doc);
-                XMLNodePtr myNode(new XMLNode(myRootNode));
-                xmlFreeDoc(doc);
+                XMLNodePtr myNode(new XMLNode(myLayout));
                 if (myNode->nodeName == "Window") {
                     for (std::map<std::string, std::string>::iterator it = myNode->attributes.begin(); it != myNode->attributes.end(); ++it) {
                         if (it->first == "name") {     
@@ -154,8 +159,10 @@ namespace spark {
     void BaseApp::onEvent(std::string theEventString) {
         //AC_PRINT << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
-        myEvent->connect(_mySparkWindow);
-        (*myEvent)();
+        if (myEvent) {
+            myEvent->connect(_mySparkWindow);
+            (*myEvent)();
+        }
         //AC_PRINT << "ate Event";
     }
     

@@ -37,6 +37,15 @@
 
 #include <dirent.h>
 
+#ifdef __ANDROID__
+#define STAT64 stat64
+#endif
+#if __APPLE__
+#define STAT64 stat
+#endif
+
+
+
 using namespace std;
 
 namespace masl {
@@ -114,7 +123,7 @@ namespace masl {
         return myBaseName;
     }
     bool fileExists(const std::string& theFilename) {
-        struct stat64 myStat;
+        struct STAT64 myStat;
         return stat(theFilename.c_str(), &myStat) != -1;
     }
 
