@@ -1,4 +1,4 @@
-#include "ProjectViewApp.h"
+#include "ACProjectView.h"
 #include <cstdlib>
 
 #include <boost/smart_ptr/shared_ptr.hpp>
@@ -10,6 +10,7 @@
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
+#include "ACProjectViewComponentMapInitializer.h"
 
 using namespace spark;
 using namespace masl;
@@ -18,36 +19,35 @@ using namespace masl;
 #ifdef __ANDROID__
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
-    spark::AppProvider::get().setApp(boost::shared_ptr<projectviewapp::ProjectViewApp>(new projectviewapp::ProjectViewApp()));
+    spark::AppProvider::get().setApp(boost::shared_ptr<acprojectview::ACProjectView>(new acprojectview::ACProjectView()));
     return JNI_VERSION_1_6;
 }
 #endif
 
 
 /////////////////// Application code, this should be in java or script language later...
-namespace projectviewapp {
-
-	
+namespace acprojectview {
    
-    ProjectViewApp::ProjectViewApp():BaseApp("projectviewapp") {
+    ACProjectView::ACProjectView():BaseApp("acprojectview") {
     }
 
-    ProjectViewApp::~ProjectViewApp() {
+    ACProjectView::~ACProjectView() {
     }
 
-    void ProjectViewApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
+    void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
+        ACProjectViewComponentMapInitializer::init();
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
         MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
         loadLayoutAndRegisterEvents(mySparkFile);
         BaseApp::realize();
         
-        ProjectViewAppPtr ptr = boost::static_pointer_cast<ProjectViewApp>(shared_from_this());
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu = _mySparkWindow->getChildByName("2dworld")->getChildByName("main",true);
 
         
-        spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ProjectViewEventCB(ptr, &ProjectViewApp::onProjectItem));
+        spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onProjectItem));
       
         _myProjectItems = boost::static_pointer_cast<spark::Container>(_myProjectMenu);
         const VectorOfComponentPtr & myChildren = _myProjectItems->getChildrenByType("ProjectMenuItemImpl");
@@ -61,7 +61,7 @@ namespace projectviewapp {
         
     }
     
-    void ProjectViewApp::onProjectItem(EventPtr theEvent) {
+    void ACProjectView::onProjectItem(EventPtr theEvent) {
         AC_PRINT << ":) __________ITEM: " << theEvent->getTarget()->getParent()->getName();
         boost::static_pointer_cast<Widget>(_myProjectItems)->setVisible(false);
     }

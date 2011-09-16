@@ -1,12 +1,12 @@
-#ifndef _included_mobile_projectviewapp_ProjectMenuItemImpl_
-#define _included_mobile_projectviewapp_ProjectMenuItemImpl_
+#ifndef _included_mobile_acprojectview_ProjectMenuItemImpl_
+#define _included_mobile_acprojectview_ProjectMenuItemImpl_
 
 #include <spark/Transform.h>
 #include <spark/Image.h>
 #include <spark/Text.h>
 
 
-namespace projectviewapp {
+namespace acprojectview {
 
     class ProjectMenuItemImpl : public spark::Transform {
         public: 
@@ -17,9 +17,7 @@ namespace projectviewapp {
             spark::ImagePtr imageComponent_; 
             spark::TextPtr titleComponent_;
             spark::TextPtr subtitleComponent_;
-    
     };
-    
     
     typedef boost::shared_ptr<ProjectMenuItemImpl> ProjectMenuItemImplPtr;
 };

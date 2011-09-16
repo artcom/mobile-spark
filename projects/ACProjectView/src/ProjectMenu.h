@@ -1,9 +1,9 @@
-#ifndef _included_mobile_projectviewapp_ProjectMenu_
-#define _included_mobile_projectviewapp_ProjectMenu_
+#ifndef _included_mobile_acprojectview_ProjectMenu_
+#define _included_mobile_acprojectview_ProjectMenu_
 
 #include <spark/Transform.h>
 
-namespace projectviewapp {
+namespace acprojectview {
 
     class ProjectMenu : public spark::Transform {
         public: 

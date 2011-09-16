@@ -1,11 +1,9 @@
-#ifndef _included_mobile_projectviewapp_ProjectViewApp_
-#define _included_mobile_projectviewapp_ProjectViewApp_
+#ifndef _included_mobile_acprojectview_ACProjectView_
+#define _included_mobile_acprojectview_ACProjectView_
 
 /////////////////// Application code, this should be in java or script language later...
 #include <spark/BaseApp.h>
 #include "ProjectMenuItemImpl.h"
-
-
 
 #ifdef __ANDROID__
 extern "C" {
@@ -13,11 +11,11 @@ extern "C" {
 }
 #endif
 
-namespace projectviewapp {
-    class ProjectViewApp: public spark::BaseApp {
+namespace acprojectview {
+    class ACProjectView: public spark::BaseApp {
         public: 
-            ProjectViewApp();
-            virtual ~ProjectViewApp();
+            ACProjectView();
+            virtual ~ACProjectView();
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
 
         private:
@@ -29,8 +27,8 @@ namespace projectviewapp {
         spark::ContainerPtr _myProjectItems;      	
     };
 
-    typedef boost::shared_ptr<ProjectViewApp> ProjectViewAppPtr;
-    typedef spark::MemberFunctionEventCallback<ProjectViewApp, ProjectViewAppPtr> ProjectViewEventCB;
+    typedef boost::shared_ptr<ACProjectView> ACProjectViewPtr;
+    typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr> ACProjectViewEventCB;
 
 };
 

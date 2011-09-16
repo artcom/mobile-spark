@@ -3,12 +3,7 @@
 
 using namespace spark;
 
-namespace projectviewapp {
-
-    //needed for component factory
-    namespace  {
-        const bool registered = spark::SparkComponentFactory::get().registerComponent("ProjectMenuItemImpl", spark::create<ProjectMenuItemImpl>);
-    }
+namespace acprojectview {
     
     ProjectMenuItemImpl::ProjectMenuItemImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
         : Transform(theApp, theXMLNode, theParent) {
@@ -35,10 +30,5 @@ namespace projectviewapp {
         if (subtitle.size() > 0) {
             subtitleComponent_->setText(subtitle);
         }
-        
-
     }    
-        
-
-
 }
