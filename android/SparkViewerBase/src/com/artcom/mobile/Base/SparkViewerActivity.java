@@ -14,7 +14,7 @@ public class SparkViewerActivity extends Activity {
     private Bundle extras_;
     private EnvMap envMap_;
     private static String GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
-    protected static String LOG_TAG = "SparkViewerActivity";
+    protected String LOG_TAG = "SparkViewerActivity";
     protected String _myPackageExtension; //should be set by child classes
     private static boolean _mySparkWorldIsLoaded = false;
     ASLOpenGLView mView;
