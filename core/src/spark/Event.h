@@ -192,6 +192,18 @@ namespace spark {
     typedef boost::shared_ptr<SensorEvent> SensorEventPtr;
     
 
+    class I18nEvent : public Event {
+        public:
+            I18nEvent(const masl::XMLNodePtr theXMLNode);
+            virtual ~I18nEvent();
+            static const char * const CLASSNAME;
+            static const char * const ON_LANGUAGE_SWITCH;
+            virtual const char * const &  classname_() const {return I18nEvent::CLASSNAME;};
+    };
+    typedef boost::shared_ptr<I18nEvent> I18nEventPtr;
+
+
+
     ////////////////////////////////////////////////////////////////////////
     //Event Callbacks //////////////////////////////////////////////////////
     
