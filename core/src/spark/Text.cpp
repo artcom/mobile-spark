@@ -21,6 +21,9 @@ namespace spark {
         ShapeWidget(theApp, theXMLNode, theParent), _myFontPath("") {
 
         _myText = _myXMLNode->getAttributeAs<std::string>("text", "");
+        if (_myI18nId.size() > 0) {
+            attachToI18nItem();
+        }
         _myFontSize = _myXMLNode->getAttributeAs<int>("fontsize", 32);
         _myMaxWidth = _myXMLNode->getAttributeAs<int>("maxWidth", 0);
         _myMaxHeight = _myXMLNode->getAttributeAs<int>("maxHeight", 0);
@@ -73,5 +76,32 @@ namespace spark {
             myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
             myMaterial->transparency_ = true;
         }
+    }
+
+    void 
+    Text::handleI18nOnLanguageSwitch(const EventPtr theEvent) {
+        _myText = boost::static_pointer_cast<I18nText>(_myI18nItem)->getText();
+    }
+
+    void
+    Text::attachToI18nItem() {
+        AC_PRINT << ".................attach to i18n " << getName();
+        TextPtr myText = boost::static_pointer_cast<Text>(shared_from_this());
+        EventCallbackPtr myHandleLanguageSwitch = EventCallbackPtr(new TextCB(myText, &Text::handleI18nOnLanguageSwitch));
+        if (_myI18nItem) {
+            _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
+            _myI18nItem = I18nTextPtr();
+        }
+        if (_myI18nId.size() > 0) {
+            _myI18nItem = getI18nItemByName(_myI18nId);
+            if (!_myI18nItem) {
+                throw I18nItemNotFoundException("no i18n item named " + _myI18nId, PLUS_FILE_LINE);
+            }
+            _myI18nItem->addEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
+            handleI18nOnLanguageSwitch();
+        } else {
+            _myText = "";
+        }
+        _myDirtyFlag = true;
     }
 }
