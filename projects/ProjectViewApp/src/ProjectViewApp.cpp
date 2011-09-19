@@ -10,6 +10,12 @@
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
+#include <animation/AnimationManager.h>
+#include <animation/ParallelAnimation.h>
+#include <animation/SequenceAnimation.h>
+#include <animation/DelayAnimation.h>
+#include <animation/Easing.h>
+
 
 using namespace spark;
 using namespace masl;
@@ -63,7 +69,23 @@ namespace projectviewapp {
     
     void ProjectViewApp::onProjectItem(EventPtr theEvent) {
         AC_PRINT << ":) __________ITEM: " << theEvent->getTarget()->getParent()->getName();
-        boost::static_pointer_cast<Widget>(_myProjectItems)->setVisible(false);
+        _myCurrentProject = boost::static_pointer_cast<ProjectMenuItemImpl>(theEvent->getTarget()->getParent());
+        //boost::static_pointer_cast<Widget>(_myCurrentProject)->setVisible(false);
+        WidgetPropertyAnimationPtr myZoomAnimationX = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myCurrentProject, &Widget::setScaleX, 1, 3, 100,
+                    animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myZoomAnimationY = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myCurrentProject, &Widget::setScaleY, 1, 3, 100,
+                    animation::EasingFnc(animation::linearTween)));
+        animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        myParallel->add(myZoomAnimationX);
+        myParallel->add(myZoomAnimationY);
+        animation::AnimationManager::get().play(myZoomAnimationX);
+        animation::AnimationManager::get().play(myZoomAnimationY);
+
+        
+        
+        //boost::static_pointer_cast<Widget>(_myProjectItems)->setVisible(false);
     }
 
 }
