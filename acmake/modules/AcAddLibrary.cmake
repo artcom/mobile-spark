@@ -78,11 +78,11 @@ macro(ac_add_library LIBRARY_NAME LIBRARY_PATH)
     endif()
     
     IF(IOS)
-		#Prevents that Xcode automatically creates Release and Debug Folders for static libraries
-		SET_TARGET_PROPERTIES(${THIS_LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-		SET_TARGET_PROPERTIES(${THIS_LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-	ENDIF()
-	
+        #Prevents that Xcode automatically creates Release and Debug Folders for static libraries
+        SET_TARGET_PROPERTIES(${THIS_LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+        SET_TARGET_PROPERTIES(${THIS_LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+    ENDIF()
+    
     # add global include and library paths
     _ac_add_global_paths(${THIS_LIBRARY_NAME})
 

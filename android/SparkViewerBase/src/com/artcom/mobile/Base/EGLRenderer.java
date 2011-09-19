@@ -54,7 +54,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
 
 
     public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
-    	CameraTexture.initWithContext(glContext);
+        CameraTexture.initWithContext(glContext);
         AC_Log.print("_________________________________- on surface created of " + PACKAGE_NAME + _myPackageExtension);
         NativeBinding.initBinding();
         if (_myFirstTimeFlag) {

@@ -18,7 +18,7 @@ namespace android {
         virtual bool isCameraCapturing();
         
         JNIEnv * env;
-        jobject obj; 	
+        jobject obj;    
         
     };
     typedef boost::shared_ptr<AndroidMobileSDK> AndroidMobileSDKPtr;
