@@ -11,7 +11,7 @@
 namespace mar {
     Material::Material() : transparency_(false) {
     }
-    
+
     Material::~Material() {
     }
 
@@ -35,7 +35,7 @@ namespace mar {
     }
 
     void Material::setShader() {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_VERTEX_SHADER); 
+        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_VERTEX_SHADER);
     }
 
     void Material::setHandles() {
@@ -56,8 +56,8 @@ namespace mar {
 
     void UnlitColoredMaterial::setShader() {
         Material::setShader();
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_COLORED_FRAGMENT_SHADER); 
-            
+        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_COLORED_FRAGMENT_SHADER);
+
     }
 
     void UnlitColoredMaterial::setHandles() {
@@ -71,7 +71,7 @@ namespace mar {
         _myTexture = TexturePtr(new Texture());
 
         if (_mySrc != "") {
-            loadTextureFromPNG(_mySrc, _myTexture);  
+            loadTextureFromPNG(_mySrc, _myTexture);
             transparency_ = _myTexture->transparency_;
         }
     }
@@ -85,14 +85,14 @@ namespace mar {
     }
 
     void UnlitTexturedMaterial::setShader() {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_VERTEX_SHADER); 
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER); 
-            
+        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_VERTEX_SHADER);
+        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER);
+
     }
     void UnlitTexturedMaterial::initGL() {
         Material::initGL();
         glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
     }
-    
+
 }
 

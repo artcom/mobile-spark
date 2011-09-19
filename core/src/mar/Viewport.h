@@ -16,12 +16,12 @@ namespace mar {
             void activate(float theCanvasWidth, float theCanvasHeight);
             vector2 getPos() const { return _myPos; };
             vector2 getSize() const { return _mySize; };
-        private:           
+        private:
             vector2 _myPos;
-            vector2 _mySize; 
+            vector2 _mySize;
     };
 
     typedef boost::shared_ptr<Viewport> ViewportPtr;
 };
 
-#endif 
+#endif

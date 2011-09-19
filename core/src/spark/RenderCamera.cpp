@@ -16,11 +16,11 @@ namespace spark {
     const char * const RenderCamera::PerspectiveStr = "perspective";
     const char * const RenderCamera::OrtohonormalStr = "orthonormal";
     const char * const RenderCamera::AutoOrthonormalStr = "auto";
-    
-    RenderCamera::RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
+
+    RenderCamera::RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode,
                    ComponentPtr theParent):
-        Widget(theApp, theXMLNode, theParent){     
-        bool myFrustumSpecified = false;            
+        Widget(theApp, theXMLNode, theParent){
+        bool myFrustumSpecified = false;
         string myFrustum = theXMLNode->getAttributeAs<std::string>("frustum", "");
         size_t myIndex  = myFrustum.find(OrtohonormalStr);
         if (myIndex == 0) {
@@ -53,21 +53,21 @@ namespace spark {
     }
 
     RenderCamera::~RenderCamera() {
-    }        
-    
-    const matrix & 
+    }
+
+    const matrix &
     RenderCamera::getProjectionMatrix() {
         return _myProjectionMatrix;
     }
 
     void
-    RenderCamera::activate(float theRenderCameraWidth, float theRenderCameraHeight) {   
+    RenderCamera::activate(float theRenderCameraWidth, float theRenderCameraHeight) {
         matrixStack.push();
-             
+
         if (_myProjectionType == AUTO_ORTHONORMAL) {
             matrixStack.loadOrtho(0, theRenderCameraWidth, 0.0 , theRenderCameraHeight, -0.1, 1000);
         } else if (_myProjectionType == PERSPECTIVE) {
-            float myWing = _myPerspectiveParams[1] * tanf(cml::rad(_myPerspectiveParams[0]) / 2.0);            
+            float myWing = _myPerspectiveParams[1] * tanf(cml::rad(_myPerspectiveParams[0]) / 2.0);
             float myRatio = (float)theRenderCameraWidth/(float)theRenderCameraHeight;
             matrixStack.loadPerspective(-myWing, myWing, -myWing / myRatio, myWing / myRatio, _myPerspectiveParams[1], _myPerspectiveParams[2]);
         }
@@ -76,5 +76,5 @@ namespace spark {
         matrixStack.multMatrix(myRenderCameraMatrix);
         _myProjectionMatrix = matrixStack.getTop();
         matrixStack.pop();
-    }    
+    }
 }

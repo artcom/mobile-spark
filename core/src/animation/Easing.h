@@ -80,7 +80,7 @@ float easeInOutQuad(float t, const float b, const float c, const float d);
 // cubic easing in - accelerating from zero velocity
 // t: current time, b: beginning value, c: change in value, d: duration
 // t and d can be frames or seconds/milliseconds
-float easeInCubic(float t, const float b, const float c, const float d); 
+float easeInCubic(float t, const float b, const float c, const float d);
 
 // cubic easing out - decelerating to zero velocity
 float easeOutCubic(float t, const float b, const float c, const float d);
@@ -199,7 +199,7 @@ float easeOutBounce(float t, const float b, const float c, const float d);
 // bounce easing in/out
 float easeInOutBounce(float t, const float b, const float c, const float d);
 
-    
+
 };  //endof namespace animation
 
 #endif

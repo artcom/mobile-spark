@@ -89,11 +89,11 @@ UnitTest::teardown() {
 //        std::cerr << TTYYELLOW;
     }
     myTearDownString += as_string(getExpectedFailedCount()) + " total tests failed expected";
-    
+
     //AC_TEST_RESULT << getExpectedFailedCount() << " total tests failed expected";// << ENDCOLOR;
 
     myTearDownString += ", ";
-    
+
     if (getPassedCount()) {
 //        std::cerr << TTYGREEN;
     }
@@ -153,10 +153,10 @@ UnitTest::getTracePrefix () {
     return ">>>>>>        ";
 }
 
-void 
+void
 UnitTest::setFailedTestMessages(const string & theMessages) {
     _failingTestsMessages = theMessages;
-}  
+}
 void
 UnitTest::setPassedCount(unsigned int passedTests) {
     _passedCount = passedTests;

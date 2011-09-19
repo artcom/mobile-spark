@@ -24,7 +24,7 @@ namespace masl {
         }
     }
 
-    
+
     //XXX: the user should call xmlFreeDoc(doc)
     xmlDocPtr loadXML(const std::string & theFilename) {
         /*
@@ -64,7 +64,7 @@ namespace masl {
         xmlFreeParserCtxt(ctxt);
         return doc;
     }
-    
+
     //XXX: the user should call xmlFreeDoc(doc)
     xmlDocPtr loadXMLFromMemoryValidate(const std::string & theXMLString) {
         /*

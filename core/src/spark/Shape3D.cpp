@@ -16,9 +16,9 @@ namespace spark {
     Shape3D::~Shape3D() {
     }
 
-    void 
-    Shape3D::onResume() {        
-        ShapeWidget::onResume();        
+    void
+    Shape3D::onResume() {
+        ShapeWidget::onResume();
         setShape(ShapeFactory::get().createObj(_mySrc));
     }
 

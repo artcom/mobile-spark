@@ -29,4 +29,4 @@ namespace spark {
         void setupFactory();
     };
 };
-#endif 
+#endif

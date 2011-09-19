@@ -51,7 +51,7 @@ public:
                 bool myExpectedResult = true)
     {ensure(myExpressionResult!=0,myExpression,mySourceFileName,mySourceLine,myExpectedResult);}
 protected:
-    virtual void setFailedTestMessages(const std::string & theMessages);    
+    virtual void setFailedTestMessages(const std::string & theMessages);
     virtual void setPassedCount(unsigned int passedTests);
     virtual void setFailedCount(unsigned int failedTests);
     virtual void setExpectedFailedCount(unsigned int failedTests);

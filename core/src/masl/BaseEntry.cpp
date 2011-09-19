@@ -10,7 +10,7 @@
 
 #ifdef __ANDROID__
 
-#ifndef OSX 
+#ifndef OSX
 // XXX: fixes linker warning: "type and size of dynamic symbol `__dso_handle' are not defined"
 extern "C"
 {
@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_putEnv(JNIEnv *
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * env, jobject obj,
-                                                              jobject theSeverity, jstring theFilename, 
+                                                              jobject theSeverity, jstring theFilename,
                                                               int theLineNumber, jstring theMessage) {
     const char* myMessage = env->GetStringUTFChars(theMessage, NULL);
     const char* myFilename = env->GetStringUTFChars(theFilename, NULL);
@@ -40,7 +40,7 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * en
 }
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setLoggerTopLevelTag(JNIEnv * env, jobject obj,
                                                                          jstring theLogString) {
-    const char* myLogString = env->GetStringUTFChars(theLogString, NULL);                                                                    
+    const char* myLogString = env->GetStringUTFChars(theLogString, NULL);
     masl::Logger::get().setLoggerTopLevelTag(myLogString);
     env->ReleaseStringUTFChars(theLogString, myLogString);
 }
