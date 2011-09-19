@@ -44,13 +44,13 @@ namespace spark {
             perform_TouchEventTest();
             perform_StageEventTest();
         }
-        
+
         void perform_StageEventTest() {
         }
 
         void perform_TouchEventTest() {
         }
 
-    };    
+    };
 };
 #endif

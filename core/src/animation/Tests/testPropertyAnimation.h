@@ -51,11 +51,11 @@ namespace animation {
             perform_FinishTest();
             perform_CancelTest();
         }
-        
+
         class Object {
-            private: 
+            private:
                 float x;
-            public: 
+            public:
                 Object() { x = 0; };
                 void setX(float theX) { x = theX;};
                 float getX() { return x;};
@@ -79,7 +79,7 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
         }
 
-        void perform_PropertyAnimationTest() {                
+        void perform_PropertyAnimationTest() {
             AnimationManager::get().init(0);
             ObjectPtr myObject = ObjectPtr(new Object());
             ENSURE_MSG(myObject, "myObject should not be null");
@@ -129,7 +129,7 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
 
-            //at the end of the animation the animation should be restarted 
+            //at the end of the animation the animation should be restarted
             //and the value should be reset to the start value
             AnimationManager::get().doFrame(1000);
             ENSURE_EQUAL(myAnimation->isRunning(),true);
@@ -197,6 +197,6 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
         }
-    };    
+    };
 };
 #endif

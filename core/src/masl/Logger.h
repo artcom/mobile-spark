@@ -8,32 +8,32 @@
 
 namespace masl {
     enum Severity {SEV_PRINT = 0, SEV_TESTRESULT, SEV_FATAL, SEV_ERROR, SEV_WARNING, SEV_INFO, SEV_DEBUG, SEV_TRACE, SEV_DISABLED};
-    
+
     class Logger : public Singleton<Logger> {
         public:
             Logger();
             virtual ~Logger();
-                      
+
             inline bool ifLog(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId) {
                 return theSeverity <= _myGlobalSeverity;
             }
-            void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);     
+            void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);
             void setLoggerTopLevelTag(const std::string & theTagString);
             void setSeverity(const Severity theSeverity) { _myGlobalSeverity = theSeverity;};
         private:
             std::string _myTopLevelLogTag;
             Severity _myGlobalSeverity;
     };
-    
+
     /**
     This class is used to collect the output and deliver it to the Logger on destruction
-    */    
+    */
     class MessagePort {
     public:
         MessagePort(Severity theSeverity, const char * theModule, int theId)
             : mySeverity(theSeverity), myModule(theModule), myId(theId)
         {}
-        ~MessagePort() {            
+        ~MessagePort() {
             Logger::get().log(/*myTime,*/ mySeverity, myModule, myId, stream.str());
         }
         /* This getter is used in the gcc branch to avoid printing of the first message token

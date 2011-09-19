@@ -12,7 +12,7 @@
     #else
         // Unsupported platform
     #endif
-    
+
 #endif
 
 namespace masl {

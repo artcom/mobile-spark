@@ -35,9 +35,9 @@ namespace mar {
         vector3 myVector;
         size_t posAB = theString.find_first_of(" ");
         size_t posBC = theString.find_last_of(" ");
-        std::string a = theString.substr(0,posAB); 
-        std::string b = theString.substr(posAB+1,posBC-posAB-1); 
-        std::string c = theString.substr(posBC+1); 
+        std::string a = theString.substr(0,posAB);
+        std::string b = theString.substr(posAB+1,posBC-posAB-1);
+        std::string c = theString.substr(posBC+1);
         myVector[0] = as<float>(a);
         myVector[1] = as<float>(b);
         myVector[2] = as<float>(c);
@@ -105,7 +105,7 @@ namespace mar {
             } else if (type == "map_Kd") {
                 //XXX: here we know that we need textures
                 myMaterial = MaterialPtr(new UnlitTexturedMaterial("/textures/" + data));
-            }        
+            }
         }
         if (myMaterial) {
             materialMap_[myMaterialId] = myMaterial;
@@ -127,7 +127,7 @@ namespace mar {
         advance(it,startFaceIndex);
         for (; it != faces_.end(); ++it) {
             for (size_t i = 0; i < 3; i++) {
-            
+
                 boost::tuple<int, int, int> key = boost::make_tuple((*it)[i * 3 + 0], (*it)[i * 3 + 1], (*it)[i * 3 + 2]);
                 if (indexMap.find(key) != indexMap.end()) {
                     element->indexDataVBO_[indexDataPosition] = indexMap.at(key);
@@ -138,7 +138,7 @@ namespace mar {
                     element->indexDataVBO_[indexDataPosition] = myIndex;
                     myIndex++;
                     indexDataPosition++;
-                
+
                     temporaryVertexData.push_back(vertices_[(*it)[i * 3 + 0]-1][0]);
                     temporaryVertexData.push_back(vertices_[(*it)[i * 3 + 0]-1][1]);
                     temporaryVertexData.push_back(vertices_[(*it)[i * 3 + 0]-1][2]);
@@ -163,7 +163,7 @@ namespace mar {
         //AC_PRINT << "num parts " << theShape->elementList.size();
     }
 
-    bool ObjImporter::sortByTransparencyFunction(ElementPtr i,ElementPtr j) { 
+    bool ObjImporter::sortByTransparencyFunction(ElementPtr i,ElementPtr j) {
         if (!i->material->transparency_ && j->material->transparency_) {
             return true;
         } else {
@@ -185,9 +185,9 @@ namespace mar {
         max_[0] = max_[1] = max_[2] = std::numeric_limits<float>::min();
         min_[3] = max_[3] = 1;
         //AC_PRINT << "import obj " << theObjFileName;
-        const std::vector<std::string> theObjFile = 
+        const std::vector<std::string> theObjFile =
             AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".obj"));
-        const std::vector<std::string> theMtlFile = 
+        const std::vector<std::string> theMtlFile =
             AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".mtl"));
         //AC_PRINT << "got data from files " << theObjFile.size() << "  " << theMtlFile.size();
         importMaterialMap(theMtlFile);
@@ -214,14 +214,14 @@ namespace mar {
                 std::string t = data.substr(pos+1);
                 texCoordinates[0] = as<float>(s);
                 texCoordinates[1] = as<float>(t);
-                texData_.push_back(texCoordinates); 
+                texData_.push_back(texCoordinates);
             } else if (type == "vn") {
                 normals_.push_back(getVector3(data));
             } else if (type == "usemtl") {
                 if (element) {
                     createElementVertices(theShape, element, startFaceIndex);
                 }
-                element = ElementPtr(new ElementWithNormalsAndTexture());                
+                element = ElementPtr(new ElementWithNormalsAndTexture());
                 element->material = materialMap_[data];
                 startFaceIndex = faces_.size();
             } else if (type == "f") {

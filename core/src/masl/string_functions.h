@@ -73,7 +73,7 @@ namespace masl {
         return message;
     }
 
-    inline std::string 
+    inline std::string
     file_string(const char* file_name) {
         std::string myFilename(file_name);
         std::string::size_type mySlash = myFilename.find_last_of("/\\");
@@ -86,12 +86,12 @@ namespace masl {
     #define PLUS_FILE_LINE masl::location_string(__FILE__,__LINE__)
     #define JUST_FILE_LINE masl::line_string(__LINE__),masl::file_string(__FILE__)
 
-        
+
     inline std::string
     location_string(const char* file_name, unsigned line_number) {
         return std::string("[") + lastFileNamePart(file_name) + ":" + as_string(line_number) + "]";
     }
-    
+
     inline std::string trimLeft (const std::string & theString, const std::string & theTrimChars = " " ) {
         std::string myString(theString);
         return myString.erase(0, theString.find_first_not_of ( theTrimChars ));
@@ -105,14 +105,14 @@ namespace masl {
     inline std::string trim (const std::string & theString, const std::string & theTrimChars = " ") {
         std::string myString(theString);
         return trimLeft ( trimRight ( myString, theTrimChars), theTrimChars);
-    }    
+    }
     inline std::string trimall (const std::string & theString) {
         std::string myString(theString);
         myString = masl::trim(myString, " ");
         myString = masl::trim(myString, "\t");
         myString = masl::trim(myString, "\n");
-        return masl::trim(myString, "\r");   
-    }    
+        return masl::trim(myString, "\r");
+    }
 } //Namespace masl
 
 #endif

@@ -63,7 +63,7 @@ namespace spark {
             bool cancelable_;
     };
 
-    
+
     class StageEvent : public Event {
         public:
 
@@ -84,7 +84,7 @@ namespace spark {
     class WindowEvent : public Event {
         public:
 
-            WindowEvent(const std::string & theType, ComponentPtr theTarget, 
+            WindowEvent(const std::string & theType, ComponentPtr theTarget,
                         unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight);
             WindowEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~WindowEvent();
@@ -152,11 +152,11 @@ namespace spark {
             int dy_;
             float factor_;
             std::string direction_;
-        
+
     };
 
     typedef boost::shared_ptr<GestureEvent> GestureEventPtr;
-    
+
     class SensorEvent : public Event {
         public:
 
@@ -178,23 +178,23 @@ namespace spark {
 			static const char * const PROXIMITY;
 			static const char * const ROTATION_VECTOR;
 			static const char * const TEMPERATURE;
-           
+
             float getValue0() const { return value0_;};
             float getValue1() const { return value1_;};
             float getValue2() const { return value2_;};
-            
+
         private:
             float value0_;
 			float value1_;
-			float value2_;        
+			float value2_;
     };
 
     typedef boost::shared_ptr<SensorEvent> SensorEventPtr;
-    
+
 
     ////////////////////////////////////////////////////////////////////////
     //Event Callbacks //////////////////////////////////////////////////////
-    
+
     class EventCallback {
     public:
         virtual ~EventCallback() {};
@@ -211,7 +211,7 @@ namespace spark {
 
     class FreeFunctionEventCallback : public EventCallback {
     public:
-        FreeFunctionEventCallback(FreeFunctionEventPtr theFunctionPtr): 
+        FreeFunctionEventCallback(FreeFunctionEventPtr theFunctionPtr):
             EventCallback(),
             _myFunctionPointer(theFunctionPtr) {
         };
@@ -221,7 +221,7 @@ namespace spark {
             _myFunctionPointer(theEvent);
         };
     private:
-        FreeFunctionEventPtr _myFunctionPointer; 
+        FreeFunctionEventPtr _myFunctionPointer;
     };
     typedef boost::shared_ptr<FreeFunctionEventCallback> FreeFunctionEventCallbackPtr;
 
@@ -230,7 +230,7 @@ namespace spark {
     template < typename T, typename TP>
     class MemberFunctionEventCallback : public EventCallback {
     public:
-        MemberFunctionEventCallback(TP theObject, void (T::*theFunctionPtr)(EventPtr)): 
+        MemberFunctionEventCallback(TP theObject, void (T::*theFunctionPtr)(EventPtr)):
             _myObjectPtr(theObject),
             _myFunctionPointer(theFunctionPtr) {
         };

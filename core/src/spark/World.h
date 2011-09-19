@@ -6,12 +6,12 @@
 #include "Widget.h"
 
 namespace spark {
-    
+
     class World : public Widget {
-    public: 
+    public:
         World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
-        virtual ~World();    
-        static const char * const SPARK_TYPE;             
+        virtual ~World();
+        static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return World::SPARK_TYPE;};
     private:
     };
