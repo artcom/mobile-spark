@@ -91,7 +91,6 @@ namespace ios {
         }
         
         if (textureWidth != 0 && textureHeight != 0) {
-
             // Initialize a Bitmap context and set the text matrix to a known value.
             GLubyte *bitmapData = (GLubyte *) calloc((textureWidth * textureHeight * 4.0), sizeof(GLubyte));
             CGContextRef context = CGBitmapContextCreate(bitmapData, textureWidth, textureHeight, 8, textureWidth * 4, rgbColorSpace, kCGImageAlphaNoneSkipLast);
@@ -105,15 +104,15 @@ namespace ios {
             CGMutablePathRef path = CGPathCreateMutable();
             CGRect bounds = CGRectMake(0.0, 0.0, textureWidth, textureHeight);
             CGPathAddRect(path, NULL, bounds);
-        
+            
             // Create the frame and draw it into the bitmap context
             CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
-
+            
             CFRelease(path);
             CFRelease(framesetter); 
             CTFrameDraw(frame, context);
             CFRelease(frame);
-        
+            
             //create Opengl Texture
             if (theTextureId == 0)
             {
@@ -122,7 +121,7 @@ namespace ios {
             {
                 texture = theTextureId;
             }
-        
+            
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -131,6 +130,15 @@ namespace ios {
             
             free(bitmapData);
             CGContextRelease(context);
+        } else {
+            //create empty Opengl Texture
+            if (theTextureId == 0)
+            {
+                glGenTextures(1, &texture);
+            } else 
+            {
+                texture = theTextureId;
+            }
         }
         
 
