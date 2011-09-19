@@ -3,7 +3,7 @@ package com.artcom.mobile.Base;
 import android.view.MotionEvent;
 
 public class EventManager {
-    
+
     private static EventManager INSTANCE;
     private int mode=0; // 0 - none; 1-pan; 2-TwofingerTap; 3-pinch; 4-rotate
     private int height;
@@ -61,7 +61,7 @@ public class EventManager {
                         if (fingerDistance>1 && Math.abs(fingerDistance-fingerDistanceStart)>20) {
                             mode = 3;
                             break;
-                        } 
+                        }
                         if (fingerDistance>1 && getRotation(event)>5f) {
                             mode = 4;
                             break;

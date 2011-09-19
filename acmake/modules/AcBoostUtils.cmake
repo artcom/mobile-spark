@@ -23,7 +23,7 @@
 # occurs within a list of strings:
 #
 #  list_contains(result string_to_find arg1 arg2 arg3 ... argn)
-# 
+#
 # This macro sets the variable named by result equal to TRUE if
 # string_to_find is found anywhere in the following arguments.
 macro(list_contains var value)
@@ -60,16 +60,16 @@ endmacro(cdr)
 # list of names, and the third argument is a list of options. Both of
 # these lists should be quoted. The rest of PARSE_ARGUMENTS are
 # arguments from another macro to be parsed.
-# 
-#     PARSE_ARGUMENTS(prefix arg_names options arg1 arg2...) 
-# 
+#
+#     PARSE_ARGUMENTS(prefix arg_names options arg1 arg2...)
+#
 # For each item in options, PARSE_ARGUMENTS will create a variable with
 # that name, prefixed with prefix_. So, for example, if prefix is
 # MY_MACRO and options is OPTION1;OPTION2, then PARSE_ARGUMENTS will
 # create the variables MY_MACRO_OPTION1 and MY_MACRO_OPTION2. These
 # variables will be set to true if the option exists in the command line
 # or false otherwise.
-# 
+#
 # For each item in arg_names, PARSE_ARGUMENTS will create a variable
 # with that name, prefixed with prefix_. Each variable will be filled
 # with the arguments that occur after the given arg_name is encountered
@@ -106,8 +106,8 @@ MACRO(PARSE_ARGUMENTS prefix arg_names option_names)
   SET(${prefix}_${current_arg_name} ${current_arg_list})
 ENDMACRO(PARSE_ARGUMENTS)
 
-# Perform a reverse topological sort on the given LIST. 
-#   
+# Perform a reverse topological sort on the given LIST.
+#
 #   topological_sort(my_list "MY_" "_EDGES")
 #
 # LIST is the name of a variable containing a list of elements to be
@@ -129,7 +129,7 @@ ENDMACRO(PARSE_ARGUMENTS)
 # using the following variables:
 #
 #     MY_A_EDGES     b
-#     MY_B_EDGES     
+#     MY_B_EDGES
 #     MY_C_EDGES     a b
 #
 #  With the involcation of topological_sort shown above and these
@@ -150,7 +150,7 @@ function(topological_sort LIST PREFIX SUFFIX)
     # search from where.
     if (NOT FOUND_${UPPER_VERTEX})
       # Push this vertex onto the stack with all of its outgoing edges
-      string(REPLACE ";" " " NEW_ELEMENT 
+      string(REPLACE ";" " " NEW_ELEMENT
         "${VERTEX};${${PREFIX}${UPPER_VERTEX}${SUFFIX}}")
       list(APPEND STACK ${NEW_ELEMENT})
 
@@ -188,14 +188,14 @@ function(topological_sort LIST PREFIX SUFFIX)
 
             # Push the remaining edges for the current vertex onto the
             # stack
-            string(REPLACE ";" " " NEW_ELEMENT 
+            string(REPLACE ";" " " NEW_ELEMENT
               "${SOURCE};${OUT_EDGES}")
             list(APPEND STACK ${NEW_ELEMENT})
 
             # Setup the new source and outgoing edges
             set(SOURCE ${TARGET})
             string(TOUPPER ${SOURCE} UPPER_SOURCE)
-            set(OUT_EDGES 
+            set(OUT_EDGES
               ${${PREFIX}${UPPER_SOURCE}${SUFFIX}})
           endif(NOT FOUND_${UPPER_TARGET})
 
