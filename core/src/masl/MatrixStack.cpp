@@ -15,8 +15,8 @@ int MatrixStack::getSize() const {
 void MatrixStack::clear() {
     stack.empty();
     matrix startMatrix;
+    startMatrix = startMatrix.identity();
     stack.push(startMatrix);
-    loadIdentity();
 }
  
 // Retrieves the current matrix at the top of the stack.
