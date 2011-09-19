@@ -12,13 +12,13 @@
 #include <masl/UnitTest.h>
 
 namespace spark {
-                    
+
     class MySparkTestSuite : public UnitTestSuite {
         public:
             MySparkTestSuite(const char * myName, int argc, char *argv[]) : UnitTestSuite(myName, argc, argv) {}
             void setup();
     };
-        
+
 };
 
 #endif //TESTSPARK

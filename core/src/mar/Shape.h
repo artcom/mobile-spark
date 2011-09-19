@@ -25,7 +25,7 @@ namespace mar {
             UNKNOWN
         };
     };
-    
+
     class Shape {
     public:
         Shape(const bool theTexturedFlag = false);
@@ -39,7 +39,7 @@ namespace mar {
         BoundingBox & getBoundingBox() { return _myBoundingBox;};
         bool isTransparent();
 
-        std::vector<ElementPtr> elementList; 
+        std::vector<ElementPtr> elementList;
     protected:
         bool _myTextureFlag;   //XXX does not make any sense, texture is decided at element level
         size_t _myDataPerVertex;
@@ -52,7 +52,7 @@ namespace mar {
 
     class RectangleShape : public Shape {
     public:
-        RectangleShape(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, 
+        RectangleShape(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0,
                        const std::string & theTextureSrc = "");
         virtual ~RectangleShape();
         void setTexCoords(vector2 theUV0, vector2 theUV1, vector2 theUV2, vector2 theUV3);
@@ -65,7 +65,7 @@ namespace mar {
 
     class NinePatchShape : public Shape {
     public:
-        NinePatchShape(const std::string & theTextureSrc, const float theLeftEdge, 
+        NinePatchShape(const std::string & theTextureSrc, const float theLeftEdge,
                 const float theTopEdge, const float theRightEdge, const float theBottomEdge,
                 const float theWidth = 0, const float theHeight = 0);
         virtual ~NinePatchShape();
@@ -95,13 +95,13 @@ namespace mar {
     class ShapeFactory : public masl::Singleton<ShapeFactory> {
     public:
         ShapePtr createRectangle(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, const std::string & theTextureSrc = "");
-        ~ShapeFactory();        
-        ShapePtr createNinePatch(const std::string & theTextureSrc, const float theLeftEdge = 0, 
-                const float theTopEdge = 0, const float theRightEdge = 0, const float theBottomEdge = 0, 
+        ~ShapeFactory();
+        ShapePtr createNinePatch(const std::string & theTextureSrc, const float theLeftEdge = 0,
+                const float theTopEdge = 0, const float theRightEdge = 0, const float theBottomEdge = 0,
                 const float theWidth = 0, const float theHeight = 0);
         ShapePtr createObj(const std::string & theFile);
     };
 
 };
 
-#endif 
+#endif

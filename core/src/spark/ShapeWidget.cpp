@@ -13,7 +13,7 @@ namespace spark {
         Widget::render(theP);
     }
 
-    bool ShapeWidget::AABB2Dcontains(const float x, const float y, 
+    bool ShapeWidget::AABB2Dcontains(const float x, const float y,
                                      const matrix theProjectionMatrix) const {
         mar::BoundingBox myBB = _myShape->getBoundingBox();
         //use 8 corner points
@@ -86,8 +86,8 @@ namespace spark {
         myMVPBB.max[1] /= myMVPBB.min[3];
         myMVPBB.max[2] /= myMVPBB.min[3];
         myMVPBB.max[3] /= myMVPBB.min[3];
-        
-        //+1/2 
+
+        //+1/2
         myMVPBB.min[0] = (myMVPBB.min[0] + 1) / 2;
         myMVPBB.min[1] = (myMVPBB.min[1] + 1) / 2;
         myMVPBB.max[0] = (myMVPBB.max[0] + 1) / 2;
@@ -101,8 +101,8 @@ namespace spark {
         }
         return false;
     }
-    
-    void 
+
+    void
     ShapeWidget::onResume() {
         Widget::onResume();
         if (_myShape) {
@@ -113,7 +113,7 @@ namespace spark {
     mar::ShapePtr ShapeWidget::getShape() {
         return _myShape;
     }
-    
+
     void ShapeWidget::setShape( mar::ShapePtr theShapePtr){
         _myShape = theShapePtr;
     }

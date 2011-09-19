@@ -30,11 +30,11 @@ namespace animation {
     template <class O, class T>
     PropertyAnimation<O, T>::PropertyAnimation(
         const O theObjectPtr,
-        const T thePropertySetter, 
-        const float theStartValue, 
-        const float theEndValue, 
+        const T thePropertySetter,
+        const float theStartValue,
+        const float theEndValue,
         const masl::UInt64 theDuration,
-        const EasingFunctionPtr theEasing): 
+        const EasingFunctionPtr theEasing):
             Animation(theDuration, theEasing),
             _myObjectPtr(theObjectPtr),
             _myPropertyCallback(thePropertySetter),

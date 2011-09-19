@@ -6,7 +6,7 @@ namespace animation {
 
     unsigned int Animation::idCounter = 0;
 
-    Animation::Animation(const masl::UInt64 theDuration, EasingFunctionPtr theEasing) : 
+    Animation::Animation(const masl::UInt64 theDuration, EasingFunctionPtr theEasing) :
         _myDuration(theDuration),
         _myEasingFunction(theEasing),
         _myId(idCounter++),
@@ -55,7 +55,7 @@ namespace animation {
         if (!_myRunning) {
             //when composite animations are finished before child animations started
             //child animations should be started (with comeToAnEndFlag = true) and finished immediately
-            play(theTime, true); 
+            play(theTime, true);
         }
         finishAnimation(theTime);
     }
@@ -63,7 +63,7 @@ namespace animation {
     void Animation::finishAnimation(const masl::UInt64 theTime) {
         //AC_PRINT << _myId << "..........finish animation";
         _myProgressTime = _myDuration;
-        _myProgress = _myEasingFunction(1.0); 
+        _myProgress = _myEasingFunction(1.0);
         if (_myOnFinish) { _myOnFinish->execute(); }
         if (_myLoop) {
             //AC_PRINT << _myId << "..........loop: restart animation";

@@ -29,14 +29,14 @@ namespace masl {
 
 
     /// read a complete file into a string
-    bool 
+    bool
     readFile(const std::string & theUTF8Filename, std::string & theContent) {
          FILE * pFile;
          std::string filepath;
          searchFile(theUTF8Filename, filepath, true);
          char *myCharBuffer;
          pFile = fopen (filepath.c_str(),"r");
-         if (pFile == NULL) { 
+         if (pFile == NULL) {
              throw Exception("Error opening file");
          } else {
             fseek(pFile,0,SEEK_END); //go to end
@@ -52,7 +52,7 @@ namespace masl {
         return true;
     }
 
-    bool 
+    bool
     readFileLineByLine(const std::string & theUTF8Filename, std::vector<std::string> & theContent) {
         const size_t MAX_LENGTH = 1000;
         char buffer[MAX_LENGTH];
@@ -122,12 +122,12 @@ namespace masl {
         }
         closedir(myDirHandle);
     }
-    
+
     bool
     searchFile(const std::string & theFileName, std::string & retPath, bool theForce) {
         FILE * pFile;
         pFile = fopen(theFileName.c_str(),"r");
-        if (pFile == NULL && theForce) { 
+        if (pFile == NULL && theForce) {
             throw Exception("Error opening file " + theFileName);
         }
         if (pFile) {
@@ -146,8 +146,8 @@ namespace masl {
             }
         }
         return false;
-    }        
-    std::string getDirectoryPart(const std::string & theFileName) {        
+    }
+    std::string getDirectoryPart(const std::string & theFileName) {
         std::string myDirName;
         if (! theFileName.empty() ) {
             if (theFileName.at(theFileName.length()-1) == '/') {
@@ -166,6 +166,6 @@ namespace masl {
 
         return myDirName;
     }
-    
+
 }
 

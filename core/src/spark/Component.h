@@ -19,7 +19,7 @@ namespace spark {
     typedef std::vector<ComponentPtr> VectorOfComponentPtr;
 
     class Component : public EventDispatcher, public boost::enable_shared_from_this<Component> {
-    public: 
+    public:
         Component();
         Component(const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Component() = 0;
@@ -47,4 +47,4 @@ namespace spark {
         ComponentPtr _myParent;
     };
 };
-#endif 
+#endif
