@@ -6,7 +6,22 @@
 
 namespace masl {
 
+    XMLNode::XMLNode(const std::string & theXMLString) {
+        xmlDocPtr doc = loadXMLFromMemory(theXMLString);
+        xmlNode* myRootNode = xmlDocGetRootElement(doc);
+        init(myRootNode);
+        xmlFreeDoc(doc);
+    }
+
     XMLNode::XMLNode(xmlNode* theNode) {
+        init(theNode);
+    }
+
+    XMLNode::~XMLNode() {
+    }
+
+    void
+    XMLNode::init(xmlNode * theNode) {
         xmlAttr *attribute = theNode->properties;
         nodeName = (const char*)(theNode->name);
         //AC_PRINT << "node name " << nodeName;
@@ -29,9 +44,6 @@ namespace masl {
                 children.push_back(childXMLNode);
             }
         }
-    }
-
-    XMLNode::~XMLNode() {
     }
 
     void XMLNode::print() const {

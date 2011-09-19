@@ -9,9 +9,9 @@
 #include "RenderCamera.h"
 
 namespace spark {
-    
+
     class View : public Widget {
-    public: 
+    public:
         View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~View();
         void activate(float theCanvasWidth, float theCanvasHeight);
@@ -19,11 +19,12 @@ namespace spark {
         void renderWorld(ComponentPtr theWorld);
         RenderCameraPtr getCamera() { ensureCamera(); return _myCamera; };
         mar::ViewportPtr getViewport() const { return _myGLViewport; };
-            
-        static const char* SPARK_TYPE;
-    private:      
+
+        static const char * const SPARK_TYPE;
+        virtual const char * const & getType() const { return View::SPARK_TYPE;};
+    private:
         void ensureCamera();
-                      
+
         MatrixStack matrixStack;
         RenderCameraPtr _myCamera;
         mar::ViewportPtr _myGLViewport;

@@ -6,13 +6,14 @@
 #include "Widget.h"
 
 namespace spark {
-    
+
     class World : public Widget {
-        public: 
-            World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
-            virtual ~World();    
-            static const char* SPARK_TYPE;
-        private:
+    public:
+        World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        virtual ~World();
+        static const char * const SPARK_TYPE;
+        virtual const char * const & getType() const { return World::SPARK_TYPE;};
+    private:
     };
 
     typedef boost::shared_ptr<World> WorldPtr;

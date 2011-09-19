@@ -36,24 +36,27 @@ namespace spark {
     }
 
     BaseApp::~BaseApp() {
+        // this has to be done only ONCE when exiting
+        xmlCleanupParser();
+        xmlMemoryDump();
+
     }
 
-    void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {        
+    void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         ComponentMapInitializer::init();
-        
+
 
         //AC_PRINT << "setup";
-        //init animationManager with setup-time 
+        //init animationManager with setup-time
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
 
 #ifdef __ANDROID__
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
-        MobileSDK_Singleton::get().setMobileSDK(android::AndroidMobileSDKPtr(new android::AndroidMobileSDK()));        
 #endif
 #if __APPLE__
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
-        MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));        
+        MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
 #endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/textures");
@@ -62,18 +65,18 @@ namespace spark {
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/fonts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
-            
-        std::string myOrientation = "free";         
+
+        std::string myOrientation = "free";
     }
-    
+
     void BaseApp::realize() {
         RealizeComponentVisitor myVisitor;
-        visitComponents(myVisitor, _mySparkWindow);   
+        visitComponents(myVisitor, _mySparkWindow);
     }
 
     std::string
     BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, std::string & theOrientation) {
-        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);   
+        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
         std::string myBestMatch = "";
@@ -81,33 +84,30 @@ namespace spark {
         std::string myBestLayoutName = "";
         int myBestLayoutWidth = 0;
         int myBestLayoutHeight = 0;
-        
+
         bool myExactMatchFlag = false;
         int myLayoutWidth = 0;
         int myLayoutHeight = 0;
         std::string myOrientation = "";
         std::string myLayoutName = "";
-        for (unsigned int i = 0; i < myFiles.size(); i++) {            
+        for (unsigned int i = 0; i < myFiles.size(); i++) {
             if (getExtension(myFiles[i]) == "spark") {
                 std::string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
-                std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);        
-                xmlDocPtr doc = loadXMLFromMemory(myLayout);
-                xmlNode* myRootNode = xmlDocGetRootElement(doc);
-                XMLNodePtr myNode(new XMLNode(myRootNode));
-                xmlFreeDoc(doc);
+                std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);
+                XMLNodePtr myNode(new XMLNode(myLayout));
                 if (myNode->nodeName == "Window") {
                     for (std::map<std::string, std::string>::iterator it = myNode->attributes.begin(); it != myNode->attributes.end(); ++it) {
-                        if (it->first == "name") {     
-                            myLayoutName = it->second;   
+                        if (it->first == "name") {
+                            myLayoutName = it->second;
                         }
-                        if (it->first == "width") {     
-                            myLayoutWidth = as<int>(it->second);   
+                        if (it->first == "width") {
+                            myLayoutWidth = as<int>(it->second);
                         }
-                        if (it->first == "height") {     
-                            myLayoutHeight = as<int>(it->second);   
+                        if (it->first == "height") {
+                            myLayoutHeight = as<int>(it->second);
                         }
-                        if (it->first == "orientation") {     
-                            myOrientation = it->second;   
+                        if (it->first == "orientation") {
+                            myOrientation = it->second;
                         }
                     }
                 }
@@ -132,7 +132,7 @@ namespace spark {
                     AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight << " with orientation: '" <<  myBestOrientation << "'";
                     break;
                 }
-            }            
+            }
         }
         if (!myExactMatchFlag) {
             AC_PRINT << "Sorry, we did not find layout<->device match -> use default layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
@@ -141,7 +141,7 @@ namespace spark {
         theOrientation = myBestOrientation;
         return myBestMatch;
     }
-    
+
     void
     BaseApp::loadLayoutAndRegisterEvents(const std::string & theLayoutFile) {
         //load layout
@@ -155,19 +155,21 @@ namespace spark {
         spark::EventCallbackPtr myOnPauseCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onPause));
         _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
     }
-    
+
     void BaseApp::onEvent(std::string theEventString) {
         //AC_PRINT << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().handleEvent(theEventString);
-        myEvent->connect(_mySparkWindow);
-        (*myEvent)();
+        if (myEvent) {
+            myEvent->connect(_mySparkWindow);
+            (*myEvent)();
+        }
         //AC_PRINT << "ate Event";
     }
-    
+
     void BaseApp::onPause(EventPtr theEvent) {
         if (_mySparkWindow) {
             OnPauseComponentVisitor myVisitor;
-            visitComponents(myVisitor, _mySparkWindow);   
+            visitComponents(myVisitor, _mySparkWindow);
         }
     }
 
@@ -178,13 +180,13 @@ namespace spark {
             visitComponents(myVisitor, _mySparkWindow);
         }
     }
-    
+
     void BaseApp::onFrame(EventPtr theEvent) {
         AC_TRACE << "onFrame";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _mySparkWindow->render();
         AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
-    }    
+    }
 }
 

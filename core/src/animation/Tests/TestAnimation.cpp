@@ -9,7 +9,7 @@ namespace animation {
         UnitTestSuite::setup();
         addTest(new animation::PropertyAnimation_UnitTest);
         addTest(new animation::CompositeAnimation_UnitTest);
-    }    
+    }
 }
 
 
@@ -23,7 +23,7 @@ JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_AnimationBinding_test(JNIE
     animation::MyAnimationTestSuite mySuite("AnimationTest", 0, 0);
     mySuite.run();
     return (env->NewStringUTF(mySuite.getFailedTestMessages().c_str()));
-    
+
 }
 #endif
 

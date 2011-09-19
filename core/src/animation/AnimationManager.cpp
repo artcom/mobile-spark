@@ -4,15 +4,15 @@
 
 namespace animation {
 
-    unsigned int AnimationManager::animationCount() const { 
-        return _myAnimations.size(); 
+    unsigned int AnimationManager::animationCount() const {
+        return _myAnimations.size();
     }
 
     void AnimationManager::play(AnimationPtr theAnimation) {
         _myAnimations.push_back(theAnimation);
         theAnimation->play(_myAnimationTime);
     }
-    
+
     void AnimationManager::doFrame(const masl::UInt64 theCurrentMillis) {
         _myAnimationTime = theCurrentMillis;
         AC_TRACE << "AnimationManager::doFrame " << _myAnimationTime;

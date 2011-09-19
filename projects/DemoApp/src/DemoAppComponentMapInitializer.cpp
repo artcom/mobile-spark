@@ -4,6 +4,6 @@
 
 namespace demoapp {
     void DemoAppComponentMapInitializer::init() {
-        spark::SparkComponentFactory::get().registerComponent("SlideImpl", spark::create<SlideImpl>);
+        spark::SparkComponentFactory::get().registerComponent(SlideImpl::SPARK_TYPE, spark::create<SlideImpl>);
     }
 }

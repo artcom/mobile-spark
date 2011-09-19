@@ -17,7 +17,7 @@ namespace mar {
     const std::string DEFAULT_TEXTURED_VERTEX_SHADER = "/default_textured_vertex.glsl";
     const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "/default_colored_fragment.glsl";
     const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "/default_textured_fragment.glsl";
-            
+
     class Material {
     public:
         virtual ~Material();
@@ -30,7 +30,7 @@ namespace mar {
 
         bool transparency_;
     protected:
-        Material(); 
+        Material();
         virtual void setShader();
         virtual void setHandles();
 
@@ -76,10 +76,10 @@ namespace mar {
         TexturePtr _myTexture;
     private:
         virtual void setShader();
-        std::string _mySrc;     
-                   
+        std::string _mySrc;
+
     };
     typedef boost::shared_ptr<UnlitTexturedMaterial> UnlitTexturedMaterialPtr;
 };
 
-#endif 
+#endif

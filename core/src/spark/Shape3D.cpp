@@ -4,6 +4,7 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
+    const char * const Shape3D::SPARK_TYPE = "Shape3D";
 
     Shape3D::Shape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
@@ -15,9 +16,9 @@ namespace spark {
     Shape3D::~Shape3D() {
     }
 
-    void 
-    Shape3D::onResume() {        
-        ShapeWidget::onResume();        
+    void
+    Shape3D::onResume() {
+        ShapeWidget::onResume();
         setShape(ShapeFactory::get().createObj(_mySrc));
     }
 

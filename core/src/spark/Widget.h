@@ -9,11 +9,12 @@
 #include <animation/PropertyAnimation.h>
 
 #include "Container.h"
+#include "I18nContext.h"
 
 namespace spark {
 
     class Widget : public Container {
-    public: 
+    public:
         Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Widget() = 0;
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
@@ -51,6 +52,13 @@ namespace spark {
         matrix _myLocalMatrix; //scale, roation and translation of this node
     protected:
         matrix _myWorldMVMatrix;
+
+        I18nContextPtr _myI18nContext;
+        I18nItemPtr _myI18nItem;
+        std::string _myI18nId;
+        std::vector<I18nContextPtr> getI18nContexts() const; 
+        I18nItemPtr getI18nItemByName(const std::string & theName) const;
+
     private:
         float _x,_y,_z;
         float _scaleX, _scaleY, _scaleZ;

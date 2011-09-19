@@ -7,7 +7,7 @@ namespace animation {
 
     CompositeAnimation::~CompositeAnimation() {
     }
-    
+
     void CompositeAnimation::add(AnimationPtr theAnimation) {
         _myChildren.push_back(theAnimation);
         AnimationPtr myThis = shared_from_this();

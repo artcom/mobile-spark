@@ -7,7 +7,7 @@ namespace animation {
 
     SequenceAnimation::~SequenceAnimation() {
     }
-    
+
     // duration = sum(map(children, duration))
     void SequenceAnimation::childDurationChanged() {
         masl::UInt64 d = 0;

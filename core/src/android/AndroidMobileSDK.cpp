@@ -3,19 +3,19 @@
 
 namespace android {
     AndroidMobileSDK::AndroidMobileSDK() {
-        
+
     }
-    
+
     AndroidMobileSDK::~AndroidMobileSDK() {
-        
+
     }
-    
-    masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize, 
+
+    masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
                                                 const std::string & theFontPath) {
-        masl::TextInfo myTextInfo;  
+        masl::TextInfo myTextInfo;
         if (env) {
-            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[IIILjava/lang/String;Ljava/lang/String;)Ljava/util/List;");
             if(myMethodId != 0) {
                 jvalue myArgs[8];
@@ -30,131 +30,131 @@ namespace android {
                 myArgs[5].i = theMaxHeight;
                 myArgs[6].l = env->NewStringUTF(theAlign.c_str());;
                 myArgs[7].l =  env->NewStringUTF(theFontPath.c_str());
-                jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);                
+                jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);
                 jclass listClass = env->GetObjectClass(myList);
-                jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
-                
-                jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
+                jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
+
+                jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);
                 jclass myIntegerClass = env->GetObjectClass(myInt);
-                
-                jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");                
-                myTextInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-                
-                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
-                myTextInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-                
-                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
-                myTextInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
-                
+
+                jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");
+                myTextInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);
+                myTextInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);
+                myTextInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
             } else {
-                AC_WARNING  << "Sorry, java-rendertext not found";                
+                AC_WARNING  << "Sorry, java-rendertext not found";
             }
-        }   
+        }
         return myTextInfo;
-    }     
-    
+    }
+
     void AndroidMobileSDK::freezeMobileOrientation(std::string theOrientation) {
         if (env) {
-            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");                        
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "freezeOrientation", "(Ljava/lang/String;)V");
             if(myMethodId != 0) {
                 jvalue myArgs[1];
                 myArgs[0].l =  env->NewStringUTF(theOrientation.c_str());
-                env->CallStaticVoidMethodA (cls, myMethodId, myArgs);                                
+                env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
             } else {
-                AC_WARNING  << "Sorry, java-freezeOrientation not found";                
+                AC_WARNING  << "Sorry, java-freezeOrientation not found";
             }
-        }                           
+        }
     }
-    
+
     masl::CameraInfo AndroidMobileSDK::getCameraSpec() {
         masl::CameraInfo myCameraInfo;
-        myCameraInfo.textureID=0;     
+        myCameraInfo.textureID=0;
         if (env) {
-            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");                        
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "getCameraParams", "()Ljava/util/List;");
             if(myMethodId != 0) {
-            	jvalue myArgs[0];
-            	jobject myList = env->CallStaticObjectMethod (cls, myMethodId, myArgs);
-				jclass listClass = env->GetObjectClass(myList);
-            	jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");                
-				
-                jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);                
+                jvalue myArgs[0];
+                jobject myList = env->CallStaticObjectMethod (cls, myMethodId, myArgs);
+                jclass listClass = env->GetObjectClass(myList);
+                jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
+
+                jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);
                 jclass myIntegerClass = env->GetObjectClass(myInt);
-                jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");                
-                myCameraInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-                
-                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);                
-                myCameraInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);      
-                
-                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);                
-                myCameraInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
-                
-                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);                
-                myCameraInfo.texturewidth = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
-                
-                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);                
-                myCameraInfo.textureheight = (jint)env->CallIntMethod(myInt, intValueMethod, 0); 
-                
+                jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");
+                myCameraInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);
+                myCameraInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);
+                myCameraInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);
+                myCameraInfo.texturewidth = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);
+                myCameraInfo.textureheight = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
             } else {
-                AC_WARNING  << "Sorry, java-getCameraParams not found";                
+                AC_WARNING  << "Sorry, java-getCameraParams not found";
             }
-        }          
+        }
         return myCameraInfo;
     }
-    void AndroidMobileSDK::updateCameraTexture() {   
+    void AndroidMobileSDK::updateCameraTexture() {
         if (env) {
-            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "updateCameraTexture", "()V");
             if(myMethodId != 0) {
                 jvalue myArgs[0];
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
             } else {
-                AC_WARNING  << "Sorry, java-updateCameraTextures not found";                
-            }            
-        }     
+                AC_WARNING  << "Sorry, java-updateCameraTextures not found";
+            }
+        }
     }
-    
-    void AndroidMobileSDK::startCameraCapture(bool theColorConversionFlag) {    
+
+    void AndroidMobileSDK::startCameraCapture(bool theColorConversionFlag) {
         if (env) {
-            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "startCamera", "(Z)V");
             if(myMethodId != 0) {
                 jvalue myArgs[1];
-                myArgs[0].b = theColorConversionFlag;                
+                myArgs[0].b = theColorConversionFlag;
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
                 AC_PRINT << "start camera capture";
             } else {
-                AC_WARNING  << "Sorry, java-startCamera not found";                
+                AC_WARNING  << "Sorry, java-startCamera not found";
             }
-        } 
+        }
     }
-    
-    void AndroidMobileSDK::stopCameraCapture() {       
+
+    void AndroidMobileSDK::stopCameraCapture() {
         if (env) {
-            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "stopCamera", "()V");
             if(myMethodId != 0) {
                 jvalue myArgs[0];
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
                 AC_PRINT << "stop camera capture";
             } else {
-                AC_WARNING  << "Sorry, java-stopCamera not found";                
+                AC_WARNING  << "Sorry, java-stopCamera not found";
             }
-        } 
+        }
     }
     bool AndroidMobileSDK::isCameraCapturing() {
-        bool myResult = false;    
+        bool myResult = false;
         if (env) {
-            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");            
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "isCameraCapturing", "()Z");
             if(myMethodId != 0) {
                 jvalue myArgs[0];
                 myResult = env->CallStaticBooleanMethod (cls, myMethodId, myArgs);
             } else {
-                AC_WARNING  << "Sorry, java-isCameraCapturing not found";                
+                AC_WARNING  << "Sorry, java-isCameraCapturing not found";
             }
         }
         return myResult;
-    } 
+    }
 }

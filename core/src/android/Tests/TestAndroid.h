@@ -14,7 +14,7 @@
 using namespace masl;
 
 namespace android {
-                    
+
     class MyAndroidTestSuite : public UnitTestSuite {
         public:
             MyAndroidTestSuite(const char * myName, int argc, char *argv[]) : UnitTestSuite(myName, argc, argv) {}
@@ -22,8 +22,8 @@ namespace android {
             JNIEnv *env;
             jstring apkPath;
     };
-        
+
 };
 
-#endif 
+#endif
 

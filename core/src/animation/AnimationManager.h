@@ -9,7 +9,7 @@
 namespace animation {
 
     class AnimationManager : public masl::Singleton<AnimationManager> {
-    public: 
+    public:
         virtual unsigned int animationCount() const;
         void play(AnimationPtr theAnimation);
         bool isPlaying() const { return _myAnimations.size() > 0; };
