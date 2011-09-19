@@ -13,14 +13,14 @@ namespace spark {
     }
 
 
-    void 
+    void
     EventDispatcher::addEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
         AC_INFO << "addEventListener for type " << theType << " capturing: " << theUseCapture;
         std::pair<std::string, bool> myKey(theType, theUseCapture);
         _myListenersMap.insert(std::pair<std::pair<std::string, bool>, EventCallbackPtr > (myKey, theListener));
     };
 
-    void 
+    void
     EventDispatcher::removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
         AC_INFO << "removeEventListener for type " << theType << " capturing: " << theUseCapture;
         std::pair<std::string, bool> myKey(theType, theUseCapture);
@@ -44,7 +44,7 @@ namespace spark {
             myCurrent = myCurrent->getParent();
             myCaptureList.push_front(myCurrent);
         }
-       
+
         // capture phase
         EventListenerKey myCaptureKey(theEvent->getType(), true);
         for (std::list<ComponentPtr>::iterator it = myCaptureList.begin(); it != myCaptureList.end(); ++it) {
@@ -78,7 +78,7 @@ namespace spark {
         theEvent->finishDispatch();
     }
 
-    inline bool 
+    inline bool
     EventDispatcher::hasEventListener(const EventListenerKey & theKey ) const {
         return (_myListenersMap.find(theKey) != _myListenersMap.end());
     }

@@ -59,7 +59,7 @@ namespace masl {
             std::map<std::string, std::string> attributes;
 
             //this is only used during initialization and not updated afterwards, use ComponentHierachry instead
-            std::vector<XMLNodePtr> children;  
+            std::vector<XMLNodePtr> children;
     };
 };
 

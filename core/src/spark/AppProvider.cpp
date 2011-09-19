@@ -3,9 +3,9 @@
 namespace spark {
     AppProvider::~AppProvider() {
     }
-    
-    void 
+
+    void
     AppProvider::setApp(BaseAppPtr theApp) {
-        app_ = theApp; 
+        app_ = theApp;
     }
 }

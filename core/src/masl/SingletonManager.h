@@ -63,7 +63,7 @@ public:
 
     template<class T>
     T& getSingletonInstance() const {
-        //__android_log_print(ANDROID_LOG_WARN, "SingletonManager type: ", typeid(T).name());            
+        //__android_log_print(ANDROID_LOG_WARN, "SingletonManager type: ", typeid(T).name());
         // NOTE: this is only called once per module and Singleton class,
         // so performance doesn't really matter.
         if (_myDelegate) {
@@ -78,7 +78,7 @@ public:
             boost::shared_ptr<SingletonBase> mySingletonPtr = boost::shared_ptr<SingletonBase>(sb);
             _mySingletonList.push_back(mySingletonPtr);
 
-            _mySingletonMap.insert(std::make_pair(&typeid(T), mySingletonPtr));                
+            _mySingletonMap.insert(std::make_pair(&typeid(T), mySingletonPtr));
             return * boost::dynamic_pointer_cast<T>(sb);
         }
     }

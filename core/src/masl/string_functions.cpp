@@ -6,11 +6,11 @@ using namespace std;
 
 namespace masl {
 
-    std::string 
+    std::string
     getExtension(const std::string & thePath) {
         std::string::size_type myDotPos = thePath.rfind(".");
         if (myDotPos != std::string::npos) {
-    
+
             std::string::size_type mySlashPos = thePath.rfind("/");
             if (mySlashPos == std::string::npos) {
                 mySlashPos = thePath.rfind("\\");
@@ -18,13 +18,13 @@ namespace masl {
             if (mySlashPos != std::string::npos && mySlashPos > myDotPos) {
                 return "";
             }
-    
+
             return thePath.substr(myDotPos+1);
         }
         return "";
     }
 
-    std::string 
+    std::string
     removeExtension(const std::string & theFileName) {
         std::string::size_type myDotPos = theFileName.rfind(".");
         if (myDotPos != std::string::npos) {
@@ -54,7 +54,7 @@ namespace masl {
         if (!myStream) {
             throw ParseException("as_float","could not convert to float");
         }
-        return outValue; 
+        return outValue;
     }
 
     template <>
@@ -69,24 +69,24 @@ namespace masl {
         }
         return false;
     }
-    
-    bool createFloatBinFromString(const std::string & theString, vector<float> & theBin) {        
+
+    bool createFloatBinFromString(const std::string & theString, vector<float> & theBin) {
         theBin.clear();
         size_t myStartIndex = 1;
         size_t myEndIndex = theString.find(",", myStartIndex);
-        while (myEndIndex != string::npos) {            
+        while (myEndIndex != string::npos) {
             std::string s = theString.substr(myStartIndex, myEndIndex-myStartIndex);
             float f = as_float(s);
             theBin.push_back(f);
             myStartIndex = myEndIndex+1;
-            myEndIndex = theString.find(",", myStartIndex);            
+            myEndIndex = theString.find(",", myStartIndex);
             if (myEndIndex == string::npos) {
-                theBin.push_back(as_float(theString.substr(myStartIndex, theString.size()-1-myStartIndex)));                
+                theBin.push_back(as_float(theString.substr(myStartIndex, theString.size()-1-myStartIndex)));
             }
         }
         return true;
     }
-    
+
     template <>
     bool fromString(const std::string & theString, vector4 & outValue) {
         vector<float> myBin;
@@ -125,6 +125,6 @@ namespace masl {
         }
         return true;
     }
-    
+
 }
 

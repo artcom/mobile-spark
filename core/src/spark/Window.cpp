@@ -13,14 +13,14 @@ using namespace std;
 namespace spark {
     const char * const Window::SPARK_TYPE = "Window";
 
-    Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, 
+    Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode,
                    ComponentPtr theParent):
-        Container(theApp, theXMLNode, theParent), 
+        Container(theApp, theXMLNode, theParent),
         _myWidth(0), _myHeight(0){
 
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
-            
+
         _myFullScreenFlag = _myXMLNode->getAttributeAs<bool>("fullscreen", false);
         _myClearColor = _myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1));
 
@@ -36,7 +36,7 @@ namespace spark {
 
     Window::~Window() {
     }
-    vector2 Window::getSize() const { 
+    vector2 Window::getSize() const {
         int myScreensLargerSide = _myWidth > _myHeight ? _myWidth : _myHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  _myHeight ? _myWidth : _myHeight;
 
@@ -47,10 +47,10 @@ namespace spark {
         }
         // floating
         return vector2(_myWidth, _myHeight);
-    }    
-    
-    void 
-    Window::onTouch(EventPtr theEvent) { 
+    }
+
+    void
+    Window::onTouch(EventPtr theEvent) {
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         AC_INFO<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
         ComponentPtr myPicked = pick2DAABBStyle(myEvent->getX(), myEvent->getY());
@@ -62,21 +62,21 @@ namespace spark {
             AC_DEBUG << "nothing picked";
         }
     }
-    
+
     void Window::onResume() {
         _myGLCanvas->initGLState();
     }
 
-    void 
+    void
     Window::onSizeChanged(EventPtr theEvent) {
-        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);                    
-        _myWidth = myEvent->size_[0]; 
+        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
+        _myWidth = myEvent->size_[0];
         _myHeight= myEvent->size_[1];
     }
 
-    void 
-    Window::render() const {        
-        _myGLCanvas->preRender(getClearColor());        
+    void
+    Window::render() const {
+        _myGLCanvas->preRender(getClearColor());
         // get all views
         VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
@@ -87,7 +87,7 @@ namespace spark {
                 // find world and render it
                 myView->renderWorld(getChildByName(myView->getWorldName()));
             }
-        }        
+        }
     }
 
 
@@ -103,7 +103,7 @@ namespace spark {
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             //use relative touch point
-            CollectAABBComponentVisitor myVisitor(myPickedComponentList, (float)x/(float)_myWidth, (float)y/(float)_myHeight, 
+            CollectAABBComponentVisitor myVisitor(myPickedComponentList, (float)x/(float)_myWidth, (float)y/(float)_myHeight,
                                                   myView->getCamera()->getProjectionMatrix());
             visitComponents(myVisitor, getChildByName(myView->getWorldName()));
         }
@@ -116,9 +116,9 @@ namespace spark {
         return null;
     }
 
-    bool 
-    sortByZ(std::pair<ComponentPtr, float> i, std::pair<ComponentPtr, float> j) { 
-        return (i.second > j.second); 
+    bool
+    sortByZ(std::pair<ComponentPtr, float> i, std::pair<ComponentPtr, float> j) {
+        return (i.second > j.second);
     }
 
 }

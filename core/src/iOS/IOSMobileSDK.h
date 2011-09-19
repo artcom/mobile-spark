@@ -12,11 +12,11 @@ namespace ios {
         virtual masl::TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath);
         virtual void updateCameraTexture();
         virtual void freezeMobileOrientation(std::string theOrientation);
-        virtual masl::CameraInfo getCameraSpec();             
+        virtual masl::CameraInfo getCameraSpec();
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
-        
+
     private:
         //GLuint  texture;
             };
