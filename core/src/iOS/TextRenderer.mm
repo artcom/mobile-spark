@@ -45,57 +45,57 @@ namespace ios {
         CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFStringGetLength((CFStringRef)string)), kCTFontAttributeName, font);
         CFRelease(font);
         
-        
-        /*
-        CTParagraphStyleSetting styleSetting[1] = {{kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), (void*)kCTCenterTextAlignment}};
-        //Style
-        
-        styleSetting[0].value = (void*)kCTCenterTextAlignment;
-        
+        //Set alignment
+        CTTextAlignment alignment = kCTLeftTextAlignment;
         if (theAlign.compare("center") == 0) {
-            styleSetting[0].value = (void*)kCTCenterTextAlignment;
+            alignment = kCTCenterTextAlignment;
         } 
         if (theAlign.compare("left") == 0) {
-            styleSetting[0].value = (void*)kCTLeftTextAlignment;
+            alignment = kCTLeftTextAlignment;
         } 
         if (theAlign.compare("right") == 0) {
-            styleSetting[0].value = (void*)kCTRightTextAlignment;
+            alignment = kCTRightTextAlignment;
         }
-        styleSetting[0].spec = kCTParagraphStyleSpecifierAlignment;
-        styleSetting[0].valueSize = sizeof(CTTextAlignment);
         
-        CFIndex index = 1;
-        CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate((const CTParagraphStyleSetting*) &styleSetting, index);
-        CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFStringGetLength((CFStringRef)string)), kCTParagraphStyleAttributeName, paragraphStyle);
+        //Create Paragraph style and set alignment settings to it
+        CTParagraphStyleSetting styleSetting[] = { {kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &alignment} };
+        CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(styleSetting, 1);
         
+        //add paragraphStyle as an attribute to the string
+        CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFAttributedStringGetLength(attrString)), kCTParagraphStyleAttributeName, paragraphStyle);
         CFRelease(paragraphStyle);
-        */
-        
-        
-        
-        
         
         // Create the framesetter with the attributed string.
         CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attrString);
         CFRelease(attrString);
         
-        //Determine the optimal Texture size
-        CFRange fitRange;
-
-        theMaxWidth = theMaxWidth == 0 ? CGFLOAT_MAX : theMaxWidth;
-        theMaxHeight = theMaxHeight == 0 ? CGFLOAT_MAX : theMaxHeight;
-
-        suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(theMaxWidth, theMaxHeight), nil);
-        textureWidth = ceil(suggestedSize.width);
-        textureHeight = ceil(suggestedSize.height);
-
+        //Determine the optimal Texture size        
+        if (theMaxWidth != 0 && theMaxHeight != 0) {
+            textureWidth = ceil(theMaxWidth);
+            textureHeight = ceil(textureHeight);
+        } else if (theMaxWidth == 0 && theMaxHeight == 0) {
+            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), nil);
+            textureWidth = ceil(suggestedSize.width);
+            textureHeight = ceil(suggestedSize.height);
+        } else if (theMaxWidth == 0) {
+            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(CGFLOAT_MAX, theMaxHeight), nil);
+            textureWidth = ceil(suggestedSize.width);
+            textureHeight = ceil(theMaxHeight);
+        } else if ( theMaxHeight == 0){
+            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(theMaxWidth, CGFLOAT_MAX), nil);
+            textureWidth = ceil(theMaxWidth);
+            textureHeight = ceil(suggestedSize.height);
+        } else {
+            textureWidth = 0;
+            textureHeight = 0;
+        }
         
-        // Initialize a Bitmap context and set the text matrix to a known value.
-        GLubyte *bitmapData = (GLubyte *) calloc((textureWidth * textureHeight * 4.0), sizeof(GLubyte));
-        CGContextRef context = CGBitmapContextCreate(bitmapData, textureWidth, textureHeight, 8, textureWidth * 4, rgbColorSpace, kCGImageAlphaNoneSkipLast);
+        if (textureWidth != 0 && textureHeight != 0) {
 
-        if (context) {
-
+            // Initialize a Bitmap context and set the text matrix to a known value.
+            GLubyte *bitmapData = (GLubyte *) calloc((textureWidth * textureHeight * 4.0), sizeof(GLubyte));
+            CGContextRef context = CGBitmapContextCreate(bitmapData, textureWidth, textureHeight, 8, textureWidth * 4, rgbColorSpace, kCGImageAlphaNoneSkipLast);
+            
             CGContextSetTextMatrix(context, CGAffineTransformIdentity);
             // Flip the context so that the Bitmap is rendered right side up
             CGContextTranslateCTM(context, 0.0, textureHeight);
@@ -129,10 +129,11 @@ namespace ios {
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureWidth, (GLsizei)textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapData);
             
+            free(bitmapData);
+            CGContextRelease(context);
         }
         
-        free(bitmapData);
-        CGContextRelease(context);
+
         CGColorSpaceRelease(rgbColorSpace);        
     }
     
