@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Exception.h"
 #include "numeric_functions.h"
+#include "file_functions.h"
 
 namespace masl {
 
@@ -53,19 +54,6 @@ namespace masl {
     int as_int(const std::string & theString);
     float as_float(const std::string & theString);
 
-    static std::string
-    lastFileNamePart(const char* file_name) {
-        std::string myFilename(file_name);
-        std::string::size_type mySlash = myFilename.find_last_of("/\\");
-        if (mySlash != std::string::npos) {
-            myFilename = myFilename.substr(mySlash+1);
-        }
-        return myFilename;
-    }
-
-    std::string getExtension(const std::string & thePath);
-    std::string removeExtension(const std::string & theFileName);
-
     inline std::string
     line_string(unsigned line_number) {
         std::string message;
@@ -83,14 +71,15 @@ namespace masl {
         return myFilename;
     }
 
-    #define PLUS_FILE_LINE masl::location_string(__FILE__,__LINE__)
-    #define JUST_FILE_LINE masl::line_string(__LINE__),masl::file_string(__FILE__)
-
-
     inline std::string
     location_string(const char* file_name, unsigned line_number) {
         return std::string("[") + lastFileNamePart(file_name) + ":" + as_string(line_number) + "]";
     }
+
+
+    #define PLUS_FILE_LINE masl::location_string(__FILE__,__LINE__)
+    #define JUST_FILE_LINE masl::line_string(__LINE__),masl::file_string(__FILE__)
+
 
     inline std::string trimLeft (const std::string & theString, const std::string & theTrimChars = " " ) {
         std::string myString(theString);
