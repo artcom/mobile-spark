@@ -51,8 +51,8 @@ namespace spark {
         return ComponentPtr();
     }
 
-    void
-    Container::insertChild(ComponentPtr theChild) {
+    void 
+    Container::addChild(ComponentPtr theChild) {
         _myChildren.push_back(theChild);
         theChild->setParent(shared_from_this());
     }

@@ -295,7 +295,7 @@ namespace demoapp {
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(shared_from_this(), 
                 "<Rectangle name=\"created_from_code\" width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0]\"/>"); 
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(myTransform);
-        myContainer->insertChild(myCreated);
+        myContainer->addChild(myCreated);
 
     }
 

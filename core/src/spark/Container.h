@@ -14,10 +14,11 @@ namespace spark {
     public:
         Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Container() = 0;
+        
+        virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
+        virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const; 
+        virtual void addChild(ComponentPtr theChild);
 
-        virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const;
-        virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
-        void insertChild(ComponentPtr theChild);
         void removeChild(ComponentPtr theChild);
         const BaseAppPtr getApp() { return _myApp;}
 

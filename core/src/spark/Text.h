@@ -19,6 +19,8 @@ namespace spark {
         virtual const char * const & getType() const { return Text::SPARK_TYPE;};
     private:
         void build();
+        void attachToI18nItem();
+        void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
 
         std::string _myText;
         bool _myDirtyFlag;
@@ -32,5 +34,7 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<Text> TextPtr;
+    typedef MemberFunctionEventCallback<Text, TextPtr> TextCB;
+
 };
 #endif

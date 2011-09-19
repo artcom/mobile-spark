@@ -36,7 +36,7 @@ namespace spark {
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(shared_from_this());
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myContainer->getApp(),
                 "<Text name=\"fps\" y=\"-10\" maxWidth=\"0\" text=\"fps:\" height=\"-16\" color=\"[1.0,0.0,0.0, 1.0]\" fontsize=\"16\"/>");
-        myContainer->insertChild(myCreated);
+        myContainer->addChild(myCreated);
         _myFPSText = boost::static_pointer_cast<spark::Text>(myCreated);
 
         myStatisticHeight += _myFPSText->getTextSize()[1];
