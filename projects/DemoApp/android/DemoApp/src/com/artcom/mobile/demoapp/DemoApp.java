@@ -9,10 +9,10 @@ public class DemoApp extends SparkViewerActivity {
         NativeBinding.loadLibraries();
         System.loadLibrary("DemoApp"); 
     }
-    protected static String LOG_TAG = "DemoApp";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        LOG_TAG = "DemoApp";
         _myPackageExtension = ".demoapp";
         super.onCreate(savedInstanceState);
     }

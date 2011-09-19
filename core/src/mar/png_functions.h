@@ -23,8 +23,8 @@ namespace mar {
 
     void loadTextureFromPNG (const std::string & filename, TexturePtr theTexture);
     bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb);
-    bool loadTextureFromPNGSkeleton(const std::string & filename, GLuint & outTextureId, 
-                                    int & outWidth, int & outHeight, bool & outRgb, 
+    bool loadTextureFromPNGSkeleton(const std::string & filename, GLuint & outTextureId,
+                                    int & outWidth, int & outHeight, bool & outRgb,
                                     pngData & thePngData,
                                     void (*close)(void),
                                     bool (*initFileReading)(pngData & thePngData),
@@ -32,4 +32,4 @@ namespace mar {
                                     bool (*postPNGReading)(pngData & thePngData));
 };
 
-#endif 
+#endif

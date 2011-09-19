@@ -34,7 +34,7 @@ namespace spark {
 
     class CollectAABBComponentVisitor : public ComponentVisitor {
     public:
-        CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList, 
+        CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList,
                                 const float x, const float y,
                                 const matrix theProjectionMatrix);
         virtual bool visit(ComponentPtr theComponent);
@@ -63,17 +63,17 @@ namespace spark {
     };
 
 
-    template<class VISITOR> void 
+    template<class VISITOR> void
     visitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {
         bool myContinueTraversal = theVisitor.visit(theComponent);
         if (!myContinueTraversal || theComponent->getChildren().size() == 0) { return; }
-        for (std::vector<ComponentPtr>::const_iterator it = theComponent->getChildren().begin(); 
+        for (std::vector<ComponentPtr>::const_iterator it = theComponent->getChildren().begin();
                                                        it != theComponent->getChildren().end(); ++it) {
             visitComponents(theVisitor, *it);
         }
     };
 
-    bool sortByRenderKey(std::pair<ComponentPtr, RenderKey> i, std::pair<ComponentPtr, RenderKey> j); 
+    bool sortByRenderKey(std::pair<ComponentPtr, RenderKey> i, std::pair<ComponentPtr, RenderKey> j);
 };
 
 #endif

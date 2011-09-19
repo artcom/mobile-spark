@@ -4,8 +4,8 @@
 
 namespace spark {
     Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _visible(true), _sensible(true) 
-    { 
+        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _visible(true), _sensible(true)
+    {
         _x = _myXMLNode->getAttributeAs<float>("x", 0);
         _y = _myXMLNode->getAttributeAs<float>("y", 0);
         _z = _myXMLNode->getAttributeAs<float>("z", 0);
@@ -35,8 +35,8 @@ namespace spark {
         helpMatrixStack.scale(_scaleX, _scaleY, _scaleZ);
         _myLocalMatrix = helpMatrixStack.getTop();
     };
-    
-    //TODO: use visitor? 
+
+    //TODO: use visitor?
     void Widget::prerender(MatrixStack& theCurrentMatrixStack) {
         theCurrentMatrixStack.push();
         theCurrentMatrixStack.multMatrix(_myLocalMatrix);

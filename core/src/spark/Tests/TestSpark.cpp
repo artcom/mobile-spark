@@ -7,7 +7,7 @@ namespace spark {
     void MySparkTestSuite::setup() {
         UnitTestSuite::setup();
         addTest(new spark::SparkEvents_UnitTest);
-    }    
+    }
 }
 
 
@@ -21,7 +21,7 @@ JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_SparkBinding_test(JNIEnv *
     spark::MySparkTestSuite mySuite("SparkTest", 0, 0);
     mySuite.run();
     return (env->NewStringUTF(mySuite.getFailedTestMessages().c_str()));
-    
+
 }
 #endif
 

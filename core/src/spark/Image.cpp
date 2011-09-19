@@ -13,12 +13,12 @@ namespace spark {
         build();
     }
 
-    void 
-    Image::onResume() {        
-        ShapeWidget::onResume();        
+    void
+    Image::onResume() {
+        ShapeWidget::onResume();
         build();
     }
-    
+
     void
     Image::build() {
         if(_mySrc.size() == 0) return;
@@ -33,7 +33,7 @@ namespace spark {
             getShape()->setDimensions(width, height);
         }
     }
-    
+
     Image::~Image() {
-    }        
+    }
 }

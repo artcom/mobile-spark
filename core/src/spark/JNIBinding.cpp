@@ -7,8 +7,8 @@
 #include "AppProvider.h"
 #include <masl/MobileSDK.h>
 #include <android/AndroidMobileSDK.h>
-    
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,  
+
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,
                                                              jlong currentMillis,
                                                              jstring apkFile,
                                                              jint theScreenWidth,
@@ -21,8 +21,8 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
     android::AndroidMobileSDKPtr myAndroidSDK = android::AndroidMobileSDKPtr(new android::AndroidMobileSDK());
-    MobileSDK_Singleton::get().setMobileSDK(myAndroidSDK);        
-    
+    MobileSDK_Singleton::get().setMobileSDK(myAndroidSDK);
+
     myAndroidSDK->env = env;
     myAndroidSDK->obj = obj;
 }

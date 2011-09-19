@@ -14,16 +14,16 @@ public class AndroidLibTest  extends AndroidTestCase{
 
     public void testLib() throws Throwable {
         // run libs tests method
-        String myResult = AndroidBinding.test(APK.getApkFilePath(PACKAGE_NAME, getContext())); 
+        String myResult = AndroidBinding.test(APK.getApkFilePath(PACKAGE_NAME, getContext()));
         Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);
     }
-    
-    public void testLibsInterface() throws Throwable {      
+
+    public void testLibsInterface() throws Throwable {
          // test bound methods
    }
-    public void testJava() throws Throwable {   
+    public void testJava() throws Throwable {
          // test java stuff
-        Assert.assertTrue(APK.getApkFilePath(PACKAGE_NAME, getContext()).length()>0);       
+        Assert.assertTrue(APK.getApkFilePath(PACKAGE_NAME, getContext()).length()>0);
    }
 
 }
