@@ -12,6 +12,8 @@ namespace spark {
         virtual ~Text();
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onResume();
+        virtual void realize();
+
         const vector2 & getTextSize();
         void setText(std::string theText) { _myText = theText; _myDirtyFlag = true;};
 

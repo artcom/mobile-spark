@@ -1,8 +1,9 @@
 #include "Container.h"
 
-#include "SparkComponentFactory.h"
-
 #include <masl/Logger.h>
+
+#include "SparkComponentFactory.h"
+#include "I18nContext.h"
 
 using namespace masl;
 
@@ -18,9 +19,22 @@ namespace spark {
             ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
             _myChildren.push_back(childComponent);
         }
+        setI18nContextIfAvailable();
     }
 
     Container::~Container() {
+    }
+
+    void
+    Container::setI18nContextIfAvailable() {
+        std::string myI18nContextName = _myXMLNode->getAttributeAs<std::string>("i18nContext", "");
+        if (myI18nContextName.size() > 0) {
+            ComponentPtr myComponent = getChildByName(myI18nContextName);
+            I18nContextPtr myContext = boost::static_pointer_cast<I18nContext>(myComponent);
+            if (myContext) {
+                _myI18nContext = myContext;
+            }
+        }
     }
 
     VectorOfComponentPtr
@@ -65,5 +79,34 @@ namespace spark {
                 break;
             }
         }
+    }
+
+    std::vector<I18nContextPtr>  
+    Container::getI18nContexts() {
+        std::vector<I18nContextPtr> myContexts;
+        ContainerPtr myCurrent =  boost::static_pointer_cast<Container>(shared_from_this());
+        while (myCurrent) {
+            if (myCurrent->getI18nContext()) {
+                myContexts.push_back(myCurrent->getI18nContext());
+            }
+            myCurrent = boost::static_pointer_cast<Container>(myCurrent->getParent());
+        }
+        return myContexts;
+    }
+
+    I18nItemPtr
+    Container::getI18nItemByName(const std::string & theName) {
+        I18nItemPtr myI18nItem;
+        std::vector<I18nContextPtr> myContexts = getI18nContexts();
+        for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
+            ComponentPtr myComponent = (*it)->getChildByName(theName);
+            if (myComponent) {
+                myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);
+                if (myI18nItem) {
+                    return myI18nItem;
+                }
+            }
+        }
+        return myI18nItem;
     }
 }

@@ -1,6 +1,6 @@
 #include "Text.h"
-#include "BaseApp.h"
 
+#include <masl/MobileSDK.h>
 #include <mar/AssetProvider.h>
 
 #ifdef __ANDROID__
@@ -10,8 +10,9 @@
     #include <ios/IOSAssetProvider.h>
 #endif
 
+#include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include <masl/MobileSDK.h>
+#include "I18nContext.h"
 
 using namespace std;
 namespace spark {
@@ -21,9 +22,6 @@ namespace spark {
         ShapeWidget(theApp, theXMLNode, theParent), _myFontPath("") {
 
         _myText = _myXMLNode->getAttributeAs<std::string>("text", "");
-        if (_myI18nId.size() > 0) {
-            attachToI18nItem();
-        }
         _myFontSize = _myXMLNode->getAttributeAs<int>("fontsize", 32);
         _myMaxWidth = _myXMLNode->getAttributeAs<int>("maxWidth", 0);
         _myMaxHeight = _myXMLNode->getAttributeAs<int>("maxHeight", 0);
@@ -39,6 +37,12 @@ namespace spark {
     }
 
     Text::~Text() {
+    }
+
+    void Text::realize() {
+        if (_myI18nId.size() > 0) {
+            attachToI18nItem();
+        }
     }
 
     void
