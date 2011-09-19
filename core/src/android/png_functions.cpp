@@ -16,17 +16,17 @@ namespace android {
 zip* archive;
 zip_file* file;
 
-void 
+void
 png_zip_read(png_structp png_ptr, png_bytep data, png_size_t length) {
   zip_fread(file, data, length);
 }
 
-void 
+void
 close() {
     zip_fclose(file);
 }
 
-bool 
+bool
 initFileReading(mar::pngData & thePngData) {
     AC_DEBUG << "-------------init file reading apk for " << thePngData.filename;
     file = zip_fopen(archive, thePngData.filename.c_str(), 0);
@@ -72,18 +72,18 @@ postPNGReading(mar::pngData & thePngData) {
     // set the individual row_pointers to point at the correct offsets of image_data
     for (unsigned int i = 0; i < thePngData.theight; ++i)
       row_pointers[thePngData.theight - 1 - i] = thePngData.image_data + i * thePngData.row_bytes;
-  
+
     //read the png into image_data through row_pointers
     png_read_image(thePngData.png_ptr, row_pointers);
     delete[] row_pointers;
     return true;
 }
 
-bool 
+bool
 loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
     archive = theAPKArchive;
     mar::pngData myData;
-    return loadTextureFromPNGSkeleton(filename, outTextureId, outWidth, outHeight, outRgb, myData, 
+    return loadTextureFromPNGSkeleton(filename, outTextureId, outWidth, outHeight, outRgb, myData,
                                close, initFileReading, prePNGReading, postPNGReading);
 }
 

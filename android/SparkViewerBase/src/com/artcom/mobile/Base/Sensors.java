@@ -9,11 +9,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 public class Sensors implements SensorEventListener{
-    
+
     private static Sensors INSTANCE;
     private SensorManager _mySensorManager = null;
     private Context _myContext;
-    
+
     public final static int ACCELEROMETER = Sensor.TYPE_ACCELEROMETER;
     public final static int GRAVITY = Sensor.TYPE_GRAVITY;
     public final static int GYROSCOPE = Sensor.TYPE_GYROSCOPE;
@@ -25,7 +25,7 @@ public class Sensors implements SensorEventListener{
     public final static int PROXIMITY = Sensor.TYPE_PROXIMITY;
     public final static int ROTATION_VECTOR = Sensor.TYPE_ROTATION_VECTOR;
     public final static int TEMPERATURE = Sensor.TYPE_TEMPERATURE;
-    
+
     private static final HashMap<Integer, String> eventNameForType = new HashMap<Integer, String>() {
         private static final long serialVersionUID = 1L; {
         put(Sensor.TYPE_ACCELEROMETER,  "ACCELEROMETER");
@@ -64,8 +64,8 @@ public class Sensors implements SensorEventListener{
     public static void disableAllSensors() {if (INSTANCE != null) INSTANCE.disableAll();}
     //-------MEMBER------------------------------------------------------------
     public void enable(int sensorType) {
-        _mySensorManager.registerListener(this, 
-                _mySensorManager.getDefaultSensor(sensorType), 
+        _mySensorManager.registerListener(this,
+                _mySensorManager.getDefaultSensor(sensorType),
                 SensorManager.SENSOR_DELAY_UI);
     }
     //-------------------------------------------------------------------------
@@ -79,7 +79,7 @@ public class Sensors implements SensorEventListener{
     //-------------------------------------------------------------------------
     public void onAccuracyChanged(Sensor sensor, int accuracy) { }
     //-------------------------------------------------------------------------
-    public void onSensorChanged(SensorEvent event) { 
+    public void onSensorChanged(SensorEvent event) {
         StringBuilder sb = new StringBuilder("<SensorEvent type='");
         sb.append(eventNameForType.get(event.sensor.getType())).append("'");
         for(int i=0, l = event.values.length; i<l; ++i) {

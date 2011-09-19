@@ -11,7 +11,7 @@ SET (MACOSX_DEPLOYMENT_TARGET "Compiler Default")
 SET(CMAKE_SYSTEM_PROCESSOR i386)
 SET(CMAKE_OSX_ARCHITECTURES i386)
 
-# Skip the platform compiler checks for cross compiling 
+# Skip the platform compiler checks for cross compiling
 #set (CMAKE_CXX_COMPILER_WORKS TRUE)
 #set (CMAKE_C_COMPILER_WORKS TRUE)
 

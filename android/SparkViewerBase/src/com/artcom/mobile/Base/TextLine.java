@@ -13,5 +13,5 @@ public class TextLine {
         _myYPos = myYPos;
         _myWidth = theWidth;
     }
-    
+
 }

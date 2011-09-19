@@ -16,27 +16,27 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static int _myScreenWidth;
     public static int _myScreenHeight;
     public static String _myPackageExtension;
-    private Context context;    
+    private Context context;
     public EGLRenderer (Context context, String thePackageExtension, int theScreenWidth, int theScreenHeight, boolean firstTime) {
         _myFirstTimeFlag = firstTime;
         _myScreenWidth = theScreenWidth;
         _myScreenHeight = theScreenHeight;
         _myPackageExtension = thePackageExtension;
         this.context = context;
-       
-    }    
+
+    }
     public void onDrawFrame(GL10 glUnused) {
         updateFrameCounter();
         String myEvent = "<StageEvent type='frame' time='" + System.currentTimeMillis() + "'/>";
         NativeBinding.onEvent(myEvent);
     }
 
-    public void onSurfaceChanged(GL10 glUnused, int width, int height) {        
+    public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         AC_Log.print("_________________________________- onSurfaceChanged");
         String myEvent = "<WindowEvent type='on_resize' newsize='[" + width + "," + height + "]' oldsize='[-1, -1]'/>";
-        NativeBinding.onEvent(myEvent);        
+        NativeBinding.onEvent(myEvent);
     }
-    
+
     private void updateFrameCounter() {
         if (numFrames == 0) {
             millisec = System.currentTimeMillis();

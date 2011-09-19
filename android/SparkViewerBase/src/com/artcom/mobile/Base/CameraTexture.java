@@ -14,7 +14,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup.LayoutParams;
 
 public class CameraTexture implements SurfaceHolder.Callback {
-    
+
     private static CameraTexture INSTANCE;
     private static Activity theActivity;
     private static SurfaceView theSurfaceView;
@@ -28,7 +28,7 @@ public class CameraTexture implements SurfaceHolder.Callback {
     private static byte _myCamData[] = new byte[0];
     private boolean _newFrameAvailable=false;
     public static Activity _myActivity;
-    
+
     //--------- STATIC --------------------------------------------------------
     public static CameraTexture init(Activity activity) {
         _myActivity = activity;
@@ -74,7 +74,7 @@ public class CameraTexture implements SurfaceHolder.Callback {
         myResult.add(INSTANCE._myTextureID);
         myResult.add(INSTANCE._myCamWidth);
         myResult.add(INSTANCE._myCamHeight);
-        myResult.add(INSTANCE._myTextureWidth);       
+        myResult.add(INSTANCE._myTextureWidth);
         myResult.add(INSTANCE._myTextureHeight);
         return myResult;
     }
@@ -90,8 +90,8 @@ public class CameraTexture implements SurfaceHolder.Callback {
     private CameraTexture() {} // hide constructor
     //-------------------------------------------------------------------------
     private void start() {
-        if(INSTANCE != null) close(); 
-        if(gl == null) return; 
+        if(INSTANCE != null) close();
+        if(gl == null) return;
         if(_myTextureID==0) {
             _myTextureID = createTextureID();
         }
@@ -102,13 +102,13 @@ public class CameraTexture implements SurfaceHolder.Callback {
         Parameters params = _myCamera.getParameters();
         params.setRotation(90);
         _myCamera.setParameters(params);
-        if ( _myCamera == null ) { 
-            AC_Log.print( "CameraTexture: Camera is null" ); 
-            return; 
+        if ( _myCamera == null ) {
+            AC_Log.print( "CameraTexture: Camera is null" );
+            return;
         }
-        try { 
+        try {
             _myCamera.setPreviewDisplay( _mySurfaceHolder );
-        } catch ( Throwable t ) { 
+        } catch ( Throwable t ) {
             AC_Log.print( "CameraTexture: Exception in setPreviewDisplay()");
         }
         _myCamWidth = _myCamera.getParameters().getPreviewSize().width;
@@ -125,29 +125,29 @@ public class CameraTexture implements SurfaceHolder.Callback {
     }
     //-------------------------------------------------------------------------
     public void bind() {
-        if (!_newFrameAvailable) return; // only bind if new picture was token 
+        if (!_newFrameAvailable) return; // only bind if new picture was token
         _newFrameAvailable = false;
 
         byte myRGBCamData[] = new byte[(int) (_myCamWidth * _myCamHeight * 2.0)];
-        
+
         if (_myColorConversionFlag) {
             toRGB565(_myCamData, _myCamWidth, _myCamHeight, myRGBCamData);
         }
         gl.glBindTexture(GL10.GL_TEXTURE_2D, _myTextureID);
         if (_myColorConversionFlag) {
-            gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB, _myTextureWidth, _myTextureHeight, 
+            gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB, _myTextureWidth, _myTextureHeight,
                     0, GL10.GL_RGB, GL10.GL_UNSIGNED_SHORT_5_6_5, null);
-            gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, _myCamWidth, _myCamHeight, GL10.GL_RGB, 
+            gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, _myCamWidth, _myCamHeight, GL10.GL_RGB,
                                GL10.GL_UNSIGNED_SHORT_5_6_5, ByteBuffer.wrap(myRGBCamData));
         } else {
-            gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_LUMINANCE, _myTextureWidth, _myTextureHeight, 
+            gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_LUMINANCE, _myTextureWidth, _myTextureHeight,
                     0, GL10.GL_LUMINANCE, GL10.GL_UNSIGNED_BYTE, null);
-            gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, _myCamWidth, _myCamHeight, GL10.GL_LUMINANCE, 
+            gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, _myCamWidth, _myCamHeight, GL10.GL_LUMINANCE,
                        GL10.GL_UNSIGNED_BYTE, ByteBuffer.wrap(_myCamData));
         }
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
     }
-    
+
     private void toRGB565(byte[] yuvs, int width, int height, byte[] rgbs) {
         //the end of the luminance data
         final int lumEnd = width * height;
@@ -171,35 +171,35 @@ public class CameraTexture implements SurfaceHolder.Callback {
             }
 
             //read the luminance and chromiance values
-            final int Y1 = yuvs[lumPtr++] & 0xff; 
-            final int Y2 = yuvs[lumPtr++] & 0xff; 
-            final int Cr = (yuvs[chrPtr++] & 0xff) - 128; 
+            final int Y1 = yuvs[lumPtr++] & 0xff;
+            final int Y2 = yuvs[lumPtr++] & 0xff;
+            final int Cr = (yuvs[chrPtr++] & 0xff) - 128;
             final int Cb = (yuvs[chrPtr++] & 0xff) - 128;
             int R, G, B;
 
             //generate first RGB components
             B = Y1 + ((454 * Cb) >> 8);
-            if(B < 0) B = 0; else if(B > 255) B = 255; 
-            G = Y1 - ((88 * Cb + 183 * Cr) >> 8); 
-            if(G < 0) G = 0; else if(G > 255) G = 255; 
-            R = Y1 + ((359 * Cr) >> 8); 
-            if(R < 0) R = 0; else if(R > 255) R = 255; 
+            if(B < 0) B = 0; else if(B > 255) B = 255;
+            G = Y1 - ((88 * Cb + 183 * Cr) >> 8);
+            if(G < 0) G = 0; else if(G > 255) G = 255;
+            R = Y1 + ((359 * Cr) >> 8);
+            if(R < 0) R = 0; else if(R > 255) R = 255;
             //NOTE: this assume little-endian encoding
             rgbs[outPtr++]  = (byte) (((G & 0x3c) << 3) | (B >> 3));
             rgbs[outPtr++]  = (byte) ((R & 0xf8) | (G >> 5));
 
             //generate second RGB components
             B = Y2 + ((454 * Cb) >> 8);
-            if(B < 0) B = 0; else if(B > 255) B = 255; 
-            G = Y2 - ((88 * Cb + 183 * Cr) >> 8); 
-            if(G < 0) G = 0; else if(G > 255) G = 255; 
-            R = Y2 + ((359 * Cr) >> 8); 
-            if(R < 0) R = 0; else if(R > 255) R = 255; 
+            if(B < 0) B = 0; else if(B > 255) B = 255;
+            G = Y2 - ((88 * Cb + 183 * Cr) >> 8);
+            if(G < 0) G = 0; else if(G > 255) G = 255;
+            R = Y2 + ((359 * Cr) >> 8);
+            if(R < 0) R = 0; else if(R > 255) R = 255;
             //NOTE: this assume little-endian encoding
             rgbs[outPtr++]  = (byte) (((G & 0x3c) << 3) | (B >> 3));
             rgbs[outPtr++]  = (byte) ((R & 0xf8) | (G >> 5));
         }
-    }    
+    }
     //-------------------------------------------------------------------------
     private int createTextureID() {
         if (_myCameraTextures==null)
