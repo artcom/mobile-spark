@@ -6,7 +6,7 @@
 #include "BaseApp.h"
 
 namespace spark {
-    class AppProvider : public masl::Singleton<AppProvider> { 
+    class AppProvider : public masl::Singleton<AppProvider> {
     public:
         AppProvider() { };
         virtual ~AppProvider();

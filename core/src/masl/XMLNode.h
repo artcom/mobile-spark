@@ -1,5 +1,5 @@
-#ifndef _included_mobile_asl_xmlnode_
-#define _included_mobile_asl_xmlnode_
+#ifndef _included_mobile_masl_xmlnode_
+#define _included_mobile_masl_xmlnode_
 
 #include <string>
 #include <sstream>
@@ -59,7 +59,7 @@ namespace masl {
             std::map<std::string, std::string> attributes;
 
             //this is only used during initialization and not updated afterwards, use ComponentHierachry instead
-            std::vector<XMLNodePtr> children;  
+            std::vector<XMLNodePtr> children;
     };
 };
 

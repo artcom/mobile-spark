@@ -101,13 +101,13 @@ namespace mar {
          AC_PRINT << (theUniformFlag?"glGetUniformLocation":"glGetAttribLocation") << "(\"" << theVariableName << "\") = " << myHandle;
          return myHandle;
      }
- 
-     GLuint getShaderVariableHandleAttribute(GLuint theProgram, 
+
+     GLuint getShaderVariableHandleAttribute(GLuint theProgram,
                                                     std::string theVariableName) {
          return getShaderVariableHandle(theProgram, theVariableName, false);
      }
- 
-     GLuint getShaderVariableHandleUniform(GLuint theProgram, 
+
+     GLuint getShaderVariableHandleUniform(GLuint theProgram,
                                                   std::string theVariableName) {
          return getShaderVariableHandle(theProgram, theVariableName, true);
      }

@@ -28,7 +28,7 @@ namespace mar {
     const unsigned int NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE) * (sizeof(float)));
     const unsigned int TEXTURED_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
     const unsigned int TEXTURED_NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
-    
+
     class Element {
     public:
         Element();
@@ -41,7 +41,7 @@ namespace mar {
         MaterialPtr material;
         unsigned int numVertices;
         unsigned int numIndices;
-        
+
         boost::shared_array<float> vertexData_;    //interleaved
         boost::shared_array<GLushort> indexDataVBO_;
 
@@ -50,7 +50,7 @@ namespace mar {
         #if __APPLE__
         GLuint vertexArrayObject;
         #endif
-        
+
     protected:
         std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
         unsigned int _myStride;
@@ -65,16 +65,16 @@ namespace mar {
     };
 
     class ElementWithTexture : public Element {
-    public: 
+    public:
         ElementWithTexture();
         virtual ~ElementWithTexture();
     };
 
     class ElementWithNormalsAndTexture : public Element {
-    public: 
+    public:
         ElementWithNormalsAndTexture();
         virtual ~ElementWithNormalsAndTexture();
     };
 };
 
-#endif 
+#endif

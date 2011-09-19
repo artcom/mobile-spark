@@ -13,7 +13,7 @@ namespace masl {
         addTest(new masl::Logger_UnitTest);
         addTest(new masl::XMLNode_UnitTest);
         addTest(new masl::MatrixStack_UnitTest);
-    }    
+    }
 }
 
 
@@ -27,7 +27,7 @@ JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_BaseBinding_test(JNIEnv * 
     masl::MyBaseTestSuite mySuite("BaseTest", 0, 0);
     mySuite.run();
     return (env->NewStringUTF(mySuite.getFailedTestMessages().c_str()));
-    
+
 }
 #endif
 

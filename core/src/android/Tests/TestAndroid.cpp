@@ -8,7 +8,7 @@ namespace android {
     void MyAndroidTestSuite::setup() {
         UnitTestSuite::setup();
         addTest(new android::APK_functions_UnitTest(env, apkPath));
-    }    
+    }
 }
 
 

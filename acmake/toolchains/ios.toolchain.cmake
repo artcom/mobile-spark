@@ -11,7 +11,7 @@ SET (MACOSX_DEPLOYMENT_TARGET "Compiler Default")
 SET(CMAKE_SYSTEM_PROCESSOR arm)
 SET(CMAKE_OSX_ARCHITECTURES armv7)
 
-# Skip the platform compiler checks for cross compiling 
+# Skip the platform compiler checks for cross compiling
 set (CMAKE_CXX_COMPILER_WORKS TRUE)
 set (CMAKE_C_COMPILER_WORKS TRUE)
 

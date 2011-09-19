@@ -18,4 +18,4 @@ namespace android {
     std::vector<std::string> readLineByLineFromPackage(zip* theAPKArchive, const std::string & theFileName);
 };
 
-#endif 
+#endif

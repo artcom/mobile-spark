@@ -10,8 +10,8 @@
 using namespace std;
 namespace android {
 
-    AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath) 
-        : AssetProvider(), _myApkArchive(NULL) 
+    AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath)
+        : AssetProvider(), _myApkArchive(NULL)
     {
         AC_PRINT << "AndroidAssetProvider ctor";
         android::loadAPK(&_myApkArchive, theApkPath);
@@ -22,9 +22,9 @@ namespace android {
         //delete _myApkArchive; //warnings?
     }
 
-    std::string 
+    std::string
     AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {
-        if (theFileName.size() > 0 && theFileName[0] == '/') {  
+        if (theFileName.size() > 0 && theFileName[0] == '/') {
             //unzipped, read from sdcard
             std::string myContent;
             std::string filePath;
@@ -36,9 +36,9 @@ namespace android {
         return readFromPackage(_myApkArchive, theFileName);
     }
 
-    std::vector<std::string> 
+    std::vector<std::string>
     AndroidAssetProvider::getLineByLineFromFile(const std::string & theFileName) const {
-        if (theFileName.size() > 0 && theFileName[0] == '/') {  
+        if (theFileName.size() > 0 && theFileName[0] == '/') {
             //unzipped, read from sdcard
             std::vector<std::string> myContent;
             std::string filePath;
@@ -46,13 +46,13 @@ namespace android {
                 masl::readFileLineByLine(filePath, myContent);
             }
             return myContent;
-        } 
+        }
         return readLineByLineFromPackage(_myApkArchive, theFileName);
     }
 
-    bool 
+    bool
     AndroidAssetProvider::loadTextureFromPNG(const std::string & theFileName, GLuint & textureId, int & width, int & height, bool & rgb) {
-        std::string myFilename = masl::trimall(theFileName);        
+        std::string myFilename = masl::trimall(theFileName);
         if (myFilename.size() > 0 && myFilename[0] == '/') {
             //unzipped, read from sdcard
             std::string filePath;

@@ -50,16 +50,16 @@ namespace masl {
             void run() {
                 perform_XMLLibTest();
                 perform_XMLNodeTest();
-                perform_loadXMLTest();  
+                perform_loadXMLTest();
                 perform_loadMultipleXMLTest();
             }
-            
+
             //fixtures
             static const char *include;
             static const char *sparkFile;
 
-            void perform_XMLLibTest() {                
-                xmlParserCtxtPtr ctxt; 
+            void perform_XMLLibTest() {
+                xmlParserCtxtPtr ctxt;
                 xmlDocPtr doc;
                 ctxt = xmlNewParserCtxt();
                 ENSURE_MSG(ctxt, "parser context should not be null");
@@ -74,8 +74,8 @@ namespace masl {
                 xmlFreeParserCtxt(ctxt);
             }
 
-            void perform_XMLNodeTest() {                
-                xmlParserCtxtPtr ctxt; 
+            void perform_XMLNodeTest() {
+                xmlParserCtxtPtr ctxt;
                 xmlDocPtr doc;
                 ctxt = xmlNewParserCtxt();
                 doc = xmlCtxtReadMemory(ctxt, sparkFile, strlen(sparkFile), "layout.spark", NULL, XML_PARSE_DTDATTR);
@@ -112,7 +112,7 @@ namespace masl {
 
             void perform_loadMultipleXMLTest() {
                 xmlDocPtr doc = loadXMLFromMemory(include);
-                xmlNode *root_node = xmlDocGetRootElement(doc); 
+                xmlNode *root_node = xmlDocGetRootElement(doc);
                 ENSURE_MSG(root_node,"root node should not be null");
                 ENSURE_EQUAL(std::string((const char*)root_node->name), std::string("document"));
                 XMLNodePtr myXMLNode(new XMLNode(root_node));
@@ -143,7 +143,7 @@ namespace masl {
 
                 //ENSURE_EQUAL(std::string((const char*)root_node2->name), std::string("Window"));  //this is not possible after deleting the document
             }
-    };    
+    };
 
     const char* XMLNode_UnitTest::include = "<?xml version='1.0'?>\n\
                                    <document xmlns:xi=\"http://www.w3.org/2003/XInclude\">\n\

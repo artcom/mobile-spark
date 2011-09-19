@@ -40,7 +40,7 @@
 namespace android {
     class APK_functions_UnitTest : public UnitTest {
         public:
-            APK_functions_UnitTest(JNIEnv* env, jstring apkPath) : 
+            APK_functions_UnitTest(JNIEnv* env, jstring apkPath) :
                 UnitTest("APK_functions_UnitTest"), env(env), apkPath(apkPath) {  }
 
             JNIEnv* env;
@@ -49,8 +49,8 @@ namespace android {
             void run() {
                 perform_APK_functionsTest();
             }
-            
-            void perform_APK_functionsTest() {                
+
+            void perform_APK_functionsTest() {
                 jboolean isCopy;
                 const char* str = env->GetStringUTFChars(apkPath, &isCopy);
                 ENSURE_MSG(str, "apkPath given form java should not be null");
@@ -64,7 +64,7 @@ namespace android {
                 ENSURE_MSG(myLinesInFile.size() == 2, "there should be two lines in file");
                 ENSURE_MSG(myLinesInFile[1].find("baz") == 0, "second line should start with 'baz'");
             }
-    };    
+    };
 
 };
 #endif

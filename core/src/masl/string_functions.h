@@ -1,25 +1,5 @@
-/* __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-// Copyright (C) 1993-2008, ART+COM AG Berlin, Germany <www.artcom.de>
-//
-// This file is part of the ART+COM Standard Library (masl).
-//
-// It is distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-//    $RCSfile: string_functions.h,v $
-//
-//   $Revision: 1.16 $
-//
-// Description: string helper functions
-//
-//
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-*/
-#ifndef _included_mobile_asl_string_functions_
-#define _included_mobile_asl_string_functions_
+#ifndef _included_mobile_masl_string_functions_
+#define _included_mobile_masl_string_functions_
 
 #include <sstream>
 #include "Exception.h"
@@ -45,13 +25,17 @@ namespace masl {
     }
 
 
+    template <>
     bool fromString(const std::string & theString, bool & outValue);
+    template <>
     bool fromString(const std::string & theString, vector4 & outValue);
+    template <>
     bool fromString(const std::string & theString, vector3 & outValue);
+    template <>
     bool fromString(const std::string & theString, vector2 & outValue);
 
-    inline
-    bool fromString(const std::string & theString, std::string & outValue) {
+    template <>
+    inline bool fromString(const std::string & theString, std::string & outValue) {
         outValue = theString;
         return true;
     };
@@ -89,7 +73,7 @@ namespace masl {
         return message;
     }
 
-    inline std::string 
+    inline std::string
     file_string(const char* file_name) {
         std::string myFilename(file_name);
         std::string::size_type mySlash = myFilename.find_last_of("/\\");
@@ -102,12 +86,12 @@ namespace masl {
     #define PLUS_FILE_LINE masl::location_string(__FILE__,__LINE__)
     #define JUST_FILE_LINE masl::line_string(__LINE__),masl::file_string(__FILE__)
 
-        
+
     inline std::string
     location_string(const char* file_name, unsigned line_number) {
         return std::string("[") + lastFileNamePart(file_name) + ":" + as_string(line_number) + "]";
     }
-    
+
     inline std::string trimLeft (const std::string & theString, const std::string & theTrimChars = " " ) {
         std::string myString(theString);
         return myString.erase(0, theString.find_first_not_of ( theTrimChars ));
@@ -121,14 +105,14 @@ namespace masl {
     inline std::string trim (const std::string & theString, const std::string & theTrimChars = " ") {
         std::string myString(theString);
         return trimLeft ( trimRight ( myString, theTrimChars), theTrimChars);
-    }    
+    }
     inline std::string trimall (const std::string & theString) {
         std::string myString(theString);
         myString = masl::trim(myString, " ");
         myString = masl::trim(myString, "\t");
         myString = masl::trim(myString, "\n");
-        return masl::trim(myString, "\r");   
-    }    
+        return masl::trim(myString, "\r");
+    }
 } //Namespace masl
 
 #endif

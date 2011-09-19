@@ -20,7 +20,7 @@ namespace spark {
     const char * const TouchEvent::DOUBLETAP = "doubletap";
     const char * const TouchEvent::LONGPRESS = "longpress";
     const char * const TouchEvent::PICKED = "picked";
-        
+
     const char * const GestureEvent::PAN = "pan";
     const char * const GestureEvent::PINCH = "pinch";
     const char * const GestureEvent::ROTATE = "rotate";
@@ -43,20 +43,20 @@ namespace spark {
     }
     Event::Event(const masl::XMLNodePtr theXMLNode)
          : type_(theXMLNode->getAttributeAs<std::string>("type", theXMLNode->nodeName)) {
-        
+
     }
 
     Event::~Event() {
     }
 
-    void 
+    void
     Event::operator () () {
         if (target_) {
             target_->dispatchEvent(shared_from_this());
         }
     }
 
-    std::ostream & 
+    std::ostream &
     Event::print(std::ostream & os) const {
         os << classname_() << " type: '" << type_ << "' target: '" << target_->getName() << "' currentPhase: " << currentPhase_;
         return os;
@@ -97,15 +97,15 @@ namespace spark {
 
 
     StageEvent::StageEvent(const std::string & theType, ComponentPtr theTarget, const UInt64 theCurrentTime) :
-        Event(theType, theTarget), currenttime_(theCurrentTime) 
+        Event(theType, theTarget), currenttime_(theCurrentTime)
     {}
     StageEvent::StageEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
         currenttime_(theXMLNode->getAttributeAs<UInt64>("time", 0))
-    {}    
+    {}
     StageEvent::~StageEvent() {}
 
-    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget, 
+    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget,
                              unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight) :
         Event(theType, theTarget)
     {
@@ -120,18 +120,18 @@ namespace spark {
     {
         size_ = theXMLNode->getAttributeAs<vector2>("newsize", vector2(0,0));
         oldsize_ = theXMLNode->getAttributeAs<vector2>("oldsize", vector2(0,0));
-    }    
+    }
 
     WindowEvent::~WindowEvent() {}
 
 
 
     TouchEvent::TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY) :
-        Event(theType, theTarget), x_(theX), y_(theY) 
+        Event(theType, theTarget), x_(theX), y_(theY)
     {}
     TouchEvent::TouchEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
-        x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)), 
+        x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)),
         y_(theXMLNode->getAttributeAs<unsigned int>("y", 0))
     {}
 
@@ -151,17 +151,17 @@ namespace spark {
     { }
     GestureEvent::GestureEvent(const masl::XMLNodePtr theXMLNode)
          : Event(theXMLNode),
-           x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)), 
+           x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)),
            y_(theXMLNode->getAttributeAs<unsigned int>("y", 0)),
-           dx_(theXMLNode->getAttributeAs<int>("dx", 0)), 
+           dx_(theXMLNode->getAttributeAs<int>("dx", 0)),
            dy_(theXMLNode->getAttributeAs<int>("dy", 0)),
            factor_(theXMLNode->getAttributeAs<float>("factor", 0.0)),
            direction_(theXMLNode->getAttributeAs<std::string>("direction", ""))
     {}
-    
+
     GestureEvent::~GestureEvent() {}
-    
-    
+
+
     SensorEvent::SensorEvent(const std::string & theType, ComponentPtr theTarget, const float theValue0, const float theValue1, const float theValue2)
          : Event(theType, theTarget), value0_(theValue0), value1_(theValue1), value2_(theValue2)
     {}
@@ -172,7 +172,6 @@ namespace spark {
         value2_(theXMLNode->getAttributeAs<float>("value2", 0.0))
     {}
     SensorEvent::~SensorEvent() {}
-
 
 
     I18nEvent::I18nEvent(const masl::XMLNodePtr theXMLNode) :

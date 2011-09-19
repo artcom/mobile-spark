@@ -10,10 +10,10 @@ public class TemplateApp extends SparkViewerActivity {
         NativeBinding.loadLibraries();
         System.loadLibrary("TemplateApp"); 
     }
-    protected static String LOG_TAG = "TemplateApp";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        LOG_TAG = "TemplateApp";
         _myPackageExtension = ".templateapp";
         super.onCreate(savedInstanceState);
     }

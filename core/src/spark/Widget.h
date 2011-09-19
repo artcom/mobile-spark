@@ -14,7 +14,7 @@
 namespace spark {
 
     class Widget : public Container {
-    public: 
+    public:
         Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Widget() = 0;
         virtual void prerender(MatrixStack& theCurrentMatrixStack);

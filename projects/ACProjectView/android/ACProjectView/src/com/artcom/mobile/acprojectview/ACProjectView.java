@@ -10,10 +10,10 @@ public class ACProjectView extends SparkViewerActivity {
         NativeBinding.loadLibraries();
         System.loadLibrary("ACProjectView"); 
     }
-    protected static String LOG_TAG = "ACProjectView";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        LOG_TAG = "ACProjectView";
         _myPackageExtension = ".acprojectview";
         super.onCreate(savedInstanceState);
     }

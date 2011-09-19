@@ -17,7 +17,7 @@ namespace mar {
         virtual void addIncludePath(const std::string & thePath) = 0;
 
         virtual std::vector<std::string> getFilesFromPath(const std::string & theBasePath) const;
-        virtual std::string findFile(const std::string & theFilename) const;            
+        virtual std::string findFile(const std::string & theFilename) const;
     protected:
         std::vector<std::string> includePaths_;
     };
@@ -29,7 +29,7 @@ namespace mar {
             virtual ~AssetProviderSingleton();
             void setAssetProvider(AssetProviderPtr theAssetProvider);
             const AssetProviderPtr & ap() const { return _myAssetProvider;};
-    
+
         private:
             AssetProviderPtr _myAssetProvider;
     };
