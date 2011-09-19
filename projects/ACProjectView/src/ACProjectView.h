@@ -22,7 +22,7 @@ namespace acprojectview {
                 void onProjectItem(spark::EventPtr theEvent);
 
         std::vector<ProjectMenuItemImplPtr> _myProjects;
-        unsigned _myCurrentProject; 
+        ProjectMenuItemImplPtr _myCurrentProject; 
         spark::ComponentPtr _myProjectMenu;
         spark::ContainerPtr _myProjectItems;      	
     };

@@ -14,7 +14,7 @@
             <ProjectMenuItem sensible="true" name="item1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" x="0"  y="0" src="/belvedere_teaser_thumb_01.png">
             </ProjectMenuItem>
             
-            <ProjectMenuItem sensible="false" name="item2" title="DUALITY" subtitle="Tokio, 2007" x="265" y="0" src="/duality_teaser_thumb_01.png">
+            <ProjectMenuItem name="item2" title="DUALITY" subtitle="Tokio, 2007" x="265" y="0" src="/duality_teaser_thumb_01.png">
             </ProjectMenuItem>
             
                         
@@ -32,7 +32,7 @@
             </ProjectMenuItem>
           
             <ProjectMenuItem name="item5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" x="265"  y="200" src="/levelgreen_teaser_thumb.png">
-            </ProjectMenuItem>
+        </ProjectMenuItem>
 
 
 
@@ -40,6 +40,11 @@
 
             
         </ProjectMenu>
+
+
+	
+	
+
         <Transform name="transform">
             <Text name="testtextgreen" y="580" x="10" z="13" text="Hello World" color="[0,1,0,1]" fontsize="32"/>
         </Transform>    
