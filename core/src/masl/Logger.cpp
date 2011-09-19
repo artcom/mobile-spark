@@ -24,12 +24,9 @@ namespace masl {
         char buf[20];
         sprintf(buf,"%i",theId);
         std::string myLogTag(_myTopLevelLogTag);
-        myLogTag += "/";
         if (theSeverity == SEV_TESTRESULT) {
-            myLogTag += "TestResult";
-            myLogTag += "/";
+            myLogTag += "/TestResult/";
         }
-        myLogTag += removeExtension(lastFileNamePart(theModule));
         std::string myText(theText);
         myText += " [";
         myText += lastFileNamePart(theModule);

@@ -85,7 +85,8 @@ namespace masl {
         return true;
     }
 
-    std::string getFilenamePart(const std::string & theFileName) {
+    std::string 
+    getFilenamePart(const std::string & theFileName) {
         std::string myBaseName;
         if ( ! theFileName.empty()) {
             if (theFileName.at(theFileName.length()-1) == '/') {  // Huh? what's that for??? [DS/MS]
@@ -99,12 +100,15 @@ namespace masl {
         }
         return myBaseName;
     }
-    bool fileExists(const std::string& theFilename) {
+
+    bool 
+    fileExists(const std::string& theFilename) {
         struct STAT64 myStat;
         return stat(theFilename.c_str(), &myStat) != -1;
     }
 
-   void getDirectoryEntries(const string & thePath,  std::vector<string> & theDirEntries, string theFilter) {
+    void 
+    getDirectoryEntries(const string & thePath,  std::vector<string> & theDirEntries, string theFilter) {
         if (!fileExists(thePath)) {
             return;
         }
@@ -147,7 +151,9 @@ namespace masl {
         }
         return false;
     }
-    std::string getDirectoryPart(const std::string & theFileName) {
+
+    std::string 
+    getDirectoryPart(const std::string & theFileName) {
         std::string myDirName;
         if (! theFileName.empty() ) {
             if (theFileName.at(theFileName.length()-1) == '/') {
@@ -165,6 +171,47 @@ namespace masl {
         }
 
         return myDirName;
+    }
+
+    std::string
+    lastFileNamePart(const char* file_name) {
+        std::string myFilename(file_name);
+        std::string::size_type mySlash = myFilename.find_last_of("/\\");
+        if (mySlash != std::string::npos) {
+            myFilename = myFilename.substr(mySlash+1);
+        }
+        return myFilename;
+    }
+
+    std::string
+    getExtension(const std::string & thePath) {
+        std::string::size_type myDotPos = thePath.rfind(".");
+        if (myDotPos != std::string::npos) {
+
+            std::string::size_type mySlashPos = thePath.rfind("/");
+            if (mySlashPos == std::string::npos) {
+                mySlashPos = thePath.rfind("\\");
+            }
+            if (mySlashPos != std::string::npos && mySlashPos > myDotPos) {
+                return "";
+            }
+
+            return thePath.substr(myDotPos+1);
+        }
+        return "";
+    }
+
+    std::string
+    removeExtension(const std::string & theFileName) {
+        std::string::size_type myDotPos = theFileName.rfind(".");
+        if (myDotPos != std::string::npos) {
+            std::string::size_type mySlashPos = theFileName.rfind("/");
+            if (mySlashPos != std::string::npos && mySlashPos > myDotPos) {
+                return theFileName;
+            }
+            return theFileName.substr(0, myDotPos);
+        }
+        return theFileName;
     }
 
 }

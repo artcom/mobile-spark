@@ -1,43 +1,12 @@
 // own header
 #include "string_functions.h"
-#include "Logger.h"
 
 using namespace std;
 
 namespace masl {
 
-    std::string
-    getExtension(const std::string & thePath) {
-        std::string::size_type myDotPos = thePath.rfind(".");
-        if (myDotPos != std::string::npos) {
-
-            std::string::size_type mySlashPos = thePath.rfind("/");
-            if (mySlashPos == std::string::npos) {
-                mySlashPos = thePath.rfind("\\");
-            }
-            if (mySlashPos != std::string::npos && mySlashPos > myDotPos) {
-                return "";
-            }
-
-            return thePath.substr(myDotPos+1);
-        }
-        return "";
-    }
-
-    std::string
-    removeExtension(const std::string & theFileName) {
-        std::string::size_type myDotPos = theFileName.rfind(".");
-        if (myDotPos != std::string::npos) {
-            std::string::size_type mySlashPos = theFileName.rfind("/");
-            if (mySlashPos != std::string::npos && mySlashPos > myDotPos) {
-                return theFileName;
-            }
-            return theFileName.substr(0, myDotPos);
-        }
-        return theFileName;
-    }
-
-    int as_int(const string & theString) {
+    int 
+    as_int(const string & theString) {
         int outValue;
         istringstream myStream(theString);
         myStream >> outValue;
@@ -47,7 +16,8 @@ namespace masl {
         return outValue;
     }
 
-    float as_float(const string & theString) {
+    float 
+    as_float(const string & theString) {
         float outValue;
         istringstream myStream(theString);
         myStream >> outValue;
@@ -70,7 +40,8 @@ namespace masl {
         return false;
     }
 
-    bool createFloatBinFromString(const std::string & theString, vector<float> & theBin) {
+    bool 
+    createFloatBinFromString(const std::string & theString, vector<float> & theBin) {
         theBin.clear();
         size_t myStartIndex = 1;
         size_t myEndIndex = theString.find(",", myStartIndex);
