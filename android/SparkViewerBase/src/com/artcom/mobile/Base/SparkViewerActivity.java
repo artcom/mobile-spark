@@ -41,7 +41,7 @@ public class SparkViewerActivity extends Activity {
         AC_Log.print("SparkViewer created, ready to call native [cpp logger]. ");
 
         DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);        	
+        getWindowManager().getDefaultDisplay().getMetrics(dm);          
         int myScreenWidth = dm.widthPixels;
         int myScreenHeight = dm.heightPixels;
         
@@ -54,7 +54,7 @@ public class SparkViewerActivity extends Activity {
     }
     
     public boolean onTouchEvent(MotionEvent event) {
-    	return eventManager.dumpTouchEvent(event) ;
+        return eventManager.dumpTouchEvent(event) ;
     }
     
     @Override protected void onStart() {
