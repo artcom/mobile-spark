@@ -18,7 +18,6 @@ namespace ios {
         virtual bool isCameraCapturing();
         
     private:
-        //GLuint  texture;
             };
     typedef boost::shared_ptr<IOSMobileSDK> IOSMobileSDKPtr;
 };
