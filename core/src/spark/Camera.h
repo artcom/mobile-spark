@@ -15,7 +15,8 @@ namespace spark {
         virtual void onPause();
         virtual void onSizeChanged(EventPtr theEvent);
         
-        static const char* SPARK_TYPE;             
+        static const char * const SPARK_TYPE;             
+        virtual const char * const & getType() const { return Camera::SPARK_TYPE;};
     private:
         void setGeometry();
         bool _myColorConversionFlag;

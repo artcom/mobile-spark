@@ -20,7 +20,8 @@ namespace spark {
         RenderCameraPtr getCamera() { ensureCamera(); return _myCamera; };
         mar::ViewportPtr getViewport() const { return _myGLViewport; };
             
-        static const char* SPARK_TYPE;
+        static const char * const SPARK_TYPE;
+        virtual const char * const & getType() const { return View::SPARK_TYPE;};
     private:      
         void ensureCamera();
                       

@@ -5,6 +5,8 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
+    const char * const NinePatch::SPARK_TYPE = "NinePatch";
+
     NinePatch::NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
 
@@ -15,6 +17,9 @@ namespace spark {
         edgeBottom_ = _myXMLNode->getAttributeAs<float>("edgeBottom", 0);
         build();        
     }
+
+    NinePatch::~NinePatch() {
+    }        
     
     void 
     NinePatch::build() {
@@ -35,7 +40,4 @@ namespace spark {
         ShapeWidget::onResume();        
         build();
     }
-
-    NinePatch::~NinePatch() {
-    }        
 }

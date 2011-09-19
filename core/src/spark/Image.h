@@ -14,6 +14,8 @@ namespace spark {
         void setSrc(std::string theSrc) {         AC_PRINT << " ######## Image.h";
 _mySrc = theSrc; build();};
 
+        static const char * const SPARK_TYPE;             
+        virtual const char * const & getType() const { return Image::SPARK_TYPE;};
     private:
         void build();
         std::string _mySrc;

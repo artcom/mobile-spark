@@ -5,7 +5,7 @@
 
 namespace spark {
 
-    const char * Statistic::SPARK_TYPE = "Statistic";
+    const char * const Statistic::SPARK_TYPE = "Statistic";
 
     Statistic::Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Transform(theApp, theXMLNode, theParent) {
@@ -36,7 +36,7 @@ namespace spark {
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(shared_from_this());        
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myContainer->getApp(), 
                 "<Text name=\"fps\" y=\"-10\" maxWidth=\"0\" text=\"fps:\" height=\"-16\" color=\"[1.0,0.0,0.0, 1.0]\" fontsize=\"16\"/>"); 
-        myCreated->insertAtParent(myContainer);
+        myContainer->insertChild(myCreated);
         _myFPSText = boost::static_pointer_cast<spark::Text>(myCreated);        
 
         myStatisticHeight += _myFPSText->getTextSize()[1];
