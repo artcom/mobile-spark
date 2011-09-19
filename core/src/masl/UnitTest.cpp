@@ -1,41 +1,6 @@
-/* __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-// Copyright (C) 1993-2008, ART+COM AG Berlin, Germany <www.artcom.de>
-//
-// This file is part of the ART+COM Standard Library (masl).
-//
-// It is distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-//    $RCSfile: UnitTest.cpp,v $
-//
-//   $Revision: 1.5 $
-//
-// Description: Utility Classes and Macros for easy unit testing
-//
-//
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-*/
-
 // own header
 #include "UnitTest.h"
 #include "string_functions.h"
-
-//#include "console_functions.h"
-//#include "file_functions.h"
-
-//#include <acmake/aslbase_paths.h>
-
-/*#ifdef _WIN32
-#   include <windows.h>
-#   include <io.h>
-#endif
-*/
-#ifndef _WIN32
-//#   include "signal_functions.h"
-#endif
 
 using namespace std;
 using namespace masl;

@@ -1,5 +1,5 @@
-#ifndef _included_mobile_asl_xmlnode_
-#define _included_mobile_asl_xmlnode_
+#ifndef _included_mobile_masl_xmlnode_
+#define _included_mobile_masl_xmlnode_
 
 #include <string>
 #include <sstream>
