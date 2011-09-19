@@ -80,14 +80,6 @@ NUM maximum(NUM a, NUM b) {
         return b;
 }
 
-template <class NUM>
-NUM sign(NUM a) {
-    if (a < 0) {
-        return -1;
-    }
-    return 1;
-}
-
 inline
 bool powerOfTwo(unsigned long n) {
     return (n & (n - 1)) == 0;
@@ -136,24 +128,17 @@ class tidy {
         }
 };
 
-template <class Number>
-Number clamp(Number x, Number min, Number max) {
-    if (x < min) x = min;
-    if (x > max) x = max;
-    return x;
-}
-
 // Shifts an angle into a range between theMin and theMax
 template <class Number>
 Number shiftToRange(Number theAngle, double theMin = -constants::pi(), double theMax = constants::pi()) {
     double myResult = theAngle;
     if (myResult < theMax) {
         while (myResult < theMin) {
-            myResult += 2 * constants::pi();
+            myResult += constants::two_pi();
         }
     } else {
         while (myResult > theMax) {
-            myResult -= 2 * constants::pi();
+            myResult -= constants::two_pi();
         }
     }
     return Number(myResult);
@@ -299,11 +284,6 @@ T smoothStep(T theValue, T theIn = 0, T theOut = 1)
 
     T myOutput = (theValue - theIn) / (theOut - theIn);
     return (myOutput * myOutput) * (3 - 2 * myOutput);
-}
-
-template <class T>
-T sqr(const T & a) {
-    return a * a;
 }
 
 template <class NUMBER>
