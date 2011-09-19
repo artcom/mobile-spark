@@ -3,7 +3,7 @@
     
     <Template name="ProjectMenuItem" src="/projectmenuitem.spark"/>
    
-    <I18nContext name="global-i18n" defaultLanguage="de">
+    <!--I18nContext name="global-i18n" defaultLanguage="de">
         <I18nText name="hello_text">
             <de><![CDATA[Hallö]]> </de>
             <en><![CDATA[Höhö]]> </en>
@@ -12,7 +12,7 @@
             <de>en</de>
             <en>de</en>
         </I18nText>
-    </I18nContext>
+    </I18nContext-->
 
     <!-- userinterface is located in 2dworld -->
     <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
@@ -46,10 +46,9 @@
             </ProjectMenuItem>
         </ProjectMenu>
 
-        <Transform name="transform">
+        <!--Transform name="transform">
             <Text name="testtextgreen" y="580" x="10" z="13" i18nId="hello_text" color="[0,1,0,1]" fontsize="32"/>
         </Transform>    
-
-        <Text name="language_toggle" y="580" x="400" z="13" i18nId="language" fontsize="42"/>
+        <Text name="language_toggle" y="580" x="400" z="13" i18nId="language" fontsize="42"/-->
     </World>        
 </Window>
