@@ -16,7 +16,11 @@ namespace ios {
         CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
 
         // Initialize an attributed string.
-        NSString *string = [NSString stringWithUTF8String:theMessage.c_str()];
+        NSString *string = [NSString stringWithCString:theMessage.c_str() encoding:NSUTF8StringEncoding];
+        //The linebreaks are not encoded by the XML-Parser.
+        //Therfore, each "\n" in the string is replaced with an appropriate encoded linebreak, so that Core Text can handle them.
+        string = [string stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"];
+        
         CFMutableAttributedStringRef attrString = CFAttributedStringCreateMutable(kCFAllocatorDefault, 0);
         CFAttributedStringReplaceString (attrString, CFRangeMake(0, 0), (CFStringRef)string);
         
@@ -93,7 +97,9 @@ namespace ios {
         if (textureWidth != 0 && textureHeight != 0) {
             // Initialize a Bitmap context and set the text matrix to a known value.
             GLubyte *bitmapData = (GLubyte *) calloc((textureWidth * textureHeight * 4.0), sizeof(GLubyte));
-            CGContextRef context = CGBitmapContextCreate(bitmapData, textureWidth, textureHeight, 8, textureWidth * 4, rgbColorSpace, kCGImageAlphaNoneSkipLast);
+            CGContextRef context = CGBitmapContextCreate(bitmapData, textureWidth, textureHeight, 8, textureWidth * 4, rgbColorSpace, kCGImageAlphaPremultipliedLast);
+            
+
             
             CGContextSetTextMatrix(context, CGAffineTransformIdentity);
             // Flip the context so that the Bitmap is rendered right side up
