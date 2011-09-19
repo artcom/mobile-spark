@@ -7,7 +7,6 @@ namespace acprojectview {
 
     ProjectMenu::ProjectMenu(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
         : Transform(theApp, theXMLNode, theParent) {
-        AC_PRINT << "##################################### PROJECTMENU KONSTRUKTOR";
     }
 
     ProjectMenu::~ProjectMenu() {}

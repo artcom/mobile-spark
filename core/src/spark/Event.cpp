@@ -9,10 +9,12 @@ namespace spark {
     const char * const WindowEvent::CLASSNAME = "WindowEvent";
     const char * const GestureEvent::CLASSNAME = "GestureEvent";
     const char * const SensorEvent::CLASSNAME = "SensorEvent";
+    const char * const I18nEvent::CLASSNAME = "I18nEvent";
 
     const char * const StageEvent::FRAME = "frame";
     const char * const StageEvent::PAUSE = "pause";
     const char * const WindowEvent::ON_RESIZE = "on_resize";
+    const char * const I18nEvent::ON_LANGUAGE_SWITCH = "on_language_switch";
         
     const char * const TouchEvent::TAP = "tap";
     const char * const TouchEvent::DOUBLETAP = "doubletap";
@@ -171,5 +173,10 @@ namespace spark {
     {}
     SensorEvent::~SensorEvent() {}
 
-    
+
+
+    I18nEvent::I18nEvent(const masl::XMLNodePtr theXMLNode) :
+        Event(theXMLNode) {
+    }
+    I18nEvent::~I18nEvent() {}
 }

@@ -11,8 +11,7 @@ namespace spark {
         Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Image();
         void onResume();
-        void setSrc(std::string theSrc) {         AC_PRINT << " ######## Image.h";
-_mySrc = theSrc; build();};
+        void setSrc(std::string theSrc) { _mySrc = theSrc; build();};
 
         static const char * const SPARK_TYPE;             
         virtual const char * const & getType() const { return Image::SPARK_TYPE;};
