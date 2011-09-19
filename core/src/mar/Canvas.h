@@ -15,10 +15,10 @@ namespace mar {
             ~Canvas();
             void initGLState();
             void preRender(vector4 theClearColor);
-        private:           
+        private:
     };
 
     typedef boost::shared_ptr<Canvas> CanvasPtr;
 };
 
-#endif 
+#endif

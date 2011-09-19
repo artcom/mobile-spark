@@ -15,26 +15,28 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static boolean _myFirstTimeFlag;
     public static int _myScreenWidth;
     public static int _myScreenHeight;
-    private Context context;    
-    public EGLRenderer (Context context, int theScreenWidth, int theScreenHeight, boolean firstTime) {
+    public static String _myPackageExtension;
+    private Context context;
+    public EGLRenderer (Context context, String thePackageExtension, int theScreenWidth, int theScreenHeight, boolean firstTime) {
         _myFirstTimeFlag = firstTime;
         _myScreenWidth = theScreenWidth;
         _myScreenHeight = theScreenHeight;
+        _myPackageExtension = thePackageExtension;
         this.context = context;
-       
-    }    
+
+    }
     public void onDrawFrame(GL10 glUnused) {
         updateFrameCounter();
         String myEvent = "<StageEvent type='frame' time='" + System.currentTimeMillis() + "'/>";
         NativeBinding.onEvent(myEvent);
     }
 
-    public void onSurfaceChanged(GL10 glUnused, int width, int height) {        
+    public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         AC_Log.print("_________________________________- onSurfaceChanged");
         String myEvent = "<WindowEvent type='on_resize' newsize='[" + width + "," + height + "]' oldsize='[-1, -1]'/>";
-        NativeBinding.onEvent(myEvent);        
+        NativeBinding.onEvent(myEvent);
     }
-    
+
     private void updateFrameCounter() {
         if (numFrames == 0) {
             millisec = System.currentTimeMillis();
@@ -52,11 +54,11 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
 
 
     public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
-    	CameraTexture.initWithContext(glContext);
-        AC_Log.print("_________________________________- on surface created");
+        CameraTexture.initWithContext(glContext);
+        AC_Log.print("_________________________________- on surface created of " + PACKAGE_NAME + _myPackageExtension);
         NativeBinding.initBinding();
         if (_myFirstTimeFlag) {
-            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), _myScreenWidth,  _myScreenHeight);
+            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME + _myPackageExtension, context), _myScreenWidth,  _myScreenHeight);
         } else {
             NativeBinding.onResume();
         }

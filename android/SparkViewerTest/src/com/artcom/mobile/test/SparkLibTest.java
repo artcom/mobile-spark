@@ -8,13 +8,13 @@ import android.util.Log;
 public class SparkLibTest extends AndroidTestCase{
 
     public static String LOG_TAG = "SparkLibTest";
-    
+
     public void testLib() throws Throwable {
-        String myResult = SparkBinding.test(); 
+        String myResult = SparkBinding.test();
         Assert.assertEquals("\n" + myResult + "\n", myResult.length(), 0);
     }
-    
-    public void testLibsInterface() throws Throwable {      
+
+    public void testLibsInterface() throws Throwable {
          // test bound methods
    }
 }

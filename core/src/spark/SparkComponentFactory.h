@@ -40,7 +40,6 @@ namespace spark {
         void resolveTemplates(const BaseAppPtr theApp, XMLNodePtr theRoot);
         XMLNodePtr loadXMLNodeFromFile(const BaseAppPtr theApp, const std::string & thePath);
         XMLNodePtr loadXMLNodeFromString(const BaseAppPtr theApp, const std::string & theNode);
-        XMLNodePtr prepareXMLFromString(const BaseAppPtr theApp, const std::string & theNode);
     };
 };
-#endif 
+#endif

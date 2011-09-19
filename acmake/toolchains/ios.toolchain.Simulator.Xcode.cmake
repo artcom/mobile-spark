@@ -16,7 +16,7 @@ SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2")
 SET(CMAKE_SYSTEM_PROCESSOR i386)
 SET(CMAKE_OSX_ARCHITECTURES i386)
 
-# Skip the platform compiler checks for cross compiling 
+# Skip the platform compiler checks for cross compiling
 SET(CMAKE_CXX_COMPILER_WORKS TRUE)
 SET(CMAKE_C_COMPILER_WORKS TRUE)
 

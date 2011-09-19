@@ -3,8 +3,8 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
-    
-    const char * Rectangle::SPARK_TYPE = "Rectangle";
+
+    const char * const Rectangle::SPARK_TYPE = "Rectangle";
 
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
@@ -25,5 +25,5 @@ namespace spark {
 
     Rectangle::~Rectangle() {
     }
-    
+
 }

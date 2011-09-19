@@ -294,7 +294,9 @@ namespace demoapp {
         ComponentPtr myTransform = _mySparkWindow->getChildByName("2dworld")->getChildByName("ObjectCreationSlide");
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(shared_from_this(), 
                 "<Rectangle name=\"created_from_code\" width=\"300\" height=\"10\" color=\"[1.0,1.0,0.0]\"/>"); 
-        myCreated->insertAtParent(boost::static_pointer_cast<spark::Container>(myTransform));
+        ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(myTransform);
+        myContainer->addChild(myCreated);
+
     }
 
     void DemoApp::onTouch(EventPtr theEvent) {

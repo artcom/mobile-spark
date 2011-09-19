@@ -24,7 +24,7 @@ namespace masl {
         }
     }
 
-    
+
     //XXX: the user should call xmlFreeDoc(doc)
     xmlDocPtr loadXML(const std::string & theFilename) {
         /*
@@ -53,7 +53,7 @@ namespace masl {
             if (ctxt->valid == 0) {  //does not validate, don't know why
                 AC_ERROR << "Failed to validate " << theFilename;
             } else {
-                AC_PRINT << "xml is valid";
+                AC_DEBUG << "xml is valid";
             }
         }
 
@@ -62,14 +62,11 @@ namespace masl {
 
         /* free up the parser context */
         xmlFreeParserCtxt(ctxt);
-        xmlCleanupParser();
-        xmlMemoryDump();
-
         return doc;
     }
-    
+
     //XXX: the user should call xmlFreeDoc(doc)
-    xmlDocPtr loadXMLFromMemory(const std::string & theXMLString) {
+    xmlDocPtr loadXMLFromMemoryValidate(const std::string & theXMLString) {
         /*
         * this initialises the library and check potential ABI mismatches
         * between the version it was compiled for and the actual shared
@@ -86,6 +83,7 @@ namespace masl {
         }
         /* parse the file, activating the DTD validation option */
         doc = xmlCtxtReadMemory(ctxt, theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, XML_PARSE_DTDATTR);
+        //doc = xmlReadMemory(theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, 0);
 
         /* check if parsing suceeded */
         if (doc == NULL) {
@@ -96,17 +94,40 @@ namespace masl {
             if (ctxt->valid == 0) {  //does not validate, don't know why
                 AC_ERROR << "Failed to validate XMLString";
             } else {
-                AC_PRINT << "xml is valid";
+                AC_DEBUG << "xml is valid";
             }
         }
 
+        //XXX: doc is return value so no freeing here
         /* free up the resulting document */
         //xmlFreeDoc(doc);
 
         /* free up the parser context */
         xmlFreeParserCtxt(ctxt);
-        xmlCleanupParser();
-        xmlMemoryDump();
+        return doc;
+    }
+    //
+    //XXX: the user should call xmlFreeDoc(doc)
+    xmlDocPtr loadXMLFromMemory(const std::string & theXMLString) {
+        /*
+        * this initialises the library and check potential ABI mismatches
+        * between the version it was compiled for and the actual shared
+        * library used.
+        */
+        LIBXML_TEST_VERSION
+        xmlDocPtr doc; /* the resulting document tree */
+
+        doc = xmlReadMemory(theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, 0);
+
+        /* check if parsing suceeded */
+        if (doc == NULL) {
+            AC_ERROR << "Failed to parse XMLString";
+            return doc;
+        }
+
+        //XXX: doc is return value so no freeing here
+        /* free up the resulting document */
+        //xmlFreeDoc(doc);
 
         return doc;
     }

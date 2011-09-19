@@ -13,9 +13,9 @@ public class AC_Log {
     }
 
     private static void log(Severity theSeverity, String theMessage) {
-        NativeBinding.log(theSeverity, new Throwable().getStackTrace()[2].getFileName(), 
-                         new Throwable().getStackTrace()[2].getLineNumber(), 
-                         theMessage);   
+        NativeBinding.log(theSeverity, new Throwable().getStackTrace()[2].getFileName(),
+                         new Throwable().getStackTrace()[2].getLineNumber(),
+                         theMessage);
     }
     public static void info(String theMessage) {
         if (Severity.SEV_INFO.compareTo(_myGlobalSeverity) < 0) {

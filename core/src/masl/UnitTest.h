@@ -1,27 +1,5 @@
-/* __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-// Copyright (C) 1993-2008, ART+COM AG Berlin, Germany <www.artcom.de>
-//
-// This file is part of the ART+COM Standard Library (masl).
-//
-// It is distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-//    $RCSfile: UnitTest.h,v $
-//
-//   $Revision: 1.8 $
-//
-// Description: Utility Classes and Macros for easy unit testing
-//
-//
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-*/
 #ifndef _included_UnitTest_
 #define _included_UnitTest_
-
-//#include "asl_base_settings.h"
 
 #include "Exception.h"
 #include "Logger.h"
@@ -32,9 +10,6 @@
 #include <cstring>
 #include <cstdlib>
 
-
-/*! \addtogroup aslbase */
-/* @{ */
 
 class  UnitTest {
 public:
@@ -76,7 +51,7 @@ public:
                 bool myExpectedResult = true)
     {ensure(myExpressionResult!=0,myExpression,mySourceFileName,mySourceLine,myExpectedResult);}
 protected:
-    virtual void setFailedTestMessages(const std::string & theMessages);    
+    virtual void setFailedTestMessages(const std::string & theMessages);
     virtual void setPassedCount(unsigned int passedTests);
     virtual void setFailedCount(unsigned int failedTests);
     virtual void setExpectedFailedCount(unsigned int failedTests);
@@ -224,8 +199,5 @@ public:
         AC_ERROR << getTracePrefix() << #EXP2 << " = " << EXP2 << std::endl; \
     } \
 }
-
-
-/* @} */
 
 #endif

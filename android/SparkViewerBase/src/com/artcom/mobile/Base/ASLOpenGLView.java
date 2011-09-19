@@ -1,6 +1,6 @@
 package com.artcom.mobile.Base;
 
-import com.artcom.mobile.Base.*; 
+import com.artcom.mobile.Base.*;
 import com.artcom.mobile.Base.AndroidEGLConfigChooser.ConfigType;
 
 import android.content.Context;
@@ -13,24 +13,24 @@ import javax.microedition.khronos.egl.EGLDisplay;
 
 
 public class ASLOpenGLView extends GLSurfaceView {
-    
-    
+
+
     private EGLRenderer myRenderer;
 
-    public ASLOpenGLView(Context context, int theScreenWidth, int theScreenHeight, boolean firstTime) {
+    public ASLOpenGLView(Context context, String thePackageExtension, int theScreenWidth, int theScreenHeight, boolean firstTime) {
         super(context);
-        myRenderer = new EGLRenderer(context, theScreenWidth, theScreenHeight, firstTime);
-        init();        
-        setKeepScreenOn(true);   
+        myRenderer = new EGLRenderer(context, thePackageExtension, theScreenWidth, theScreenHeight, firstTime);
+        init();
+        setKeepScreenOn(true);
     }
 
     public void onSizeChanged (int w, int h, int oldw, int oldh) {
         EventManager.onSizeChanged(w,h);
         String myEvent = "<WindowEvent type='on_resize' newsize='[" + w + "," + h + "]' oldsize='[" + oldw + "," + oldh + "]'/>";
-        NativeBinding.onEvent(myEvent);        
+        NativeBinding.onEvent(myEvent);
     }
-    
-    
+
+
     private void init() {
 
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
