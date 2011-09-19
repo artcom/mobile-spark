@@ -25,7 +25,8 @@ namespace spark {
     Widget::~Widget() {
     }
 
-    void Widget::updateMatrix() {
+    void 
+    Widget::updateMatrix() {
         MatrixStack helpMatrixStack;
         helpMatrixStack.loadIdentity();
         helpMatrixStack.rotateXAxis(_rotationX);
@@ -61,32 +62,4 @@ namespace spark {
     void Widget::render(const matrix & theProjectionMatrix) const {
     }
 
-    std::vector<I18nContextPtr>  
-    Widget::getI18nContexts() const {
-        std::vector<I18nContextPtr> myContexts;
-        boost::shared_ptr<const spark::Component> myCurrent = shared_from_this();
-        while (myCurrent) {
-            if (_myI18nContext) {
-                myContexts.push_back(_myI18nContext);
-            }
-            myCurrent = myCurrent->getParent();
-        }
-        return myContexts;
-    }
-
-    I18nItemPtr
-    Widget::getI18nItemByName(const std::string & theName) const {
-        I18nItemPtr myI18nItem;
-        std::vector<I18nContextPtr> myContexts = getI18nContexts();
-        for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
-            ComponentPtr myComponent = (*it)->getChildByName(theName);
-            if (myComponent) {
-                myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);
-                if (myI18nItem) {
-                    return myI18nItem;
-                }
-            }
-        }
-        return myI18nItem;
-    }
 }
