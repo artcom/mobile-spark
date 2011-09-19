@@ -1,25 +1,5 @@
-/* __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-// Copyright (C) 1993-2008, ART+COM AG Berlin, Germany <www.artcom.de>
-//
-// This file is part of the ART+COM Standard Library (masl).
-//
-// It is distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-//    $RCSfile: string_functions.h,v $
-//
-//   $Revision: 1.16 $
-//
-// Description: string helper functions
-//
-//
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-*/
-#ifndef _included_mobile_asl_string_functions_
-#define _included_mobile_asl_string_functions_
+#ifndef _included_mobile_masl_string_functions_
+#define _included_mobile_masl_string_functions_
 
 #include <sstream>
 #include "Exception.h"
@@ -45,13 +25,17 @@ namespace masl {
     }
 
 
+    template <>
     bool fromString(const std::string & theString, bool & outValue);
+    template <>
     bool fromString(const std::string & theString, vector4 & outValue);
+    template <>
     bool fromString(const std::string & theString, vector3 & outValue);
+    template <>
     bool fromString(const std::string & theString, vector2 & outValue);
 
-    inline
-    bool fromString(const std::string & theString, std::string & outValue) {
+    template <>
+    inline bool fromString(const std::string & theString, std::string & outValue) {
         outValue = theString;
         return true;
     };

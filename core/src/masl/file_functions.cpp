@@ -1,24 +1,3 @@
-/* __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-// Copyright (C) 1993-2008, ART+COM AG Berlin, Germany <www.artcom.de>
-//
-// This file is part of the ART+COM Standard Library (asl).
-//
-// It is distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-//    $RCSfile: file_functions.cpp,v $
-//
-//   $Revision: 1.23 $
-//
-// Description: file helper functions
-//
-//
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-*/
-
 // own header
 #include "file_functions.h"
 
@@ -29,8 +8,6 @@
 #include "Logger.h"
 
 #include <libgen.h>
-//#include <unistd.h>
-//#include <utime.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>

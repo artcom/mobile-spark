@@ -1,5 +1,7 @@
 #include "RenderCamera.h"
 
+#include <masl/numeric_functions.h>
+
 #include "SparkComponentFactory.h"
 
 #include <string>
@@ -65,7 +67,7 @@ namespace spark {
         if (_myProjectionType == AUTO_ORTHONORMAL) {
             matrixStack.loadOrtho(0, theRenderCameraWidth, 0.0 , theRenderCameraHeight, -0.1, 1000);
         } else if (_myProjectionType == PERSPECTIVE) {
-            float myWing = _myPerspectiveParams[1] * tanf(radFromDeg(_myPerspectiveParams[0]) / 2.0);            
+            float myWing = _myPerspectiveParams[1] * tanf(cml::rad(_myPerspectiveParams[0]) / 2.0);            
             float myRatio = (float)theRenderCameraWidth/(float)theRenderCameraHeight;
             matrixStack.loadPerspective(-myWing, myWing, -myWing / myRatio, myWing / myRatio, _myPerspectiveParams[1], _myPerspectiveParams[2]);
         }
