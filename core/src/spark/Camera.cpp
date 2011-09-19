@@ -6,7 +6,7 @@
 
 namespace spark {
 
-    const char * Camera::SPARK_TYPE = "Camera";
+    const char * const Camera::SPARK_TYPE = "Camera";
 
     Camera::Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent),_mySetupFlag(false), _myPortraitMode(true) {

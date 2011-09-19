@@ -5,6 +5,7 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
+    const char * const Image::SPARK_TYPE = "Image";
 
     Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {

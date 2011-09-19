@@ -15,7 +15,7 @@
 
 using namespace std;
 namespace spark {
-    const char * Text::SPARK_TYPE = "Text";
+    const char * const Text::SPARK_TYPE = "Text";
 
     Text::Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent), _myFontPath("") {

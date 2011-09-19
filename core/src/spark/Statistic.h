@@ -15,7 +15,8 @@ namespace spark {
         virtual void onFrame(EventPtr theEvent);
         virtual void realize();
         
-        static const char* SPARK_TYPE;             
+        static const char * const SPARK_TYPE;             
+        virtual const char * const & getType() const { return Statistic::SPARK_TYPE;};
     private:
         masl::UInt64 lasttime_;      
         TextPtr _myFPSText;                              

@@ -13,8 +13,8 @@ namespace spark {
         EventDispatcher(),
         _myXMLNode(theXMLNode),
         _myName(theXMLNode->name),
-        _myParent(theParent) {
-    }
+        _myParent(theParent) 
+    {}
 
     Component::~Component() {
         AC_PRINT << ".................delete " + _myName;
@@ -24,6 +24,7 @@ namespace spark {
     Component::getChildByName(const std::string & theName, bool theDeepFlag) const {
         return ComponentPtr();
     }
+
     ComponentPtr 
     Component::getRoot() {
         if (_myParent) {
@@ -31,16 +32,5 @@ namespace spark {
         } else {
             return shared_from_this();
         }
-    }
-    
-    const std::string & 
-    Component::getType() const {
-        return _myXMLNode->nodeName;
-    }
-
-    void 
-    Component::insertAtParent(ContainerPtr theParent) {
-        _myParent = theParent;
-        theParent->insertChild(shared_from_this()); 
     }
 }

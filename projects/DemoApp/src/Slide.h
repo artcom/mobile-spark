@@ -11,6 +11,8 @@ namespace demoapp {
             SlideImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
             virtual ~SlideImpl();
             void centerTitles(const int theWidth, const int theHeight);
+            static const char * const SPARK_TYPE;             
+            virtual const char * const & getType() const { return SlideImpl::SPARK_TYPE;};
         private:
             spark::TextPtr titleComponent_;
             spark::TextPtr subtitleComponent_;

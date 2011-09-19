@@ -15,11 +15,13 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static boolean _myFirstTimeFlag;
     public static int _myScreenWidth;
     public static int _myScreenHeight;
+    public static String _myPackageExtension;
     private Context context;    
-    public EGLRenderer (Context context, int theScreenWidth, int theScreenHeight, boolean firstTime) {
+    public EGLRenderer (Context context, String thePackageExtension, int theScreenWidth, int theScreenHeight, boolean firstTime) {
         _myFirstTimeFlag = firstTime;
         _myScreenWidth = theScreenWidth;
         _myScreenHeight = theScreenHeight;
+        _myPackageExtension = thePackageExtension;
         this.context = context;
        
     }    
@@ -53,10 +55,10 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
 
     public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
     	CameraTexture.initWithContext(glContext);
-        AC_Log.print("_________________________________- on surface created");
+        AC_Log.print("_________________________________- on surface created of " + PACKAGE_NAME + _myPackageExtension);
         NativeBinding.initBinding();
         if (_myFirstTimeFlag) {
-            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME, context), _myScreenWidth,  _myScreenHeight);
+            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME + _myPackageExtension, context), _myScreenWidth,  _myScreenHeight);
         } else {
             NativeBinding.onResume();
         }
