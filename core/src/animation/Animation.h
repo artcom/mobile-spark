@@ -10,17 +10,17 @@
 #include <masl/Settings.h>
 
 namespace animation {
-    
+
     typedef boost::function<float(float)> EasingFunctionPtr;
     inline float defaultEasing(float theValue) { return theValue; };
 
-    
+
 
     class Animation;
     typedef boost::shared_ptr<Animation> AnimationPtr;
     typedef boost::weak_ptr<Animation> AnimationWeakPtr;
     class Animation : public boost::enable_shared_from_this<Animation> {
-    public: 
+    public:
         Animation(const masl::UInt64 theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
         virtual ~Animation();
         virtual void doFrame(const masl::UInt64 theTime);
@@ -31,7 +31,7 @@ namespace animation {
 
         bool isRunning() const { return _myRunning; };
         bool isFinished()  const { return _myFinished; };
-    
+
         void setLoop(const bool theLoop) { _myLoop = theLoop; };
         void setParent(AnimationWeakPtr theParent) { _myParent = theParent; };
         masl::UInt64 getDuration() const { return _myDuration;};

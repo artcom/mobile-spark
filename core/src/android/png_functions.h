@@ -9,4 +9,4 @@ namespace android {
     bool loadTextureFromPNG (zip* theAPKArchive, const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb);
 };
 
-#endif 
+#endif

@@ -3,7 +3,7 @@
 #include "SparkComponentFactory.h"
 
 namespace spark {
-    
+
     const char * const Rectangle::SPARK_TYPE = "Rectangle";
 
     Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
@@ -25,5 +25,5 @@ namespace spark {
 
     Rectangle::~Rectangle() {
     }
-    
+
 }

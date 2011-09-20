@@ -1,30 +1,12 @@
-/* __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-// Copyright (C) 1993-2008, ART+COM AG Berlin, Germany <www.artcom.de>
-//
-// This file is part of the ART+COM Standard Library (asl).
-//
-// It is distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-//
-//    $RCSfile: numeric_functions.h,v $
-//
-//   $Revision: 1.33 $
-//
-// Description: Exception class hierarchy
-//
-//
-// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
-*/
 #ifndef _included_masl_numeric_functions_
 #define _included_masl_numeric_functions_
 
 #include <cml/cml.h>
+#include <cml/util.h>
 #include <cml/mathlib/typedef.h>
 #include <cml/vector/vector_ops.h>
 
+typedef cml::constantsf constants;
 typedef cml::matrix44f_c matrix;
 typedef cml::vector4f vector4;
 typedef cml::vector3f vector3;
@@ -36,24 +18,7 @@ typedef cml::quaternionf quaternion;
 #include <limits>
 #include <string>
 
-#if defined(_WIN32)
-#include <float.h>
-#endif //defined(_WIN32)
-
 namespace masl {
-
-/*! @addtogroup aslmath */
-/* @{ */
-
-// from math.h
-static const double PI   = 3.14159265358979323846;
-static const double PI_2 = 1.57079632679489661923;
-static const double PI_4 = 0.785398163397448309616;
-static const double EULER = 2.7182818284590452354;
-
-inline double radFromDeg(double theDegree)  { return (theDegree * PI) / 180.0; }
-inline double degFromRad(double theRadiant) { return (theRadiant * 180.0) / PI; }
-
 
 inline float distance(const vector3 & a, const vector3 & b) {
     return (b - a).length();
@@ -115,14 +80,6 @@ NUM maximum(NUM a, NUM b) {
         return b;
 }
 
-template <class NUM>
-NUM sign(NUM a) {
-    if (a < 0) {
-        return -1;
-    }
-    return 1;
-}
-
 inline
 bool powerOfTwo(unsigned long n) {
     return (n & (n - 1)) == 0;
@@ -171,24 +128,17 @@ class tidy {
         }
 };
 
-template <class Number>
-Number clamp(Number x, Number min, Number max) {
-    if (x < min) x = min;
-    if (x > max) x = max;
-    return x;
-}
-
 // Shifts an angle into a range between theMin and theMax
 template <class Number>
-Number shiftToRange(Number theAngle, double theMin = -PI, double theMax = PI) {
+Number shiftToRange(Number theAngle, double theMin = -constants::pi(), double theMax = constants::pi()) {
     double myResult = theAngle;
     if (myResult < theMax) {
         while (myResult < theMin) {
-            myResult += 2 * PI;
+            myResult += constants::two_pi();
         }
     } else {
         while (myResult > theMax) {
-            myResult -= 2 * PI;
+            myResult -= constants::two_pi();
         }
     }
     return Number(myResult);
@@ -336,11 +286,6 @@ T smoothStep(T theValue, T theIn = 0, T theOut = 1)
     return (myOutput * myOutput) * (3 - 2 * myOutput);
 }
 
-template <class T>
-T sqr(const T & a) {
-    return a * a;
-}
-
 template <class NUMBER>
 NUMBER ipow(NUMBER a, int x) {
     if (x == 0) return 1;
@@ -353,10 +298,6 @@ template <class NUMBER>
 NUMBER random(NUMBER min, NUMBER max) {
     return static_cast<NUMBER>(min + rand()/double(RAND_MAX) * (max - min));
 }
-
-
-
-/* @} */
 
 } //Namespace masl
 

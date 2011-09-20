@@ -55,10 +55,10 @@
 #       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${my_cxx_flags}")
 #       SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  ${my_cxx_flags}")
 #       The flags will be prepopulated with critical flags, so don't loose them.
-#    
-#     ANDROID and BUILD_ANDROID will be set to true, you may test these 
+#
+#     ANDROID and BUILD_ANDROID will be set to true, you may test these
 #     variables to make necessary changes.
-#    
+#
 #     Also ARMEABI and ARMEABI_V7A will be set true, mutually exclusive. V7A is
 #     for floating point. NEON option will be set true if fpu is set to neon.
 #
@@ -68,9 +68,9 @@
 #        under ${LIBRARY_OUTPUT_PATH_ROOT}/libs/armeabi* depending on target.
 #        this will be convenient for android linking
 #
-#     Base system is Linux, but you may need to change things 
+#     Base system is Linux, but you may need to change things
 #     for android compatibility.
-#   
+#
 #
 #   - initial version December 2010 Ethan Rublee ethan.ruble@gmail.com
 #   - modified April 2011 Andrey Kamaev andrey.kamaev@itseez.com
@@ -210,7 +210,7 @@ else()
     set( ARMEABI_NDK_NAME "armeabi-v7a" )
 endif()
 
-# where is the target environment 
+# where is the target environment
 if( BUILD_WITH_ANDROID_NDK )
     set( CMAKE_FIND_ROOT_PATH  ${ANDROID_NDK_TOOLCHAIN_ROOT}/bin ${ANDROID_NDK_TOOLCHAIN_ROOT}/arm-linux-androideabi ${ANDROID_NDK_SYSROOT} )
     include_directories( ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/include ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ARMEABI_NDK_NAME}/include )
@@ -263,7 +263,7 @@ set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
 set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
 
 set( STL_LIBRARIES_PATH "${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ARMEABI_NDK_NAME}" )
-      
+
 #Also, this is *required* to use the following linker flags that routes around
 #a CPU bug in some Cortex-A8 implementations:
 set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++ " )

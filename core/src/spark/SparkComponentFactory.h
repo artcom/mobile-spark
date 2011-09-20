@@ -42,4 +42,4 @@ namespace spark {
         XMLNodePtr loadXMLNodeFromString(const BaseAppPtr theApp, const std::string & theNode);
     };
 };
-#endif 
+#endif

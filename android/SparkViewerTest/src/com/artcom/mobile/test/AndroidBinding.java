@@ -6,9 +6,9 @@ public class AndroidBinding {
 
     static {
         System.loadLibrary("masl");
-        System.loadLibrary("animation");        
+        System.loadLibrary("animation");
         System.loadLibrary("mar");
-        System.loadLibrary("android"); 
+        System.loadLibrary("android");
         System.loadLibrary("testAndroid");
     }
 

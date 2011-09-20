@@ -13,7 +13,7 @@
 
 
 namespace spark {
-    
+
     enum ProjectionType {
         PERSPECTIVE,
         ORTHONORMAL,
@@ -22,19 +22,19 @@ namespace spark {
 
 
     class RenderCamera : public Widget {
-    public: 
+    public:
         RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~RenderCamera();
         void activate(float theCanvasWidth, float theCanvasHeight);
-        const matrix & getProjectionMatrix();            
+        const matrix & getProjectionMatrix();
 
-        static const char * const SPARK_TYPE;             
+        static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return RenderCamera::SPARK_TYPE;};
     private:
         matrix _myProjectionMatrix;
         MatrixStack matrixStack;
         ProjectionType _myProjectionType;
-        vector3 _myPerspectiveParams;        
+        vector3 _myPerspectiveParams;
 
         static const char * const PerspectiveStr;
         static const char * const OrtohonormalStr;

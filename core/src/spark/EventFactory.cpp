@@ -7,7 +7,7 @@
 using namespace masl;
 
 namespace spark {
-    
+
     //TODO: decentralize this again
     void EventFactory::setupFactory() {
         bool registered = registerEvent(StageEvent::CLASSNAME, spark::createEvent<StageEvent>);
@@ -15,9 +15,9 @@ namespace spark {
         registered = registerEvent(TouchEvent::CLASSNAME, spark::createEvent<TouchEvent>);
         registered = registerEvent(GestureEvent::CLASSNAME, spark::createEvent<GestureEvent>);
         registered = registerEvent(SensorEvent::CLASSNAME, spark::createEvent<SensorEvent>);
-
+        registered = registerEvent(I18nEvent::CLASSNAME, spark::createEvent<I18nEvent>);
     };
-    
+
     EventFactory::EventFactory() {
         setupFactory();
     }

@@ -18,10 +18,10 @@ namespace ios {
     public:
         TextRenderer();
         virtual ~TextRenderer();
-        void renderText(const std::string & theMessage, int theTextureId, int theFontSize, 
+        void renderText(const std::string & theMessage, int theTextureId, int theFontSize,
                         vector4 theColor, int theMaxWidth, int theMaxHeight);
         int getTextureID();
-        
+
     private:
         GLuint  texture;
     };
