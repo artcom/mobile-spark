@@ -57,11 +57,11 @@ namespace demoapp {
 
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
-        
         DemoAppComponentMapInitializer::init();
         
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
+        AC_PRINT << "Orientation: " << myOrientation;
         MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
                     
         loadLayoutAndRegisterEvents(mySparkFile);
@@ -167,9 +167,8 @@ namespace demoapp {
         _myCurrentSlide = 0;
         _mySlides[_myCurrentSlide]->setVisible(true);
 
-        AC_DEBUG << "found #" << _mySlides.size() << " slides";
-        
-        BaseApp::realize();
+        AC_DEBUG << "found #" << _mySlides.size() << " slides";        
+        //BaseApp::realize();
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {
@@ -177,6 +176,7 @@ namespace demoapp {
     	changeSlide(theEvent->getTarget()->getName() == "backbutton" ? -1 :  +1);    }
     
     void DemoApp::onStartSlideSwipe() {
+        AC_PRINT << "set : " << _mySlides[_myNextSlide]->getName() << " to visible";
         _mySlides[_myNextSlide]->setVisible(true);
         _mySlides[_myNextSlide]->setX(_mySparkWindow->getSize()[0]);        
     }
@@ -185,6 +185,7 @@ namespace demoapp {
     	if (_mySlides[_myCurrentSlide]->getName() == "3D-Viewer-Slide") animation::AnimationManager::get().play(myAmazoneRotation);
         _mySlides[_myCurrentSlide]->setVisible(false);
         _mySlides[_myCurrentSlide]->setSensible(false);
+        AC_PRINT << "set : " << _mySlides[_myCurrentSlide]->getName() << " to invisible";
         _myCurrentSlide = _myNextSlide;
         _mySlides[_myCurrentSlide]->setSensible(true);
         if (_mySlides[_myCurrentSlide]->getName() == "3D-Viewer-Slide") myAmazoneRotation->cancel();
@@ -197,7 +198,12 @@ namespace demoapp {
     	changeSlide(theEvent->getType() == "swipe-right" ? -1 :  +1);
     }
     
+    void DemoApp::onFrame(EventPtr theEvent) {
+        BaseApp::onFrame(theEvent);            
+    }
+    
     void DemoApp::changeSlide(int theDirection) {
+        AC_PRINT << "change slide: " << theDirection << " next slide:" << _myNextSlide << " currentslide: " << _myCurrentSlide;
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         animation::ParallelAnimationPtr mySequence = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         mySequence->setOnPlay(masl::CallbackPtr(
