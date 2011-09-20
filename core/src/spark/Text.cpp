@@ -84,7 +84,9 @@ namespace spark {
 
     void 
     Text::handleI18nOnLanguageSwitch(const EventPtr theEvent) {
+        AC_PRINT << " handle on language switch ";
         _myText = boost::static_pointer_cast<I18nText>(_myI18nItem)->getText();
+        AC_PRINT << "........ text " << _myText;
     }
 
     void

@@ -7,35 +7,48 @@ namespace spark {
 
     I18nContext::I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent) {
+        for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            addChild(*it, false);
+        }
         defaultLanguage_ = _myXMLNode->getAttributeAs<std::string>("defaultLanguage","en"); 
-        AC_PRINT << "default language " << defaultLanguage_;
+        needsUpdate_ = true;
     }
 
     I18nContext::~I18nContext() {
     }
 
     void
+    I18nContext::setup() {
+        if (needsUpdate_) {
+            needsUpdate_ = false;
+            switchLanguage(defaultLanguage_);
+        }
+    }
+
+    void
     I18nContext::switchLanguage(const std::string & theLanguage) {
-        AC_INFO << "I18n context " << getName() << " switching to language " << theLanguage << " _myLanguage: " << language_;
+        AC_PRINT << "I18n context " << getName() << " switching to language " << theLanguage << " _myLanguage: " << language_;
         if (language_ != theLanguage) {
             language_ = theLanguage;
-
             for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
                 I18nItemPtr myItem = boost::static_pointer_cast<I18nItem>(*it);
                 if (myItem) myItem->switchLanguage(theLanguage);
             }
         }
-        EventPtr myEvent = EventFactory::get().handleEvent("<I18nEvent type=\"on_language_switch\">");
+        EventPtr myEvent = EventFactory::get().handleEvent("<I18nEvent type=\"on_language_switch\"/>");
         (*myEvent)();
     }
 
     void
-    I18nContext::addChild(ComponentPtr theChild) {
+    I18nContext::addChild(const ComponentPtr theChild, const bool theSetParentFlag) {
+        AC_PRINT << "******************* addChild to I18nContext";
         I18nItemPtr myChild = boost::static_pointer_cast<I18nItem>(theChild);
         if (!myChild) {
             throw I18nItemNotFoundException("adding child " + theChild->getName() + " to I18nContext " + getName() + " does not work because theChild is not an I18nItem", PLUS_FILE_LINE);
         }
-        Container::addChild(theChild);
+        if (theSetParentFlag) {
+            Container::addChild(theChild);
+        }
         if (language_ != "") {
             myChild->switchLanguage(language_);
         }
@@ -48,8 +61,10 @@ namespace spark {
     I18nItem::I18nItem(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
               Component(theXMLNode, theParent){
     }
+
     I18nItem::~I18nItem() {
     }
+
     void 
     I18nItem::switchLanguage(const std::string & theLanguage) {
         AC_PRINT << "item switch language";
@@ -70,49 +85,11 @@ namespace spark {
     I18nText::getText() {
         return text_;
     }
-
 }
 
-/*
-
-spark.I18nContext.Constructor = function (Protected) {
-    Public.Inherit(spark.EventDispatcher);
-
-
-    Base.postRealize = Public.postRealize;
-    Public.postRealize = function () {
-        Base.postRealize();
-        _myDefaultLanguage = Protected.getString("defaultLanguage", "en");
-        Public.switchLanguage(_myDefaultLanguage);
-    };
-
-    Base.addChild = Public.addChild;
-    Public.addChild = function (theChild) {
-        Base.addChild(theChild);
-        if (_myLanguage !== "") {
-            theChild.switchLanguage(_myLanguage);
-        }
-    };
-};
-*/
 
 
 /*
-spark.I18nItem = spark.AbstractClass("I18nItem");
-
-spark.I18nItem.Constructor = function (Protected) {
-    var Public = this;
-    var Base = {};
-
-    Public.Inherit(spark.Component);
-    Public.Inherit(spark.EventDispatcher);
-
-    var _myLanguage = "";
-
-    Public.__defineGetter__("language", function () {
-        return _myLanguage;
-    });
-
     var _myLanguageData = {};
     var _myLanguageNodes = {}; 
 

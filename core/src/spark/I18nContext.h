@@ -14,7 +14,8 @@ namespace spark {
         virtual ~I18nContext();
 
         virtual void switchLanguage(const std::string & theLanguage);
-        virtual void addChild(ComponentPtr theChild);
+        virtual void addChild(const ComponentPtr theChild, const bool theSetParentFlag = true);
+        virtual void setup();
 
         static const char * const SPARK_TYPE;             
         virtual const char * const & getType() const { return I18nContext::SPARK_TYPE;};
@@ -22,6 +23,7 @@ namespace spark {
     private:
         std::string  language_;
         std::string  defaultLanguage_;
+        bool needsUpdate_;
     };
     typedef boost::shared_ptr<I18nContext> I18nContextPtr;
 
@@ -32,6 +34,7 @@ namespace spark {
         virtual ~I18nItem();
         virtual void switchLanguage(const std::string & theLanguage);
     private:
+        std::map<std::string, std::string> languageData_;  //maps language key to language specific string
     };
     typedef boost::shared_ptr<I18nItem> I18nItemPtr;
     DEFINE_EXCEPTION(I18nItemNotFoundException, Exception);

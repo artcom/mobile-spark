@@ -17,7 +17,8 @@ namespace spark {
                 continue;
             }
             ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
-            _myChildren.push_back(childComponent);
+            AC_DEBUG << "Container Constructor " << getName() << " add child " << childComponent->getName();
+            addChild(childComponent, false);
         }
         setI18nContextIfAvailable();
     }
@@ -66,9 +67,12 @@ namespace spark {
     }
 
     void 
-    Container::addChild(ComponentPtr theChild) {
+    Container::addChild(const ComponentPtr theChild, const bool theSetParentFlag) {
         _myChildren.push_back(theChild);
-        theChild->setParent(shared_from_this());
+        //set parent is optional because this(!) can not be done from constructor
+        if (theSetParentFlag) {
+            theChild->setParent(shared_from_this());
+        }
     }
 
     void
@@ -99,14 +103,17 @@ namespace spark {
         I18nItemPtr myI18nItem;
         std::vector<I18nContextPtr> myContexts = getI18nContexts();
         for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
+            (*it)->setup();  //??? good idea? this avoids postrealize
             ComponentPtr myComponent = (*it)->getChildByName(theName);
             if (myComponent) {
                 myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);
                 if (myI18nItem) {
+                    AC_PRINT << ".................found i18nItem";
                     return myI18nItem;
                 }
             }
         }
+        AC_PRINT << "------------------ no i18nItem found";
         return myI18nItem;
     }
 }
