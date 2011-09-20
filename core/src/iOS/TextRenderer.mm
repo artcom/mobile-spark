@@ -32,19 +32,25 @@ namespace ios {
         
         //Create Font and add it as an attribute to the string.
         //Get Font data
-        NSString *fontPath = [NSString stringWithUTF8String:theFontPath.c_str()];
-        NSData *data = [[NSData alloc] initWithContentsOfFile:fontPath];
-        CGDataProviderRef fontProvider = CGDataProviderCreateWithCFData((CFDataRef)data);
-        [data release];
-        
-        //Create Core Graphics Font
-        CGFontRef theCGFont = CGFontCreateWithDataProvider(fontProvider);
-        CGDataProviderRelease(fontProvider);
-        
-        //Create Core Text Font with Core Graphics Font
-        CTFontRef font = CTFontCreateWithGraphicsFont(theCGFont, theFontSize, NULL, NULL);
-        CGFontRelease(theCGFont);
-        
+        CTFontRef font;
+        if (theFontPath.size() != 0){
+            NSString *fontPath = [NSString stringWithUTF8String:theFontPath.c_str()];
+            NSData *data = [[NSData alloc] initWithContentsOfFile:fontPath];
+            CGDataProviderRef fontProvider = CGDataProviderCreateWithCFData((CFDataRef)data);
+            [data release];
+            
+            //Create Core Graphics Font
+            CGFontRef theCGFont = CGFontCreateWithDataProvider(fontProvider);
+            CGDataProviderRelease(fontProvider);
+            
+            //Create Core Text Font with Core Graphics Font
+            font = CTFontCreateWithGraphicsFont(theCGFont, theFontSize, NULL, NULL);
+            CGFontRelease(theCGFont);
+        } else {
+            //Defeault Font
+            font = CTFontCreateWithName(CFSTR("Helvetica"), theFontSize, NULL);
+        }
+
         //add Font as an attribute to the string
         CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFStringGetLength((CFStringRef)string)), kCTFontAttributeName, font);
         CFRelease(font);
@@ -96,11 +102,16 @@ namespace ios {
         
         if (textureWidth != 0 && textureHeight != 0) {
             // Initialize a Bitmap context and set the text matrix to a known value.
-            GLubyte *bitmapData = (GLubyte *) calloc((textureWidth * textureHeight * 4.0), sizeof(GLubyte));
+            GLubyte *bitmapData = (GLubyte *) calloc((textureWidth * textureHeight * 4), sizeof(GLubyte));
             CGContextRef context = CGBitmapContextCreate(bitmapData, textureWidth, textureHeight, 8, textureWidth * 4, rgbColorSpace, kCGImageAlphaPremultipliedLast);
+            CGContextSetRGBFillColor(context, 0, 0, 0, 0);
             
             CGContextSetAllowsAntialiasing(context, YES);
             CGContextSetShouldAntialias(context, YES);
+            
+            CGContextSetAllowsFontSmoothing(context, YES);
+            CGContextSetShouldSmoothFonts(context, YES);
+            
             CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
 
             CGContextSetTextMatrix(context, CGAffineTransformIdentity);
@@ -132,6 +143,7 @@ namespace ios {
             
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureWidth, (GLsizei)textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapData);
@@ -148,8 +160,6 @@ namespace ios {
                 texture = theTextureId;
             }
         }
-        
-
         CGColorSpaceRelease(rgbColorSpace);        
     }
     
