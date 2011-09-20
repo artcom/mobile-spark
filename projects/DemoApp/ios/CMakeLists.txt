@@ -56,7 +56,7 @@ ADD_FRAMEWORK(${EXECUTABLE_NAME} QuartzCore)
 ADD_FRAMEWORK(${EXECUTABLE_NAME} CoreText)
 
 #Link libraries
-target_link_libraries(${EXECUTABLE_NAME} demoapp)
+target_link_libraries(${EXECUTABLE_NAME} DemoApp)
 target_link_libraries(${EXECUTABLE_NAME} ${masl_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${mar_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${animation_LIBRARY_DIRS})
