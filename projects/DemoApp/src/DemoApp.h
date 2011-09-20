@@ -32,6 +32,7 @@ namespace demoapp {
             void onTouch(spark::EventPtr theEvent);
             void insertCreatedComponent();
             void onSizeChanged(spark::EventPtr theEvent);
+            void onFrame(spark::EventPtr theEvent);
 
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
