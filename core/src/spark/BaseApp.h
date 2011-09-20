@@ -20,6 +20,8 @@ namespace spark {
             virtual ~BaseApp();
 
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
+            bool isSetup() const {return _mySetupFlag;}
+            bool isSparkRealized() const {return _mySparkRealizedFlag;}
             void realize();
             void loadLayoutAndRegisterEvents(const std::string & theLayoutFile);
             std::string findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, std::string & theOrientation);
@@ -34,6 +36,8 @@ namespace spark {
 
         protected:
             std::string appPath_;
+            bool _mySetupFlag;       
+            bool _mySparkRealizedFlag;         
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;
