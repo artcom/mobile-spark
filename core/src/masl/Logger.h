@@ -45,12 +45,12 @@ namespace masl {
             }*/
             void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);
             void setLoggerTopLevelTag(const std::string & theTagString);
-            void setSeverity(const Severity theSeverity) { _myGlobalSeverity = theSeverity;};
+            void setSeverity(const Severity theSeverity);
             /**
             sets the verbosity for a particular module; an id range can be supplied;
             the default settings will be that all module ids (line numbers) in a range will be selected.
             */
-            void setModuleSeverity(Severity theSeverity,
+            void setModuleSeverity(const std::string & theSeverity,
                 const std::string & theModule,
                 int theMidId = 0,
                 int theMaxId = std::numeric_limits<int>::max() );
@@ -61,6 +61,7 @@ namespace masl {
 
         private:
             Severity getSeverityFromString(std::string theString, Severity theDefault) const;
+            void parseEnvModuleSeverity();
             std::string _myTopLevelLogTag;
             Severity _myGlobalSeverity;
             std::multimap<std::string,ModuleSeverity> _mySeveritySettings;
