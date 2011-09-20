@@ -6,7 +6,7 @@
 #include <boost/bind.hpp>
 
 namespace animation {
-   
+
     FunctionPtr EasingFnc(EasingFunctionPtr4 theFncPtr) {
         boost::function<float(float,float,float,float)> myFncPtr = theFncPtr;
         return boost::bind(myFncPtr, _1,0,1,1);
@@ -265,7 +265,7 @@ float easeInOutElastic(float t, const float b, const float c, const float d, flo
     if (t < 1)  {
         t-=1;
         return -.5*(a*pow(2,10*t) * sin( (t*d-s)*(2*PI)/p )) + b;
-    } 
+    }
     t-=1;
     return a*pow(2,-10*t) * sin( (t*d-s)*(2*PI)/p )*.5 + c + b;
 }

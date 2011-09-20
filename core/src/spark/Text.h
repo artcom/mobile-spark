@@ -7,19 +7,21 @@ using namespace mar;
 
 namespace spark {
     class Text : public ShapeWidget {
-    public: 
+    public:
         Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
-        virtual ~Text();    
-        virtual void prerender(MatrixStack& theCurrentMatrixStack);   
+        virtual ~Text();
+        virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onResume();
         const vector2 & getTextSize();
         void setText(std::string theText) { _myText = theText; _myDirtyFlag = true;};
 
-        static const char * const SPARK_TYPE;             
+        static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Text::SPARK_TYPE;};
     private:
         void build();
-        
+        void attachToI18nItem();
+        void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
+
         std::string _myText;
         bool _myDirtyFlag;
         int _myFontSize;
@@ -32,5 +34,7 @@ namespace spark {
     };
 
     typedef boost::shared_ptr<Text> TextPtr;
+    typedef MemberFunctionEventCallback<Text, TextPtr> TextCB;
+
 };
-#endif 
+#endif

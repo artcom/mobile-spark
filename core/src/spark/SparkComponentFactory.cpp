@@ -10,7 +10,7 @@ using namespace masl;
 using namespace mar;
 
 namespace spark {
-    
+
     SparkComponentFactory::SparkComponentFactory() {
     }
     SparkComponentFactory::~SparkComponentFactory() {
@@ -18,19 +18,19 @@ namespace spark {
 
 
     // Returns 'true' if registration was successful
-    bool 
+    bool
     SparkComponentFactory::registerComponent(const std::string & theComponentName,
                     const CreateComponentCallback theCreateFn) {
         return createCallbackMap_.insert(CallbackMap::value_type(theComponentName, theCreateFn)).second;
     }
 
     // Returns 'true' if the ShapeId was registered before
-    bool 
+    bool
     SparkComponentFactory::unregisterComponent(const std::string & theComponentName) {
         return createCallbackMap_.erase(theComponentName) == 1;
     }
 
-    ComponentPtr 
+    ComponentPtr
     SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
         CallbackMap::const_iterator i;
         if (templateMap_.find(theNode->nodeName) != templateMap_.end()) {
@@ -58,13 +58,13 @@ namespace spark {
         return (i->second)(theApp, theNode, theParent);
     }
 
-    ComponentPtr 
+    ComponentPtr
     SparkComponentFactory::loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath) {
         std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
         return loadSparkComponentsFromString(theApp, myLayout);
     }
 
-    ComponentPtr 
+    ComponentPtr
     SparkComponentFactory::loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode) {
         XMLNodePtr myNode(new XMLNode(theNode));
         resolveTemplates(theApp, myNode);
@@ -86,12 +86,12 @@ namespace spark {
     }
 
     /*
-     * assumptions: 
+     * assumptions:
      * - Template nodes should be child nodes of root node of every file
      * - Templates should be included only once
      * - Templates should be included before they are used
      */
-    void 
+    void
     SparkComponentFactory::resolveTemplates(const BaseAppPtr theApp, XMLNodePtr theRoot) {
         for (std::vector<XMLNodePtr>::iterator it = theRoot->children.begin(); it != theRoot->children.end(); ++it) {
             if ((*it)->nodeName == "Template") {

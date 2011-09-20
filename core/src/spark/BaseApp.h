@@ -15,7 +15,7 @@
 namespace spark {
 
     class BaseApp : public boost::enable_shared_from_this<BaseApp> {
-        public: 
+        public:
             BaseApp(const std::string & theAppPath);
             virtual ~BaseApp();
 
@@ -26,10 +26,10 @@ namespace spark {
             virtual void onFrame(EventPtr theEvent);
             virtual void onPause(EventPtr theEvent);
             virtual void onResume();
-            
+
             virtual void onEvent(std::string theEventString);
 
-            spark::WindowPtr _mySparkWindow; 
+            spark::WindowPtr _mySparkWindow;
             void renderText(std::string theMessage, int theOpenGLTextureId);
 
         protected:

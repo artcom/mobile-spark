@@ -4,9 +4,9 @@
 #
 # This file is part of the ART+COM CMake Library (acmake).
 #
-# It is distributed under the Boost Software License, Version 1.0. 
+# It is distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at
-#  http://www.boost.org/LICENSE_1_0.txt)             
+#  http://www.boost.org/LICENSE_1_0.txt)
 # __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 #
 #
@@ -52,7 +52,7 @@ macro(ac_add_library LIBRARY_NAME LIBRARY_PATH)
         "STATIC;SHARED;IMPORTED;IMPORTED_LOCATION"
         ${ARGN}
     )
-    
+
     # do the same manually for name and path
     set(THIS_LIBRARY_NAME "${LIBRARY_NAME}")
     set(THIS_LIBRARY_PATH "${LIBRARY_PATH}")
@@ -76,13 +76,13 @@ macro(ac_add_library LIBRARY_NAME LIBRARY_PATH)
         set_property(TARGET ${THIS_LIBRARY_NAME} PROPERTY
                     IMPORTED_LOCATION ${THIS_IMPORTED_LOCATION})
     endif()
-    
+
     IF(IOS)
-		#Prevents that Xcode automatically creates Release and Debug Folders for static libraries
-		SET_TARGET_PROPERTIES(${THIS_LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-		SET_TARGET_PROPERTIES(${THIS_LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-	ENDIF()
-	
+        #Prevents that Xcode automatically creates Release and Debug Folders for static libraries
+        SET_TARGET_PROPERTIES(${THIS_LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+        SET_TARGET_PROPERTIES(${THIS_LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+    ENDIF()
+
     # add global include and library paths
     _ac_add_global_paths(${THIS_LIBRARY_NAME})
 

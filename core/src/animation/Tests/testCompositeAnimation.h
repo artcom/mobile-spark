@@ -58,12 +58,12 @@ namespace animation {
             perform_ParallelFinishTest();
             perform_parallelCancelTest();
         }
-        
+
         class Object {
-            private: 
+            private:
                 float x;
                 float y;
-            public: 
+            public:
                 Object() { x = 0; y = 0; };
                 void setX(float theX) { x = theX;};
                 void setY(float theY) { y = theY;};
@@ -83,7 +83,7 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
             SequenceAnimationPtr mySequence = SequenceAnimationPtr(new SequenceAnimation);
             ENSURE_MSG(mySequence, "mySequence should not be null");
-            
+
             AnimationManager::get().play(mySequence);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
@@ -99,7 +99,7 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
             ParallelAnimationPtr myParallel = ParallelAnimationPtr(new ParallelAnimation);
             ENSURE_MSG(myParallel, "myParallel should not be null");
-            
+
             AnimationManager::get().play(myParallel);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 1);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), true);
@@ -113,7 +113,7 @@ namespace animation {
             AnimationManager::get().init(0);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
-           
+
             SequenceAnimationPtr mySequence = SequenceAnimationPtr(new SequenceAnimation);
             ENSURE_MSG(mySequence, "mySequence should not be null");
 
@@ -159,11 +159,11 @@ namespace animation {
             ENSURE_EQUAL(mySequence->isFinished(), true);
         }
 
-        void perform_ParallelTest() {                
+        void perform_ParallelTest() {
             AnimationManager::get().init(0);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
-           
+
             ParallelAnimationPtr myParallel = ParallelAnimationPtr(new ParallelAnimation);
             ENSURE_MSG(myParallel, "myParallel should not be null");
 
@@ -251,7 +251,7 @@ namespace animation {
             AnimationManager::get().play(mySequence);
             AnimationManager::get().doFrame(myDuration1);
 
-            //finish after first Animation 
+            //finish after first Animation
             mySequence->finish(myDuration1);
             ENSURE_EQUAL(mySequence->isRunning(),false);
             ENSURE_EQUAL(mySequence->isFinished(),true);
@@ -279,7 +279,7 @@ namespace animation {
             mySequence->add(myAnimation2);
             AnimationManager::get().play(mySequence);
             AnimationManager::get().doFrame(myDuration1-2);
-            
+
             //cancel before first animation finished
             mySequence->cancel();
             ENSURE_EQUAL(mySequence->isRunning(),false);
@@ -294,7 +294,7 @@ namespace animation {
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
         }
-            
+
         void perform_ParallelFinishTest() {
             AnimationManager::get().init(0);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
@@ -307,7 +307,7 @@ namespace animation {
             myParallel->add(myAnimation1);
             myParallel->add(myAnimation2);
             AnimationManager::get().play(myParallel);
-            
+
             //finish before first animation finished
             myParallel->finish(myDuration1-2);
             ENSURE_EQUAL(myParallel->isRunning(),false);
@@ -335,7 +335,7 @@ namespace animation {
             myParallel->add(myAnimation1);
             myParallel->add(myAnimation2);
             AnimationManager::get().play(myParallel);
-            
+
             //cancel before first animation finished
             AnimationManager::get().doFrame(myDuration1-2);
             myParallel->cancel();
@@ -346,11 +346,11 @@ namespace animation {
             ENSURE_EQUAL(myAnimation2->isRunning(), false);
             ENSURE_EQUAL(myAnimation2->isFinished(), false);
             ENSURE_MSG(myObject->getX() > 0 && myObject->getX() < 1, "x should be between 0 and 1");
-            ENSURE_MSG(myObject->getY() > 23 && myObject->getY() < 42, "y should be between 23 and 42");  
+            ENSURE_MSG(myObject->getY() > 23 && myObject->getY() < 42, "y should be between 23 and 42");
             AnimationManager::get().doFrame(myDuration1-1);
             ENSURE_EQUAL(AnimationManager::get().isPlaying(), false);
             ENSURE_EQUAL(AnimationManager::get().animationCount(), 0);
         }
-    };    
+    };
 };
 #endif

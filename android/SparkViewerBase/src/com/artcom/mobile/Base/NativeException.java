@@ -1,11 +1,11 @@
 package com.artcom.mobile.Base;
 
 public class NativeException extends Exception {
-    
+
 
     String what_;
     String where_;
-    
+
     public NativeException() {
         super();
     }

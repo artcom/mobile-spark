@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class EnvMap {
-   private Map<String,String> _myEnvironmentVariables = new HashMap<String, String>(); 
+   private Map<String,String> _myEnvironmentVariables = new HashMap<String, String>();
 
    public void EnvMap () {
    }
@@ -27,7 +27,7 @@ public class EnvMap {
             }
         }
    }
-    
+
    public boolean hasEnv(String theKey) {
        return _myEnvironmentVariables.containsKey(theKey);
    }

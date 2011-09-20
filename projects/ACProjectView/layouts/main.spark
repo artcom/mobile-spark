@@ -4,6 +4,7 @@
     <Template name="Project" src="/project.spark"/>
     <Template name="ProjectViewer" src="/projectViewer.spark"/>
     
+
     <!-- userinterface is located in 2dworld -->
     <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
 
@@ -25,6 +26,7 @@
             <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" x="0"  y="200" src="/kinetik_teaser_thumb.png">
             </Project>
 
+
             <Project name="project5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" x="265"  y="200" src="/levelgreen_teaser_thumb.png">
             </Project>
 
@@ -35,6 +37,7 @@
         
         <ProjectViewer name="projectViewer" visible="false">
         </ProjectViewer>
+
 
     </World>        
 </Window>

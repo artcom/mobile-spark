@@ -42,11 +42,11 @@ namespace masl {
             void run() {
                 perform_MatrixStackTest();
             }
-            
-            void perform_MatrixStackTest() {                
+
+            void perform_MatrixStackTest() {
                 MatrixStack myStack;
                 ENSURE_MSG(myStack.getSize() == 1, "initial matrix stack should be of size 1");
-                ENSURE_MSG(myStack.getTop().data()[0] == 1 && 
+                ENSURE_MSG(myStack.getTop().data()[0] == 1 &&
                            myStack.getTop().data()[1] == 0 &&
                            myStack.getTop().data()[2] == 0 &&
                            myStack.getTop().data()[3] == 0 &&
@@ -64,7 +64,7 @@ namespace masl {
                            myStack.getTop().data()[15] == 1 , "inital top should be identity");
                 myStack.push();
                 ENSURE_EQUAL(myStack.getSize(), 2);
-                ENSURE_MSG(myStack.getTop().data()[0] == 1 && 
+                ENSURE_MSG(myStack.getTop().data()[0] == 1 &&
                            myStack.getTop().data()[1] == 0 &&
                            myStack.getTop().data()[2] == 0 &&
                            myStack.getTop().data()[3] == 0 &&
@@ -98,7 +98,7 @@ namespace masl {
                 //           myStack.getTop().data()[13]<< "  " <<
                 //           myStack.getTop().data()[14]<< "  " <<
                 //           myStack.getTop().data()[15];
-                ENSURE_MSG(myStack.getTop().data()[0] == 1 && 
+                ENSURE_MSG(myStack.getTop().data()[0] == 1 &&
                            myStack.getTop().data()[1] == 0 &&
                            myStack.getTop().data()[2] == 0 &&
                            myStack.getTop().data()[3] == 0 &&
@@ -121,7 +121,7 @@ namespace masl {
 
 
             }
-    };    
+    };
 
 };
 #endif

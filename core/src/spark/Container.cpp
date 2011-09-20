@@ -23,18 +23,18 @@ namespace spark {
     Container::~Container() {
     }
 
-    VectorOfComponentPtr 
+    VectorOfComponentPtr
     Container::getChildrenByType(const std::string & theType) const {
         VectorOfComponentPtr myResult;
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             if ((*it)->getType() == theType) {
                 myResult.push_back(*it);
             }
-        }        
+        }
         return myResult;
     }
 
-    ComponentPtr 
+    ComponentPtr
     Container::getChildByName(const std::string & theName, bool theDeepFlag) const {
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             if ((*it)->getName() == theName) {
@@ -47,12 +47,12 @@ namespace spark {
                     }
                 }
             }
-        }        
+        }
         return ComponentPtr();
     }
 
     void 
-    Container::insertChild(ComponentPtr theChild) {
+    Container::addChild(ComponentPtr theChild) {
         _myChildren.push_back(theChild);
         theChild->setParent(shared_from_this());
     }

@@ -4,9 +4,9 @@
 #
 # This file is part of the ART+COM CMake Library (acmake).
 #
-# It is distributed under the Boost Software License, Version 1.0. 
+# It is distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at
-#  http://www.boost.org/LICENSE_1_0.txt)             
+#  http://www.boost.org/LICENSE_1_0.txt)
 # __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 #
 #
@@ -20,7 +20,7 @@ if(NOT ACMAKE_DEFAULT_BUILD_CONFIG)
 endif(NOT ACMAKE_DEFAULT_BUILD_CONFIG)
 
 
-# XXX uses undocumented behaviour: assumes CMAKE_CONFIGURATION_TYPES is 
+# XXX uses undocumented behaviour: assumes CMAKE_CONFIGURATION_TYPES is
 #     empty for single configuration generators
 if(CMAKE_CONFIGURATION_TYPES)
     # multi config generator

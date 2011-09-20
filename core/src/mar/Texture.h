@@ -5,7 +5,7 @@
 #include "openGL_functions.h"
 
 namespace mar {
-        
+
     class Texture {
         public:
             Texture();
@@ -14,12 +14,12 @@ namespace mar {
 
             GLuint width_;
             GLuint height_;
-            bool transparency_;            
+            bool transparency_;
         private:
             GLuint textureId_;
     };
     typedef boost::shared_ptr<Texture> TexturePtr;
-    
+
 };
 
-#endif 
+#endif
