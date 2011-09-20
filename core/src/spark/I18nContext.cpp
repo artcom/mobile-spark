@@ -11,8 +11,8 @@ namespace spark {
         for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             addChild(*it, false);
         }
-        std::string myLanguage = _myXMLNode->getAttributeAs<std::string>("defaultLanguage","en"); 
-        defaultLanguage_ = getLanguageId(myLanguage);
+        std::string myLanguage = _myXMLNode->getAttributeAs<std::string>("defaultLanguage", I18nConstants::LANGUAGE_STRINGS[EN]); 
+        defaultLanguage_ = I18nConstants::getLanguageId(myLanguage);
         needsUpdate_ = true;
     }
 
@@ -29,7 +29,7 @@ namespace spark {
 
     void
     I18nContext::switchLanguage(const LANGUAGE theLanguage) {
-        AC_PRINT << "I18n context " << getName() << " switching to language " << theLanguage << " _myLanguage: " << language_;
+        AC_DEBUG << "I18n context " << getName() << " switching to language " << theLanguage << " _myLanguage: " << language_;
         if (language_ != theLanguage) {
             language_ = theLanguage;
             for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
@@ -37,13 +37,13 @@ namespace spark {
                 if (myItem) myItem->switchLanguage(theLanguage);
             }
         }
-        EventPtr myEvent = EventFactory::get().handleEvent("<I18nEvent type=\"on_language_switch\"/>");
+        EventPtr myEvent = EventFactory::get().handleEvent("<" + std::string(I18nEvent::CLASSNAME) + " type=\"" + std::string(I18nEvent::ON_LANGUAGE_SWITCH) + "\"/>");
+        myEvent->connect(getApp()->_mySparkWindow);
         (*myEvent)();
     }
 
     void
     I18nContext::addChild(const ComponentPtr theChild, const bool theSetParentFlag) {
-        AC_PRINT << "******************* addChild to I18nContext";
         I18nItemPtr myChild = boost::static_pointer_cast<I18nItem>(theChild);
         if (!myChild) {
             throw I18nItemNotFoundException("adding child " + theChild->getName() + " to I18nContext " + getName() + " does not work because theChild is not an I18nItem", PLUS_FILE_LINE);
@@ -51,7 +51,7 @@ namespace spark {
         if (theSetParentFlag) {
             Container::addChild(theChild);
         }
-        if (language_ != "") {
+        if (language_ != NO_LANGUAGE) {
             myChild->switchLanguage(language_);
         }
     }
@@ -62,13 +62,9 @@ namespace spark {
     ///////////////////////////////////////////////////////I18nItem
     I18nItem::I18nItem(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
               Component(theXMLNode, theParent){
-
-        AC_PRINT << "constructor i18nItem " << getName() << "  " << getNodeName();
         for (std::vector<XMLNodePtr>::iterator it = theXMLNode->children.begin(); it != theXMLNode->children.end(); ++it) {
-            AC_PRINT << (*it)->nodeName << "  " << (*it)->content << "  " <<  (*it)->name << " children " << (*it)->children.size();
-            AC_PRINT << "create new xml node for children";
-            //XMLNodePtr child = XMLNodePtr(new XMLNode((
-            languageData_[(*it)->nodeName] = (*it)->nodeName;
+            LANGUAGE myLanguage = I18nConstants::getLanguageId((*it)->nodeName);
+            languageData_[myLanguage] = (*it)->content;
         }
     }
 
@@ -78,14 +74,12 @@ namespace spark {
     void 
     I18nItem::switchLanguage(const LANGUAGE theLanguage) {
         language_ = theLanguage;
-        AC_PRINT << "item switch language";
     }
 
     std::string 
     I18nItem::getLanguageData(const LANGUAGE theLanguage) const {
         std::string myData = "";
-        const std::string myLanguage = (theLanguage != NO_LANGUAGE ? theLanguage : language_);
-        AC_PRINT << "get language Data for language " << theLanguage;
+        const LANGUAGE myLanguage = (theLanguage != NO_LANGUAGE ? theLanguage : language_);
         if (languageData_.find(myLanguage) != languageData_.end()) {
             myData = languageData_.at(myLanguage);
         }
@@ -109,231 +103,3 @@ namespace spark {
 }
 
 
-
-/*
-    var _myLanguageData = {};
-    var _myLanguageNodes = {}; 
-
-    Protected.languageData = function () {
-        return _myLanguageData;
-    };
-
-    Base.realize = Public.realize;
-    Public.realize = function () {
-        Base.realize();
-        var myNode = Public.node;
-        for (var i = 0; i < myNode.childNodesLength(); i++) {
-            var myChild = myNode.childNode(i);
-            var myLang = myChild.nodeName;
-            var myData = "";
-            var myNumChildren = myChild.childNodesLength();
-            for (var j = 0; j < myNumChildren; j++) {
-                myData += myChild.childNode(j).nodeValue;
-            }
-            Public.addLanguageData(myLang, myData);
-            Public.addLanguageNode(myLang, myChild);
-        }
-    };
-
-    Protected.createEvent = function (theLanguage) {
-        return new spark.I18nEvent(theLanguage);
-    };
-
-    Public.getLanguageData = function (theLanguage) {
-        if (!theLanguage) {
-            theLanguage = _myLanguage;
-        }
-        if (!(theLanguage in _myLanguageData)) {
-            Logger.debug("I18n item '" + Public.name + "' does not contain language '" + theLanguage + "'");
-            if (Public.parent.defaultLanguage in _myLanguageData) {
-                return _myLanguageData[Public.parent.defaultLanguage];
-            } else {
-                Logger.warning("I18n item '" + Public.name + "' does not contain defaultlanguage '" + Public.parent.defaultLanguage + "'");
-                return null;
-            }
-        } else {
-            return _myLanguageData[theLanguage];
-        }
-    };
-
-    Public.hasLanguageData = function (theLanguage) {
-        return theLanguage in _myLanguageData;
-    };
-    
-    Public.getLanguageNode = function(theLanguage) {
-        if(!theLanguage) {
-            theLanguage = _myLanguage;
-        }
-        if(!(theLanguage in _myLanguageNodes)) {
-            Logger.info("I18n item '" + Public.name + "' does not contain language '" + theLanguage + "'");
-            if (Public.parent.defaultLanguage in _myLanguageNodes) {
-                return _myLanguageNodes[Public.parent.defaultLanguage];
-            } else {
-                Logger.warning("I18n item '" + Public.name + "' does not contain defaultlanguage '" + Public.parent.defaultLanguage + "'");
-                return null;
-            }
-        } else {
-            return _myLanguageNodes[theLanguage];
-        }
-    };
-    
-    Public.hasLanguageNode = function(theLanguage) {
-        return theLanguage in _myLanguageNodes;
-    };
-
-    Public.switchLanguage = function (theLanguage) {
-        if (theLanguage == _myLanguage) {
-            return;
-        }
-
-        // XXX; one of these tests is redundant now
-        if (!(theLanguage in _myLanguageData)) {
-            Logger.debug("I18n item " + Public.name + " does not contain language " + theLanguage);
-        }
-        if(!(theLanguage in _myLanguageNodes)) {
-            Logger.debug("I18n item " + Public.name + " does not contain language node " + theLanguage);
-        }
-        _myLanguage = theLanguage;
-        var myEvent = Protected.createEvent(theLanguage);
-        Public.dispatchEvent(myEvent);
-    };
-
-    Public.addLanguageData = function (theLanguage, theData) {
-        if (theLanguage in _myLanguageData) {
-            Logger.warning("duplicate i18n data for item " + Public.name + " in language " + theLanguage);
-        }
-        _myLanguageData[theLanguage] = theData;
-    };
-    	   
-    Public.addLanguageNode = function(theLanguage, theNode) {
-        if(theLanguage in _myLanguageNodes) {
-            Logger.warning("duplicate i18n node for item " + Public.name + " in language " + theLanguage);
-        }
-        _myLanguageNodes[theLanguage] = theNode;
-    };
-
-    Public.changeLanguageData = function (theLanguage, theData) {
-        if (theLanguage in _myLanguageData) {
-            Logger.info("overwrite i18n data for item " + Public.name + " in language " + theLanguage);
-        }
-        _myLanguageData[theLanguage] = theData;
-        var myEvent = Protected.createEvent(theLanguage);
-        Public.dispatchEvent(myEvent);
-    };
-
-};
-
-spark.I18nText = spark.ComponentClass("I18nText");
-
-spark.I18nText.Constructor = function (Protected) {
-    var Public = this;
-    var Base = {};
-
-    Public.Inherit(spark.I18nItem);
-
-    Base.createEvent = Protected.createEvent;
-    Protected.createEvent = function (theLanguage) {
-        var myEvent = Base.createEvent(theLanguage);
-        myEvent.text = Public.text;
-        myEvent.fontStyle = Public.fontStyle;
-        return myEvent;
-    };
-
-    Public.__defineGetter__("text", function () {
-        var myData = Public.getLanguageData(Public.language);
-        if (myData === null) {
-            return "";
-        } else {
-            return myData;
-        }
-        // see if this can be replaced by
-        // return Public.getLanguageData(Public.language) || "";
-    });
-		
-    Public.__defineGetter__("fontStyle", function() {
-        var myFontStyleNode = Public.getLanguageNode(Public.language);
-        return myFontStyleNode;
-    });
-};
-
-spark.I18nImage = spark.ComponentClass("I18nImage");
-
-spark.I18nImage.Constructor = function (Protected) {
-    var Public = this;
-    var Base = {};
-
-    Public.Inherit(spark.I18nItem);
-
-    Base.createEvent = Protected.createEvent;
-    Protected.createEvent = function (theLanguage) {
-        var myEvent = Base.createEvent(theLanguage);
-        myEvent.src = Public.src;
-        return myEvent;
-    };
-
-    Public.__defineGetter__("src", function () {
-        var myData = Public.getLanguageData(Public.language);
-        if (myData === null) {
-            return "";
-        } else {
-            return myData;
-        }
-        // see if this can be replaced by
-        // return Public.getLanguageData(Public.language) || "";
-    });
-};
-
-spark.I18nMovie = spark.ComponentClass("I18nMovie");
-
-spark.I18nMovie.Constructor = function (Protected) {
-    var Public = this;
-    var Base = {};
-
-    Public.Inherit(spark.I18nItem);
-    
-    Base.createEvent = Protected.createEvent;
-    Protected.createEvent = function (theLanguage) {
-        var myEvent = Base.createEvent(theLanguage);
-        myEvent.src = Public.src;
-        return myEvent;
-    };
-
-    Public.__defineGetter__("src", function () {
-        var myData = Public.getLanguageData(Public.language);
-        if (myData === null) {
-            return "";
-        } else {
-            return myData;
-        }
-        // see if this can be replaced by
-        // return Public.getLanguageData(Public.language) || "";
-    });
-};
-
-spark.I18nAudio = spark.ComponentClass("I18nAudio");
-
-spark.I18nAudio.Constructor = function (Protected) {
-    var Public = this;
-    var Base = {};
-
-    Public.Inherit(spark.I18nItem);
-    
-    Base.createEvent = Protected.createEvent;
-    Protected.createEvent = function (theLanguage) {
-        var myEvent = Base.createEvent(theLanguage);
-        myEvent.src = Public.src;
-        return myEvent;
-    };
-
-    Public.__defineGetter__("src", function () {
-        var myData = Public.getLanguageData(Public.language);
-        if (myData === null) {
-            return "";
-        } else {
-            return myData;
-        }
-        // see if this can be replaced by
-        // return Public.getLanguageData(Public.language) || "";
-    });
-};
-*/

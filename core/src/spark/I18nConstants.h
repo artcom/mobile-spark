@@ -4,11 +4,16 @@
 #include <masl/Exception.h>
 
 namespace spark {
-    DEFINE_EXCEPTION(LanguageNotFoundException, masl::Exception)
 
     enum LANGUAGE {DE, EN, NO_LANGUAGE = 1000};
-    const char* LANGUAGE_STRINGS[] = {"de", "en"};
-    const size_t NUM_LANGUAGES = 2;
-    LANGUAGE getLanguageId(const std::string & theString);
+    DEFINE_EXCEPTION(LanguageNotFoundException, masl::Exception)
+
+    class I18nConstants {
+    private:
+        static const size_t NUM_LANGUAGES;
+    public:
+        static const char* LANGUAGE_STRINGS[];
+        static LANGUAGE getLanguageId(const std::string & theString);
+    };
 };
 #endif
