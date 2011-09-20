@@ -7,27 +7,27 @@ namespace spark {
 
     bool
     PrintComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_PRINT << "component name " << theComponent->getName();
+        AC_PRINT << "component name " << *theComponent;
         return true;
     }
 
     bool
     OnPauseComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_DEBUG << theComponent->getName() << " onPause";
+        AC_DEBUG << *theComponent << " onPause";
         theComponent->onPause();
         return true;
     }
 
     bool
     RealizeComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_DEBUG << theComponent->getName() << " realize";
+        AC_DEBUG << *theComponent << " realize";
         theComponent->realize();
         return true;
     }
 
     bool
     OnResumeComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_DEBUG << theComponent->getName() << " onResume";
+        AC_DEBUG << *theComponent << " onResume";
         theComponent->onResume();
         return true;
     }
@@ -53,7 +53,8 @@ namespace spark {
                 if (myShapeWidget && myShapeWidget->getShape() &&
                     myShapeWidget->AABB2Dcontains(x_,y_,projectionMatrix_)) {
                     list_.push_back(std::make_pair(myShapeWidget, myShapeWidget->getWorldZ()));
-                    //AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();
+                    AC_TRACE << "CollectAABBComponentVisitor collected: " << *myShapeWidget << ", z: " 
+                             << myShapeWidget->getZ() << "  current size " << list_.size();
                 }
                 return true;
             }
@@ -79,7 +80,9 @@ namespace spark {
                 if (myShapeWidget && myShapeWidget->getShape()) {
                     RenderKey myKey(myShapeWidget->getWorldZ(), myShapeWidget->getShape()->isTransparent());
                     list_.push_back(std::make_pair(myShapeWidget, myKey));
-                    //AC_PRINT << "collect " << myShapeWidget->getName() << ", " << myShapeWidget->getZ() << "  current size " << list_.size();
+                    AC_TRACE << "CollectVisibleNodesVisitor collected: " << *myShapeWidget << ", worldZ: " 
+                             << myShapeWidget->getWorldZ() << " isTransparent: " << myShapeWidget->getShape()->isTransparent() 
+                             << "  current size " << list_.size();
                 }
                 return true;
             }
