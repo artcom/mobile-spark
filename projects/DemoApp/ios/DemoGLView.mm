@@ -7,6 +7,7 @@
 - (void) createApp
 {
     myApp = new demoapp::DemoApp();
+    MSAAQuality = useNoneMSAA;
 }
 
 - (void)dealloc
