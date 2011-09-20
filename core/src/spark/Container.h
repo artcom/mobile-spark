@@ -29,6 +29,8 @@ namespace spark {
         const BaseAppPtr getApp() { return _myApp;}
 
         const I18nContextPtr getI18nContext() const { return _myI18nContext; };
+        LANGUAGE getLanguage();
+        void switchLanguage(LANGUAGE theLanguage);
 
     protected:
         const BaseAppPtr _myApp;
@@ -39,8 +41,6 @@ namespace spark {
 
         std::vector<I18nContextPtr> getI18nContexts(); 
         I18nItemPtr getI18nItemByName(const std::string & theName);
-        LANGUAGE getLanguage();
-        void switchLanguage(LANGUAGE theLanguage);
 
     private:
         void setI18nContextIfAvailable();

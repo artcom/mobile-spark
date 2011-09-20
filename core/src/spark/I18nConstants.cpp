@@ -1,8 +1,12 @@
 #include "I18nConstants.h"
 #include <masl/string_functions.h>
 namespace spark {
+
+    const size_t I18nConstants::NUM_LANGUAGES = 2;
+    const char* I18nConstants::LANGUAGE_STRINGS[I18nConstants::NUM_LANGUAGES] = {"de", "en"};
+
     LANGUAGE
-    getLanguageId(const std::string & theString) {
+    I18nConstants::getLanguageId(const std::string & theString) {
         for (size_t i = 0; i < NUM_LANGUAGES; ++i) {
             if (theString == LANGUAGE_STRINGS[i]) {
                 return (LANGUAGE)i;

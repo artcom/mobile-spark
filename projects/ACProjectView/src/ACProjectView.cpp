@@ -67,7 +67,7 @@ namespace acprojectview {
         }
 
         spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("language_toggle", true);
-        spark:::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitch));
+        spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitch));
         myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
         
     }
@@ -95,7 +95,7 @@ namespace acprojectview {
 
     void ACProjectView::onLanguageSwitch(EventPtr theEvent) {
         AC_PRINT << "on language switch in ACProjectView";
-        std::string myLanguage = _mySparkWindow->getLanguage();
+        LANGUAGE myLanguage = _mySparkWindow->getLanguage();
         AC_PRINT << " current language " << myLanguage;
         _mySparkWindow->switchLanguage(myLanguage == spark::DE ? spark::EN : spark::DE);
     }
