@@ -42,7 +42,7 @@ namespace acprojectview {
     }
 
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
-        BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
+       BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         ACProjectViewComponentMapInitializer::init();
         std::string myOrientation;
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
@@ -51,18 +51,21 @@ namespace acprojectview {
         BaseApp::realize();
         
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        _myProjectMenu = _mySparkWindow->getChildByName("2dworld")->getChildByName("main",true);
+        _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));
+        _myProjectViewer = boost::static_pointer_cast<ProjectViewerImpl>(_mySparkWindow->getChildByName("2dworld")->getChildByName("projectViewer",true));
 
         
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onProjectItem));
-      
+        spark::EventCallbackPtr myBackCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onBack));
+        
+        _myProjectViewer->addEventListener(TouchEvent::PICKED, myBackCB,true);
+        
         _myProjectItems = boost::static_pointer_cast<spark::Container>(_myProjectMenu);
-        const VectorOfComponentPtr & myChildren = _myProjectItems->getChildrenByType("ProjectMenuItemImpl");
+        const VectorOfComponentPtr & myChildren = _myProjectItems->getChildrenByType(ProjectImpl::SPARK_TYPE);
         for (size_t i = 0; i < myChildren.size(); i++) {
-            ProjectMenuItemImplPtr myProject = boost::static_pointer_cast<ProjectMenuItemImpl>(myChildren[i]);
+            ProjectImplPtr myProject = boost::static_pointer_cast<ProjectImpl>(myChildren[i]);
             if (myProject) {
                 myProject->addEventListener(TouchEvent::PICKED, myPickedCB,true);
-                _myProjects.push_back(myProject);
             }
         }
         
@@ -70,23 +73,43 @@ namespace acprojectview {
     
     void ACProjectView::onProjectItem(EventPtr theEvent) {
         AC_PRINT << ":) __________ITEM: " << theEvent->getTarget()->getParent()->getName();
-        _myCurrentProject = boost::static_pointer_cast<ProjectMenuItemImpl>(theEvent->getTarget()->getParent());
-        //boost::static_pointer_cast<Widget>(_myCurrentProject)->setVisible(false);
+        _myProjectViewer->setVisible(true);
+        _myProjectViewer->setSensible(true);
+        _myProjectMenu->setSensible(false);
+        _myCurrentProject = boost::static_pointer_cast<ProjectImpl>(theEvent->getTarget()->getParent());
+        projectViewAnimation(_myCurrentProject->getX()+_myProjectMenu->getPreviewWidth()/2, 0, _myCurrentProject->getY() + _myProjectMenu->getPreviewHeight()/2, 0, 0, 1);
+         _myProjectViewer->showProject(_myCurrentProject);
+    }
+
+    void ACProjectView::onBack(EventPtr theEvent) {
+            AC_PRINT<< "----------- BACK";
+        projectViewAnimation(0, _myCurrentProject->getX() + _myProjectMenu->getPreviewWidth()/2, 0, _myCurrentProject->getY() + _myProjectMenu->getPreviewHeight()/2, 1, 0);
+        _myProjectMenu->setSensible(true);
+        _myProjectViewer->setSensible(false);
+    }
+    
+    void ACProjectView::projectViewAnimation(int fromX,int toX,int fromY,int toY,int fromScale,int toScale){
         WidgetPropertyAnimationPtr myZoomAnimationX = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myCurrentProject, &Widget::setScaleX, 1, 3, 100,
+                new WidgetPropertyAnimation(_myProjectViewer, &Widget::setScaleX, fromScale, toScale, _myAnimationTime,
                     animation::EasingFnc(animation::linearTween)));
         WidgetPropertyAnimationPtr myZoomAnimationY = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myCurrentProject, &Widget::setScaleY, 1, 3, 100,
+                new WidgetPropertyAnimation(_myProjectViewer, &Widget::setScaleY, fromScale, toScale, _myAnimationTime,
+                    animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myTransAnimationX = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myProjectViewer, &Widget::setX, fromX, toX, _myAnimationTime,
+                    animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myTransAnimationY = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myProjectViewer, &Widget::setY, fromY, toY, _myAnimationTime,
                     animation::EasingFnc(animation::linearTween)));
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myParallel->add(myZoomAnimationX);
         myParallel->add(myZoomAnimationY);
+        myParallel->add(myTransAnimationX);
+        myParallel->add(myTransAnimationY);
         animation::AnimationManager::get().play(myZoomAnimationX);
         animation::AnimationManager::get().play(myZoomAnimationY);
-
-        
-        
-        //boost::static_pointer_cast<Widget>(_myProjectItems)->setVisible(false);
+        animation::AnimationManager::get().play(myTransAnimationX);
+        animation::AnimationManager::get().play(myTransAnimationY);
     }
 
 }
