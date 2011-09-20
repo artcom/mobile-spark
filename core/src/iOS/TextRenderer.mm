@@ -99,8 +99,10 @@ namespace ios {
             GLubyte *bitmapData = (GLubyte *) calloc((textureWidth * textureHeight * 4.0), sizeof(GLubyte));
             CGContextRef context = CGBitmapContextCreate(bitmapData, textureWidth, textureHeight, 8, textureWidth * 4, rgbColorSpace, kCGImageAlphaPremultipliedLast);
             
+            CGContextSetAllowsAntialiasing(context, YES);
+            CGContextSetShouldAntialias(context, YES);
+            CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
 
-            
             CGContextSetTextMatrix(context, CGAffineTransformIdentity);
             // Flip the context so that the Bitmap is rendered right side up
             CGContextTranslateCTM(context, 0.0, textureHeight);
@@ -129,7 +131,7 @@ namespace ios {
             }
             
             glBindTexture(GL_TEXTURE_2D, texture);
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureWidth, (GLsizei)textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapData);
