@@ -23,6 +23,12 @@ namespace spark {
         Component();
         Component(const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Component() = 0;
+        
+        std::ostream & print(std::ostream & os) const;
+        friend inline std::ostream & operator<<(std::ostream & os, const Component & c) {
+            return c.print(os);
+        }
+
         virtual void realize() {};
         virtual void onPause() {};
         virtual void onResume() {};

@@ -58,7 +58,7 @@ namespace spark {
 
     std::ostream &
     Event::print(std::ostream & os) const {
-        os << classname_() << " type: '" << type_ << "' target: '" << target_->getName() << "' currentPhase: " << currentPhase_;
+        os << classname_() << " type: '" << type_ << "' target: '" << *target_ << "' currentPhase: " << currentPhase_;
         return os;
     }
 
