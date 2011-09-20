@@ -57,7 +57,7 @@ namespace spark {
         if (myPicked) {
             EventPtr myEvent = EventPtr(new TouchEvent(TouchEvent::PICKED, myPicked));
             (*myEvent)();
-            AC_PRINT << "______________________________________picked " << myPicked->getName();
+            AC_PRINT << "______________________________________picked " << *myPicked;
         } else {
             AC_DEBUG << "nothing picked";
         }

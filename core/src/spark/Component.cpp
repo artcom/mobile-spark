@@ -17,7 +17,13 @@ namespace spark {
     {}
 
     Component::~Component() {
-        AC_PRINT << ".................delete " + _myName;
+        AC_INFO << ".................delete " + _myName;
+    }
+
+    std::ostream &
+    Component::print(std::ostream & os) const {
+        os << getType() << " name: '" << getName() << "'";
+        return os;
     }
 
     ComponentPtr
