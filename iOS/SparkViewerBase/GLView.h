@@ -16,7 +16,7 @@
 #import "EventManager.h"
 
 typedef enum {
-    useNoneMSAA   = 0,
+    useNoneMSAA = 0,
     useMSAA2x = 2,
     useMSAA4x = 4,
     useMSAA8x = 8,
