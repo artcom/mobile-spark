@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Component.h"
+#include "I18nConstants.h"
 
 namespace spark {
     class BaseApp;
@@ -35,8 +36,11 @@ namespace spark {
         I18nContextPtr _myI18nContext;
         I18nItemPtr _myI18nItem;
         std::string _myI18nId;
+
         std::vector<I18nContextPtr> getI18nContexts(); 
         I18nItemPtr getI18nItemByName(const std::string & theName);
+        LANGUAGE getLanguage();
+        void switchLanguage(LANGUAGE theLanguage);
 
     private:
         void setI18nContextIfAvailable();
