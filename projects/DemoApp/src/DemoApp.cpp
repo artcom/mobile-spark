@@ -42,7 +42,7 @@ namespace demoapp {
 	
     WidgetPropertyAnimationPtr myAmazoneRotation;
 
-    DemoApp::DemoApp():BaseApp("demoapp"), _myCurrentSlide(0) {
+    DemoApp::DemoApp():BaseApp("DemoApp"), _myCurrentSlide(0) {
     }
 
     DemoApp::~DemoApp() {

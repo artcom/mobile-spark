@@ -71,12 +71,13 @@
         }
         
         //DemoApp
-        NSLog(@"width: %d,  height: %d ", width, height);
         NSString *path = [[NSBundle mainBundle] resourcePath];
         [self createApp];
         myApp->setup((0.0),[path UTF8String], width, height);
-        //myApp->onSizeChanged(width, height);
         
+        NSString *resizeEvent = [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%d,%d]' oldsize='[%d,%d]'/>", width, height, width, height];
+        myApp->onEvent([resizeEvent UTF8String]); 
+
         //Motion Events
         UITapGestureRecognizer *singleFingerTap = 
         [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
@@ -100,8 +101,8 @@
     //NSLog(@"Euler Angles roll: %f pitch: %f yaw: %f", attitude.roll, attitude.pitch, attitude.yaw);
     
     //render
-    NSString *myEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
-    myApp->onEvent([myEvent UTF8String]);    
+    NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
+    myApp->onEvent([frameEvent UTF8String]);    
     
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     [glContext presentRenderbuffer:GL_RENDERBUFFER];  
