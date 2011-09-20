@@ -19,8 +19,25 @@ namespace masl {
     const char * const LOG_GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
 
     Logger::Logger() : _myTopLevelLogTag("Unset"), _myGlobalSeverity(SEV_WARNING) {
+    }
+
+    Logger::~Logger() {}
+
+
+    void Logger::setLoggerTopLevelTag(const std::string & theTagString) {
+        _myTopLevelLogTag = theTagString;
+    }
     
+    void
+    Logger::setSeverity(const Severity theSeverity) {
+        _myGlobalSeverity = theSeverity;
+        parseEnvModuleSeverity();
+    }
+
+    void
+    Logger::parseEnvModuleSeverity() {
         const char * myEnv = getenv(LOG_MODULE_VERBOSITY_ENV);
+        AC_INFO << LOG_MODULE_VERBOSITY_ENV << " = " << myEnv;
         if (myEnv && strlen(myEnv) > 0) {
             std::string myLogLevelString(myEnv);
             std::string::size_type myColon;
@@ -33,13 +50,7 @@ namespace masl {
             }
         }
     }
-    Logger::~Logger() {}
 
-
-    void Logger::setLoggerTopLevelTag(const std::string & theTagString) {
-        _myTopLevelLogTag = theTagString;
-    }
-    
     /**
     return true if theSeverity is higher (numerically smaller) than the verbosity setting
     a different verbosity can be defined for any id range in any module; if there are different
@@ -152,14 +163,16 @@ namespace masl {
     }
 
     void
-    Logger::setModuleSeverity(Severity theSeverity,
+    Logger::setModuleSeverity(const std::string & theSeverityString,
                                const std::string & theModule,
                                int theMinId, int theMaxId)
     {
         const std::string & myModule = theModule;
+        Severity mySeverity = getSeverityFromString(theSeverityString, SEV_DEBUG);
+        AC_INFO << "setting verbosity for module " << myModule << " to " << theSeverityString;
         // TODO: remove item when there is an exact match
         _mySeveritySettings.insert(std::pair<const std::string, ModuleSeverity>(
-                                    file_string(myModule.c_str()), ModuleSeverity(theSeverity, theMinId, theMaxId)));
+                                    file_string(myModule.c_str()), ModuleSeverity(mySeverity, theMinId, theMaxId)));
     }
     
     Severity
@@ -176,6 +189,7 @@ namespace masl {
     void
     Logger::setModuleSeverity(const std::string & theSeverityString) {
     
+        AC_INFO << "setModuleSeverity " << theSeverityString;
         std::string mySeverityString = theSeverityString;
         std::vector<std::string> mySubStrings;
     
@@ -196,7 +210,6 @@ namespace masl {
             return;
         }
     
-        Severity mySeverity = getSeverityFromString(mySubStrings[0], SEV_DEBUG);
         std::string myModule = mySubStrings[1];
         int myMinId = 0, myMaxId = std::numeric_limits<int>::max();
         if (mySubStrings.size() > 2 && mySubStrings[2].size()) {
@@ -205,6 +218,6 @@ namespace masl {
         if (mySubStrings.size() > 3 && mySubStrings[3].size()) {
             myMaxId = as_int(mySubStrings[3]);
         }
-        setModuleSeverity(mySeverity, myModule, myMinId, myMaxId);
+        setModuleSeverity(mySubStrings[0], myModule, myMinId, myMaxId);
     }
 };
