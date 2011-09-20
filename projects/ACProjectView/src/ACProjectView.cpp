@@ -48,7 +48,6 @@ namespace acprojectview {
         std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
         MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
         loadLayoutAndRegisterEvents(mySparkFile);
-        BaseApp::realize();
         
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));

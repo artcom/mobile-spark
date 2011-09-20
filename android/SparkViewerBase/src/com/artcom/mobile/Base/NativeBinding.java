@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import com.artcom.mobile.Base.AC_Log;
 import com.artcom.mobile.Base.Severity;
 import com.artcom.mobile.Base.NativeException;
 public class NativeBinding {
+    public static SparkViewerActivity ourActivity;
 
 
   public static void loadLibraries() {
@@ -37,6 +39,7 @@ public class NativeBinding {
   public static native void putEnv(String theEnvVar);
   public static native void onResume();
   public static native void initBinding();
+  public static native void sparkRealize();
   public static native void onEvent(String theEvent);
 
   public static native void log(Severity theSeverity, String theFilename, int theLineNumber, String theMessage);
@@ -173,12 +176,10 @@ public class NativeBinding {
   }
 
   public static void freezeOrientation(String theOrientation) {
-      // TODO clean this up
-      AC_Log.print(theOrientation);
      if (theOrientation.compareTo("portrait") == 0) {
-         CameraTexture._myActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
+    	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
      } else if (theOrientation.compareTo("landscape") == 0) {
-         CameraTexture._myActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
+    	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
      }
   }
 
