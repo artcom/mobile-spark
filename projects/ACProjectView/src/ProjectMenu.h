@@ -10,6 +10,10 @@ namespace acprojectview {
             ProjectMenu(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
             virtual ~ProjectMenu();
             void arrangeProjects(const int theWidth, const int theHeight);
+            
+            int getPreviewWidth();
+            int getPreviewHeight();
+            
         private:
             
     };

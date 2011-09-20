@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <Window name="ProjectView" fullscreen="true" clearColor="[0,0,0,1]" orientation="landscape" width="800" height="480">
     
-     <Template name="ProjectMenuItem" src="/projectmenuitem.spark"/>
-   
+    <Template name="Project" src="/project.spark"/>
+    <Template name="ProjectViewer" src="/projectViewer.spark"/>
+    
     <!-- userinterface is located in 2dworld -->
     <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
 
@@ -11,43 +12,29 @@
 
         <ProjectMenu name="main">
             
-            <ProjectMenuItem sensible="true" name="item1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" x="0"  y="0" src="/belvedere_teaser_thumb_01.png">
-            </ProjectMenuItem>
+            <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" x="0"  y="0" src="/belvedere_teaser_thumb_01.png">
+	            <ContentImage src="/duality_teaser_thumb_01.png"/>
+            </Project>
             
-            <ProjectMenuItem name="item2" title="DUALITY" subtitle="Tokio, 2007" x="265" y="0" src="/duality_teaser_thumb_01.png">
-            </ProjectMenuItem>
+            <Project name="project2" title="DUALITY" subtitle="Tokio, 2007" x="265" y="0" src="/duality_teaser_thumb_01.png">
+            </Project>
             
-                        
-            
-            <ProjectMenuItem name="item3" title="Juraskope" subtitle="Museum für Naturkunde, Berlin, 2007" x="530" y="0" src="/juraskope_teaser_thumb.png">
-            </ProjectMenuItem>
+            <Project name="project3" title="Juraskope" subtitle="Museum für Naturkunde, Berlin, 2007" x="530" y="0" src="/juraskope_teaser_thumb.png">
+            </Project>
 
-	    
-            
-            <ProjectMenuItem name="item4" title="Kinetische Skulptur" subtitle="Museum München, 2008" x="0"  y="200" src="/kinetik_teaser_thumb.png">
-            </ProjectMenuItem>
+            <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" x="0"  y="200" src="/kinetik_teaser_thumb.png">
+            </Project>
 
+            <Project name="project5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" x="265"  y="200" src="/levelgreen_teaser_thumb.png">
+            </Project>
 
-            <ProjectMenuItem name="item6" title="Terravision" subtitle="1994" x="530"  y="200" src="/terravision_teaser_thumb.png">
-            </ProjectMenuItem>
+            <!--Project name="project6" title="Terravision" subtitle="1994" x="530"  y="200" src="/terravision_teaser_thumb.png">
+            </Project-->
           
-            <ProjectMenuItem name="item5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" x="265"  y="200" src="/levelgreen_teaser_thumb.png">
-        </ProjectMenuItem>
-
-
-
-	   
-
-            
-        </ProjectMenu>
-
-
-	
-	
-
-        <Transform name="transform">
-            <Text name="testtextgreen" y="580" x="10" z="13" text="Hello World" color="[0,1,0,1]" fontsize="32"/>
-        </Transform>    
+        </ProjectMenu>	
+        
+        <ProjectViewer name="projectViewer" visible="false">
+        </ProjectViewer>
 
     </World>        
 </Window>

@@ -3,7 +3,11 @@
 
 /////////////////// Application code, this should be in java or script language later...
 #include <spark/BaseApp.h>
-#include "ProjectMenuItemImpl.h"
+#include "ProjectImpl.h"
+#include "ProjectMenu.h"
+#include "ProjectViewerImpl.h"
+#include "ContentImage.h"
+
 
 #ifdef __ANDROID__
 extern "C" {
@@ -19,17 +23,22 @@ namespace acprojectview {
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
 
         private:
-                void onProjectItem(spark::EventPtr theEvent);
+            void onProjectItem(spark::EventPtr theEvent);
+            void onBack(spark::EventPtr theEvent);
+            void projectViewAnimation(int fromX, int toX, int fromY, int toY, int fromScale, int toScale);
+            
 
-        std::vector<ProjectMenuItemImplPtr> _myProjects;
-        ProjectMenuItemImplPtr _myCurrentProject; 
-        spark::ComponentPtr _myProjectMenu;
-        spark::ContainerPtr _myProjectItems;      	
+            //std::vector<ProjectImplPtr> _myProjects;
+            ProjectImplPtr _myCurrentProject; 
+            ProjectViewerImplPtr _myProjectViewer; 
+            ProjectMenuPtr _myProjectMenu;
+            spark::ContainerPtr _myProjectItems;  
+        
+            const static unsigned int _myAnimationTime = 250;
     };
 
     typedef boost::shared_ptr<ACProjectView> ACProjectViewPtr;
     typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr> ACProjectViewEventCB;
-
 };
 
 #endif 
