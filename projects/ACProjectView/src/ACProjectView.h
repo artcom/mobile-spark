@@ -19,12 +19,13 @@ namespace acprojectview {
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
 
         private:
-                void onProjectItem(spark::EventPtr theEvent);
+            void onProjectItem(spark::EventPtr theEvent);
+            void onLanguageSwitch(spark::EventPtr theEvent);
 
-        std::vector<ProjectMenuItemImplPtr> _myProjects;
-        ProjectMenuItemImplPtr _myCurrentProject; 
-        spark::ComponentPtr _myProjectMenu;
-        spark::ContainerPtr _myProjectItems;      	
+            std::vector<ProjectMenuItemImplPtr> _myProjects;
+            ProjectMenuItemImplPtr _myCurrentProject; 
+            spark::ComponentPtr _myProjectMenu;
+            spark::ContainerPtr _myProjectItems;      	
     };
 
     typedef boost::shared_ptr<ACProjectView> ACProjectViewPtr;

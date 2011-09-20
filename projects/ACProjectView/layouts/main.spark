@@ -9,8 +9,8 @@
             <en><![CDATA[Höhö]]> </en>
         </I18nText>
         <I18nText name="language">
-            <de>en</de>
-            <en>de</en>
+            <de>switch to english</de>
+            <en>schalte auf deutsch</en>
         </I18nText>
     </I18nContext>
 
@@ -47,8 +47,8 @@
         </ProjectMenu>
 
         <Transform name="transform">
-            <Text name="testtextgreen" y="580" x="10" z="13" i18nId="hello_text" color="[0,1,0,1]" fontsize="32"/>
+            <Text name="testtextgreen" y="380" x="10" z="13" i18nId="hello_text" color="[0,1,0,1]" fontsize="32"/>
         </Transform>    
-        <Text name="language_toggle" y="580" x="400" z="13" i18nId="language" fontsize="42"/>
+        <Text name="language_toggle" y="380" x="400" z="13" i18nId="language" fontsize="42"/>
     </World>        
 </Window>

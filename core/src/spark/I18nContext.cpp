@@ -2,15 +2,17 @@
 
 namespace spark {
 
+
     ///////////////////////////////////////////////////////I18nContext
     const char * const I18nContext::SPARK_TYPE = "I18nContext";
 
     I18nContext::I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        Container(theApp, theXMLNode, theParent) {
+        Container(theApp, theXMLNode, theParent), language_(NO_LANGUAGE) {
         for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             addChild(*it, false);
         }
-        defaultLanguage_ = _myXMLNode->getAttributeAs<std::string>("defaultLanguage","en"); 
+        std::string myLanguage = _myXMLNode->getAttributeAs<std::string>("defaultLanguage","en"); 
+        defaultLanguage_ = getLanguageId(myLanguage);
         needsUpdate_ = true;
     }
 
@@ -26,7 +28,7 @@ namespace spark {
     }
 
     void
-    I18nContext::switchLanguage(const std::string & theLanguage) {
+    I18nContext::switchLanguage(const LANGUAGE theLanguage) {
         AC_PRINT << "I18n context " << getName() << " switching to language " << theLanguage << " _myLanguage: " << language_;
         if (language_ != theLanguage) {
             language_ = theLanguage;
@@ -60,16 +62,35 @@ namespace spark {
     ///////////////////////////////////////////////////////I18nItem
     I18nItem::I18nItem(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
               Component(theXMLNode, theParent){
+
+        AC_PRINT << "constructor i18nItem " << getName() << "  " << getNodeName();
+        for (std::vector<XMLNodePtr>::iterator it = theXMLNode->children.begin(); it != theXMLNode->children.end(); ++it) {
+            AC_PRINT << (*it)->nodeName << "  " << (*it)->content << "  " <<  (*it)->name << " children " << (*it)->children.size();
+            AC_PRINT << "create new xml node for children";
+            //XMLNodePtr child = XMLNodePtr(new XMLNode((
+            languageData_[(*it)->nodeName] = (*it)->nodeName;
+        }
     }
 
     I18nItem::~I18nItem() {
     }
 
     void 
-    I18nItem::switchLanguage(const std::string & theLanguage) {
+    I18nItem::switchLanguage(const LANGUAGE theLanguage) {
+        language_ = theLanguage;
         AC_PRINT << "item switch language";
     }
 
+    std::string 
+    I18nItem::getLanguageData(const LANGUAGE theLanguage) const {
+        std::string myData = "";
+        const std::string myLanguage = (theLanguage != NO_LANGUAGE ? theLanguage : language_);
+        AC_PRINT << "get language Data for language " << theLanguage;
+        if (languageData_.find(myLanguage) != languageData_.end()) {
+            myData = languageData_.at(myLanguage);
+        }
+        return myData;
+    }
 
 
     ///////////////////////////////////////////////////////I18nText
@@ -81,9 +102,9 @@ namespace spark {
     I18nText::~I18nText() {
     }
 
-    std::string &  
+    std::string   
     I18nText::getText() {
-        return text_;
+        return getLanguageData();
     }
 }
 
