@@ -13,14 +13,87 @@
 #endif
 
 namespace masl {
-    Logger::Logger() : _myTopLevelLogTag("Unset"), _myGlobalSeverity(SEV_WARNING) {}
+    
+    const char * SeverityName[] = {"PRINT","TESTRESULT","FATAL", "ERROR", "WARNING", "INFO", "DEBUG", "TRACE", "DISABLED", 0};
+    const char * const LOG_MODULE_VERBOSITY_ENV = "AC_LOG_MODULE_VERBOSITY";
+    const char * const LOG_GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
+
+    Logger::Logger() : _myTopLevelLogTag("Unset"), _myGlobalSeverity(SEV_WARNING) {
+    }
+
     Logger::~Logger() {}
 
 
     void Logger::setLoggerTopLevelTag(const std::string & theTagString) {
         _myTopLevelLogTag = theTagString;
     }
-    void Logger::log(/*Time theTime, */ Severity theSeverity, const char * theModule, int theId, const std::string & theText) {
+    
+    void
+    Logger::setSeverity(const Severity theSeverity) {
+        _myGlobalSeverity = theSeverity;
+        parseEnvModuleSeverity();
+    }
+
+    void
+    Logger::parseEnvModuleSeverity() {
+        const char * myEnv = getenv(LOG_MODULE_VERBOSITY_ENV);
+        AC_INFO << LOG_MODULE_VERBOSITY_ENV << " = " << myEnv;
+        if (myEnv && strlen(myEnv) > 0) {
+            std::string myLogLevelString(myEnv);
+            std::string::size_type myColon;
+            while ((myColon = myLogLevelString.find_first_of(":;")) != std::string::npos) {
+                setModuleSeverity(myLogLevelString.substr(0, myColon));
+                myLogLevelString = myLogLevelString.substr(myColon+1);
+            }
+            if (myLogLevelString.size()) {
+                setModuleSeverity(myLogLevelString);
+            }
+        }
+    }
+
+    /**
+    return true if theSeverity is higher (numerically smaller) than the verbosity setting
+    a different verbosity can be defined for any id range in any module; if there are different
+    verbosity settings for an overlapping id region in the same module, the setting for the
+    smallest id-range takes precedence.
+    */
+    bool
+    Logger::ifLog(Severity theSeverity, const char * theModule, int theId) {
+        if (!_mySeveritySettings.empty()) {
+            Severity mySeverity = _myGlobalSeverity;
+            const std::string myModule(file_string(theModule)); // remove everything before the last backslash
+            // find all setting for a particular module
+            std::multimap<std::string,ModuleSeverity>::const_iterator myLowerBound =
+                _mySeveritySettings.lower_bound(myModule);
+            if (myLowerBound != _mySeveritySettings.end()) {
+                std::multimap<std::string,ModuleSeverity>::const_iterator myUpperBound =
+                    _mySeveritySettings.upper_bound(myModule);
+    
+                // find smallest range containing theId with matching module name
+                unsigned int myRange = std::numeric_limits<unsigned int>::max();
+                for (std::multimap<std::string,ModuleSeverity>::const_iterator myIter = myLowerBound;
+                    myIter != myUpperBound; ++myIter)
+                {
+                    if (myIter->first == myModule) {
+                        int myMinId = myIter->second.myMinId;
+                        int myMaxId = myIter->second.myMaxId;
+                        if (theId >= myMinId && theId <= myMaxId) {
+                            unsigned int myNewRange = myMaxId - myMinId;
+                            if (myNewRange < myRange) {
+                                mySeverity = myIter->second.mySeverity;
+                                myRange = myNewRange;
+                            }
+                        }
+                    }
+                }
+            }
+            return theSeverity <= mySeverity;
+        }
+        return theSeverity <= _myGlobalSeverity;
+    }
+
+    void
+    Logger::log(/*Time theTime, */ Severity theSeverity, const char * theModule, int theId, const std::string & theText) {
         char buf[20];
         sprintf(buf,"%i",theId);
         std::string myLogTag(_myTopLevelLogTag);
@@ -89,4 +162,62 @@ namespace masl {
 
     }
 
+    void
+    Logger::setModuleSeverity(const std::string & theSeverityString,
+                               const std::string & theModule,
+                               int theMinId, int theMaxId)
+    {
+        const std::string & myModule = theModule;
+        Severity mySeverity = getSeverityFromString(theSeverityString, SEV_DEBUG);
+        AC_INFO << "setting verbosity for module " << myModule << " to " << theSeverityString;
+        // TODO: remove item when there is an exact match
+        _mySeveritySettings.insert(std::pair<const std::string, ModuleSeverity>(
+                                    file_string(myModule.c_str()), ModuleSeverity(mySeverity, theMinId, theMaxId)));
+    }
+    
+    Severity
+    Logger::getSeverityFromString(std::string theString, Severity theDefault) const {
+        std::vector<std::string> mySeverities(SeverityName, SeverityName + 9); // XXX
+        for (std::vector<std::string>::size_type i = 0; i < mySeverities.size(); ++i) {
+            if (mySeverities[i] == theString) {
+                return (Severity) i;
+            }
+        }
+        return theDefault;
+    }
+    
+    void
+    Logger::setModuleSeverity(const std::string & theSeverityString) {
+    
+        AC_INFO << "setModuleSeverity " << theSeverityString;
+        std::string mySeverityString = theSeverityString;
+        std::vector<std::string> mySubStrings;
+    
+        std::string::size_type mySlash;
+        while ((mySlash = mySeverityString.find('/')) != std::string::npos) {
+            std::string myString = mySeverityString.substr(0, mySlash);
+            mySubStrings.push_back(myString);
+            mySeverityString = mySeverityString.substr(mySlash+1);
+        }
+        if (mySeverityString.size()) {
+            mySubStrings.push_back(mySeverityString);
+        }
+    
+        if (mySubStrings.size() < 2) {
+            if (!theSeverityString.empty()) {
+                AC_ERROR << "### Insufficient arguments for module Severity '" << theSeverityString << "'";
+            }
+            return;
+        }
+    
+        std::string myModule = mySubStrings[1];
+        int myMinId = 0, myMaxId = std::numeric_limits<int>::max();
+        if (mySubStrings.size() > 2 && mySubStrings[2].size()) {
+            myMinId = as_int(mySubStrings[2]);
+        }
+        if (mySubStrings.size() > 3 && mySubStrings[3].size()) {
+            myMaxId = as_int(mySubStrings[3]);
+        }
+        setModuleSeverity(mySubStrings[0], myModule, myMinId, myMaxId);
+    }
 };
