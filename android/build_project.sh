@@ -2,8 +2,30 @@
 
 APPFOLDER=`pwd`/..
 
+VERBOSITY="-quiet"
+NUMCORES=
+
+for i in $*
+do
+    case $i in
+        verbose)
+            VERBOSITY=""
+            ;;
+        -j*)
+            NUMCORES=$i
+            ;;
+        *)
+        #unknown
+        echo $i
+       ;;
+   esac
+done
+
+echo "VERBOSITY $VERBOSITY"
+echo "NUMCORES $NUMCORES"
+
 cd ../../../android
-./build.sh $1
+./build.sh $NUMCORES 
 BUILD_OK=$?
 echo "core build exited with $BUILD_OK"
 
@@ -21,7 +43,7 @@ then
     mkdir -p _build
     cd _build
     cmake -DCMAKE_TOOLCHAIN_FILE=../../acmake/toolchains/android.toolchain.cmake ..
-    $MAKE_TOOL $1
+    $MAKE_TOOL $NUMCORES
     BUILD_OK=$?
 
     #copy demoapp.so to core _build
@@ -50,14 +72,14 @@ if [ $BUILD_OK == "0" ]
 then
     
     # build java
-    ant -quiet   compile
+    ant "$VERBOSITY" compile
     BUILD_OK=$?
 fi
     
 if [ $BUILD_OK == "0" ] 
 then
     # build apk && upload
-    ant -quiet install
+    ant "$VERBOSITY" install
     BUILD_OK=$?
 fi
     
