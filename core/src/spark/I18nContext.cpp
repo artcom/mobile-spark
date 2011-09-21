@@ -96,9 +96,13 @@ namespace spark {
     I18nText::~I18nText() {
     }
 
-    std::string   
-    I18nText::getText() {
-        return getLanguageData();
+    ///////////////////////////////////////////////////////I18nImage
+    const char * const I18nImage::SPARK_TYPE = "I18nImage";
+    I18nImage::I18nImage(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
+              I18nItem(theApp, theXMLNode, theParent) {
+    }
+
+    I18nImage::~I18nImage() {
     }
 }
 

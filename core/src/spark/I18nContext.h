@@ -36,7 +36,6 @@ namespace spark {
         I18nItem(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~I18nItem();
         virtual void switchLanguage(const LANGUAGE theLanguage);
-    protected:
         std::string getLanguageData(const LANGUAGE theLanguage = NO_LANGUAGE) const;
     private:
         LANGUAGE  language_;
@@ -50,11 +49,21 @@ namespace spark {
     public:
         I18nText(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~I18nText();
-        std::string getText();
 
         static const char * const SPARK_TYPE;             
         virtual const char * const & getType() const { return I18nText::SPARK_TYPE;};
     };
     typedef boost::shared_ptr<I18nText> I18nTextPtr;
+
+    ///////////////////////////////////////////////////////I18nText
+    class I18nImage : public I18nItem {
+    public:
+        I18nImage(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        virtual ~I18nImage();
+
+        static const char * const SPARK_TYPE;             
+        virtual const char * const & getType() const { return I18nImage::SPARK_TYPE;};
+    };
+    typedef boost::shared_ptr<I18nImage> I18nImagePtr;
 };
 #endif 
