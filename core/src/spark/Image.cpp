@@ -70,7 +70,7 @@ namespace spark {
         EventCallbackPtr myHandleLanguageSwitch = EventCallbackPtr(new ImageCB(myImage, &Image::handleI18nOnLanguageSwitch));
         if (_myI18nItem) {
             _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
-            _myI18nItem = I18nImagePtr();
+            _myI18nItem = I18nItemPtr();
         }
         if (_myI18nId.size() > 0) {
             _myI18nItem = getI18nItemByName(_myI18nId);

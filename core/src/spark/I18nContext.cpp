@@ -57,6 +57,7 @@ namespace spark {
 
 
     ///////////////////////////////////////////////////////I18nItem
+    const char * const I18nItem::SPARK_TYPE = "I18nItem";
     I18nItem::I18nItem(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
               Component(theXMLNode, theParent){
         for (std::vector<XMLNodePtr>::iterator it = theXMLNode->children.begin(); it != theXMLNode->children.end(); ++it) {
@@ -84,25 +85,6 @@ namespace spark {
             myData = it->second;
         }
         return myData;
-    }
-
-
-    ///////////////////////////////////////////////////////I18nText
-    const char * const I18nText::SPARK_TYPE = "I18nText";
-    I18nText::I18nText(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-              I18nItem(theApp, theXMLNode, theParent) {
-    }
-
-    I18nText::~I18nText() {
-    }
-
-    ///////////////////////////////////////////////////////I18nImage
-    const char * const I18nImage::SPARK_TYPE = "I18nImage";
-    I18nImage::I18nImage(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-              I18nItem(theApp, theXMLNode, theParent) {
-    }
-
-    I18nImage::~I18nImage() {
     }
 }
 
