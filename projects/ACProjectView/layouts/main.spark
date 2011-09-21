@@ -1,9 +1,19 @@
 <?xml version="1.0"?>
-<Window name="ProjectView" fullscreen="true" clearColor="[0,0,0,1]" orientation="landscape" width="800" height="480">
+<Window name="ProjectView" fullscreen="true" i18nContext="global-i18n" width="800" height="480" orientation="landscape" clearColor="[0,0,0,1]">
     
     <Template name="Project" src="/project.spark"/>
     <Template name="ProjectViewer" src="/projectViewer.spark"/>
     
+    <I18nContext name="global-i18n" defaultLanguage="de">
+        <I18nItem name="hello_text">
+            <de><![CDATA[Willkommen]]> </de>
+            <en><![CDATA[Welcome]]> </en>
+        </I18nItem>
+        <I18nItem name="language">
+            <de>/en.png</de>
+            <en>/de.png</en>
+        </I18nItem>
+    </I18nContext>
 
     <!-- userinterface is located in 2dworld -->
     <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
@@ -12,11 +22,10 @@
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
 
         <ProjectMenu name="main">
-            
             <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" x="0"  y="0" src="/belvedere_teaser_thumb_01.png">
 	            <ContentImage src="/duality_teaser_thumb_01.png"/>
             </Project>
-            
+
             <Project name="project2" title="DUALITY" subtitle="Tokio, 2007" x="265" y="0" src="/duality_teaser_thumb_01.png">
             </Project>
             
@@ -24,20 +33,30 @@
             </Project>
 
             <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" x="0"  y="200" src="/kinetik_teaser_thumb.png">
-            </Project>
-
+                <ContentImage src="/kinetische_skulptur_01.png"/>
+                <ContentImage src="/kinetische_skulptur_02.png"/>
+	            <ContentImage src="/kinetische_skulptur_03.png"/>
+	            <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+	        </Project>
 
             <Project name="project5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" x="265"  y="200" src="/levelgreen_teaser_thumb.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
             </Project>
 
-            <!--Project name="project6" title="Terravision" subtitle="1994" x="530"  y="200" src="/terravision_teaser_thumb.png">
-            </Project-->
+            <Project name="project6" title="Terravision" subtitle="1994" x="530"  y="200" src="/terravision_teaser_thumb.png">
+            </Project>
           
         </ProjectMenu>	
         
         <ProjectViewer name="projectViewer" visible="false">
         </ProjectViewer>
 
+        <Text name="hellotext" y="400" x="10" z="13" i18nId="hello_text" color="[1,1,0,1]" fontsize="32"/>
+        <Image name="language_toggle" y="400" x="680" z="13" i18nId="language"/>
 
     </World>        
 </Window>

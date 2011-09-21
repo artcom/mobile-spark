@@ -40,7 +40,7 @@ namespace spark {
         theEvent->startDispatch();
 
         ComponentPtr myCurrent = theEvent->getTarget();
-        AC_DEBUG << " dispatchEvent " << *theEvent;
+        AC_TRACE << " dispatchEvent " << *theEvent;
         // collect dispatchers to capture on
         std::list<ComponentPtr> myCaptureList;
         while (myCurrent->getParent()) {

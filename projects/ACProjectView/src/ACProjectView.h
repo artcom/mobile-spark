@@ -21,20 +21,23 @@ namespace acprojectview {
             ACProjectView();
             virtual ~ACProjectView();
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
-
+            
         private:
             void onProjectItem(spark::EventPtr theEvent);
+            void onLanguageSwitch(spark::EventPtr theEvent);
             void onBack(spark::EventPtr theEvent);
-            void projectViewAnimation(int fromX, int toX, int fromY, int toY, int fromScale, int toScale);
-            
+            void onSwipeCB(spark::EventPtr theEvent);
 
-            //std::vector<ProjectImplPtr> _myProjects;
+            void projectViewAnimation(bool showProject);
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 
             ProjectMenuPtr _myProjectMenu;
             spark::ContainerPtr _myProjectItems;  
         
-            const static unsigned int _myAnimationTime = 250;
+            unsigned int _myWidth;
+            unsigned int _myHeight;
+
+            const static unsigned int _myAnimationTime = 400;
     };
 
     typedef boost::shared_ptr<ACProjectView> ACProjectViewPtr;

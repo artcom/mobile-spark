@@ -89,6 +89,12 @@ namespace demoapp {
         spark::EventCallbackPtr myCreationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onCreationButton));
         ComponentPtr myCreationButton = my2DWorld->getChildByName("creationbutton", true);
         myCreationButton->addEventListener(TouchEvent::PICKED, myCreationCB);
+
+        spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLanguageSwitch));
+        spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("languagebutton", true);
+        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
+
+		//touch gestures
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myAnimationCB);
 
@@ -294,6 +300,11 @@ namespace demoapp {
                         new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::insertCreatedComponent)));
             animation::AnimationManager::get().play(myDelay);
         }
+    }
+
+    void DemoApp::onLanguageSwitch(EventPtr theEvent) {
+        LANGUAGE myLanguage = _mySparkWindow->getLanguage();
+        _mySparkWindow->switchLanguage(myLanguage == spark::DE ? spark::EN : spark::DE);
     }
 
     void DemoApp::insertCreatedComponent() {
