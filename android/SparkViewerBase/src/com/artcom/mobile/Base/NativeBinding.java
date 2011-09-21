@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.graphics.Typeface;
 import android.opengl.GLES20;
 import android.opengl.GLES10;
 import android.opengl.GLUtils;
+import android.os.Vibrator;
 
 import com.artcom.mobile.Base.AC_Log;
 import com.artcom.mobile.Base.Severity;
@@ -182,7 +184,11 @@ public class NativeBinding {
     	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
      }
   }
-
+  
+  public static void vibrate(int theDurationMillisec) {
+	  Vibrator vibrator = (Vibrator)ourActivity.getSystemService(Context.VIBRATOR_SERVICE);
+      vibrator.vibrate(theDurationMillisec);	  
+  }
 
 }
 
