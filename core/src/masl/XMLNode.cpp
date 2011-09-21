@@ -24,14 +24,12 @@ namespace masl {
     XMLNode::init(xmlNode * theNode) {
         xmlAttr *attribute = theNode->properties;
         nodeName = (const char*)(theNode->name);
-        //AC_PRINT << "node name " << nodeName;
         while (attribute) {
             xmlNode* attrNode = attribute->children;
             attributes[std::string((const char*)attribute->name)] = std::string((const char*)attrNode->content);
-            //AC_PRINT << " attr " << std::string((const char*)attribute->name) << " = " <<  std::string((const char*)attrNode->content);
+            AC_TRACE << " attr " << std::string((const char*)attribute->name) << " = " <<  std::string((const char*)attrNode->content);
             attribute = attribute->next;
         }
-        //AC_PRINT << "finished properties of " << nodeName;
 
         if (attributes.find("name") != attributes.end()) {
             name = attributes["name"];
@@ -41,7 +39,16 @@ namespace masl {
         for (; currentChild; currentChild = currentChild->next) {
             if (currentChild->type == XML_ELEMENT_NODE) {
                 XMLNodePtr childXMLNode = XMLNodePtr(new XMLNode(currentChild));
+                AC_TRACE << "add child for " << nodeName << ": " << childXMLNode->nodeName;
                 children.push_back(childXMLNode);
+            } else if (currentChild->type == XML_TEXT_NODE) { 
+                if (content.size() == 0) { //this is needed to avoid resetting content from CDATA by following TEXT
+                    content = std::string((const char*)currentChild->content);
+                    AC_TRACE << "set content for TEXT " << content;
+                }
+            } else if (currentChild->type == XML_CDATA_SECTION_NODE) { //cdata-sections
+                content = std::string((const char*)currentChild->content);
+                AC_TRACE << "set content for CDATA " << content;
             }
         }
     }

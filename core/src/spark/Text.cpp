@@ -1,6 +1,6 @@
 #include "Text.h"
-#include "BaseApp.h"
 
+#include <masl/MobileSDK.h>
 #include <mar/AssetProvider.h>
 
 #ifdef __ANDROID__
@@ -10,8 +10,9 @@
     #include <ios/IOSAssetProvider.h>
 #endif
 
+#include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include <masl/MobileSDK.h>
+#include "I18nContext.h"
 
 using namespace std;
 namespace spark {
@@ -21,9 +22,6 @@ namespace spark {
         ShapeWidget(theApp, theXMLNode, theParent), _myFontPath("") {
 
         _myText = _myXMLNode->getAttributeAs<std::string>("text", "");
-        if (_myI18nId.size() > 0) {
-            attachToI18nItem();
-        }
         _myFontSize = _myXMLNode->getAttributeAs<int>("fontsize", 32);
         _myMaxWidth = _myXMLNode->getAttributeAs<int>("maxWidth", 0);
         _myMaxHeight = _myXMLNode->getAttributeAs<int>("maxHeight", 0);
@@ -39,6 +37,12 @@ namespace spark {
     }
 
     Text::~Text() {
+    }
+
+    void Text::realize() {
+        if (_myI18nId.size() > 0) {
+            attachToI18nItem();
+        }
     }
 
     void
@@ -80,17 +84,18 @@ namespace spark {
 
     void 
     Text::handleI18nOnLanguageSwitch(const EventPtr theEvent) {
-        _myText = boost::static_pointer_cast<I18nText>(_myI18nItem)->getText();
+        _myText = _myI18nItem->getLanguageData();
+        AC_DEBUG << "on language switch text " << _myText;
+        _myDirtyFlag = true;
     }
 
     void
     Text::attachToI18nItem() {
-        AC_PRINT << ".................attach to i18n " << getName();
         TextPtr myText = boost::static_pointer_cast<Text>(shared_from_this());
         EventCallbackPtr myHandleLanguageSwitch = EventCallbackPtr(new TextCB(myText, &Text::handleI18nOnLanguageSwitch));
         if (_myI18nItem) {
             _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
-            _myI18nItem = I18nTextPtr();
+            _myI18nItem = I18nItemPtr();
         }
         if (_myI18nId.size() > 0) {
             _myI18nItem = getI18nItemByName(_myI18nId);

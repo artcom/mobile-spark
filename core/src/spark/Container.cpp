@@ -1,8 +1,9 @@
 #include "Container.h"
 
-#include "SparkComponentFactory.h"
-
 #include <masl/Logger.h>
+
+#include "SparkComponentFactory.h"
+#include "I18nContext.h"
 
 using namespace masl;
 
@@ -16,11 +17,25 @@ namespace spark {
                 continue;
             }
             ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
-            _myChildren.push_back(childComponent);
+            AC_DEBUG << "Container Constructor " << getName() << " add child " << childComponent->getName();
+            addChild(childComponent, false);
         }
+        setI18nContextIfAvailable();
     }
 
     Container::~Container() {
+    }
+
+    void
+    Container::setI18nContextIfAvailable() {
+        std::string myI18nContextName = _myXMLNode->getAttributeAs<std::string>("i18nContext", "");
+        if (myI18nContextName.size() > 0) {
+            ComponentPtr myComponent = getChildByName(myI18nContextName);
+            I18nContextPtr myContext = boost::static_pointer_cast<I18nContext>(myComponent);
+            if (myContext) {
+                _myI18nContext = myContext;
+            }
+        }
     }
 
     VectorOfComponentPtr
@@ -52,9 +67,12 @@ namespace spark {
     }
 
     void 
-    Container::addChild(ComponentPtr theChild) {
+    Container::addChild(const ComponentPtr theChild, const bool theSetParentFlag) {
         _myChildren.push_back(theChild);
-        theChild->setParent(shared_from_this());
+        //set parent is optional because this(!) can not be done from constructor
+        if (theSetParentFlag) {
+            theChild->setParent(shared_from_this());
+        }
     }
 
     void
@@ -64,6 +82,54 @@ namespace spark {
                 _myChildren.erase(it);
                 break;
             }
+        }
+    }
+
+    std::vector<I18nContextPtr> 
+    Container::getI18nContexts() {
+        std::vector<I18nContextPtr> myContexts;
+        //XXX: does not work if method is const, why?
+        ContainerPtr myCurrent =  boost::static_pointer_cast<Container>(shared_from_this());
+        while (myCurrent) {
+            if (myCurrent->getI18nContext()) {
+                myContexts.push_back(myCurrent->getI18nContext());
+            }
+            myCurrent = boost::static_pointer_cast<Container>(myCurrent->getParent());
+        }
+        return myContexts;
+    }
+
+    I18nItemPtr
+    Container::getI18nItemByName(const std::string & theName) {
+        I18nItemPtr myI18nItem;
+        std::vector<I18nContextPtr> myContexts = getI18nContexts();
+        for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
+            (*it)->setup();  //??? good idea? this avoids postrealize
+            ComponentPtr myComponent = (*it)->getChildByName(theName);
+            if (myComponent) {
+                myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);
+                if (myI18nItem) {
+                    return myI18nItem;
+                }
+            }
+        }
+        return myI18nItem;
+    }
+
+    LANGUAGE 
+    Container::getLanguage() {
+        std::vector<I18nContextPtr> myI18nContexts = getI18nContexts();
+        if (myI18nContexts.size() > 0) {
+            return myI18nContexts[0]->getLanguage();
+        }
+        return NO_LANGUAGE;
+    }
+
+    void 
+    Container::switchLanguage(LANGUAGE theLanguage) {
+        std::vector<I18nContextPtr> myI18nContexts = getI18nContexts();
+        for (std::vector<I18nContextPtr>::iterator it = myI18nContexts.begin(); it != myI18nContexts.end(); ++it) {
+            (*it)->switchLanguage(theLanguage);
         }
     }
 }
