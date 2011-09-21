@@ -3,8 +3,6 @@
 
 #include <map>
 #include <boost/smart_ptr/shared_ptr.hpp>
-//#include <boost/enable_shared_from_this.hpp>
-//#include <masl/Callback.h>
 #include <masl/Logger.h>
 #include <masl/Exception.h>
 #include "Event.h"
@@ -17,9 +15,6 @@ namespace spark {
     typedef std::pair<const std::string, const bool> EventListenerKey;
     typedef std::multimap<EventListenerKey, const EventCallbackPtr > EventListenerMap;
 
-    class Event;
-    typedef boost::shared_ptr<Event> EventPtr;
-
     class EventDispatcher {
         public:
 
@@ -30,7 +25,9 @@ namespace spark {
             void removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
             void dispatchEvent(const EventPtr theEvent) const;
             const EventListenerMap & getEventListeners() const {return _myListenersMap;};
-            inline bool hasEventListener(const EventListenerKey & theKey ) const;
+            inline bool hasEventListener(const EventListenerKey & theKey ) const {
+                return (_myListenersMap.find(theKey) != _myListenersMap.end());
+            }
         private:
 
             EventListenerMap _myListenersMap;
