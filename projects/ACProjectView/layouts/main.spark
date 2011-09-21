@@ -5,12 +5,12 @@
    
     <I18nContext name="global-i18n" defaultLanguage="de">
         <I18nText name="hello_text">
-            <de><![CDATA[Hallö]]> </de>
-            <en><![CDATA[Höhö]]> </en>
+            <de><![CDATA[Hallo <ACProjectView> (äöüß)]]> </de>
+            <en><![CDATA[Hello <ACProjectView>]]> </en>
         </I18nText>
         <I18nText name="language">
-            <de>switch to english</de>
-            <en>schalte auf deutsch</en>
+            <de>en</de>
+            <en>de</en>
         </I18nText>
     </I18nContext>
 
@@ -46,9 +46,7 @@
             </ProjectMenuItem>
         </ProjectMenu>
 
-        <Transform name="transform">
-            <Text name="testtextgreen" y="380" x="10" z="13" i18nId="hello_text" color="[0,1,0,1]" fontsize="32"/>
-        </Transform>    
-        <Text name="language_toggle" y="380" x="400" z="13" i18nId="language" fontsize="42"/>
+        <Text name="testtextgreen" y="400" x="10" z="13" i18nId="hello_text" color="[0,1,0,1]" fontsize="32"/>
+        <Text name="language_toggle" y="400" x="680" z="13" i18nId="language" fontsize="42"/>
     </World>        
 </Window>
