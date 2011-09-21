@@ -71,8 +71,7 @@ namespace spark {
     void 
     I18nItem::switchLanguage(const LANGUAGE theLanguage) {
         language_ = theLanguage;
-        EventPtr myEvent = EventFactory::get().handleEvent("<" + std::string(I18nEvent::CLASSNAME) + " type=\"" + std::string(I18nEvent::ON_LANGUAGE_SWITCH) + "\"/>");
-        myEvent->connect(shared_from_this());
+        EventPtr myEvent = EventPtr(new I18nEvent(I18nEvent::ON_LANGUAGE_SWITCH, shared_from_this()));
         dispatchEvent(myEvent);
     }
 
