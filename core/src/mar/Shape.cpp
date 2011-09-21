@@ -15,6 +15,15 @@ namespace mar {
     Shape::~Shape() {
     }
 
+    void
+    Shape::setAlpha(const float theAlpha) {
+        AC_DEBUG << "Shape setAlpha: " << theAlpha;
+        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
+             it != elementList.end(); ++it)
+        {
+            (*it)->material->setAlpha(theAlpha);
+        }
+    }
 
 #if __APPLE__
     void Shape::render(const matrix & theMatrix) const {
