@@ -39,6 +39,7 @@ namespace mar {
         BoundingBox & getBoundingBox() { return _myBoundingBox;};
         bool isTransparent();
 
+        void setAlpha(const float theAlpha);
         std::vector<ElementPtr> elementList;
     protected:
         bool _myTextureFlag;   //XXX does not make any sense, texture is decided at element level

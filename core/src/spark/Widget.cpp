@@ -4,7 +4,7 @@
 
 namespace spark {
     Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _visible(true), _sensible(true)
+        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _actualAlpha(1.0), _visible(true), _sensible(true)
     {
         _x = _myXMLNode->getAttributeAs<float>("x", 0);
         _y = _myXMLNode->getAttributeAs<float>("y", 0);
@@ -23,6 +23,11 @@ namespace spark {
     }
 
     Widget::~Widget() {
+    }
+
+    void
+    Widget::realize() {
+        setAlpha(_myXMLNode->getAttributeAs<float>("alpha", _alpha));
     }
 
     void Widget::updateMatrix() {
@@ -46,6 +51,7 @@ namespace spark {
         }
         theCurrentMatrixStack.pop();
     }
+
     bool Widget::isRendered() const {
         if (!_visible) {
             return false;
@@ -61,32 +67,26 @@ namespace spark {
     void Widget::render(const matrix & theProjectionMatrix) const {
     }
 
-    std::vector<I18nContextPtr>  
-    Widget::getI18nContexts() const {
-        std::vector<I18nContextPtr> myContexts;
-        boost::shared_ptr<const spark::Component> myCurrent = shared_from_this();
-        while (myCurrent) {
-            if (_myI18nContext) {
-                myContexts.push_back(_myI18nContext);
+    float
+    Widget::getParentAlpha() const {
+        float myParentAlpha = 1.0;
+        if (getParent()) {
+            WidgetPtr myParent = boost::dynamic_pointer_cast<Widget>(getParent());
+            if (myParent) {
+                myParentAlpha = myParent->getActualAlpha();
             }
-            myCurrent = myCurrent->getParent();
         }
-        return myContexts;
+        return myParentAlpha;
     }
 
-    I18nItemPtr
-    Widget::getI18nItemByName(const std::string & theName) const {
-        I18nItemPtr myI18nItem;
-        std::vector<I18nContextPtr> myContexts = getI18nContexts();
-        for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
-            ComponentPtr myComponent = (*it)->getChildByName(theName);
-            if (myComponent) {
-                myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);
-                if (myI18nItem) {
-                    return myI18nItem;
-                }
+    void
+    Widget::propagateAlpha() {
+        _actualAlpha = getParentAlpha() * _alpha;
+        for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            WidgetPtr myChild = boost::dynamic_pointer_cast<Widget>(*it);
+            if (myChild) {
+                myChild->propagateAlpha();
             }
         }
-        return myI18nItem;
     }
 }

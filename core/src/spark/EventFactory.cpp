@@ -34,7 +34,7 @@ namespace spark {
         return _myCreateCallbackMap.erase(theEventName) == 1;
     }
 
-	EventPtr EventFactory::handleEvent(const std::string & theEventString) const {
+	EventPtr EventFactory::createEvent(const std::string & theEventString) const {
         AC_TRACE << "handle event : " << theEventString;
         XMLNodePtr myXMLNode(new XMLNode(theEventString));
         CallbackMap::const_iterator i = _myCreateCallbackMap.find(myXMLNode->nodeName);
