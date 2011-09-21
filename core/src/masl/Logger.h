@@ -40,9 +40,6 @@ namespace masl {
             smallest id-range takes precedence.
             */
             bool ifLog(Severity theSeverity, const char * theModule, int theId);
-            /*inline bool ifLog(Severity theSeverity, const char * theModule, int theId) {
-                return theSeverity <= _myGlobalSeverity;
-            }*/
             void log(/*masl::Time theTime,*/ Severity theSeverity, const char * theModule, int theId, const std::string & theText);
             void setLoggerTopLevelTag(const std::string & theTagString);
             void setSeverity(const Severity theSeverity);
@@ -52,7 +49,7 @@ namespace masl {
             */
             void setModuleSeverity(const std::string & theSeverity,
                 const std::string & theModule,
-                int theMidId = 0,
+                int theMinId = 0,
                 int theMaxId = std::numeric_limits<int>::max() );
     
             /** sets the verbosity for a particular module; an id range can be supplied;
