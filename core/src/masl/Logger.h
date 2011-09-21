@@ -49,7 +49,7 @@ namespace masl {
             */
             void setModuleSeverity(const std::string & theSeverity,
                 const std::string & theModule,
-                int theMidId = 0,
+                int theMinId = 0,
                 int theMaxId = std::numeric_limits<int>::max() );
     
             /** sets the verbosity for a particular module; an id range can be supplied;
