@@ -84,9 +84,7 @@ namespace spark {
 
     void 
     Text::handleI18nOnLanguageSwitch(const EventPtr theEvent) {
-        AC_PRINT << " ...............handle on language switch ";
         _myText = boost::static_pointer_cast<I18nText>(_myI18nItem)->getText();
-        AC_PRINT << "........ text " << _myText;
         _myDirtyFlag = true;
     }
 
@@ -104,7 +102,6 @@ namespace spark {
                 throw I18nItemNotFoundException("no i18n item named " + _myI18nId, PLUS_FILE_LINE);
             }
             _myI18nItem->addEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
-            AC_PRINT << "ATTACHED EVENT LISTENER for " << getName();
             handleI18nOnLanguageSwitch();
         } else {
             _myText = "";
