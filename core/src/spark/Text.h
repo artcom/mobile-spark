@@ -2,6 +2,7 @@
 #define _included_mobile_spark_Text_
 
 #include "ShapeWidget.h"
+#include "I18nHandler.h"
 
 using namespace mar;
 
@@ -15,7 +16,7 @@ namespace spark {
         virtual void realize();
 
         const vector2 & getTextSize();
-        void setText(std::string theText) { _myText = theText; _myDirtyFlag = true;};
+        void setText(std::string theText) { i18nHandler_->data_ = theText; _myDirtyFlag = true;};
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Text::SPARK_TYPE;};
@@ -24,8 +25,7 @@ namespace spark {
         void attachToI18nItem();
         void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
 
-        std::string _myText;
-        bool _myDirtyFlag;
+        I18nHandlerPtr i18nHandler_;
         int _myFontSize;
         vector4 _myTextColor;
         vector2 _myTextSize;
