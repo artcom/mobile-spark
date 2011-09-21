@@ -16,13 +16,17 @@ public class SparkViewerActivity extends Activity {
     private static String GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
     protected String LOG_TAG = "SparkViewerActivity";
     protected String _myPackageExtension; //should be set by child classes
-    private static boolean _mySparkWorldIsLoaded = false;
+    public boolean _mySparkWorldIsLoaded = false;
     ASLOpenGLView mView;
     private EventManager eventManager;
     private Sensors sensors;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	NativeBinding.ourActivity = this;
+        AC_Log.print("----------------------------------------------------------------------");
+        AC_Log.print("-*************************SparkViewer********************************-");
+        AC_Log.print("----------------------------------------------------------------------");
         super.onCreate(savedInstanceState);
         extras_ = this.getIntent().getExtras();
         envMap_ = new EnvMap();
@@ -38,32 +42,28 @@ public class SparkViewerActivity extends Activity {
         Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
         AC_Log.setSeverity(mySeverity);
         AC_Log.print("severity: " + mySeverity);
-        AC_Log.print("SparkViewer created, ready to call native [cpp logger]. ");
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int myScreenWidth = dm.widthPixels;
         int myScreenHeight = dm.heightPixels;
 
-        mView = new ASLOpenGLView(getApplication(), _myPackageExtension, myScreenWidth, myScreenHeight, !_mySparkWorldIsLoaded);
+        mView = new ASLOpenGLView(getApplication(), _myPackageExtension, myScreenWidth, myScreenHeight);
         setContentView(mView);
 
-        //---change to landscape mode---
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
     }
 
     public boolean onTouchEvent(MotionEvent event) {
         return eventManager.dumpTouchEvent(event) ;
     }
 
+    @Override protected void onRestart() {
+        AC_Log.print("----------------------SparkViewer restarted");
+        super.onRestart();
+    }
     @Override protected void onStart() {
         AC_Log.print("----------------------SparkViewer started");
         super.onStart();
-        _mySparkWorldIsLoaded = true;
-        //---change to landscape mode---
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
     }
 
     @Override protected void onPause() {
@@ -74,7 +74,6 @@ public class SparkViewerActivity extends Activity {
         NativeBinding.onEvent(myEvent);
         CameraTexture.closeCamera();
         Sensors.disableAllSensors();
-        AC_Log.print("----------------------SparkViewer paused");
     }
     @Override protected void onStop() {
         AC_Log.print("--------------------- on Stop");
