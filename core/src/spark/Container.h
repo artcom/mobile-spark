@@ -6,6 +6,7 @@
 
 #include "Component.h"
 #include "I18nConstants.h"
+#include "I18nHandler.h"
 
 namespace spark {
     class BaseApp;
@@ -17,6 +18,7 @@ namespace spark {
     typedef boost::shared_ptr<I18nContext> I18nContextPtr;
 
     class Container : public Component {
+    friend class I18nHandler;
     public:
         Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Container() = 0;
@@ -37,10 +39,10 @@ namespace spark {
 
         I18nContextPtr _myI18nContext;
         I18nItemPtr _myI18nItem;
-        std::string _myI18nId;
 
         std::vector<I18nContextPtr> getI18nContexts(); 
         I18nItemPtr getI18nItemByName(const std::string & theName);
+        bool _myDirtyFlag;
 
     private:
         void setI18nContextIfAvailable();
