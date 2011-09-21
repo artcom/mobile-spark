@@ -7,20 +7,20 @@
 
 namespace spark {
 
-    class Container;
-    typedef boost::shared_ptr<Container> ContainerPtr;
+    class Widget;
+    typedef boost::shared_ptr<Widget> WidgetPtr;
     class I18nContext;
 
     class I18nHandler : public boost::enable_shared_from_this<I18nHandler> {
     public:
         I18nHandler(const masl::XMLNodePtr theXMLNode, const std::string & theKey);
         ~I18nHandler();
-        void realize(const ContainerPtr theContainer);
+        void realize(const WidgetPtr theWidget);
 
         std::string data_;
         std::string i18nId_;
     private:
-        ContainerPtr container_;
+        WidgetPtr widget_;
 
         void attachToI18nItem();
         void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());

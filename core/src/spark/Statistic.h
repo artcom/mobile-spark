@@ -10,7 +10,6 @@ namespace spark {
     public:
         Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Statistic();
-        virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onPause();
         virtual void onFrame(EventPtr theEvent);
         virtual void realize();

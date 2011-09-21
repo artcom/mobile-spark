@@ -13,15 +13,13 @@ namespace spark {
         virtual ~NinePatch();
         virtual void onResume();
         virtual void realize();
-        virtual void prerender(MatrixStack & theCurrentMatrixStack);
         void setSrc(std::string theSrc) { i18nHandler_->data_ = theSrc; _myDirtyFlag = true;};
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return NinePatch::SPARK_TYPE;};
+    protected:
+        virtual void build();
     private:
-        void build();
-        void attachToI18nItem();
-        void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
 
         I18nHandlerPtr i18nHandler_;
         float edgeLeft_;

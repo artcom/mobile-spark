@@ -11,7 +11,6 @@ namespace spark {
     public:
         Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
         virtual ~Text();
-        virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onResume();
         virtual void realize();
 
@@ -20,10 +19,9 @@ namespace spark {
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Text::SPARK_TYPE;};
+    protected:
+        virtual void build();
     private:
-        void build();
-        void attachToI18nItem();
-        void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
 
         I18nHandlerPtr i18nHandler_;
         int _myFontSize;

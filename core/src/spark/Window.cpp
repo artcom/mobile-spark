@@ -15,7 +15,7 @@ namespace spark {
 
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode,
                    ComponentPtr theParent):
-        Container(theApp, theXMLNode, theParent),
+        Widget(theApp, theXMLNode, theParent),
         _myWidth(0), _myHeight(0){
 
         _myGLCanvas = CanvasPtr( new Canvas());
@@ -36,7 +36,9 @@ namespace spark {
 
     Window::~Window() {
     }
-    vector2 Window::getSize() const {
+
+    vector2
+    Window::getSize() const {
         int myScreensLargerSide = _myWidth > _myHeight ? _myWidth : _myHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  _myHeight ? _myWidth : _myHeight;
 
