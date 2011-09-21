@@ -176,7 +176,6 @@ namespace spark {
 
     I18nEvent::I18nEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode) {
-        AC_PRINT << "create new I18nEvent";
     }
     I18nEvent::~I18nEvent() {}
 }

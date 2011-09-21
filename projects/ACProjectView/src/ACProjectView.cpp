@@ -94,9 +94,7 @@ namespace acprojectview {
     }
 
     void ACProjectView::onLanguageSwitch(EventPtr theEvent) {
-        AC_PRINT << "on language switch in ACProjectView";
         LANGUAGE myLanguage = _mySparkWindow->getLanguage();
-        AC_PRINT << " current language " << myLanguage;
         _mySparkWindow->switchLanguage(myLanguage == spark::DE ? spark::EN : spark::DE);
     }
 

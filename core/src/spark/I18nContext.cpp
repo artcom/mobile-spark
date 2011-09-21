@@ -37,9 +37,6 @@ namespace spark {
                 if (myItem) myItem->switchLanguage(theLanguage);
             }
         }
-        EventPtr myEvent = EventFactory::get().handleEvent("<" + std::string(I18nEvent::CLASSNAME) + " type=\"" + std::string(I18nEvent::ON_LANGUAGE_SWITCH) + "\"/>");
-        myEvent->connect(getApp()->_mySparkWindow);
-        (*myEvent)();
     }
 
     void
@@ -74,14 +71,18 @@ namespace spark {
     void 
     I18nItem::switchLanguage(const LANGUAGE theLanguage) {
         language_ = theLanguage;
+        EventPtr myEvent = EventFactory::get().handleEvent("<" + std::string(I18nEvent::CLASSNAME) + " type=\"" + std::string(I18nEvent::ON_LANGUAGE_SWITCH) + "\"/>");
+        myEvent->connect(shared_from_this());
+        dispatchEvent(myEvent);
     }
 
     std::string 
     I18nItem::getLanguageData(const LANGUAGE theLanguage) const {
         std::string myData = "";
         const LANGUAGE myLanguage = (theLanguage != NO_LANGUAGE ? theLanguage : language_);
-        if (languageData_.find(myLanguage) != languageData_.end()) {
-            myData = languageData_.at(myLanguage);
+        std::map<LANGUAGE, std::string>::const_iterator it = languageData_.find(myLanguage);
+        if (it != languageData_.end()) {
+            myData = it->second;
         }
         return myData;
     }
