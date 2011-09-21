@@ -42,7 +42,7 @@ namespace spark {
 
     void Text::realize() {
         ShapeWidget::realize();
-        i18nHandler_->realize(boost::static_pointer_cast<Container>(shared_from_this()));
+        i18nHandler_->realize(boost::static_pointer_cast<Widget>(shared_from_this()));
     }
 
     void
@@ -53,11 +53,6 @@ namespace spark {
         _myDirtyFlag = true;
     }
 
-    void
-    Text::prerender(MatrixStack& theCurrentMatrixStack) {
-        ShapeWidget::prerender(theCurrentMatrixStack);
-        build();
-    }
     const vector2 &
     Text::getTextSize() {
         if (_myDirtyFlag) {
@@ -65,20 +60,19 @@ namespace spark {
         }
         return _myTextSize;
     }
+
     void
     Text::build() {
-        if (_myDirtyFlag) {
-            _myDirtyFlag = false;
-            UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
-            TextInfo myTextInfo = MobileSDK_Singleton::get().getNative()->renderText(i18nHandler_->data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
-                                             _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath);
+        ShapeWidget::build();
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        TextInfo myTextInfo = MobileSDK_Singleton::get().getNative()->renderText(i18nHandler_->data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
+                                         _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath);
 
-            _myTextSize[0] = myTextInfo.width;
-            _myTextSize[1] = myTextInfo.height;
-    		getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
-    		//AC_PRINT << "rendered text :'" << i18nHandler_->data_ << "' has size: " << _myTextSize[0] << "/" << _myTextSize[1];
-            myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
-            myMaterial->transparency_ = true;
-        }
+        _myTextSize[0] = myTextInfo.width;
+        _myTextSize[1] = myTextInfo.height;
+        getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
+        //AC_PRINT << "rendered text :'" << i18nHandler_->data_ << "' has size: " << _myTextSize[0] << "/" << _myTextSize[1];
+        myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
+        myMaterial->transparency_ = true;
     }
 }
