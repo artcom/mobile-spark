@@ -35,7 +35,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace acprojectview {
    
-    ACProjectView::ACProjectView():BaseApp("acprojectview") {
+    ACProjectView::ACProjectView():BaseApp("ACProjectView") {
     }
 
     ACProjectView::~ACProjectView() {

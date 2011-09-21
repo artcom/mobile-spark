@@ -195,6 +195,7 @@ namespace spark {
     class I18nEvent : public Event {
         public:
             I18nEvent(const masl::XMLNodePtr theXMLNode);
+            I18nEvent(const std::string & theType, ComponentPtr theTarget);
             virtual ~I18nEvent();
             static const char * const CLASSNAME;
             static const char * const ON_LANGUAGE_SWITCH;
