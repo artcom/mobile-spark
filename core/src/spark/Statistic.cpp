@@ -26,6 +26,7 @@ namespace spark {
     }
     void
     Statistic::realize() {
+        Widget::realize();
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
         StatisticPtr ptr = boost::static_pointer_cast<Statistic>(shared_from_this());
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new StatisticCB(ptr, &Statistic::onFrame));
