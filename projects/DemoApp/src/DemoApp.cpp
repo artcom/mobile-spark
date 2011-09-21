@@ -148,10 +148,20 @@ namespace demoapp {
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 8, 500));
         WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 8, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
+        WidgetPropertyAnimationPtr myAnimation3 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setAlpha, 1, 0.2, 1500, animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myAnimation4 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setAlpha, 0.2, 1, 1500, animation::EasingFnc(animation::linearTween)));
         animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(2000));
         animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
-        mySequence->add(myAnimation1);
-        mySequence->add(myAnimation2);
+        animation::ParallelAnimationPtr myParallel1 = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        animation::ParallelAnimationPtr myParallel2 = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        myParallel1->add(myAnimation1);
+        myParallel1->add(myAnimation3);
+        myParallel2->add(myAnimation2);
+        myParallel2->add(myAnimation4);
+        mySequence->add(myParallel1);
+        mySequence->add(myParallel2);
         mySequence->add(myDelay);
         mySequence->setLoop(true);
         //mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
