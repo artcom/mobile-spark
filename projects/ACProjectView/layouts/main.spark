@@ -6,8 +6,8 @@
     
     <I18nContext name="global-i18n" defaultLanguage="de">
         <I18nItem name="hello_text">
-            <de><![CDATA[Hallo <ACProjectView> (äöüß)]]> </de>
-            <en><![CDATA[Hello <ACProjectView>]]> </en>
+            <de><![CDATA[Willkommen]]> </de>
+            <en><![CDATA[Welcome]]> </en>
         </I18nItem>
         <I18nItem name="language">
             <de>/en.png</de>

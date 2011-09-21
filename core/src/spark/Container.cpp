@@ -109,12 +109,10 @@ namespace spark {
             if (myComponent) {
                 myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);
                 if (myI18nItem) {
-                    AC_PRINT << ".................found i18nItem";
                     return myI18nItem;
                 }
             }
         }
-        AC_PRINT << "------------------ no i18nItem found";
         return myI18nItem;
     }
 

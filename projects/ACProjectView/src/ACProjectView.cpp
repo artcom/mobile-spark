@@ -91,7 +91,7 @@ namespace acprojectview {
 
     
     void ACProjectView::onBack(EventPtr theEvent) {
-            AC_PRINT<< "----------- BACK";
+        AC_PRINT<< "----------- BACK";
         projectViewAnimation(false);
         _myProjectMenu->setSensible(true);
         _myProjectViewer->setSensible(false);
