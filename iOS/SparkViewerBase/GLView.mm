@@ -17,6 +17,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
+        [self createApp];
+        
         // Initialization code
         // Apple changed EGL a lot, it is not possible to render to the display directly. 
         // We have to render into a framebuffer, which is displayed to the user
@@ -26,7 +29,6 @@
         eaglLayer.opaque = TRUE;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-        
         
         glContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         if (glContext == nil)
@@ -48,19 +50,38 @@
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         
         //create color renderbuffer
-        glGenRenderbuffers(1, &colorRenderbuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+        glGenRenderbuffers(1, &renderbuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
         [glContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
         
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
         
-        //create depthbuffer
-        glGenRenderbuffers(1, &depthRenderbuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+        if (MSAAQuality > 0) {
+            //Create Multisampling Buffer
+            glGenFramebuffers(1, &multisamplingFramebuffer);
+            glBindFramebuffer(GL_FRAMEBUFFER, multisamplingFramebuffer);
+            
+            glGenRenderbuffers(1, &multisamplingRenderbuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, multisamplingRenderbuffer);
+            
+            //Use 4x Multisample anti-aliasing
+            glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, MSAAQuality, GL_RGBA8_OES, width, height);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, multisamplingRenderbuffer);
+            
+            //create depthbuffer
+            glGenRenderbuffers(1, &depthRenderbuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+            glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, MSAAQuality, GL_DEPTH_COMPONENT16, width, height);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+        } else {
+            //create depthbuffer
+            glGenRenderbuffers(1, &depthRenderbuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+        }
         
         //Test Frame Buffer
         GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER) ;
@@ -70,13 +91,13 @@
             
         }
         
-        //DemoApp
-        NSLog(@"width: %d,  height: %d ", width, height);
+        //setup DemoApp
         NSString *path = [[NSBundle mainBundle] resourcePath];
-        [self createApp];
         myApp->setup((0.0),[path UTF8String], width, height);
-        //myApp->onSizeChanged(width, height);
-        
+        myApp->realize();
+        NSString *resizeEvent = [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%d,%d]' oldsize='[%d,%d]'/>", width, height, width, height];
+        myApp->onEvent([resizeEvent UTF8String]); 
+
         //Motion Events
         UITapGestureRecognizer *singleFingerTap = 
         [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
@@ -90,7 +111,6 @@
     return self;
 }
 
-
 - (void)render:(id)sender 
 {
     [EAGLContext setCurrentContext:glContext];
@@ -100,10 +120,33 @@
     //NSLog(@"Euler Angles roll: %f pitch: %f yaw: %f", attitude.roll, attitude.pitch, attitude.yaw);
     
     //render
-    NSString *myEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
-    myApp->onEvent([myEvent UTF8String]);    
+    NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
+    myApp->onEvent([frameEvent UTF8String]);    
     
-    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    [glContext presentRenderbuffer:GL_RENDERBUFFER];  
+}
+
+- (void)renderWithMSAA:(id)sender
+{
+    [EAGLContext setCurrentContext:glContext];
+    glBindFramebuffer(GL_FRAMEBUFFER, multisamplingFramebuffer);
+    
+    CMAttitude *attitude = motionManager.deviceMotion.attitude;
+    //NSLog(@"Euler Angles roll: %f pitch: %f yaw: %f", attitude.roll, attitude.pitch, attitude.yaw);
+    
+    //render
+    NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
+    myApp->onEvent([frameEvent UTF8String]);    
+        
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, multisamplingFramebuffer);
+    glResolveMultisampleFramebufferAPPLE();
+    
+    const GLenum discards[]  = {GL_COLOR_ATTACHMENT0,GL_DEPTH_ATTACHMENT};
+    glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE,2,discards);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
     [glContext presentRenderbuffer:GL_RENDERBUFFER];  
         
 }
@@ -114,9 +157,16 @@
 {
     if (!animating)
     {
-        //init Animation loop. fires at 60 hz
-        displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render:)];
-        [displayLink setFrameInterval:1];
+        //init Animation loop. fires at 60hz defeault, set frameInterval to 2 for 30hz
+        if (MSAAQuality > 0) {
+            displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(renderWithMSAA:)];
+        }
+        else {
+            displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render:)];
+        }
+        if (frameInterval) {
+            [displayLink setFrameInterval:frameInterval];
+        }
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         
         animating = TRUE;
@@ -153,10 +203,22 @@
         framebuffer = 0;
     }
     
-    if (colorRenderbuffer)
+    if (renderbuffer)
     {
-        glDeleteRenderbuffers(1, &colorRenderbuffer);
-        colorRenderbuffer = 0;
+        glDeleteRenderbuffers(1, &renderbuffer);
+        renderbuffer = 0;
+    }
+    
+    if (multisamplingFramebuffer)
+    {
+        glDeleteRenderbuffers(1, &multisamplingFramebuffer);
+        multisamplingFramebuffer = 0;
+    }
+    
+    if (multisamplingRenderbuffer)
+    {
+        glDeleteRenderbuffers(1, &multisamplingRenderbuffer);
+        multisamplingRenderbuffer = 0;
     }
     
     if (depthRenderbuffer)

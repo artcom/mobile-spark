@@ -16,9 +16,11 @@ namespace spark {
             virtual bool AABB2Dcontains(const float x, const float y,
                                         const matrix theProjectionMatrix) const;
 
-            mar::ShapePtr getShape();
+            inline mar::ShapePtr getShape() {return _myShape;};
             void setShape( mar::ShapePtr theShapePtr);
             float getWorldZ() const;
+        protected:
+            virtual void applyAlpha (const float theAlpha);
         private:
             mar::ShapePtr _myShape;
     };

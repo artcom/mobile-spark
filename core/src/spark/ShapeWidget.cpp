@@ -7,13 +7,24 @@ namespace spark {
 
     ShapeWidget::~ShapeWidget() {}
 
-    void ShapeWidget::render(const matrix & theP) const {
+    void
+    ShapeWidget::render(const matrix & theP) const {
         matrix mvp = theP * _myWorldMVMatrix;
         _myShape->render(mvp);
         Widget::render(theP);
     }
 
-    bool ShapeWidget::AABB2Dcontains(const float x, const float y,
+    void
+    ShapeWidget::applyAlpha (const float theAlpha) { 
+        Widget::applyAlpha(theAlpha); 
+        if (getShape()) {
+            AC_DEBUG << *this << " set calculated alpha: " << getActualAlpha();
+            getShape()->setAlpha(getActualAlpha());
+        }
+    }
+
+    bool
+    ShapeWidget::AABB2Dcontains(const float x, const float y,
                                      const matrix theProjectionMatrix) const {
         mar::BoundingBox myBB = _myShape->getBoundingBox();
         //use 8 corner points
@@ -110,15 +121,13 @@ namespace spark {
         }
     }
 
-    mar::ShapePtr ShapeWidget::getShape() {
-        return _myShape;
-    }
-
-    void ShapeWidget::setShape( mar::ShapePtr theShapePtr){
+    void 
+    ShapeWidget::setShape( mar::ShapePtr theShapePtr) {
         _myShape = theShapePtr;
     }
 
-    float ShapeWidget::getWorldZ() const {
+    float 
+    ShapeWidget::getWorldZ() const {
         vector3 myTranslation = matrix_get_translation(_myWorldMVMatrix);
         return myTranslation[2];
     }

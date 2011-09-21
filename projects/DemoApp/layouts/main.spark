@@ -18,7 +18,7 @@
             <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="/deco.png"/>
         </Controls>
 
-        <Slide name="TextSlide" title="Text-Examples">
+        <Slide name="TextSlide" alpha="0.5" title="Text-Examples">
             <Text name="testtextgreen" y="610" x="10" z="13" text="Fontsize 32 - acswissmed.ttf" color="[0,1,0,1]" fontsize="32" font="/acswissmed.ttf"/>
             <Text name="testtextgreen" y="570" x="10" z="13" text="Fontsize 32 - defaultfont" color="[0,1,0,1]" fontsize="32"/>
             <Text name="textblock" y="520" x="10" text="left aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="left"/>
@@ -40,19 +40,19 @@
         <Slide name="ImagesSlide" title="Images">
             <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="/texture.png"/>
             <Image name="transparent_image" x="250" y="250" z="1" src="/transparenttexture.png"/>
-            <Image name="image_from_apk_package" x="250" y="50" z="2" src="assets/textures/sparks.png"/>
+            <Image name="image_from_apk_package" alpha="0.5" x="250" y="50" z="2" src="assets/textures/sparks.png"/>
         </Slide>
 
         <Slide name="AnimatedRectangleSlide" title="Animation" subtitle="touch screen to animate">
             <Transform name="transform" x="170" y="170" rotationZ="0.3">
                 <Rectangle name="blueObject" x="0" y="0" width="40" height="100" color="[0,0.0,1.0]"/>
-                <Rectangle name="redObject" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
+                <Rectangle alpha="0.6" name="redObject" y="5" width="100" height="40" z="1" color="[1,0.0,0.0]"/>
             </Transform>
             <Rectangle name="greenObject" width="20" height="400" z="1" color="[0,1.0,0.0]"/>
         </Slide>
 
         <Slide name="3DSlide" title="3D">
-            <Transform name="transform" x="100" y="10" >
+            <Transform alpha="0.5" name="transform" x="100" y="10" >
                 <Transform name="rotatetransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
                     <Shape3D name="funnyShape" src="/model"/>
                 </Transform>
@@ -68,10 +68,10 @@
             <NinePatch x="40" y="100" z="20" height="80" width="125" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
             <NinePatch x="40" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_roll.png"/>
             <NinePatch x="40" y="300" z="20" height="80" width="75" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_visited.png"/>
-            <NinePatch x="40" y="400" z="20" height="80" width="175" edgeTop="5" edgeRight="10" edgeBottom="15" edgeLeft="20" src="/ninepatchtest.png"/>
+            <NinePatch x="40" y="400" z="20" alpha="0.4" height="80" width="175" edgeTop="5" edgeRight="10" edgeBottom="15" edgeLeft="20" src="/ninepatchtest.png"/>
         </Slide>
 
-        <Slide name="CameraSlide" title="Camera">
+        <Slide alpha="0.7" name="CameraSlide" title="Camera">
             <Camera name="camera" x="0" y="0" scaleX="1" scaleY="1" cpu_color_conversion="false">
                 <Image name="border2" visible="false" width="640" height="480" src="/rahmen_schwarz.png" z="1"/>
             </Camera>

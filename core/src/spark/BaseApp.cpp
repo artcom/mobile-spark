@@ -32,7 +32,7 @@ using namespace mar;
 namespace spark {
 
 
-    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath) {
+    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), _mySetupFlag(false), _mySparkRealizedFlag(false) {
     }
 
     BaseApp::~BaseApp() {
@@ -43,10 +43,9 @@ namespace spark {
     }
 
     void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
+        _mySetupFlag = true;
         ComponentMapInitializer::init();
 
-
-        //AC_PRINT << "setup";
         //init animationManager with setup-time
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
@@ -65,11 +64,10 @@ namespace spark {
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/fonts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
-
-        std::string myOrientation = "free";
     }
 
     void BaseApp::realize() {
+        _mySparkRealizedFlag = true;
         RealizeComponentVisitor myVisitor;
         visitComponents(myVisitor, _mySparkWindow);
     }

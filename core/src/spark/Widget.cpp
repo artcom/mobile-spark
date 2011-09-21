@@ -4,7 +4,7 @@
 
 namespace spark {
     Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _visible(true), _sensible(true)
+        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _actualAlpha(1.0), _visible(true), _sensible(true)
     {
         _x = _myXMLNode->getAttributeAs<float>("x", 0);
         _y = _myXMLNode->getAttributeAs<float>("y", 0);
@@ -25,8 +25,12 @@ namespace spark {
     Widget::~Widget() {
     }
 
-    void 
-    Widget::updateMatrix() {
+    void
+    Widget::realize() {
+        setAlpha(_myXMLNode->getAttributeAs<float>("alpha", _alpha));
+    }
+
+    void Widget::updateMatrix() {
         MatrixStack helpMatrixStack;
         helpMatrixStack.loadIdentity();
         helpMatrixStack.rotateXAxis(_rotationX);
@@ -47,6 +51,7 @@ namespace spark {
         }
         theCurrentMatrixStack.pop();
     }
+
     bool Widget::isRendered() const {
         if (!_visible) {
             return false;
@@ -62,4 +67,26 @@ namespace spark {
     void Widget::render(const matrix & theProjectionMatrix) const {
     }
 
+    float
+    Widget::getParentAlpha() const {
+        float myParentAlpha = 1.0;
+        if (getParent()) {
+            WidgetPtr myParent = boost::dynamic_pointer_cast<Widget>(getParent());
+            if (myParent) {
+                myParentAlpha = myParent->getActualAlpha();
+            }
+        }
+        return myParentAlpha;
+    }
+
+    void
+    Widget::propagateAlpha() {
+        _actualAlpha = getParentAlpha() * _alpha;
+        for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            WidgetPtr myChild = boost::dynamic_pointer_cast<Widget>(*it);
+            if (myChild) {
+                myChild->propagateAlpha();
+            }
+        }
+    }
 }
