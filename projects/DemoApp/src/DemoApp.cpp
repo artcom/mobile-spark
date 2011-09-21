@@ -182,6 +182,7 @@ namespace demoapp {
         }
         _myCurrentSlide = 0;
         _mySlides[_myCurrentSlide]->setVisible(true);
+        _mySlides[_myCurrentSlide]->setSensible(true);
 
         AC_DEBUG << "found #" << _mySlides.size() << " slides";        
         //BaseApp::realize();
