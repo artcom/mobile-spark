@@ -56,6 +56,7 @@ namespace masl {
         public:
             std::string nodeName;
             std::string name;
+            std::string content;
             std::map<std::string, std::string> attributes;
 
             //this is only used during initialization and not updated afterwards, use ComponentHierachry instead

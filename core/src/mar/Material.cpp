@@ -9,7 +9,7 @@
 
 
 namespace mar {
-    Material::Material() : transparency_(false) {
+    Material::Material() : transparency_(false), alpha_(1.0) {
     }
 
     Material::~Material() {
@@ -32,6 +32,7 @@ namespace mar {
         glUseProgram(shaderProgram);
         checkGlError("glUseProgram");
         glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, theMatrix.data());
+        glUniform1f(alphaHandle, alpha_);
     }
 
     void Material::setShader() {
@@ -40,6 +41,7 @@ namespace mar {
 
     void Material::setHandles() {
         mvpHandle = glGetUniformLocation(shaderProgram, "u_mvpMatrix");
+        alphaHandle = glGetUniformLocation(shaderProgram, "a_alpha");
     }
 
     //////////////////////////////////////////////////// UnlitColoredMaterial
