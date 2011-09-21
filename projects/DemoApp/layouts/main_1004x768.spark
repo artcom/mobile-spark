@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Window name="Apple ipad 2" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="landscape" width="1024" height="768">
+<Window name="Apple ipad 2" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="landscape" width="1004" height="768">
 
     <Template name="Controls" src="/controls.spark"/>
     <Template name="Slide" src="/slide.spark"/>

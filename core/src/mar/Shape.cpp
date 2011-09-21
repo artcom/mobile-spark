@@ -15,6 +15,15 @@ namespace mar {
     Shape::~Shape() {
     }
 
+    void
+    Shape::setAlpha(const float theAlpha) {
+        AC_DEBUG << "Shape setAlpha: " << theAlpha;
+        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
+             it != elementList.end(); ++it)
+        {
+            (*it)->material->setAlpha(theAlpha);
+        }
+    }
 
 #if __APPLE__
     void Shape::render(const matrix & theMatrix) const {
@@ -206,26 +215,26 @@ namespace mar {
                     myX = 0;
                     myS = 0;
                 } else if (j == vertices_per_side - 3) {
-                    myX = masl::clamp(leftEdge_ ,0.0f , width_);
-                    myS = masl::clamp(leftEdge_/imageWidth_, 0.0f, 1.0f);
+                    myX = cml::clamp(leftEdge_ ,0.0f , width_);
+                    myS = cml::clamp(leftEdge_/imageWidth_, 0.0f, 1.0f);
                 } else if (j == vertices_per_side - 2) {
-                    myX = masl::clamp(width_ - rightEdge_, std::min(leftEdge_, width_), width_);
-                    myS = masl::clamp((imageWidth_ - rightEdge_)/imageWidth_, 0.0f, 1.0f);
+                    myX = cml::clamp(width_ - rightEdge_, std::min(leftEdge_, width_), width_);
+                    myS = cml::clamp((imageWidth_ - rightEdge_)/imageWidth_, 0.0f, 1.0f);
                 } else if (j == vertices_per_side - 1) {
-                    myX = masl::clamp(width_, std::min(leftEdge_, width_), width_);
+                    myX = cml::clamp(width_, std::min(leftEdge_, width_), width_);
                     myS = 1.0f;
                 }
                 if (i == 0) {
                     myY = 0;
                     myT = 0.0f;
                 } else if (i == vertices_per_side - 3) {
-                    myY = masl::clamp(bottomEdge_,0.0f,height_);
-                    myT = masl::clamp(bottomEdge_/imageHeight_, 0.0f, 1.0f);
+                    myY = cml::clamp(bottomEdge_,0.0f,height_);
+                    myT = cml::clamp(bottomEdge_/imageHeight_, 0.0f, 1.0f);
                 } else if (i == vertices_per_side - 2) {
-                    myY = masl::clamp(height_ - topEdge_, std::min(bottomEdge_,height_),height_);
-                    myT = masl::clamp((imageHeight_-topEdge_)/imageHeight_, 0.0f, 1.0f);
+                    myY = cml::clamp(height_ - topEdge_, std::min(bottomEdge_,height_),height_);
+                    myT = cml::clamp((imageHeight_-topEdge_)/imageHeight_, 0.0f, 1.0f);
                 } else if (i == vertices_per_side - 1) {
-                    myY = masl::clamp(height_, std::min(bottomEdge_,height_),height_);
+                    myY = cml::clamp(height_, std::min(bottomEdge_,height_),height_);
                     myT = 1.0f;
                 }
 

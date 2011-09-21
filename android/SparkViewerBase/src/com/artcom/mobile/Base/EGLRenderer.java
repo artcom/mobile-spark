@@ -12,13 +12,11 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static int numFrames = 0;
     public static long millisec = 0;
     public static final String PACKAGE_NAME = "com.artcom.mobile";
-    public static boolean _myFirstTimeFlag;
     public static int _myScreenWidth;
     public static int _myScreenHeight;
     public static String _myPackageExtension;
     private Context context;
-    public EGLRenderer (Context context, String thePackageExtension, int theScreenWidth, int theScreenHeight, boolean firstTime) {
-        _myFirstTimeFlag = firstTime;
+    public EGLRenderer (Context context, String thePackageExtension, int theScreenWidth, int theScreenHeight) {
         _myScreenWidth = theScreenWidth;
         _myScreenHeight = theScreenHeight;
         _myPackageExtension = thePackageExtension;
@@ -38,7 +36,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     }
 
     private void updateFrameCounter() {
-        if (numFrames == 0) {
+        /*if (numFrames == 0) {
             millisec = System.currentTimeMillis();
         } else if (numFrames == 99) {
             long now = System.currentTimeMillis();
@@ -49,16 +47,20 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
             millisec = now;
             numFrames = 0;
         }
-        numFrames++;
+        numFrames++;*/
     }
 
 
     public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
         CameraTexture.initWithContext(glContext);
         AC_Log.print("_________________________________- on surface created of " + PACKAGE_NAME + _myPackageExtension);
+        AC_Log.print(String.format("Spark Loaded %b " , NativeBinding.ourActivity._mySparkWorldIsLoaded));
         NativeBinding.initBinding();
-        if (_myFirstTimeFlag) {
+        if (!NativeBinding.ourActivity._mySparkWorldIsLoaded) {
             NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME + _myPackageExtension, context), _myScreenWidth,  _myScreenHeight);
+            NativeBinding.sparkRealize();
+            NativeBinding.ourActivity._mySparkWorldIsLoaded = true;
+            
         } else {
             NativeBinding.onResume();
         }

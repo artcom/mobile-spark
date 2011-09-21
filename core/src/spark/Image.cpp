@@ -39,6 +39,7 @@ namespace spark {
         build();
     }
 
+    
     void
     Image::build() {
         if (_myDirtyFlag) {

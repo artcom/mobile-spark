@@ -15,8 +15,19 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
                                                              jint theScreenHeight) {
     jboolean isCopy;
     const char* myAssetPath = env->GetStringUTFChars(apkFile, &isCopy);
-    CALL_NATIVE(spark::AppProvider::get().getApp()->setup(currentMillis, myAssetPath, theScreenWidth, theScreenHeight));
+    if (!spark::AppProvider::get().getApp()->isSetup()) {
+        CALL_NATIVE(spark::AppProvider::get().getApp()->setup(currentMillis, myAssetPath, theScreenWidth, theScreenHeight));        
+    } else {
+        // a second call to setup is really a resume
+        CALL_NATIVE(spark::AppProvider::get().getApp()->onResume());        
+    }
     env->ReleaseStringUTFChars(apkFile, myAssetPath);
+}
+
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_sparkRealize(JNIEnv * env, jobject obj) {
+    if (!spark::AppProvider::get().getApp()->isSparkRealized()) {
+        CALL_NATIVE(spark::AppProvider::get().getApp()->realize());        
+    }
 }
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
@@ -26,6 +37,7 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNI
     myAndroidSDK->env = env;
     myAndroidSDK->obj = obj;
 }
+
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
     CALL_NATIVE(spark::AppProvider::get().getApp()->onResume());

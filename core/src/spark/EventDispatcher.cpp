@@ -25,11 +25,14 @@ namespace spark {
         AC_INFO << "removeEventListener for type " << theType << " capturing: " << theUseCapture;
         std::pair<std::string, bool> myKey(theType, theUseCapture);
         std::pair<EventListenerMap::iterator, EventListenerMap::iterator> itp = _myListenersMap.equal_range(myKey);
-        if (itp.first != itp.second) {
-            _myListenersMap.erase(itp.first, itp.second);
-        } else {
-            throw EventDispatcherException(std::string("removeEventListener: no eventlistener found for " + theType), PLUS_FILE_LINE);
+        for (EventListenerMap::iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
+            if ((*mapIt).second == theListener) {
+                AC_DEBUG << "remove listener: " << (*mapIt).second;
+                _myListenersMap.erase(mapIt);
+                return;
+            }
         }
+        throw EventDispatcherException(std::string("removeEventListener: no eventlistener found for " + theType + " capturing " + ((theUseCapture) ? "true" : "false")), PLUS_FILE_LINE);
     }
 
     void
@@ -47,13 +50,13 @@ namespace spark {
 
         // capture phase
         EventListenerKey myCaptureKey(theEvent->getType(), true);
-        for (std::list<ComponentPtr>::iterator it = myCaptureList.begin(); it != myCaptureList.end(); ++it) {
+        for (std::list<ComponentPtr>::const_iterator it = myCaptureList.begin(); it != myCaptureList.end(); ++it) {
             if ((*it)->hasEventListener(myCaptureKey)) {
                 theEvent->dispatchTo(*it, Event::CAPTURING);
                 EventListenerMap myListeners = (*it)->getEventListeners();
                 std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = myListeners.equal_range(myCaptureKey);
                 for (EventListenerMap::const_iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
-                    AC_TRACE << "CAPTURE_PHASE: callling listener: "<<(*mapIt).second;
+                    AC_TRACE << "CAPTURE_PHASE: calling listener: "<<(*mapIt).second;
                     (*(*mapIt).second)(theEvent);
                     if (!theEvent->isDispatching()) {
                         return;
@@ -78,8 +81,4 @@ namespace spark {
         theEvent->finishDispatch();
     }
 
-    inline bool
-    EventDispatcher::hasEventListener(const EventListenerKey & theKey ) const {
-        return (_myListenersMap.find(theKey) != _myListenersMap.end());
-    }
 }

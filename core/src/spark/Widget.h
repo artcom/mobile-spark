@@ -18,8 +18,9 @@ namespace spark {
         virtual ~Widget() = 0;
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void render(const matrix & theProjectionMatrix) const;
+        virtual void realize();
 
-        inline void setVisible(bool theFlag) { AC_DEBUG << "setvisible of " << getName() << " to " << theFlag; _visible = theFlag;};
+        inline void setVisible(bool theFlag) { AC_DEBUG << "setvisible of " << *this << " to " << theFlag; _visible = theFlag;};
         inline void setSensible(bool theFlag) { _sensible = theFlag;};
         inline bool isVisible() const { return _visible;};
         inline bool isSensible() const { return _sensible;};
@@ -39,7 +40,9 @@ namespace spark {
         void setRotationX(const float theRotationX) { _rotationX = theRotationX; updateMatrix();};
         void setRotationY(const float theRotationY) { _rotationY = theRotationY; updateMatrix();};
         void setRotationZ(const float theRotationZ) { _rotationZ = theRotationZ; updateMatrix();};
-        void setAlpha(const float theAlpha)  { _alpha = theAlpha; };
+
+        float getAlpha() const { return _alpha;};
+        inline void setAlpha(const float theAlpha) {applyAlpha(theAlpha);};
 
         void test() {
             AC_PRINT << "test callback";
@@ -50,6 +53,10 @@ namespace spark {
         }
         matrix _myLocalMatrix; //scale, roation and translation of this node
     protected:
+        float getActualAlpha() const { return _actualAlpha;};
+        float getParentAlpha() const;
+        void propagateAlpha();
+        virtual void applyAlpha (const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
         matrix _myWorldMVMatrix;
 
     private:
@@ -57,6 +64,7 @@ namespace spark {
         float _scaleX, _scaleY, _scaleZ;
         float _rotationX, _rotationY, _rotationZ;
         float _alpha;
+        float _actualAlpha;
         bool _visible;
         bool _sensible;
 

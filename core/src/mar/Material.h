@@ -24,9 +24,11 @@ namespace mar {
         virtual void createShader();
         virtual void loadShader(const matrix & theMatrix);
         virtual void initGL();
+        void setAlpha(const float theAlpha) {alpha_ = theAlpha;};
 
         GLuint shaderProgram;
         GLuint mvpHandle;
+        GLuint alphaHandle;
 
         bool transparency_;
     protected:
@@ -36,6 +38,7 @@ namespace mar {
 
         std::string _myFragmentShader;
         std::string _myVertexShader;
+        float alpha_;
     };
     typedef boost::shared_ptr<Material> MaterialPtr;
 
