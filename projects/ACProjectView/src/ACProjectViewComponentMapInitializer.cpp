@@ -5,6 +5,8 @@
 #include "ProjectImpl.h"
 #include "ProjectViewerImpl.h"
 #include "ContentImage.h"
+#include "Description.h"
+
 
 
 
@@ -14,6 +16,7 @@ namespace acprojectview {
         spark::SparkComponentFactory::get().registerComponent("ProjectImpl", spark::create<ProjectImpl>);
         spark::SparkComponentFactory::get().registerComponent("ProjectViewerImpl", spark::create<ProjectViewerImpl>);
         spark::SparkComponentFactory::get().registerComponent("ContentImage", spark::create<ContentImage>);
+        spark::SparkComponentFactory::get().registerComponent("Description", spark::create<Description>);
 
     }
 }

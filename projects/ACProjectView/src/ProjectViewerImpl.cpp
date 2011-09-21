@@ -23,6 +23,10 @@ namespace acprojectview {
         image0 = boost::static_pointer_cast<Image>(getChildByName("image0"));
         image1 = boost::static_pointer_cast<Image>(getChildByName("image1"));
         image2 = boost::static_pointer_cast<Image>(getChildByName("image2"));
+        _myDescription = boost::static_pointer_cast<Text>(getChildByName("description"));
+        _myDescription->setText("");
+        
+        
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
 
         spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipe));
@@ -49,7 +53,13 @@ namespace acprojectview {
              return;
          }
          image0->setVisible(true);
-
+         DescriptionPtr txt = boost::static_pointer_cast<Description>(_myCurrentProject->getChildByName("description"));
+         if (txt == 0) {
+             _myDescription->setText("");
+         } else {
+             _myDescription->setText(txt->getText());
+         }
+         AC_PRINT << "__sadf_______________________" << _myDescription->getHeight();
          image0->setX(0);
          image1->setX(_myWidth);
          image2->setX(-_myWidth);

@@ -10,6 +10,7 @@
 
 #include "ProjectImpl.h"
 #include "ContentImage.h"
+#include "Description.h"
 
 
 
@@ -48,7 +49,8 @@ namespace acprojectview {
             spark::ImagePtr image0;
             spark::ImagePtr image1;
             spark::ImagePtr image2;
-            
+            spark::TextPtr _myDescription;
+
             
             void changeImage(int dir);
             void onAnimationFinished();
