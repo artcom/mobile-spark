@@ -21,6 +21,7 @@ namespace spark {
         SparkComponentFactory::get().registerComponent(Image::SPARK_TYPE, spark::create<Image>);
         SparkComponentFactory::get().registerComponent(I18nContext::SPARK_TYPE, spark::create<I18nContext>);
         SparkComponentFactory::get().registerComponent(I18nText::SPARK_TYPE, spark::create<I18nText>);
+        SparkComponentFactory::get().registerComponent(I18nImage::SPARK_TYPE, spark::create<I18nImage>);
         SparkComponentFactory::get().registerComponent(NinePatch::SPARK_TYPE, spark::create<NinePatch>);
         SparkComponentFactory::get().registerComponent(Rectangle::SPARK_TYPE, spark::create<Rectangle>);
         SparkComponentFactory::get().registerComponent(RenderCamera::SPARK_TYPE, spark::create<RenderCamera>);
