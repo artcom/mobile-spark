@@ -27,6 +27,10 @@
                 <ContentImage src="/kinetische_skulptur_01.png"/>
                 <ContentImage src="/kinetische_skulptur_02.png"/>
 	            <ContentImage src="/kinetische_skulptur_03.png"/>
+	            <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+	            
 	        </Project>
 
 

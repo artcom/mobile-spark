@@ -56,16 +56,13 @@ namespace acprojectview {
 
         _myWidth = _myProjectMenu->getPreviewWidth();
         _myHeight = _myProjectMenu->getPreviewHeight();
-        _myProjectViewer->setWidth(_myWidth);
-        _myProjectViewer->setWidth(_myHeight);
+        //_myProjectViewer->setWidth(_myWidth);
+        //_myProjectViewer->setWidth(_myHeight);
         
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onProjectItem));
         spark::EventCallbackPtr myBackCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onBack));
-        spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onSwipeCB));
-
+        
         _myProjectViewer->addEventListener(TouchEvent::PICKED, myBackCB,true);
-        _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
-        _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
         
         
         _myProjectItems = boost::static_pointer_cast<spark::Container>(_myProjectMenu);
@@ -96,12 +93,6 @@ namespace acprojectview {
         _myProjectViewer->setSensible(false);
     }
     
-    void ACProjectView::onSwipeCB(EventPtr theEvent) {
-        _myProjectViewer->onSwipe(theEvent);
-    }
-
-    
-    //void ACProjectView::projectViewAnimation(int fromX,int toX,int fromY,int toY,int fromScale,int toScale){
     void ACProjectView::projectViewAnimation(bool showProject){
         int toX = showProject ? 0 : _myCurrentProject->getX()+_myWidth/2;
         int fromX   = showProject ? _myCurrentProject->getX()+_myWidth/2 : 0;
@@ -127,10 +118,7 @@ namespace acprojectview {
         myParallel->add(myZoomAnimationY);
         myParallel->add(myTransAnimationX);
         myParallel->add(myTransAnimationY);
-        animation::AnimationManager::get().play(myZoomAnimationX);
-        animation::AnimationManager::get().play(myZoomAnimationY);
-        animation::AnimationManager::get().play(myTransAnimationX);
-        animation::AnimationManager::get().play(myTransAnimationY);
+        animation::AnimationManager::get().play(myParallel);
     }
 
 }

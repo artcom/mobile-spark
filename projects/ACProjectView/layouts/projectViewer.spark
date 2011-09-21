@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ProjectViewerImpl>
+                <Rectangle name="background" x="0" y="0" width="800" height="480" color="[1,1.0,1.0]"/>
+                <Image name="image0" src="" x="0" y="0"/>
+                <Image name="image1" src="" x="0" y="0"/>
+                <Image name="image2" src="" x="0" y="0"/>
+                
+                
+                <Image name="arrowLeft" src="/greyTransparency.png" x="100" y="0" z="1" scaleX="12" scaleY="5"/>
+                <Image name="arrowRight" src="/arrow_right.png" x="740" y="30" z="1"/>
+                <Image name="arrowRightb" src="/arrow_left.png" x="10" y="30" z="1"/>
+
+</ProjectViewerImpl>
