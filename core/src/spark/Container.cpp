@@ -17,7 +17,7 @@ namespace spark {
             }
             ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
             AC_DEBUG << "Container Constructor " << getName() << " add child " << childComponent->getName();
-            addChild(childComponent, false);
+            _myChildren.push_back(childComponent);
         }
     }
 
@@ -26,6 +26,7 @@ namespace spark {
 
     void
     Container::realize() {
+        //XXX: make this work
         //for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
         //    (*it)->setParent(shared_from_this());
         //}
@@ -60,12 +61,9 @@ namespace spark {
     }
 
     void 
-    Container::addChild(const ComponentPtr theChild, const bool theSetParentFlag) {
+    Container::addChild(const ComponentPtr theChild) {
         _myChildren.push_back(theChild);
-        //set parent is optional because this(!) can not be done from constructor
-        if (theSetParentFlag) {
-            theChild->setParent(shared_from_this());
-        }
+        theChild->setParent(shared_from_this());
     }
 
     void
