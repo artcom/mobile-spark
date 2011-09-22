@@ -44,8 +44,6 @@ namespace acprojectview {
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         ACProjectViewComponentMapInitializer::init();
-        std::string myOrientation;
-        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
