@@ -32,10 +32,6 @@ namespace spark {
             _myFontPath = AssetProviderSingleton::get().ap()->findFile(myFontName);
          }
         setShape(ShapeFactory::get().createRectangle(true,500,500));
-
-        //XXX: dirtyflag neccessary? virtual in ctor!!
-        _myDirtyFlag = true;
-        build();
     }
 
     Text::~Text() {

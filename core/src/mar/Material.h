@@ -47,6 +47,10 @@ namespace mar {
         UnlitColoredMaterial();
         virtual ~UnlitColoredMaterial();
         virtual void loadShader(const matrix & theMatrix);
+        void setDiffuseColor(const vector3 & theColor) {
+            diffuse_ = vector4(theColor, alpha_);
+            transparency_ = (diffuse_[3] != 1.0);
+        }
         void setDiffuseColor(const vector4 & theColor) {
             diffuse_ = theColor;
             transparency_ = (diffuse_[3] != 1.0);

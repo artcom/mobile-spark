@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <masl/Logger.h>
+#include <masl/MobileSDK.h>
 
 #include "SparkComponentFactory.h"
 #include "View.h"
@@ -37,6 +38,14 @@ namespace spark {
     Window::~Window() {
     }
 
+    void
+    Window::realize() {
+        Widget::realize();
+        if (_myOrientation != "") {
+            MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
+        }
+    }
+
     vector2
     Window::getSize() const {
         int myScreensLargerSide = _myWidth > _myHeight ? _myWidth : _myHeight;
@@ -68,6 +77,9 @@ namespace spark {
     void
     Window::onResume() {
         _myGLCanvas->initGLState();
+        if (_myOrientation != "") {
+            MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
+        }
     }
 
     void
