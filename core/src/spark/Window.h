@@ -18,7 +18,7 @@ namespace spark {
         virtual void render() const;
         virtual void onSizeChanged(EventPtr theEvent);
         virtual void onResume();
-        virtual void realize();
+        virtual void realize();        
         vector4 getClearColor() const { return _myClearColor;};
         vector2 getSize() const;
         static const char * const SPARK_TYPE;

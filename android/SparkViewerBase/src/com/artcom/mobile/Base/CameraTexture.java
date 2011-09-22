@@ -23,8 +23,8 @@ public class CameraTexture implements SurfaceHolder.Callback {
     private SurfaceHolder _mySurfaceHolder;
     private Camera _myCamera;
     private int _myCamWidth, _myCamHeight, _myTextureWidth, _myTextureHeight;
-    private int _myTextureID;
-    private int[] _myCameraTextures;
+    private int[] _myCameraTextures=new int[1];
+    
     private static byte _myCamData[] = new byte[0];
     private boolean _newFrameAvailable=false;
     public static Activity _myActivity;
@@ -71,7 +71,7 @@ public class CameraTexture implements SurfaceHolder.Callback {
     public static List<Integer> getTextureParams() {
         if (INSTANCE == null ) return null;
         List<Integer> myResult = new ArrayList<Integer>();
-        myResult.add(INSTANCE._myTextureID);
+        myResult.add(INSTANCE._myCameraTextures[0]);
         myResult.add(INSTANCE._myCamWidth);
         myResult.add(INSTANCE._myCamHeight);
         myResult.add(INSTANCE._myTextureWidth);
@@ -81,6 +81,7 @@ public class CameraTexture implements SurfaceHolder.Callback {
     //--------- MEMBER --------------------------------------------------------
     //-------------------------------------------------------------------------
     private CameraTexture(Activity activity) {
+    	_myCameraTextures[0] = 0;
         if (theActivity == null || theActivity != activity) {
             theActivity=activity;
             theSurfaceView = new SurfaceView(theActivity);
@@ -92,8 +93,8 @@ public class CameraTexture implements SurfaceHolder.Callback {
     private void start() {
         if(INSTANCE != null) close();
         if(gl == null) return;
-        if(_myTextureID==0) {
-            _myTextureID = createTextureID();
+        if(_myCameraTextures[0]==0) {
+            createTextureID();
         }
         _mySurfaceHolder = theSurfaceView.getHolder();
         _mySurfaceHolder.setType( SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS );
@@ -133,7 +134,7 @@ public class CameraTexture implements SurfaceHolder.Callback {
         if (_myColorConversionFlag) {
             toRGB565(_myCamData, _myCamWidth, _myCamHeight, myRGBCamData);
         }
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, _myTextureID);
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, _myCameraTextures[0]);
         if (_myColorConversionFlag) {
             gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB, _myTextureWidth, _myTextureHeight,
                     0, GL10.GL_RGB, GL10.GL_UNSIGNED_SHORT_5_6_5, null);
@@ -201,17 +202,22 @@ public class CameraTexture implements SurfaceHolder.Callback {
         }
     }
     //-------------------------------------------------------------------------
-    private int createTextureID() {
-        if (_myCameraTextures==null)
-            _myCameraTextures=new int[1];
-        else
+    private void createTextureID() {
+        if (_myCameraTextures[0] != 0) {
             gl.glDeleteTextures(1, _myCameraTextures, 0);
+            AC_Log.print("!!!!!!!!!!!!!!!!!!!!!!!!!1 delete texture");
+        }
+        AC_Log.print("!!!!!!!!!!!!!!!!!!!!!!!!!1 create texture");
         gl.glGenTextures(1, _myCameraTextures, 0);
-        return _myTextureID = _myCameraTextures[0];
     }
     //-------------------------------------------------------------------------
     public void close() {
         if ( _myCamera != null ) {
+            if (_myCameraTextures[0] !=0) {
+                gl.glDeleteTextures(1, _myCameraTextures, 0);
+                AC_Log.print("!!!!!!!!!!!!!!!!!!!!!!!!!1 delete texture");
+            }
+            _myCameraTextures[0] = 0;
             _myCamera.setPreviewCallback(null);
             _myCamera.stopPreview();
             _myCamera.release();
