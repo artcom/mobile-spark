@@ -8,8 +8,8 @@
 namespace spark {
     const char * const Image::SPARK_TYPE = "Image";
 
-    Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent) {
+    Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        ShapeWidget(theApp, theXMLNode) {
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "src"));
     }
 

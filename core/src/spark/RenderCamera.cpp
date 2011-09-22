@@ -17,9 +17,8 @@ namespace spark {
     const char * const RenderCamera::OrtohonormalStr = "orthonormal";
     const char * const RenderCamera::AutoOrthonormalStr = "auto";
 
-    RenderCamera::RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode,
-                   ComponentPtr theParent):
-        Widget(theApp, theXMLNode, theParent){
+    RenderCamera::RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        Widget(theApp, theXMLNode) {
         bool myFrustumSpecified = false;
         string myFrustum = theXMLNode->getAttributeAs<std::string>("frustum", "");
         size_t myIndex  = myFrustum.find(OrtohonormalStr);

@@ -12,7 +12,7 @@ namespace spark {
 
     class Container : public Component {
     public:
-        Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Container() = 0;
         
         virtual void realize();
