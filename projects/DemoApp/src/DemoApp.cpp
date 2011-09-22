@@ -89,6 +89,12 @@ namespace demoapp {
         spark::EventCallbackPtr myCreationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onCreationButton));
         ComponentPtr myCreationButton = my2DWorld->getChildByName("creationbutton", true);
         myCreationButton->addEventListener(TouchEvent::PICKED, myCreationCB);
+
+        spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLanguageSwitch));
+        spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("languagebutton", true);
+        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
+
+		//touch gestures
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myAnimationCB);
 
@@ -142,10 +148,20 @@ namespace demoapp {
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 8, 500));
         WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 8, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
+        WidgetPropertyAnimationPtr myAnimation3 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setAlpha, 1, 0.2, 1500, animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myAnimation4 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setAlpha, 0.2, 1, 1500, animation::EasingFnc(animation::linearTween)));
         animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(2000));
         animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
-        mySequence->add(myAnimation1);
-        mySequence->add(myAnimation2);
+        animation::ParallelAnimationPtr myParallel1 = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        animation::ParallelAnimationPtr myParallel2 = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        myParallel1->add(myAnimation1);
+        myParallel1->add(myAnimation3);
+        myParallel2->add(myAnimation2);
+        myParallel2->add(myAnimation4);
+        mySequence->add(myParallel1);
+        mySequence->add(myParallel2);
         mySequence->add(myDelay);
         mySequence->setLoop(true);
         //mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
@@ -294,6 +310,11 @@ namespace demoapp {
                         new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::insertCreatedComponent)));
             animation::AnimationManager::get().play(myDelay);
         }
+    }
+
+    void DemoApp::onLanguageSwitch(EventPtr theEvent) {
+        LANGUAGE myLanguage = _mySparkWindow->getLanguage();
+        _mySparkWindow->switchLanguage(myLanguage == spark::DE ? spark::EN : spark::DE);
     }
 
     void DemoApp::insertCreatedComponent() {

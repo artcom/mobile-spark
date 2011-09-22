@@ -9,7 +9,7 @@ else (ANDROID)
 endif(ANDROID)
 
 ac_add_library(
-    ${APP_NAME} ${APP_NAME} 
+    ${APP_NAME} ${APP_NAME}
     SOURCES ${SOURCES}
     HEADERS ${HEADERS}
     DEPENDS ${DEPENDS}

@@ -29,6 +29,7 @@ namespace demoapp {
         	void onSensorGyroEvent(spark::EventPtr theEvent);
             void onControlButton(spark::EventPtr theEvent);
             void onCreationButton(spark::EventPtr theEvent);
+            void onLanguageSwitch(spark::EventPtr theEvent);
             void onTouch(spark::EventPtr theEvent);
             void insertCreatedComponent();
             void onSizeChanged(spark::EventPtr theEvent);
