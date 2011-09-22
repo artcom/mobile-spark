@@ -21,10 +21,6 @@ namespace spark {
     }
 
     void
-    Statistic::prerender(MatrixStack& theCurrentMatrixStack) {
-        Transform::prerender(theCurrentMatrixStack);
-    }
-    void
     Statistic::realize() {
         Widget::realize();
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
