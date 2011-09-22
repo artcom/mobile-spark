@@ -18,7 +18,7 @@ namespace spark {
         _rotationZ = _myXMLNode->getAttributeAs<float>("rotationZ", 0);
         _visible = _myXMLNode->getAttributeAs<bool>("visible", _visible);
         _sensible = _myXMLNode->getAttributeAs<bool>("sensible", _sensible);
-
+        _alpha = _myXMLNode->getAttributeAs<float>("alpha", _alpha);
         updateMatrix();
         setI18nContextIfAvailable();
     }
@@ -28,10 +28,12 @@ namespace spark {
 
     void
     Widget::realize() {
-        setAlpha(_myXMLNode->getAttributeAs<float>("alpha", _alpha));
+        Container::realize();
+        setAlpha(_alpha);
     }
 
-    void Widget::updateMatrix() {
+    void
+    Widget::updateMatrix() {
         MatrixStack helpMatrixStack;
         helpMatrixStack.loadIdentity();
         helpMatrixStack.rotateXAxis(_rotationX);
@@ -40,10 +42,11 @@ namespace spark {
         helpMatrixStack.translate(_x, _y, _z);
         helpMatrixStack.scale(_scaleX, _scaleY, _scaleZ);
         _myLocalMatrix = helpMatrixStack.getTop();
-    };
+    }
 
     //TODO: use visitor?
-    void Widget::prerender(MatrixStack& theCurrentMatrixStack) {
+    void
+    Widget::prerender(MatrixStack& theCurrentMatrixStack) {
         theCurrentMatrixStack.push();
         theCurrentMatrixStack.multMatrix(_myLocalMatrix);
         _myWorldMVMatrix = theCurrentMatrixStack.getTop();
@@ -51,6 +54,7 @@ namespace spark {
             (*it)->prerender(theCurrentMatrixStack);
         }
         theCurrentMatrixStack.pop();
+        //XXX: should dirty be true on construction
         if (_myDirtyFlag) {
             build();
             setAlpha(_alpha);
@@ -58,7 +62,8 @@ namespace spark {
         }
     }
 
-    bool Widget::isRendered() const {
+    bool
+    Widget::isRendered() const {
         if (!_visible) {
             return false;
         } else {
@@ -70,7 +75,8 @@ namespace spark {
         }
     }
 
-    void Widget::render(const matrix & theProjectionMatrix) const {
+    void
+    Widget::render(const matrix & theProjectionMatrix) const {
     }
 
     float
@@ -127,7 +133,7 @@ namespace spark {
         I18nItemPtr myI18nItem;
         std::vector<I18nContextPtr> myContexts = getI18nContexts();
         for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
-            (*it)->setup();  //??? good idea? this avoids postrealize
+            (*it)->setup();  //XXX: good idea? this avoids postrealize
             ComponentPtr myComponent = (*it)->getChildByName(theName);
             if (myComponent) {
                 myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);

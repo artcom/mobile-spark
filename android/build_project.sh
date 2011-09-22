@@ -21,9 +21,6 @@ do
    esac
 done
 
-echo "VERBOSITY $VERBOSITY"
-echo "NUMCORES $NUMCORES"
-
 cd ../../../android
 ./build.sh $NUMCORES 
 BUILD_OK=$?

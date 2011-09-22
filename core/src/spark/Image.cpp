@@ -13,7 +13,7 @@ namespace spark {
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "src"));
         if (i18nHandler_->data_.size() > 0) {
             _myDirtyFlag = true;
-            build();
+            build(); // virtual in ctor, dirty flag?!
         }
     }
 

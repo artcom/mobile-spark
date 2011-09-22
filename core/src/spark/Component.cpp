@@ -2,8 +2,6 @@
 
 #include <masl/Logger.h>
 
-#include "Container.h"
-
 namespace spark {
 
     Component::Component(): EventDispatcher(), _myParent(ComponentPtr()) {
