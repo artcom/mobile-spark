@@ -10,6 +10,20 @@ namespace android {
 
     }
 
+    void AndroidMobileSDK::vibrate(long theDurationMillisec) {
+        if (env) {
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "vibrate", "(I)V");
+            if(myMethodId != 0) {
+                jvalue myArgs[1];
+                myArgs[0].i =theDurationMillisec ;
+                env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+            } else {
+                AC_WARNING  << "Sorry, java-vibrate not found";
+            }
+        }       
+    }
+
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
                                                 const std::string & theFontPath) {
