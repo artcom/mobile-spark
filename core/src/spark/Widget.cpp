@@ -114,21 +114,21 @@ namespace spark {
     }
 
     std::vector<I18nContextPtr> 
-    Widget::getI18nContexts() {
+    Widget::getI18nContexts() const {
         std::vector<I18nContextPtr> myContexts;
-        //XXX: does not work if method is const, why?
-        WidgetPtr myCurrent =  boost::static_pointer_cast<Widget>(shared_from_this());
+        boost::shared_ptr<const Component> myCurrent =  boost::static_pointer_cast<const Component>(shared_from_this());
         while (myCurrent) {
-            if (myCurrent->getI18nContext()) {
-                myContexts.push_back(myCurrent->getI18nContext());
+            boost::shared_ptr<const Widget> myWidget = boost::dynamic_pointer_cast<const Widget>(myCurrent);
+            if (myWidget && myWidget->getI18nContext()) {
+                myContexts.push_back(myWidget->getI18nContext());
             }
-            myCurrent = boost::dynamic_pointer_cast<Widget>(myCurrent->getParent());
+            myCurrent = myCurrent->getParent();
         }
         return myContexts;
     }
 
     I18nItemPtr
-    Widget::getI18nItemByName(const std::string & theName) {
+    Widget::getI18nItemByName(const std::string & theName) const {
         I18nItemPtr myI18nItem;
         std::vector<I18nContextPtr> myContexts = getI18nContexts();
         for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
@@ -145,7 +145,7 @@ namespace spark {
     }
 
     LANGUAGE 
-    Widget::getLanguage() {
+    Widget::getLanguage() const {
         std::vector<I18nContextPtr> myI18nContexts = getI18nContexts();
         if (myI18nContexts.size() > 0) {
             return myI18nContexts[0]->getLanguage();
