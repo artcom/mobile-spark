@@ -25,7 +25,7 @@ include_directories(${Cml_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/core/src)  
 include_directories(../src)
 
-set(EXECUTABLE_NAME ACProjectView)
+set(EXECUTABLE_NAME ACProjectViewApp)
 #Builds the *.app
 set(APP_TYPE MACOSX_BUNDLE)
 add_executable(${EXECUTABLE_NAME}
@@ -73,13 +73,21 @@ target_link_libraries(${EXECUTABLE_NAME} ${ZLIB_LIBRARY_DIRS})
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND cd ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app && mkdir -p ${APP_NAME} && mkdir -p core && cd -
+    COMMAND cd ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app && mkdir -p ${APP_NAME} && mkdir -p core && mkdir -p assets && cd -
 )
 
 #This copies the asset folder into the iOS app, 
 #as well as if you drag and drop the folder into the Xcodeproject 
 #or into the final app by opening it with the packetmanager.
 #copy assets folder
+set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/android/${APP_NAME}/assets)
+add_custom_command( 
+    TARGET ${EXECUTABLE_NAME} 
+    POST_BUILD 
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+)
+
+#copy layouts folder
 set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/layouts)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
@@ -87,7 +95,7 @@ add_custom_command(
     COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
-#copy assets folder
+#copy models folder
 set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/models)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
@@ -95,7 +103,7 @@ add_custom_command(
     COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
-#copy assets folder
+#copy shaders folder
 set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/shaders)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
@@ -103,7 +111,7 @@ add_custom_command(
     COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
-#copy assets folder
+#copy textures folder
 set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/textures)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
@@ -111,12 +119,18 @@ add_custom_command(
     COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
-#copy assets folder
+#copy fonts folder
+set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/fonts)
+add_custom_command( 
+    TARGET ${EXECUTABLE_NAME} 
+    POST_BUILD 
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
+)
+
+#copy core/shaders folder
 set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/../../core/shaders)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
     COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/core/
 )
-
-   
