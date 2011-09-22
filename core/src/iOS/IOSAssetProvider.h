@@ -14,7 +14,7 @@ public:
     virtual bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb);
     virtual void addIncludePath(const std::string & thePath)  { includePaths_.push_back(_myAssetFolderPath + "/"+thePath); };
 private:
-    const std::string &_myAssetFolderPath;
+    const std::string _myAssetFolderPath;
 };
 typedef boost::shared_ptr<IOSAssetProvider> IOSAssetProviderPtr;
 };

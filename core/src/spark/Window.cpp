@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <masl/Logger.h>
+#include <masl/MobileSDK.h>
 
 #include "SparkComponentFactory.h"
 #include "View.h"
@@ -38,6 +39,9 @@ namespace spark {
         WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new WindowCB(ptr, &Window::onSizeChanged));
         addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
+        if (_myOrientation != "") {
+            MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
+        }
     }
 
     vector2
@@ -71,6 +75,9 @@ namespace spark {
     void
     Window::onResume() {
         _myGLCanvas->initGLState();
+        if (_myOrientation != "") {
+            MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
+        }
     }
 
     void
