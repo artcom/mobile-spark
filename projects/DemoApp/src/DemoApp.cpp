@@ -59,10 +59,7 @@ namespace demoapp {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
         
-        std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight);//, myOrientation);
-                    
-        loadLayoutAndRegisterEvents(mySparkFile);
-
+        loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
 
