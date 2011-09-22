@@ -17,10 +17,6 @@ namespace spark {
         edgeRight_ = _myXMLNode->getAttributeAs<float>("edgeRight", 0);
         edgeBottom_ = _myXMLNode->getAttributeAs<float>("edgeBottom", 0);
 
-        if (i18nHandler_->data_.size() > 0) {
-            _myDirtyFlag = true;
-            build(); // virtual in ctor, dirty flag?!
-        }
     }
 
     NinePatch::~NinePatch() {
@@ -41,8 +37,7 @@ namespace spark {
     void
     NinePatch::build() {
         ShapeWidget::build();
-        //XXX: use empty()
-        if(i18nHandler_->data_.size() == 0) return;
+        if(i18nHandler_->data_.empty()) return;
         float width = _myXMLNode->getAttributeAs<float>("width", -1);
         float height = _myXMLNode->getAttributeAs<float>("height", -1);
 
