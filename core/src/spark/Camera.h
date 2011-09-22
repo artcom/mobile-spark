@@ -20,7 +20,6 @@ namespace spark {
     private:
         void setGeometry();
         bool _myColorConversionFlag;
-        bool _mySetupFlag;
         bool _myPortraitMode;
     };
 

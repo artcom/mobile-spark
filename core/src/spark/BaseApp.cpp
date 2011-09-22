@@ -73,12 +73,11 @@ namespace spark {
     }
 
     std::string
-    BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, std::string & theOrientation) {
+    BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight) {
         std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
         std::string myBestMatch = "";
-        std::string myBestOrientation = "";
         std::string myBestLayoutName = "";
         int myBestLayoutWidth = 0;
         int myBestLayoutHeight = 0;
@@ -86,7 +85,6 @@ namespace spark {
         bool myExactMatchFlag = false;
         int myLayoutWidth = 0;
         int myLayoutHeight = 0;
-        std::string myOrientation = "";
         std::string myLayoutName = "";
         for (unsigned int i = 0; i < myFiles.size(); i++) {
             if (getExtension(myFiles[i]) == "spark") {
@@ -104,14 +102,10 @@ namespace spark {
                         if (it->first == "height") {
                             myLayoutHeight = as<int>(it->second);
                         }
-                        if (it->first == "orientation") {
-                            myOrientation = it->second;
-                        }
                     }
                 }
                 if (i == 0) {
                     myBestMatch = myChoice;
-                    myBestOrientation = myOrientation;
                     myBestLayoutName = myLayoutName;
                     myBestLayoutWidth = myLayoutWidth;
                     myBestLayoutHeight = myLayoutHeight;
@@ -121,22 +115,20 @@ namespace spark {
                 //AC_PRINT << "check layout '" << myLayoutName << " width " << myLayoutWidth << "'" << " height " << myLayoutHeight << " screen :" << theScreenWidth << " x" << theScreenHeight;
                 if (myLayoutsLargerSide == myScreensLargerSide && myLayoutsSmallerSide == myScreensSmallerSide ) {
                     myBestMatch = myChoice;
-                    myBestOrientation = myOrientation;
                     myBestLayoutName = myLayoutName;
                     myBestLayoutWidth = myLayoutWidth;
                     myBestLayoutHeight = myLayoutHeight;
                     myExactMatchFlag = true;
                     AC_PRINT << "Excellent we have a layout<->device match -> use layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
-                    AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight << " with orientation: '" <<  myBestOrientation << "'";
+                    AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
                     break;
                 }
             }
         }
         if (!myExactMatchFlag) {
             AC_PRINT << "Sorry, we did not find layout<->device match -> use default layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
-            AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight << " with orientation: '" <<  myBestOrientation << "'";
+            AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
         }
-        theOrientation = myBestOrientation;
         return myBestMatch;
     }
 
