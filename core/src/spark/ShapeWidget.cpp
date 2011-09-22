@@ -1,8 +1,8 @@
 #include "ShapeWidget.h"
 
 namespace spark {
-    ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Widget(theApp, theXMLNode, theParent)
+    ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+        : Widget(theApp, theXMLNode)
     {}
 
     ShapeWidget::~ShapeWidget() {}

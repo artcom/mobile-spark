@@ -65,7 +65,6 @@ namespace demoapp {
         MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
                     
         loadLayoutAndRegisterEvents(mySparkFile);
-
         
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
 
@@ -185,7 +184,6 @@ namespace demoapp {
         _mySlides[_myCurrentSlide]->setSensible(true);
 
         AC_DEBUG << "found #" << _mySlides.size() << " slides";        
-        //BaseApp::realize();
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {

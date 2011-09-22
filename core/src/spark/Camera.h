@@ -9,10 +9,11 @@ namespace spark {
 
     class Camera : public ShapeWidget {
     public:
-        Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Camera();
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onPause();
+        virtual void realize();
         virtual void onSizeChanged(EventPtr theEvent);
 
         static const char * const SPARK_TYPE;

@@ -22,7 +22,7 @@ namespace spark {
     class Widget : public Container {
     friend class I18nHandler;
     public:
-        Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Widget() = 0;
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void render(const matrix & theProjectionMatrix) const;

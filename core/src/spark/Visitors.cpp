@@ -36,7 +36,7 @@ namespace spark {
 
     bool
     I18nComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_DEBUG << *theComponent << " realize";
+        AC_DEBUG << *theComponent << " i18n setup";
         WidgetPtr myWidget = boost::dynamic_pointer_cast<Widget>(theComponent);
         if(myWidget && myWidget->getI18nContext()) {
             myWidget->getI18nContext()->setup();

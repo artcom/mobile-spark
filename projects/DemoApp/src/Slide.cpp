@@ -6,8 +6,8 @@ using namespace spark;
 namespace demoapp {
     const char * const SlideImpl::SPARK_TYPE = "SlideImpl";             
     
-    SlideImpl::SlideImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Transform(theApp, theXMLNode, theParent) {
+    SlideImpl::SlideImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+        : Transform(theApp, theXMLNode) {
         std::string title = _myXMLNode->getAttributeAs<std::string>("title",""); 
         std::string subtitle = _myXMLNode->getAttributeAs<std::string>("subtitle",""); 
         titleComponent_ = boost::static_pointer_cast<Text>(getChildByName("title"));
