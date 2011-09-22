@@ -135,8 +135,8 @@ namespace masl {
             AC_ERROR << "Failed to parse XMLString";
             xmlErrorPtr	myXMLError = xmlCtxtGetLastError(ctxt);
             AC_PRINT << "XMLError: " << myXMLError->message;
+            xmlFreeParserCtxt(ctxt);
             throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE);  //does not work, why?
-            return doc;
         }
 
         //XXX: doc is return value so no freeing here
