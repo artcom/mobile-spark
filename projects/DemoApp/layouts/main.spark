@@ -1,8 +1,27 @@
 <?xml version="1.0"?>
-<Window name="Samsung Galaxy S" fullscreen="true" clearColor="[0.2,0.2,0.5,1]" orientation="portrait" width="800" height="480">
+<Window name="Samsung Galaxy S" fullscreen="true" i18nContext="global-i18n" clearColor="[0.2,0.2,0.5,1]" orientation="portrait" width="800" height="480">
 
     <Template name="Controls" src="/controls.spark"/>
     <Template name="Slide" src="/slide.spark"/>
+
+    <I18nContext name="global-i18n" defaultLanguage="en">
+        <I18nItem name="lang_text">
+            <de><![CDATA[<Hallo>äöüß</Hallo>]]> </de>
+            <en><![CDATA[<Hello>'`§$%&@€</Hello>]]> </en>
+        </I18nItem>
+        <I18nItem name="test_text">
+            <de><![CDATA[gjqp]]> </de>
+            <en><![CDATA[oaei]]> </en>
+        </I18nItem>
+        <I18nItem name="lang_image">
+            <de>/en.png</de>
+            <en>/de.png</en>
+        </I18nItem>
+        <I18nItem name="lang_ninepatch">
+            <de>/button_normal.png</de>
+            <en>/button_roll.png</en>
+        </I18nItem>
+    </I18nContext>
 
     <!-- 3dworld provides 3d background animation and should therefore be rendered first-->
     <View name="3dView" world="3dworld" pos="[0.0,0.0]" size="[1.0,1.0]" cameraName="3dcamera"/>            
@@ -59,11 +78,6 @@
             </Transform>
         </Slide>
 
-
-        <Slide name="ObjectCreationSlide" title="Component Creation" subtitle="press button to create component from code">
-            <NinePatch name="creationbutton" x="20" y="400" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
-        </Slide>
-
         <Slide name="NinePatchSlide" title="NinePatch">
             <NinePatch x="40" y="100" z="20" height="80" width="125" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
             <NinePatch x="40" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_roll.png"/>
@@ -76,8 +90,10 @@
                 <Image name="border2" visible="false" width="640" height="480" src="/rahmen_schwarz.png" z="1"/>
             </Camera>
         </Slide>
+        
         <Slide name="3D-Viewer-Slide" title="3D-Viewer">
         </Slide>        
+
         <Slide name="SensorSlide" title="Sensors">
 	        <Transform name="transformLight" x="0" y="10">
 	         	<Rectangle name="colorIndicator" x="0" y="0" width="1200" height="5" color="[0,0.5,0]"/>
@@ -93,7 +109,18 @@
 				<Rectangle name="gyro" x="-15" y="-15" width="30" height="30" color="[1,0.3,0]"/>
 	         	<Text name="textblock" x="-100" y="2" text="Gyroscope" maxWidth="150" color="[1,1,1,1]" fontsize="16"/>
             </Transform>
-           
+        </Slide>
+
+        <Slide name="ObjectCreationSlide" title="Component Creation" subtitle="press button to create component from code">
+            <NinePatch name="creationbutton" x="20" y="400" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+        </Slide>
+
+        <Slide name="I18nSlide" title="Internationalization" subtitle="click button to toggle language\nand exchange text and images">
+            <NinePatch name="languagebutton" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+            <Text name="i18ntext" x="10" y="350" z="13" i18nId="test_text" color="[1,1,0,1]" fontsize="32"/>
+            <Text name="i18ntext2" x="10" y="300" z="13" i18nId="lang_text" color="[1,1,0,1]" fontsize="32"/>
+            <Image name="i18nimage" x="10" y="250" z="13" i18nId="lang_image"/>
+            <NinePatch name="i18nninepatch" x="10" y="150" z="13" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" i18nId="lang_ninepatch"/>
         </Slide>
 
     </World>        

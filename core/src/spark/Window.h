@@ -2,14 +2,14 @@
 #define _included_mobile_spark_Window_
 
 #include <masl/XMLNode.h>
-#include "Container.h"
+#include "Widget.h"
 #include "Event.h"
 #include <mar/Canvas.h>
 
 
 namespace spark {
 
-    class Window : public Container {
+    class Window : public Widget {
     public:
         Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Window();

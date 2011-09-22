@@ -25,7 +25,7 @@ namespace spark {
 
     bool
     ShapeWidget::AABB2Dcontains(const float x, const float y,
-                                     const matrix theProjectionMatrix) const {
+                                     const matrix & theProjectionMatrix) const {
         mar::BoundingBox myBB = _myShape->getBoundingBox();
         //use 8 corner points
         vector4 corners[8];

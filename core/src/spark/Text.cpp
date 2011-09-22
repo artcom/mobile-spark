@@ -1,6 +1,6 @@
 #include "Text.h"
-#include "BaseApp.h"
 
+#include <masl/MobileSDK.h>
 #include <mar/AssetProvider.h>
 
 #ifdef __ANDROID__
@@ -10,8 +10,9 @@
     #include <ios/IOSAssetProvider.h>
 #endif
 
+#include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include <masl/MobileSDK.h>
+#include "I18nContext.h"
 
 using namespace std;
 namespace spark {
@@ -20,10 +21,7 @@ namespace spark {
     Text::Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent), _myFontPath("") {
 
-        _myText = _myXMLNode->getAttributeAs<std::string>("text", "");
-        if (_myI18nId.size() > 0) {
-            attachToI18nItem();
-        }
+        i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "text"));
         _myFontSize = _myXMLNode->getAttributeAs<int>("fontsize", 32);
         _myMaxWidth = _myXMLNode->getAttributeAs<int>("maxWidth", 0);
         _myMaxHeight = _myXMLNode->getAttributeAs<int>("maxHeight", 0);
@@ -34,11 +32,19 @@ namespace spark {
             _myFontPath = AssetProviderSingleton::get().ap()->findFile(myFontName);
          }
         setShape(ShapeFactory::get().createRectangle(true,500,500));
+
+        //XXX: dirtyflag neccessary? virtual in ctor!!
         _myDirtyFlag = true;
         build();
     }
 
     Text::~Text() {
+    }
+
+    void
+    Text::realize() {
+        ShapeWidget::realize();
+        i18nHandler_->realize(boost::static_pointer_cast<Widget>(shared_from_this()));
     }
 
     void
@@ -49,11 +55,7 @@ namespace spark {
         _myDirtyFlag = true;
     }
 
-    void
-    Text::prerender(MatrixStack& theCurrentMatrixStack) {
-        ShapeWidget::prerender(theCurrentMatrixStack);
-        build();
-    }
+    //XXX: hmmm
     const vector2 &
     Text::getTextSize() {
         if (_myDirtyFlag) {
@@ -61,47 +63,19 @@ namespace spark {
         }
         return _myTextSize;
     }
+
     void
     Text::build() {
-        if (_myDirtyFlag) {
-            _myDirtyFlag = false;
-            UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
-            TextInfo myTextInfo = MobileSDK_Singleton::get().getNative()->renderText(_myText, myMaterial->getTexture()->getTextureId(), _myFontSize,
-                                             _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath);
+        ShapeWidget::build();
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        TextInfo myTextInfo = MobileSDK_Singleton::get().getNative()->renderText(i18nHandler_->data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
+                                         _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath);
 
-            _myTextSize[0] = myTextInfo.width;
-            _myTextSize[1] = myTextInfo.height;
-    		getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
-    		//AC_PRINT << "rendered text :'" << _myText << "' has size: " << _myTextSize[0] << "/" << _myTextSize[1];
-            myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
-            myMaterial->transparency_ = true;
-        }
-    }
-
-    void 
-    Text::handleI18nOnLanguageSwitch(const EventPtr theEvent) {
-        _myText = boost::static_pointer_cast<I18nText>(_myI18nItem)->getText();
-    }
-
-    void
-    Text::attachToI18nItem() {
-        AC_PRINT << ".................attach to i18n " << getName();
-        TextPtr myText = boost::static_pointer_cast<Text>(shared_from_this());
-        EventCallbackPtr myHandleLanguageSwitch = EventCallbackPtr(new TextCB(myText, &Text::handleI18nOnLanguageSwitch));
-        if (_myI18nItem) {
-            _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
-            _myI18nItem = I18nTextPtr();
-        }
-        if (_myI18nId.size() > 0) {
-            _myI18nItem = getI18nItemByName(_myI18nId);
-            if (!_myI18nItem) {
-                throw I18nItemNotFoundException("no i18n item named " + _myI18nId, PLUS_FILE_LINE);
-            }
-            _myI18nItem->addEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
-            handleI18nOnLanguageSwitch();
-        } else {
-            _myText = "";
-        }
-        _myDirtyFlag = true;
+        _myTextSize[0] = myTextInfo.width;
+        _myTextSize[1] = myTextInfo.height;
+        getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
+        //AC_PRINT << "rendered text :'" << i18nHandler_->data_ << "' has size: " << _myTextSize[0] << "/" << _myTextSize[1];
+        myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
+        myMaterial->transparency_ = true;
     }
 }

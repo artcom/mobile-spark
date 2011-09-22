@@ -177,5 +177,8 @@ namespace spark {
     I18nEvent::I18nEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode) {
     }
+    I18nEvent::I18nEvent(const std::string & theType, ComponentPtr theTarget)
+        : Event(theType, theTarget) {
+    }
     I18nEvent::~I18nEvent() {}
 }

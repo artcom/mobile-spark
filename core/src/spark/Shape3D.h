@@ -13,6 +13,8 @@ namespace spark {
         void onResume();
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Shape3D::SPARK_TYPE;};
+    protected:
+        virtual void build();
     private:
         std::string _mySrc;
     };

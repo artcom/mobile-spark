@@ -24,18 +24,21 @@ namespace spark {
     EventFactory::~EventFactory() {}
 
     // Returns 'true' if registration was successful
-    bool EventFactory::registerEvent(const std::string & theEventName,
+    bool
+    EventFactory::registerEvent(const std::string & theEventName,
                     const CreateEventCallback theCreateFn) {
         return _myCreateCallbackMap.insert(CallbackMap::value_type(theEventName, theCreateFn)).second;
     }
 
     // Returns 'true' if the event name was registered before
-    bool EventFactory::unregisterEvent(const std::string & theEventName) {
+    bool
+    EventFactory::unregisterEvent(const std::string & theEventName) {
         return _myCreateCallbackMap.erase(theEventName) == 1;
     }
 
-	EventPtr EventFactory::handleEvent(const std::string & theEventString) const {
-        AC_TRACE << "handle event : " << theEventString;
+	EventPtr
+	EventFactory::createEvent(const std::string & theEventString) const {
+        AC_TRACE << "create event : " << theEventString;
         XMLNodePtr myXMLNode(new XMLNode(theEventString));
         CallbackMap::const_iterator i = _myCreateCallbackMap.find(myXMLNode->nodeName);
         if (i == _myCreateCallbackMap.end()) {
