@@ -53,7 +53,7 @@ namespace spark {
         inline void setAlpha(const float theAlpha) {applyAlpha(theAlpha);};
 
         const I18nContextPtr getI18nContext() const { return _myI18nContext; };
-        LANGUAGE getLanguage();
+        LANGUAGE getLanguage() const;
         void switchLanguage(LANGUAGE theLanguage);
 
         void test() {
@@ -76,8 +76,8 @@ namespace spark {
         I18nContextPtr _myI18nContext;
         I18nItemPtr _myI18nItem;
 
-        std::vector<I18nContextPtr> getI18nContexts(); 
-        I18nItemPtr getI18nItemByName(const std::string & theName);
+        std::vector<I18nContextPtr> getI18nContexts() const ; 
+        I18nItemPtr getI18nItemByName(const std::string & theName) const;
 
     private:
         void setI18nContextIfAvailable();
