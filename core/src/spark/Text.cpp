@@ -33,6 +33,7 @@ namespace spark {
          }
         setShape(ShapeFactory::get().createRectangle(true,500,500));
 
+        //XXX: dirtyflag neccessary? virtual in ctor!!
         _myDirtyFlag = true;
         build();
     }
@@ -40,7 +41,8 @@ namespace spark {
     Text::~Text() {
     }
 
-    void Text::realize() {
+    void
+    Text::realize() {
         ShapeWidget::realize();
         i18nHandler_->realize(boost::static_pointer_cast<Widget>(shared_from_this()));
     }
@@ -53,6 +55,7 @@ namespace spark {
         _myDirtyFlag = true;
     }
 
+    //XXX: hmmm
     const vector2 &
     Text::getTextSize() {
         if (_myDirtyFlag) {

@@ -65,7 +65,8 @@ namespace spark {
         }
     }
 
-    void Window::onResume() {
+    void
+    Window::onResume() {
         _myGLCanvas->initGLState();
     }
 
