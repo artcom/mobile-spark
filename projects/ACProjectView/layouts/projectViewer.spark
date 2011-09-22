@@ -5,9 +5,12 @@
                 <Image name="image1" src="" x="0" y="0"/>
                 <Image name="image2" src="" x="0" y="0"/>
                 
+                <!--Rectangle name="textbackground" x="100" y="0" width="600" height="80" color="[0,0,0,0.5]"/-->
+                <!--Image name="textBackground" src="/greyTransparency.png" x="100" y="0" z="1" scaleX="12" scaleY="2"/-->
+                <Text name="description" x="105" y="10" z="2" color="[1,1,1,1]" fontsize="20"/>
                 
-                <Image name="arrowLeft" src="/greyTransparency.png" x="100" y="0" z="1" scaleX="12" scaleY="5"/>
+                
                 <Image name="arrowRight" src="/arrow_right.png" x="740" y="30" z="1"/>
-                <Image name="arrowRightb" src="/arrow_left.png" x="10" y="30" z="1"/>
+                <Image name="arrowLeft" src="/arrow_left.png" x="10" y="30" z="1"/>
 
 </ProjectViewerImpl>

@@ -7,6 +7,7 @@
 #include "ProjectMenu.h"
 #include "ProjectViewerImpl.h"
 #include "ContentImage.h"
+#include "Description.h"
 
 
 #ifdef __ANDROID__

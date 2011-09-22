@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Window name="ProjectView" fullscreen="true" i18nContext="global-i18n" width="800" height="480" orientation="landscape" clearColor="[0,0,0,1]">
-    
+
     <Template name="Project" src="/project.spark"/>
     <Template name="ProjectViewer" src="/projectViewer.spark"/>
     
@@ -39,6 +39,7 @@
 	            <ContentImage src="/level_green_01.png"/>
                 <ContentImage src="/level_green_02.png"/>
 	            <ContentImage src="/level_green_03.png"/>
+	            <Description name="description" text="Hier steht ne super Beschreibung, \n     -> nur fuer Alphabeten"/>
 	        </Project>
 
             <Project name="project5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" x="265"  y="200" src="/levelgreen_teaser_thumb.png">
