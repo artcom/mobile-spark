@@ -9,9 +9,6 @@ namespace spark {
     I18nContext::I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         Container(theApp, theXMLNode, theParent), language_(NO_LANGUAGE)
     {
-        for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-            addChild(*it, false); //XXX: virtual in ctor
-        }
         std::string myLanguage = _myXMLNode->getAttributeAs<std::string>("defaultLanguage", I18nConstants::LANGUAGE_STRINGS[EN]); 
         defaultLanguage_ = I18nConstants::getLanguageId(myLanguage);
         needsUpdate_ = true;
@@ -41,13 +38,11 @@ namespace spark {
     }
 
     void
-    I18nContext::addChild(const ComponentPtr theChild, const bool theSetParentFlag) {
+    I18nContext::addChild(const ComponentPtr theChild) {
+        Container::addChild(theChild);
         I18nItemPtr myChild = boost::static_pointer_cast<I18nItem>(theChild);
         if (!myChild) {
             throw I18nItemNotFoundException("adding child " + theChild->getName() + " to I18nContext " + getName() + " does not work because theChild is not an I18nItem", PLUS_FILE_LINE);
-        }
-        if (theSetParentFlag) {
-            Container::addChild(theChild);
         }
         if (language_ != NO_LANGUAGE) {
             myChild->switchLanguage(language_);

@@ -17,7 +17,7 @@ namespace spark {
 
         LANGUAGE getLanguage() const { return language_;};
         virtual void switchLanguage(const LANGUAGE theLanguage);
-        virtual void addChild(const ComponentPtr theChild, const bool theSetParentFlag = true);
+        virtual void addChild(const ComponentPtr theChild);
         virtual void setup();
 
         static const char * const SPARK_TYPE;             

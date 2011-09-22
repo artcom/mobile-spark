@@ -18,7 +18,7 @@ namespace spark {
         virtual void realize();
         virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const; 
-        virtual void addChild(const ComponentPtr theChild, const bool theSetParentFlag = true);
+        virtual void addChild(const ComponentPtr theChild);
 
         void removeChild(ComponentPtr theChild);
         const BaseAppPtr getApp() { return _myApp;}
