@@ -24,7 +24,7 @@ namespace spark {
             bool isSparkRealized() const {return _mySparkRealizedFlag;}
             void realize();
             void loadLayoutAndRegisterEvents(const std::string & theLayoutFile);
-            std::string findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, std::string & theOrientation);
+            std::string findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight);
             virtual void onFrame(EventPtr theEvent);
             virtual void onPause(EventPtr theEvent);
             virtual void onResume();
