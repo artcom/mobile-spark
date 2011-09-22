@@ -7,9 +7,10 @@ namespace spark {
     const char * const I18nContext::SPARK_TYPE = "I18nContext";
 
     I18nContext::I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        Container(theApp, theXMLNode, theParent), language_(NO_LANGUAGE) {
+        Container(theApp, theXMLNode, theParent), language_(NO_LANGUAGE)
+    {
         for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-            addChild(*it, false);
+            addChild(*it, false); //XXX: virtual in ctor
         }
         std::string myLanguage = _myXMLNode->getAttributeAs<std::string>("defaultLanguage", I18nConstants::LANGUAGE_STRINGS[EN]); 
         defaultLanguage_ = I18nConstants::getLanguageId(myLanguage);
@@ -58,6 +59,7 @@ namespace spark {
 
     ///////////////////////////////////////////////////////I18nItem
     const char * const I18nItem::SPARK_TYPE = "I18nItem";
+        
     I18nItem::I18nItem(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
               Component(theXMLNode, theParent){
         for (std::vector<XMLNodePtr>::iterator it = theXMLNode->children.begin(); it != theXMLNode->children.end(); ++it) {
