@@ -5,7 +5,7 @@
 
 namespace spark {
     Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Container(theApp, theXMLNode, theParent), _alpha(1.0), _actualAlpha(1.0), _visible(true), _sensible(true)
+        : Container(theApp, theXMLNode, theParent), _myDirtyFlag(true), _alpha(1.0), _actualAlpha(1.0), _visible(true), _sensible(true)
     {
         _x = _myXMLNode->getAttributeAs<float>("x", 0);
         _y = _myXMLNode->getAttributeAs<float>("y", 0);
@@ -54,7 +54,6 @@ namespace spark {
             (*it)->prerender(theCurrentMatrixStack);
         }
         theCurrentMatrixStack.pop();
-        //XXX: should dirty be true on construction
         if (_myDirtyFlag) {
             build();
             setAlpha(_alpha);
