@@ -115,19 +115,34 @@ namespace masl {
         * library used.
         */
         LIBXML_TEST_VERSION
+        xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc; /* the resulting document tree */
 
-        doc = xmlReadMemory(theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, 0);
+        /* create a parser context */
+        ctxt = xmlNewParserCtxt();
+        if (ctxt == NULL) {
+            AC_ERROR << "Failed to allocate parser context";
+        }
+
+        /* parse the file, activating the DTD validation option */
+        doc = xmlCtxtReadMemory(ctxt, theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, XML_PARSE_DTDATTR);
+
+        //parse without context
+        //doc = xmlReadMemory(theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, 0);
 
         /* check if parsing suceeded */
         if (doc == NULL) {
             AC_ERROR << "Failed to parse XMLString";
+            xmlErrorPtr	myXMLError = xmlCtxtGetLastError(ctxt);
+            AC_PRINT << "XMLError: " << myXMLError->message;
+            throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE);  //does not work, why?
             return doc;
         }
 
         //XXX: doc is return value so no freeing here
         /* free up the resulting document */
         //xmlFreeDoc(doc);
+        xmlFreeParserCtxt(ctxt);
 
         return doc;
     }

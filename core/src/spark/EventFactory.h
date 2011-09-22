@@ -22,7 +22,7 @@ namespace spark {
         bool registerEvent(const std::string & theEventName,
                         const CreateEventCallback theCreateFn);
         bool unregisterEvent(const std::string & theEventName);
-        EventPtr handleEvent(const std::string & theEvent) const;
+        EventPtr createEvent(const std::string & theEvent) const;
 
     private:
         CallbackMap _myCreateCallbackMap;

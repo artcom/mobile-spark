@@ -19,6 +19,12 @@ namespace spark {
     void
     Shape3D::onResume() {
         ShapeWidget::onResume();
+        _myDirtyFlag = true;
+    }
+
+    void
+    Shape3D::build() {
+        ShapeWidget::build();
         setShape(ShapeFactory::get().createObj(_mySrc));
     }
 

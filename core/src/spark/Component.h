@@ -36,15 +36,15 @@ namespace spark {
         virtual void render(const matrix & theProjectionMatrix) const {};
 
         const std::string & getName() const { return _myName; };
+        const std::string & getNodeName() const { return _myXMLNode->nodeName; }; //XXX: duplicate
         virtual const char * const & getType() const = 0;
-        const VectorOfComponentPtr & getChildren() { return _myChildren; };
+        const VectorOfComponentPtr & getChildren() { return _myChildren; }; //XXX: should be in Container
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
         ComponentPtr getRoot();
         const ComponentPtr & getParent() const {return _myParent; };
         void setParent(ComponentPtr theParent) {_myParent = theParent;};
         virtual bool isRendered() const { return true;}
 
-        virtual void testEvent(EventPtr theEvent) {AC_PRINT<<"event callback";};
     protected:
         const XMLNodePtr _myXMLNode;
         std::string _myName;

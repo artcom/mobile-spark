@@ -12,6 +12,7 @@ namespace spark {
         float width = _myXMLNode->getAttributeAs<float>("width");
         float height = _myXMLNode->getAttributeAs<float>("height");
         vector3 myColor = _myXMLNode->getAttributeAs<vector3>("color", vector3(1,1,1));
+        //XXX: fix color / alpha issue
         _myColor[0] = myColor[0];
         _myColor[1] = myColor[1];
         _myColor[2] = myColor[2];

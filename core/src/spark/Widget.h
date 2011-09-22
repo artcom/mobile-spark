@@ -8,12 +8,19 @@
 #include <masl/Callback.h>
 #include <animation/PropertyAnimation.h>
 
+#include "I18nConstants.h"
+#include "I18nHandler.h"
 #include "Container.h"
-#include "I18nContext.h"
 
 namespace spark {
 
+    class I18nItem;
+    typedef boost::shared_ptr<I18nItem> I18nItemPtr;
+    class I18nContext;
+    typedef boost::shared_ptr<I18nContext> I18nContextPtr;
+
     class Widget : public Container {
+    friend class I18nHandler;
     public:
         Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
         virtual ~Widget() = 0;
@@ -45,6 +52,10 @@ namespace spark {
         float getAlpha() const { return _alpha;};
         inline void setAlpha(const float theAlpha) {applyAlpha(theAlpha);};
 
+        const I18nContextPtr getI18nContext() const { return _myI18nContext; };
+        LANGUAGE getLanguage();
+        void switchLanguage(LANGUAGE theLanguage);
+
         void test() {
             AC_PRINT << "test callback";
         }
@@ -54,19 +65,24 @@ namespace spark {
         }
         matrix _myLocalMatrix; //scale, roation and translation of this node
     protected:
+        virtual void build() {};
         float getActualAlpha() const { return _actualAlpha;};
         float getParentAlpha() const;
         void propagateAlpha();
         virtual void applyAlpha (const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
         matrix _myWorldMVMatrix;
+        bool _myDirtyFlag;
 
         I18nContextPtr _myI18nContext;
         I18nItemPtr _myI18nItem;
-        std::string _myI18nId;
-        std::vector<I18nContextPtr> getI18nContexts() const; 
-        I18nItemPtr getI18nItemByName(const std::string & theName) const;
+
+        std::vector<I18nContextPtr> getI18nContexts(); 
+        I18nItemPtr getI18nItemByName(const std::string & theName);
 
     private:
+        void setI18nContextIfAvailable();
+        void updateMatrix();
+
         float _x,_y,_z;
         float _scaleX, _scaleY, _scaleZ;
         float _rotationX, _rotationY, _rotationZ;
@@ -75,7 +91,6 @@ namespace spark {
         bool _visible;
         bool _sensible;
 
-        void updateMatrix();
     };
 
     typedef boost::shared_ptr<Widget> WidgetPtr;

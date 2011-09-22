@@ -69,6 +69,7 @@ namespace spark {
         XMLNodePtr myNode(new XMLNode(theNode));
         resolveTemplates(theApp, myNode);
         ComponentPtr myComponentPtr = createComponent(theApp, myNode);
+        myComponentPtr->realize();
         return myComponentPtr;
     }
 

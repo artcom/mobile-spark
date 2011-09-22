@@ -1,8 +1,8 @@
 #include "Container.h"
 
-#include "SparkComponentFactory.h"
-
 #include <masl/Logger.h>
+
+#include "SparkComponentFactory.h"
 
 using namespace masl;
 
@@ -16,13 +16,21 @@ namespace spark {
                 continue;
             }
             ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
-            _myChildren.push_back(childComponent);
+            AC_DEBUG << "Container Constructor " << getName() << " add child " << childComponent->getName();
+            addChild(childComponent, false);
         }
     }
 
     Container::~Container() {
     }
 
+    void
+    Container::realize() {
+        //for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+        //    (*it)->setParent(shared_from_this());
+        //}
+    }
+    
     VectorOfComponentPtr
     Container::getChildrenByType(const std::string & theType) const {
         VectorOfComponentPtr myResult;
@@ -52,9 +60,12 @@ namespace spark {
     }
 
     void 
-    Container::addChild(ComponentPtr theChild) {
+    Container::addChild(const ComponentPtr theChild, const bool theSetParentFlag) {
         _myChildren.push_back(theChild);
-        theChild->setParent(shared_from_this());
+        //set parent is optional because this(!) can not be done from constructor
+        if (theSetParentFlag) {
+            theChild->setParent(shared_from_this());
+        }
     }
 
     void
@@ -66,4 +77,5 @@ namespace spark {
             }
         }
     }
+
 }
