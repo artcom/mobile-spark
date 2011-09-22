@@ -1,5 +1,7 @@
 #include "Visitors.h"
 
+#include "I18nContext.h"
+
 namespace spark {
 
     ComponentVisitor::~ComponentVisitor() {
@@ -29,6 +31,16 @@ namespace spark {
     OnResumeComponentVisitor::visit(ComponentPtr theComponent) {
         AC_DEBUG << *theComponent << " onResume";
         theComponent->onResume();
+        return true;
+    }
+
+    bool
+    I18nComponentVisitor::visit(ComponentPtr theComponent) {
+        AC_DEBUG << *theComponent << " realize";
+        WidgetPtr myWidget = boost::dynamic_pointer_cast<Widget>(theComponent);
+        if(myWidget && myWidget->getI18nContext()) {
+            myWidget->getI18nContext()->setup();
+        }
         return true;
     }
 
