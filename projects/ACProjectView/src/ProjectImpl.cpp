@@ -8,8 +8,8 @@ namespace acprojectview {
     const char * const ProjectImpl::SPARK_TYPE = "ProjectImpl";
 
     
-    ProjectImpl::ProjectImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Transform(theApp, theXMLNode, theParent) {
+    ProjectImpl::ProjectImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+        : Transform(theApp, theXMLNode) {
     }
 
     ProjectImpl::~ProjectImpl() {}

@@ -10,7 +10,7 @@ namespace acprojectview {
 
     class ProjectMenuItemImpl : public spark::Transform {
         public: 
-            ProjectMenuItemImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
+            ProjectMenuItemImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ProjectMenuItemImpl();
             virtual void realize();
         private:

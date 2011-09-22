@@ -7,8 +7,8 @@ namespace spark {
 
     const char * const Statistic::SPARK_TYPE = "Statistic";
 
-    Statistic::Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        Transform(theApp, theXMLNode, theParent) {
+    Statistic::Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        Transform(theApp, theXMLNode) {
 
     }
 

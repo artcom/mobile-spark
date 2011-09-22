@@ -7,7 +7,7 @@ namespace acprojectview {
 
     class ProjectMenu : public spark::Transform {
         public: 
-            ProjectMenu(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
+            ProjectMenu(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ProjectMenu();
             void arrangeProjects(const int theWidth, const int theHeight);
             

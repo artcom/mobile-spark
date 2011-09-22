@@ -15,8 +15,8 @@ namespace acprojectview {
     const char * const ProjectViewerImpl::SPARK_TYPE = "ProjectViewerImpl";
 
     
-    ProjectViewerImpl::ProjectViewerImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Transform(theApp, theXMLNode, theParent) {
+    ProjectViewerImpl::ProjectViewerImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+        : Transform(theApp, theXMLNode) {
         std::string image = _myXMLNode->getAttributeAs<std::string>("im",""); 
         _myWidth = 800;
         _myHeight = 480;
@@ -26,20 +26,21 @@ namespace acprojectview {
         _myDescription = boost::static_pointer_cast<Text>(getChildByName("description"));
         _myDescription->setText("");
         
-        
+    }
+
+    ProjectViewerImpl::~ProjectViewerImpl() {}
+
+    void
+    ProjectViewerImpl::realize() {
+        Transform::realize();
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
 
         spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipe));
         
         getRoot()->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
         getRoot()->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
-
-
+    
     }
-
-    ProjectViewerImpl::~ProjectViewerImpl() {}
-
-    void ProjectViewerImpl::realize() {}
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
          _myIsAnimating = false;            

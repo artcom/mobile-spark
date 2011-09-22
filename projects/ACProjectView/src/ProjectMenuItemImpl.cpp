@@ -5,8 +5,8 @@ using namespace spark;
 
 namespace acprojectview {
     
-    ProjectMenuItemImpl::ProjectMenuItemImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Transform(theApp, theXMLNode, theParent) {
+    ProjectMenuItemImpl::ProjectMenuItemImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+        : Transform(theApp, theXMLNode) {
     }
 
     ProjectMenuItemImpl::~ProjectMenuItemImpl() {}

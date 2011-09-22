@@ -9,7 +9,7 @@ namespace acprojectview {
 
     class Description : public spark::Container {
         public: 
-            Description(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
+            Description(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~Description();
             
             static const char * const SPARK_TYPE;             

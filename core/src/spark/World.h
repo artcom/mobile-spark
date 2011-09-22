@@ -9,7 +9,7 @@ namespace spark {
 
     class World : public Widget {
     public:
-        World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        World(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~World();
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return World::SPARK_TYPE;};

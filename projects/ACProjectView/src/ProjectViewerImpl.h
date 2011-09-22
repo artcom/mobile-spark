@@ -21,7 +21,7 @@ namespace acprojectview {
 
     class ProjectViewerImpl : public spark::Transform {
         public: 
-            ProjectViewerImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
+            ProjectViewerImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ProjectViewerImpl();
             virtual void realize();
             

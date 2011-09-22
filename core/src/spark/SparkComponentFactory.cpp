@@ -31,7 +31,7 @@ namespace spark {
     }
 
     ComponentPtr
-    SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent) const {
+    SparkComponentFactory::createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode) const {
         CallbackMap::const_iterator i;
         if (templateMap_.find(theNode->nodeName) != templateMap_.end()) {
             XMLNodePtr templateRoot = templateMap_.at(theNode->nodeName);
@@ -55,7 +55,7 @@ namespace spark {
             throw UnknownComponentException("Unknown Component Name: " + theNode->nodeName, PLUS_FILE_LINE);
         }
         AC_DEBUG << "create component " << theNode->nodeName;
-        return (i->second)(theApp, theNode, theParent);
+        return (i->second)(theApp, theNode);
     }
 
     ComponentPtr

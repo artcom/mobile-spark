@@ -8,8 +8,8 @@
 namespace spark {
     const char * const NinePatch::SPARK_TYPE = "NinePatch";
 
-    NinePatch::NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent) {
+    NinePatch::NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        ShapeWidget(theApp, theXMLNode) {
 
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "src"));
         edgeLeft_ = _myXMLNode->getAttributeAs<float>("edgeLeft", 0);
