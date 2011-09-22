@@ -11,10 +11,6 @@ namespace spark {
     Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
         ShapeWidget(theApp, theXMLNode, theParent) {
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "src"));
-        if (i18nHandler_->data_.size() > 0) {
-            _myDirtyFlag = true;
-            build(); // virtual in ctor, dirty flag?!
-        }
     }
 
     Image::~Image() {
@@ -36,7 +32,7 @@ namespace spark {
     void
     Image::build() {
         ShapeWidget::build();
-        if(i18nHandler_->data_.size() == 0) return;
+        if(i18nHandler_->data_.empty()) return;
         float width = _myXMLNode->getAttributeAs<float>("width", -1);
         float height = _myXMLNode->getAttributeAs<float>("height", -1);
         setShape(ShapeFactory::get().createRectangle(true, width >= 0 ? width : 0, height >= 0 ? height : 0, i18nHandler_->data_));
