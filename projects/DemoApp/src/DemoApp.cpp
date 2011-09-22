@@ -59,10 +59,9 @@ namespace demoapp {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
         
-        std::string myOrientation;
-        std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
-        AC_PRINT << "Orientation: " << myOrientation;
-        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
+        //std::string myOrientation;
+        std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight);//, myOrientation);
+        //AC_PRINT << "Orientation: " << myOrientation;
                     
         loadLayoutAndRegisterEvents(mySparkFile);
 
