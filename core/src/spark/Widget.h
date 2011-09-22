@@ -9,7 +9,6 @@
 #include <animation/PropertyAnimation.h>
 
 #include "Container.h"
-#include "I18nContext.h"
 
 namespace spark {
 
@@ -59,12 +58,6 @@ namespace spark {
         void propagateAlpha();
         virtual void applyAlpha (const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
         matrix _myWorldMVMatrix;
-
-        I18nContextPtr _myI18nContext;
-        I18nItemPtr _myI18nItem;
-        std::string _myI18nId;
-        std::vector<I18nContextPtr> getI18nContexts() const; 
-        I18nItemPtr getI18nItemByName(const std::string & theName) const;
 
     private:
         float _x,_y,_z;

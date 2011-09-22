@@ -59,7 +59,7 @@ namespace acprojectview {
          } else {
              _myDescription->setText(txt->getText());
          }
-         AC_PRINT << "__sadf_______________________" << _myDescription->getHeight();
+         AC_PRINT << "__sadf_______________________" << _myDescription->getTextSize()[1];
          image0->setX(0);
          image1->setX(_myWidth);
          image2->setX(-_myWidth);

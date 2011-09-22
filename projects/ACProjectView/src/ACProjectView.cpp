@@ -35,7 +35,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace acprojectview {
    
-    ACProjectView::ACProjectView():BaseApp("acprojectview") {
+    ACProjectView::ACProjectView():BaseApp("ACProjectView") {
     }
 
     ACProjectView::~ACProjectView() {
@@ -73,6 +73,10 @@ namespace acprojectview {
                 myProject->addEventListener(TouchEvent::PICKED, myPickedCB,true);
             }
         }
+
+        spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("language_toggle", true);
+        spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitch));
+        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
         
     }
     
@@ -87,7 +91,7 @@ namespace acprojectview {
 
     
     void ACProjectView::onBack(EventPtr theEvent) {
-            AC_PRINT<< "----------- BACK";
+        AC_PRINT<< "----------- BACK";
         projectViewAnimation(false);
         _myProjectMenu->setSensible(true);
         _myProjectViewer->setSensible(false);
@@ -119,6 +123,11 @@ namespace acprojectview {
         myParallel->add(myTransAnimationX);
         myParallel->add(myTransAnimationY);
         animation::AnimationManager::get().play(myParallel);
+    }
+
+    void ACProjectView::onLanguageSwitch(EventPtr theEvent) {
+        LANGUAGE myLanguage = _mySparkWindow->getLanguage();
+        _mySparkWindow->switchLanguage(myLanguage == spark::DE ? spark::EN : spark::DE);
     }
 
 }
