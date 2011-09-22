@@ -38,7 +38,7 @@ namespace spark {
         virtual void switchLanguage(const LANGUAGE theLanguage);
         std::string getLanguageData(const LANGUAGE theLanguage = NO_LANGUAGE) const;
         static const char * const SPARK_TYPE;             
-        virtual const char * const & getType() const { return I18nContext::SPARK_TYPE;};
+        virtual const char * const & getType() const { return I18nItem::SPARK_TYPE;};
     private:
         LANGUAGE  language_;
         std::map<LANGUAGE, std::string> languageData_;  //maps language key to language specific string
