@@ -7,7 +7,7 @@ import com.artcom.mobile.Base.SparkViewerActivity;
 public class DemoApp extends SparkViewerActivity {
     static {
         NativeBinding.loadLibraries();
-        System.loadLibrary("DemoApp"); 
+        System.loadLibrary("demoapp"); 
     }
 
     @Override
