@@ -5,14 +5,14 @@
     <Template name="ProjectViewer" src="/projectViewer.spark"/>
     
     <I18nContext name="global-i18n" defaultLanguage="de">
-        <I18nItem name="hello_text">
+        <!--I18nItem name="hello_text">
             <de><![CDATA[Willkommen]]> </de>
             <en><![CDATA[Welcome]]> </en>
         </I18nItem>
         <I18nItem name="language">
             <de>/en.png</de>
             <en>/de.png</en>
-        </I18nItem>
+        </I18nItem-->
     </I18nContext>
 
     <!-- userinterface is located in 2dworld -->
@@ -20,8 +20,13 @@
 
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
-
+        
+        <Transform name="startscreen">
+            <Image name="background" x="0" y="0" z="5" src="/startScreenBackground.png"/> 
+        </Transform>        
+        
         <ProjectMenu name="main">
+        
             <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" x="0"  y="0" src="/belvedere_teaser_thumb_01.png">
 	            <ContentImage src="/duality_teaser_thumb_01.png"/>
             </Project>

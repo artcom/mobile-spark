@@ -26,7 +26,8 @@ namespace acprojectview {
         _myDescription = boost::static_pointer_cast<Text>(getChildByName("description"));
         _myDescription->setText("");
         
-        
+        boost::static_pointer_cast<Rectangle>(getChildByName("textbackground"))->setAlpha(0.5);
+
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
 
         spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipe));
@@ -59,7 +60,7 @@ namespace acprojectview {
          } else {
              _myDescription->setText(txt->getText());
          }
-         AC_PRINT << "__sadf_______________________" << _myDescription->getTextSize()[1];
+         //AC_PRINT << "__sadf_______________________" << _myDescription->getTextSize();
          image0->setX(0);
          image1->setX(_myWidth);
          image2->setX(-_myWidth);
