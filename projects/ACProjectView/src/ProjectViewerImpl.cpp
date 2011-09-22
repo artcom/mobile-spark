@@ -26,14 +26,14 @@ namespace acprojectview {
         _myDescription = boost::static_pointer_cast<Text>(getChildByName("description"));
         _myDescription->setText("");
         
-        boost::static_pointer_cast<Rectangle>(getChildByName("textbackground"))->setAlpha(0.5);
-
+        
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
 
         spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipe));
-        
         getRoot()->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
         getRoot()->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
+        
+        
 
 
     }
@@ -43,7 +43,8 @@ namespace acprojectview {
     void ProjectViewerImpl::realize() {}
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
-         _myIsAnimating = false;            
+         _myIsAnimating = false;     
+         boost::static_pointer_cast<Widget>(getChildByName("textbackground"))->setAlpha(0.5);
          _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
          _myNumberOfImages = _myContentImages.size();
@@ -84,13 +85,13 @@ namespace acprojectview {
         _myDirection =dir;
         WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(image0, &Widget::setX, image0->getX(), image0->getX()-_myWidth*dir, 300,
-                    animation::EasingFnc(animation::easeInOutQuad)));
+                    animation::EasingFnc(animation::easeInOutSine)));
         WidgetPropertyAnimationPtr changeAnimation1 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(image1, &Widget::setX, image1->getX(), image1->getX()-_myWidth*dir, 300,
-                    animation::EasingFnc(animation::easeInOutQuad)));
+                    animation::EasingFnc(animation::easeInOutSine)));
         WidgetPropertyAnimationPtr changeAnimation2 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(image2, &Widget::setX, image2->getX(), image2->getX()-_myWidth*dir, 300,
-                    animation::EasingFnc(animation::easeInOutQuad)));
+                    animation::EasingFnc(animation::easeInOutSine)));
         
         animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());

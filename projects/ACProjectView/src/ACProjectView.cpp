@@ -56,6 +56,11 @@ namespace acprojectview {
 
         _myWidth = _myProjectMenu->getPreviewWidth();
         _myHeight = _myProjectMenu->getPreviewHeight();
+        
+        _myProjectMenu->setSensible(false);
+        _myStartScreenPtr =  boost::static_pointer_cast<Transform>(_mySparkWindow->getChildByName("2dworld")->getChildByName("startscreen",true));
+        spark::EventCallbackPtr startToMenuAniCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onStartScreenClicked));
+        _myStartScreenPtr->addEventListener(TouchEvent::PICKED, startToMenuAniCB,true);
         //_myProjectViewer->setWidth(_myWidth);
         //_myProjectViewer->setWidth(_myHeight);
         
@@ -80,6 +85,23 @@ namespace acprojectview {
         
     }
     
+    void ACProjectView::onStartScreenClicked(EventPtr theEvent) {
+        AC_PRINT << "ššššššššššššššššššššššššššššššššššššššššššššššššššš";
+        ImagePtr myBgImagePtr = boost::static_pointer_cast<Image>(_myStartScreenPtr->getChildByName("background"));
+        
+        _myStartScreenPtr->setSensible(false);
+        myBgImagePtr->setSensible(false);
+        _myProjectMenu->setSensible(true);
+
+        WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myBgImagePtr, &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
+        animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        myParallel->add(myAnimation);
+        animation::AnimationManager::get().play(myParallel);
+        
+
+    }
+    
     void ACProjectView::onProjectItem(EventPtr theEvent) {
         _myProjectViewer->setVisible(true);
         _myProjectViewer->setSensible(true);
@@ -91,6 +113,7 @@ namespace acprojectview {
 
     
     void ACProjectView::onBack(EventPtr theEvent) {
+        if (_myProjectMenu->isSensible()) return;
         AC_PRINT<< "----------- BACK";
         projectViewAnimation(false);
         _myProjectMenu->setSensible(true);

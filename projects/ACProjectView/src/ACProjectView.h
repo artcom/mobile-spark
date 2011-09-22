@@ -28,12 +28,13 @@ namespace acprojectview {
             void onLanguageSwitch(spark::EventPtr theEvent);
             void onBack(spark::EventPtr theEvent);
             void onSwipeCB(spark::EventPtr theEvent);
-
+            void onStartScreenClicked(spark::EventPtr theEvent);
             void projectViewAnimation(bool showProject);
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 
             ProjectMenuPtr _myProjectMenu;
             spark::ContainerPtr _myProjectItems;  
+            spark::TransformPtr _myStartScreenPtr;
         
             unsigned int _myWidth;
             unsigned int _myHeight;

@@ -5,14 +5,14 @@
     <Template name="ProjectViewer" src="/projectViewer.spark"/>
     
     <I18nContext name="global-i18n" defaultLanguage="de">
-        <!--I18nItem name="hello_text">
+        <I18nItem name="hello_text">
             <de><![CDATA[Willkommen]]> </de>
             <en><![CDATA[Welcome]]> </en>
         </I18nItem>
         <I18nItem name="language">
             <de>/en.png</de>
             <en>/de.png</en>
-        </I18nItem-->
+        </I18nItem>
     </I18nContext>
 
     <!-- userinterface is located in 2dworld -->
@@ -61,7 +61,7 @@
         <ProjectViewer name="projectViewer" visible="false">
         </ProjectViewer>
 
-        <Text name="hellotext" y="400" x="10" z="13" i18nId="hello_text" color="[1,1,0,1]" fontsize="32"/>
+        <!--Text name="hellotext" y="400" x="10" z="13" i18nId="hello_text" color="[1,1,0,1]" fontsize="32"/-->
         <Image name="language_toggle" y="400" x="680" z="13" i18nId="language"/>
 
     </World>        
