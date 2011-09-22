@@ -14,6 +14,7 @@
 
 namespace masl {
     
+    const size_t SEVERITIES = 9;
     const char * SeverityName[] = {"PRINT","TESTRESULT","FATAL", "ERROR", "WARNING", "INFO", "DEBUG", "TRACE", "DISABLED", 0};
     const char * const LOG_MODULE_VERBOSITY_ENV = "AC_LOG_MODULE_VERBOSITY";
     const char * const LOG_GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
@@ -177,7 +178,7 @@ namespace masl {
     
     Severity
     Logger::getSeverityFromString(std::string theString, Severity theDefault) const {
-        std::vector<std::string> mySeverities(SeverityName, SeverityName + 9); // XXX
+        std::vector<std::string> mySeverities(SeverityName, SeverityName + SEVERITIES);
         for (std::vector<std::string>::size_type i = 0; i < mySeverities.size(); ++i) {
             if (mySeverities[i] == theString) {
                 return (Severity) i;
