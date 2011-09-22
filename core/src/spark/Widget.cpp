@@ -132,7 +132,6 @@ namespace spark {
         I18nItemPtr myI18nItem;
         std::vector<I18nContextPtr> myContexts = getI18nContexts();
         for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
-            (*it)->setup();  //XXX: good idea? this avoids postrealize
             ComponentPtr myComponent = (*it)->getChildByName(theName);
             if (myComponent) {
                 myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);

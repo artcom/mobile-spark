@@ -11,18 +11,9 @@ namespace spark {
     {
         std::string myLanguage = _myXMLNode->getAttributeAs<std::string>("defaultLanguage", I18nConstants::LANGUAGE_STRINGS[EN]); 
         defaultLanguage_ = I18nConstants::getLanguageId(myLanguage);
-        needsUpdate_ = true;
     }
 
     I18nContext::~I18nContext() {
-    }
-
-    void
-    I18nContext::setup() {
-        if (needsUpdate_) {
-            needsUpdate_ = false;
-            switchLanguage(defaultLanguage_);
-        }
     }
 
     void

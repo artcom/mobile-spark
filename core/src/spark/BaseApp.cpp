@@ -70,6 +70,8 @@ namespace spark {
         _mySparkRealizedFlag = true;
         RealizeComponentVisitor myVisitor;
         visitComponents(myVisitor, _mySparkWindow);
+        I18nComponentVisitor myI18nVisitor;
+        visitComponents(myI18nVisitor, _mySparkWindow);
     }
 
     std::string
