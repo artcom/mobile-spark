@@ -15,7 +15,7 @@ namespace spark {
             if ((*it)->nodeName == "Template") {
                 continue;
             }
-            ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
+            ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it/*, ComponentPtr(this)*/);
             AC_DEBUG << "Container Constructor " << getName() << " add child " << childComponent->getName();
             addChild(childComponent, false);
         }
@@ -24,6 +24,13 @@ namespace spark {
     Container::~Container() {
     }
 
+    void
+    Container::realize() {
+        for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            (*it)->setParent(shared_from_this());
+        }
+    }
+    
     VectorOfComponentPtr
     Container::getChildrenByType(const std::string & theType) const {
         VectorOfComponentPtr myResult;
