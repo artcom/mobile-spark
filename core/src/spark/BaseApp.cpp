@@ -32,7 +32,8 @@ using namespace mar;
 namespace spark {
 
 
-    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), _mySetupFlag(false), _mySparkRealizedFlag(false) {
+    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
+        _myChooseLayoutFlag(false), _mySetupFlag(false), _mySparkRealizedFlag(false) {
     }
 
     BaseApp::~BaseApp() {
@@ -133,9 +134,15 @@ namespace spark {
     }
 
     void
-    BaseApp::loadLayoutAndRegisterEvents(const std::string & theLayoutFile) {
+    BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
+        std::string myLayoutFile = "";
+        if (_myChooseLayoutFlag) {
+            myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight);
+        }  else {
+            myLayoutFile = theBaseName + ".spark";
+        }
         //load layout
-        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), theLayoutFile));
+        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), myLayoutFile));
 
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
