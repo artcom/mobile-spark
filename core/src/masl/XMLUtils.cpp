@@ -83,16 +83,22 @@ namespace masl {
         }
         /* parse the file, activating the DTD validation option */
         doc = xmlCtxtReadMemory(ctxt, theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, XML_PARSE_DTDATTR);
-        //doc = xmlReadMemory(theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, 0);
 
         /* check if parsing suceeded */
         if (doc == NULL) {
             AC_ERROR << "Failed to parse XMLString";
-            return doc;
+            xmlErrorPtr myXMLError = xmlCtxtGetLastError(ctxt);
+            AC_PRINT << "XMLError message from libxml2: " << myXMLError->message;
+            xmlFreeParserCtxt(ctxt);
+            throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE); 
         } else {
         /* check if validation suceeded */
-            if (ctxt->valid == 0) {  //does not validate, don't know why
+            if (ctxt->valid == 0) {  
                 AC_ERROR << "Failed to validate XMLString";
+                xmlErrorPtr myXMLError = xmlCtxtGetLastError(ctxt);
+                AC_PRINT << "XMLError message from libxml2: " << myXMLError->message;
+                xmlFreeParserCtxt(ctxt);
+                throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE); 
             } else {
                 AC_DEBUG << "xml is valid";
             }
@@ -115,35 +121,21 @@ namespace masl {
         * library used.
         */
         LIBXML_TEST_VERSION
-        xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc; /* the resulting document tree */
-
-        /* create a parser context */
-        ctxt = xmlNewParserCtxt();
-        if (ctxt == NULL) {
-            AC_ERROR << "Failed to allocate parser context";
-        }
-
-        /* parse the file, activating the DTD validation option */
-        doc = xmlCtxtReadMemory(ctxt, theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, XML_PARSE_DTDATTR);
-
+        
         //parse without context
-        //doc = xmlReadMemory(theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, 0);
+        doc = xmlReadMemory(theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, 0);
 
         /* check if parsing suceeded */
         if (doc == NULL) {
-            AC_ERROR << "Failed to parse XMLString";
-            xmlErrorPtr	myXMLError = xmlCtxtGetLastError(ctxt);
-            AC_PRINT << "XMLError: " << myXMLError->message;
-            xmlFreeParserCtxt(ctxt);
+            AC_ERROR << "Failed to parse XMLString (use loadXMLFromMemoryValidate to get more information)";
             throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE);  //does not work, why?
+            return doc;
         }
 
         //XXX: doc is return value so no freeing here
         /* free up the resulting document */
         //xmlFreeDoc(doc);
-        xmlFreeParserCtxt(ctxt);
-
         return doc;
     }
 }
