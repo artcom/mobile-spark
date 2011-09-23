@@ -24,7 +24,7 @@
         <ProjectMenu name="main">
             <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" x="0"  y="0" src="/belvedere_teaser_thumb_01.png">
 	            <ContentImage src="/duality_teaser_thumb_01.png"/>
-            <Project>
+            </Project>
 
             <Project name="project2" title="DUALITY" subtitle="Tokio, 2007" x="265" y="0" src="/duality_teaser_thumb_01.png">
             </Project>
