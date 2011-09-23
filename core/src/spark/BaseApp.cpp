@@ -9,6 +9,8 @@
 #include <masl/MobileSDK.h>
 #include <masl/XMLUtils.h>
 #include <masl/file_functions.h>
+#include <masl/string_functions.h>
+#include <masl/Exception.h>
 
 #include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
