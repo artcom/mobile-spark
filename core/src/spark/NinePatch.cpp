@@ -8,15 +8,14 @@
 namespace spark {
     const char * const NinePatch::SPARK_TYPE = "NinePatch";
 
-    NinePatch::NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent) {
-
+    NinePatch::NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        ShapeWidget(theApp, theXMLNode),
+        edgeLeft_(_myXMLNode->getAttributeAs<float>("edgeLeft", 0)),
+        edgeTop_(_myXMLNode->getAttributeAs<float>("edgeTop", 0)),
+        edgeRight_(_myXMLNode->getAttributeAs<float>("edgeRight", 0)),
+        edgeBottom_(_myXMLNode->getAttributeAs<float>("edgeBottom", 0))
+    {
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "src"));
-        edgeLeft_ = _myXMLNode->getAttributeAs<float>("edgeLeft", 0);
-        edgeTop_ = _myXMLNode->getAttributeAs<float>("edgeTop", 0);
-        edgeRight_ = _myXMLNode->getAttributeAs<float>("edgeRight", 0);
-        edgeBottom_ = _myXMLNode->getAttributeAs<float>("edgeBottom", 0);
-
     }
 
     NinePatch::~NinePatch() {

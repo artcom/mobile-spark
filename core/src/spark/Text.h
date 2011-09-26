@@ -9,7 +9,7 @@ using namespace mar;
 namespace spark {
     class Text : public ShapeWidget {
     public:
-        Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Text();
         virtual void onResume();
         virtual void realize();
@@ -27,8 +27,8 @@ namespace spark {
         int _myFontSize;
         vector4 _myTextColor;
         vector2 _myTextSize;
-        int _myMaxHeight;
         int _myMaxWidth;
+        int _myMaxHeight;
         std::string _myFontPath;
         std::string _myTextAlign;
     };

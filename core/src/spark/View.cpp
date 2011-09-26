@@ -14,14 +14,12 @@ namespace spark {
 
     const char * const View::SPARK_TYPE = "View";
 
-    View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode,
-                   ComponentPtr theParent):
-        Widget(theApp, theXMLNode, theParent){
+    View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        Widget(theApp, theXMLNode){
         _myWorldName  = theXMLNode->getAttributeAs<std::string>("world", "");
         vector2 myPos = theXMLNode->getAttributeAs<vector2>("pos", vector2(0,0));
         vector2 mySize = theXMLNode->getAttributeAs<vector2>("size", vector2(1,1));
         _myGLViewport = ViewportPtr(new Viewport(mySize[0],mySize[1], myPos[0],myPos[1]));
-        ensureCamera();
     }
 
     View::~View() {
@@ -48,8 +46,7 @@ namespace spark {
         stable_sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
 
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
-            ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(it->first);
-            AC_TRACE << " View::renderWorld render: " << it->first->getName();
+            AC_TRACE << " View::renderWorld render component: " << it->first->getName();
             it->first->render(_myCamera->getProjectionMatrix());
         }
     }

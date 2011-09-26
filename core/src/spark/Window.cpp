@@ -1,8 +1,10 @@
 #include "Window.h"
 
 #include <algorithm>
+#include <masl/XMLNode.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
+#include <mar/Canvas.h>
 
 #include "SparkComponentFactory.h"
 #include "View.h"
@@ -14,25 +16,17 @@ using namespace std;
 namespace spark {
     const char * const Window::SPARK_TYPE = "Window";
 
-    Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode,
-                   ComponentPtr theParent):
-        Widget(theApp, theXMLNode, theParent),
-        _myWidth(0), _myHeight(0){
-
+    Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        Widget(theApp, theXMLNode),
+        // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
+        _myWidth(_myXMLNode->getAttributeAs<float>("width",100)),
+        _myHeight(_myXMLNode->getAttributeAs<float>("height",100)),
+        _myFullScreenFlag(_myXMLNode->getAttributeAs<bool>("fullscreen", false)),
+        _myClearColor(_myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1))),
+        _myOrientation(_myXMLNode->getAttributeAs<string>("orientation",""))
+    {
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
-
-        _myFullScreenFlag = _myXMLNode->getAttributeAs<bool>("fullscreen", false);
-        _myClearColor = _myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1));
-
-        WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());
-        EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new WindowCB(ptr, &Window::onSizeChanged));
-        addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
-
-        // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
-        _myWidth = _myXMLNode->getAttributeAs<float>("width",100);
-        _myHeight = _myXMLNode->getAttributeAs<float>("height",100);
-        _myOrientation = _myXMLNode->getAttributeAs<string>("orientation","");
     }
 
     Window::~Window() {
@@ -41,6 +35,9 @@ namespace spark {
     void
     Window::realize() {
         Widget::realize();
+        WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());
+        EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new WindowCB(ptr, &Window::onSizeChanged));
+        addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
         if (_myOrientation != "") {
             MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
         }
@@ -66,7 +63,7 @@ namespace spark {
         AC_INFO<<"hallo evt: "<< myEvent->getType() << " x: "<< myEvent->getX();
         ComponentPtr myPicked = pick2DAABBStyle(myEvent->getX(), myEvent->getY());
         if (myPicked) {
-            AC_PRINT << "____________picked " << myPicked->getName() << " " << *myPicked;
+            AC_PRINT << "____________picked " << *myPicked;
             EventPtr myEvent = EventPtr(new TouchEvent(TouchEvent::PICKED, myPicked));
             (*myEvent)();
         } else {

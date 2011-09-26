@@ -3,13 +3,13 @@
 #include <mar/png_functions.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include "I18nContext.h"
 
 namespace spark {
     const char * const Image::SPARK_TYPE = "Image";
 
-    Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent) {
+    Image::Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        ShapeWidget(theApp, theXMLNode) 
+    {
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "src"));
     }
 
@@ -28,6 +28,14 @@ namespace spark {
         _myDirtyFlag = true;
     }
 
+    const vector2 &
+    Image::getTextureSize() {
+        if (_myDirtyFlag) {
+            build();
+        }
+        return _myTextureSize;
+    }
+
     
     void
     Image::build() {
@@ -40,6 +48,7 @@ namespace spark {
         if (width == -1 || height == -1) {
             width = width == -1 ? myMaterial->getTexture()->width_ : width;
             height = height == -1 ? myMaterial->getTexture()->height_ : height;
+            _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
             //dimensions have to be set after image size is known
             getShape()->setDimensions(width, height);
         }

@@ -9,7 +9,7 @@ using namespace mar;
 namespace spark {
     class NinePatch : public ShapeWidget {
     public:
-        NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~NinePatch();
         virtual void onResume();
         virtual void realize();

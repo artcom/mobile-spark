@@ -8,20 +8,26 @@ namespace spark {
 
     const char * const Camera::SPARK_TYPE = "Camera";
 
-    Camera::Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent), _myPortraitMode(true) {
+    Camera::Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        ShapeWidget(theApp, theXMLNode), _myPortraitMode(true) {
 
         setShape(ShapeFactory::get().createRectangle(true));
         _myColorConversionFlag = _myXMLNode->getAttributeAs<bool>("cpu_color_conversion", false);
         getShape()->setDimensions(500, 500);
 
+    }
+
+    Camera::~Camera() {
+    }
+
+    void
+    Camera::realize() {
+        ShapeWidget::realize();
         CameraPtr ptr = boost::static_pointer_cast<Camera>(shared_from_this());
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new CameraCB(ptr, &Camera::onSizeChanged));
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
         myWindow->addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
-    }
 
-    Camera::~Camera() {
     }
 
     void
