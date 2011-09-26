@@ -6,23 +6,14 @@ namespace spark {
     ///////////////////////////////////////////////////////I18nContext
     const char * const I18nContext::SPARK_TYPE = "I18nContext";
 
-    I18nContext::I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        Container(theApp, theXMLNode, theParent), language_(NO_LANGUAGE)
+    I18nContext::I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode):
+        Container(theApp, theXMLNode), language_(NO_LANGUAGE)
     {
         std::string myLanguage = _myXMLNode->getAttributeAs<std::string>("defaultLanguage", I18nConstants::LANGUAGE_STRINGS[EN]); 
         defaultLanguage_ = I18nConstants::getLanguageId(myLanguage);
-        needsUpdate_ = true;
     }
 
     I18nContext::~I18nContext() {
-    }
-
-    void
-    I18nContext::setup() {
-        if (needsUpdate_) {
-            needsUpdate_ = false;
-            switchLanguage(defaultLanguage_);
-        }
     }
 
     void
@@ -55,8 +46,8 @@ namespace spark {
     ///////////////////////////////////////////////////////I18nItem
     const char * const I18nItem::SPARK_TYPE = "I18nItem";
         
-    I18nItem::I18nItem(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-              Component(theXMLNode, theParent){
+    I18nItem::I18nItem(const spark::BaseAppPtr & theApp, const XMLNodePtr theXMLNode):
+              Component(theXMLNode){
         for (std::vector<XMLNodePtr>::iterator it = theXMLNode->children.begin(); it != theXMLNode->children.end(); ++it) {
             LANGUAGE myLanguage = I18nConstants::getLanguageId((*it)->nodeName);
             languageData_[myLanguage] = (*it)->content;

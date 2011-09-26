@@ -23,7 +23,7 @@ namespace spark {
             bool isSetup() const {return _mySetupFlag;}
             bool isSparkRealized() const {return _mySparkRealizedFlag;}
             void realize();
-            void loadLayoutAndRegisterEvents(const std::string & theLayoutFile);
+            void loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight);
             std::string findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight);
             virtual void onFrame(EventPtr theEvent);
             virtual void onPause(EventPtr theEvent);
@@ -36,6 +36,7 @@ namespace spark {
 
         protected:
             std::string appPath_;
+            bool _myChooseLayoutFlag;
             bool _mySetupFlag;       
             bool _mySparkRealizedFlag;         
     };

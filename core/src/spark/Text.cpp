@@ -18,8 +18,8 @@ using namespace std;
 namespace spark {
     const char * const Text::SPARK_TYPE = "Text";
 
-    Text::Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent), _myFontPath("") {
+    Text::Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        ShapeWidget(theApp, theXMLNode), _myFontPath("") {
 
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "text"));
         _myFontSize = _myXMLNode->getAttributeAs<int>("fontsize", 32);

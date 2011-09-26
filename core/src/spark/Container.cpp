@@ -8,14 +8,14 @@ using namespace masl;
 
 namespace spark {
 
-    Container::Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Component(theXMLNode, theParent), _myApp(theApp)
+    Container::Container(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+        : Component(theXMLNode), _myApp(theApp)
     {
         for (std::vector<XMLNodePtr>::iterator it = theXMLNode->children.begin(); it != theXMLNode->children.end(); ++it) {
             if ((*it)->nodeName == "Template") {
                 continue;
             }
-            ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it, ComponentPtr(this));
+            ComponentPtr childComponent = SparkComponentFactory::get().createComponent(_myApp, *it);
             AC_DEBUG << "Container Constructor " << getName() << " add child " << childComponent->getName();
             _myChildren.push_back(childComponent);
         }
@@ -26,10 +26,9 @@ namespace spark {
 
     void
     Container::realize() {
-        //XXX: make this work
-        //for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-        //    (*it)->setParent(shared_from_this());
-        //}
+        for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            (*it)->setParent(shared_from_this());
+        }
     }
     
     VectorOfComponentPtr
