@@ -4,12 +4,10 @@
 #include "ShapeWidget.h"
 #include "I18nHandler.h"
 
-using namespace mar;
-
 namespace spark {
     class NinePatch : public ShapeWidget {
     public:
-        NinePatch(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        NinePatch(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~NinePatch();
         virtual void onResume();
         virtual void realize();

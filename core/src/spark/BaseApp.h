@@ -1,27 +1,21 @@
 #ifndef _included_mobile_spark_BaseApp_
 #define _included_mobile_spark_BaseApp_
 
-//#define BOOST_NO_SFINAE
-//#include <boost/thread/pthread/shared_mutex.hpp>
-//#include <boost/thread/locks.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
 
-//#include <mar/Canvas.h>
 #ifdef __ANDROID__
 #include "JNIBinding.h"
 #endif
 
+#include <masl/Settings.h>
 #include <masl/ThreadLock.h>
 
-#include "Window.h"
-#include "EventFactory.h"
-
-//typedef boost::shared_mutex Lock;
-//typedef boost::unique_lock< boost::shared_mutex > WriteLock;
-//typedef boost::shared_lock< boost::shared_mutex >  ReadLock;
-
+#include "Event.h"
 
 namespace spark {
+
+    class Window;
+    typedef boost::shared_ptr<Window> WindowPtr;
 
     class BaseApp : public boost::enable_shared_from_this<BaseApp> {
         public:
@@ -40,8 +34,9 @@ namespace spark {
 
             virtual void onEvent(std::string theEventString);
             virtual void handleEvents();
-            spark::WindowPtr _mySparkWindow;
             void renderText(std::string theMessage, int theOpenGLTextureId);
+
+            spark::WindowPtr _mySparkWindow;
 
         protected:
             std::string appPath_;

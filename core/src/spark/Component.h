@@ -10,8 +10,6 @@
 
 #include "EventDispatcher.h"
 
-using namespace masl;
-
 namespace spark {
 
     class Component;
@@ -21,7 +19,7 @@ namespace spark {
     class Component : public EventDispatcher, public boost::enable_shared_from_this<Component> {
     public:
         Component();
-        Component(const XMLNodePtr theXMLNode);
+        Component(const masl::XMLNodePtr theXMLNode);
         virtual ~Component() = 0;
         
         std::ostream & print(std::ostream & os) const;
@@ -45,7 +43,7 @@ namespace spark {
         virtual bool isRendered() const { return true;}
 
     protected:
-        const XMLNodePtr _myXMLNode;
+        const masl::XMLNodePtr _myXMLNode;
         std::string _myName;
         VectorOfComponentPtr _myChildren;
     private:
