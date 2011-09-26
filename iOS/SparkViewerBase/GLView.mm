@@ -122,6 +122,7 @@
     //render
     NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
     myApp->onEvent([frameEvent UTF8String]);    
+    myApp->handleEvents();
     
     glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
     [glContext presentRenderbuffer:GL_RENDERBUFFER];  
@@ -137,7 +138,8 @@
     
     //render
     NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
-    myApp->onEvent([frameEvent UTF8String]);    
+    myApp->onEvent([frameEvent UTF8String]);  
+    myApp->handleEvents();
         
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, framebuffer);
     glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, multisamplingFramebuffer);

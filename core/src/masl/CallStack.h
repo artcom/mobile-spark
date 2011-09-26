@@ -22,7 +22,6 @@
 
 #include <string>
 
-
 // ---------------------------------------------------------------------------
 
 namespace masl {
@@ -61,6 +60,7 @@ public:
     
     size_t size() const { return mCount; }
 
+
 private:
     // Internal helper function
     std::string toStringSingleLevel(const char* prefix, int32_t level) const;
@@ -68,6 +68,8 @@ private:
     size_t      mCount;
     const void* mStack[MAX_DEPTH];
 };
+
+    void dumpstack();
 
 }; // namespace 
 
