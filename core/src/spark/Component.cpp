@@ -11,7 +11,7 @@ namespace spark {
         EventDispatcher(),
         _myXMLNode(theXMLNode),
         _myName(theXMLNode->name),
-        _myParent(ComponentPtr())
+        _myParent()
     {}
 
     Component::~Component() {

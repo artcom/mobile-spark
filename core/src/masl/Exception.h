@@ -36,7 +36,7 @@ namespace masl {
             _what += "\n"+whatelse;
         }
 
-        CallStack & stack() const {return _callstack; };
+        const CallStack & stack() const {return _callstack; };
 
     protected:
         virtual void set(const std::string & what,
@@ -52,7 +52,7 @@ namespace masl {
         mutable std::string _what;
         mutable std::string _where;
         mutable const char * _name;
-        mutable CallStack _callstack;
+        CallStack _callstack;
 
     };
 
