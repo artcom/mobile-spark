@@ -1,4 +1,5 @@
 #include "ProjectViewerImpl.h"
+#include <spark/Window.h>
 #include <spark/SparkComponentFactory.h>
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
@@ -15,7 +16,7 @@ namespace acprojectview {
     const char * const ProjectViewerImpl::SPARK_TYPE = "ProjectViewerImpl";
 
     
-    ProjectViewerImpl::ProjectViewerImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+    ProjectViewerImpl::ProjectViewerImpl(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Transform(theApp, theXMLNode) {
         std::string image = _myXMLNode->getAttributeAs<std::string>("im",""); 
         _myWidth = 800;

@@ -4,12 +4,10 @@
 #include "ShapeWidget.h"
 #include "I18nHandler.h"
 
-using namespace mar;
-
 namespace spark {
     class Text : public ShapeWidget {
     public:
-        Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Text(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Text();
         virtual void onResume();
         virtual void realize();

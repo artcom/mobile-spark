@@ -4,7 +4,7 @@
 #include "BaseApp.h"
 
 namespace spark {
-    Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+    Widget::Widget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Container(theApp, theXMLNode),
           _myDirtyFlag(true),
           _x(_myXMLNode->getAttributeAs<float>("x", 0)),

@@ -11,7 +11,6 @@
 #include <string>
 #include <masl/UnitTest.h>
 
-using namespace masl;
 
 namespace android {
 

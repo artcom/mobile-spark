@@ -1,5 +1,9 @@
 #include "I18nContext.h"
 
+#include "BaseApp.h"
+
+using namespace masl;
+
 namespace spark {
 
 

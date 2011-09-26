@@ -6,6 +6,7 @@
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 
+#include <spark/Window.h>
 #include <spark/Event.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
