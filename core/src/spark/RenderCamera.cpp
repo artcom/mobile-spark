@@ -7,7 +7,6 @@
 #include <string>
 
 using namespace std;
-using namespace mar;
 using namespace masl;
 
 namespace spark {

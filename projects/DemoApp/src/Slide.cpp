@@ -6,7 +6,7 @@ using namespace spark;
 namespace demoapp {
     const char * const SlideImpl::SPARK_TYPE = "SlideImpl";             
     
-    SlideImpl::SlideImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+    SlideImpl::SlideImpl(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Transform(theApp, theXMLNode) {
         std::string title = _myXMLNode->getAttributeAs<std::string>("title",""); 
         std::string subtitle = _myXMLNode->getAttributeAs<std::string>("subtitle",""); 

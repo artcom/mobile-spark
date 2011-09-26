@@ -1,8 +1,9 @@
 #include "EventFactory.h"
 
-
 #include <masl/Logger.h>
 #include <masl/XMLNode.h>
+
+#include "Event.h"
 
 using namespace masl;
 

@@ -6,7 +6,7 @@
 namespace spark {
     class Rectangle : public ShapeWidget {
     public:
-        Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Rectangle(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Rectangle();
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Rectangle::SPARK_TYPE;};

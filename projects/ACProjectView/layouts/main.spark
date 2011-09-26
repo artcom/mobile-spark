@@ -33,13 +33,12 @@
             </Project>
 
             <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" x="0"  y="200" src="/kinetik_teaser_thumb.png">
-                <ContentImage src="/kinetische_skulptur_klein.png"/>
+                <ContentImage src="/kinetische_skulptur_klein_1_1.png"/>
+                <ContentImage src="/kinetische_skulptur_klein_1_0.5.png"/>
+                <ContentImage src="/kinetische_skulptur_klein_0.5_1.png"/>
                 <ContentImage src="/kinetische_skulptur_01.png"/>
                 <ContentImage src="/kinetische_skulptur_02.png"/>
 	            <ContentImage src="/kinetische_skulptur_03.png"/>
-	            <ContentImage src="/level_green_01.png"/>
-                <ContentImage src="/level_green_02.png"/>
-	            <ContentImage src="/level_green_03.png"/>
 	            <Description name="description" text="Hier steht ne super Beschreibung, \n     -> nur fuer Alphabeten"/>
 	        </Project>
 

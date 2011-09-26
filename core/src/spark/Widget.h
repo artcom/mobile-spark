@@ -22,7 +22,7 @@ namespace spark {
     class Widget : public Container {
     friend class I18nHandler;
     public:
-        Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Widget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Widget() = 0;
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void render(const matrix & theProjectionMatrix) const;
@@ -94,6 +94,6 @@ namespace spark {
     typedef void (Widget::* WidgetMemberFunction)();
     typedef animation::PropertyAnimation<WidgetPtr, WidgetPropertySetterFunction> WidgetPropertyAnimation;
     typedef boost::shared_ptr<WidgetPropertyAnimation>  WidgetPropertyAnimationPtr;
-    typedef boost::shared_ptr<MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
+    typedef boost::shared_ptr<masl::MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
 };
 #endif
