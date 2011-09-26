@@ -7,6 +7,7 @@
 #include "Visitors.h"
 #include <mar/openGL_functions.h>
 
+using namespace masl;
 using namespace mar;
 using namespace std;
 

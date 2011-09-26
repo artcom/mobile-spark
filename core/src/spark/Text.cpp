@@ -14,11 +14,10 @@
 #include "SparkComponentFactory.h"
 #include "I18nContext.h"
 
-using namespace std;
 namespace spark {
     const char * const Text::SPARK_TYPE = "Text";
 
-    Text::Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+    Text::Text(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         ShapeWidget(theApp, theXMLNode),
         _myFontSize(_myXMLNode->getAttributeAs<int>("fontsize", 32)),
         _myTextColor(_myXMLNode->getAttributeAs<vector4>("color", vector4(1,1,1,1))),
@@ -29,9 +28,9 @@ namespace spark {
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "text"));
         std::string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
         if (myFontName != "") {
-            _myFontPath = AssetProviderSingleton::get().ap()->findFile(myFontName);
+            _myFontPath = mar::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
-        setShape(ShapeFactory::get().createRectangle(true,500,500));
+        setShape(mar::ShapeFactory::get().createRectangle(true,500,500));
     }
 
     Text::~Text() {
@@ -46,7 +45,7 @@ namespace spark {
     void
     Text::onResume() {
         ShapeWidget::onResume();
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
         myMaterial->getTexture()->setTextureId(0); //new texture should be generated
         _myDirtyFlag = true;
     }
@@ -62,8 +61,8 @@ namespace spark {
     void
     Text::build() {
         ShapeWidget::build();
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
-        TextInfo myTextInfo = MobileSDK_Singleton::get().getNative()->renderText(i18nHandler_->data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(i18nHandler_->data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath);
         _myTextSize[0] = myTextInfo.width;
         _myTextSize[1] = myTextInfo.height;

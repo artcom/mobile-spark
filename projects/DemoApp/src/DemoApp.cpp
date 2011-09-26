@@ -12,6 +12,7 @@
 #include <animation/DelayAnimation.h>
 #include <animation/Easing.h>
 
+#include <spark/Window.h>
 #include <spark/Event.h>
 #include <spark/Rectangle.h>
 #include <spark/Transform.h>
@@ -22,7 +23,7 @@
 
 #include "DemoAppComponentMapInitializer.h"
 
-static bool ourVibratorFlag = false;
+//static bool ourVibratorFlag = false;
 using namespace spark;
 using namespace masl;
 

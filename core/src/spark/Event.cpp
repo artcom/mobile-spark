@@ -1,5 +1,8 @@
-#include "Component.h"
 #include "Event.h"
+
+#include <masl/Logger.h>
+
+#include "Component.h"
 
 using namespace masl;
 
