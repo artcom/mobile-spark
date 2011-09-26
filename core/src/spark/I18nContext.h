@@ -4,15 +4,17 @@
 #include <masl/Exception.h>
 
 #include "Container.h"
-#include "BaseApp.h"
 #include "I18nConstants.h"
 
 namespace spark {
 
+    class BaseApp;
+    typedef boost::shared_ptr<BaseApp> BaseAppPtr;
+
     ///////////////////////////////////////////////////////I18nContext
     class I18nContext : public Container {
     public: 
-        I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode);
+        I18nContext(const spark::BaseAppPtr& theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~I18nContext();
 
         LANGUAGE getLanguage() const { return language_;};
@@ -36,7 +38,7 @@ namespace spark {
     ///////////////////////////////////////////////////////I18nItem
     class I18nItem : public Component {
     public:
-        I18nItem(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode);
+        I18nItem(const spark::BaseAppPtr& theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~I18nItem();
         virtual void switchLanguage(const LANGUAGE theLanguage);
         std::string getLanguageData(const LANGUAGE theLanguage = NO_LANGUAGE) const;
@@ -47,6 +49,6 @@ namespace spark {
         std::map<LANGUAGE, std::string> languageData_;  //maps language key to language specific string
     };
     typedef boost::shared_ptr<I18nItem> I18nItemPtr;
-    DEFINE_EXCEPTION(I18nItemNotFoundException, Exception);
+    DEFINE_EXCEPTION(I18nItemNotFoundException, masl::Exception);
 };
 #endif 

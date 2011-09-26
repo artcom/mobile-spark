@@ -16,7 +16,7 @@ using namespace std;
 namespace spark {
     const char * const Window::SPARK_TYPE = "Window";
 
-    Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+    Window::Window(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         Widget(theApp, theXMLNode),
         // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
         _myWidth(_myXMLNode->getAttributeAs<float>("width",100)),
@@ -39,7 +39,7 @@ namespace spark {
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new WindowCB(ptr, &Window::onSizeChanged));
         addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
         if (_myOrientation != "") {
-            MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
+            masl::MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
         }
     }
 
@@ -75,7 +75,7 @@ namespace spark {
     Window::onResume() {
         _myGLCanvas->initGLState();
         if (_myOrientation != "") {
-            MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
+            masl::MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
         }
     }
 

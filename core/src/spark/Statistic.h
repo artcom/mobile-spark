@@ -10,7 +10,7 @@ namespace spark {
         
     class Statistic : public Transform {
     public:
-        Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Statistic(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Statistic();
         virtual void onPause();
         virtual void onFrame(EventPtr theEvent);

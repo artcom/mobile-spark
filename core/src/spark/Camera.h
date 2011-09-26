@@ -3,13 +3,11 @@
 
 #include "ShapeWidget.h"
 
-using namespace mar;
-
 namespace spark {
 
     class Camera : public ShapeWidget {
     public:
-        Camera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Camera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Camera();
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onPause();
