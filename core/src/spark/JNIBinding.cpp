@@ -2,11 +2,12 @@
 
 #include "JNIBinding.h"
 
+#include <masl/Exception.h>
 #include <masl/Logger.h>
-
-#include "AppProvider.h"
 #include <masl/MobileSDK.h>
 #include <android/AndroidMobileSDK.h>
+
+#include "AppProvider.h"
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * env, jobject obj,
                                                              jlong currentMillis,
@@ -32,7 +33,7 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_sparkRealize(JN
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
     android::AndroidMobileSDKPtr myAndroidSDK = android::AndroidMobileSDKPtr(new android::AndroidMobileSDK());
-    MobileSDK_Singleton::get().setMobileSDK(myAndroidSDK);
+    masl::MobileSDK_Singleton::get().setMobileSDK(myAndroidSDK);
 
     myAndroidSDK->env = env;
     myAndroidSDK->obj = obj;

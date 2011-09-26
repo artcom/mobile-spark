@@ -8,7 +8,7 @@ namespace spark {
 
     class ShapeWidget : public Widget {
         public:
-            ShapeWidget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+            ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ShapeWidget() = 0;
             virtual void render(const matrix & theP) const;
             virtual void onResume();

@@ -2,14 +2,13 @@
 #define _included_mobile_spark_Image_
 
 #include "ShapeWidget.h"
+#include "Event.h"
 #include "I18nHandler.h"
-
-using namespace mar;
 
 namespace spark {
     class Image : public ShapeWidget {
     public:
-        Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Image();
         virtual void onResume();
         virtual void realize();

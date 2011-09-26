@@ -1,21 +1,21 @@
 #ifndef _included_mobile_spark_EventFactory_
 #define _included_mobile_spark_EventFactory_
 
+#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/Singleton.h>
 #include <masl/Exception.h>
-#include "BaseApp.h"
 
 #include "Event.h"
 
 namespace spark {
 
-    DEFINE_EXCEPTION(EventFactoryException, Exception);
+    DEFINE_EXCEPTION(EventFactoryException, masl::Exception);
 
     class EventFactory : public masl::Singleton<EventFactory> {
     public:
         EventFactory();
         virtual ~EventFactory();
-        typedef EventPtr (*CreateEventCallback)( const XMLNodePtr theXMLNode);
+        typedef EventPtr (*CreateEventCallback)( const masl::XMLNodePtr theXMLNode);
     private:
         typedef std::map<const std::string, CreateEventCallback> CallbackMap;
     public:
