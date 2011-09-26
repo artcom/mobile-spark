@@ -39,10 +39,7 @@ namespace templateapp {
     void TemplateApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         TemplateAppComponentMapInitializer::init();
-        std::string myOrientation;
-        std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
-        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
-        loadLayoutAndRegisterEvents(mySparkFile);
+        loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
     }
 
 }

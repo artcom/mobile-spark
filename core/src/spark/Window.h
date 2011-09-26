@@ -2,22 +2,23 @@
 #define _included_mobile_spark_Window_
 
 #include <masl/XMLNode.h>
-#include "Container.h"
+#include "Widget.h"
 #include "Event.h"
 #include <mar/Canvas.h>
 
 
 namespace spark {
 
-    class Window : public Container {
+    class Window : public Widget {
     public:
-        Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Window();
 
         void onTouch(EventPtr theEvent);
         virtual void render() const;
         virtual void onSizeChanged(EventPtr theEvent);
         virtual void onResume();
+        virtual void realize();        
         vector4 getClearColor() const { return _myClearColor;};
         vector2 getSize() const;
         static const char * const SPARK_TYPE;

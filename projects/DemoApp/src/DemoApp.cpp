@@ -22,7 +22,7 @@
 
 #include "DemoAppComponentMapInitializer.h"
 
-
+static bool ourVibratorFlag = false;
 using namespace spark;
 using namespace masl;
 
@@ -59,13 +59,7 @@ namespace demoapp {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
         
-        std::string myOrientation;
-        std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
-        AC_PRINT << "Orientation: " << myOrientation;
-        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
-                    
-        loadLayoutAndRegisterEvents(mySparkFile);
-
+        loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
 
@@ -148,10 +142,20 @@ namespace demoapp {
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 8, 500));
         WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 8, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
+        WidgetPropertyAnimationPtr myAnimation3 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setAlpha, 1, 0.2, 1500, animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myAnimation4 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myRectangle, &Widget::setAlpha, 0.2, 1, 1500, animation::EasingFnc(animation::linearTween)));
         animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(2000));
         animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
-        mySequence->add(myAnimation1);
-        mySequence->add(myAnimation2);
+        animation::ParallelAnimationPtr myParallel1 = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        animation::ParallelAnimationPtr myParallel2 = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        myParallel1->add(myAnimation1);
+        myParallel1->add(myAnimation3);
+        myParallel2->add(myAnimation2);
+        myParallel2->add(myAnimation4);
+        mySequence->add(myParallel1);
+        mySequence->add(myParallel2);
         mySequence->add(myDelay);
         mySequence->setLoop(true);
         //mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
@@ -172,14 +176,15 @@ namespace demoapp {
         }
         _myCurrentSlide = 0;
         _mySlides[_myCurrentSlide]->setVisible(true);
+        _mySlides[_myCurrentSlide]->setSensible(true);
 
         AC_DEBUG << "found #" << _mySlides.size() << " slides";        
-        //BaseApp::realize();
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {
         AC_DEBUG << "on control button";
-        MobileSDK_Singleton::get().getNative()->vibrate(10);
+        //ourVibratorFlag = true;
+        MobileSDK_Singleton::get().getNative()->vibrate(10);        
     	changeSlide(theEvent->getTarget()->getName() == "backbutton" ? -1 :  +1);    }
     
     void DemoApp::onStartSlideSwipe() {
@@ -206,6 +211,11 @@ namespace demoapp {
     }
     
     void DemoApp::onFrame(EventPtr theEvent) {
+        /*if (ourVibratorFlag) {
+            MobileSDK_Singleton::get().getNative()->vibrate(10);        
+            ourVibratorFlag = false;
+        }*/
+        
         BaseApp::onFrame(theEvent);            
     }
     
@@ -289,7 +299,8 @@ namespace demoapp {
 
     void DemoApp::onCreationButton(EventPtr theEvent) {
         AC_DEBUG << "on creation button";
-        MobileSDK_Singleton::get().getNative()->vibrate(10);        
+        //ourVibratorFlag = true;
+        MobileSDK_Singleton::get().getNative()->vibrate(10);                
         ComponentPtr myTransform = _mySparkWindow->getChildByName("2dworld")->getChildByName("ObjectCreationSlide");
         ComponentPtr myCreated = myTransform->getChildByName("created_from_code");
         if (myCreated) {

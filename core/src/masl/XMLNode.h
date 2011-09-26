@@ -24,7 +24,7 @@ namespace masl {
         public:
             XMLNode(const std::string & theXMLString);
             XMLNode(xmlNode* theNode);
-            virtual ~XMLNode();
+            ~XMLNode();
             void print() const;
             std::ostream & print(std::ostream & os) const;
 
