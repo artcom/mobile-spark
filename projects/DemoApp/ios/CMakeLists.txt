@@ -44,6 +44,9 @@ SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_REL
 
 LINK_DIRECTORIES("${SDKROOT}/usr/lib")
 LINK_DIRECTORIES("${SDKROOT}/System/Library/Frameworks")
+LINK_DIRECTORIES("${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1")
+LINK_DIRECTORIES("${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1/v7")
+LINK_DIRECTORIES("${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1/v6")
 
 #Apple ios Frameworks
 ADD_FRAMEWORK(${EXECUTABLE_NAME} UIKit)
@@ -67,7 +70,12 @@ target_link_libraries(${EXECUTABLE_NAME} ${png_LIBRARY_DIRS})
 find_library(ZLIB_LIBRARY_DIRS
    NAMES z zlib
 )
+find_library(LIBGCC_LIBRARY_DIRS 
+   NAMES libgcc_eh.a
+   HINTS "${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1"
+)
 target_link_libraries(${EXECUTABLE_NAME} ${ZLIB_LIBRARY_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${LIBGCC_LIBRARY_DIRS})
 
 #This creates folders in the *.app with the mkdir command
 add_custom_command( 
