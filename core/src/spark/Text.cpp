@@ -19,18 +19,18 @@ namespace spark {
     const char * const Text::SPARK_TYPE = "Text";
 
     Text::Text(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
-        ShapeWidget(theApp, theXMLNode), _myFontPath("") {
-
+        ShapeWidget(theApp, theXMLNode),
+        _myFontSize(_myXMLNode->getAttributeAs<int>("fontsize", 32)),
+        _myTextColor(_myXMLNode->getAttributeAs<vector4>("color", vector4(1,1,1,1))),
+        _myMaxWidth(_myXMLNode->getAttributeAs<int>("maxWidth", 0)),
+        _myMaxHeight(_myXMLNode->getAttributeAs<int>("maxHeight", 0)),
+        _myTextAlign(_myXMLNode->getAttributeAs<std::string>("align", "left"))
+    {
         i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "text"));
-        _myFontSize = _myXMLNode->getAttributeAs<int>("fontsize", 32);
-        _myMaxWidth = _myXMLNode->getAttributeAs<int>("maxWidth", 0);
-        _myMaxHeight = _myXMLNode->getAttributeAs<int>("maxHeight", 0);
-        _myTextColor = _myXMLNode->getAttributeAs<vector4>("color", vector4(1,1,1,1));
-        _myTextAlign = _myXMLNode->getAttributeAs<std::string>("align", "left");
-        string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
+        std::string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
         if (myFontName != "") {
             _myFontPath = AssetProviderSingleton::get().ap()->findFile(myFontName);
-         }
+        }
         setShape(ShapeFactory::get().createRectangle(true,500,500));
     }
 

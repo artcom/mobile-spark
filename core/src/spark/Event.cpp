@@ -106,21 +106,17 @@ namespace spark {
     StageEvent::~StageEvent() {}
 
     WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget,
-                             unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight) :
-        Event(theType, theTarget)
-    {
-        size_[0] = theNewWidth;
-        size_[1] = theNewHeight;
-
-        oldsize_[0] = theOldWidth;
-        oldsize_[1] = theOldHeight;
-    }
+                             const unsigned int theNewWidth, const unsigned int theNewHeight, const unsigned int theOldWidth, const unsigned int theOldHeight) :
+        Event(theType, theTarget),
+        size_(theNewWidth, theNewHeight),
+        oldsize_(theOldWidth, theOldHeight)
+    {}
+    
     WindowEvent::WindowEvent(const masl::XMLNodePtr theXMLNode) :
-        Event(theXMLNode)
-    {
-        size_ = theXMLNode->getAttributeAs<vector2>("newsize", vector2(0,0));
-        oldsize_ = theXMLNode->getAttributeAs<vector2>("oldsize", vector2(0,0));
-    }
+        Event(theXMLNode),
+        size_(theXMLNode->getAttributeAs<vector2>("newsize", vector2(0,0))),
+        oldsize_(theXMLNode->getAttributeAs<vector2>("oldsize", vector2(0,0)))
+    {}
 
     WindowEvent::~WindowEvent() {}
 
