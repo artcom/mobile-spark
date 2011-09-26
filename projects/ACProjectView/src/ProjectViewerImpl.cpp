@@ -49,9 +49,8 @@ namespace acprojectview {
     }
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
-         _myIsAnimating = false;     
-         boost::static_pointer_cast<Widget>(getChildByName("textbackground"))->setAlpha(0.5);
-         _myCurrentProject = currentProject;
+        _myIsAnimating = false;     
+        _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
          _myNumberOfImages = _myContentImages.size();
          if (_myNumberOfImages < 1) {

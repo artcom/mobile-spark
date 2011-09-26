@@ -3,6 +3,8 @@
 
 #include <spark/Transform.h>
 #include <spark/SparkComponentFactory.h>
+#include <spark/Window.h>
+
 
 
 namespace acprojectview {
@@ -19,15 +21,21 @@ namespace acprojectview {
             int getPreviewHeight();
             
         private:
-            spark::WindowPtr _myWindowPtr;
+            void onDragCB(spark::EventPtr theEvent);
+            void onFingerDownCB(spark::EventPtr theEvent);
 
+            
+            spark::WindowPtr _myWindowPtr;
             int _myVerticalTiling;
             int _myHorizontalTiling;
             int _myGapX;
             int _myGapY;
+            int _myStartDragX;
             
     };
     typedef boost::shared_ptr<ProjectMenu> ProjectMenuPtr;
+    typedef spark::MemberFunctionEventCallback<ProjectMenu, ProjectMenuPtr>ProjectMenuEventCB;
+
 };
 
 #endif

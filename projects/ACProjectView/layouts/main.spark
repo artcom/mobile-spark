@@ -21,14 +21,15 @@
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
         
+        <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
+        
         <Transform name="startscreen">
             <Image name="background" x="0" y="0" z="5" src="/startScreenBackground.png"/> 
         </Transform>        
         
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
         
-            <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
-        
+            
             <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" src="/belvedere_teaser_thumb_01.png">
 	            <ContentImage src="/duality_teaser_thumb_01.png"/>
             </Project>

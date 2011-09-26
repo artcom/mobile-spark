@@ -143,7 +143,7 @@ namespace acprojectview {
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onInitiateProjectView)));
             mySeqAnimation->add(myInitiateProjectViewAnim);
         }
-                
+  
         int toX = showProject ? 0 : _myCurrentProject->getX()+_myWidth/2;
         int fromX   = showProject ? _myCurrentProject->getX()+_myWidth/2 : 0;
         int toY = showProject ? 0 : _myCurrentProject->getY()+_myHeight/2;
@@ -163,17 +163,15 @@ namespace acprojectview {
         WidgetPropertyAnimationPtr myTransAnimationY = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(_myProjectViewer, &Widget::setY, fromY, toY, _myAnimationTime,
                     animation::EasingFnc(animation::easeInOutQuad)));
-                        
+           
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
-        myParallel->setOnPlay(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartProjectView)));
+         myParallel->setOnPlay(masl::CallbackPtr(
+                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartProjectView)));
             
         myParallel->add(myZoomAnimationX);
         myParallel->add(myZoomAnimationY);
         myParallel->add(myTransAnimationX);
         myParallel->add(myTransAnimationY);
-
-
 
         mySeqAnimation->add(myParallel);
         if (showProject) {                       
@@ -182,7 +180,6 @@ namespace acprojectview {
         } else {
             _myProjectViewer->initiateClose();
         }
-        
         animation::AnimationManager::get().play(mySeqAnimation);
     }
 
