@@ -8,6 +8,10 @@
 #include "string_functions.h"
 #include "CallStack.h"
 
+#if __APPLE__
+    typedef sig_t sighandler_t;
+#endif
+
 namespace masl {
 
     void traceAndReraiseSignal(int theSignal);
