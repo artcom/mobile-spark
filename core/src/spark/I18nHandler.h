@@ -2,8 +2,12 @@
 #define _included_mobile_spark_I18nHandler_
 
 #include <boost/smart_ptr/shared_ptr.hpp>
-#include <masl/XMLNode.h>
 #include "Event.h"
+
+namespace masl {
+    class XMLNode;
+    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
+};
 
 namespace spark {
 
