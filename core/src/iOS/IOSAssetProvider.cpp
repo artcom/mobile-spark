@@ -20,6 +20,8 @@ namespace ios
             if (masl::searchFile(includePaths_, theFile, filePath)) {
                 return mar::loadTextureFromPNG(filePath, textureId, outWidth, outHeight, rgb);
             }
+            AC_ERROR << "texture " << theFile << " was not found in search paths";
+            throw masl::FileNotFoundException("texture " + theFileName + " was not found in search paths", PLUS_FILE_LINE);
         }
         return mar::loadTextureFromPNG(_myAssetFolderPath + "/" + theFile, textureId, outWidth, outHeight, rgb);
     }
@@ -32,6 +34,9 @@ namespace ios
             std::string filePath;
             if (masl::searchFile(includePaths_, theFile, filePath)) {
                 masl::readFile(filePath, content);
+            } else {
+                AC_ERROR << "file " << theFile << " was not found in search paths";
+                throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
             }
             return content;
         }
@@ -47,6 +52,9 @@ namespace ios
             std::string filePath;
             if (masl::searchFile(includePaths_, theFile, filePath)) {
                 masl::readFileLineByLine(filePath, content);
+            } else {
+                AC_ERROR << "file " << theFile << " was not found in search paths";
+                throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
             }
             return content;
         }
