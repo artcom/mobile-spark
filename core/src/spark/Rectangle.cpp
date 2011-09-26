@@ -6,8 +6,8 @@ namespace spark {
 
     const char * const Rectangle::SPARK_TYPE = "Rectangle";
 
-    Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        ShapeWidget(theApp, theXMLNode, theParent) {
+    Rectangle::Rectangle(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        ShapeWidget(theApp, theXMLNode) {
 
         float width = _myXMLNode->getAttributeAs<float>("width");
         float height = _myXMLNode->getAttributeAs<float>("height");

@@ -12,13 +12,16 @@ namespace spark {
     ///////////////////////////////////////////////////////I18nContext
     class I18nContext : public Container {
     public: 
-        I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        I18nContext(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode);
         virtual ~I18nContext();
 
         LANGUAGE getLanguage() const { return language_;};
         virtual void switchLanguage(const LANGUAGE theLanguage);
         virtual void addChild(const ComponentPtr theChild);
-        virtual void setup();
+        inline void setup() {
+            switchLanguage(defaultLanguage_);
+        };
+
 
         static const char * const SPARK_TYPE;             
         virtual const char * const & getType() const { return I18nContext::SPARK_TYPE;};
@@ -33,7 +36,7 @@ namespace spark {
     ///////////////////////////////////////////////////////I18nItem
     class I18nItem : public Component {
     public:
-        I18nItem(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        I18nItem(const spark::BaseAppPtr& theApp, const XMLNodePtr theXMLNode);
         virtual ~I18nItem();
         virtual void switchLanguage(const LANGUAGE theLanguage);
         std::string getLanguageData(const LANGUAGE theLanguage = NO_LANGUAGE) const;

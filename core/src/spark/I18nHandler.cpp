@@ -16,7 +16,7 @@ namespace spark {
     void
     I18nHandler::realize(const WidgetPtr theWidget) {
         widget_ = theWidget;
-        if (i18nId_.size() > 0) {
+        if (!i18nId_.empty()) {
             attachToI18nItem();
         }
     }
@@ -35,7 +35,7 @@ namespace spark {
             widget_->_myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
             widget_->_myI18nItem = I18nItemPtr();
         }
-        if (i18nId_.size() > 0) {
+        if (!i18nId_.empty()) {
             widget_->_myI18nItem = widget_->getI18nItemByName(i18nId_);
             if (!widget_->_myI18nItem) {
                 throw I18nItemNotFoundException("no i18n item named " + i18nId_, PLUS_FILE_LINE);

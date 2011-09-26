@@ -42,14 +42,15 @@ namespace acprojectview {
     }
 
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
-       BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
+        BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         ACProjectViewComponentMapInitializer::init();
         std::string myOrientation;
-        std::string myDefaultLayout = "/main";
-        std::string mySparkFile = findBestMatchedLayout(myDefaultLayout, theScreenWidth, theScreenHeight, myOrientation);
-        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
-        loadLayoutAndRegisterEvents(mySparkFile);
+        //std::string mySparkFile = findBestMatchedLayout(myDefaultLayout, theScreenWidth, theScreenHeight, myOrientation);
+        //MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
+        //loadLayoutAndRegisterEvents(mySparkFile);
         
+
+        loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));
@@ -70,7 +71,6 @@ namespace acprojectview {
         
         _myProjectViewer->addEventListener(TouchEvent::PICKED, myBackCB,true);
         
-        
         _myProjectItems = boost::static_pointer_cast<spark::Container>(_myProjectMenu);
         const VectorOfComponentPtr & myChildren = _myProjectItems->getChildrenByType(ProjectImpl::SPARK_TYPE);
         for (size_t i = 0; i < myChildren.size(); i++) {
@@ -83,7 +83,6 @@ namespace acprojectview {
         spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("language_toggle", true);
         spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitch));
         myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
-        
     }
     
     void ACProjectView::onStartScreenClicked(EventPtr theEvent) {

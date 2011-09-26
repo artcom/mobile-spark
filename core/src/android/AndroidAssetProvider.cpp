@@ -13,9 +13,7 @@ namespace android {
     AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath)
         : AssetProvider(), _myApkArchive(NULL)
     {
-        AC_PRINT << "AndroidAssetProvider ctor";
         android::loadAPK(&_myApkArchive, theApkPath);
-        AC_PRINT << "AndroidAssetProvider ctor end";
     }
 
     AndroidAssetProvider::~AndroidAssetProvider() {
@@ -30,6 +28,9 @@ namespace android {
             std::string filePath;
             if (masl::searchFile(includePaths_, theFileName, filePath)) {
                 masl::readFile(filePath, myContent);
+            } else {
+                AC_ERROR << "file " << theFileName << " was not found in search paths";
+                throw masl::FileNotFoundException("file " + theFileName + " was not found in search paths", PLUS_FILE_LINE);
             }
             return myContent;
         }
@@ -44,6 +45,9 @@ namespace android {
             std::string filePath;
             if (masl::searchFile(includePaths_, theFileName, filePath)) {
                 masl::readFileLineByLine(filePath, myContent);
+            } else {
+                AC_ERROR << "file " << theFileName << " was not found in search paths";
+                throw masl::FileNotFoundException("file " + theFileName + " was not found in search paths", PLUS_FILE_LINE);
             }
             return myContent;
         }
@@ -59,6 +63,8 @@ namespace android {
             if (masl::searchFile(includePaths_, myFilename, filePath)) {
                 return mar::loadTextureFromPNG(filePath, textureId, width, height, rgb);
             }
+            AC_ERROR << "texture " << theFileName << " was not found in search paths";
+            throw masl::FileNotFoundException("texture " + theFileName + " was not found in search paths", PLUS_FILE_LINE);
         }
         return android::loadTextureFromPNG(_myApkArchive, myFilename, textureId, width, height, rgb);
     }

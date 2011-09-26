@@ -11,7 +11,7 @@ namespace spark {
 
     class Window : public Widget {
     public:
-        Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Window();
 
         void onTouch(EventPtr theEvent);

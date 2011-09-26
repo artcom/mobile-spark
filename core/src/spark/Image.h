@@ -9,7 +9,7 @@ using namespace mar;
 namespace spark {
     class Image : public ShapeWidget {
     public:
-        Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        Image(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Image();
         virtual void onResume();
         virtual void realize();
