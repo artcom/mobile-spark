@@ -3,7 +3,6 @@
 
 #include <map>
 #include <boost/smart_ptr/shared_ptr.hpp>
-#include <masl/Logger.h>
 #include <masl/Exception.h>
 #include "Event.h"
 

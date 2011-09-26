@@ -12,7 +12,7 @@ namespace spark {
 
     class View : public Widget {
     public:
-        View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        View(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~View();
         void activate(float theCanvasWidth, float theCanvasHeight);
         const std::string & getWorldName() const { return _myWorldName;}
