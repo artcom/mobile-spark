@@ -18,7 +18,7 @@ namespace spark {
 
     class RenderCamera : public Widget {
     public:
-        RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        RenderCamera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~RenderCamera();
         void activate(float theCanvasWidth, float theCanvasHeight);
         const matrix & getProjectionMatrix();

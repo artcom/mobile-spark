@@ -8,7 +8,7 @@ namespace acprojectview {
     const char * const Description::SPARK_TYPE = "Description";
     
         
-    Description::Description(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+    Description::Description(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Container(theApp, theXMLNode) {
         _myText = _myXMLNode->getAttributeAs<std::string>("text","");
     }

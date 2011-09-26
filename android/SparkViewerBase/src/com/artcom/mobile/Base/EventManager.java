@@ -82,9 +82,7 @@ public class EventManager {
                     }
                     if(dx*dx + dy*dy < 10) break;
                     mode=1;
-                    if (timeNow-startTime > 200) {
-                        panHandler();
-                    }
+                    panHandler();
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     if (mode==2) break;

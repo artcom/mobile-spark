@@ -10,7 +10,7 @@ using namespace spark;
 
 namespace acprojectview {
 
-    ProjectMenu::ProjectMenu(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+    ProjectMenu::ProjectMenu(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Transform(theApp, theXMLNode) {
         _myHorizontalTiling = theXMLNode->getAttributeAs<int>("x-tiling",0); 
         _myVerticalTiling = theXMLNode->getAttributeAs<int>("y-tiling",0); 
