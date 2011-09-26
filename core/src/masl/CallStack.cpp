@@ -336,6 +336,12 @@ std::string CallStack::toString(const char* prefix) const
     return res;
 }
 
+void dumpstack() {
+    CallStack myStack;
+    myStack.update();
+    AC_PRINT << myStack.toString();
+}
+
 /*****************************************************************************/
 
 }; // namespace 
