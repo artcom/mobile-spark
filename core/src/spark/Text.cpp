@@ -51,7 +51,6 @@ namespace spark {
         _myDirtyFlag = true;
     }
 
-    //XXX: hmmm
     const vector2 &
     Text::getTextSize() {
         if (_myDirtyFlag) {
@@ -66,11 +65,9 @@ namespace spark {
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
         TextInfo myTextInfo = MobileSDK_Singleton::get().getNative()->renderText(i18nHandler_->data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath);
-
         _myTextSize[0] = myTextInfo.width;
         _myTextSize[1] = myTextInfo.height;
         getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
-        //AC_PRINT << "rendered text :'" << i18nHandler_->data_ << "' has size: " << _myTextSize[0] << "/" << _myTextSize[1];
         myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
         myMaterial->transparency_ = true;
     }

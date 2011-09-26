@@ -70,7 +70,7 @@ namespace mar {
         std::string myMaterialId;
         for (std::vector<std::string>::const_iterator it = theMtlFile.begin(); it != theMtlFile.end(); ++it) {
             std::string line = *it;
-            //AC_PRINT << "line " << line.c_str();
+            AC_DEBUG << "line " << line.c_str();
             size_t pos = line.find_first_of(" ");
             if (pos == std::string::npos) {
                 continue;
@@ -111,7 +111,7 @@ namespace mar {
             materialMap_[myMaterialId] = myMaterial;
             myMaterial->createShader();
         }
-        AC_PRINT << "num materials " << materialMap_.size();
+        AC_INFO << "num materials " << materialMap_.size();
     }
 
     void ObjImporter::createElementVertices(ObjShapePtr theShape, ElementPtr element,
@@ -160,7 +160,7 @@ namespace mar {
             element->vertexData_[vertexDataIndex++] = *it;
         }
         theShape->elementList.push_back(element);
-        //AC_PRINT << "num parts " << theShape->elementList.size();
+        AC_INFO << "num parts " << theShape->elementList.size();
     }
 
     bool ObjImporter::sortByTransparencyFunction(ElementPtr i,ElementPtr j) {
@@ -184,12 +184,12 @@ namespace mar {
         min_[0] = min_[1] = min_[2] = std::numeric_limits<float>::max();
         max_[0] = max_[1] = max_[2] = std::numeric_limits<float>::min();
         min_[3] = max_[3] = 1;
-        //AC_PRINT << "import obj " << theObjFileName;
+        AC_DEBUG << "import obj " << theObjFileName;
         const std::vector<std::string> theObjFile =
             AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".obj"));
         const std::vector<std::string> theMtlFile =
             AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".mtl"));
-        //AC_PRINT << "got data from files " << theObjFile.size() << "  " << theMtlFile.size();
+        AC_DEBUG << "got data from files " << theObjFile.size() << "  " << theMtlFile.size();
         importMaterialMap(theMtlFile);
 
         ElementPtr element;
@@ -197,14 +197,14 @@ namespace mar {
         size_t startFaceIndex = 0;
         for (std::vector<std::string>::const_iterator it = theObjFile.begin(); it != theObjFile.end(); ++it) {
             std::string line = *it;
-            //AC_PRINT << "line " << line;
+            AC_DEBUG << "line " << line;
             size_t pos = line.find_first_of(" ");
             if (pos == std::string::npos) {
                 continue;
             }
             std::string type = line.substr(0,pos);
             std::string data = line.substr(pos+1);
-            //AC_PRINT << "type " << type << ", data " << data;
+            AC_DEBUG << "type " << type << ", data " << data;
             if (type == "v") {
                 vertices_.push_back(getVector3(data));
             } else if (type == "vt") {
@@ -225,7 +225,7 @@ namespace mar {
                 element->material = materialMap_[data];
                 startFaceIndex = faces_.size();
             } else if (type == "f") {
-                //AC_PRINT << "data:_" << data;
+                AC_DEBUG << "data:_" << data;
                 std::vector<int> faceVertices;
                 size_t pos1 = data.find_first_of(" ");
                 size_t pos2 = data.find_last_of(" ");
@@ -244,8 +244,8 @@ namespace mar {
         }
 
         std::sort(theShape->elementList.begin(), theShape->elementList.end(), sortByTransparencyFunction);
-        AC_PRINT << "vertex size " << vertices_.size() << " normals_ size " << normals_.size() << " tex size " << texData_.size();
-        AC_PRINT << "faces_ size " << faces_.size() << " objectParts " << theShape->elementList.size();
+        AC_INFO << "vertex size " << vertices_.size() << " normals_ size " << normals_.size() << " tex size " << texData_.size();
+        AC_INFO << "faces_ size " << faces_.size() << " objectParts " << theShape->elementList.size();
         theShape->setBoundingBox(min_, max_);
     }
 }
