@@ -3,7 +3,6 @@
 #include <mar/png_functions.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include "I18nContext.h"
 
 namespace spark {
     const char * const Image::SPARK_TYPE = "Image";

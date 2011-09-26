@@ -85,7 +85,7 @@ namespace spark {
         public:
 
             WindowEvent(const std::string & theType, ComponentPtr theTarget,
-                        unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight);
+                        const unsigned int theNewWidth, const unsigned int theNewHeight, const unsigned int theOldWidth, const unsigned int theOldHeight);
             WindowEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~WindowEvent();
 

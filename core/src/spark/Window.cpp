@@ -1,8 +1,10 @@
 #include "Window.h"
 
 #include <algorithm>
+#include <masl/XMLNode.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
+#include <mar/Canvas.h>
 
 #include "SparkComponentFactory.h"
 #include "View.h"
@@ -16,18 +18,15 @@ namespace spark {
 
     Window::Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
         Widget(theApp, theXMLNode),
-        _myWidth(0), _myHeight(0){
-
+        // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
+        _myWidth(_myXMLNode->getAttributeAs<float>("width",100)),
+        _myHeight(_myXMLNode->getAttributeAs<float>("height",100)),
+        _myFullScreenFlag(_myXMLNode->getAttributeAs<bool>("fullscreen", false)),
+        _myClearColor(_myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1))),
+        _myOrientation(_myXMLNode->getAttributeAs<string>("orientation",""))
+    {
         _myGLCanvas = CanvasPtr( new Canvas());
         _myGLCanvas->initGLState();
-
-        _myFullScreenFlag = _myXMLNode->getAttributeAs<bool>("fullscreen", false);
-        _myClearColor = _myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1));
-
-        // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
-        _myWidth = _myXMLNode->getAttributeAs<float>("width",100);
-        _myHeight = _myXMLNode->getAttributeAs<float>("height",100);
-        _myOrientation = _myXMLNode->getAttributeAs<string>("orientation","");
     }
 
     Window::~Window() {
