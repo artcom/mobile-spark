@@ -110,8 +110,8 @@ namespace acprojectview {
                 myNewWidth = myNewHeight / myImageRatio;
             }
         }
-        //theImage->setScaleX(float(myNewWidth)/myImageWidth);
-        //theImage->setScaleY(float(myNewHeight)/myImageHeight);
+        theImage->setScaleX(float(myNewWidth)/myImageWidth);
+        theImage->setScaleY(float(myNewHeight)/myImageHeight);
         AC_PRINT << "image will be scaled to  : " << myNewWidth << "/" << myNewHeight;
     }
     

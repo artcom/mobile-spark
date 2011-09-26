@@ -1,8 +1,9 @@
 #ifndef _included_mobile_spark_BaseApp_
 #define _included_mobile_spark_BaseApp_
 
-#define BOOST_NO_SFINAE
-#include <boost/thread/locks.hpp>
+//#define BOOST_NO_SFINAE
+//#include <boost/thread/pthread/shared_mutex.hpp>
+//#include <boost/thread/locks.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 //#include <mar/Canvas.h>
@@ -10,11 +11,13 @@
 #include "JNIBinding.h"
 #endif
 
+#include <masl/ThreadLock.h>
+
 #include "Window.h"
 #include "EventFactory.h"
 
 //typedef boost::shared_mutex Lock;
-//typedef boost::unique_lock< boost::shared_mutex > WrtieLock;
+//typedef boost::unique_lock< boost::shared_mutex > WriteLock;
 //typedef boost::shared_lock< boost::shared_mutex >  ReadLock;
 
 
@@ -47,8 +50,8 @@ namespace spark {
             bool _mySparkRealizedFlag;  
         private:
             EventPtrList _myEvents;    
-            boost::shared_mutex myLock;
-            //boost::mutex m_mutex;            
+            masl::ThreadLock _myLock;
+            
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;

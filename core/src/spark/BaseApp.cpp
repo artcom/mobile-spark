@@ -11,6 +11,7 @@
 #include <masl/file_functions.h>
 #include <masl/string_functions.h>
 #include <masl/Exception.h>
+#include <masl/Auto.h>
 
 #include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
@@ -30,6 +31,7 @@
 #include "ComponentMapInitializer.h"
 
 using namespace mar;
+using namespace masl;
 
 namespace spark {
 
@@ -161,6 +163,7 @@ namespace spark {
         AC_TRACE << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
+            AutoLocker<ThreadLock> myLocker(_myLock);        
             _myEvents.push_back(myEvent);
         }
     }
@@ -181,6 +184,7 @@ namespace spark {
     }
     
     void BaseApp::handleEvents() {
+        AutoLocker<ThreadLock> myLocker(_myLock);        
         for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
             (*it)->connect(_mySparkWindow);
             //AC_PRINT << "handle event: " << (*(*it));
