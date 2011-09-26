@@ -103,7 +103,7 @@ int32_t linux_gcc_demangler(const char *mangled_name, std::string & unmangled_na
 	int status = 0;
 	char *demangled = abi::__cxa_demangle(mangled_name, 0, &out_len, &status);
 	if (status == 0) {
-    AC_PRINT << "demangled " << demangled << "-.--" << out_len;
+    AC_DEBUG << "demangled " << demangled << "-len --" << out_len;
 		// OK
 		if (out_len < buffersize) {
             unmangled_name = demangled;
@@ -330,11 +330,9 @@ void CallStack::dump(const char* prefix) const
 std::string CallStack::toString(const char* prefix) const
 {
     std::string res;
-
     for (int i=0; i<int(mCount); i++) {
         res.append(toStringSingleLevel(prefix, i));
     }
-
     return res;
 }
 

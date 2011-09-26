@@ -9,6 +9,7 @@
 #include <masl/MobileSDK.h>
 #include <masl/XMLUtils.h>
 #include <masl/file_functions.h>
+#include <masl/signal_functions.h>
 #include <masl/string_functions.h>
 #include <masl/Exception.h>
 
@@ -36,6 +37,7 @@ namespace spark {
 
     BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
         _myChooseLayoutFlag(false), _mySetupFlag(false), _mySparkRealizedFlag(false) {
+        masl::initSignalHandling();
     }
 
     BaseApp::~BaseApp() {
