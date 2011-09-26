@@ -8,7 +8,10 @@
 
 namespace masl {
 
-    DEFINE_EXCEPTION(OpenDirectoryFailed, Exception);
+    DEFINE_EXCEPTION(OpenDirectoryFailed, Exception)
+    DEFINE_EXCEPTION(OpenFileFailed, Exception)
+    DEFINE_EXCEPTION(FileNotFoundException, Exception)
+
     /// read a complete file into a string
     bool fileExists(const std::string& theFilename);
     bool readFile(const std::string & thePath, std::string & theContent);
@@ -21,7 +24,6 @@ namespace masl {
     std::string lastFileNamePart(const char* file_name);
     std::string getExtension(const std::string & thePath);
     std::string removeExtension(const std::string & theFileName);
-
 }
 
 #endif

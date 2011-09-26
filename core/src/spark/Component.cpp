@@ -7,11 +7,11 @@ namespace spark {
     Component::Component(): EventDispatcher() {
     }
 
-    Component::Component(const XMLNodePtr theXMLNode):
+    Component::Component(const masl::XMLNodePtr theXMLNode):
         EventDispatcher(),
         _myXMLNode(theXMLNode),
         _myName(theXMLNode->name),
-        _myParent(ComponentPtr())
+        _myParent()
     {}
 
     Component::~Component() {

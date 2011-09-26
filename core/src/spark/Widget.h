@@ -22,7 +22,7 @@ namespace spark {
     class Widget : public Container {
     friend class I18nHandler;
     public:
-        Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Widget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Widget() = 0;
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void render(const matrix & theProjectionMatrix) const;
@@ -56,13 +56,6 @@ namespace spark {
         LANGUAGE getLanguage() const;
         void switchLanguage(LANGUAGE theLanguage);
 
-        void test() {
-            AC_PRINT << "test callback";
-        }
-        virtual void testEvent(EventPtr theEvent) {
-            TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent> (theEvent);
-            AC_PRINT << "test eventcallback "<< myEvent->getX() << " , "<< myEvent->getY();
-        }
         matrix _myLocalMatrix; //scale, roation and translation of this node
     protected:
         virtual void build() {};
@@ -70,6 +63,7 @@ namespace spark {
         float getParentAlpha() const;
         void propagateAlpha();
         virtual void applyAlpha (const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
+        
         matrix _myWorldMVMatrix;
         bool _myDirtyFlag;
 
@@ -100,6 +94,6 @@ namespace spark {
     typedef void (Widget::* WidgetMemberFunction)();
     typedef animation::PropertyAnimation<WidgetPtr, WidgetPropertySetterFunction> WidgetPropertyAnimation;
     typedef boost::shared_ptr<WidgetPropertyAnimation>  WidgetPropertyAnimationPtr;
-    typedef boost::shared_ptr<MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
+    typedef boost::shared_ptr<masl::MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
 };
 #endif

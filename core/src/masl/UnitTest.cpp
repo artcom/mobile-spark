@@ -208,7 +208,7 @@ void
 UnitTestSuite::run() {
     try {
         try {
-            masl::Exception::initExceptionBehaviour();
+
 #ifndef _WIN32
 //            masl::initSignalHandling();
 #endif

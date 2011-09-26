@@ -1,5 +1,9 @@
 #include "I18nContext.h"
 
+#include "BaseApp.h"
+
+using namespace masl;
+
 namespace spark {
 
 
@@ -23,7 +27,7 @@ namespace spark {
             language_ = theLanguage;
             for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
                 I18nItemPtr myItem = boost::static_pointer_cast<I18nItem>(*it);
-                if (myItem) myItem->switchLanguage(theLanguage);
+                myItem->switchLanguage(theLanguage);
             }
         }
     }
@@ -31,7 +35,7 @@ namespace spark {
     void
     I18nContext::addChild(const ComponentPtr theChild) {
         Container::addChild(theChild);
-        I18nItemPtr myChild = boost::static_pointer_cast<I18nItem>(theChild);
+        I18nItemPtr myChild = boost::static_pointer_cast<I18nItem>(theChild); // XXX
         if (!myChild) {
             throw I18nItemNotFoundException("adding child " + theChild->getName() + " to I18nContext " + getName() + " does not work because theChild is not an I18nItem", PLUS_FILE_LINE);
         }

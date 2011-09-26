@@ -1,17 +1,24 @@
 #ifndef _included_mobile_spark_Window_
 #define _included_mobile_spark_Window_
 
-#include <masl/XMLNode.h>
 #include "Widget.h"
 #include "Event.h"
-#include <mar/Canvas.h>
 
+namespace masl {
+    class XMLNode;
+    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
+};
+
+namespace mar {
+    class Canvas;
+    typedef boost::shared_ptr<Canvas> CanvasPtr;
+};
 
 namespace spark {
 
     class Window : public Widget {
     public:
-        Window(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Window(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Window();
 
         void onTouch(EventPtr theEvent);

@@ -1,18 +1,21 @@
 #ifndef _included_mobile_spark_BaseApp_
 #define _included_mobile_spark_BaseApp_
 
-
 #include <boost/smart_ptr/shared_ptr.hpp>
-//#include <mar/Canvas.h>
+
 #ifdef __ANDROID__
 #include "JNIBinding.h"
 #endif
 
-#include "Window.h"
-#include "EventFactory.h"
+#include <masl/Settings.h>
+#include <masl/ThreadLock.h>
 
+#include "Event.h"
 
 namespace spark {
+
+    class Window;
+    typedef boost::shared_ptr<Window> WindowPtr;
 
     class BaseApp : public boost::enable_shared_from_this<BaseApp> {
         public:
@@ -30,15 +33,20 @@ namespace spark {
             virtual void onResume();
 
             virtual void onEvent(std::string theEventString);
+            virtual void handleEvents();
+            void renderText(std::string theMessage, int theOpenGLTextureId);
 
             spark::WindowPtr _mySparkWindow;
-            void renderText(std::string theMessage, int theOpenGLTextureId);
 
         protected:
             std::string appPath_;
             bool _myChooseLayoutFlag;
             bool _mySetupFlag;       
-            bool _mySparkRealizedFlag;         
+            bool _mySparkRealizedFlag;  
+        private:
+            EventPtrList _myEvents;    
+            masl::ThreadLock _myLock;
+            
     };
 
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;

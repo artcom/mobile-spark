@@ -4,7 +4,6 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <masl/Settings.h>
-#include <masl/Logger.h>
 #include <masl/Callback.h>
 #include <masl/XMLNode.h>
 
@@ -12,7 +11,8 @@ namespace spark {
 
     class Event;
     typedef boost::shared_ptr<Event> EventPtr;
-
+    typedef std::vector<EventPtr> EventPtrList;
+    
     template<typename T>
     EventPtr createEvent(const masl::XMLNodePtr theXMLNode) {
         return EventPtr(new T(theXMLNode));
@@ -85,7 +85,7 @@ namespace spark {
         public:
 
             WindowEvent(const std::string & theType, ComponentPtr theTarget,
-                        unsigned theNewWidth, unsigned theNewHeight, unsigned theOldWidth, unsigned theOldHeight);
+                        const unsigned int theNewWidth, const unsigned int theNewHeight, const unsigned int theOldWidth, const unsigned int theOldHeight);
             WindowEvent(const masl::XMLNodePtr theXMLNode);
             virtual ~WindowEvent();
 

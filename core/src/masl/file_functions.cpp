@@ -37,7 +37,7 @@ namespace masl {
          char *myCharBuffer;
          pFile = fopen (filepath.c_str(),"r");
          if (pFile == NULL) {
-             throw Exception("Error opening file");
+             throw OpenFileFailed("Error opening file " + theUTF8Filename, PLUS_FILE_LINE);
          } else {
             fseek(pFile,0,SEEK_END); //go to end
             int len=ftell(pFile); //get position at end (length)
@@ -61,7 +61,7 @@ namespace masl {
         searchFile(theUTF8Filename, filepath, true);
         FILE *file;
         if ((file = fopen(filepath.c_str(), "rb")) == NULL) {
-            throw Exception("Error opening file");
+            throw OpenFileFailed("Error opening file " + theUTF8Filename, PLUS_FILE_LINE);
         }
         size_t size = fread(buffer, 1, MAX_LENGTH,file);
         bool endedWithNewLine = false;
@@ -132,7 +132,7 @@ namespace masl {
         FILE * pFile;
         pFile = fopen(theFileName.c_str(),"r");
         if (pFile == NULL && theForce) {
-            throw Exception("Error opening file " + theFileName);
+            throw OpenFileFailed("Error opening file " + theFileName, PLUS_FILE_LINE);
         }
         if (pFile) {
             fclose(pFile);

@@ -9,7 +9,7 @@ namespace ios {
     public:
         IOSMobileSDK();
         virtual ~IOSMobileSDK();
-        virtual void vibrate(long theDurationMillisec);                                    
+        virtual void vibrate(long theDurationMillisec);                            
         virtual masl::TextInfo renderText(const std::string & theMessage, int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath);
         virtual void updateCameraTexture();
         virtual void freezeMobileOrientation(std::string theOrientation);

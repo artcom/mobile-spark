@@ -1,6 +1,8 @@
 #include "AndroidMobileSDK.h"
 #include <masl/Logger.h>
 
+using namespace masl;
+
 namespace android {
     AndroidMobileSDK::AndroidMobileSDK() {
 
@@ -9,7 +11,6 @@ namespace android {
     AndroidMobileSDK::~AndroidMobileSDK() {
 
     }
-
     void AndroidMobileSDK::vibrate(long theDurationMillisec) {
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
@@ -23,12 +24,12 @@ namespace android {
             }
         }       
     }
-
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
                                                 const std::string & theFontPath) {
         masl::TextInfo myTextInfo;
         if (env) {
+            env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[IIILjava/lang/String;Ljava/lang/String;)Ljava/util/List;");
             if(myMethodId != 0) {
@@ -63,6 +64,7 @@ namespace android {
             } else {
                 AC_WARNING  << "Sorry, java-rendertext not found";
             }
+            env->PopLocalFrame(NULL);
         }
         return myTextInfo;
     }
