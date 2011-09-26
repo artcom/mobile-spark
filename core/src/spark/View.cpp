@@ -46,8 +46,7 @@ namespace spark {
         stable_sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
 
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
-            ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(it->first);
-            AC_TRACE << " View::renderWorld render: " << it->first->getName();
+            AC_TRACE << " View::renderWorld render component: " << it->first->getName();
             it->first->render(_myCamera->getProjectionMatrix());
         }
     }

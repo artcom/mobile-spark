@@ -43,6 +43,7 @@ public class NativeBinding {
   public static native void initBinding();
   public static native void sparkRealize();
   public static native void onEvent(String theEvent);
+  public static native void handleEvents();
 
   public static native void log(Severity theSeverity, String theFilename, int theLineNumber, String theMessage);
   public static native void setLoggerTopLevelTag(String theTagString);

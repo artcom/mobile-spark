@@ -17,7 +17,9 @@ namespace android {
     }
 
     AndroidAssetProvider::~AndroidAssetProvider() {
-        //delete _myApkArchive; //warnings?
+        if (_myApkArchive) {
+            zip_close(_myApkArchive);
+        }
     }
 
     std::string
