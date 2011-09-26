@@ -26,6 +26,7 @@
 #endif
 
 #include "SparkComponentFactory.h"
+#include "Window.h"
 #include "EventFactory.h"
 #include "Visitors.h"
 #include "ComponentMapInitializer.h"

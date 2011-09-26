@@ -3,12 +3,10 @@
 
 #include "ShapeWidget.h"
 
-using namespace mar;
-
 namespace spark {
     class Shape3D : public ShapeWidget {
     public:
-        Shape3D(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
+        Shape3D(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Shape3D();
         void onResume();
         static const char * const SPARK_TYPE;

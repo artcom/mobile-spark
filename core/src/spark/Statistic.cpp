@@ -1,6 +1,7 @@
 #include "Statistic.h"
 
 #include "BaseApp.h"
+#include "Window.h"
 #include "Text.h"
 #include "SparkComponentFactory.h"
 
@@ -8,7 +9,7 @@ namespace spark {
 
     const char * const Statistic::SPARK_TYPE = "Statistic";
 
-    Statistic::Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+    Statistic::Statistic(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         Transform(theApp, theXMLNode),
         lasttime_(0)
     {}
@@ -47,7 +48,7 @@ namespace spark {
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         if (_myFPSText) {
             int myFPS = 1000.0/(myEvent->getCurrentTime() - lasttime_);
-            _myFPSText->setText("fps: " + as_string(myFPS));
+            _myFPSText->setText("fps: " + masl::as_string(myFPS));
         }
         lasttime_ = myEvent->getCurrentTime();
     }
