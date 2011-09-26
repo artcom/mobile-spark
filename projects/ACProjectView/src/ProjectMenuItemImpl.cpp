@@ -5,13 +5,14 @@ using namespace spark;
 
 namespace acprojectview {
     
-    ProjectMenuItemImpl::ProjectMenuItemImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+    ProjectMenuItemImpl::ProjectMenuItemImpl(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Transform(theApp, theXMLNode) {
     }
 
     ProjectMenuItemImpl::~ProjectMenuItemImpl() {}
 
     void ProjectMenuItemImpl::realize() {
+        Transform::realize();
         std::string src = _myXMLNode->getAttributeAs<std::string>("src",""); 
         std::string title = _myXMLNode->getAttributeAs<std::string>("title",""); 
         std::string subtitle = _myXMLNode->getAttributeAs<std::string>("subtitle",""); 

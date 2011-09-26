@@ -6,6 +6,7 @@
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 
+#include <spark/Window.h>
 #include <spark/Event.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
@@ -49,7 +50,7 @@ namespace acprojectview {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));
         _myProjectViewer = boost::static_pointer_cast<ProjectViewerImpl>(_mySparkWindow->getChildByName("2dworld")->getChildByName("projectViewer",true));
-
+                    
         _myWidth = _myProjectMenu->getPreviewWidth();
         _myHeight = _myProjectMenu->getPreviewHeight();
         //_myProjectViewer->setWidth(_myWidth);
@@ -75,23 +76,46 @@ namespace acprojectview {
     }
     
     void ACProjectView::onProjectItem(EventPtr theEvent) {
+        AC_PRINT << "clicked on project: "<< theEvent->getTarget()->getParent()->getName();
+        MobileSDK_Singleton::get().getNative()->vibrate(10);                
         _myProjectViewer->setVisible(true);
         _myProjectViewer->setSensible(true);
         _myProjectMenu->setSensible(false);
         _myCurrentProject = boost::static_pointer_cast<ProjectImpl>(theEvent->getTarget()->getParent());
-        _myProjectViewer->showProject(_myCurrentProject);
         projectViewAnimation(true);
     }
 
     
     void ACProjectView::onBack(EventPtr theEvent) {
         AC_PRINT<< "----------- BACK";
+        MobileSDK_Singleton::get().getNative()->vibrate(10);                
         projectViewAnimation(false);
         _myProjectMenu->setSensible(true);
         _myProjectViewer->setSensible(false);
     }
     
+    void ACProjectView::onInitiateProjectView() {        
+        _myProjectViewer->showProject(_myCurrentProject);
+    }
+
+    void ACProjectView::onStartProjectView() {        
+        _myProjectViewer->setVisible(true);
+    }    
+    void ACProjectView::onFinishLoadProjectView() {        
+        _myProjectViewer->loadInitialSet();
+    }
+    
+    
     void ACProjectView::projectViewAnimation(bool showProject){
+        animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        if (showProject) {               
+            animation::DelayAnimationPtr myInitiateProjectViewAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(40));
+            myInitiateProjectViewAnim->setOnPlay(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onInitiateProjectView)));
+            mySeqAnimation->add(myInitiateProjectViewAnim);
+        }
+                
         int toX = showProject ? 0 : _myCurrentProject->getX()+_myWidth/2;
         int fromX   = showProject ? _myCurrentProject->getX()+_myWidth/2 : 0;
         int toY = showProject ? 0 : _myCurrentProject->getY()+_myHeight/2;
@@ -111,12 +135,27 @@ namespace acprojectview {
         WidgetPropertyAnimationPtr myTransAnimationY = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(_myProjectViewer, &Widget::setY, fromY, toY, _myAnimationTime,
                     animation::EasingFnc(animation::easeInOutQuad)));
+                        
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        myParallel->setOnPlay(masl::CallbackPtr(
+                        new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartProjectView)));
+            
         myParallel->add(myZoomAnimationX);
         myParallel->add(myZoomAnimationY);
         myParallel->add(myTransAnimationX);
         myParallel->add(myTransAnimationY);
-        animation::AnimationManager::get().play(myParallel);
+
+
+
+        mySeqAnimation->add(myParallel);
+        if (showProject) {                       
+            mySeqAnimation->setOnFinish(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
+        } else {
+            _myProjectViewer->initiateClose();
+        }
+        
+        animation::AnimationManager::get().play(mySeqAnimation);
     }
 
     void ACProjectView::onLanguageSwitch(EventPtr theEvent) {

@@ -100,7 +100,8 @@ namespace spark {
             }
         }
     }
-
+    
+    //XXX: seqfaults with sort, only works with stable sort, why?!
     bool
     sortByRenderKey(std::pair<ComponentPtr, RenderKey> i, std::pair<ComponentPtr, RenderKey> j) {
         if (i.second.transparency_ && j.second.transparency_) {

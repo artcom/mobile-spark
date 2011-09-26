@@ -33,7 +33,8 @@ namespace acprojectview {
             void onSwipe(spark::EventPtr theEvent);
             void setWidth(int width) {_myWidth = width;};
             void setHeight(int height) {_myHeight = height;};
-
+            void loadInitialSet();
+            void initiateClose();
 
        private:
             unsigned int _myCurrentImage;
@@ -46,14 +47,19 @@ namespace acprojectview {
             spark::VectorOfComponentPtr _myContentImages;
             //std::vector<ContentImage> _myContentImages;
             ProjectImplPtr _myCurrentProject;
-            spark::ImagePtr image0;
-            spark::ImagePtr image1;
-            spark::ImagePtr image2;
+            spark::TransformPtr _imageTransform0;
+            spark::TransformPtr _imageTransform1;
+            spark::TransformPtr _imageTransform2;
+            spark::ImagePtr _image0;
+            spark::ImagePtr _image1;
+            spark::ImagePtr _image2;
             spark::TextPtr _myDescription;
-
+            spark::WindowPtr _myWindowPtr;
             
             void changeImage(int dir);
             void onAnimationFinished();
+            void onLoadNextImages();
+            void autoScaleImage(spark::ImagePtr theImage);
 
 
     };

@@ -26,8 +26,8 @@ public class ASLOpenGLView extends GLSurfaceView {
 
     public void onSizeChanged (int w, int h, int oldw, int oldh) {
         EventManager.onSizeChanged(w,h);
-        String myEvent = "<WindowEvent type='on_resize' newsize='[" + w + "," + h + "]' oldsize='[" + oldw + "," + oldh + "]'/>";
-        NativeBinding.onEvent(myEvent);
+        //String myEvent = "<WindowEvent type='on_resize' newsize='[" + w + "," + h + "]' oldsize='[" + oldw + "," + oldh + "]'/>";
+        //NativeBinding.onEvent(myEvent);
     }
 
     private void init() {
