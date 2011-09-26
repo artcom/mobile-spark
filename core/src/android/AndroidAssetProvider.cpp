@@ -13,9 +13,7 @@ namespace android {
     AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath)
         : AssetProvider(), _myApkArchive(NULL)
     {
-        AC_PRINT << "AndroidAssetProvider ctor";
         android::loadAPK(&_myApkArchive, theApkPath);
-        AC_PRINT << "AndroidAssetProvider ctor end";
     }
 
     AndroidAssetProvider::~AndroidAssetProvider() {
