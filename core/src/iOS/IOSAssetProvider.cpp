@@ -21,7 +21,7 @@ namespace ios
                 return mar::loadTextureFromPNG(filePath, textureId, outWidth, outHeight, rgb);
             }
             AC_ERROR << "texture " << theFile << " was not found in search paths";
-            throw masl::FileNotFoundException("texture " + theFileName + " was not found in search paths", PLUS_FILE_LINE);
+            throw masl::FileNotFoundException("texture " + theFile + " was not found in search paths", PLUS_FILE_LINE);
         }
         return mar::loadTextureFromPNG(_myAssetFolderPath + "/" + theFile, textureId, outWidth, outHeight, rgb);
     }
