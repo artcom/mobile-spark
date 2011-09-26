@@ -4,21 +4,23 @@
 #include "BaseApp.h"
 
 namespace spark {
-    Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Container(theApp, theXMLNode, theParent), _myDirtyFlag(true), _alpha(1.0), _actualAlpha(1.0), _visible(true), _sensible(true)
+    Widget::Widget(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+        : Container(theApp, theXMLNode),
+          _myDirtyFlag(true),
+          _x(_myXMLNode->getAttributeAs<float>("x", 0)),
+          _y(_myXMLNode->getAttributeAs<float>("y", 0)),
+          _z(_myXMLNode->getAttributeAs<float>("z", 0)),
+          _scaleX(_myXMLNode->getAttributeAs<float>("scaleX",1)),
+          _scaleY(_myXMLNode->getAttributeAs<float>("scaleY",1)),
+          _scaleZ(_myXMLNode->getAttributeAs<float>("scaleZ",1)),
+          _rotationX(_myXMLNode->getAttributeAs<float>("rotationX", 0)),
+          _rotationY(_myXMLNode->getAttributeAs<float>("rotationY", 0)),
+          _rotationZ(_myXMLNode->getAttributeAs<float>("rotationZ", 0)),
+          _alpha(_myXMLNode->getAttributeAs<float>("alpha", 1.0)),
+          _actualAlpha(_alpha),
+          _visible(_myXMLNode->getAttributeAs<bool>("visible", true)),
+          _sensible(_myXMLNode->getAttributeAs<bool>("sensible", true))
     {
-        _x = _myXMLNode->getAttributeAs<float>("x", 0);
-        _y = _myXMLNode->getAttributeAs<float>("y", 0);
-        _z = _myXMLNode->getAttributeAs<float>("z", 0);
-        _scaleX = _myXMLNode->getAttributeAs<float>("scaleX",1);
-        _scaleY = _myXMLNode->getAttributeAs<float>("scaleY",1);
-        _scaleZ = _myXMLNode->getAttributeAs<float>("scaleZ",1);
-        _rotationX = _myXMLNode->getAttributeAs<float>("rotationX", 0);
-        _rotationY = _myXMLNode->getAttributeAs<float>("rotationY", 0);
-        _rotationZ = _myXMLNode->getAttributeAs<float>("rotationZ", 0);
-        _visible = _myXMLNode->getAttributeAs<bool>("visible", _visible);
-        _sensible = _myXMLNode->getAttributeAs<bool>("sensible", _sensible);
-        _alpha = _myXMLNode->getAttributeAs<float>("alpha", _alpha);
         updateMatrix();
         setI18nContextIfAvailable();
     }
@@ -81,11 +83,9 @@ namespace spark {
     float
     Widget::getParentAlpha() const {
         float myParentAlpha = 1.0;
-        if (getParent()) {
-            WidgetPtr myParent = boost::dynamic_pointer_cast<Widget>(getParent());
-            if (myParent) {
-                myParentAlpha = myParent->getActualAlpha();
-            }
+        WidgetPtr myParent = boost::dynamic_pointer_cast<Widget>(getParent());
+        if (myParent) {
+            myParentAlpha = myParent->getActualAlpha();
         }
         return myParentAlpha;
     }
@@ -132,13 +132,9 @@ namespace spark {
         I18nItemPtr myI18nItem;
         std::vector<I18nContextPtr> myContexts = getI18nContexts();
         for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
-            (*it)->setup();  //XXX: good idea? this avoids postrealize
             ComponentPtr myComponent = (*it)->getChildByName(theName);
-            if (myComponent) {
-                myI18nItem = boost::static_pointer_cast<I18nItem>(myComponent);
-                if (myI18nItem) {
-                    return myI18nItem;
-                }
+            if (myComponent && myComponent->getType() == I18nItem::SPARK_TYPE) {
+                return boost::static_pointer_cast<I18nItem>(myComponent);
             }
         }
         return myI18nItem;

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.graphics.Typeface;
 import android.opengl.GLES20;
 import android.opengl.GLES10;
 import android.opengl.GLUtils;
+import android.os.Vibrator;
 
 import com.artcom.mobile.Base.AC_Log;
 import com.artcom.mobile.Base.Severity;
@@ -41,6 +43,7 @@ public class NativeBinding {
   public static native void initBinding();
   public static native void sparkRealize();
   public static native void onEvent(String theEvent);
+  public static native void handleEvents();
 
   public static native void log(Severity theSeverity, String theFilename, int theLineNumber, String theMessage);
   public static native void setLoggerTopLevelTag(String theTagString);
@@ -183,6 +186,17 @@ public class NativeBinding {
      }
   }
 
+  public static void vibrate(int theDurationMillisec) {
+      try {	  
+		  Vibrator vibrator = (Vibrator)ourActivity.getSystemService(Context.VIBRATOR_SERVICE);
+		  if (vibrator != null) {
+			  vibrator.vibrate(theDurationMillisec);
+		  }
+      } catch (Exception theEx) {
+          AC_Log.print(String.format("exception %s", theEx.getMessage()));
+      }
+	  
+  }
 
 }
 

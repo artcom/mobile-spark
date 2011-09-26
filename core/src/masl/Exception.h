@@ -5,6 +5,8 @@
 #include <string>
 #include <stdexcept>
 
+#include "CallStack.h"
+
 namespace masl {
 
     class  Exception {
@@ -34,8 +36,8 @@ namespace masl {
             _what += "\n"+whatelse;
         }
 
+        const CallStack & stack() const {return _callstack; };
 
-        static void initExceptionBehaviour();
     protected:
         virtual void set(const std::string & what,
                          const std::string & where,
@@ -50,6 +52,7 @@ namespace masl {
         mutable std::string _what;
         mutable std::string _where;
         mutable const char * _name;
+        CallStack _callstack;
 
     };
 

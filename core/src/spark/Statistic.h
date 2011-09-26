@@ -2,13 +2,15 @@
 #define _included_mobile_spark_Statistic_
 
 #include "Transform.h"
-#include "Text.h"
 
 namespace spark {
 
+    class Text;
+    typedef boost::shared_ptr<Text> TextPtr;
+        
     class Statistic : public Transform {
     public:
-        Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Statistic();
         virtual void onPause();
         virtual void onFrame(EventPtr theEvent);

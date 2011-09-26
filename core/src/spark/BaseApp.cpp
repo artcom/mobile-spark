@@ -9,6 +9,9 @@
 #include <masl/MobileSDK.h>
 #include <masl/XMLUtils.h>
 #include <masl/file_functions.h>
+#include <masl/string_functions.h>
+#include <masl/Exception.h>
+#include <masl/Auto.h>
 
 #include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
@@ -28,11 +31,13 @@
 #include "ComponentMapInitializer.h"
 
 using namespace mar;
+using namespace masl;
 
 namespace spark {
 
 
-    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), _mySetupFlag(false), _mySparkRealizedFlag(false) {
+    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
+        _myChooseLayoutFlag(false), _mySetupFlag(false), _mySparkRealizedFlag(false) {
     }
 
     BaseApp::~BaseApp() {
@@ -70,6 +75,8 @@ namespace spark {
         _mySparkRealizedFlag = true;
         RealizeComponentVisitor myVisitor;
         visitComponents(myVisitor, _mySparkWindow);
+        I18nComponentVisitor myI18nVisitor;
+        visitComponents(myI18nVisitor, _mySparkWindow);
     }
 
     std::string
@@ -133,9 +140,15 @@ namespace spark {
     }
 
     void
-    BaseApp::loadLayoutAndRegisterEvents(const std::string & theLayoutFile) {
+    BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
+        std::string myLayoutFile = "";
+        if (_myChooseLayoutFlag) {
+            myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight);
+        }  else {
+            myLayoutFile = theBaseName + ".spark";
+        }
         //load layout
-        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), theLayoutFile));
+        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), myLayoutFile));
 
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
@@ -147,13 +160,12 @@ namespace spark {
     }
 
     void BaseApp::onEvent(std::string theEventString) {
-        //AC_PRINT << "a string event came in :" << theEventString;
+        AC_TRACE << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
-            myEvent->connect(_mySparkWindow);
-            (*myEvent)();
+            AutoLocker<ThreadLock> myLocker(_myLock);        
+            _myEvents.push_back(myEvent);
         }
-        //AC_PRINT << "ate Event";
     }
 
     void BaseApp::onPause(EventPtr theEvent) {
@@ -164,14 +176,26 @@ namespace spark {
     }
 
     void BaseApp::onResume() {
-        AC_PRINT << "onResume";
+        AC_TRACE << "onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
         }
     }
+    
+    void BaseApp::handleEvents() {
+        AutoLocker<ThreadLock> myLocker(_myLock);        
+        for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
+            (*it)->connect(_mySparkWindow);
+            //AC_PRINT << "handle event: " << (*(*it));
+            (*(*it))();
+        }            
+        _myEvents.clear();        
+    }
+    
 
     void BaseApp::onFrame(EventPtr theEvent) {
+        
         AC_TRACE << "onFrame";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());

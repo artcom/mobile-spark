@@ -13,22 +13,22 @@ namespace spark {
     DEFINE_EXCEPTION(UnknownComponentException, SparkComponentException)
 
     template < typename T>
-    ComponentPtr create(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent) {
-        return ComponentPtr(new T(theApp, theXMLNode, theParent));
+    ComponentPtr create(const BaseAppPtr theApp, const XMLNodePtr theXMLNode) {
+        return ComponentPtr(new T(theApp, theXMLNode));
     };
 
     class SparkComponentFactory : public masl::Singleton<SparkComponentFactory> {
     public:
         SparkComponentFactory();
         ~SparkComponentFactory();
-        typedef ComponentPtr (*CreateComponentCallback)(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        typedef ComponentPtr (*CreateComponentCallback)(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
     private:
         typedef std::map<const std::string, CreateComponentCallback> CallbackMap;
     public:
         bool registerComponent(const std::string & theComponentName,
                         const CreateComponentCallback theCreateFn);
         bool unregisterComponent(const std::string & theComponentName);
-        ComponentPtr createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode, ComponentPtr theParent = ComponentPtr()) const;
+        ComponentPtr createComponent(const BaseAppPtr theApp, const XMLNodePtr theNode) const;
 
         ComponentPtr loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath);
         ComponentPtr loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode);

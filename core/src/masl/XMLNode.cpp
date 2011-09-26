@@ -7,7 +7,7 @@
 namespace masl {
 
     XMLNode::XMLNode(const std::string & theXMLString) {
-        xmlDocPtr doc = loadXMLFromMemory(theXMLString);
+        xmlDocPtr doc = loadXMLFromMemoryValidate(theXMLString);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         init(myRootNode);
         xmlFreeDoc(doc);

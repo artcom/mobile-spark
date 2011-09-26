@@ -10,7 +10,8 @@ namespace android {
         AC_PRINT << "Loading APK " << apkPath;
         *theAPKArchive = zip_open(apkPath.c_str(), 0, NULL);
         if (!(*theAPKArchive)) {
-            AC_ERROR << "Error loading APK";
+            AC_ERROR << "Error loading APK " << apkPath;
+            throw APKLoadingException("Error loading APK " + apkPath, PLUS_FILE_LINE);
             return;
         }
 
@@ -32,10 +33,12 @@ namespace android {
         const size_t MAX_LENGTH = 5000;
         if (!theAPKArchive) {
             AC_ERROR << "apk broken";
+            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
         }
         zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
         if (!file) {
             AC_ERROR << "Error opening " << theFileName << " from APK";
+            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
             return NULL;
         }
         char buffer[MAX_LENGTH];
@@ -53,10 +56,12 @@ namespace android {
 
         if (!theAPKArchive) {
             AC_ERROR << "apk broken";
+            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
         }
         zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
         if (!file) {
             AC_ERROR << "Error opening " << theFileName << " from APK";
+            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
             return content;
         }
         size_t size = zip_fread(file, buffer, MAX_LENGTH);

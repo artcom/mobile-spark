@@ -1,11 +1,6 @@
 #ifndef _included_mobile_spark_RenderCamera_
 #define _included_mobile_spark_RenderCamera_
 
-/*#include <mar/Viewport.h>
-#include <masl/XMLNode.h>
-#include <masl/Frustum.h>
-#include <masl/MatrixStack.h>*/
-
 #include <masl/MatrixStack.h>
 #include <masl/numeric_functions.h>
 
@@ -23,7 +18,7 @@ namespace spark {
 
     class RenderCamera : public Widget {
     public:
-        RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent);
+        RenderCamera(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~RenderCamera();
         void activate(float theCanvasWidth, float theCanvasHeight);
         const matrix & getProjectionMatrix();
