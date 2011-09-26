@@ -8,14 +8,14 @@ namespace acprojectview {
     const char * const ProjectImpl::SPARK_TYPE = "ProjectImpl";
 
     
-    ProjectImpl::ProjectImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent)
-        : Transform(theApp, theXMLNode, theParent) {
+    ProjectImpl::ProjectImpl(const BaseAppPtr theApp, const XMLNodePtr theXMLNode)
+        : Transform(theApp, theXMLNode) {
     }
 
     ProjectImpl::~ProjectImpl() {}
 
     void ProjectImpl::realize() {
-         AC_PRINT << "##################################### PROJECT KONSTRUKTOR";
+        Transform::realize();
         std::string src = _myXMLNode->getAttributeAs<std::string>("src",""); 
         std::string title = _myXMLNode->getAttributeAs<std::string>("title",""); 
         std::string subtitle = _myXMLNode->getAttributeAs<std::string>("subtitle",""); 

@@ -43,6 +43,7 @@ public class NativeBinding {
   public static native void initBinding();
   public static native void sparkRealize();
   public static native void onEvent(String theEvent);
+  public static native void handleEvents();
 
   public static native void log(Severity theSeverity, String theFilename, int theLineNumber, String theMessage);
   public static native void setLoggerTopLevelTag(String theTagString);
@@ -184,10 +185,17 @@ public class NativeBinding {
     	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
      }
   }
-  
+
   public static void vibrate(int theDurationMillisec) {
-	  Vibrator vibrator = (Vibrator)ourActivity.getSystemService(Context.VIBRATOR_SERVICE);
-      vibrator.vibrate(theDurationMillisec);	  
+      try {	  
+		  Vibrator vibrator = (Vibrator)ourActivity.getSystemService(Context.VIBRATOR_SERVICE);
+		  if (vibrator != null) {
+			  vibrator.vibrate(theDurationMillisec);
+		  }
+      } catch (Exception theEx) {
+          AC_Log.print(String.format("exception %s", theEx.getMessage()));
+      }
+	  
   }
 
 }

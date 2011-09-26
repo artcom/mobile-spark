@@ -10,6 +10,7 @@
 
 #include "ProjectImpl.h"
 #include "ContentImage.h"
+#include "Description.h"
 
 
 
@@ -20,7 +21,7 @@ namespace acprojectview {
 
     class ProjectViewerImpl : public spark::Transform {
         public: 
-            ProjectViewerImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
+            ProjectViewerImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ProjectViewerImpl();
             virtual void realize();
             
@@ -32,7 +33,8 @@ namespace acprojectview {
             void onSwipe(spark::EventPtr theEvent);
             void setWidth(int width) {_myWidth = width;};
             void setHeight(int height) {_myHeight = height;};
-
+            void loadInitialSet();
+            void initiateClose();
 
        private:
             unsigned int _myCurrentImage;
@@ -48,10 +50,13 @@ namespace acprojectview {
             spark::ImagePtr image0;
             spark::ImagePtr image1;
             spark::ImagePtr image2;
-            
+            spark::TextPtr _myDescription;
+            spark::WindowPtr _myWindowPtr;
             
             void changeImage(int dir);
             void onAnimationFinished();
+            void onLoadNextImages();
+            void autoScaleImage(spark::ImagePtr theImage);
 
 
     };

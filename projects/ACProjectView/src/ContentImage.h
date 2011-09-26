@@ -9,7 +9,7 @@ namespace acprojectview {
 
     class ContentImage : public spark::Container {
         public: 
-            ContentImage(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
+            ContentImage(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ContentImage();
             
             static const char * const SPARK_TYPE;             

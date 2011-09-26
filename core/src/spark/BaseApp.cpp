@@ -32,7 +32,8 @@ using namespace mar;
 namespace spark {
 
 
-    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), _mySetupFlag(false), _mySparkRealizedFlag(false) {
+    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
+        _myChooseLayoutFlag(false), _mySetupFlag(false), _mySparkRealizedFlag(false) {
     }
 
     BaseApp::~BaseApp() {
@@ -70,15 +71,16 @@ namespace spark {
         _mySparkRealizedFlag = true;
         RealizeComponentVisitor myVisitor;
         visitComponents(myVisitor, _mySparkWindow);
+        I18nComponentVisitor myI18nVisitor;
+        visitComponents(myI18nVisitor, _mySparkWindow);
     }
 
     std::string
-    BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, std::string & theOrientation) {
+    BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight) {
         std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
         std::string myBestMatch = "";
-        std::string myBestOrientation = "";
         std::string myBestLayoutName = "";
         int myBestLayoutWidth = 0;
         int myBestLayoutHeight = 0;
@@ -86,7 +88,6 @@ namespace spark {
         bool myExactMatchFlag = false;
         int myLayoutWidth = 0;
         int myLayoutHeight = 0;
-        std::string myOrientation = "";
         std::string myLayoutName = "";
         for (unsigned int i = 0; i < myFiles.size(); i++) {
             if (getExtension(myFiles[i]) == "spark") {
@@ -104,14 +105,10 @@ namespace spark {
                         if (it->first == "height") {
                             myLayoutHeight = as<int>(it->second);
                         }
-                        if (it->first == "orientation") {
-                            myOrientation = it->second;
-                        }
                     }
                 }
                 if (i == 0) {
                     myBestMatch = myChoice;
-                    myBestOrientation = myOrientation;
                     myBestLayoutName = myLayoutName;
                     myBestLayoutWidth = myLayoutWidth;
                     myBestLayoutHeight = myLayoutHeight;
@@ -121,29 +118,33 @@ namespace spark {
                 //AC_PRINT << "check layout '" << myLayoutName << " width " << myLayoutWidth << "'" << " height " << myLayoutHeight << " screen :" << theScreenWidth << " x" << theScreenHeight;
                 if (myLayoutsLargerSide == myScreensLargerSide && myLayoutsSmallerSide == myScreensSmallerSide ) {
                     myBestMatch = myChoice;
-                    myBestOrientation = myOrientation;
                     myBestLayoutName = myLayoutName;
                     myBestLayoutWidth = myLayoutWidth;
                     myBestLayoutHeight = myLayoutHeight;
                     myExactMatchFlag = true;
                     AC_PRINT << "Excellent we have a layout<->device match -> use layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
-                    AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight << " with orientation: '" <<  myBestOrientation << "'";
+                    AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
                     break;
                 }
             }
         }
         if (!myExactMatchFlag) {
             AC_PRINT << "Sorry, we did not find layout<->device match -> use default layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
-            AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight << " with orientation: '" <<  myBestOrientation << "'";
+            AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
         }
-        theOrientation = myBestOrientation;
         return myBestMatch;
     }
 
     void
-    BaseApp::loadLayoutAndRegisterEvents(const std::string & theLayoutFile) {
+    BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
+        std::string myLayoutFile = "";
+        if (_myChooseLayoutFlag) {
+            myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight);
+        }  else {
+            myLayoutFile = theBaseName + ".spark";
+        }
         //load layout
-        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), theLayoutFile));
+        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), myLayoutFile));
 
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
@@ -155,13 +156,11 @@ namespace spark {
     }
 
     void BaseApp::onEvent(std::string theEventString) {
-        //AC_PRINT << "a string event came in :" << theEventString;
+        AC_TRACE << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
-            myEvent->connect(_mySparkWindow);
-            (*myEvent)();
+            _myEvents.push_back(myEvent);
         }
-        //AC_PRINT << "ate Event";
     }
 
     void BaseApp::onPause(EventPtr theEvent) {
@@ -172,14 +171,25 @@ namespace spark {
     }
 
     void BaseApp::onResume() {
-        AC_PRINT << "onResume";
+        AC_TRACE << "onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
         }
     }
+    
+    void BaseApp::handleEvents() {
+        for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
+            (*it)->connect(_mySparkWindow);
+            //AC_PRINT << "handle event: " << (*(*it));
+            (*(*it))();
+        }            
+        _myEvents.clear();        
+    }
+    
 
     void BaseApp::onFrame(EventPtr theEvent) {
+        
         AC_TRACE << "onFrame";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());

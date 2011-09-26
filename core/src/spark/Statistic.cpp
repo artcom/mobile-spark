@@ -7,8 +7,8 @@ namespace spark {
 
     const char * const Statistic::SPARK_TYPE = "Statistic";
 
-    Statistic::Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent):
-        Transform(theApp, theXMLNode, theParent) {
+    Statistic::Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+        Transform(theApp, theXMLNode) {
 
     }
 
@@ -21,12 +21,8 @@ namespace spark {
     }
 
     void
-    Statistic::prerender(MatrixStack& theCurrentMatrixStack) {
-        Transform::prerender(theCurrentMatrixStack);
-    }
-    void
     Statistic::realize() {
-        Widget::realize();
+        Transform::realize();
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
         StatisticPtr ptr = boost::static_pointer_cast<Statistic>(shared_from_this());
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new StatisticCB(ptr, &Statistic::onFrame));
@@ -45,7 +41,8 @@ namespace spark {
         setX(10);
     }
 
-    void Statistic::onFrame(EventPtr theEvent) {
+    void
+    Statistic::onFrame(EventPtr theEvent) {
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         if (_myFPSText) {
             int myFPS = 1000.0/(myEvent->getCurrentTime() - lasttime_);

@@ -7,6 +7,7 @@
 #include "ProjectMenu.h"
 #include "ProjectViewerImpl.h"
 #include "ContentImage.h"
+#include "Description.h"
 
 
 #ifdef __ANDROID__
@@ -27,7 +28,10 @@ namespace acprojectview {
             void onLanguageSwitch(spark::EventPtr theEvent);
             void onBack(spark::EventPtr theEvent);
             void onSwipeCB(spark::EventPtr theEvent);
-
+            void onStartProjectView();
+            void onInitiateProjectView();
+            void onFinishLoadProjectView();
+            
             void projectViewAnimation(bool showProject);
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 

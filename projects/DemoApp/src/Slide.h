@@ -8,7 +8,7 @@ namespace demoapp {
 
     class SlideImpl : public spark::Transform {
         public: 
-            SlideImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode, spark::ComponentPtr theParent);
+            SlideImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~SlideImpl();
             void centerTitles(const int theWidth, const int theHeight);
             static const char * const SPARK_TYPE;             

@@ -8,9 +8,8 @@ namespace spark {
 
     class Statistic : public Transform {
     public:
-        Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode, ComponentPtr theParent = ComponentPtr());
+        Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode);
         virtual ~Statistic();
-        virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onPause();
         virtual void onFrame(EventPtr theEvent);
         virtual void realize();

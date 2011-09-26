@@ -12,7 +12,8 @@ namespace spark {
 
     class Event;
     typedef boost::shared_ptr<Event> EventPtr;
-
+    typedef std::vector<EventPtr> EventPtrList;
+    
     template<typename T>
     EventPtr createEvent(const masl::XMLNodePtr theXMLNode) {
         return EventPtr(new T(theXMLNode));
