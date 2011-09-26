@@ -15,7 +15,7 @@ namespace acprojectview {
     ProjectImpl::~ProjectImpl() {}
 
     void ProjectImpl::realize() {
-         AC_PRINT << "##################################### PROJECT KONSTRUKTOR";
+        Transform::realize();
         std::string src = _myXMLNode->getAttributeAs<std::string>("src",""); 
         std::string title = _myXMLNode->getAttributeAs<std::string>("title",""); 
         std::string subtitle = _myXMLNode->getAttributeAs<std::string>("subtitle",""); 

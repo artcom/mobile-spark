@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ProjectImpl>
-    <Image name="image" src="" y="75"/>
-    <Text name="title" x="10" y="40" color="[1,1,1,1]" fontsize="16"/>
-    <Text name="subtitle" x="10" y="10" color="[1,1,1,1]" fontsize="16"/>
+    <Image name="image" src="" y="40"/>
+    <Text name="title" x="10" y="20" color="[0,0,0,1]" fontsize="16"/>
+    <Text name="subtitle" x="10" y="0" color="[0,0,0,1]" fontsize="16"/>
 
 </ProjectImpl>

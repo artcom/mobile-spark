@@ -34,8 +34,10 @@ public class EventManager {
                     mode=0;
                     startX = (int)event.getX();
                     startY = height - (int)event.getY();
+                    downHandler();
                     break;
                 case MotionEvent.ACTION_UP:
+                    upHandler();
                     if (timeNow - startTime < 400) {
                         if (timeNow - lastTapTime<400) {
                             doubleTapHandler();
@@ -106,6 +108,18 @@ public class EventManager {
         private float getRotation(MotionEvent event) {
             // todo
             return  0;
+        }
+        //-------------------------------------------------------------------------
+        private void downHandler() {
+            AC_Log.print(" ########### down: " + startX + ", " + startY);
+            String myEvent = "<TouchEvent type='down' x='" + startX + "' y='" + startY + "'/>";
+            NativeBinding.onEvent(myEvent);
+        }
+        //-------------------------------------------------------------------------
+        private void upHandler() {
+            AC_Log.print(" ########### up: " + startX + ", " + startY);
+            String myEvent = "<TouchEvent type='up' x='" + startX + "' y='" + startY + "'/>";
+            NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void singleTapHandler() {

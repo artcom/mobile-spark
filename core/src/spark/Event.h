@@ -12,7 +12,8 @@ namespace spark {
 
     class Event;
     typedef boost::shared_ptr<Event> EventPtr;
-
+    typedef std::vector<EventPtr> EventPtrList;
+    
     template<typename T>
     EventPtr createEvent(const masl::XMLNodePtr theXMLNode) {
         return EventPtr(new T(theXMLNode));
@@ -110,6 +111,8 @@ namespace spark {
             static const char * const DOUBLETAP;
             static const char * const LONGPRESS;
             static const char * const PICKED;
+            static const char * const DOWN;
+            static const char * const UP;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};

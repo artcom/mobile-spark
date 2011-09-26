@@ -11,6 +11,7 @@
 #include <masl/file_functions.h>
 #include <masl/string_functions.h>
 #include <masl/Exception.h>
+#include <masl/Auto.h>
 
 #include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
@@ -30,6 +31,7 @@
 #include "ComponentMapInitializer.h"
 
 using namespace mar;
+using namespace masl;
 
 namespace spark {
 
@@ -158,13 +160,12 @@ namespace spark {
     }
 
     void BaseApp::onEvent(std::string theEventString) {
-        //AC_PRINT << "a string event came in :" << theEventString;
+        AC_TRACE << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
-            myEvent->connect(_mySparkWindow);
-            (*myEvent)();
+            AutoLocker<ThreadLock> myLocker(_myLock);        
+            _myEvents.push_back(myEvent);
         }
-        //AC_PRINT << "ate Event";
     }
 
     void BaseApp::onPause(EventPtr theEvent) {
@@ -175,14 +176,26 @@ namespace spark {
     }
 
     void BaseApp::onResume() {
-        AC_PRINT << "onResume";
+        AC_TRACE << "onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
         }
     }
+    
+    void BaseApp::handleEvents() {
+        AutoLocker<ThreadLock> myLocker(_myLock);        
+        for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
+            (*it)->connect(_mySparkWindow);
+            //AC_PRINT << "handle event: " << (*(*it));
+            (*(*it))();
+        }            
+        _myEvents.clear();        
+    }
+    
 
     void BaseApp::onFrame(EventPtr theEvent) {
+        
         AC_TRACE << "onFrame";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
