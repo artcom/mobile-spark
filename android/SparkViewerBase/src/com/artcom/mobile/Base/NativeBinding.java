@@ -35,9 +35,15 @@ public class NativeBinding {
       System.loadLibrary("android");
       System.loadLibrary("spark");
 
+      loadLibrary("libmasl.so");
+      loadLibrary("libanimation.so");
+      loadLibrary("libmar.so");
+      loadLibrary("libandroid.so");
+      loadLibrary("libspark.so");
   }
 
   public static native void setup(long currentMillis, String apkFilePath, int theScreenWidth, int theScreenHeight);
+  public static native void loadLibrary(String theLibrary);
   public static native void putEnv(String theEnvVar);
   public static native void onResume();
   public static native void initBinding();

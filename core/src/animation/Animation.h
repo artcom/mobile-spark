@@ -11,6 +11,11 @@
 
 namespace animation {
 
+    class Dummy {
+        public:
+        Dummy();// { throw masl::Exception("asdasdasdasd", PLUS_FILE_LINE); }
+        void ex();
+    };
     typedef boost::function<float(float)> EasingFunctionPtr;
     inline float defaultEasing(float theValue) { return theValue; };
 

@@ -4,6 +4,8 @@
 
 namespace animation {
 
+    Dummy::Dummy() {}
+    void Dummy::ex() { AC_PRINT<<"lololol"; throw masl::Exception("asdasdasdasd", PLUS_FILE_LINE); }
     unsigned int Animation::idCounter = 0;
 
     Animation::Animation(const masl::UInt64 theDuration, EasingFunctionPtr theEasing) :

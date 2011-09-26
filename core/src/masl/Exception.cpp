@@ -33,7 +33,8 @@ masl::compose_message(const Exception& ex) {
         string(": ") +
         string(ex.what().size() ? ex.what() : string("Unspecified reason")) +
         string(" ") +
-        string(ex.where().size() ? ex.where() : string("Unspecified origin"));
+        string(ex.where().size() ? ex.where() : string("Unspecified origin")) +
+        string("\n");
 
     myMsg += ex.stack().toString();
     return myMsg;

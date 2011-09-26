@@ -9,7 +9,7 @@
 
 namespace masl {
 
-    class  Exception {
+    class __attribute__ ((visibility ("default"))) Exception {
     public:
 
         Exception(const std::string & what = "", const std::string & where ="");
@@ -66,7 +66,7 @@ namespace masl {
 
 
     #define DEFINE_NAMED_EXCEPTION(CLASS,NAME,BASECLASS)\
-    class CLASS : public BASECLASS {\
+    class __attribute__ ((visibility ("default"))) CLASS : public BASECLASS {\
         public:\
                CLASS(const std::string & what, const std::string & where)\
                    : BASECLASS(what,where, # NAME ) {}\
