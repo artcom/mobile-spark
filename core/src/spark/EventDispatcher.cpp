@@ -1,6 +1,10 @@
-#include <list>
-#include "Component.h"
 #include "EventDispatcher.h"
+
+#include <masl/Logger.h>
+
+#include "Component.h"
+
+#include <list>
 
 using namespace masl;
 

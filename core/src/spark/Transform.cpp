@@ -6,7 +6,7 @@
 namespace spark {
     const char * const Transform::SPARK_TYPE = "Transform";
 
-    Transform::Transform(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
+    Transform::Transform(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         Widget(theApp, theXMLNode) {
     }
 
