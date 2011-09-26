@@ -2,10 +2,12 @@
 
 #include <string>
 
+#include <masl/XMLNode.h>
+#include <mar/openGL_functions.h>
+
 #include "SparkComponentFactory.h"
 #include "Widget.h"
 #include "Visitors.h"
-#include <mar/openGL_functions.h>
 
 using namespace masl;
 using namespace mar;
