@@ -158,7 +158,6 @@ namespace demoapp {
         mySequence->add(myParallel2);
         mySequence->add(myDelay);
         mySequence->setLoop(true);
-        //mySequence->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<Widget, RectanglePtr>( myRectangle, &Widget::test)));
         //mySequence->setOnFinish(masl::CallbackPtr(new masl::FreeFunctionCallback(freeFunction)));
         animation::AnimationManager::get().play(mySequence);
 
