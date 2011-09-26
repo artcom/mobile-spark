@@ -45,7 +45,8 @@ namespace acprojectview {
        BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         ACProjectViewComponentMapInitializer::init();
         std::string myOrientation;
-        std::string mySparkFile = findBestMatchedLayout("/main", theScreenWidth, theScreenHeight, myOrientation);
+        std::string myDefaultLayout = "/main";
+        std::string mySparkFile = findBestMatchedLayout(myDefaultLayout, theScreenWidth, theScreenHeight, myOrientation);
         MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
         loadLayoutAndRegisterEvents(mySparkFile);
         
