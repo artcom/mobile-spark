@@ -22,6 +22,7 @@ namespace mar {
         shaderProgram = createProgram(_myVertexShader, _myFragmentShader);
         if (!shaderProgram) {
             AC_ERROR << "Could not create program.";
+            throw ShaderCreationException("problems during shader program creation of " + _myVertexShader + " or/and " + _myFragmentShader, PLUS_FILE_LINE);
             return;
         }
         glBindAttribLocation(shaderProgram, VERTEX_POS_INDEX, "a_position");

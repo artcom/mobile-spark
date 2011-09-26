@@ -12,7 +12,6 @@
 #include "Texture.h"
 
 namespace mar {
-
     const std::string DEFAULT_VERTEX_SHADER = "/default_vertex.glsl";
     const std::string DEFAULT_TEXTURED_VERTEX_SHADER = "/default_textured_vertex.glsl";
     const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "/default_colored_fragment.glsl";

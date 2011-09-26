@@ -1,10 +1,14 @@
 #ifndef _included_mobile_mar_opengl_functions_
 #define _included_mobile_mar_opengl_functions_
 
-#include "GlHeaders.h"
 #include <string>
+#include <masl/Exception.h>
+
+#include "GlHeaders.h"
 
 namespace mar {
+    DEFINE_EXCEPTION(ShaderCreationException, masl::Exception)
+
     //////////////////////////////////////////logging
     void printGLString(const char *name, GLenum s);
     void checkGlError(const char* op);
