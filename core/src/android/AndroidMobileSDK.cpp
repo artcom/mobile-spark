@@ -9,7 +9,6 @@ namespace android {
     AndroidMobileSDK::~AndroidMobileSDK() {
 
     }
-
     void AndroidMobileSDK::vibrate(long theDurationMillisec) {
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
@@ -23,7 +22,6 @@ namespace android {
             }
         }       
     }
-
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
                                                 const std::string & theFontPath) {

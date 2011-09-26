@@ -182,8 +182,8 @@ namespace demoapp {
 
     void DemoApp::onControlButton(EventPtr theEvent) {
         AC_DEBUG << "on control button";
-        ourVibratorFlag = true;
-        //MobileSDK_Singleton::get().getNative()->vibrate(10);        
+        //ourVibratorFlag = true;
+        MobileSDK_Singleton::get().getNative()->vibrate(10);        
     	changeSlide(theEvent->getTarget()->getName() == "backbutton" ? -1 :  +1);    }
     
     void DemoApp::onStartSlideSwipe() {
@@ -210,10 +210,10 @@ namespace demoapp {
     }
     
     void DemoApp::onFrame(EventPtr theEvent) {
-        if (ourVibratorFlag) {
+        /*if (ourVibratorFlag) {
             MobileSDK_Singleton::get().getNative()->vibrate(10);        
             ourVibratorFlag = false;
-        }
+        }*/
         
         BaseApp::onFrame(theEvent);            
     }
@@ -298,8 +298,8 @@ namespace demoapp {
 
     void DemoApp::onCreationButton(EventPtr theEvent) {
         AC_DEBUG << "on creation button";
-        ourVibratorFlag = true;
-        //MobileSDK_Singleton::get().getNative()->vibrate(10);                
+        //ourVibratorFlag = true;
+        MobileSDK_Singleton::get().getNative()->vibrate(10);                
         ComponentPtr myTransform = _mySparkWindow->getChildByName("2dworld")->getChildByName("ObjectCreationSlide");
         ComponentPtr myCreated = myTransform->getChildByName("created_from_code");
         if (myCreated) {
