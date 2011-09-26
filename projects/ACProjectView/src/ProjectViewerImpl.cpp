@@ -20,9 +20,13 @@ namespace acprojectview {
         std::string image = _myXMLNode->getAttributeAs<std::string>("im",""); 
         _myWidth = 800;
         _myHeight = 480;
-        image0 = boost::static_pointer_cast<Image>(getChildByName("image0"));
-        image1 = boost::static_pointer_cast<Image>(getChildByName("image1"));
-        image2 = boost::static_pointer_cast<Image>(getChildByName("image2"));
+        _imageTransform0 = boost::static_pointer_cast<Transform>(getChildByName("image_0_transform"));
+        _imageTransform1 = boost::static_pointer_cast<Transform>(getChildByName("image_1_transform"));
+        _imageTransform2 = boost::static_pointer_cast<Transform>(getChildByName("image_2_transform"));
+        _image0 = boost::static_pointer_cast<Image>(_imageTransform0->getChildByName("image"));
+        _image1 = boost::static_pointer_cast<Image>(_imageTransform1->getChildByName("image"));
+        _image2 = boost::static_pointer_cast<Image>(_imageTransform2->getChildByName("image"));
+            
         _myDescription = boost::static_pointer_cast<Text>(getChildByName("description"));
         _myDescription->setText("");
         
@@ -49,39 +53,35 @@ namespace acprojectview {
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
          _myNumberOfImages = _myContentImages.size();
          if (_myNumberOfImages < 1) {
-             image0->setVisible(false);
-             image1->setVisible(false);
-             image2->setVisible(false);
+             _imageTransform0->setVisible(false);
+             _imageTransform1->setVisible(false);
+             _imageTransform2->setVisible(false);
              return;
          }
-         image0->setVisible(true);
+         _imageTransform0->setVisible(true);
          DescriptionPtr txt = boost::static_pointer_cast<Description>(_myCurrentProject->getChildByName("description"));
          if (txt == 0) {
              _myDescription->setText("");
          } else {
              _myDescription->setText(txt->getText());
          }
-         //AC_PRINT << "__sadf_______________________" << _myDescription->getTextSize()[1];
-         image0->setX(0);
-         image1->setX(_myWidth);
-         image2->setX(-_myWidth);
+         _imageTransform0->setX(0);
+         _imageTransform1->setX(_myWidth);
+         _imageTransform2->setX(-_myWidth);
          _myCurrentImage = 0;
          _myDisplayedImage = 0;
          
-         image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());
-        AC_PRINT << "ProjectViewerImpl::showProject start";
+         _image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());
             
-         autoScaleImage(image0);
-            AC_PRINT << "ProjectViewerImpl::showProject end";
+         autoScaleImage(_image0);
          
-         image0->setVisible(true);
-         image1->setVisible(false);
-         image2->setVisible(false);
+         _imageTransform0->setVisible(true);
+         _imageTransform1->setVisible(false);
+         _imageTransform2->setVisible(false);
          setVisible(false);
     }
     
     void ProjectViewerImpl::autoScaleImage(ImagePtr theImage) {
-        AC_PRINT << "ProjectViewerImpl::autoScaleImage";
         int myImageWidth = theImage->getTextureSize()[0];
         int myImageHeight = theImage->getTextureSize()[1];
         float myImageRatio = float(myImageWidth)/myImageHeight;
@@ -90,52 +90,51 @@ namespace acprojectview {
         int myWindowHeight = _myWindowPtr->getSize()[1];
         float myWindowRatio = float(myWindowWidth)/myWindowHeight;
         
-        AC_PRINT << "image : " << theImage->getName() << " size: " << myImageWidth << "/" << myImageHeight << " ratio: " << myImageRatio;
-        AC_PRINT << "window : " << _myWindowPtr->getName() << " size: " << myWindowWidth << "/" << myWindowHeight << " ratio: " << myWindowRatio;
-
         int myNewWidth = 0;
         int myNewHeight = 0;
         if (myImageRatio == myWindowRatio) {
             myNewWidth = myWindowWidth;
             myNewHeight = myWindowHeight;
         } else {
-            float myWidthScale = float(myImageWidth) / myWindowWidth;
-            float myHeightScale = float(myImageWidth) / myWindowWidth;
+            myNewWidth = myWindowWidth;
+            myNewHeight = myNewWidth / myImageRatio;
+            
+            float myWidthScale = float(myWindowWidth) / myNewWidth;
+            float myHeightScale = float(myWindowHeight) / myNewHeight;
+
             if (myWidthScale > myHeightScale) {
-                // with adapting width we get a bigger size    
-                myNewWidth = myWidthScale * myWindowWidth;   
-                myNewHeight = myNewWidth / myImageRatio;
+                myNewWidth *= myHeightScale;
+                myNewHeight *= myHeightScale;
             } else {
-                myNewHeight = myHeightScale * myWindowHeight;
-                myNewWidth = myNewHeight / myImageRatio;
-            }
+                myNewWidth *= myWidthScale;
+                myNewHeight *= myWidthScale;                
+            }                                        
         }
         theImage->setScaleX(float(myNewWidth)/myImageWidth);
         theImage->setScaleY(float(myNewHeight)/myImageHeight);
-        AC_PRINT << "image will be scaled to  : " << myNewWidth << "/" << myNewHeight;
+        theImage->setX(float(myWindowWidth - myNewWidth) / 2.0);
+        theImage->setY(float(myWindowHeight - myNewHeight) / 2.0);
     }
     
     void ProjectViewerImpl::initiateClose() {
-        image0->setVisible(false);
-        image1->setVisible(false);
-        image2->setVisible(false);
+        _imageTransform0->setVisible(false);
+        _imageTransform1->setVisible(false);
+        _imageTransform2->setVisible(false);
         if (_myCurrentImage == 0) {
-            image0->setVisible(true);
+            _imageTransform0->setVisible(true);
         } else if (_myCurrentImage == 1) {
-            image1->setVisible(true);
+            _imageTransform1->setVisible(true);
         } else if (_myCurrentImage == 2) {
-            image2->setVisible(true);
+            _imageTransform2->setVisible(true);
         }
     }
     void ProjectViewerImpl::loadInitialSet() {
          if (_myNumberOfImages > 0) {
-            AC_PRINT << "ProjectViewerImpl::loadInitialSet start";
-             image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[1%_myNumberOfImages])->getSrc());
-             autoScaleImage(image1);
+             _image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[1%_myNumberOfImages])->getSrc());
+             autoScaleImage(_image1);
 
-             image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[_myNumberOfImages-1])->getSrc());
-             autoScaleImage(image2);
-            AC_PRINT << "ProjectViewerImpl::loadInitialSet end";
+             _image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[_myNumberOfImages-1])->getSrc());
+             autoScaleImage(_image2);
         }        
     }
     
@@ -146,17 +145,17 @@ namespace acprojectview {
     void ProjectViewerImpl::changeImage(int dir) {
         if(_myIsAnimating) return;
         _myIsAnimating = true;      
-        image1->setVisible(true);
-        image2->setVisible(true);
+        _imageTransform1->setVisible(true);
+        _imageTransform2->setVisible(true);
         _myDirection =dir;
         WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(image0, &Widget::setX, image0->getX(), image0->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(_imageTransform0, &Widget::setX, _imageTransform0->getX(), _imageTransform0->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr changeAnimation1 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(image1, &Widget::setX, image1->getX(), image1->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(_imageTransform1, &Widget::setX, _imageTransform1->getX(), _imageTransform1->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr changeAnimation2 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(image2, &Widget::setX, image2->getX(), image2->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(_imageTransform2, &Widget::setX, _imageTransform2->getX(), _imageTransform2->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
@@ -178,30 +177,27 @@ namespace acprojectview {
     }
     
     void ProjectViewerImpl::onLoadNextImages() {
-            AC_PRINT << "ProjectViewerImpl::onLoadNextImages start";
-
         if ((_myCurrentImage-_myDirection+3)%3 == 0) {
-            image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
-            autoScaleImage(image0);
+            _image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
+            autoScaleImage(_image0);
         } else if ((_myCurrentImage-_myDirection+3)%3 == 1) {
-            image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
-            autoScaleImage(image1);
+            _image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
+            autoScaleImage(_image1);
         } else if ((_myCurrentImage-_myDirection+3)%3 == 2) {
-            image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
-            autoScaleImage(image2);
+            _image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
+            autoScaleImage(_image2);
         }
-            AC_PRINT << "ProjectViewerImpl::onLoadNextImages end";
         _myCurrentImage = (_myCurrentImage + _myDirection + _myNumberOfImages) % _myNumberOfImages;
         _myIsAnimating = false;            
         
     }
     void ProjectViewerImpl::onAnimationFinished() {
         if ((_myCurrentImage-_myDirection+3)%3 == 0) {
-            image0->setX((image0->getX() + _myWidth*_myDirection) * -1);
+            _imageTransform0->setX((_imageTransform0->getX() + _myWidth*_myDirection) * -1);
         } else if ((_myCurrentImage-_myDirection+3)%3 == 1) {
-            image1->setX((image1->getX() + _myWidth*_myDirection) * -1);
+            _imageTransform1->setX((_imageTransform1->getX() + _myWidth*_myDirection) * -1);
         } else if ((_myCurrentImage-_myDirection+3)%3 == 2) {
-            image2->setX((image2->getX() + _myWidth*_myDirection) * -1);
+            _imageTransform2->setX((_imageTransform2->getX() + _myWidth*_myDirection) * -1);
         }
     }
 
