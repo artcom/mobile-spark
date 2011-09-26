@@ -18,6 +18,15 @@ extern "C"
 }
 #endif
 /////////////////////////////////////////////////////////////////////////JNI
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_loadLibrary(JNIEnv *env, jclass, jstring lib)
+{
+    const char * myLib = env->GetStringUTFChars(lib, NULL);
+    void* myModule = dlopen(myLib, RTLD_LAZY | RTLD_GLOBAL);
+    if (!myModule) {
+        AC_ERROR << "failed to load lib " << myLib;
+    }
+    env->ReleaseStringUTFChars(lib, myLib);
+}
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_putEnv(JNIEnv *env, jclass, jstring envVar)
 {
     const char * myEnvVar = env->GetStringUTFChars(envVar, NULL);

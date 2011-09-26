@@ -103,7 +103,6 @@ int32_t linux_gcc_demangler(const char *mangled_name, std::string & unmangled_na
 	int status = 0;
 	char *demangled = abi::__cxa_demangle(mangled_name, 0, &out_len, &status);
 	if (status == 0) {
-    AC_PRINT << "demangled " << demangled << "-.--" << out_len;
 		// OK
 		if (out_len < buffersize) {
             unmangled_name = demangled;
