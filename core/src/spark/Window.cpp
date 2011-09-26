@@ -28,6 +28,7 @@ namespace spark {
         _myWidth = _myXMLNode->getAttributeAs<float>("width",100);
         _myHeight = _myXMLNode->getAttributeAs<float>("height",100);
         _myOrientation = _myXMLNode->getAttributeAs<string>("orientation","");
+        MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
     }
 
     Window::~Window() {

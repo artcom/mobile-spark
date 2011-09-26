@@ -50,4 +50,9 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onEvent(JNIEnv 
     env->ReleaseStringUTFChars(evt, myEvent);
 }
 
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_handleEvents(JNIEnv * env, jobject obj, jstring evt) {
+    CALL_NATIVE(spark::AppProvider::get().getApp()->handleEvents());    
+}
+
+
 #endif
