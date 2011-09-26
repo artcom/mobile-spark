@@ -6,10 +6,15 @@ extern "C" {
 #include <libpng/png.h>
 }
 
+#include <masl/Exception.h>
+
 #include "openGL_functions.h"
 #include "Material.h"
 
 namespace mar {
+
+    DEFINE_EXCEPTION(PngLoadingException, masl::Exception)
+
     struct pngData {
         std::string filename;
         png_structp png_ptr;

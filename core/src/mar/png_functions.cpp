@@ -30,6 +30,7 @@ initFileReading(pngData & thePngData) {
     AC_DEBUG << "--init file reading for " << thePngData.filename;
     if ((file = fopen(thePngData.filename.c_str(), "rb")) == NULL) {
         AC_ERROR << " Error opening file " << thePngData.filename;
+        throw PngLoadingException("Error opening file " +thePngData.filename, PLUS_FILE_LINE);
         return false;
     }
     return true;
@@ -73,6 +74,7 @@ loadTextureFromPNGSkeleton(const std::string & filename, GLuint & outTextureId,
     if (!thePngData.png_ptr) {
         close();
         AC_ERROR << "Unable to create png struct : " << thePngData.filename;
+        throw PngLoadingException("unable to create png struct " +thePngData.filename, PLUS_FILE_LINE);
         return false;
     }
 
@@ -82,12 +84,14 @@ loadTextureFromPNGSkeleton(const std::string & filename, GLuint & outTextureId,
         close();
         png_destroy_read_struct(&thePngData.png_ptr, NULL, NULL);
         AC_ERROR << "Unable to create png info : " << thePngData.filename;
+        throw PngLoadingException("Unable to create png info " +thePngData.filename, PLUS_FILE_LINE);
         return false;
     }
     thePngData.end_info = png_create_info_struct(thePngData.png_ptr);
     if (!thePngData.end_info) {
       close();
       png_destroy_read_struct(&thePngData.png_ptr, &thePngData.info_ptr, NULL);
+        throw PngLoadingException("Unable to create png end info " +thePngData.filename, PLUS_FILE_LINE);
       AC_ERROR << "Unable to create png end info : " << thePngData.filename;
       return false;
     }
@@ -96,6 +100,7 @@ loadTextureFromPNGSkeleton(const std::string & filename, GLuint & outTextureId,
     if (setjmp(png_jmpbuf(thePngData.png_ptr))) {
         close();
         png_destroy_read_struct(&thePngData.png_ptr, &thePngData.info_ptr, &thePngData.end_info);
+        throw PngLoadingException("Error during setjmp " +thePngData.filename, PLUS_FILE_LINE);
         AC_ERROR << "Error during setjmp : " << thePngData.filename;
         return false;
     }
@@ -111,11 +116,12 @@ loadTextureFromPNGSkeleton(const std::string & filename, GLuint & outTextureId,
     thePngData.row_bytes = png_get_rowbytes(thePngData.png_ptr, thePngData.info_ptr);
     thePngData.image_data = new GLubyte[thePngData.row_bytes * thePngData.theight];
     if (!thePngData.image_data) {
-      //clean up memory and close stuff
-      png_destroy_read_struct(&thePngData.png_ptr, &thePngData.info_ptr, &thePngData.end_info);
-      AC_ERROR << "Unable to allocate image_data while loading " << thePngData.filename;
-      close();
-      return false;
+        //clean up memory and close stuff
+        png_destroy_read_struct(&thePngData.png_ptr, &thePngData.info_ptr, &thePngData.end_info);
+        close();
+        AC_ERROR << "Unable to allocate image_data while loading " << thePngData.filename;
+        throw PngLoadingException("Unable to allocate image_data while loading " +thePngData.filename, PLUS_FILE_LINE);
+        return false;
     }
 
     if (!postPNGReading(thePngData)) {
