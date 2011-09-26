@@ -16,10 +16,6 @@
 #include "Window.h"
 #include "EventFactory.h"
 
-//typedef boost::shared_mutex Lock;
-//typedef boost::unique_lock< boost::shared_mutex > WriteLock;
-//typedef boost::shared_lock< boost::shared_mutex >  ReadLock;
-
 
 namespace spark {
 
