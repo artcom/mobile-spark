@@ -12,6 +12,7 @@ namespace acprojectview {
     ProjectMenuItemImpl::~ProjectMenuItemImpl() {}
 
     void ProjectMenuItemImpl::realize() {
+        Transform::realize();
         std::string src = _myXMLNode->getAttributeAs<std::string>("src",""); 
         std::string title = _myXMLNode->getAttributeAs<std::string>("title",""); 
         std::string subtitle = _myXMLNode->getAttributeAs<std::string>("subtitle",""); 

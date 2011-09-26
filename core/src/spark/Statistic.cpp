@@ -1,6 +1,7 @@
 #include "Statistic.h"
-#include "BaseApp.h"
 
+#include "BaseApp.h"
+#include "Text.h"
 #include "SparkComponentFactory.h"
 
 namespace spark {
@@ -8,9 +9,9 @@ namespace spark {
     const char * const Statistic::SPARK_TYPE = "Statistic";
 
     Statistic::Statistic(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
-        Transform(theApp, theXMLNode) {
-
-    }
+        Transform(theApp, theXMLNode),
+        lasttime_(0)
+    {}
 
     Statistic::~Statistic() {
     }

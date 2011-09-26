@@ -47,7 +47,6 @@ namespace spark {
             myCurrent = myCurrent->getParent();
             myCaptureList.push_front(myCurrent);
         }
-
         // capture phase
         EventListenerKey myCaptureKey(theEvent->getType(), true);
         for (std::list<ComponentPtr>::const_iterator it = myCaptureList.begin(); it != myCaptureList.end(); ++it) {
