@@ -5,6 +5,8 @@
 
 namespace masl {
 
+    DEFINE_EXCEPTION(XMLParsingException, Exception)
+
     void printXMLNode(const xmlNode* theNode) {
         AC_PRINT << "print xml node " << theNode->name;
         const xmlNode *cur_node = NULL;
@@ -88,17 +90,15 @@ namespace masl {
         if (doc == NULL) {
             AC_ERROR << "Failed to parse XMLString";
             xmlErrorPtr myXMLError = xmlCtxtGetLastError(ctxt);
-            AC_PRINT << "XMLError message from libxml2: " << myXMLError->message;
             xmlFreeParserCtxt(ctxt);
-            throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE); 
+            throw XMLParsingException("Failed to parse XMLString: '" + std::string(myXMLError->message) + "'", PLUS_FILE_LINE); 
         } else {
         /* check if validation suceeded */
             if (ctxt->valid == 0) {  
                 AC_ERROR << "Failed to validate XMLString";
                 xmlErrorPtr myXMLError = xmlCtxtGetLastError(ctxt);
-                AC_PRINT << "XMLError message from libxml2: " << myXMLError->message;
                 xmlFreeParserCtxt(ctxt);
-                throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE); 
+                throw XMLParsingException("Failed to parse XMLString: '" + std::string(myXMLError->message) + "'", PLUS_FILE_LINE); 
             } else {
                 AC_DEBUG << "xml is valid";
             }
@@ -129,7 +129,7 @@ namespace masl {
         /* check if parsing suceeded */
         if (doc == NULL) {
             AC_ERROR << "Failed to parse XMLString (use loadXMLFromMemoryValidate to get more information)";
-            throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE);  //does not work, why?
+            throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE);
             return doc;
         }
 

@@ -10,6 +10,8 @@ using namespace masl;
 
 namespace spark {
 
+    DEFINE_EXCEPTION(EventDispatcherException, masl::Exception);
+
     EventDispatcher::EventDispatcher() {
     }
 
