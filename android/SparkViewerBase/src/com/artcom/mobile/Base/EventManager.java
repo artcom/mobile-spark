@@ -51,6 +51,8 @@ public class EventManager {
                         if (mode == 1) {
                             if (dx < -100f) swipeLeftHandler();
                             if (dx > 100f) swipeRightHandler();
+                            if (dy < -100f) swipeDownHandler();
+                            if (dy > 100f) swipeUpHandler();
                             break;
                         }
                     } else if (mode == 0) {
@@ -163,6 +165,18 @@ public class EventManager {
         private void swipeRightHandler() {
             AC_Log.print(" ########### swipe right");
             String myEvent = "<GestureEvent type='swipe-right' direction='right'/>";
+            NativeBinding.onEvent(myEvent);
+        }
+         //-------------------------------------------------------------------------
+        private void swipeUpHandler() {
+            AC_Log.print(" ########### swipe up");
+            String myEvent = "<GestureEvent type='swipe-up' direction='up'/>";
+            NativeBinding.onEvent(myEvent);
+        }
+        //-------------------------------------------------------------------------
+        private void swipeDownHandler() {
+            AC_Log.print(" ########### swipe down");
+            String myEvent = "<GestureEvent type='swipe-down' direction='down'/>";
             NativeBinding.onEvent(myEvent);
         }
 }

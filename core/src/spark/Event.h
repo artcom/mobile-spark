@@ -138,6 +138,8 @@ namespace spark {
             static const char * const ROTATE;
             static const char * const SWIPE_LEFT;
             static const char * const SWIPE_RIGHT;
+            static const char * const SWIPE_UP;            
+            static const char * const SWIPE_DOWN;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};
