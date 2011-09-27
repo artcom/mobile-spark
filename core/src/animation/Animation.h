@@ -13,11 +13,8 @@ namespace animation {
     typedef boost::function<float(float)> EasingFunctionPtr;
     inline float defaultEasing(float theValue) { return theValue; };
 
-
-
     class Animation;
     typedef masl::Ptr<Animation> AnimationPtr;
-    typedef masl::WeakPtr<Animation> AnimationWeakPtr;
     class Animation : public boost::enable_shared_from_this<Animation> {
     public:
         Animation(const masl::UInt64 theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
@@ -32,7 +29,6 @@ namespace animation {
         bool isFinished()  const { return _myFinished; };
 
         void setLoop(const bool theLoop) { _myLoop = theLoop; };
-        void setParent(AnimationWeakPtr theParent) { _myParent = theParent; };
         masl::UInt64 getDuration() const { return _myDuration;};
         unsigned int getId() const { return _myId; };
 
@@ -53,7 +49,6 @@ namespace animation {
         bool _myRunning;
         bool _myFinished;
         bool _myLoop;
-        AnimationWeakPtr _myParent;
 
         masl::CallbackPtr _myOnPlay;
         masl::CallbackPtr _myOnFinish;
