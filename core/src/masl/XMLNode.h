@@ -16,7 +16,7 @@
 
 namespace masl {
 
-    DEFINE_EXCEPTION(XMLNodeException, Exception);
+    DECLARE_EXCEPTION(XMLNodeException, Exception);
 
     class XMLNode;
     typedef Ptr<XMLNode> XMLNodePtr;

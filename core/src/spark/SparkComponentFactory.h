@@ -9,8 +9,8 @@
 
 namespace spark {
 
-    DEFINE_EXCEPTION(SparkComponentException, masl::Exception)
-    DEFINE_EXCEPTION(UnknownComponentException, SparkComponentException)
+    DECLARE_EXCEPTION(SparkComponentException, masl::Exception)
+    DECLARE_EXCEPTION(UnknownComponentException, SparkComponentException)
 
     template < typename T>
     ComponentPtr create(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode) {

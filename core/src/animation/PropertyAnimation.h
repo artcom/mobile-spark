@@ -10,7 +10,8 @@ namespace animation {
     template <class O, class T>
     class PropertyAnimation : public Animation {
     public:
-        PropertyAnimation(const O theObject, const T thePropertySetter, const float theStartValue = 0.0f, const float theEndValue = 1.0f, const masl::UInt64 theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
+        PropertyAnimation(const O theObject, const T thePropertySetter, const float theStartValue = 0.0f,
+                          const float theEndValue = 1.0f, const masl::UInt64 theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
         virtual ~PropertyAnimation();
         virtual void doFrame(const masl::UInt64 theTime);
 

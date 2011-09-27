@@ -2,6 +2,8 @@
 #include <masl/string_functions.h>
 namespace spark {
 
+    DEFINE_EXCEPTION(LanguageNotFoundException, masl::Exception)
+
     const size_t I18nConstants::NUM_LANGUAGES = 2;
     const char* I18nConstants::LANGUAGE_STRINGS[I18nConstants::NUM_LANGUAGES] = {"de", "en"};
 

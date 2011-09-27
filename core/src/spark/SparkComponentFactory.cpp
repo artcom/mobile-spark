@@ -11,6 +11,9 @@ using namespace mar;
 
 namespace spark {
 
+    DEFINE_EXCEPTION(SparkComponentException, masl::Exception)
+    DEFINE_EXCEPTION(UnknownComponentException, SparkComponentException)
+
     SparkComponentFactory::SparkComponentFactory() {
     }
     SparkComponentFactory::~SparkComponentFactory() {
