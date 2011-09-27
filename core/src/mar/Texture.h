@@ -1,7 +1,7 @@
 #ifndef _ac_mobile_mar_Texture_h_included_
 #define _ac_mobile_mar_Texture_h_included_
 
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <masl/Ptr.h>
 #include "openGL_functions.h"
 
 namespace mar {
@@ -18,7 +18,7 @@ namespace mar {
         private:
             GLuint textureId_;
     };
-    typedef boost::shared_ptr<Texture> TexturePtr;
+    typedef masl::Ptr<Texture> TexturePtr;
 
 };
 
