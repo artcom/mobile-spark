@@ -1,7 +1,6 @@
 #ifndef _ac_mobile_animation_Animation_h_included_
 #define _ac_mobile_animation_Animation_h_included_
 
-#include <boost/smart_ptr/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/function.hpp>
 
@@ -18,7 +17,7 @@ namespace animation {
 
     class Animation;
     typedef masl::Ptr<Animation> AnimationPtr;
-    typedef boost::weak_ptr<Animation> AnimationWeakPtr;
+    typedef masl::WeakPtr<Animation> AnimationWeakPtr;
     class Animation : public boost::enable_shared_from_this<Animation> {
     public:
         Animation(const masl::UInt64 theDuration = 1000, const EasingFunctionPtr theEasing = defaultEasing);
