@@ -1,8 +1,12 @@
 #ifndef _included_mobile_spark_I18nHandler_
 #define _included_mobile_spark_I18nHandler_
 
-#include <masl/XMLNode.h>
 #include "Event.h"
+
+namespace masl {
+    class XMLNode;
+    typedef masl::Ptr<XMLNode> XMLNodePtr;
+};
 
 namespace spark {
 
