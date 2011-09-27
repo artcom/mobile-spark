@@ -13,7 +13,7 @@ namespace animation {
         virtual void play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag = false);
     };
 
-    typedef boost::shared_ptr<ParallelAnimation> ParallelAnimationPtr;
+    typedef masl::Ptr<ParallelAnimation> ParallelAnimationPtr;
 };
 
 #endif
