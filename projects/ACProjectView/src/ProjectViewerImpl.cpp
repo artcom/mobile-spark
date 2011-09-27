@@ -26,7 +26,9 @@ namespace acprojectview {
         _image2 = boost::static_pointer_cast<Image>(_imageTransform2->getChildByName("image"));
         _myPopup = boost::static_pointer_cast<Rectangle>(getChildByName("popup"));
         _myDescription = boost::static_pointer_cast<Text>(_myPopup->getChildByName("description"));
-        _myDescription->setText("");        
+        _myPopUpTitle = boost::static_pointer_cast<Text>(_myPopup->getChildByName("title"));
+        _myDescription->setText("");   
+        _myPopUpTitle->setText("");   
     }
 
     ProjectViewerImpl::~ProjectViewerImpl() {}
@@ -35,20 +37,26 @@ namespace acprojectview {
     ProjectViewerImpl::realize() {
         Transform::realize();
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
-
         spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipe));
         getRoot()->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
         getRoot()->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
+
+        spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipePopup));
+        getRoot()->addEventListener(GestureEvent::SWIPE_UP, mySwipeUpDownCB);
+        getRoot()->addEventListener(GestureEvent::SWIPE_DOWN, mySwipeUpDownCB);
+            
         _myWindowPtr = boost::static_pointer_cast<Window>(getRoot());                
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
+        
+        _myDescription->setMaxWidth(_myWidth - (2*_myDescription->getX()));
+        _myPopUpTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         
         _myPopup->getShape()->setDimensions(_myWidth, 0);
             
     }
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
-        _myHiddenPopUpHeight = currentProject->getNode()->getAttributeAs<int>("hidden_popup_height",30);         
         _myIsAnimating = false;     
         _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
@@ -66,10 +74,15 @@ namespace acprojectview {
          } else {
              _myDescription->setText(txt->getText());
          }
+         
+         _myPopUpTitle->setText(currentProject->getNode()->getAttributeAs<std::string>("title",""));
+         int myHiddenPopUpHeight = std::max(30, int(_myPopUpTitle->getTextSize()[1]));
          int myTextHeight = _myDescription->getTextSize()[1];
-         AC_PRINT << "Description height : " << myTextHeight;
-         _myPopup->getShape()->setDimensions(_myWidth, _myHiddenPopUpHeight + myTextHeight);
+         _myPopup->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
+         
+         _myPopUpTitle->setY(myTextHeight);
          _myPopup->setY(-myTextHeight);
+         
          _imageTransform0->setX(0);
          _imageTransform1->setX(_myWidth);
          _imageTransform2->setX(-_myWidth);
@@ -143,6 +156,18 @@ namespace acprojectview {
         }        
     }
     
+    void ProjectViewerImpl::onSwipePopup(EventPtr theEvent) {
+        if (isRendered()) {
+            int myTextHeight = _myDescription->getTextSize()[1];            
+            if (theEvent->getType() == "swipe-up") {
+                _myPopup->setY(0);
+                _myPopup->setAlpha(0.9);
+            } else {
+                _myPopup->setY(-myTextHeight);
+                _myPopup->setAlpha(0.5);
+            }
+	    }
+    }
     void ProjectViewerImpl::onSwipe(EventPtr theEvent) {
         if (isRendered()) {
     	    changeImage(theEvent->getType() == "swipe-right" ? -1 :  +1);
