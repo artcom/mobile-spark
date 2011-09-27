@@ -140,7 +140,9 @@ namespace acprojectview {
     }
     
     void ProjectViewerImpl::onSwipe(EventPtr theEvent) {
-    	changeImage(theEvent->getType() == "swipe-right" ? -1 :  +1);
+        if (isRendered()) {
+    	    changeImage(theEvent->getType() == "swipe-right" ? -1 :  +1);
+	    }
     }
     
     void ProjectViewerImpl::changeImage(int dir) {

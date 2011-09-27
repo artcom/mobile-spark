@@ -42,12 +42,7 @@ namespace acprojectview {
 
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
-        ACProjectViewComponentMapInitializer::init();
-        std::string myOrientation;
-        //std::string mySparkFile = findBestMatchedLayout(myDefaultLayout, theScreenWidth, theScreenHeight, myOrientation);
-        //MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
-        //loadLayoutAndRegisterEvents(mySparkFile);
-        
+        ACProjectViewComponentMapInitializer::init();        
 
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
@@ -130,7 +125,6 @@ namespace acprojectview {
     
     void ACProjectView::onBack(EventPtr theEvent) {
         if (_myProjectMenu->isSensible()) return;
-        AC_PRINT<< "----------- BACK";
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
         projectViewAnimation(false);
         _myProjectMenu->setSensible(true);
@@ -146,6 +140,9 @@ namespace acprojectview {
     }    
     void ACProjectView::onFinishLoadProjectView() {        
         _myProjectViewer->loadInitialSet();
+    }
+    void ACProjectView::onFinishProjectView() {        
+        _myProjectViewer->setVisible(false);
     }
     
     
@@ -194,6 +191,9 @@ namespace acprojectview {
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
         } else {
             _myProjectViewer->initiateClose();
+            mySeqAnimation->setOnFinish(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
+
         }
         animation::AnimationManager::get().play(mySeqAnimation);
     }

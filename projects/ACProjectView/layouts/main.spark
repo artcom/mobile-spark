@@ -27,7 +27,7 @@
             <Image name="background" x="0" y="0" z="5" src="/startScreenBackground.png"/> 
         </Transform>        
         
-        <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
+        <ProjectMenu name="main" x-tiling="3" y-tiling="2" x-gap="20" y-gap="20" >
         
             
             <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" src="/belvedere_teaser_thumb_01.png">
