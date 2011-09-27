@@ -31,6 +31,8 @@ namespace spark {
     const char * const GestureEvent::ROTATE = "rotate";
     const char * const GestureEvent::SWIPE_LEFT = "swipe-left";
     const char * const GestureEvent::SWIPE_RIGHT = "swipe-right";
+    const char * const GestureEvent::SWIPE_UP = "swipe-up";
+    const char * const GestureEvent::SWIPE_DOWN = "swipe-down";
     const char * const SensorEvent::ACCELEROMETER = "ACCELEROMETER";
 	const char * const SensorEvent::GRAVITY = "GRAVITY";
 	const char * const SensorEvent::GYROSCOPE = "GYROSCOPE";
