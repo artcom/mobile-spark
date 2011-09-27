@@ -36,6 +36,6 @@ namespace spark {
         static const char * const AutoOrthonormalStr;
     };
 
-    typedef boost::shared_ptr<RenderCamera> RenderCameraPtr;
+    typedef masl::Ptr<RenderCamera> RenderCameraPtr;
 };
 #endif
