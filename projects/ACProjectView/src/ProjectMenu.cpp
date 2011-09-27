@@ -57,12 +57,16 @@ namespace acprojectview {
             myProject->setY(_myGapY/2 + dy * (i % _myVerticalTiling));
             // scale preview image:
             ImagePtr image = boost::static_pointer_cast<spark::Image>(myProject->getChildByName("image"));
-            int textHeight = boost::static_pointer_cast<spark::Image>(myProject->getChildByName("title"))->getX();
+            int textHeight = boost::static_pointer_cast<spark::Image>(myProject->getChildByName("title"))->getY();
+            int textSpace = textHeight*2;
             float scaleX = iconWidth / (image->getTextureSize()[0]);
-            float scaleY = iconHeight / (image->getTextureSize()[1] + textHeight*2);
+            float scaleY = (iconHeight - textSpace) / (image->getTextureSize()[1]);
             float scale = std::min(scaleX, scaleY);
             image->setScaleX(scale);
             image->setScaleY(scale);
+            // center image: 
+            image->setX(image->getX() + (iconWidth - scale * image->getTextureSize()[0])/2.0);
+            image->setY(image->getY() + (iconHeight - textSpace - scale * image->getTextureSize()[1])/2.0);
         }
     }
     
@@ -91,7 +95,7 @@ namespace acprojectview {
     void 
     ProjectMenu::changeSlide(int dir) {
         ProjectMenuPtr myPtr = boost::static_pointer_cast<ProjectMenu>(shared_from_this());
-        if(_myIsAnimating || _myCurrentSlide+dir < 0 || _myCurrentSlide+dir > _myNumberOfSlides) return;
+        if(_myIsAnimating || _myCurrentSlide+dir < 0 || _myCurrentSlide+dir >= _myNumberOfSlides) return;
         _myIsAnimating = true;      
         _myCurrentSlide += dir;
         WidgetPropertyAnimationPtr changeAnimation = WidgetPropertyAnimationPtr(
