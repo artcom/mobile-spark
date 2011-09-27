@@ -12,7 +12,7 @@
 #include <masl/signal_functions.h>
 #include <masl/string_functions.h>
 #include <masl/Exception.h>
-#include <masl/Auto.h>
+#include <masl/AutoLocker.h>
 #include <masl/CallStack.h>
 
 #include <mar/AssetProvider.h>
