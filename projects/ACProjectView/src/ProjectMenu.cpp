@@ -7,7 +7,6 @@
 #include "spark/Image.h"
 #include "ProjectMenu.h"
 
-#include "ProjectImpl.h"
 
 
 
@@ -21,6 +20,7 @@ namespace acprojectview {
         _myVerticalTiling = theXMLNode->getAttributeAs<int>("y-tiling",0); 
         _myGapX = theXMLNode->getAttributeAs<int>("x-gap",0); 
         _myGapY = theXMLNode->getAttributeAs<int>("y-gap",0);
+        _myCurrentSlide = 0;
     }
     
     void
@@ -38,10 +38,9 @@ namespace acprojectview {
 
     void
     ProjectMenu::arrangeProjects() {
-        _myIsAnimating = false;      
+        _myIsAnimating = false; 
         ProjectMenuPtr myPtr = boost::static_pointer_cast<ProjectMenu>(shared_from_this());
-        _myCurrentSlide = 0;
-        myPtr->setX(0);
+        //myPtr->setX(0);
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
         int dx = _myWidth / _myHorizontalTiling;
@@ -52,17 +51,30 @@ namespace acprojectview {
         _myNumberOfSlides = myChildren.size()/(_myHorizontalTiling * _myVerticalTiling);
         for (size_t i = 0; i < myChildren.size(); i++) {
             ProjectImplPtr myProject = boost::static_pointer_cast<ProjectImpl>(myChildren[i]);
+            ImagePtr image = boost::static_pointer_cast<spark::Image>(myProject->getChildByName("image"));
+            TextPtr titlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("title"));
+            TextPtr subtitlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("title"));
+            // update text sizes:
+            titlePtr->setMaxWidth(iconWidth);
+            subtitlePtr->setMaxWidth(iconWidth);
+            titlePtr->realize();
+            subtitlePtr->realize();
+ // hier evtl tauschen
+ //  int textSpace = titlePtr->getTextSize()[1] + subtitlePtr->getTextSize()[1];
+ int textSpace = 40;
             // set Position:
             myProject->setX(_myGapX/2 + dx * (i/_myVerticalTiling)); 
             myProject->setY(_myGapY/2 + dy * (i % _myVerticalTiling));
             // scale preview image:
-            ImagePtr image = boost::static_pointer_cast<spark::Image>(myProject->getChildByName("image"));
-            int textHeight = boost::static_pointer_cast<spark::Image>(myProject->getChildByName("title"))->getX();
+            
             float scaleX = iconWidth / (image->getTextureSize()[0]);
-            float scaleY = iconHeight / (image->getTextureSize()[1] + textHeight*2);
+            float scaleY = (iconHeight - textSpace) / (image->getTextureSize()[1]);
             float scale = std::min(scaleX, scaleY);
             image->setScaleX(scale);
             image->setScaleY(scale);
+            // center image: 
+            image->setX(image->getX() + (iconWidth - scale * image->getTextureSize()[0])/2.0);
+            image->setY(image->getY() + (iconHeight - textSpace - scale * image->getTextureSize()[1])/2.0);
         }
     }
     
@@ -91,7 +103,7 @@ namespace acprojectview {
     void 
     ProjectMenu::changeSlide(int dir) {
         ProjectMenuPtr myPtr = boost::static_pointer_cast<ProjectMenu>(shared_from_this());
-        if(_myIsAnimating || _myCurrentSlide+dir < 0 || _myCurrentSlide+dir > _myNumberOfSlides) return;
+        if(_myIsAnimating || _myCurrentSlide+dir < 0 || _myCurrentSlide+dir >= _myNumberOfSlides) return;
         _myIsAnimating = true;      
         _myCurrentSlide += dir;
         WidgetPropertyAnimationPtr changeAnimation = WidgetPropertyAnimationPtr(
@@ -112,6 +124,13 @@ namespace acprojectview {
     
     void ProjectMenu::onDelayFinished() {        
         _myIsAnimating = false;
+    }
+    
+    
+    void ProjectMenu::updateText(ProjectImplPtr theProject) {
+        int textHeight = boost::static_pointer_cast<spark::Text>(theProject->getChildByName("title"))->getTextSize()[1];
+            
+        AC_PRINT << "############# textSize " << textHeight;
     }
 
     
