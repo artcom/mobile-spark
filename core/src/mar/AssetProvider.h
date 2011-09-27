@@ -2,9 +2,9 @@
 #define _ac_mobile_masl_AssetProvider_h_included_
 
 #include <vector>
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/Singleton.h>
 #include <masl/Logger.h>
+#include <masl/Ptr.h>
 
 #include "GlHeaders.h"
 
@@ -21,7 +21,7 @@ namespace mar {
     protected:
         std::vector<std::string> includePaths_;
     };
-    typedef boost::shared_ptr<AssetProvider> AssetProviderPtr;
+    typedef masl::Ptr<AssetProvider> AssetProviderPtr;
 
 
     class AssetProviderSingleton : public masl::Singleton<AssetProviderSingleton> {

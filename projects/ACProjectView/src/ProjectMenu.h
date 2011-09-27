@@ -41,7 +41,7 @@ namespace acprojectview {
            
             
     };
-    typedef boost::shared_ptr<ProjectMenu> ProjectMenuPtr;
+    typedef masl::Ptr<ProjectMenu> ProjectMenuPtr;
     typedef spark::MemberFunctionEventCallback<ProjectMenu, ProjectMenuPtr>ProjectMenuEventCB;
 
 };

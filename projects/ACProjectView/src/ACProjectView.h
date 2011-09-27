@@ -33,6 +33,8 @@ namespace acprojectview {
             void onInitiateProjectView();
             void onFinishLoadProjectView();
             void projectViewAnimation(bool showProject);
+            void onStartIdleFade();
+            void onFinishIdleFade();            
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 
             ProjectMenuPtr _myProjectMenu;
@@ -45,7 +47,7 @@ namespace acprojectview {
             const static unsigned int _myAnimationTime = 400;
     };
 
-    typedef boost::shared_ptr<ACProjectView> ACProjectViewPtr;
+    typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
     typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr> ACProjectViewEventCB;
 };
 

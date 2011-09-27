@@ -6,7 +6,7 @@
 namespace spark {
 
     class Text;
-    typedef boost::shared_ptr<Text> TextPtr;
+    typedef masl::Ptr<Text> TextPtr;
         
     class Statistic : public Transform {
     public:
@@ -23,7 +23,7 @@ namespace spark {
         TextPtr _myFPSText;
     };
 
-    typedef boost::shared_ptr<Statistic> StatisticPtr;
+    typedef masl::Ptr<Statistic> StatisticPtr;
     typedef MemberFunctionEventCallback<Statistic, StatisticPtr> StatisticCB;
 
 };

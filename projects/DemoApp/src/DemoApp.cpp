@@ -1,6 +1,5 @@
 #include "DemoApp.h"
 
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <cstdlib>
 
 #include <masl/Logger.h>
@@ -31,7 +30,7 @@ using namespace masl;
 #ifdef __ANDROID__
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
-    spark::AppProvider::get().setApp(boost::shared_ptr<demoapp::DemoApp>(new demoapp::DemoApp()));
+    spark::AppProvider::get().setApp(masl::Ptr<demoapp::DemoApp>(new demoapp::DemoApp()));
     return JNI_VERSION_1_6;
 }
 #endif

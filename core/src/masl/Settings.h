@@ -1,5 +1,5 @@
-#ifndef _ac_mobile_asl_Settings_h_included_
-#define _ac_mobile_asl_Settings_h_included_
+#ifndef _included_mobile_masl_Settings_
+#define _included_mobile_masl_Settings_
 
 #if __APPLE__
     #include "TargetConditionals.h"
@@ -14,6 +14,7 @@
     #endif
 
 #endif
+
 
 namespace masl {
     typedef unsigned long long UInt64;

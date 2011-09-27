@@ -24,7 +24,7 @@ namespace spark {
         private:
             mar::ShapePtr _myShape;
     };
-    typedef boost::shared_ptr<ShapeWidget> ShapeWidgetPtr;
+    typedef masl::Ptr<ShapeWidget> ShapeWidgetPtr;
 };
 
 #endif

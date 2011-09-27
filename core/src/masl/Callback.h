@@ -1,8 +1,8 @@
 #ifndef _ac_mobile_masl_Callback_h_included_
 #define _ac_mobile_masl_Callback_h_included_
 
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/Logger.h>
+#include <masl/Ptr.h>
 
 namespace masl {
     class Callback {
@@ -12,7 +12,7 @@ namespace masl {
         virtual void operator() () {execute();};
     };
 
-    typedef boost::shared_ptr<Callback> CallbackPtr;
+    typedef masl::Ptr<Callback> CallbackPtr;
 
 
     typedef void (*FreeFunctionPtr)();
@@ -31,7 +31,7 @@ namespace masl {
     private:
         FreeFunctionPtr _myFunctionPointer;
     };
-    typedef boost::shared_ptr<FreeFunctionCallback> FreeFunctionCallbackPtr;
+    typedef masl::Ptr<FreeFunctionCallback> FreeFunctionCallbackPtr;
 
     template < typename T, typename TP>
     class MemberFunctionCallback : public Callback {
