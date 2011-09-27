@@ -41,16 +41,16 @@ namespace acprojectview {
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
 
         spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipe));
-        
         getRoot()->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
         getRoot()->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
+
 
         _myWindowPtr = boost::static_pointer_cast<Window>(getRoot());                
     }
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
-         _myIsAnimating = false;            
-         _myCurrentProject = currentProject;
+        _myIsAnimating = false;     
+        _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
          _myNumberOfImages = _myContentImages.size();
          if (_myNumberOfImages < 1) {
