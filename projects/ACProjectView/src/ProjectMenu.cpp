@@ -59,9 +59,7 @@ namespace acprojectview {
             subtitlePtr->setMaxWidth(iconWidth);
             titlePtr->realize();
             subtitlePtr->realize();
- // hier evtl tauschen
- //  int textSpace = titlePtr->getTextSize()[1] + subtitlePtr->getTextSize()[1];
- int textSpace = 40;
+            int textSpace = titlePtr->getTextSize()[1] + subtitlePtr->getTextSize()[1];
             // set Position:
             myProject->setX(_myGapX/2 + dx * (i/_myVerticalTiling)); 
             myProject->setY(_myGapY/2 + dy * (i % _myVerticalTiling));
