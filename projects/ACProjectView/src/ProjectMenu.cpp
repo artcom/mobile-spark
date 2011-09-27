@@ -55,8 +55,8 @@ namespace acprojectview {
             TextPtr titlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("title"));
             TextPtr subtitlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("subtitle"));
             // update text sizes:
-            titlePtr->setMaxWidth(100);//iconWidth-titlePtr->getX()*2);
-            subtitlePtr->setMaxWidth(100);//iconWidth-subtitlePtr->getX()*2);
+            titlePtr->setMaxWidth(iconWidth-titlePtr->getX()*2);
+            subtitlePtr->setMaxWidth(iconWidth-subtitlePtr->getX()*2);
             titlePtr->setY(subtitlePtr->getTextSize()[1]);
             titlePtr->realize();
             subtitlePtr->realize();
@@ -122,13 +122,6 @@ namespace acprojectview {
     
     void ProjectMenu::onDelayFinished() {        
         _myIsAnimating = false;
-    }
-    
-    
-    void ProjectMenu::updateText(ProjectImplPtr theProject) {
-        int textHeight = boost::static_pointer_cast<spark::Text>(theProject->getChildByName("title"))->getTextSize()[1];
-            
-        //AC_PRINT << "############# textSize " << textHeight;
     }
 
     
