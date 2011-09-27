@@ -9,7 +9,7 @@
 namespace spark {
 
     class BaseApp;
-    typedef boost::shared_ptr<BaseApp> BaseAppPtr;
+    typedef masl::Ptr<BaseApp> BaseAppPtr;
 
     ///////////////////////////////////////////////////////I18nContext
     class I18nContext : public Container {
@@ -33,7 +33,7 @@ namespace spark {
         LANGUAGE  defaultLanguage_;
         bool needsUpdate_;
     };
-    typedef boost::shared_ptr<I18nContext> I18nContextPtr;
+    typedef masl::Ptr<I18nContext> I18nContextPtr;
 
     ///////////////////////////////////////////////////////I18nItem
     class I18nItem : public Component {
@@ -48,7 +48,7 @@ namespace spark {
         LANGUAGE  language_;
         std::map<LANGUAGE, std::string> languageData_;  //maps language key to language specific string
     };
-    typedef boost::shared_ptr<I18nItem> I18nItemPtr;
+    typedef masl::Ptr<I18nItem> I18nItemPtr;
     DEFINE_EXCEPTION(I18nItemNotFoundException, masl::Exception);
 };
 #endif 

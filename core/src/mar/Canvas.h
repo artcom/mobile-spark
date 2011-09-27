@@ -2,9 +2,9 @@
 #define _ac_mobile_mar_Canvas_h_included_
 
 #include "GlHeaders.h"
-#include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <masl/numeric_functions.h>
+#include <masl/Ptr.h>
 
 
 namespace mar {
@@ -18,7 +18,7 @@ namespace mar {
         private:
     };
 
-    typedef boost::shared_ptr<Canvas> CanvasPtr;
+    typedef masl::Ptr<Canvas> CanvasPtr;
 };
 
 #endif

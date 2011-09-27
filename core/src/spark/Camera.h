@@ -22,7 +22,7 @@ namespace spark {
         bool _myPortraitMode;
     };
 
-    typedef boost::shared_ptr<Camera> CameraPtr;
+    typedef masl::Ptr<Camera> CameraPtr;
     typedef MemberFunctionEventCallback<Camera, CameraPtr> CameraCB;
 
 };

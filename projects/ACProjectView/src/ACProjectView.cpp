@@ -1,8 +1,6 @@
 #include "ACProjectView.h"
 #include <cstdlib>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 
@@ -27,7 +25,7 @@ using namespace masl;
 #ifdef __ANDROID__
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
-    spark::AppProvider::get().setApp(boost::shared_ptr<acprojectview::ACProjectView>(new acprojectview::ACProjectView()));
+    spark::AppProvider::get().setApp(masl::Ptr<acprojectview::ACProjectView>(new acprojectview::ACProjectView()));
     return JNI_VERSION_1_6;
 }
 #endif

@@ -15,9 +15,9 @@
 namespace spark {
 
     class I18nItem;
-    typedef boost::shared_ptr<I18nItem> I18nItemPtr;
+    typedef masl::Ptr<I18nItem> I18nItemPtr;
     class I18nContext;
-    typedef boost::shared_ptr<I18nContext> I18nContextPtr;
+    typedef masl::Ptr<I18nContext> I18nContextPtr;
 
     class Widget : public Container {
     friend class I18nHandler;
@@ -87,13 +87,13 @@ namespace spark {
 
     };
 
-    typedef boost::shared_ptr<Widget> WidgetPtr;
+    typedef masl::Ptr<Widget> WidgetPtr;
 
     //animations
     typedef void (Widget::* WidgetPropertySetterFunction)(float);
     typedef void (Widget::* WidgetMemberFunction)();
     typedef animation::PropertyAnimation<WidgetPtr, WidgetPropertySetterFunction> WidgetPropertyAnimation;
-    typedef boost::shared_ptr<WidgetPropertyAnimation>  WidgetPropertyAnimationPtr;
-    typedef boost::shared_ptr<masl::MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
+    typedef masl::Ptr<WidgetPropertyAnimation>  WidgetPropertyAnimationPtr;
+    typedef masl::Ptr<masl::MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
 };
 #endif

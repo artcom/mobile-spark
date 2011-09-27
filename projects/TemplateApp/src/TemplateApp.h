@@ -21,7 +21,7 @@ namespace templateapp {
         	
     };
 
-    typedef boost::shared_ptr<TemplateApp> TemplateAppPtr;
+    typedef masl::Ptr<TemplateApp> TemplateAppPtr;
     typedef spark::MemberFunctionEventCallback<TemplateApp, TemplateAppPtr> TemplateAppEventCB;
 
 };

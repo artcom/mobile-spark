@@ -17,6 +17,6 @@ namespace spark {
         std::string _mySrc;
     };
 
-    typedef boost::shared_ptr<Shape3D> Shape3DPtr;
+    typedef masl::Ptr<Shape3D> Shape3DPtr;
 };
 #endif
