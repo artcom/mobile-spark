@@ -6,7 +6,7 @@ if [ "$#" != "0" ]; then
 else
     echo "push core"
     cd ../../android
-    push.sh
+    ./push.sh
     cd -
 fi
 
