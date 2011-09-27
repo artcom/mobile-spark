@@ -2,11 +2,15 @@
 #define _included_mobile_spark_View_
 
 #include <mar/Viewport.h>
-#include <masl/XMLNode.h>
 #include <masl/MatrixStack.h>
 
 #include "Container.h"
 #include "RenderCamera.h"
+
+namespace masl {
+    class XMLNode;
+    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
+};
 
 namespace spark {
 
