@@ -26,7 +26,6 @@ namespace acprojectview {
             void onSwipeRightCB(spark::EventPtr theEvent);
             void changeSlide(int dir);
             void onDelayFinished();
-            void updateText(ProjectImplPtr theProject);
 
 
             spark::WindowPtr _myWindowPtr;

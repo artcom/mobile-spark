@@ -18,8 +18,6 @@ namespace acprojectview {
     
     ProjectViewerImpl::ProjectViewerImpl(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Transform(theApp, theXMLNode) {
-        std::string image = _myXMLNode->getAttributeAs<std::string>("im",""); 
-            
         _imageTransform0 = boost::static_pointer_cast<Transform>(getChildByName("image_0_transform"));
         _imageTransform1 = boost::static_pointer_cast<Transform>(getChildByName("image_1_transform"));
         _imageTransform2 = boost::static_pointer_cast<Transform>(getChildByName("image_2_transform"));
@@ -45,11 +43,12 @@ namespace acprojectview {
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
         
-        _myPopup->getShape()->setDimensions(_myWidth, 80);
+        _myPopup->getShape()->setDimensions(_myWidth, 0);
             
     }
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
+        _myHiddenPopUpHeight = currentProject->getNode()->getAttributeAs<int>("hidden_popup_height",30);         
         _myIsAnimating = false;     
         _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
@@ -69,8 +68,8 @@ namespace acprojectview {
          }
          int myTextHeight = _myDescription->getTextSize()[1];
          AC_PRINT << "Description height : " << myTextHeight;
-         _myPopup->getShape()->setDimensions(_myWidth, myTextHeight);
-         
+         _myPopup->getShape()->setDimensions(_myWidth, _myHiddenPopUpHeight + myTextHeight);
+         _myPopup->setY(-myTextHeight);
          _imageTransform0->setX(0);
          _imageTransform1->setX(_myWidth);
          _imageTransform2->setX(-_myWidth);

@@ -18,7 +18,7 @@
     <!--Image name="textBackground" src="/greyTransparency.png" x="100" y="0" z="1" scaleX="12" scaleY="2"/-->
     
     
-    <Image name="arrowRight" src="/arrow_right.png" x="740" y="30" z="1"/>
-    <Image name="arrowLeft" src="/arrow_left.png" x="10" y="30" z="1"/>
+    <!--Image name="arrowRight" src="/arrow_right.png" x="740" y="30" z="1"/>
+    <Image name="arrowLeft" src="/arrow_left.png" x="10" y="30" z="1"/-->
 
 </ProjectViewerImpl>
