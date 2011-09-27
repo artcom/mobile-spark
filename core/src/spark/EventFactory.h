@@ -1,7 +1,6 @@
 #ifndef _included_mobile_spark_EventFactory_
 #define _included_mobile_spark_EventFactory_
 
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/Singleton.h>
 #include <masl/Exception.h>
 

@@ -14,6 +14,6 @@ namespace spark {
         vector3 _myColor;
     };
 
-    typedef boost::shared_ptr<Rectangle> RectanglePtr;
+    typedef masl::Ptr<Rectangle> RectanglePtr;
 };
 #endif

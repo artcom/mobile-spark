@@ -2,6 +2,7 @@
 #define _included_mobile_android_MobileSDK_
 
 #include <masl/MobileSDK.h>
+#include <masl/Ptr.h>
 #include <jni.h>
 
 namespace android {
@@ -22,7 +23,7 @@ namespace android {
         jobject obj;
 
     };
-    typedef boost::shared_ptr<AndroidMobileSDK> AndroidMobileSDKPtr;
+    typedef masl::Ptr<AndroidMobileSDK> AndroidMobileSDKPtr;
 };
 
 #endif

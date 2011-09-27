@@ -1,18 +1,17 @@
 #ifndef _included_mobile_spark_I18nHandler_
 #define _included_mobile_spark_I18nHandler_
 
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include "Event.h"
 
 namespace masl {
     class XMLNode;
-    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
+    typedef masl::Ptr<XMLNode> XMLNodePtr;
 };
 
 namespace spark {
 
     class Widget;
-    typedef boost::shared_ptr<Widget> WidgetPtr;
+    typedef masl::Ptr<Widget> WidgetPtr;
     class I18nContext;
 
     class I18nHandler : public boost::enable_shared_from_this<I18nHandler> {
@@ -29,7 +28,7 @@ namespace spark {
         void attachToI18nItem();
         void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
     };
-    typedef boost::shared_ptr<I18nHandler> I18nHandlerPtr;
+    typedef masl::Ptr<I18nHandler> I18nHandlerPtr;
     typedef MemberFunctionEventCallback<I18nHandler, I18nHandlerPtr> I18nHandlerCB;
 };
 #endif

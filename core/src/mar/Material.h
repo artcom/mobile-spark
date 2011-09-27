@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <masl/Ptr.h>
 #include <masl/MatrixStack.h>
 
 #include "GlHeaders.h"
@@ -39,7 +39,7 @@ namespace mar {
         std::string _myVertexShader;
         float alpha_;
     };
-    typedef boost::shared_ptr<Material> MaterialPtr;
+    typedef masl::Ptr<Material> MaterialPtr;
 
     class UnlitColoredMaterial : public Material {
     public:
@@ -70,7 +70,7 @@ namespace mar {
         virtual void setShader();
         virtual void setHandles();
     };
-    typedef boost::shared_ptr<UnlitColoredMaterial> UnlitColoredMaterialPtr;
+    typedef masl::Ptr<UnlitColoredMaterial> UnlitColoredMaterialPtr;
 
     class UnlitTexturedMaterial : public Material {
     public:
@@ -85,7 +85,7 @@ namespace mar {
         std::string _mySrc;
 
     };
-    typedef boost::shared_ptr<UnlitTexturedMaterial> UnlitTexturedMaterialPtr;
+    typedef masl::Ptr<UnlitTexturedMaterial> UnlitTexturedMaterialPtr;
 };
 
 #endif

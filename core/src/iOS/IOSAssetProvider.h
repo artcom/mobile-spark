@@ -1,8 +1,8 @@
 #ifndef _included_mobile_ios_AssetProvider_
 #define _included_mobile_ios_AssetProvider_
 
+#include <masl/Ptr.h>
 #include <mar/AssetProvider.h>
-#include <boost/smart_ptr/shared_ptr.hpp>
 
 namespace ios {
 class IOSAssetProvider : public mar::AssetProvider {
@@ -16,7 +16,7 @@ public:
 private:
     const std::string _myAssetFolderPath;
 };
-typedef boost::shared_ptr<IOSAssetProvider> IOSAssetProviderPtr;
+typedef masl::Ptr<IOSAssetProvider> IOSAssetProviderPtr;
 };
 
 #endif
