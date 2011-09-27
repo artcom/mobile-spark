@@ -3,8 +3,7 @@
 
 #include <string>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-
+#include <masl/Ptr.h>
 #include <masl/XMLNode.h>
 #include <masl/MatrixStack.h>
 
@@ -13,7 +12,7 @@
 namespace spark {
 
     class Component;
-    typedef boost::shared_ptr<Component> ComponentPtr;
+    typedef masl::Ptr<Component> ComponentPtr;
     typedef std::vector<ComponentPtr> VectorOfComponentPtr;
 
     class Component : public EventDispatcher, public boost::enable_shared_from_this<Component> {
@@ -38,6 +37,7 @@ namespace spark {
         const VectorOfComponentPtr & getChildren() { return _myChildren; }; //XXX: should be in Container
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
         ComponentPtr getRoot();
+        const masl::XMLNodePtr getNode() { return _myXMLNode; }
         const ComponentPtr & getParent() const {return _myParent; };
         void setParent(ComponentPtr theParent) {_myParent = theParent;};
         virtual bool isRendered() const { return true;}

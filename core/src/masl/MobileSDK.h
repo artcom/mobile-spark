@@ -30,7 +30,7 @@ namespace masl {
 
     };
 
-    typedef boost::shared_ptr<MobileSDK> MobileSDKPtr;
+    typedef masl::Ptr<MobileSDK> MobileSDKPtr;
 
     class MobileSDK_Singleton : public Singleton<MobileSDK_Singleton> {
         public:

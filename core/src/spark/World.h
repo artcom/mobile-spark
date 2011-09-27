@@ -14,6 +14,6 @@ namespace spark {
     private:
     };
 
-    typedef boost::shared_ptr<World> WorldPtr;
+    typedef masl::Ptr<World> WorldPtr;
 };
 #endif

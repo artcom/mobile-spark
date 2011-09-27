@@ -8,12 +8,6 @@
 #include <list>
 #include <typeinfo>
 
-#include "Exception.h"
-#include "SingletonBase.h"
-#include <boost/smart_ptr/shared_ptr.hpp>
-#include <boost/pointer_cast.hpp>
-
-
 #ifdef __APPLE__
     //iOS
     #include <iostream>
@@ -22,6 +16,11 @@
     #include <android/log.h>
 #endif
 
+#include <boost/pointer_cast.hpp>
+
+#include "Ptr.h"
+#include "Exception.h"
+#include "SingletonBase.h"
 #include "string_functions.h"
 
 namespace masl {
@@ -75,7 +74,7 @@ public:
             return *( boost::dynamic_pointer_cast<T>(i->second));
         } else {
             SingletonBase * sb = new T();
-            boost::shared_ptr<SingletonBase> mySingletonPtr = boost::shared_ptr<SingletonBase>(sb);
+            masl::Ptr<SingletonBase> mySingletonPtr = masl::Ptr<SingletonBase>(sb);
             _mySingletonList.push_back(mySingletonPtr);
 
             _mySingletonMap.insert(std::make_pair(&typeid(T), mySingletonPtr));
@@ -100,8 +99,8 @@ private:
 
     SingletonManager *_myDelegate;
 
-    typedef std::map< const std::type_info *, boost::shared_ptr<SingletonBase>, LessTypeInfoPtr> SingletonMap;
-    typedef std::list< boost::shared_ptr<SingletonBase> > SingletonList;
+    typedef std::map< const std::type_info *, masl::Ptr<SingletonBase>, LessTypeInfoPtr> SingletonMap;
+    typedef std::list< masl::Ptr<SingletonBase> > SingletonList;
 
     mutable SingletonList _mySingletonList; // for keeping track of order of construction
     mutable SingletonMap _mySingletonMap;   // for fast lookup

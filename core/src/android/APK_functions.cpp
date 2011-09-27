@@ -6,6 +6,8 @@
 using namespace std;
 namespace android {
 
+    DEFINE_EXCEPTION(APKLoadingException, masl::Exception)
+
     void loadAPK (zip** theAPKArchive, const string & apkPath) {
         AC_PRINT << "Loading APK " << apkPath;
         *theAPKArchive = zip_open(apkPath.c_str(), 0, NULL);

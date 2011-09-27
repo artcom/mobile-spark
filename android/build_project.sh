@@ -43,7 +43,7 @@ then
     $MAKE_TOOL $NUMCORES
     BUILD_OK=$?
 
-    #copy demoapp.so to core _build
+    #copy projectname.so to core _build
     cd -
     cp _build/lib/armeabi-v7a/lib$PROJECT_NAME.so ../../_build/lib/armeabi-v7a/
 fi

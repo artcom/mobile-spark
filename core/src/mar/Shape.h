@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <string>
-#include <boost/smart_ptr/shared_ptr.hpp>
 
+#include <masl/Ptr.h>
 #include <masl/Singleton.h>
 #include <masl/MatrixStack.h>
 
@@ -48,7 +48,7 @@ namespace mar {
     private:
         Transparency::type _myTransparency;
     };
-    typedef boost::shared_ptr<Shape> ShapePtr;
+    typedef masl::Ptr<Shape> ShapePtr;
 
 
     class RectangleShape : public Shape {
@@ -90,7 +90,7 @@ namespace mar {
         virtual void setDimensions(const float theWidth, const float theHeight) {};
         void setBoundingBox(const vector4 theMin, const vector4 theMax);
     };
-    typedef boost::shared_ptr<ObjShape> ObjShapePtr;
+    typedef masl::Ptr<ObjShape> ObjShapePtr;
 
 
     class ShapeFactory : public masl::Singleton<ShapeFactory> {

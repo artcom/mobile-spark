@@ -24,7 +24,7 @@ namespace spark {
         I18nHandlerPtr i18nHandler_;
     };
 
-    typedef boost::shared_ptr<Image> ImagePtr;
+    typedef masl::Ptr<Image> ImagePtr;
     typedef MemberFunctionEventCallback<Image, ImagePtr> ImageCB;
 };
 #endif

@@ -8,7 +8,7 @@
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <masl/Ptr.h>
 #include <masl/string_functions.h>
 #include <masl/Exception.h>
 
@@ -16,10 +16,10 @@
 
 namespace masl {
 
-    DEFINE_EXCEPTION(XMLNodeException, Exception);
+    DECLARE_EXCEPTION(XMLNodeException, Exception);
 
     class XMLNode;
-    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
+    typedef Ptr<XMLNode> XMLNodePtr;
     class XMLNode {
         public:
             XMLNode(const std::string & theXMLString);

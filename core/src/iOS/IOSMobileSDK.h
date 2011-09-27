@@ -17,10 +17,9 @@ namespace ios {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
+    };
 
-    private:
-            };
-    typedef boost::shared_ptr<IOSMobileSDK> IOSMobileSDKPtr;
+    typedef masl::Ptr<IOSMobileSDK> IOSMobileSDKPtr;
 };
 
 #endif

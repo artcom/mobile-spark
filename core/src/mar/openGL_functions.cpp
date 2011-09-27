@@ -3,6 +3,9 @@
 #include <masl/Logger.h>
 
 namespace mar {
+
+    DEFINE_EXCEPTION(ShaderCreationException, masl::Exception)
+
     //////////////////////////////////////////logging
     void printGLString(const char *name, GLenum s) {
         const char *v = (const char *) glGetString(s);

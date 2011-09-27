@@ -1,7 +1,6 @@
 #ifndef _included_mobile_spark_EventFactory_
 #define _included_mobile_spark_EventFactory_
 
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/Singleton.h>
 #include <masl/Exception.h>
 
@@ -9,7 +8,7 @@
 
 namespace spark {
 
-    DEFINE_EXCEPTION(EventFactoryException, masl::Exception);
+    DECLARE_EXCEPTION(EventFactoryException, masl::Exception);
 
     class EventFactory : public masl::Singleton<EventFactory> {
     public:

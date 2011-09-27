@@ -10,7 +10,7 @@ namespace animation {
         virtual ~DelayAnimation();
     };
 
-    typedef boost::shared_ptr<DelayAnimation> DelayAnimationPtr;
+    typedef masl::Ptr<DelayAnimation> DelayAnimationPtr;
 };
 
 #endif

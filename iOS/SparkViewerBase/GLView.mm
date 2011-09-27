@@ -97,11 +97,6 @@
         myApp->realize();
         NSString *resizeEvent = [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%d,%d]' oldsize='[%d,%d]'/>", width, height, width, height];
         myApp->onEvent([resizeEvent UTF8String]); 
-
-        //Motion Events
-        UITapGestureRecognizer *singleFingerTap = 
-        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-        [self addGestureRecognizer:singleFingerTap];
        
         motionManager = [[CMMotionManager alloc] init];
         motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
@@ -159,7 +154,7 @@
 {
     if (!animating)
     {
-        //init Animation loop. fires at 60hz defeault, set frameInterval to 2 for 30hz
+        //init Animation loop. fires at 60hz default, set frameInterval to 2 for 30hz
         if (MSAAQuality > 0) {
             displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(renderWithMSAA:)];
         }

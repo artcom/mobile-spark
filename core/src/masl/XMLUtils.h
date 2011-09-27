@@ -1,5 +1,5 @@
-#ifndef _included_mobile_asl_xmlutils_
-#define _included_mobile_asl_xmlutils_
+#ifndef _included_mobile_masl_xmlutils_
+#define _included_mobile_masl_xmlutils_
 
 #include <string>
 
@@ -9,7 +9,7 @@
 #include "Exception.h"
 
 namespace masl {
-    DEFINE_EXCEPTION(XMLParsingException, Exception)
+    DECLARE_EXCEPTION(XMLParsingException, Exception)
 
     xmlDocPtr loadXML(const std::string & theFilename);
     xmlDocPtr loadXMLFromMemoryValidate(const std::string & theXMLString);
