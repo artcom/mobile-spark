@@ -14,7 +14,7 @@ namespace spark {
     private:
     };
 
-    typedef boost::shared_ptr<Transform> TransformPtr;
+    typedef masl::Ptr<Transform> TransformPtr;
 };
 
 #endif

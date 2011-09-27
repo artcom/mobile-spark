@@ -1,7 +1,6 @@
 #ifndef _ac_mobile_spark_Event_h_included_
 #define _ac_mobile_spark_Event_h_included_
 
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <masl/Settings.h>
 #include <masl/Callback.h>
@@ -10,7 +9,7 @@
 namespace spark {
 
     class Event;
-    typedef boost::shared_ptr<Event> EventPtr;
+    typedef masl::Ptr<Event> EventPtr;
     typedef std::vector<EventPtr> EventPtrList;
     
     template<typename T>
@@ -19,7 +18,7 @@ namespace spark {
     }
 
     class Component;
-    typedef boost::shared_ptr<Component> ComponentPtr;
+    typedef masl::Ptr<Component> ComponentPtr;
 
     class Event : public boost::enable_shared_from_this<Event> {
         public:
@@ -79,7 +78,7 @@ namespace spark {
             masl::UInt64 currenttime_;
     };
 
-    typedef boost::shared_ptr<StageEvent> StageEventPtr;
+    typedef masl::Ptr<StageEvent> StageEventPtr;
 
     class WindowEvent : public Event {
         public:
@@ -96,7 +95,7 @@ namespace spark {
             vector2 oldsize_;
     };
 
-    typedef boost::shared_ptr<WindowEvent> WindowEventPtr;
+    typedef masl::Ptr<WindowEvent> WindowEventPtr;
 
     class TouchEvent : public Event {
         public:
@@ -119,7 +118,7 @@ namespace spark {
             unsigned int y_;
     };
 
-    typedef boost::shared_ptr<TouchEvent> TouchEventPtr;
+    typedef masl::Ptr<TouchEvent> TouchEventPtr;
 
     class GestureEvent : public Event {
         public:
@@ -155,7 +154,7 @@ namespace spark {
 
     };
 
-    typedef boost::shared_ptr<GestureEvent> GestureEventPtr;
+    typedef masl::Ptr<GestureEvent> GestureEventPtr;
 
     class SensorEvent : public Event {
         public:
@@ -189,7 +188,7 @@ namespace spark {
 			float value2_;
     };
 
-    typedef boost::shared_ptr<SensorEvent> SensorEventPtr;
+    typedef masl::Ptr<SensorEvent> SensorEventPtr;
 
 
     class I18nEvent : public Event {
@@ -201,7 +200,7 @@ namespace spark {
             static const char * const ON_LANGUAGE_SWITCH;
             virtual const char * const &  classname_() const {return I18nEvent::CLASSNAME;};
     };
-    typedef boost::shared_ptr<I18nEvent> I18nEventPtr;
+    typedef masl::Ptr<I18nEvent> I18nEventPtr;
 
 
 
@@ -215,7 +214,7 @@ namespace spark {
         virtual void operator() (EventPtr theEvent) {execute(theEvent);};
     };
 
-    typedef boost::shared_ptr<EventCallback> EventCallbackPtr;
+    typedef masl::Ptr<EventCallback> EventCallbackPtr;
 
 
 
@@ -236,7 +235,7 @@ namespace spark {
     private:
         FreeFunctionEventPtr _myFunctionPointer;
     };
-    typedef boost::shared_ptr<FreeFunctionEventCallback> FreeFunctionEventCallbackPtr;
+    typedef masl::Ptr<FreeFunctionEventCallback> FreeFunctionEventCallbackPtr;
 
 
 

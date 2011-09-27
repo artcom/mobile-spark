@@ -31,6 +31,6 @@ namespace spark {
         std::string _myWorldName;
     };
 
-    typedef boost::shared_ptr<View> ViewPtr;
+    typedef masl::Ptr<View> ViewPtr;
 };
 #endif
