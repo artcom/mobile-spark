@@ -6,6 +6,8 @@
 #include <spark/Text.h>
 #include <spark/View.h>
 #include <spark/Container.h>
+#include <spark/Rectangle.h>
+
 #include <spark/SparkComponentFactory.h>
 
 #include "ProjectImpl.h"
