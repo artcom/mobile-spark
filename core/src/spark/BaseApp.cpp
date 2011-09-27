@@ -5,7 +5,6 @@
 
 #include <masl/Logger.h>
 #include <masl/BaseEntry.h>
-#include <masl/XMLNode.h>
 #include <masl/MobileSDK.h>
 #include <masl/XMLUtils.h>
 #include <masl/file_functions.h>
@@ -13,6 +12,7 @@
 #include <masl/string_functions.h>
 #include <masl/Exception.h>
 #include <masl/Auto.h>
+#include <masl/XMLNode.h>
 #include <masl/CallStack.h>
 
 #include <mar/AssetProvider.h>

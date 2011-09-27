@@ -34,7 +34,6 @@ public class NativeBinding {
       System.loadLibrary("mar");
       System.loadLibrary("android");
       System.loadLibrary("spark");
-
   }
 
   public static native void setup(long currentMillis, String apkFilePath, int theScreenWidth, int theScreenHeight);

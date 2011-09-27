@@ -10,6 +10,8 @@
 
 namespace animation {
 
+    DECLARE_EXCEPTION(AnimationException, masl::Exception);
+
     typedef boost::function<float(float)> EasingFunctionPtr;
     inline float defaultEasing(float theValue) { return theValue; };
 

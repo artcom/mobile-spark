@@ -8,7 +8,7 @@
 
 namespace spark {
 
-    DEFINE_EXCEPTION(EventFactoryException, masl::Exception);
+    DECLARE_EXCEPTION(EventFactoryException, masl::Exception);
 
     class EventFactory : public masl::Singleton<EventFactory> {
     public:

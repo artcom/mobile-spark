@@ -9,6 +9,8 @@ using namespace masl;
 
 namespace spark {
 
+    DEFINE_EXCEPTION(EventFactoryException, masl::Exception);
+
     //TODO: decentralize this again
     void EventFactory::setupFactory() {
         bool registered = registerEvent(StageEvent::CLASSNAME, spark::createEvent<StageEvent>);

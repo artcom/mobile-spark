@@ -19,7 +19,7 @@ namespace mar {
     const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "/default_textured_fragment.glsl";
     const unsigned int MAX_NUM_HANDLES = 23;
 
-    DEFINE_EXCEPTION(ProblemWithHandleException, masl::Exception)
+    DECLARE_EXCEPTION(ProblemWithHandleException, masl::Exception)
 
     class Material {
     public:

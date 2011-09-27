@@ -8,7 +8,14 @@
 using namespace std;
 
 namespace masl {
+    DEFINE_EXCEPTION(ParseException, Exception);
+    DEFINE_EXCEPTION(NotYetImplemented, Exception)
+    DEFINE_EXCEPTION(InputOutputFailure, Exception)
 
+    void
+    Exception::appendWhat(const std::string & whatelse) {
+        _what += "\n"+whatelse;
+    }
 
     Exception::Exception(const std::string & what, const std::string & where)
             : _what(what), _where(where), _name("Exception")
@@ -33,7 +40,8 @@ masl::compose_message(const Exception& ex) {
         string(": ") +
         string(ex.what().size() ? ex.what() : string("Unspecified reason")) +
         string(" ") +
-        string(ex.where().size() ? ex.where() : string("Unspecified origin"));
+        string(ex.where().size() ? ex.where() : string("Unspecified origin")) +
+        string("\n");
 
     myMsg += ex.stack().toString();
     return myMsg;
