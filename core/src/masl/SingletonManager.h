@@ -18,11 +18,9 @@
 
 #include <boost/pointer_cast.hpp>
 
-#include <masl/Ptr.h>
-
+#include "Ptr.h"
 #include "Exception.h"
 #include "SingletonBase.h"
-
 #include "string_functions.h"
 
 namespace masl {

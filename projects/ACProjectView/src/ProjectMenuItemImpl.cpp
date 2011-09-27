@@ -25,7 +25,7 @@ namespace acprojectview {
         }
          
         if (title.size() > 0) {
-           titleComponent_->setText(title);
+           titleComponent_->setText(title);           
         }
         if (subtitle.size() > 0) {
             subtitleComponent_->setText(subtitle);
