@@ -159,7 +159,7 @@
 {
     if (!animating)
     {
-        //init Animation loop. fires at 60hz defeault, set frameInterval to 2 for 30hz
+        //init Animation loop. fires at 60hz default, set frameInterval to 2 for 30hz
         if (MSAAQuality > 0) {
             displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(renderWithMSAA:)];
         }
