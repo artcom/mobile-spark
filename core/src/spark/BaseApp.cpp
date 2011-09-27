@@ -16,7 +16,6 @@
 #include <masl/CallStack.h>
 
 #include <mar/AssetProvider.h>
-#include <animation/Animation.h>
 #include <animation/AnimationManager.h>
 
 #ifdef __ANDROID__
@@ -29,7 +28,6 @@
 #endif
 
 #include "SparkComponentFactory.h"
-#include "Camera.h"
 #include "Window.h"
 #include "EventFactory.h"
 #include "Visitors.h"
@@ -37,14 +35,10 @@
 
 using namespace mar;
 using namespace masl;
-using namespace animation;
 
 namespace spark {
 
 
-//    Dummy::Dummy() {
-//        throw masl::Exception("asdasdasdasd", PLUS_FILE_LINE);
-//    }
     BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
         _myChooseLayoutFlag(false), _mySetupFlag(false), _mySparkRealizedFlag(false) {
         masl::initSignalHandling();
@@ -58,21 +52,6 @@ namespace spark {
     }
 
     void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
-        try{
-        XMLNode* myX = new XMLNode("asdasd");
-        } catch(const masl::Exception & ex) {
-            AC_PRINT<<"MASLMASL "<<ex;
-        } catch(...) {
-            AC_PRINT<<"UNKNOWN";
-        }
-        try{
-        Dummy* myDummy = new Dummy();
-        myDummy->ex();
-        } catch(const masl::Exception & ex) {
-            AC_PRINT<<"MASLMASL "<<ex;
-        } catch(...) {
-            AC_PRINT<<"UNKNOWN";
-        }
         _mySetupFlag = true;
         ComponentMapInitializer::init();
 

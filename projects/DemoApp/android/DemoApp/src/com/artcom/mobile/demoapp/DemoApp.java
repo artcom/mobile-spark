@@ -8,7 +8,6 @@ public class DemoApp extends SparkViewerActivity {
     static {
         NativeBinding.loadLibraries();
         System.loadLibrary("DemoApp"); 
-        NativeBinding.loadLibrary("libDemoApp.so"); 
     }
 
     @Override

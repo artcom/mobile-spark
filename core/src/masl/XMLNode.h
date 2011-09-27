@@ -15,12 +15,8 @@
 #include "numeric_functions.h"
 
 namespace masl {
-//    class Dummy {
-//        public:
-//        Dummy();// { throw masl::Exception("asdasdasdasd", PLUS_FILE_LINE); }
-//    };
 
-    DEFINE_EXCEPTION(XMLNodeException, Exception);
+    DECLARE_EXCEPTION(XMLNodeException, Exception);
 
     class XMLNode;
     typedef boost::shared_ptr<XMLNode> XMLNodePtr;

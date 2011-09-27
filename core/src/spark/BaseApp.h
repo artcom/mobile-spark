@@ -14,11 +14,6 @@
 
 namespace spark {
 
-//    class Dummy {
-//        public:
-//        Dummy();
-//    };
-
     class Window;
     typedef boost::shared_ptr<Window> WindowPtr;
 

@@ -8,7 +8,14 @@
 using namespace std;
 
 namespace masl {
+    DEFINE_EXCEPTION(ParseException, Exception);
+    DEFINE_EXCEPTION(NotYetImplemented, Exception)
+    DEFINE_EXCEPTION(InputOutputFailure, Exception)
 
+    void
+    Exception::appendWhat(const std::string & whatelse) {
+        _what += "\n"+whatelse;
+    }
 
     Exception::Exception(const std::string & what, const std::string & where)
             : _what(what), _where(where), _name("Exception")
