@@ -35,6 +35,8 @@ namespace acprojectview {
             void projectViewAnimation(bool showProject);
             void onStartIdleFade();
             void onFinishIdleFade();            
+            void onFinishProjectView();
+            
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 
             ProjectMenuPtr _myProjectMenu;
