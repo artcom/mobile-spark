@@ -8,7 +8,7 @@
 
 namespace spark {
     class BaseApp;
-    typedef boost::shared_ptr<BaseApp> BaseAppPtr;
+    typedef masl::Ptr<BaseApp> BaseAppPtr;
 
     class Container : public Component {
     public:
@@ -29,6 +29,6 @@ namespace spark {
 
     };
 
-    typedef boost::shared_ptr<Container> ContainerPtr;
+    typedef masl::Ptr<Container> ContainerPtr;
 };
 #endif

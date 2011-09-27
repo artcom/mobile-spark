@@ -9,7 +9,7 @@
 
 namespace masl {
     class XMLNode;
-    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
+    typedef masl::Ptr<XMLNode> XMLNodePtr;
 };
 
 namespace spark {
@@ -35,6 +35,6 @@ namespace spark {
         std::string _myWorldName;
     };
 
-    typedef boost::shared_ptr<View> ViewPtr;
+    typedef masl::Ptr<View> ViewPtr;
 };
 #endif
