@@ -1,5 +1,7 @@
 #include "I18nHandler.h"
 
+#include <masl/XMLNode.h>
+
 #include "I18nContext.h"
 #include "Widget.h"
 
