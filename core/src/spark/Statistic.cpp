@@ -1,5 +1,8 @@
 #include "Statistic.h"
 
+#include <masl/proc_functions.h>
+#include <masl/string_functions.h>
+
 #include "BaseApp.h"
 #include "Window.h"
 #include "Text.h"
@@ -38,6 +41,11 @@ namespace spark {
         myContainer->addChild(myCreated);
         _myFPSText = boost::static_pointer_cast<spark::Text>(myCreated);
 
+        myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myContainer->getApp(),
+                "<Text name=\"memory_usage\" y=\"-30\" z=\"1\" maxWidth=\"0\" text=\"memory:\" height=\"-16\" color=\"[1.0,0.0,0.0, 1.0]\" fontsize=\"16\"/>");
+        myContainer->addChild(myCreated);
+        _myMemoryText = boost::static_pointer_cast<spark::Text>(myCreated);
+
         myStatisticHeight += _myFPSText->getTextSize()[1];
         setY(myWindow->getSize()[1] - myStatisticHeight);
         setX(10);
@@ -49,6 +57,12 @@ namespace spark {
         if (_myFPSText) {
             int myFPS = 1000.0/(myEvent->getCurrentTime() - lasttime_);
             _myFPSText->setText("fps: " + masl::as_string(myFPS));
+        }
+        if (_myMemoryText) {
+            unsigned int myMemoryUsage = masl::getUsedMemory();
+            unsigned int myTotalMemory = masl::getTotalMemory();
+            _myMemoryText->setText("memory: " + masl::as_string(myMemoryUsage) + "/" + masl::as_string(myTotalMemory));
+            //AC_PRINT << masl::getProcessMemoryUsage() << "  " << masl::getFreeMemory() << "  " << masl::getUsedMemory() << "  " << masl::getTotalMemory();
         }
         lasttime_ = myEvent->getCurrentTime();
     }
