@@ -21,6 +21,7 @@ namespace spark {
     private:
         masl::UInt64 lasttime_;
         TextPtr _myFPSText;
+        TextPtr _myMemoryText;
     };
 
     typedef masl::Ptr<Statistic> StatisticPtr;
