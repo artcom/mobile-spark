@@ -96,10 +96,27 @@ namespace acprojectview {
         WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myBgImagePtr, &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+            
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        myAnimation->setOnPlay(masl::CallbackPtr(
+                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartIdleFade)));
+        myAnimation->setOnFinish(masl::CallbackPtr(
+                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishIdleFade)));
+            
         myParallel->add(myAnimation);
         animation::AnimationManager::get().play(myParallel);
          
 
+    }
+    
+    void ACProjectView::onStartIdleFade() {
+       ImagePtr myBgImagePtr = boost::static_pointer_cast<Image>(_myStartScreenPtr->getChildByName("background"));
+        myBgImagePtr->setVisible(true);
+    }
+
+    void ACProjectView::onFinishIdleFade() {
+       ImagePtr myBgImagePtr = boost::static_pointer_cast<Image>(_myStartScreenPtr->getChildByName("background"));
+        myBgImagePtr->setVisible(false);
     }
     
     void ACProjectView::onProjectItem(EventPtr theEvent) {
