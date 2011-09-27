@@ -27,7 +27,7 @@
             <Image name="background" x="0" y="0" z="5" src="/startScreenBackground.png"/> 
         </Transform>        
         
-        <ProjectMenu name="main" x-tiling="3" y-tiling="2" x-gap="20" y-gap="20" >
+        <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
         
             
             <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" src="/belvedere_teaser_thumb_01.png">
@@ -57,6 +57,31 @@
             </Project>
 
             <Project name="project6" title="Terravision" subtitle="1994"  src="/terravision_teaser_thumb.png">
+            </Project>
+
+
+            <Project name="project7" title="Project Test1 " subtitle="low resolution square" src="/test1.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+            </Project>
+            
+	        <Project name="project8" title="Project Test2 " subtitle="medium resolution 393x236 Der ADC Europe hat die spiegelkinetische Installation in der Kategorie Environmental Design mit Gold ausgezeichnet. Mobility ist für die World Expo 2010 in Shanghai entstanden, beauftragt von Otto Bock HealthCare. " src="/test1.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+            </Project>
+
+            <Project name="project9" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" src="/levelgreen_teaser_thumb.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+            </Project>
+            
+             <Project name="project10" title="Project Test3" subtitle="portrait picture 282x375"  src="/test3.png">
+            </Project>
+
+            <Project name="project11" title="Terravision" subtitle="1994"  src="/terravision_teaser_thumb.png">
             </Project>
           
         </ProjectMenu>	
