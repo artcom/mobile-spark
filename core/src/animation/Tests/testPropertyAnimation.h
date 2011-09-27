@@ -33,7 +33,6 @@
 #define _ac_mobile_asl_test_PropertyAnimation_h_included_
 
 #include <string>
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/UnitTest.h>
 
 #include "../AnimationManager.h"
@@ -60,12 +59,12 @@ namespace animation {
                 void setX(float theX) { x = theX;};
                 float getX() { return x;};
         };
-        typedef boost::shared_ptr<Object> ObjectPtr;
+        typedef masl::Ptr<Object> ObjectPtr;
 
         //animations
         typedef void (Object::* ObjectPropertySetterFunction)(float);
         typedef PropertyAnimation<ObjectPtr, ObjectPropertySetterFunction> ObjectPropertyAnimation;
-        typedef boost::shared_ptr<ObjectPropertyAnimation>  ObjectPropertyAnimationPtr;
+        typedef masl::Ptr<ObjectPropertyAnimation>  ObjectPropertyAnimationPtr;
 
         void perform_AnimationManagerTest() {
             AnimationManager::get().init(0);

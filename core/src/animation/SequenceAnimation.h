@@ -15,7 +15,7 @@ namespace animation {
         unsigned int _myCurrent;
     };
 
-    typedef boost::shared_ptr<SequenceAnimation> SequenceAnimationPtr;
+    typedef masl::Ptr<SequenceAnimation> SequenceAnimationPtr;
 };
 
 #endif

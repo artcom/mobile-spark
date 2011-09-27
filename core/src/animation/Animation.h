@@ -1,13 +1,13 @@
 #ifndef _ac_mobile_animation_Animation_h_included_
 #define _ac_mobile_animation_Animation_h_included_
 
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/function.hpp>
 
 #include <masl/Callback.h>
 #include <masl/Settings.h>
+#include <masl/Ptr.h>
 
 namespace animation {
 
@@ -17,7 +17,7 @@ namespace animation {
 
 
     class Animation;
-    typedef boost::shared_ptr<Animation> AnimationPtr;
+    typedef masl::Ptr<Animation> AnimationPtr;
     typedef boost::weak_ptr<Animation> AnimationWeakPtr;
     class Animation : public boost::enable_shared_from_this<Animation> {
     public:
