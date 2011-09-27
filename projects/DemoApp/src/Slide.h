@@ -17,7 +17,7 @@ namespace demoapp {
             spark::TextPtr titleComponent_;
             spark::TextPtr subtitleComponent_;
     };
-    typedef boost::shared_ptr<SlideImpl> SlideImplPtr;
+    typedef masl::Ptr<SlideImpl> SlideImplPtr;
 };
 
 #endif

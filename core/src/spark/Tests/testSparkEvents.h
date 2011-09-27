@@ -33,7 +33,6 @@
 #define _ac_mobile_spark_test_SparkEvents_h_included_
 
 #include <string>
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/UnitTest.h>
 
 namespace spark {

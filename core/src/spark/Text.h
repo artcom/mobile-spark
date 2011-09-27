@@ -31,7 +31,7 @@ namespace spark {
         std::string _myTextAlign;
     };
 
-    typedef boost::shared_ptr<Text> TextPtr;
+    typedef masl::Ptr<Text> TextPtr;
     typedef MemberFunctionEventCallback<Text, TextPtr> TextCB;
 
 };

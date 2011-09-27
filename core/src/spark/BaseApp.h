@@ -1,8 +1,6 @@
 #ifndef _included_mobile_spark_BaseApp_
 #define _included_mobile_spark_BaseApp_
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-
 #ifdef __ANDROID__
 #include "JNIBinding.h"
 #endif
@@ -15,7 +13,7 @@
 namespace spark {
 
     class Window;
-    typedef boost::shared_ptr<Window> WindowPtr;
+    typedef masl::Ptr<Window> WindowPtr;
 
     class BaseApp : public boost::enable_shared_from_this<BaseApp> {
         public:
@@ -49,7 +47,7 @@ namespace spark {
             
     };
 
-    typedef boost::shared_ptr<BaseApp> BaseAppPtr;
+    typedef masl::Ptr<BaseApp> BaseAppPtr;
 };
 
 #endif
