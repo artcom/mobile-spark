@@ -33,6 +33,8 @@ namespace acprojectview {
             void onInitiateProjectView();
             void onFinishLoadProjectView();
             void projectViewAnimation(bool showProject);
+            void onStartIdleFade();
+            void onFinishIdleFade();            
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 
             ProjectMenuPtr _myProjectMenu;
