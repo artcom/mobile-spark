@@ -5,7 +5,6 @@
 
 #include <masl/Logger.h>
 #include <masl/BaseEntry.h>
-#include <masl/XMLNode.h>
 #include <masl/MobileSDK.h>
 #include <masl/XMLUtils.h>
 #include <masl/file_functions.h>
@@ -13,6 +12,7 @@
 #include <masl/string_functions.h>
 #include <masl/Exception.h>
 #include <masl/AutoLocker.h>
+#include <masl/XMLNode.h>
 #include <masl/CallStack.h>
 
 #include <mar/AssetProvider.h>
@@ -189,8 +189,8 @@ namespace spark {
     }
     
     void BaseApp::handleEvents() {
-        AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
         AutoLocker<ThreadLock> myLocker(_myLock);        
+        AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
         int i = 0;
         for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
             AC_TRACE << "EVENT# " << i;

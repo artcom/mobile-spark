@@ -7,7 +7,7 @@
 #include "GlHeaders.h"
 
 namespace mar {
-    DEFINE_EXCEPTION(ShaderCreationException, masl::Exception)
+    DECLARE_EXCEPTION(ShaderCreationException, masl::Exception)
 
     //////////////////////////////////////////logging
     void printGLString(const char *name, GLenum s);

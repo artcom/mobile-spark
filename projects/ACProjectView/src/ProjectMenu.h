@@ -4,6 +4,7 @@
 #include <spark/Transform.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/Window.h>
+#include "ProjectImpl.h"
 
 
 
@@ -21,19 +22,27 @@ namespace acprojectview {
             int getPreviewHeight();
             
         private:
-            void onDragCB(spark::EventPtr theEvent);
-            void onFingerDownCB(spark::EventPtr theEvent);
+            void onSwipeLeftCB(spark::EventPtr theEvent);
+            void onSwipeRightCB(spark::EventPtr theEvent);
+            void changeSlide(int dir);
+            void onDelayFinished();
 
-            
+
             spark::WindowPtr _myWindowPtr;
             int _myVerticalTiling;
             int _myHorizontalTiling;
             int _myGapX;
             int _myGapY;
-            int _myStartDragX;
+            int _myWidth;
+            int _myHeight;
+            int _myNumberOfSlides;
+            int _myCurrentSlide;
+            bool _myIsAnimating;      
+
+           
             
     };
-    typedef boost::shared_ptr<ProjectMenu> ProjectMenuPtr;
+    typedef masl::Ptr<ProjectMenu> ProjectMenuPtr;
     typedef spark::MemberFunctionEventCallback<ProjectMenu, ProjectMenuPtr>ProjectMenuEventCB;
 
 };

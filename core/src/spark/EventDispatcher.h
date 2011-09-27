@@ -2,14 +2,13 @@
 #define _ac_mobile_spark_EventDispatcher_h_included_
 
 #include <map>
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/Exception.h>
 #include "Event.h"
 
 
 namespace spark {
 
-    DEFINE_EXCEPTION(EventDispatcherException, masl::Exception);
+    DECLARE_EXCEPTION(EventDispatcherException, masl::Exception);
 
     typedef std::pair<const std::string, const bool> EventListenerKey;
     typedef std::multimap<EventListenerKey, const EventCallbackPtr > EventListenerMap;

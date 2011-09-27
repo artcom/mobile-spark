@@ -1,8 +1,6 @@
 #include "ACProjectView.h"
 #include <cstdlib>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 
@@ -27,7 +25,7 @@ using namespace masl;
 #ifdef __ANDROID__
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
-    spark::AppProvider::get().setApp(boost::shared_ptr<acprojectview::ACProjectView>(new acprojectview::ACProjectView()));
+    spark::AppProvider::get().setApp(masl::Ptr<acprojectview::ACProjectView>(new acprojectview::ACProjectView()));
     return JNI_VERSION_1_6;
 }
 #endif
@@ -44,12 +42,7 @@ namespace acprojectview {
 
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
-        ACProjectViewComponentMapInitializer::init();
-        std::string myOrientation;
-        //std::string mySparkFile = findBestMatchedLayout(myDefaultLayout, theScreenWidth, theScreenHeight, myOrientation);
-        //MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(myOrientation);
-        //loadLayoutAndRegisterEvents(mySparkFile);
-        
+        ACProjectViewComponentMapInitializer::init();        
 
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
@@ -96,10 +89,27 @@ namespace acprojectview {
         WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myBgImagePtr, &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+            
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        myAnimation->setOnPlay(masl::CallbackPtr(
+                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartIdleFade)));
+        myAnimation->setOnFinish(masl::CallbackPtr(
+                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishIdleFade)));
+            
         myParallel->add(myAnimation);
         animation::AnimationManager::get().play(myParallel);
          
 
+    }
+    
+    void ACProjectView::onStartIdleFade() {
+       ImagePtr myBgImagePtr = boost::static_pointer_cast<Image>(_myStartScreenPtr->getChildByName("background"));
+        myBgImagePtr->setVisible(true);
+    }
+
+    void ACProjectView::onFinishIdleFade() {
+       ImagePtr myBgImagePtr = boost::static_pointer_cast<Image>(_myStartScreenPtr->getChildByName("background"));
+        myBgImagePtr->setVisible(false);
     }
     
     void ACProjectView::onProjectItem(EventPtr theEvent) {
@@ -115,7 +125,6 @@ namespace acprojectview {
     
     void ACProjectView::onBack(EventPtr theEvent) {
         if (_myProjectMenu->isSensible()) return;
-        AC_PRINT<< "----------- BACK";
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
         projectViewAnimation(false);
         _myProjectMenu->setSensible(true);
@@ -131,6 +140,9 @@ namespace acprojectview {
     }    
     void ACProjectView::onFinishLoadProjectView() {        
         _myProjectViewer->loadInitialSet();
+    }
+    void ACProjectView::onFinishProjectView() {        
+        _myProjectViewer->setVisible(false);
     }
     
     
@@ -179,6 +191,9 @@ namespace acprojectview {
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
         } else {
             _myProjectViewer->initiateClose();
+            mySeqAnimation->setOnFinish(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
+
         }
         animation::AnimationManager::get().play(mySeqAnimation);
     }

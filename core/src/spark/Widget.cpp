@@ -116,9 +116,9 @@ namespace spark {
     std::vector<I18nContextPtr> 
     Widget::getI18nContexts() const {
         std::vector<I18nContextPtr> myContexts;
-        boost::shared_ptr<const Component> myCurrent =  boost::static_pointer_cast<const Component>(shared_from_this());
+        masl::Ptr<const Component> myCurrent =  boost::static_pointer_cast<const Component>(shared_from_this());
         while (myCurrent) {
-            boost::shared_ptr<const Widget> myWidget = boost::dynamic_pointer_cast<const Widget>(myCurrent);
+            masl::Ptr<const Widget> myWidget = boost::dynamic_pointer_cast<const Widget>(myCurrent);
             if (myWidget && myWidget->getI18nContext()) {
                 myContexts.push_back(myWidget->getI18nContext());
             }

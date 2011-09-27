@@ -14,7 +14,8 @@ namespace spark {
 
         const vector2 & getTextSize();
         void setText(std::string theText) { i18nHandler_->data_ = theText; _myDirtyFlag = true;};
-
+        void setMaxWidth(int theMaxWidth) {_myMaxWidth = theMaxWidth; _myDirtyFlag = true;};
+        void setMaxHeight(int theMaxHeight) {_myMaxHeight = theMaxHeight; _myDirtyFlag = true;};
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Text::SPARK_TYPE;};
     protected:
@@ -31,7 +32,7 @@ namespace spark {
         std::string _myTextAlign;
     };
 
-    typedef boost::shared_ptr<Text> TextPtr;
+    typedef masl::Ptr<Text> TextPtr;
     typedef MemberFunctionEventCallback<Text, TextPtr> TextCB;
 
 };

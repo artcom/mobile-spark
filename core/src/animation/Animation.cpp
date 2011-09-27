@@ -4,6 +4,8 @@
 
 namespace animation {
 
+    DEFINE_EXCEPTION(AnimationException, masl::Exception);
+
     unsigned int Animation::idCounter = 0;
 
     Animation::Animation(const masl::UInt64 theDuration, EasingFunctionPtr theEasing) :
@@ -16,7 +18,7 @@ namespace animation {
     }
 
     Animation::~Animation() {
-        //AC_PRINT << "destruct animation " << _myId;
+        AC_DEBUG << "destruct animation " << _myId;
     }
 
     void Animation::doFrame(const masl::UInt64 theCurrentMillis) {
@@ -24,13 +26,13 @@ namespace animation {
         _myProgress = _myEasingFunction(_myProgressTime/(float)_myDuration);
         AC_TRACE << _myId << " progress is now " << _myProgress;
         if (_myProgressTime >= _myDuration) {
-            AC_DEBUG << _myId << "..................... stop it";
+            AC_DEBUG << _myId << "..................... stop animation";
             finish(theCurrentMillis);
         }
     }
 
     void Animation::play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag) {
-        AC_DEBUG << _myId << "..........play it";
+        AC_DEBUG << _myId << "..........play animation";
         _myStartTime = theStartTime;
         _myProgressTime = 0.0;
         _myProgress = _myEasingFunction(_myProgressTime);
@@ -41,14 +43,14 @@ namespace animation {
     }
 
     void Animation::cancel() {
-        //AC_PRINT << _myId << "..........cancel it";
+        AC_DEBUG << _myId << "...............cancel animtion";
         _myRunning = false;
         _myFinished = false;
         if (_myOnCancel) { _myOnCancel->execute(); }
     }
 
     void Animation::finish(const masl::UInt64 theTime) {
-        //AC_PRINT << _myId << "..........finish it";
+        AC_DEBUG << _myId << "..........finish animtion";
         if (_myFinished) {
             return;
         }
@@ -61,12 +63,12 @@ namespace animation {
     }
 
     void Animation::finishAnimation(const masl::UInt64 theTime) {
-        //AC_PRINT << _myId << "..........finish animation";
+        AC_DEBUG << _myId << "..........finish animation";
         _myProgressTime = _myDuration;
         _myProgress = _myEasingFunction(1.0);
         if (_myOnFinish) { _myOnFinish->execute(); }
         if (_myLoop) {
-            //AC_PRINT << _myId << "..........loop: restart animation";
+            AC_DEBUG << _myId << "..........loop: restart animation";
             play(theTime);
         } else {
             _myRunning = false;

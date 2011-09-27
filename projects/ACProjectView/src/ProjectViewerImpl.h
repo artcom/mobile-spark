@@ -15,10 +15,6 @@
 #include "Description.h"
 
 
-
-
-
-
 namespace acprojectview {
 
     class ProjectViewerImpl : public spark::Transform {
@@ -55,9 +51,10 @@ namespace acprojectview {
             spark::ImagePtr _image0;
             spark::ImagePtr _image1;
             spark::ImagePtr _image2;
+            spark::RectanglePtr _myPopup;                
             spark::TextPtr _myDescription;
             spark::WindowPtr _myWindowPtr;
-            
+            int _myHiddenPopUpHeight;
             void changeImage(int dir);
             void onAnimationFinished();
             void onLoadNextImages();
@@ -66,7 +63,7 @@ namespace acprojectview {
 
     };
     
-    typedef boost::shared_ptr<ProjectViewerImpl> ProjectViewerImplPtr;
+    typedef masl::Ptr<ProjectViewerImpl> ProjectViewerImplPtr;
     typedef spark::MemberFunctionEventCallback<ProjectViewerImpl, ProjectViewerImplPtr> ProjectViewerImplCB;
 
 };

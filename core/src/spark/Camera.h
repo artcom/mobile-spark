@@ -5,6 +5,11 @@
 
 namespace spark {
 
+//    class Dummy {
+//        public:
+//        Dummy();// { throw masl::Exception("asdasdasdasd", PLUS_FILE_LINE); }
+//    };
+
     class Camera : public ShapeWidget {
     public:
         Camera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
@@ -22,7 +27,7 @@ namespace spark {
         bool _myPortraitMode;
     };
 
-    typedef boost::shared_ptr<Camera> CameraPtr;
+    typedef masl::Ptr<Camera> CameraPtr;
     typedef MemberFunctionEventCallback<Camera, CameraPtr> CameraCB;
 
 };

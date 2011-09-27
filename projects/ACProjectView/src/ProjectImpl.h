@@ -22,7 +22,7 @@ namespace acprojectview {
             spark::TextPtr subtitleComponent_;
     };
     
-    typedef boost::shared_ptr<ProjectImpl> ProjectImplPtr;
+    typedef masl::Ptr<ProjectImpl> ProjectImplPtr;
 };
 
 #endif

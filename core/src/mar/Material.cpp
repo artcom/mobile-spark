@@ -1,5 +1,6 @@
 #include "Material.h"
 
+#include <masl/CallStack.h>
 #include <masl/Logger.h>
 
 #include "AssetProvider.h"
@@ -9,6 +10,9 @@
 
 
 namespace mar {
+
+    DEFINE_EXCEPTION(ProblemWithHandleException, masl::Exception)
+
     Material::Material() : transparency_(false), alpha_(1.0) {
     }
 
@@ -41,8 +45,18 @@ namespace mar {
     }
 
     void Material::setHandles() {
-        mvpHandle = glGetUniformLocation(shaderProgram, "u_mvpMatrix");
-        alphaHandle = glGetUniformLocation(shaderProgram, "a_alpha");
+        mvpHandle = getHandle("u_mvpMatrix");
+        alphaHandle = getHandle("a_alpha");
+    }
+
+    GLuint Material::getHandle(const std::string & theName) const {
+        GLuint myHandle = glGetUniformLocation(shaderProgram, theName.c_str());
+        if (myHandle > MAX_NUM_HANDLES) {
+            AC_ERROR << "Strange Handle " << theName << ". Maybe it is not found in shader.";
+            //XXX: does not throw!
+            //throw ProblemWithHandleException("handle for " + theName + " seems to be strange. Maybe it's not found in shader.", PLUS_FILE_LINE);
+        }
+        return myHandle;
     }
 
     //////////////////////////////////////////////////// UnlitColoredMaterial
@@ -65,7 +79,7 @@ namespace mar {
 
     void UnlitColoredMaterial::setHandles() {
         Material::setHandles();
-        colorHandle = glGetUniformLocation(shaderProgram, "a_color");
+        colorHandle = getHandle("a_color");
     }
 
     //////////////////////////////////////////////////// UnlitTexturedMaterial

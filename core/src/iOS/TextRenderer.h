@@ -6,9 +6,8 @@
 #import <CoreText/CoreText.h>
 #import <UIKit/UIKit.h>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-
 #include <masl/numeric_functions.h>
+#include <masl/Ptr.h>
 #include <mar/GLHeaders.h>
 
 
@@ -28,7 +27,7 @@ namespace ios {
         int textureHeight;
         CGSize suggestedSize;
     };
-    typedef boost::shared_ptr<TextRenderer> TextRendererPtr;
+    typedef masl::Ptr<TextRenderer> TextRendererPtr;
 };
 
 #endif
