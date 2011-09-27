@@ -44,7 +44,7 @@ namespace acprojectview {
             const static unsigned int _myAnimationTime = 400;
     };
 
-    typedef boost::shared_ptr<ACProjectView> ACProjectViewPtr;
+    typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
     typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr> ACProjectViewEventCB;
 };
 

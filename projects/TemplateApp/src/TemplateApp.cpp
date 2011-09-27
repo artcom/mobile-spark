@@ -1,8 +1,6 @@
 #include "TemplateApp.h"
 #include <cstdlib>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 
@@ -19,7 +17,7 @@ using namespace masl;
 #ifdef __ANDROID__
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
-    spark::AppProvider::get().setApp(boost::shared_ptr<templateapp::TemplateApp>(new templateapp::TemplateApp()));
+    spark::AppProvider::get().setApp(masl::Ptr<templateapp::TemplateApp>(new templateapp::TemplateApp()));
     return JNI_VERSION_1_6;
 }
 #endif
@@ -28,8 +26,6 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace templateapp {
 
-	
-   
     TemplateApp::TemplateApp():BaseApp("TemplateApp") {
     }
 

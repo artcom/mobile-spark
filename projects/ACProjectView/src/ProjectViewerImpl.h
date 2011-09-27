@@ -13,10 +13,6 @@
 #include "Description.h"
 
 
-
-
-
-
 namespace acprojectview {
 
     class ProjectViewerImpl : public spark::Transform {
@@ -64,7 +60,7 @@ namespace acprojectview {
 
     };
     
-    typedef boost::shared_ptr<ProjectViewerImpl> ProjectViewerImplPtr;
+    typedef masl::Ptr<ProjectViewerImpl> ProjectViewerImplPtr;
     typedef spark::MemberFunctionEventCallback<ProjectViewerImpl, ProjectViewerImplPtr> ProjectViewerImplCB;
 
 };

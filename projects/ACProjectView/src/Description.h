@@ -19,12 +19,8 @@ namespace acprojectview {
             
         private:
             std::string _myText;
-
-            
-            
-            
     };
-    typedef boost::shared_ptr<Description> DescriptionPtr;
+    typedef masl::Ptr<Description> DescriptionPtr;
 };
 
 #endif

@@ -17,7 +17,7 @@ namespace acprojectview {
         private:
             
     };
-    typedef boost::shared_ptr<ProjectMenu> ProjectMenuPtr;
+    typedef masl::Ptr<ProjectMenu> ProjectMenuPtr;
 };
 
 #endif
