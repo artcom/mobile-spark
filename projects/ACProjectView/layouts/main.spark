@@ -20,19 +20,27 @@
 
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
-
-        <ProjectMenu name="main">
-            <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" x="0"  y="0" src="/belvedere_teaser_thumb_01.png">
+        
+        <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
+        
+        <Transform name="startscreen">
+            <Image name="background" x="0" y="0" z="5" src="/startScreenBackground.png"/> 
+        </Transform>        
+        
+        <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
+        
+            
+            <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" src="/belvedere_teaser_thumb_01.png">
 	            <ContentImage src="/duality_teaser_thumb_01.png"/>
             </Project>
 
-            <Project name="project2" title="DUALITY" subtitle="Tokio, 2007" x="265" y="0" src="/duality_teaser_thumb_01.png">
+            <Project name="project2" title="DUALITY" subtitle="Tokio, 2007" src="/duality_teaser_thumb_01.png" >
             </Project>
             
-            <Project name="project3" title="Juraskope" subtitle="Museum für Naturkunde, Berlin, 2007" x="530" y="0" src="/juraskope_teaser_thumb.png">
+            <Project name="project3" title="Juraskope" subtitle="Museum für Naturkunde, Berlin, 2007" src="/juraskope_teaser_thumb.png">
             </Project>
 
-            <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" x="0"  y="200" src="/kinetik_teaser_thumb.png">
+            <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" src="/kinetik_teaser_thumb.png">
                 <ContentImage src="/kinetische_skulptur_klein_1_1.png"/>
                 <ContentImage src="/kinetische_skulptur_klein_1_0.5.png"/>
                 <ContentImage src="/kinetische_skulptur_klein_0.5_1.png"/>
@@ -42,13 +50,13 @@
 	            <Description name="description" text="Hier steht ne super Beschreibung, \n     -> nur fuer Alphabeten"/>
 	        </Project>
 
-            <Project name="project5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" x="265"  y="200" src="/levelgreen_teaser_thumb.png">
+            <Project name="project5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" src="/levelgreen_teaser_thumb.png">
                 <ContentImage src="/level_green_01.png"/>
                 <ContentImage src="/level_green_02.png"/>
 	            <ContentImage src="/level_green_03.png"/>
             </Project>
 
-            <Project name="project6" title="Terravision" subtitle="1994" x="530"  y="200" src="/terravision_teaser_thumb.png">
+            <Project name="project6" title="Terravision" subtitle="1994"  src="/terravision_teaser_thumb.png">
             </Project>
           
         </ProjectMenu>	
@@ -56,7 +64,7 @@
         <ProjectViewer name="projectViewer" visible="false">
         </ProjectViewer>
 
-        <Text name="hellotext" y="400" x="10" z="13" i18nId="hello_text" color="[1,1,0,1]" fontsize="32"/>
+        <!--Text name="hellotext" y="400" x="10" z="13" i18nId="hello_text" color="[1,1,0,1]" fontsize="32"/-->
         <Image name="language_toggle" y="400" x="680" z="13" i18nId="language"/>
 
     </World>        

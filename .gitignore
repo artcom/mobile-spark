@@ -12,8 +12,11 @@ build.xml
 proguard.cfg
 local.properties
 default.properties
-iOS/Xcode_iPad
 iOS/Xcode_Simulator
+iOS/Xcode_iPad
+iOS/xcode_ios
 _iOS_build
 projects/DemoApp/Xcode_Ipad
+projects/ACProjectView/xcode
+projects/DemoApp/ios/Xcode
 projects/DemoApp/Xcode_Simulator
