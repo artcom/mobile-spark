@@ -4,6 +4,7 @@
 #include <spark/Transform.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/Window.h>
+#include "ProjectImpl.h"
 
 
 
@@ -25,6 +26,7 @@ namespace acprojectview {
             void onSwipeRightCB(spark::EventPtr theEvent);
             void changeSlide(int dir);
             void onDelayFinished();
+            void updateText(ProjectImplPtr theProject);
 
 
             spark::WindowPtr _myWindowPtr;
