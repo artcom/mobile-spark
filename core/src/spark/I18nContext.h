@@ -7,6 +7,7 @@
 #include "I18nConstants.h"
 
 namespace spark {
+    DECLARE_EXCEPTION(I18nItemNotFoundException, masl::Exception);
 
     class BaseApp;
     typedef boost::shared_ptr<BaseApp> BaseAppPtr;
@@ -49,6 +50,5 @@ namespace spark {
         std::map<LANGUAGE, std::string> languageData_;  //maps language key to language specific string
     };
     typedef boost::shared_ptr<I18nItem> I18nItemPtr;
-    DEFINE_EXCEPTION(I18nItemNotFoundException, masl::Exception);
 };
 #endif 

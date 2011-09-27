@@ -4,9 +4,9 @@
 #include <masl/Exception.h>
 
 namespace spark {
+    DECLARE_EXCEPTION(LanguageNotFoundException, masl::Exception)
 
     enum LANGUAGE {DE, EN, NO_LANGUAGE = 1000};
-    DEFINE_EXCEPTION(LanguageNotFoundException, masl::Exception)
 
     class I18nConstants {
     private:

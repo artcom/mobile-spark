@@ -6,11 +6,9 @@
 
 namespace masl {
 
-//    Dummy::Dummy() {
-//        throw masl::Exception("asdasdasdasd", PLUS_FILE_LINE);
-//    }
+    DEFINE_EXCEPTION(XMLNodeException, Exception);
+
     XMLNode::XMLNode(const std::string & theXMLString) {
-        throw masl::Exception("XMLXMLXMLXML", PLUS_FILE_LINE);
         xmlDocPtr doc = loadXMLFromMemoryValidate(theXMLString);
         xmlNode* myRootNode = xmlDocGetRootElement(doc);
         init(myRootNode);

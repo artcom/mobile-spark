@@ -6,6 +6,7 @@ using namespace masl;
 
 namespace spark {
 
+    DEFINE_EXCEPTION(I18nItemNotFoundException, masl::Exception);
 
     ///////////////////////////////////////////////////////I18nContext
     const char * const I18nContext::SPARK_TYPE = "I18nContext";

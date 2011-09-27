@@ -9,7 +9,7 @@
 
 namespace spark {
 
-    DEFINE_EXCEPTION(EventDispatcherException, masl::Exception);
+    DECLARE_EXCEPTION(EventDispatcherException, masl::Exception);
 
     typedef std::pair<const std::string, const bool> EventListenerKey;
     typedef std::multimap<EventListenerKey, const EventCallbackPtr > EventListenerMap;

@@ -9,6 +9,8 @@ using namespace masl;
 
 namespace spark {
 
+    DEFINE_EXCEPTION(EventFactoryException, masl::Exception);
+
     //TODO: decentralize this again
     void EventFactory::setupFactory() {
         bool registered = registerEvent(StageEvent::CLASSNAME, spark::createEvent<StageEvent>);
@@ -40,7 +42,6 @@ namespace spark {
 	EventPtr
 	EventFactory::createEvent(const std::string & theEventString) const {
         AC_TRACE << "create event : " << theEventString;
-        return EventPtr();
         XMLNodePtr myXMLNode(new XMLNode(theEventString));
         CallbackMap::const_iterator i = _myCreateCallbackMap.find(myXMLNode->nodeName);
         if (i == _myCreateCallbackMap.end()) {
