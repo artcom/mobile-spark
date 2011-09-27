@@ -189,8 +189,8 @@ namespace spark {
     }
     
     void BaseApp::handleEvents() {
-        AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
         AutoLocker<ThreadLock> myLocker(_myLock);        
+        AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
         int i = 0;
         for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
             AC_TRACE << "EVENT# " << i;
