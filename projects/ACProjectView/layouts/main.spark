@@ -40,7 +40,7 @@
             <Project name="project3" title="Juraskope" subtitle="Museum für Naturkunde, Berlin, 2007" src="/juraskope_teaser_thumb.png">
             </Project>
 
-            <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" src="/kinetik_teaser_thumb.png">
+            <Project name="project4" hidden_popup_height="30" title="Kinetische Skulptur" subtitle="Museum München, 2008" src="/kinetik_teaser_thumb.png">
                 <ContentImage src="/kinetische_skulptur_klein_1_1.png"/>
                 <ContentImage src="/kinetische_skulptur_klein_1_0.5.png"/>
                 <ContentImage src="/kinetische_skulptur_klein_0.5_1.png"/>

@@ -54,7 +54,7 @@ namespace acprojectview {
             spark::RectanglePtr _myPopup;                
             spark::TextPtr _myDescription;
             spark::WindowPtr _myWindowPtr;
-            
+            int _myHiddenPopUpHeight;
             void changeImage(int dir);
             void onAnimationFinished();
             void onLoadNextImages();
