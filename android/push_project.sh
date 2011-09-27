@@ -3,6 +3,11 @@
 FOLDERS="models layouts shaders textures fonts" 
 if [ "$#" != "0" ]; then
     FOLDERS=$*
+else
+    echo "push core"
+    cd ../../android
+    push.sh
+    cd -
 fi
 
 echo "push folders $FOLDERS"
