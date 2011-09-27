@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 
+#include <masl/Exception.h>
 #include <masl/Ptr.h>
 #include <masl/MatrixStack.h>
 
@@ -16,6 +17,9 @@ namespace mar {
     const std::string DEFAULT_TEXTURED_VERTEX_SHADER = "/default_textured_vertex.glsl";
     const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "/default_colored_fragment.glsl";
     const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "/default_textured_fragment.glsl";
+    const unsigned int MAX_NUM_HANDLES = 23;
+
+    DEFINE_EXCEPTION(ProblemWithHandleException, masl::Exception)
 
     class Material {
     public:
@@ -34,6 +38,7 @@ namespace mar {
         Material();
         virtual void setShader();
         virtual void setHandles();
+        GLuint getHandle(const std::string & theName) const;
 
         std::string _myFragmentShader;
         std::string _myVertexShader;
