@@ -19,12 +19,8 @@ namespace acprojectview {
             
         private:
             std::string _mySrc;
-
-            
-            
-            
     };
-    typedef boost::shared_ptr<ContentImage> ContentImagePtr;
+    typedef masl::Ptr<ContentImage> ContentImagePtr;
 };
 
 #endif

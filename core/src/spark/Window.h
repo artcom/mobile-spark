@@ -6,12 +6,12 @@
 
 namespace masl {
     class XMLNode;
-    typedef boost::shared_ptr<XMLNode> XMLNodePtr;
+    typedef masl::Ptr<XMLNode> XMLNodePtr;
 };
 
 namespace mar {
     class Canvas;
-    typedef boost::shared_ptr<Canvas> CanvasPtr;
+    typedef masl::Ptr<Canvas> CanvasPtr;
 };
 
 namespace spark {
@@ -41,7 +41,7 @@ namespace spark {
         ComponentPtr pick2DAABBStyle(const unsigned int x, const unsigned int y) ;
     };
 
-    typedef boost::shared_ptr<Window> WindowPtr;
+    typedef masl::Ptr<Window> WindowPtr;
     typedef MemberFunctionEventCallback<Window, WindowPtr> WindowCB;
 
     //picking

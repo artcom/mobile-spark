@@ -46,7 +46,7 @@ namespace demoapp {
             unsigned _myNextSlide;
     };
 
-    typedef boost::shared_ptr<DemoApp> DemoAppPtr;
+    typedef masl::Ptr<DemoApp> DemoAppPtr;
     typedef spark::MemberFunctionEventCallback<DemoApp, DemoAppPtr> DemoEventCB;
 
 };

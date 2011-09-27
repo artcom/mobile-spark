@@ -1,10 +1,9 @@
 #ifndef _ac_mobile_mar_Viewport_h_included_
 #define _ac_mobile_mar_Viewport_h_included_
 
-#include "GlHeaders.h"
-#include <boost/smart_ptr/shared_ptr.hpp>
-
 #include <masl/numeric_functions.h>
+#include <masl/Ptr.h>
+#include "GlHeaders.h"
 
 namespace mar {
 
@@ -21,7 +20,7 @@ namespace mar {
             vector2 _mySize;
     };
 
-    typedef boost::shared_ptr<Viewport> ViewportPtr;
+    typedef masl::Ptr<Viewport> ViewportPtr;
 };
 
 #endif

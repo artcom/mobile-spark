@@ -4,10 +4,10 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/shared_array.hpp>
 #include <boost/tuple/tuple.hpp>
 
+#include <masl/Ptr.h>
 #include <masl/MatrixStack.h>
 
 #include "Material.h"
@@ -56,7 +56,7 @@ namespace mar {
         unsigned int _myStride;
     };
 
-    typedef boost::shared_ptr<Element> ElementPtr;
+    typedef masl::Ptr<Element> ElementPtr;
 
     class ElementWithNormals : public Element {
     public:

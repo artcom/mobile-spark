@@ -1,5 +1,5 @@
-#ifndef _included_mobile_asl_xmlutils_
-#define _included_mobile_asl_xmlutils_
+#ifndef _included_mobile_masl_xmlutils_
+#define _included_mobile_masl_xmlutils_
 
 #include <string>
 

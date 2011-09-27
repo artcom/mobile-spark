@@ -2,7 +2,6 @@
 #define _ac_mobile_spark_EventDispatcher_h_included_
 
 #include <map>
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <masl/Exception.h>
 #include "Event.h"
 

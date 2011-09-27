@@ -26,7 +26,7 @@ namespace spark {
         float edgeBottom_;
     };
 
-    typedef boost::shared_ptr<NinePatch> NinePatchPtr;
+    typedef masl::Ptr<NinePatch> NinePatchPtr;
     typedef MemberFunctionEventCallback<NinePatch, NinePatchPtr> NinePatchCB;
 };
 #endif
