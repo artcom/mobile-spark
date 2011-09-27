@@ -11,7 +11,7 @@
 
 namespace android {
 
-    DEFINE_EXCEPTION(APKLoadingException, masl::Exception)
+    DECLARE_EXCEPTION(APKLoadingException, masl::Exception)
 
     void loadAPK (zip** theAPKArchive, const std::string & apkPath);
     std::string readFromPackage(zip* theAPKArchive, const std::string & theFileName);

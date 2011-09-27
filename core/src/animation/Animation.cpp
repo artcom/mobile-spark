@@ -4,6 +4,8 @@
 
 namespace animation {
 
+    DEFINE_EXCEPTION(AnimationException, masl::Exception);
+
     unsigned int Animation::idCounter = 0;
 
     Animation::Animation(const masl::UInt64 theDuration, EasingFunctionPtr theEasing) :

@@ -8,9 +8,9 @@
 
 namespace masl {
 
-    DEFINE_EXCEPTION(OpenDirectoryFailed, Exception)
-    DEFINE_EXCEPTION(OpenFileFailed, Exception)
-    DEFINE_EXCEPTION(FileNotFoundException, Exception)
+    DECLARE_EXCEPTION(OpenDirectoryFailed, Exception)
+    DECLARE_EXCEPTION(OpenFileFailed, Exception)
+    DECLARE_EXCEPTION(FileNotFoundException, Exception)
 
     /// read a complete file into a string
     bool fileExists(const std::string& theFilename);

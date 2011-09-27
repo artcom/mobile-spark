@@ -11,7 +11,7 @@ namespace masl {
 
 #define PTR_DEBUG
 
-    DEFINE_EXCEPTION(NullPointerException, Exception)
+    DECLARE_EXCEPTION(NullPointerException, Exception)
 
     template <class T> class Ptr;
 

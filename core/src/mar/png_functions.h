@@ -13,7 +13,7 @@ extern "C" {
 
 namespace mar {
 
-    DEFINE_EXCEPTION(PngLoadingException, masl::Exception)
+    DECLARE_EXCEPTION(PngLoadingException, masl::Exception)
 
     struct pngData {
         std::string filename;
