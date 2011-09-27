@@ -24,7 +24,6 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
 
     }
     public void onDrawFrame(GL10 glUnused) {
-        updateFrameCounter();
         String myEvent = "<StageEvent type='frame' time='" + System.currentTimeMillis() + "'/>";
         NativeBinding.onEvent(myEvent);
         NativeBinding.handleEvents();
@@ -36,22 +35,6 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
         NativeBinding.onEvent(myEvent);
     }
 
-    private void updateFrameCounter() {
-        /*if (numFrames == 0) {
-            millisec = System.currentTimeMillis();
-        } else if (numFrames == 99) {
-            long now = System.currentTimeMillis();
-            //AC_Log.print("num Frames " + numFrames);
-            //AC_Log.print("time " + (now- millisec));
-            float fps = (float)numFrames/(float)(now-millisec) * 1000.0f;
-            //AC_Log.print("fps " + fps);
-            millisec = now;
-            numFrames = 0;
-        }
-        numFrames++;*/
-    }
-
-
     public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
         CameraTexture.initWithContext(glContext);
         AC_Log.print("_________________________________- on surface created of " + PACKAGE_NAME + _myPackageExtension);
@@ -61,7 +44,6 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
             NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME + _myPackageExtension, context), _myScreenWidth,  _myScreenHeight);
             NativeBinding.sparkRealize();
             NativeBinding.ourActivity._mySparkWorldIsLoaded = true;
-            
         } else {
             NativeBinding.onResume();
         }

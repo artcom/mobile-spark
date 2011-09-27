@@ -80,12 +80,16 @@ namespace acprojectview {
     
     void
     ProjectMenu::onSwipeLeftCB(EventPtr theEvent) {
-        changeSlide(1);
+        if (isRendered()) {        
+            changeSlide(1);
+        }
     }
     
     void
     ProjectMenu::onSwipeRightCB(EventPtr theEvent) {
-        changeSlide(-1);
+        if (isRendered()) {        
+            changeSlide(-1);
+        }
     }
     
     void 

@@ -10,7 +10,7 @@ import android.util.Log;
 import android.test.AndroidTestCase;
 
 public class AndroidLibTest  extends AndroidTestCase{
-    private static String PACKAGE_NAME = "com.artcom.mobile.test";
+    private static String PACKAGE_NAME = "com.artcom.mobile.BaseApp";
 
     public void testLib() throws Throwable {
         // run libs tests method
@@ -23,6 +23,8 @@ public class AndroidLibTest  extends AndroidTestCase{
    }
     public void testJava() throws Throwable {
          // test java stuff
+        Log.v("Test", PACKAGE_NAME);
+        Log.v("Test","......." + APK.getApkFilePath(PACKAGE_NAME, getContext()));
         Assert.assertTrue(APK.getApkFilePath(PACKAGE_NAME, getContext()).length()>0);
    }
 
