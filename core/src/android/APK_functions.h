@@ -7,8 +7,6 @@
 #include <string>
 #include <libzip/zip.h>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-
 #include <masl/Exception.h>
 
 namespace android {
