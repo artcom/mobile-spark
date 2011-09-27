@@ -98,7 +98,7 @@ public class TextLayouter {
 
                 if (_myMaxHeight == 0) {
                     myTextPaint.getTextBounds(myCurrentString, 0, myCurrentString.length(), myRect);
-                    _myCanvasHeight = myBaseLine + myRect.bottom;
+                    _myCanvasHeight = myBaseLine + (int)myMetrics.bottom;//myRect.bottom;
                 }
                 myBaseLine += myLineHeight;
                 //AC_Log.print(String.format("_myCanvasHeight %d %d", _myCanvasHeight, _myMaxHeight));

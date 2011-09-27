@@ -23,7 +23,7 @@ namespace mar {
         virtual void createShader();
         virtual void loadShader(const matrix & theMatrix);
         virtual void initGL();
-        void setAlpha(const float theAlpha) {alpha_ = theAlpha;};
+        void setAlpha(const float theAlpha) {alpha_ = theAlpha; transparency_ |= (alpha_ != 1.0);};
 
         GLuint shaderProgram;
         GLuint mvpHandle;
