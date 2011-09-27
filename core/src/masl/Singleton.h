@@ -1,6 +1,7 @@
 #ifndef _ac_mobile_masl_Singleton_h_included_
 #define _ac_mobile_masl_Singleton_h_included_
 
+#include "SingletonBase.h"
 #include "SingletonManager.h"
 
 namespace masl {
