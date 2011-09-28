@@ -219,7 +219,7 @@ namespace demoapp {
     }
     
     void DemoApp::changeSlide(int theDirection) {
-        AC_PRINT << "change slide: " << theDirection << " next slide:" << _myNextSlide << " currentslide: " << _myCurrentSlide;
+        AC_INFO << "change slide: " << theDirection << " next slide:" << _myNextSlide << " currentslide: " << _myCurrentSlide;
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         animation::ParallelAnimationPtr mySequence = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         mySequence->setOnPlay(masl::CallbackPtr(
