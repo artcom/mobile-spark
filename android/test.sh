@@ -23,6 +23,7 @@ cd -
 
 cd SparkViewerTest
 # update android test project
+$ANDROID_TOOL update project --library ../SparkViewerBase --target android-9 --name test --path . 
 $ANDROID_TOOL --silent update test-project --main ../SparkViewerBase --path .
 
 # update test.spark

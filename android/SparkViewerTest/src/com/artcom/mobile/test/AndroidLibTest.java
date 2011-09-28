@@ -10,7 +10,7 @@ import android.util.Log;
 import android.test.AndroidTestCase;
 
 public class AndroidLibTest  extends AndroidTestCase{
-    private static String PACKAGE_NAME = "com.artcom.mobile.BaseApp";
+    private static String PACKAGE_NAME = "com.artcom.mobile.test";
 
     public void testLib() throws Throwable {
         // run libs tests method
