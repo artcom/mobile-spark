@@ -2,6 +2,7 @@
 #include "BaseApp.h"
 
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/progress.hpp>
 
 #include <masl/Logger.h>
 #include <masl/BaseEntry.h>
@@ -190,6 +191,7 @@ namespace spark {
     
     void BaseApp::handleEvents() {
         AutoLocker<ThreadLock> myLocker(_myLock);        
+        boost::timer::timer myTimer;
         AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
         int i = 0;
         for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
@@ -201,15 +203,18 @@ namespace spark {
         }            
         _myEvents.clear();        
         AC_TRACE << "################ handle events finished " << _myEvents.size();
+        AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " s";
     }
     
 
     void BaseApp::onFrame(EventPtr theEvent) {
+        boost::timer::timer myTimer;
         AC_TRACE << "onFrame";
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _mySparkWindow->render();
         AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
+        AC_TRACE << "OnFrame duration " << myTimer.elapsed() << " s";
     }
 }
 
