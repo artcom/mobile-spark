@@ -142,7 +142,7 @@ namespace mar {
         }
     }
 
-    void RectangleShape::setTexCoords(vector2 theUV0, vector2 theUV1, vector2 theUV2, vector2 theUV3) {
+    void RectangleShape::setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {
         ElementPtr myElement = elementList[0];
         if (_myTextureFlag) {
             (myElement->vertexData_)[0 * _myDataPerVertex + 3] = theUV0[0];
