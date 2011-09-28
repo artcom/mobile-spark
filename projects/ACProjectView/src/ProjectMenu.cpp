@@ -48,7 +48,10 @@ namespace acprojectview {
         int iconWidth = dx - _myGapX;
         int iconHeight = dy - _myGapY;
         const VectorOfComponentPtr & myChildren = myPtr->getChildrenByType(ProjectImpl::SPARK_TYPE);
-        _myNumberOfSlides = myChildren.size()/(_myHorizontalTiling * _myVerticalTiling);
+        _myNumberOfSlides = (myChildren.size()-1)/(_myHorizontalTiling * _myVerticalTiling);
+        AC_PRINT << "---------------------------------- number of slides" << _myNumberOfSlides;
+        AC_PRINT << "---------------------------------- number of childs" << myChildren.size();
+
         for (size_t i = 0; i < myChildren.size(); i++) {
             ProjectImplPtr myProject = boost::static_pointer_cast<ProjectImpl>(myChildren[i]);
             ImagePtr image = boost::static_pointer_cast<spark::Image>(myProject->getChildByName("image"));
@@ -101,7 +104,7 @@ namespace acprojectview {
     void 
     ProjectMenu::changeSlide(int dir) {
         ProjectMenuPtr myPtr = boost::static_pointer_cast<ProjectMenu>(shared_from_this());
-        if(_myIsAnimating || _myCurrentSlide+dir < 0 || _myCurrentSlide+dir >= _myNumberOfSlides) return;
+        if(_myIsAnimating || _myCurrentSlide+dir < 0 || _myCurrentSlide+dir > _myNumberOfSlides) return;
         _myIsAnimating = true;      
         _myCurrentSlide += dir;
         WidgetPropertyAnimationPtr changeAnimation = WidgetPropertyAnimationPtr(

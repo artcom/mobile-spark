@@ -53,11 +53,12 @@ namespace acprojectview {
             spark::ImagePtr _image2;
             spark::RectanglePtr _myPopup;                
             spark::TextPtr _myDescription;
+            spark::TextPtr _myPopUpTitle;                
             spark::WindowPtr _myWindowPtr;
-            int _myHiddenPopUpHeight;
             void changeImage(int dir);
             void onAnimationFinished();
             void onLoadNextImages();
+            void onSwipePopup(spark::EventPtr theEvent);
             void autoScaleImage(spark::ImagePtr theImage);
 
 

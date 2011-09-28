@@ -40,14 +40,14 @@
             <Project name="project3" title="Juraskope" subtitle="Museum für Naturkunde, Berlin, 2007" src="/juraskope_teaser_thumb.png">
             </Project>
 
-            <Project name="project4" hidden_popup_height="30" title="Kinetische Skulptur" subtitle="Museum München, 2008" src="/kinetik_teaser_thumb.png">
+            <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" src="/kinetik_teaser_thumb.png">
                 <ContentImage src="/kinetische_skulptur_klein_1_1.png"/>
                 <ContentImage src="/kinetische_skulptur_klein_1_0.5.png"/>
                 <ContentImage src="/kinetische_skulptur_klein_0.5_1.png"/>
                 <ContentImage src="/kinetische_skulptur_01.png"/>
                 <ContentImage src="/kinetische_skulptur_02.png"/>
 	            <ContentImage src="/kinetische_skulptur_03.png"/>
-	            <Description name="description" text="Hier steht ne super Beschreibung, \n     -> nur fuer Alphabeten"/>
+	            <Description name="description" text="Die Kinetische Skulptur übersetzt den Prozess der Formfindung in Kunst und Design metaphorisch in den Raum.\n714 Metallkugeln bewegen sich im Zusammenspiel aus Mechanik, Elektronik und Code durch eine siebenminütige Narration. Auf einer Fläche von sechs Quadratmetern an feinen Stahlseilen hängend, werden sie einzeln über computergesteuerte Schrittmotoren bewegt. Anfangs bildet die Installation einen chaotischen Zustand ab, dann miteinander im Wettstreit liegende Formen bis diese schließlich zu einem finalen Objekt werden. Dieser Prozess wird in einer Reihe von Visualisierungsvariationen dargestellt."/>
 	        </Project>
 
             <Project name="project5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" src="/levelgreen_teaser_thumb.png">
