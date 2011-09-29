@@ -279,12 +279,6 @@ namespace mar {
     ObjShape::~ObjShape() {
     }
 
-    //bounding box is calculated during obj import and set from there
-    void ObjShape::setBoundingBox(vector4 theMin, vector4 theMax) {
-        _myBoundingBox.min = theMin;
-        _myBoundingBox.max = theMax;
-    }
-
     //////////////////////////////////////////////////////////////ShapeFactory
     ShapeFactory::~ShapeFactory() {}
 
@@ -301,7 +295,7 @@ namespace mar {
     }
 
     ShapePtr ShapeFactory::createObj(const std::string & theFile) {
-        ObjShapePtr myShape = ObjShapePtr(new ObjShape());
+        ShapePtr myShape = ShapePtr(new ObjShape());
         ObjImporter::get().importObj(theFile, myShape);
         myShape->initGL();
         return myShape;
