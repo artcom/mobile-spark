@@ -20,7 +20,7 @@ namespace mar {
 
         void importObj(std::string theObjFileName, ShapePtr theShape);
     private:
-        void faceParseHelper(std::vector<int> &theFaceData, const std::string & theData);
+        void faceParseHelper(std::vector<int> &theFaceData, const std::string & theData) const;
         vector3 getVector3(const std::string & theString) const;
         vector4 getColor(const std::string & theString) const;
         void importMaterialMap(const std::vector<std::string> & theMtlFile);

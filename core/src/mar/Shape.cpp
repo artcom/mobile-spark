@@ -69,7 +69,7 @@ namespace mar {
         }
     }
 
-    void Shape::setBoundingBox(vector4 theMin, vector4 theMax) {
+    void Shape::setBoundingBox(const vector4 & theMin, const vector4 & theMax) {
         _myBoundingBox.min = theMin;
         _myBoundingBox.max = theMax;
     }
