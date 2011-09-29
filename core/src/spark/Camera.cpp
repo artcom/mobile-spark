@@ -9,9 +9,6 @@
 
 namespace spark {
 
-    //Dummy::Dummy() { 
-    //    throw masl::Exception("asdasdasdasd", PLUS_FILE_LINE); 
-    //}
     const char * const Camera::SPARK_TYPE = "Camera";
 
     Camera::Camera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
