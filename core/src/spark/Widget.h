@@ -21,7 +21,6 @@ namespace spark {
     typedef masl::Ptr<I18nContext> I18nContextPtr;
 
     class Widget : public Container  {
-    friend class I18nHandler;
     public:
         Widget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Widget() = 0;
@@ -58,8 +57,6 @@ namespace spark {
         void switchLanguage(LANGUAGE theLanguage);
         I18nItemPtr getI18nItem() const { return _myI18nItem; }
         matrix _myLocalMatrix; //scale, roation and translation of this node
-        //void setI18nId(std::string theNewI18nId);
-        //void attachToI18nItem(EventCallbackPtr theCB);        
         
     protected:
         virtual void build() {};

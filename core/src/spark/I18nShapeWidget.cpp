@@ -3,18 +3,35 @@
 
 namespace spark {
     I18nShapeWidget::I18nShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
-        : ShapeWidget(theApp, theXMLNode) {
-        setI18nId(_myXMLNode->getAttributeAs<std::string>("i18nId", ""));
+        : ShapeWidget(theApp, theXMLNode), 
+        i18nId_(theXMLNode->getAttributeAs<std::string>("i18nId", ""))    {
     }
 
-    I18nShapeWidget::~I18nShapeWidget() {}
+    I18nShapeWidget::~I18nShapeWidget() {
+        if (_myI18nItem && _myHandleI18nEventCB && _myI18nItem->hasEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleI18nEventCB) ) {
+            _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleI18nEventCB);
+        }
+    }
+    
+    void 
+    I18nShapeWidget::setI18nData(std::string theData) {
+        data_ = theData;
+    }
+    
+    void 
+    I18nShapeWidget::setI18nId(std::string theNewI18nId) {
+        i18nId_ = theNewI18nId;
+        if (!i18nId_.empty()) {
+            attachToI18nItem();
+        }
+    }
 
     void
     I18nShapeWidget::realize()  {
         ShapeWidget::realize();
-        I18nShapeWidgetPtr ptr = boost::static_pointer_cast<I18nShapeWidget>(shared_from_this());        
-        I18nWidgetEventCallbackPtr myHandleLanguageSwitch = I18nWidgetEventCallbackPtr(new I18nWidgetEventCallback(ptr, &I18nShapeWidget::handleI18nOnLanguageSwitch));
-        I18nHandler::realize(boost::static_pointer_cast<Widget>(shared_from_this()), myHandleLanguageSwitch);                     
+        if (!i18nId_.empty()) {
+            attachToI18nItem();
+        }            
     }
 
     void 
@@ -23,5 +40,28 @@ namespace spark {
         _myDirtyFlag = true;
         AC_DEBUG << "on language switch data " << data_;
     }
+    void
+    I18nShapeWidget::attachToI18nItem() {
+        if (_myI18nItem) {
+            if (_myI18nItem->hasEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleI18nEventCB)) {
+                _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleI18nEventCB);
+            }
+            _myI18nItem = I18nItemPtr();
+        }
+        if (!i18nId_.empty()) {
+            _myI18nItem = getI18nItemByName(i18nId_);
+            if (!_myI18nItem) {
+                throw I18nItemNotFoundException("no i18n item named " + i18nId_, PLUS_FILE_LINE);
+            }
+            I18nShapeWidgetPtr ptr = boost::static_pointer_cast<I18nShapeWidget>(shared_from_this());        
+            EventCallbackPtr myHandleLanguageSwitch = EventCallbackPtr(new I18nWidgetEventCallback(ptr, &I18nShapeWidget::handleI18nOnLanguageSwitch));
+            _myI18nItem->addEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
+            myHandleLanguageSwitch->execute(spark::EventPtr());
+        } else {
+            data_ = "";
+        }
+        _myDirtyFlag = true;
+    }
+    
 
 }
