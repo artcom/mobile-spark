@@ -52,5 +52,5 @@ typedef enum {
 - (void) renderWithMSAA:(id)sender;
 - (void) startAnimation;
 - (void) stopAnimation;
-
+//- (spark::BaseApp) getApp;
 @end

@@ -191,6 +191,10 @@
     }
 }
 
+- (spark::BaseApp) getApp {
+    return *myApp;
+}
+
 - (void)dealloc
 {
     
