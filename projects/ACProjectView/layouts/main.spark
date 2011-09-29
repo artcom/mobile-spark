@@ -13,6 +13,14 @@
             <de>/en.png</de>
             <en>/de.png</en>
         </I18nItem>
+        <I18nItem name="kinetik_title">
+            <de>Kinetische Skulptur</de>
+            <en>Kinetic sculpture</en>
+        </I18nItem>
+        <I18nItem name="kinetik_subtitle">
+            <de>Museum München, 2008</de>
+            <en>Museum Munich, 2008</en>
+        </I18nItem>
         <I18nItem name="kinetik_text">
             <de>
             <![CDATA[Die Kinetische Skulptur übersetzt den Prozess der Formfindung in Kunst und Design metaphorisch in den Raum.\n714 Metallkugeln bewegen sich im Zusammenspiel aus Mechanik, Elektronik und Code durch eine siebenminütige Narration. Auf einer Fläche von sechs Quadratmetern an feinen Stahlseilen hängend, werden sie einzeln über computergesteuerte Schrittmotoren bewegt. Anfangs bildet die Installation einen chaotischen Zustand ab, dann miteinander im Wettstreit liegende Formen bis diese schließlich zu einem finalen Objekt werden. Dieser Prozess wird in einer Reihe von Visualisierungsvariationen dargestellt.]]>
@@ -21,6 +29,71 @@
             <![CDATA[EN-Die Kinetische Skulptur übersetzt den Prozess der Formfindung in Kunst und Design metaphorisch in den Raum.\n714 Metallkugeln bewegen sich im Zusammenspiel aus Mechanik, Elektronik und Code durch eine siebenminütige Narration. Auf einer Fläche von sechs Quadratmetern an feinen Stahlseilen hängend, werden sie einzeln über computergesteuerte Schrittmotoren bewegt. Anfangs bildet die Installation einen chaotischen Zustand ab, dann miteinander im Wettstreit liegende Formen bis diese schließlich zu einem finalen Objekt werden. Dieser Prozess wird in einer Reihe von Visualisierungsvariationen dargestellt.]]>
             </en>
         </I18nItem>
+        <I18nItem name="belvedere_title">
+            <de>DAS NEUE OESTERREICH</de>
+            <en>The new austria</en>
+        </I18nItem>
+        <I18nItem name="belvedere_subtitle">
+            <de>Schloss Belvedere Wien, 2005</de>
+            <en>Schloss Belvedere Wien, 2005</en>
+        </I18nItem>
+        <I18nItem name="duality_title">
+            <de>DUALITY</de>
+            <en>DUALITY</en>
+        </I18nItem>
+        <I18nItem name="duality_subtitle">
+            <de>Tokio, 2007</de>
+            <en>Tokio, 2007</en>
+        </I18nItem>
+        <I18nItem name="jurascope_title">
+            <de>Juraskope</de>
+            <en>Juraskope</en>
+        </I18nItem>
+        <I18nItem name="jurascope_subtitle">
+            <de>Museum für Naturkunde, Berlin, 2007</de>
+            <en>Museum for nature, Berlin, 2007</en>
+        </I18nItem>        
+        <I18nItem name="level_green_title">
+            <de>Level Green</de>
+            <en>Level Green</en>
+        </I18nItem>
+        <I18nItem name="level_green_subtitle">
+            <de>Autostadt Wolfsburg, 2009</de>
+            <en>Autostadt Wolfsburg, 2009</en>
+        </I18nItem>        
+        <I18nItem name="terravision_title">
+            <de>Terravision</de>
+            <en>Terravision</en>
+        </I18nItem>
+        <I18nItem name="terravision_subtitle">
+            <de>1994</de>
+            <en>1994</en>
+        </I18nItem>        
+        <I18nItem name="project_1_title">
+            <de>Project Test 1</de>
+            <en>Project Test 1</en>
+        </I18nItem>
+        <I18nItem name="project_1_subtitle">
+            <de>low resolution square</de>
+            <en>low resolution square</en>
+        </I18nItem>        
+        <I18nItem name="project_2_title">
+            <de>Project Test 2</de>
+            <en>Project Test 2</en>
+        </I18nItem>
+        <I18nItem name="project_2_subtitle">
+            <de>medium resolution 393x236</de>
+            <en>medium resolution 393x236</en>
+        </I18nItem>        
+        <I18nItem name="project_3_title">
+            <de>Project Test 3</de>
+            <en>Project Test 3</en>
+        </I18nItem>
+        <I18nItem name="project_3_subtitle">
+            <de>portrait picture 282x375</de>
+            <en>portrait picture 282x375</en>
+        </I18nItem>        
+        
     </I18nContext>
 
     <!-- userinterface is located in 2dworld -->
@@ -38,17 +111,18 @@
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
         
             
-            <Project name="project1" title="DAS NEUE OESTERREICH" subtitle="Schloss Belvedere Wien, 2005" src="/belvedere_teaser_thumb_01.png">
+            <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle" src="/belvedere_teaser_thumb_01.png">
 	            <ContentImage src="/duality_teaser_thumb_01.png"/>
             </Project>
 
-            <Project name="project2" title="DUALITY" subtitle="Tokio, 2007" src="/duality_teaser_thumb_01.png" >
+
+            <Project name="project2" title_I18n="duality_title" subtitle_I18n="duality_subtitle" src="/duality_teaser_thumb_01.png" >
             </Project>
             
-            <Project name="project3" title="Juraskope" subtitle="Museum für Naturkunde, Berlin, 2007" src="/juraskope_teaser_thumb.png">
+            <Project name="project3" title_I18n="jurascope_title" subtitle_I18n="jurascope_subtitle" src="/juraskope_teaser_thumb.png">
             </Project>
 
-            <Project name="project4" title="Kinetische Skulptur" subtitle="Museum München, 2008" description_I18N="kinetik_text" src="/kinetik_teaser_thumb.png">
+            <Project name="project4" title_I18n="kinetik_title" subtitle_I18n="kinetik_subtitle" description_I18n="kinetik_text" src="/kinetik_teaser_thumb.png">
                 <ContentImage src="/kinetische_skulptur_klein_1_1.png"/>
                 <ContentImage src="/kinetische_skulptur_klein_1_0.5.png"/>
                 <ContentImage src="/kinetische_skulptur_klein_0.5_1.png"/>
@@ -56,39 +130,40 @@
                 <ContentImage src="/kinetische_skulptur_02.png"/>
 	            <ContentImage src="/kinetische_skulptur_03.png"/>
 	        </Project>
+	        
 
-            <Project name="project5" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" src="/levelgreen_teaser_thumb.png">
+            <Project name="project5" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" src="/levelgreen_teaser_thumb.png">
                 <ContentImage src="/level_green_01.png"/>
                 <ContentImage src="/level_green_02.png"/>
 	            <ContentImage src="/level_green_03.png"/>
             </Project>
 
-            <Project name="project6" title="Terravision" subtitle="1994"  src="/terravision_teaser_thumb.png">
+
+            <Project name="project6" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle"  src="/terravision_teaser_thumb.png">
             </Project>
 
-
-            <Project name="project7" title="Project Test1 " subtitle="low resolution square" src="/test1.png">
-                <ContentImage src="/level_green_01.png"/>
-                <ContentImage src="/level_green_02.png"/>
-	            <ContentImage src="/level_green_03.png"/>
-            </Project>
-            
-	        <Project name="project8" title="Project Test2 " subtitle="medium resolution 393x236 Der ADC Europe hat die spiegelkinetische Installation in der Kategorie Environmental Design mit Gold ausgezeichnet. Mobility ist für die World Expo 2010 in Shanghai entstanden, beauftragt von Otto Bock HealthCare. " src="/test1.png">
-                <ContentImage src="/level_green_01.png"/>
-                <ContentImage src="/level_green_02.png"/>
-	            <ContentImage src="/level_green_03.png"/>
-            </Project>
-
-            <Project name="project9" title="Level Green " subtitle="Autostadt Wolfsburg, 2009" src="/levelgreen_teaser_thumb.png">
+            <Project name="project7" title_I18n="project_1_title" subtitle_I18n="project_1_subtitle" src="/test1.png">
                 <ContentImage src="/level_green_01.png"/>
                 <ContentImage src="/level_green_02.png"/>
 	            <ContentImage src="/level_green_03.png"/>
             </Project>
             
-             <Project name="project10" title="Project Test3" subtitle="portrait picture 282x375"  src="/test3.png">
+	        <Project name="project8" title_I18n="project_2_title" subtitle_I18n="project_2_subtitle" src="/test1.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
             </Project>
 
-            <Project name="project11" title="Terravision" subtitle="1994"  src="/terravision_teaser_thumb.png">
+            <Project name="project9" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" src="/levelgreen_teaser_thumb.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+            </Project>
+            
+             <Project name="project10" title_I18n="project_3_title" subtitle_I18n="project_3_subtitle"  src="/test3.png">
+            </Project>
+
+            <Project name="project11" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle"  src="/terravision_teaser_thumb.png">
             </Project>
           
         </ProjectMenu>	
