@@ -1,10 +1,13 @@
 #import "SparkViewerAppDelegate.h"
 #import "GLView.h"
+#import "SparkViewerViewController.h"
 
 @implementation SparkViewerAppDelegate
 
 @synthesize window;
 @synthesize myGLView;
+@synthesize sparkViewerViewController=_sparkViewerViewController;
+
 
 - (void)createGLView
 {
@@ -13,14 +16,26 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    SparkViewerViewController *aViewController = [[SparkViewerViewController alloc] initWithNibName:nil bundle:nil];
+    [self setSparkViewerViewController:aViewController];
+    [aViewController release];
+
+    
     NSLog(@"in didFinishLaunchingWithOptions");
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
     [self createGLView];
-    
-    [self.window addSubview:myGLView];
+
+    [self.window addSubview:self.sparkViewerViewController.view];
+    [self.sparkViewerViewController.view addSubview:myGLView];
+    //[self.sparkViewerViewController setBaseApp:[myGLView getApp]];
+    //[self.window addSubview:myGLView];
+
     [self.window makeKeyAndVisible];
     
     [myGLView startAnimation];
+    self.window.rootViewController = self.sparkViewerViewController;
+    
+    
     return YES;
 }
 
@@ -72,6 +87,9 @@
     [window release];
     
     [myGLView release];
+    
+    [_sparkViewerViewController release];
+
     
     [super dealloc];
 }
