@@ -4,10 +4,10 @@
 #include "Exception.h"
 #include "string_functions.h"
 
-#ifdef __APPLE__
+#ifdef iOS
     //iOS
     #include <iostream>
-#elif __ANDROID__
+#elif ANDROID
     //Android
     #include <android/log.h>
 #endif
@@ -107,7 +107,7 @@ namespace masl {
         myText += " at:" + std::string(buf) + "]";
 
 
-        #ifdef __APPLE__
+        #ifdef iOS
             //iOS
         switch (theSeverity) {
             case SEV_TRACE:
@@ -133,7 +133,7 @@ namespace masl {
                 break;
         }
 
-        #elif __ANDROID__
+        #elif ANDROID
             //Android
         switch (theSeverity) {
             case SEV_TRACE :

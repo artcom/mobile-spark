@@ -9,7 +9,7 @@
 #include "ContentImage.h"
 
 
-#ifdef __ANDROID__
+#ifdef ANDROID
 extern "C" {
     JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved);
 }
@@ -24,7 +24,8 @@ namespace acprojectview {
             
         private:
             void onProjectItem(spark::EventPtr theEvent);
-            void onLanguageSwitch(spark::EventPtr theEvent);
+            void onLanguageSwitchDe(spark::EventPtr theEvent);
+            void onLanguageSwitchEn(spark::EventPtr theEvent);
             void onBack(spark::EventPtr theEvent);
             void onSwipeCB(spark::EventPtr theEvent);
             void onStartScreenClicked(spark::EventPtr theEvent);

@@ -85,6 +85,7 @@ namespace acprojectview {
          
          _myPopUpTitle->setY(myTextHeight);
          _myPopup->setY(-myTextHeight);
+         _myPopup->setAlpha(0.5);
          
          _imageTransform0->setX(0);
          _imageTransform1->setX(_myWidth);

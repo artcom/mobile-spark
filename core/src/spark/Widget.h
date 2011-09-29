@@ -9,7 +9,6 @@
 #include <animation/PropertyAnimation.h>
 
 #include "I18nConstants.h"
-#include "I18nHandler.h"
 #include "Container.h"
 #include "Event.h"
 
@@ -21,7 +20,6 @@ namespace spark {
     typedef masl::Ptr<I18nContext> I18nContextPtr;
 
     class Widget : public Container  {
-    friend class I18nHandler;
     public:
         Widget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Widget() = 0;
@@ -51,22 +49,19 @@ namespace spark {
         void setRotationZ(const float theRotationZ) { _rotationZ = theRotationZ; updateMatrix();};
 
         float getAlpha() const { return _alpha;};
-        inline void setAlpha(const float theAlpha) {applyAlpha(theAlpha);};
+        inline void setAlpha(const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
 
         const I18nContextPtr getI18nContext() const { return _myI18nContext; };
         LANGUAGE getLanguage() const;
         void switchLanguage(LANGUAGE theLanguage);
         I18nItemPtr getI18nItem() const { return _myI18nItem; }
         matrix _myLocalMatrix; //scale, roation and translation of this node
-        //void setI18nId(std::string theNewI18nId);
-        //void attachToI18nItem(EventCallbackPtr theCB);        
         
     protected:
         virtual void build() {};
-        virtual void applyAlpha (const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
         float getActualAlpha() const { return _actualAlpha;};
         float getParentAlpha() const;
-        void propagateAlpha();
+        virtual void propagateAlpha();
         
         matrix _myWorldMVMatrix;
         bool _myDirtyFlag;

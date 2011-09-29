@@ -1,7 +1,7 @@
 #ifndef _included_mobile_android_jnibinding
 #define _included_mobile_android_jnibinding
 
-#ifdef __ANDROID__
+#ifdef ANDROID
     #include <jni.h>
 
 

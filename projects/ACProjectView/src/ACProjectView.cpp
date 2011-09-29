@@ -22,7 +22,7 @@ using namespace spark;
 using namespace masl;
 
 /////////////////////////////////////////////////////////////////////////App-Instance
-#ifdef __ANDROID__
+#ifdef ANDROID
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
     spark::AppProvider::get().setApp(masl::Ptr<acprojectview::ACProjectView>(new acprojectview::ACProjectView()));
@@ -49,6 +49,9 @@ namespace acprojectview {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));
         _myProjectViewer = boost::static_pointer_cast<ProjectViewerImpl>(_mySparkWindow->getChildByName("2dworld")->getChildByName("projectViewer",true));
+
+        spark::RectanglePtr myBackground = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("2dworld")->getChildByName("background"));
+        myBackground->setSize(_mySparkWindow->getSize());
                     
         _myWidth = _myProjectMenu->getPreviewWidth();
         _myHeight = _myProjectMenu->getPreviewHeight();
@@ -57,8 +60,6 @@ namespace acprojectview {
         _myStartScreenPtr =  boost::static_pointer_cast<Transform>(_mySparkWindow->getChildByName("2dworld")->getChildByName("startscreen",true));
         spark::EventCallbackPtr startToMenuAniCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onStartScreenClicked));
         _myStartScreenPtr->addEventListener(TouchEvent::PICKED, startToMenuAniCB,true);
-        //_myProjectViewer->setWidth(_myWidth);
-        //_myProjectViewer->setWidth(_myHeight);
         
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onProjectItem));
         spark::EventCallbackPtr myBackCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onBack));
@@ -74,20 +75,31 @@ namespace acprojectview {
             }
         }
 
-        spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("language_toggle", true);
-        spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitch));
-        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
+        spark::TextPtr myGermanButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("deutsch", true));
+        spark::TextPtr myEnglishButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("english", true));
+        spark::RectanglePtr myLangSep = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("lang_sep", true));
+        myLangSep->setSize(vector2(myLangSep->getShape()->getBoundingBox().max[0], myGermanButton->getTextSize()[1]));
+        spark::RectanglePtr myStartBackground = boost::static_pointer_cast<Rectangle>(_myStartScreenPtr->getChildByName("background"));
+        myStartBackground->setSize(_mySparkWindow->getSize());
+        
+        myEnglishButton->setX(_mySparkWindow->getSize()[0] - myEnglishButton->getTextSize()[0] - 12);
+        myLangSep->setX( myEnglishButton->getX() - 12);
+        myGermanButton->setX( myLangSep->getX() - myGermanButton->getTextSize()[0] - 12);
+        
+        spark::EventCallbackPtr mySwitchLanguageDeCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitchDe));
+        myGermanButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageDeCB);
+
+        spark::EventCallbackPtr mySwitchLanguageEnCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitchEn));
+        myEnglishButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageEnCB);
     }
     
     void ACProjectView::onStartScreenClicked(EventPtr theEvent) {
-       ImagePtr myBgImagePtr = boost::static_pointer_cast<Image>(_myStartScreenPtr->getChildByName("background"));
-        
+        AC_PRINT << "clicked on startscreen";
         _myStartScreenPtr->setSensible(false);
-        myBgImagePtr->setSensible(false);
         _myProjectMenu->setSensible(true);
         _myProjectMenu->arrangeProjects();
         WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myBgImagePtr, &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
+                new WidgetPropertyAnimation(_myStartScreenPtr, &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
@@ -103,13 +115,11 @@ namespace acprojectview {
     }
     
     void ACProjectView::onStartIdleFade() {
-       ImagePtr myBgImagePtr = boost::static_pointer_cast<Image>(_myStartScreenPtr->getChildByName("background"));
-        myBgImagePtr->setVisible(true);
+        _myStartScreenPtr->setVisible(true);
     }
 
     void ACProjectView::onFinishIdleFade() {
-       ImagePtr myBgImagePtr = boost::static_pointer_cast<Image>(_myStartScreenPtr->getChildByName("background"));
-        myBgImagePtr->setVisible(false);
+        _myStartScreenPtr->setVisible(false);
     }
     
     void ACProjectView::onProjectItem(EventPtr theEvent) {
@@ -198,9 +208,11 @@ namespace acprojectview {
         animation::AnimationManager::get().play(mySeqAnimation);
     }
 
-    void ACProjectView::onLanguageSwitch(EventPtr theEvent) {
-        LANGUAGE myLanguage = _mySparkWindow->getLanguage();
-        _mySparkWindow->switchLanguage(myLanguage == spark::DE ? spark::EN : spark::DE);
+    void ACProjectView::onLanguageSwitchDe(EventPtr theEvent) {
+        _mySparkWindow->switchLanguage(spark::DE);
+    }
+    void ACProjectView::onLanguageSwitchEn(EventPtr theEvent) {
+        _mySparkWindow->switchLanguage(spark::EN);
     }
 
 }

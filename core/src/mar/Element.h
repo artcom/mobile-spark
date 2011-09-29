@@ -45,14 +45,14 @@ namespace mar {
         boost::shared_array<float> vertexData_;    //interleaved
         boost::shared_array<GLushort> indexDataVBO_;
 
-        GLuint vertexBuffer;
-        GLuint indexBuffer;
-        #if __APPLE__
+        #ifdef iOS
         GLuint vertexArrayObject;
         #endif
 
     protected:
         std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
+        GLuint vertexBuffer;
+        GLuint indexBuffer;
         unsigned int _myStride;
     };
 

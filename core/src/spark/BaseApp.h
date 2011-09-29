@@ -1,7 +1,7 @@
 #ifndef _included_mobile_spark_BaseApp_
 #define _included_mobile_spark_BaseApp_
 
-#ifdef __ANDROID__
+#ifdef ANDROID
 #include "JNIBinding.h"
 #endif
 

@@ -105,7 +105,11 @@
         <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
         
         <Transform name="startscreen">
-            <Image name="background" x="0" y="0" z="5" src="/startScreenBackground.png"/> 
+            <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]"/>
+            <Image name="logo" x="0" y="30" z="6" src="/ac_logo_140px.png"/> 
+            <Text name="deutsch" text="DEUTSCH" x="10" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
+            <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
+            <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
         </Transform>        
         
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
@@ -172,7 +176,6 @@
         </ProjectViewer>
 
         <!--Text name="hellotext" y="400" x="10" z="13" i18nId="hello_text" color="[1,1,0,1]" fontsize="32"/-->
-        <Image name="language_toggle" y="400" x="680" z="13" i18nId="language"/>
 
     </World>        
 </Window>

@@ -12,12 +12,12 @@ namespace mar {
     Element::~Element() {
         glDeleteBuffers(1, &vertexBuffer);
         glDeleteBuffers(1, &indexBuffer);
-#if __APPLE__
+#ifdef iOS
         glDeleteVertexArraysOES(1, &vertexArrayObject);
 #endif
     }
 
-#if __APPLE__
+#ifdef iOS
     void Element::loadData(const matrix & theMatrix) const {
 
     }
@@ -50,7 +50,7 @@ namespace mar {
         glBindVertexArrayOES(0);
     }
 #endif
-#ifdef __ANDROID__
+#ifdef ANDROID
     void Element::loadData(const matrix & theMatrix) const {
         material->loadShader(theMatrix);
         int offset = 0;

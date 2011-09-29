@@ -35,7 +35,7 @@ namespace mar {
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {}
         const BoundingBox & getBoundingBox() const { return _myBoundingBox;};
-        void setBoundingBox(const vector4 theMin, const vector4 theMax);
+        void setBoundingBox(const vector4 & theMin, const vector4 & theMax);
         bool isTransparent();
 
         void setAlpha(const float theAlpha);
