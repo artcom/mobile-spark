@@ -8,10 +8,10 @@
 #include <list>
 #include <typeinfo>
 
-#ifdef __APPLE__
+#ifdef iOS
     //iOS
     #include <iostream>
-#elif __ANDROID__
+#elif ANDROID
     //Android
     #include <android/log.h>
 #endif

@@ -11,7 +11,7 @@ namespace spark {
 }
 
 
-#ifdef __ANDROID__
+#ifdef ANDROID
 /////////////////////////////////////////////////////////////////////////JNI
 extern "C" {
     JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_SparkBinding_test(JNIEnv * env, jobject obj);

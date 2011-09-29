@@ -8,7 +8,7 @@
 #include "string_functions.h"
 #include "CallStack.h"
 
-#if __APPLE__
+#ifdef iOS
     typedef sig_t sighandler_t;
 #endif
 
