@@ -4,6 +4,7 @@
 
 @implementation SparkViewerAppDelegate
 
+@synthesize isPortrait;
 @synthesize window;
 @synthesize myGLView;
 @synthesize sparkViewerViewController=_sparkViewerViewController;
@@ -21,19 +22,16 @@
     [aViewController release];
 
     
-    NSLog(@"in didFinishLaunchingWithOptions");
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
     [self createGLView];
+    self.window.rootViewController = self.sparkViewerViewController;
+    [self.sparkViewerViewController setPortrait:self.isPortrait];
 
     [self.window addSubview:self.sparkViewerViewController.view];
     [self.sparkViewerViewController.view addSubview:myGLView];
-    //[self.sparkViewerViewController setBaseApp:[myGLView getApp]];
-    //[self.window addSubview:myGLView];
-
     [self.window makeKeyAndVisible];
     
     [myGLView startAnimation];
-    self.window.rootViewController = self.sparkViewerViewController;
     
     
     return YES;
