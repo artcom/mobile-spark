@@ -9,7 +9,6 @@
 #include <animation/PropertyAnimation.h>
 
 #include "I18nConstants.h"
-#include "I18nHandler.h"
 #include "Container.h"
 #include "Event.h"
 
