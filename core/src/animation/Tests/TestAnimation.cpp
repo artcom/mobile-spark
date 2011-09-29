@@ -13,7 +13,7 @@ namespace animation {
 }
 
 
-#ifdef __ANDROID__
+#ifdef ANDROID
 /////////////////////////////////////////////////////////////////////////JNI
 extern "C" {
     JNIEXPORT jstring JNICALL Java_com_artcom_mobile_test_AnimationBinding_test(JNIEnv * env, jobject obj);

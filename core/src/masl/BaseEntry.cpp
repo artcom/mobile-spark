@@ -8,7 +8,7 @@
 #include <dlfcn.h>
 #include <cstdlib>
 
-#ifdef __ANDROID__
+#ifdef ANDROID
 
 #ifndef OSX
 // XXX: fixes linker warning: "type and size of dynamic symbol `__dso_handle' are not defined"

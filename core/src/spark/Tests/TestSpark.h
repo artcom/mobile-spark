@@ -1,9 +1,9 @@
 #ifndef TESTSPARK
 #define TESTSPARK
 
-#ifdef __APPLE__
+#ifdef iOS
     //iOS
-#elif __ANDROID__
+#elif ANDROID
     //Android
     #include <jni.h>
 #endif

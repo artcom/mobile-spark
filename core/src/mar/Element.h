@@ -45,7 +45,7 @@ namespace mar {
         boost::shared_array<float> vertexData_;    //interleaved
         boost::shared_array<GLushort> indexDataVBO_;
 
-        #if __APPLE__
+        #ifdef iOS
         GLuint vertexArrayObject;
         #endif
 

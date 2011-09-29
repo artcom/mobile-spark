@@ -3,10 +3,10 @@
 #include <masl/MobileSDK.h>
 #include <mar/AssetProvider.h>
 
-#ifdef __ANDROID__
+#ifdef ANDROID
     #include <android/AndroidAssetProvider.h>
 #endif
-#if __APPLE__
+#ifdef iOS
     #include <ios/IOSAssetProvider.h>
 #endif
 
