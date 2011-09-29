@@ -2,17 +2,17 @@
 #define _included_mobile_spark_Image_
 
 #include "ShapeWidget.h"
+#include "I18nShapeWidget.h"
 #include "Event.h"
-#include "I18nHandler.h"
 
 namespace spark {
-    class Image : public ShapeWidget {
+    class Image : public I18nShapeWidget {
     public:
         Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Image();
         virtual void onResume();
         virtual void realize();
-        void setSrc(std::string theSrc) { i18nHandler_->data_ = theSrc; _myDirtyFlag = true;};
+        void setSrc(std::string theSrc);
         const vector2 & getTextureSize();
 
         static const char * const SPARK_TYPE;
@@ -21,7 +21,6 @@ namespace spark {
         virtual void build();
     private:
         vector2 _myTextureSize;        
-        I18nHandlerPtr i18nHandler_;
     };
 
     typedef masl::Ptr<Image> ImagePtr;
