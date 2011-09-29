@@ -11,6 +11,7 @@
 #include "I18nConstants.h"
 #include "I18nHandler.h"
 #include "Container.h"
+#include "Event.h"
 
 namespace spark {
 
@@ -19,7 +20,7 @@ namespace spark {
     class I18nContext;
     typedef masl::Ptr<I18nContext> I18nContextPtr;
 
-    class Widget : public Container {
+    class Widget : public Container  {
     friend class I18nHandler;
     public:
         Widget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
@@ -55,14 +56,17 @@ namespace spark {
         const I18nContextPtr getI18nContext() const { return _myI18nContext; };
         LANGUAGE getLanguage() const;
         void switchLanguage(LANGUAGE theLanguage);
-
+        I18nItemPtr getI18nItem() const { return _myI18nItem; }
         matrix _myLocalMatrix; //scale, roation and translation of this node
+        //void setI18nId(std::string theNewI18nId);
+        //void attachToI18nItem(EventCallbackPtr theCB);        
+        
     protected:
         virtual void build() {};
+        virtual void applyAlpha (const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
         float getActualAlpha() const { return _actualAlpha;};
         float getParentAlpha() const;
         void propagateAlpha();
-        virtual void applyAlpha (const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
         
         matrix _myWorldMVMatrix;
         bool _myDirtyFlag;
@@ -84,6 +88,9 @@ namespace spark {
         float _actualAlpha;
         bool _visible;
         bool _sensible;
+        //std::string i18nId_;
+        //EventCallbackPtr _myHandleI18nEventCB;
+            
 
     };
 
@@ -95,5 +102,7 @@ namespace spark {
     typedef animation::PropertyAnimation<WidgetPtr, WidgetPropertySetterFunction> WidgetPropertyAnimation;
     typedef masl::Ptr<WidgetPropertyAnimation>  WidgetPropertyAnimationPtr;
     typedef masl::Ptr<masl::MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
+    typedef MemberFunctionEventCallback<Widget, WidgetPtr> WidgetEventCallback;
+    typedef masl::Ptr<MemberFunctionEventCallback<Widget, WidgetPtr> > WidgetEventCallbackPtr;
 };
 #endif

@@ -10,9 +10,9 @@ namespace spark {
     const char * const Image::SPARK_TYPE = "Image";
 
     Image::Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        ShapeWidget(theApp, theXMLNode) 
+        I18nShapeWidget(theApp, theXMLNode) 
     {
-        i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "src"));
+        setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
     }
 
     Image::~Image() {
@@ -20,13 +20,12 @@ namespace spark {
 
     void
     Image::realize() {
-        ShapeWidget::realize();
-        i18nHandler_->realize(boost::static_pointer_cast<Widget>(shared_from_this()));
+        I18nShapeWidget::realize();
     }
 
     void
     Image::onResume() {
-        ShapeWidget::onResume();
+        I18nShapeWidget::onResume();
         _myDirtyFlag = true;
     }
 
@@ -37,15 +36,19 @@ namespace spark {
         }
         return _myTextureSize;
     }
-
+    
+    void 
+    Image::setSrc(std::string theSrc) { 
+        data_ = theSrc; _myDirtyFlag = true;
+    }    
     
     void
     Image::build() {
-        ShapeWidget::build();
-        if(i18nHandler_->data_.empty()) return;
+        I18nShapeWidget::build();
+        if(data_.empty()) return;
         float width = _myXMLNode->getAttributeAs<float>("width", -1);
         float height = _myXMLNode->getAttributeAs<float>("height", -1);
-        setShape(ShapeFactory::get().createRectangle(true, width >= 0 ? width : 0, height >= 0 ? height : 0, i18nHandler_->data_));
+        setShape(ShapeFactory::get().createRectangle(true, width >= 0 ? width : 0, height >= 0 ? height : 0, data_));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         if (width == -1 || height == -1) {
             width = width == -1 ? myMaterial->getTexture()->width_ : width;

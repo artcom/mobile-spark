@@ -10,6 +10,7 @@
 
 
 using namespace spark;
+using namespace std;
 
 namespace acprojectview {
         
@@ -57,6 +58,9 @@ namespace acprojectview {
     }
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
+        string myDescription_I18N = currentProject->getNode()->getAttributeAs<std::string>("description_I18N","");
+            
+        AC_PRINT << "################# : " << myDescription_I18N;
         _myIsAnimating = false;     
         _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
@@ -68,12 +72,14 @@ namespace acprojectview {
              return;
          }
          _imageTransform0->setVisible(true);
-         DescriptionPtr txt = boost::static_pointer_cast<Description>(_myCurrentProject->getChildByName("description"));
-         if (txt == 0) {
-             _myDescription->setText("");
-         } else {
-             _myDescription->setText(txt->getText());
-         }
+         
+         // bind i18n item to description widget
+         //I18nHandlerPtr myNewI18nHandler = I18nHandlerPtr(new I18nHandler(myDescription_I18N));
+        //AC_PRINT << "ProjectViewerImpl::showProject  i18n handler new(0): " << myNewI18nHandler << " count: " << myNewI18nHandler.use_count();          
+        //AC_PRINT << "ProjectViewerImpl::showProject  i18n handler new(1): " << myNewI18nHandler << " count: " << myNewI18nHandler.use_count();          
+        //_myDescription->setI18nHandler(myNewI18nHandler);
+        _myDescription->setI18nId(myDescription_I18N);
+        //AC_PRINT << "ProjectViewerImpl::showProject  i18n handler new(2): " << myNewI18nHandler << " count: " << myNewI18nHandler.use_count();          
          
          _myPopUpTitle->setText(currentProject->getNode()->getAttributeAs<std::string>("title",""));
          int myHiddenPopUpHeight = std::max(30, int(_myPopUpTitle->getTextSize()[1]));

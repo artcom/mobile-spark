@@ -22,7 +22,6 @@ namespace acprojectview {
         imageComponent_ = boost::static_pointer_cast<Image>(getChildByName("image"));
         titleComponent_ = boost::static_pointer_cast<Text>(getChildByName("title"));
         subtitleComponent_ = boost::static_pointer_cast<Text>(getChildByName("subtitle"));
-         
         if (src.size() >0 ) {
             imageComponent_->setSrc(src);
         }
