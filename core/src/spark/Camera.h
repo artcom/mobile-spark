@@ -5,11 +5,6 @@
 
 namespace spark {
 
-//    class Dummy {
-//        public:
-//        Dummy();// { throw masl::Exception("asdasdasdasd", PLUS_FILE_LINE); }
-//    };
-
     class Camera : public ShapeWidget {
     public:
         Camera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
