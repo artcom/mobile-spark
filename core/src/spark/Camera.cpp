@@ -45,17 +45,16 @@ namespace spark {
         float myRatio = myEvent->size_[0] /myEvent->size_[1];
         if (myRatio < 1.0) {
             _myPortraitMode = true;
-            AC_PRINT << "Camera::onSizeChanged senkrecht";
+            AC_INFO << "Camera::onSizeChanged senkrecht";
         } else {
             _myPortraitMode = false;
-            AC_PRINT << "Camera::onSizeChanged waagerecht";
+            AC_INFO << "Camera::onSizeChanged waagerecht";
         }
     }
 
     void
     Camera::prerender(MatrixStack& theCurrentMatrixStack) {
         ShapeWidget::prerender(theCurrentMatrixStack);
-        //AC_PRINT << "camera us capturing : " << MobileSDK_Singleton::get().isCameraCapturing();
         if (isRendered()) {
             if (!masl::MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
                 masl::MobileSDK_Singleton::get().getNative()->startCameraCapture(_myColorConversionFlag);
@@ -92,6 +91,6 @@ namespace spark {
                                      vector2(0,0),
                                      vector2(width/myCameraInfo.texturewidth,0));
         }
-		AC_PRINT<< " ####### Camera width x height : " << width << " x " << height;
+		AC_INFO<< "Camera width x height : " << width << " x " << height;
     }
 }
