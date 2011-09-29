@@ -75,7 +75,9 @@ find_library(LIBGCC_LIBRARY_DIRS
    HINTS "${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1"
 )
 target_link_libraries(${EXECUTABLE_NAME} ${ZLIB_LIBRARY_DIRS})
-target_link_libraries(${EXECUTABLE_NAME} ${LIBGCC_LIBRARY_DIRS})
+if (LIBGCC_LIBRARY_DIRS)
+    target_link_libraries(${EXECUTABLE_NAME} ${LIBGCC_LIBRARY_DIRS})
+endif(LIBGCC_LIBRARY_DIRS)
 
 #This creates folders in the *.app with the mkdir command
 add_custom_command( 

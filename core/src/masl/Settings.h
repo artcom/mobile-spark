@@ -1,7 +1,7 @@
 #ifndef _included_mobile_masl_Settings_
 #define _included_mobile_masl_Settings_
 
-#if __APPLE__
+#ifdef iOS
     #include "TargetConditionals.h"
     #ifdef TARGET_OS_IPHONE
          // iOS

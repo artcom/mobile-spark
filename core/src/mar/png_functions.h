@@ -6,12 +6,15 @@ extern "C" {
 #include <libpng/png.h>
 }
 
+#include <masl/Ptr.h>
 #include <masl/Exception.h>
 
 #include "openGL_functions.h"
-#include "Material.h"
 
 namespace mar {
+
+    class Texture;
+    typedef masl::Ptr<Texture> TexturePtr;
 
     DECLARE_EXCEPTION(PngLoadingException, masl::Exception)
 

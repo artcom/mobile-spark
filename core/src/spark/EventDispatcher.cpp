@@ -19,10 +19,10 @@ namespace spark {
     }
 
     bool 
-    EventDispatcher::hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
+    EventDispatcher::hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) const {
         std::pair<std::string, bool> myKey(theType, theUseCapture);
-        std::pair<EventListenerMap::iterator, EventListenerMap::iterator> itp = _myListenersMap.equal_range(myKey);
-        for (EventListenerMap::iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
+        std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = _myListenersMap.equal_range(myKey);
+        for (EventListenerMap::const_iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
             if ((*mapIt).second == theListener) {
                 return true;
             }
@@ -67,7 +67,7 @@ namespace spark {
         // capture phase
         EventListenerKey myCaptureKey(theEvent->getType(), true);
         for (std::list<ComponentPtr>::const_iterator it = myCaptureList.begin(); it != myCaptureList.end(); ++it) {
-            if ((*it)->hasEventListener(myCaptureKey)) {
+            if ((*it)->hasEventListenersForType(myCaptureKey)) {
                 theEvent->dispatchTo(*it, Event::CAPTURING);
                 EventListenerMap myListeners = (*it)->getEventListeners();
                 std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = myListeners.equal_range(myCaptureKey);

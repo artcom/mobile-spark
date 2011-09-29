@@ -20,7 +20,7 @@ namespace mar {
     //material file .mtl has the same name as .obj file
     //color of textured materials is ignored
 
-    void ObjImporter::faceParseHelper(std::vector<int> &theFaceData, const std::string & theData) {
+    void ObjImporter::faceParseHelper(std::vector<int> &theFaceData, const std::string & theData) const {
         size_t pos1 = theData.find_first_of("/");
         size_t pos2 = theData.find_last_of("/");
         std::string a = theData.substr(0,pos1);

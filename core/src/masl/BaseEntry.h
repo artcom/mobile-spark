@@ -1,9 +1,9 @@
 #ifndef BASEENTRY
 #define BASEENTRY
 
-#ifdef __APPLE__
+#ifdef iOS
     //iOS
-#elif __ANDROID__
+#elif ANDROID
     //Android
     #include <jni.h>
 #endif
@@ -14,7 +14,7 @@
 
 namespace masl {
 }
-#ifdef __ANDROID__
+#ifdef ANDROID
 extern "C" {
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_putEnv(JNIEnv *env, jclass, jstring envVar);
     JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * env, jobject obj,
@@ -26,7 +26,7 @@ extern "C" {
                                                                           jobject theSeverity);
 
 };
-#endif //__ANDROID__
+#endif //ANDROID
 
 #endif //BASEENTRY
 

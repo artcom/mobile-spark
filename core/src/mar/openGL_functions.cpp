@@ -94,7 +94,7 @@ namespace mar {
     }
 
 
-     GLuint getShaderVariableHandle(GLuint theProgram, std::string theVariableName, bool theUniformFlag) {
+     GLuint getShaderVariableHandle(GLuint theProgram, const std::string & theVariableName, bool theUniformFlag) {
          GLuint myHandle;
          if (theUniformFlag) {
              myHandle = glGetUniformLocation(theProgram, theVariableName.c_str());
@@ -108,12 +108,12 @@ namespace mar {
      }
 
      GLuint getShaderVariableHandleAttribute(GLuint theProgram,
-                                                    std::string theVariableName) {
+                                                    const std::string & theVariableName) {
          return getShaderVariableHandle(theProgram, theVariableName, false);
      }
 
      GLuint getShaderVariableHandleUniform(GLuint theProgram,
-                                                  std::string theVariableName) {
+                                                  const std::string & theVariableName) {
          return getShaderVariableHandle(theProgram, theVariableName, true);
      }
 }

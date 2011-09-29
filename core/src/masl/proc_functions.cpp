@@ -1,14 +1,20 @@
-
+// own header
 #include "proc_functions.h"
 
-
-#include "file_functions.h" // IO_Exception
+#include "Exception.h"
 #include "Logger.h"
+
+#ifdef iOS
+#include <mach/mach.h>
+#include <paths.h>
+#include <sys/sysctl.h>
+#endif
 
 using namespace std;
 
 namespace masl {
 
+#ifdef ANDROID
     enum MemInfo {
         MEM_TOTAL,
         MEM_FREE,
@@ -23,8 +29,7 @@ namespace masl {
         const char* myMemInfoFile = "/proc/meminfo";
         FILE* fp = fopen(myMemInfoFile, "r");
         if (!fp) {
-            AC_ERROR << "unable to open " << myMemInfoFile;
-            //throw IO_Failure("getMemInfo", std::string("Unable to open ") + myMemInfoFile);
+            throw masl::Exception("getMemInfo", std::string("Unable to open ") + myMemInfoFile);
         }
 
         unsigned myMemTotal = 0, myMemFree = 0;
@@ -101,8 +106,7 @@ namespace masl {
         snprintf(myPidStatusFile, sizeof(myPidStatusFile), "/proc/%d/status", thePid);
         FILE* fp = fopen(myPidStatusFile, "r");
         if (!fp) {
-            AC_ERROR << "unable to open " << myPidStatusFile;
-            //throw IO_Failure("getProcMemInfo", std::string("Unable to open ") + myPidStatusFile);
+            throw masl::Exception("getProcMemInfo", std::string("Unable to open ") + myPidStatusFile);
         }
 
         unsigned myMemVirtual = 0, myMemPhysical = 0;
@@ -148,12 +152,38 @@ namespace masl {
         myMemInfo = myMemData + myMemStack + myMemExe;
         return myMemInfo;
     }
+#endif
+
+#ifdef iOS
+    void getMemInfoMach(unsigned long long & theUsedBytes, unsigned long long & theFreeBytes) {
+        mach_port_t myHostPort = mach_host_self();
+        mach_msg_type_number_t myHostSize = sizeof(vm_statistics_data_t) / sizeof( integer_t);
+        vm_size_t myPagesize;
+        host_page_size(myHostPort, & myPagesize);
+        vm_statistics_data_t myVmStats;
+        if (host_statistics(myHostPort, HOST_VM_INFO, (host_info_t) & myVmStats,
+                    & myHostSize) != KERN_SUCCESS)
+        {
+            throw masl::Exception("Failed to get memory info.", PLUS_FILE_LINE);
+        }
+        theUsedBytes = (myVmStats.active_count + myVmStats.inactive_count +
+                myVmStats.wire_count) * myPagesize;
+        theFreeBytes = myVmStats.free_count * myPagesize;
+    }
+#endif
 
 
     unsigned getTotalMemory() {
         static unsigned myTotalMemory = 0;
         if (myTotalMemory == 0) {
+#ifdef ANDROID
             myTotalMemory = getMemInfo(MEM_TOTAL) / 1024;
+#elif iOS
+            unsigned long long myUsedBytes;
+            unsigned long long myFreeBytes;
+            getMemInfoMach( myUsedBytes, myFreeBytes);
+            myTotalMemory = (myUsedBytes + myFreeBytes) / 1024;
+#endif
             AC_TRACE << "Total system memory " << (myTotalMemory / 1024) << " MB";
         }
         return myTotalMemory;
@@ -161,17 +191,31 @@ namespace masl {
 
     unsigned getUsedMemory() {
         unsigned myUsedMemory = 0;
+#ifdef ANDROID
         // Determining used/free memory under Linux is a bit tricky since
         // the kernel usually tries to take all free memory for caching.
         // Free memory is a waste of resources anyway...
         myUsedMemory = getMemInfo(MEM_USED) / 1024;
+#elif iOS
+        unsigned long long myUsedBytes;
+        unsigned long long myFreeBytes;
+        getMemInfoMach( myUsedBytes, myFreeBytes);
+        myUsedMemory = myUsedBytes / 1024;
+#endif
         AC_TRACE << "Used system memory " << (myUsedMemory / 1024) << " MB";
         return myUsedMemory;
     }
 
     unsigned getFreeMemory() {
         unsigned myFreeMemory = 0;
+#ifdef ANDROID
         myFreeMemory = getTotalMemory() - getUsedMemory();
+#elif iOS
+        unsigned long long myUsedBytes;
+        unsigned long long myFreeBytes;
+        getMemInfoMach( myUsedBytes, myFreeBytes);
+        myFreeMemory = myFreeBytes / 1024;
+#endif
         AC_TRACE << "Free system memory " << (myFreeMemory / 1024) << " MB";
         return myFreeMemory;
     }
@@ -179,9 +223,35 @@ namespace masl {
     unsigned getProcessMemoryUsage(ProcessID thePid) {
         if (thePid == 0) {
             thePid = getpid();
+        } else {
+#ifdef iOS
+            throw masl::Exception("Can not retrieve process memory for foreign processes on MacOS X.",
+                                 PLUS_FILE_LINE);
+#endif
         }
         unsigned myMemUsage = 0;
+#ifdef ANDROID
         myMemUsage = getProcMemInfo(thePid) / 1024;
+#elif iOS
+        kern_return_t myStatus;
+
+        mach_port_t myTask;
+        myStatus = task_for_pid(mach_task_self(), thePid, & myTask);
+        if ( myStatus != KERN_SUCCESS) {
+            AC_ERROR << "Mach call failed: " << mach_error_string(myStatus);
+            return 0;
+        }
+        struct task_basic_info myTaskInfo;
+        mach_msg_type_number_t myCount = TASK_BASIC_INFO_COUNT;
+        myStatus = task_info(myTask, TASK_BASIC_INFO, (task_info_t)& myTaskInfo, & myCount);
+        if ( myStatus != KERN_SUCCESS) {
+            AC_ERROR << "Mach call failed: " << mach_error_string(myStatus);
+            return 0;
+        }
+
+        // [DS] dunno exactly if this is correct ... but it works;
+        myMemUsage = myTaskInfo.resident_size / 1024;
+#endif
         AC_TRACE << "Process " << thePid << " uses " << (myMemUsage / 1024) << " MB";
         return myMemUsage;
     }
