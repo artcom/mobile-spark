@@ -18,7 +18,18 @@ namespace spark {
     EventDispatcher::~EventDispatcher() {
     }
 
-
+    bool 
+    EventDispatcher::hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
+        std::pair<std::string, bool> myKey(theType, theUseCapture);
+        std::pair<EventListenerMap::iterator, EventListenerMap::iterator> itp = _myListenersMap.equal_range(myKey);
+        for (EventListenerMap::iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
+            if ((*mapIt).second == theListener) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     void
     EventDispatcher::addEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
         AC_INFO << "addEventListener for type " << theType << " capturing: " << theUseCapture;

@@ -9,13 +9,13 @@ namespace spark {
     const char * const NinePatch::SPARK_TYPE = "NinePatch";
 
     NinePatch::NinePatch(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        ShapeWidget(theApp, theXMLNode),
+        I18nShapeWidget(theApp, theXMLNode),
         edgeLeft_(_myXMLNode->getAttributeAs<float>("edgeLeft", 0)),
         edgeTop_(_myXMLNode->getAttributeAs<float>("edgeTop", 0)),
         edgeRight_(_myXMLNode->getAttributeAs<float>("edgeRight", 0)),
         edgeBottom_(_myXMLNode->getAttributeAs<float>("edgeBottom", 0))
     {
-        i18nHandler_ = I18nHandlerPtr(new I18nHandler(theXMLNode, "src"));
+        setI18nData(getNode()->getAttributeAs<std::string>("src", ""));        
     }
 
     NinePatch::~NinePatch() {
@@ -23,24 +23,23 @@ namespace spark {
 
     void
     NinePatch::realize() {
-        ShapeWidget::realize();
-        i18nHandler_->realize(boost::static_pointer_cast<Widget>(shared_from_this()));
+        I18nShapeWidget::realize();
     }
 
     void
     NinePatch::onResume() {
-        ShapeWidget::onResume();
+        I18nShapeWidget::onResume();
         _myDirtyFlag = true;
     }
 
     void
     NinePatch::build() {
-        ShapeWidget::build();
-        if(i18nHandler_->data_.empty()) return;
+        I18nShapeWidget::build();
+        if(data_.empty()) return;
         float width = _myXMLNode->getAttributeAs<float>("width", -1);
         float height = _myXMLNode->getAttributeAs<float>("height", -1);
 
-        setShape(mar::ShapeFactory::get().createNinePatch(i18nHandler_->data_, edgeLeft_, edgeTop_, edgeRight_, edgeBottom_,
+        setShape(mar::ShapeFactory::get().createNinePatch(data_, edgeLeft_, edgeTop_, edgeRight_, edgeBottom_,
                     width >= 0 ? width : 0, height >= 0 ? height : 0));
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
         if (width == -1 || height == -1) {
