@@ -5,6 +5,7 @@
 #include "ProjectImpl.h"
 #include "ProjectViewerImpl.h"
 #include "ContentImage.h"
+#include "AppLoaderAnim.h"
 
 
 namespace acprojectview {
@@ -13,5 +14,7 @@ namespace acprojectview {
         spark::SparkComponentFactory::get().registerComponent("ProjectImpl", spark::create<ProjectImpl>);
         spark::SparkComponentFactory::get().registerComponent("ProjectViewerImpl", spark::create<ProjectViewerImpl>);
         spark::SparkComponentFactory::get().registerComponent("ContentImage", spark::create<ContentImage>);
+        spark::SparkComponentFactory::get().registerComponent("AppLoaderAnim", spark::create<AppLoaderAnim>);
+            
     }
 }

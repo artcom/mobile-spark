@@ -103,10 +103,15 @@
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
         
         <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
-        
+        <AppLoaderAnim x="200" y="200" z="20">
+            <Image name="anim_01" x="0" y="0" src="/acapp_loader01.png" visible="false"/> 
+            <Image name="anim_02" x="0" y="0" src="/acapp_loader02.png" visible="false"/> 
+            <Image name="anim_03" x="0" y="0" src="/acapp_loader03.png" visible="false"/> 
+            <Image name="anim_04" x="0" y="0" src="/acapp_loader04.png" visible="false"/>         
+        </AppLoaderAnim>
         <Transform name="startscreen">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]"/>
-            <Image name="logo" x="0" y="30" z="6" src="/ac_logo_140px.png"/> 
+            <Image name="logo" x="12" y="30" z="6" src="/ac_logo_140px.png"/> 
             <Text name="deutsch" text="DEUTSCH" x="10" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
             <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
             <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
