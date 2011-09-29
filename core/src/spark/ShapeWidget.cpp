@@ -15,14 +15,14 @@ namespace spark {
     }
 
     void
-    ShapeWidget::applyAlpha (const float theAlpha) { 
-        Widget::applyAlpha(theAlpha); 
+    ShapeWidget::propagateAlpha() {
+        Widget::propagateAlpha(); 
         if (getShape()) {
             AC_DEBUG << *this << " set calculated alpha: " << getActualAlpha();
             getShape()->setAlpha(getActualAlpha());
         }
     }
-
+    
     bool
     ShapeWidget::AABB2Dcontains(const float x, const float y,
                                      const matrix & theProjectionMatrix) const {
