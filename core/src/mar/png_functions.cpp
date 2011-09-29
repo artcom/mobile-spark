@@ -1,6 +1,7 @@
 #include "png_functions.h"
 
 #include "AssetProvider.h"
+#include "Texture.h"
 
 
 namespace mar {
