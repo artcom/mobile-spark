@@ -7,12 +7,16 @@
 @interface SparkViewerAppDelegate : NSObject <UIApplicationDelegate> {
     GLView *myGLView;
     UIWindow *window;
-    //SparkViewerViewController *sparkViewerViewController;
+    SparkViewerViewController *sparkViewerViewController;
+    
+    @protected
+        bool isPortrait;
 
 }
 
 -(void)createGLView;
 
+@property bool isPortrait;
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) GLView *myGLView;
 @property (nonatomic, retain) SparkViewerViewController *sparkViewerViewController;
