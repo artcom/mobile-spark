@@ -4,7 +4,7 @@
 /////////////////// Application code, this should be in java or script language later...
 #include <spark/BaseApp.h>
 
-#ifdef __ANDROID__
+#ifdef ANDROID
 extern "C" {
     JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved);
 }

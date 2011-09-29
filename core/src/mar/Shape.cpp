@@ -25,7 +25,7 @@ namespace mar {
         }
     }
 
-#if __APPLE__
+#ifdef iOS
     void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
              it != elementList.end(); ++it) {
@@ -42,7 +42,7 @@ namespace mar {
     }
 #endif
 
-#ifdef __ANDROID__
+#ifdef ANDROID
     void Shape::render(const matrix & theMatrix) const {
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
              it != elementList.end(); ++it) {

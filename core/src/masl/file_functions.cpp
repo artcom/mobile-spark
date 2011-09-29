@@ -14,10 +14,10 @@
 
 #include <dirent.h>
 
-#ifdef __ANDROID__
+#ifdef ANDROID
 #define STAT64 stat64
 #endif
-#if __APPLE__
+#ifdef iOS
 #define STAT64 stat
 #endif
 

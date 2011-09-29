@@ -22,7 +22,7 @@ using namespace spark;
 using namespace masl;
 
 /////////////////////////////////////////////////////////////////////////App-Instance
-#ifdef __ANDROID__
+#ifdef ANDROID
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
     spark::AppProvider::get().setApp(masl::Ptr<acprojectview::ACProjectView>(new acprojectview::ACProjectView()));

@@ -19,11 +19,11 @@
 #include <mar/AssetProvider.h>
 #include <animation/AnimationManager.h>
 
-#ifdef __ANDROID__
+#ifdef ANDROID
     #include <android/AndroidAssetProvider.h>
     #include <android/AndroidMobileSDK.h>
 #endif
-#if __APPLE__
+#ifdef iOS
     #include <ios/IOSAssetProvider.h>
     #include <ios/IOSMobileSDK.h>
 #endif
@@ -60,10 +60,10 @@ namespace spark {
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
 
-#ifdef __ANDROID__
+#ifdef ANDROID
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
 #endif
-#if __APPLE__
+#ifdef iOS
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
         MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
 #endif

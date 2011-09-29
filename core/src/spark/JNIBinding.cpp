@@ -1,4 +1,4 @@
-#ifdef __ANDROID__
+#ifdef ANDROID
 
 #include "JNIBinding.h"
 
