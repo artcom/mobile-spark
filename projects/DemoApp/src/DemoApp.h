@@ -7,7 +7,7 @@
 #include <spark/View.h>
 #include "Slide.h"
 
-#ifdef __ANDROID__
+#ifdef ANDROID
 extern "C" {
     JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved);
 }
