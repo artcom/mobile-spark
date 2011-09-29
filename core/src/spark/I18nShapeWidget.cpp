@@ -24,9 +24,7 @@ namespace spark {
     void 
     I18nShapeWidget::setI18nId(std::string theNewI18nId) {
         i18nId_ = theNewI18nId;
-        if (!i18nId_.empty()) {
-            attachToI18nItem();
-        }
+        attachToI18nItem();
     }
 
     void
