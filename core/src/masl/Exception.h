@@ -33,7 +33,9 @@ namespace masl {
         // we need to actually define one non-pure-virtual method out-of-line to generate the vtable
         virtual void appendWhat(const std::string & whatelse);
 
-        const CallStack & stack() const {return _callstack; };
+        std::ostream & compose_message(std::ostream & os) const;
+
+        friend std::ostream& operator<<(std::ostream& os,const Exception & ex);
 
     protected:
         virtual void set(const std::string & what,
@@ -53,13 +55,6 @@ namespace masl {
 
     };
 
-
-    std::string compose_message(const Exception & ex);
-
-    inline
-    std::ostream& operator<<(std::ostream& os,const Exception & ex) {
-        return os << compose_message(ex) << std::endl;
-    }
 
 
     #define DEFINE_NAMED_EXCEPTION(CLASS,NAME,BASECLASS)\

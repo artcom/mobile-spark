@@ -10,10 +10,10 @@
     jclass Exception = env->FindClass("com/artcom/mobile/Base/NativeException"); \
     try { \
         THE_CALL; \
-    } catch(masl::Exception & ex) { \
+    } catch(const masl::Exception & ex) { \
         AC_ERROR << "masl::Exception caught "<< ex; \
         myMessage = ex.what() + " : " + ex.where(); \
-    } catch(std::exception & ex) { \
+    } catch(const std::exception & ex) { \
         AC_ERROR << "std::exception caught "<< ex.what(); \
         myMessage = ex.what(); \
     } catch(...) { \

@@ -53,17 +53,16 @@ public:
     void update(int32_t ignoreDepth=0, int32_t maxDepth=MAX_DEPTH);
 
     // Dump a stack trace to the log
-    void dump(const char* prefix = 0) const;
+    void dump() const;
 
-    // Return a string (possibly very long) containing the complete stack trace
-    std::string toString(const char* prefix = 0) const;
+    friend std::ostream & operator<<(std::ostream & os, const CallStack & cs);
     
     size_t size() const { return mCount; }
 
 
 private:
     // Internal helper function
-    std::string toStringSingleLevel(const char* prefix, int32_t level) const;
+    std::string toStringSingleLevel(int32_t level) const;
 
     size_t      mCount;
     const void* mStack[MAX_DEPTH];

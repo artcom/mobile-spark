@@ -53,8 +53,7 @@ namespace mar {
         GLuint myHandle = glGetUniformLocation(shaderProgram, theName.c_str());
         if (myHandle > MAX_NUM_HANDLES) {
             AC_ERROR << "Strange Handle " << theName << ". Maybe it is not found in shader.";
-            //XXX: does not throw!
-            //throw ProblemWithHandleException("handle for " + theName + " seems to be strange. Maybe it's not found in shader.", PLUS_FILE_LINE);
+            throw ProblemWithHandleException("handle for " + theName + " seems to be strange. Maybe it's not found in shader.", PLUS_FILE_LINE);
         }
         return myHandle;
     }

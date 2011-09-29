@@ -65,6 +65,8 @@ _Unwind_Reason_Code trace_function(_Unwind_Context *context, void *arg)
             }
             state->lastAddr = (unsigned int)ip;
         }
+    } else {
+        return _URC_END_OF_STACK;
     }
     return _URC_NO_REASON;
 }
@@ -278,7 +280,7 @@ void CallStack::update(int32_t ignoreDepth, int32_t maxDepth)
 }
 
 // Return the stack frame name on the designated level
-std::string CallStack::toStringSingleLevel(const char* prefix, int32_t level) const
+std::string CallStack::toStringSingleLevel(int32_t level) const
 {
     std::string res;
     char namebuf[1024];
@@ -291,7 +293,6 @@ std::string CallStack::toStringSingleLevel(const char* prefix, int32_t level) co
     const void* ip = mStack[level];
     if (!ip) return res;
 
-    if (prefix) res.append(prefix);
     snprintf(tmp1, 32, "#%02d  ", level);
     res.append(tmp1);
 
@@ -309,37 +310,33 @@ std::string CallStack::toStringSingleLevel(const char* prefix, int32_t level) co
         snprintf((char*)tmp.c_str(), 256, "pc %08x  %s", (size_t)ip, name);
         res.append(tmp);
     }
-    res.append("\n");
-
     return res;
 }
 
 // Dump a stack trace to the log
-void CallStack::dump(const char* prefix) const
+void CallStack::dump() const
 {
     /* 
      * Sending a single long log may be truncated since the stack levels can
      * get very deep. So we request function names of each frame individually.
      */
     for (int i=0; i<int(mCount); i++) {
-        AC_PRINT << toStringSingleLevel(prefix, i);
+        AC_ERROR << toStringSingleLevel(i);
     }
 }
 
 // Return a string (possibly very long) containing the complete stack trace
-std::string CallStack::toString(const char* prefix) const
-{
-    std::string res;
-    for (int i=0; i<int(mCount); i++) {
-        res.append(toStringSingleLevel(prefix, i));
+std::ostream & operator<<(std::ostream & os, const CallStack & cs) {
+    for (int i=0; i<int(cs.mCount); i++) {
+        os << cs.toStringSingleLevel(i);
     }
-    return res;
+    return os;
 }
 
 void dumpstack() {
     CallStack myStack;
     myStack.update();
-    AC_PRINT << myStack.toString();
+    myStack.dump();
 }
 
 /*****************************************************************************/
