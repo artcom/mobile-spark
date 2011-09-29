@@ -19,15 +19,15 @@ namespace spark {
             EventDispatcher();
             ~EventDispatcher();
 
-            bool hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
+            bool hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false) const;
             void addEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
             void removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
             void dispatchEvent(const EventPtr theEvent) const;
             const EventListenerMap & getEventListeners() const {return _myListenersMap;};
-            inline bool hasEventListener(const EventListenerKey & theKey ) const {
+        private:
+            inline bool hasEventListenersForType(const EventListenerKey & theKey ) const {
                 return (_myListenersMap.find(theKey) != _myListenersMap.end());
             }
-        private:
 
             EventListenerMap _myListenersMap;
     };
