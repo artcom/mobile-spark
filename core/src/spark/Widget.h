@@ -49,7 +49,7 @@ namespace spark {
         void setRotationZ(const float theRotationZ) { _rotationZ = theRotationZ; updateMatrix();};
 
         float getAlpha() const { return _alpha;};
-        inline void setAlpha(const float theAlpha) {applyAlpha(theAlpha);};
+        inline void setAlpha(const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
 
         const I18nContextPtr getI18nContext() const { return _myI18nContext; };
         LANGUAGE getLanguage() const;
@@ -59,10 +59,9 @@ namespace spark {
         
     protected:
         virtual void build() {};
-        virtual void applyAlpha (const float theAlpha) { _alpha = theAlpha; propagateAlpha();};
         float getActualAlpha() const { return _actualAlpha;};
         float getParentAlpha() const;
-        void propagateAlpha();
+        virtual void propagateAlpha();
         
         matrix _myWorldMVMatrix;
         bool _myDirtyFlag;
