@@ -11,7 +11,7 @@ namespace mar {
 
     Viewport::Viewport(float theWidth, float theHeight, float theXPos, float theYPos):
         _myPos(theXPos, theYPos), _mySize(theWidth, theHeight) {
-        AC_PRINT << "Viewport setup pos: " << theXPos << " /" << theYPos << " size: " << theWidth << "/" << theHeight;
+        AC_INFO << "Viewport setup pos: " << theXPos << " /" << theYPos << " size: " << theWidth << "/" << theHeight;
     }
 
 
