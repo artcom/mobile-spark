@@ -4,6 +4,7 @@
 #include <masl/Logger.h>
 
 #include "AssetProvider.h"
+#include "Texture.h"
 #include "Element.h"
 #include "openGL_functions.h"
 #include "png_functions.h"
