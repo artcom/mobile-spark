@@ -19,5 +19,10 @@ namespace spark {
 
     Rectangle::~Rectangle() {
     }
-
+    
+    void 
+    Rectangle::setSize(vector2 theSize) {
+        getShape()->setDimensions(theSize[0], theSize[1]);
+        boost::static_pointer_cast<mar::UnlitColoredMaterial>(getShape()->elementList[0]->material)->setDiffuseColor(_myColor);
+    }    
 }
