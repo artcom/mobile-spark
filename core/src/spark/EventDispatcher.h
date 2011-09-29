@@ -19,6 +19,7 @@ namespace spark {
             EventDispatcher();
             ~EventDispatcher();
 
+            bool hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
             void addEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
             void removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
             void dispatchEvent(const EventPtr theEvent) const;

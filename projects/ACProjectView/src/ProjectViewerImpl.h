@@ -12,7 +12,6 @@
 
 #include "ProjectImpl.h"
 #include "ContentImage.h"
-#include "Description.h"
 
 
 namespace acprojectview {
