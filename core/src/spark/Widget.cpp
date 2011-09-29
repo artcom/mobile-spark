@@ -20,6 +20,7 @@ namespace spark {
           _actualAlpha(_alpha),
           _visible(_myXMLNode->getAttributeAs<bool>("visible", true)),
           _sensible(_myXMLNode->getAttributeAs<bool>("sensible", true))
+          
     {
         updateMatrix();
         setI18nContextIfAvailable();
@@ -112,6 +113,7 @@ namespace spark {
             }
         }
     }
+    
 
     std::vector<I18nContextPtr> 
     Widget::getI18nContexts() const {

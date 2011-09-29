@@ -142,7 +142,7 @@ namespace mar {
         }
     }
 
-    void RectangleShape::setTexCoords(vector2 theUV0, vector2 theUV1, vector2 theUV2, vector2 theUV3) {
+    void RectangleShape::setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {
         ElementPtr myElement = elementList[0];
         if (_myTextureFlag) {
             (myElement->vertexData_)[0 * _myDataPerVertex + 3] = theUV0[0];
@@ -279,12 +279,6 @@ namespace mar {
     ObjShape::~ObjShape() {
     }
 
-    //bounding box is calculated during obj import and set from there
-    void ObjShape::setBoundingBox(vector4 theMin, vector4 theMax) {
-        _myBoundingBox.min = theMin;
-        _myBoundingBox.max = theMax;
-    }
-
     //////////////////////////////////////////////////////////////ShapeFactory
     ShapeFactory::~ShapeFactory() {}
 
@@ -301,7 +295,7 @@ namespace mar {
     }
 
     ShapePtr ShapeFactory::createObj(const std::string & theFile) {
-        ObjShapePtr myShape = ObjShapePtr(new ObjShape());
+        ShapePtr myShape = ShapePtr(new ObjShape());
         ObjImporter::get().importObj(theFile, myShape);
         myShape->initGL();
         return myShape;

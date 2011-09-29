@@ -28,21 +28,25 @@ namespace masl {
     {
         _callstack.update();
     };
+
+    std::ostream&
+    operator<<(std::ostream& os, const Exception & ex) {
+        return ex.compose_message(os);
+    }
+
+    std::ostream &
+    Exception::compose_message(std::ostream& os) const {
+        _callstack.dump();
+        std::string myMsg;
+        myMsg =
+            string(name() ? name() : "Unspecified Exception") +
+            string(": ") +
+            string(what().size() ? what() : string("Unspecified reason")) +
+            string(" ") +
+            string(where().size() ? where() : string("Unspecified origin"));
+        return os << myMsg << std::endl;
+    }
 }
 
 
 
-string
-masl::compose_message(const Exception& ex) {
-    std::string myMsg;
-    myMsg =
-        string(ex.name() ? ex.name() : "Unspecified Exception") +
-        string(": ") +
-        string(ex.what().size() ? ex.what() : string("Unspecified reason")) +
-        string(" ") +
-        string(ex.where().size() ? ex.where() : string("Unspecified origin")) +
-        string("\n");
-
-    myMsg += ex.stack().toString();
-    return myMsg;
-}

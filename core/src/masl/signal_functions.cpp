@@ -44,7 +44,7 @@ namespace masl {
         myStack.update();
         AC_ERROR << "Caught Signal " << theSignal << "  (" << strsignal(theSignal)
                  << ") at: ";
-        AC_ERROR << myStack.toString();
+        myStack.dump();
 
         signal( theSignal, SIG_DFL );
         raise( theSignal );

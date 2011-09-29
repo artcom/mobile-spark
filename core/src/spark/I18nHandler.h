@@ -14,19 +14,22 @@ namespace spark {
     typedef masl::Ptr<Widget> WidgetPtr;
     class I18nContext;
 
-    class I18nHandler : public boost::enable_shared_from_this<I18nHandler> {
+    class I18nHandler {
     public:
-        I18nHandler(const masl::XMLNodePtr theXMLNode, const std::string & theKey);
-        ~I18nHandler();
-        void realize(const WidgetPtr theWidget);
+        I18nHandler();
+        void setI18nId(std::string theNewI18nId);
+        void setI18nData(std::string theData);
+        
+        virtual ~I18nHandler();
+        void realize(const WidgetPtr theWidget, EventCallbackPtr theHandleLanguageSwitch);
 
         std::string data_;
         std::string i18nId_;
     private:
+        EventCallbackPtr _myHandleI18nEventCB;
         WidgetPtr widget_;
 
         void attachToI18nItem();
-        void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
     };
     typedef masl::Ptr<I18nHandler> I18nHandlerPtr;
     typedef MemberFunctionEventCallback<I18nHandler, I18nHandlerPtr> I18nHandlerCB;

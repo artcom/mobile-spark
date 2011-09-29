@@ -31,7 +31,7 @@ namespace mar {
         theFaceData.push_back(c != "" ? as<int>(c) : 0);
     }
 
-    vector3 ObjImporter::getVector3(const std::string & theString) {
+    vector3 ObjImporter::getVector3(const std::string & theString) const {
         vector3 myVector;
         size_t posAB = theString.find_first_of(" ");
         size_t posBC = theString.find_last_of(" ");
@@ -44,7 +44,7 @@ namespace mar {
         return myVector;
     }
 
-    vector4 ObjImporter::getColor(const std::string & theString) {
+    vector4 ObjImporter::getColor(const std::string & theString) const {
         vector4 myVector;
         vector3 myV = getVector3(theString);
         myVector[0] = myV[0];
@@ -114,7 +114,7 @@ namespace mar {
         AC_INFO << "num materials " << materialMap_.size();
     }
 
-    void ObjImporter::createElementVertices(ObjShapePtr theShape, ElementPtr element,
+    void ObjImporter::createElementVertices(ShapePtr theShape, ElementPtr element,
                                          size_t startFaceIndex) {
         size_t dataPerVertex = 3 + 3 + 2;
         element->numIndices = (faces_.size() - startFaceIndex) * 3;
@@ -174,7 +174,7 @@ namespace mar {
 
 
 
-    void ObjImporter::importObj(std::string theObjFileName, ObjShapePtr theShape) {
+    void ObjImporter::importObj(std::string theObjFileName, ShapePtr theShape) {
         vertices_.clear();
         normals_.clear();
         texData_.clear();

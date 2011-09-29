@@ -10,6 +10,7 @@
 
 
 using namespace spark;
+using namespace std;
 
 namespace acprojectview {
         
@@ -57,6 +58,11 @@ namespace acprojectview {
     }
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
+        string myDescription_I18n = currentProject->getNode()->getAttributeAs<std::string>("description_I18n","");
+        string myTitle_I18n = currentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
+        string mySubTitle_I18n = currentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
+            
+        AC_PRINT << "################# : " << myDescription_I18n;
         _myIsAnimating = false;     
         _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
@@ -68,14 +74,11 @@ namespace acprojectview {
              return;
          }
          _imageTransform0->setVisible(true);
-         DescriptionPtr txt = boost::static_pointer_cast<Description>(_myCurrentProject->getChildByName("description"));
-         if (txt == 0) {
-             _myDescription->setText("");
-         } else {
-             _myDescription->setText(txt->getText());
-         }
          
-         _myPopUpTitle->setText(currentProject->getNode()->getAttributeAs<std::string>("title",""));
+         // bind i18n item to description widget
+        _myDescription->setI18nId(myDescription_I18n);         
+         _myPopUpTitle->setI18nId(myTitle_I18n);
+         
          int myHiddenPopUpHeight = std::max(30, int(_myPopUpTitle->getTextSize()[1]));
          int myTextHeight = _myDescription->getTextSize()[1];
          _myPopup->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
