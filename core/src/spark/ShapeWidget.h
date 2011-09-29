@@ -20,7 +20,7 @@ namespace spark {
             void setShape( mar::ShapePtr theShapePtr);
             float getWorldZ() const;
         protected:
-            virtual void applyAlpha (const float theAlpha);
+            virtual void propagateAlpha();
         private:
             mar::ShapePtr _myShape;
     };
