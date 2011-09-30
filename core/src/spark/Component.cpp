@@ -4,14 +4,16 @@
 
 namespace spark {
 
-    Component::Component(): EventDispatcher() {
+    Component::Component(): EventDispatcher(),_myRealizedFlag(false) {
     }
 
     Component::Component(const masl::XMLNodePtr theXMLNode):
         EventDispatcher(),
         _myXMLNode(theXMLNode),
         _myName(theXMLNode->name),
-        _myParent()
+        _myParent(),
+        _myRealizedFlag(false),
+        _myRealizedAndAllChildrenFlag(false)
     {}
 
     Component::~Component() {
@@ -35,6 +37,23 @@ namespace spark {
             return _myParent->getRoot();
         } else {
             return shared_from_this();
+        }
+    }
+    
+    void
+    Component::realizeASync() {
+        if (!_myRealizedFlag) {
+            realize();
+            _myRealizedFlag = true;
+        } else {
+            _myRealizedAndAllChildrenFlag = true;
+            for (int i = 0; i < _myChildren.size() ; i++) {
+                if (!_myChildren[i]->isAllRealized()) {
+                    _myChildren[i]->realizeASync();    
+                    _myRealizedAndAllChildrenFlag = false;
+                    break;
+                }
+            }
         }
     }
 }

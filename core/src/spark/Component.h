@@ -27,6 +27,8 @@ namespace spark {
         }
 
         virtual void realize() {};
+        void realizeASync();
+        const bool isAllRealized() const { return _myRealizedAndAllChildrenFlag;}
         virtual void onPause() {};
         virtual void onResume() {};
         virtual void prerender(MatrixStack& theCurrentMatrixStack) {};
@@ -48,6 +50,8 @@ namespace spark {
         VectorOfComponentPtr _myChildren;
     private:
         ComponentPtr _myParent;
+        bool _myRealizedFlag;
+        bool _myRealizedAndAllChildrenFlag;
     };
 };
 #endif
