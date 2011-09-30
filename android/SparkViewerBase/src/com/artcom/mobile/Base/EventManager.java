@@ -111,71 +111,71 @@ public class EventManager {
         }
         //-------------------------------------------------------------------------
         private void downHandler() {
-            AC_Log.print(" ########### down: " + startX + ", " + startY);
+            AC_Log.debug(" ########### down: " + startX + ", " + startY);
             String myEvent = "<TouchEvent type='down' x='" + startX + "' y='" + startY + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void upHandler() {
-            AC_Log.print(" ########### up: " + startX + ", " + startY);
+            AC_Log.debug(" ########### up: " + startX + ", " + startY);
             String myEvent = "<TouchEvent type='up' x='" + startX + "' y='" + startY + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void singleTapHandler() {
-            AC_Log.print(" ########### single tap: " + startX + ", " + startY);
+            AC_Log.debug(" ########### single tap: " + startX + ", " + startY);
             String myEvent = "<TouchEvent type='tap' x='" + startX + "' y='" + startY + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void doubleTapHandler() {
-            AC_Log.print(" ########### double tap: " + startX + ", " + startY);
+            AC_Log.debug(" ########### double tap: " + startX + ", " + startY);
             String myEvent = "<TouchEvent type='doubleTap' x='" + startX + "' y='" + startY + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void longPressedHandler() {
-            AC_Log.print(" ########### longPressed: " + startX + ", " + startY);
+            AC_Log.debug(" ########### longPressed: " + startX + ", " + startY);
             String myEvent = "<TouchEvent type='longPressed' x='" + startX + "' y='" + startY + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void panHandler() {
-            AC_Log.print(" ########### pan: " + startX + ", " + startY + " translate: " + dx + ", " + dy);
+            AC_Log.debug(" ########### pan: " + startX + ", " + startY + " translate: " + dx + ", " + dy);
             String myEvent = "<GestureEvent type='pan' x='" + startX + "' y='" + startY + "' dx='" + dx + "' dy='"+ dy + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void pinchHandler() {
-            AC_Log.print(" ########### pinch: factor: " + (float)fingerDistance/fingerDistanceStart);
+            AC_Log.debug(" ########### pinch: factor: " + (float)fingerDistance/fingerDistanceStart);
             String myEvent = "<GestureEvent type='pinch' factor='" + (float)(fingerDistance)/fingerDistanceStart + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void rotationHandler() {
-            //AC_Log.print(" ########### rotation: " + event.getX() + ", " + event.getY());
+            //AC_Log.debug(" ########### rotation: " + event.getX() + ", " + event.getY());
         }
         //-------------------------------------------------------------------------
         private void swipeLeftHandler() {
-            AC_Log.print(" ########### swipe left");
+            AC_Log.debug(" ########### swipe left");
             String myEvent = "<GestureEvent type='swipe-left' direction='left'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void swipeRightHandler() {
-            AC_Log.print(" ########### swipe right");
+            AC_Log.debug(" ########### swipe right");
             String myEvent = "<GestureEvent type='swipe-right' direction='right'/>";
             NativeBinding.onEvent(myEvent);
         }
          //-------------------------------------------------------------------------
         private void swipeUpHandler() {
-            AC_Log.print(" ########### swipe up");
+            AC_Log.debug(" ########### swipe up");
             String myEvent = "<GestureEvent type='swipe-up' direction='up'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void swipeDownHandler() {
-            AC_Log.print(" ########### swipe down");
+            AC_Log.debug(" ########### swipe down");
             String myEvent = "<GestureEvent type='swipe-down' direction='down'/>";
             NativeBinding.onEvent(myEvent);
         }

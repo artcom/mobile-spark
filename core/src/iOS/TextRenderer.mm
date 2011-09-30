@@ -10,7 +10,7 @@ namespace ios {
     {
     }
     
-    void TextRenderer::renderText(const std::string & theMessage, int theTextureId, int theFontSize, 
+    void TextRenderer::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, 
                                   vector4 theColor, float theMaxWidth, float theMaxHeight, const std::string & theAlign, const std::string &theFontPath) 
     {
         CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();

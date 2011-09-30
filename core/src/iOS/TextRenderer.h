@@ -16,7 +16,7 @@ namespace ios {
     public:
         TextRenderer();
         virtual ~TextRenderer();
-        void renderText(const std::string & theMessage, int theTextureId, int theFontSize, 
+        void renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, 
                         vector4 theColor, float theMaxWidth, float theMaxHeight, const std::string & theAlign, const std::string &theFontPath);
         int getTextureID();
         int getTextureWidth();
