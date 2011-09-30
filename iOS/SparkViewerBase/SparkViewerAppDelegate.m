@@ -20,7 +20,19 @@
     SparkViewerViewController *aViewController = [[SparkViewerViewController alloc] initWithNibName:nil bundle:nil];
     [self setSparkViewerViewController:aViewController];
     [aViewController release];
-
+    // Override point for customization after application launch
+    [window makeKeyAndVisible];
+    
+    // create a pointer to a dictionary
+    NSDictionary *dictionary;
+    // read environment from application bundle
+    NSBundle* bundle = [NSBundle mainBundle];
+    NSString * finalPath = [bundle pathForResource:@"Environment" ofType:@"plist"];
+    dictionary = [NSDictionary dictionaryWithContentsOfFile:finalPath];
+    for (id key in dictionary) {
+        NSLog(@"bundle: key=%@, value=%@", key, [dictionary objectForKey:key]);
+        //putenv([NSString stringWithFormat:@"%@=%@", key, [dictionary objectForKey:key]]);
+    }
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
     [self createGLView];
