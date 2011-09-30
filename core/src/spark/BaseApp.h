@@ -23,7 +23,6 @@ namespace spark {
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
             bool isSetup() const {return _mySetupFlag;}
             void loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight);
-            std::string findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight);
             virtual void onFrame(EventPtr theEvent);
             virtual void onPause(EventPtr theEvent);
             virtual void onResume();
@@ -33,6 +32,8 @@ namespace spark {
             void renderText(std::string theMessage, int theOpenGLTextureId);
 
             spark::WindowPtr _mySparkWindow;
+            
+
 
         protected:
             std::string appPath_;
@@ -43,7 +44,10 @@ namespace spark {
             masl::ThreadLock _myLock;
             
     };
+    std::string findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait);
+    void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath );
 
+    
     typedef masl::Ptr<BaseApp> BaseAppPtr;
 };
 
