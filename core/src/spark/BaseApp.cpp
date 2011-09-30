@@ -166,7 +166,6 @@ namespace spark {
 
     void BaseApp::onEvent(std::string theEventString) {
         AC_TRACE << "a string event came in :" << theEventString;
-        //masl::dumpstack();
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
             AutoLocker<ThreadLock> myLocker(_myLock);        

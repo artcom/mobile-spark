@@ -41,7 +41,7 @@ typedef enum {
     @protected
 
     #ifdef __cplusplus
-        spark::BaseApp *myApp;
+        spark::BaseAppPtr _myApp;
         GLViewMSAAQuality MSAAQuality;
         int frameInterval;
     #endif
