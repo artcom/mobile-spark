@@ -91,6 +91,15 @@ namespace acprojectview {
 
         spark::EventCallbackPtr mySwitchLanguageEnCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitchEn));
         myEnglishButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageEnCB);
+            
+        spark::EventCallbackPtr myWorldRealizedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onWorldRealized));
+        _mySparkWindow->addEventListener(WindowEvent::WORLD_REALIZED, myWorldRealizedCB);
+
+
+        spark::WidgetPtr myLoadAnim = boost::static_pointer_cast<Window>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("apploaderanim", true));
+        myLoadAnim->setX(_mySparkWindow->getSize()[0]/2.0);
+        myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
+            
     }
     
     void ACProjectView::onStartScreenClicked(EventPtr theEvent) {
@@ -213,6 +222,15 @@ namespace acprojectview {
     }
     void ACProjectView::onLanguageSwitchEn(EventPtr theEvent) {
         _mySparkWindow->switchLanguage(spark::EN);
+    }
+    
+    void ACProjectView::onWorldRealized(EventPtr theEvent) {
+        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
+        if (myEvent->worldname_ == "2dworld") {
+            boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("loaderView"))->setVisible(false);
+            boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("mainView"))->setVisible(true);
+        }
+        AC_PRINT << "######################### world realized: " << myEvent->worldname_;
     }
 
 }

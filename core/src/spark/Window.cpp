@@ -41,6 +41,13 @@ namespace spark {
         if (_myOrientation != "") {
             masl::MobileSDK_Singleton::get().getNative()->freezeMobileOrientation(_myOrientation);            
         }
+        
+        VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
+        for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
+            ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
+            _myUnrealizedWorlds.push_back(getChildByName(myView->getWorldName()));
+        }
+        AC_PRINT << "worlds realize _myUnrealizedWorlds : "<< _myUnrealizedWorlds.size();        
     }
 
     vector2
@@ -87,17 +94,30 @@ namespace spark {
     }
 
     void
-    Window::render() const {
+    Window::render(){
         _myGLCanvas->preRender(getClearColor());
         // get all views
         VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
         for (std::vector<ComponentPtr>::const_iterator it = myViews.begin(); it != myViews.end(); ++it) {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
-            if (myView->isVisible()) {
-                AC_TRACE << "render with : " << _myWidth << "/" << _myHeight;
-                myView->activate(_myWidth, _myHeight);
-                // find world and render it
-                myView->renderWorld(getChildByName(myView->getWorldName()));
+            ComponentPtr myWorld = getChildByName(myView->getWorldName());
+            std::vector<ComponentPtr>::iterator i = find(_myUnrealizedWorlds.begin(), _myUnrealizedWorlds.end(), myWorld);
+            
+            if (i != _myUnrealizedWorlds.end()) {
+                myWorld->realizeASync();
+                if (myWorld->isAllRealized()) {
+                    WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());                    
+                    EventPtr myEvent = EventPtr(new WindowEvent(WindowEvent::WORLD_REALIZED, ptr, myWorld->getName()));
+                    (*myEvent)();                    
+                    _myUnrealizedWorlds.erase(i);    
+                }
+            } else {
+                if (myView->isVisible()) {
+                    AC_TRACE << "render with : " << _myWidth << "/" << _myHeight;
+                    myView->activate(_myWidth, _myHeight);
+                    // find world and render it
+                    myView->renderWorld(myWorld);
+                }
             }
         }
     }

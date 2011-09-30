@@ -22,7 +22,7 @@ namespace spark {
         virtual ~Window();
 
         void onTouch(EventPtr theEvent);
-        virtual void render() const;
+        virtual void render();
         virtual void onSizeChanged(EventPtr theEvent);
         virtual void onResume();
         virtual void realize();        
@@ -39,6 +39,7 @@ namespace spark {
         std::string _myOrientation;
         //picking -> move to other compilation unit?
         ComponentPtr pick2DAABBStyle(const unsigned int x, const unsigned int y) ;
+        std::vector<ComponentPtr> _myUnrealizedWorlds;
     };
 
     typedef masl::Ptr<Window> WindowPtr;
