@@ -55,25 +55,19 @@ namespace spark {
     void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         _mySetupFlag = true;
         ComponentMapInitializer::init();
-
+        
         //init animationManager with setup-time
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
 
 #ifdef ANDROID
+        assetProviderSetup(theAssetPath, appPath_);
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
 #endif
 #ifdef iOS
-        AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
         MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
 #endif
-        AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/textures");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/layouts");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/shaders");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/fonts");
-        AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
+       
     }
 
     void BaseApp::realize() {
@@ -84,76 +78,18 @@ namespace spark {
         visitComponents(myI18nVisitor, _mySparkWindow);
     }
 
-    std::string
-    BaseApp::findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight) {
-        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
-        int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
-        int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
-        std::string myBestMatch = "";
-        std::string myBestLayoutName = "";
-        int myBestLayoutWidth = 0;
-        int myBestLayoutHeight = 0;
-
-        bool myExactMatchFlag = false;
-        int myLayoutWidth = 0;
-        int myLayoutHeight = 0;
-        std::string myLayoutName = "";
-        for (unsigned int i = 0; i < myFiles.size(); i++) {
-            if (getExtension(myFiles[i]) == "spark") {
-                std::string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
-                std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);
-                XMLNodePtr myNode(new XMLNode(myLayout));
-                if (myNode->nodeName == "Window") {
-                    for (std::map<std::string, std::string>::iterator it = myNode->attributes.begin(); it != myNode->attributes.end(); ++it) {
-                        if (it->first == "name") {
-                            myLayoutName = it->second;
-                        }
-                        if (it->first == "width") {
-                            myLayoutWidth = as<int>(it->second);
-                        }
-                        if (it->first == "height") {
-                            myLayoutHeight = as<int>(it->second);
-                        }
-                    }
-                }
-                if (i == 0) {
-                    myBestMatch = myChoice;
-                    myBestLayoutName = myLayoutName;
-                    myBestLayoutWidth = myLayoutWidth;
-                    myBestLayoutHeight = myLayoutHeight;
-                }
-                int myLayoutsLargerSide = myLayoutWidth > myLayoutHeight ? myLayoutWidth : myLayoutHeight;
-                int myLayoutsSmallerSide = myScreensLargerSide ==  myLayoutHeight ? myLayoutWidth : myLayoutHeight;
-                //AC_PRINT << "check layout '" << myLayoutName << " width " << myLayoutWidth << "'" << " height " << myLayoutHeight << " screen :" << theScreenWidth << " x" << theScreenHeight;
-                if (myLayoutsLargerSide == myScreensLargerSide && myLayoutsSmallerSide == myScreensSmallerSide ) {
-                    myBestMatch = myChoice;
-                    myBestLayoutName = myLayoutName;
-                    myBestLayoutWidth = myLayoutWidth;
-                    myBestLayoutHeight = myLayoutHeight;
-                    myExactMatchFlag = true;
-                    AC_PRINT << "Excellent we have a layout<->device match -> use layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
-                    AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
-                    break;
-                }
-            }
-        }
-        if (!myExactMatchFlag) {
-            AC_PRINT << "Sorry, we did not find layout<->device match -> use default layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
-            AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
-        }
-        return myBestMatch;
-    }
-
     void
     BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
         std::string myLayoutFile = "";
+        AC_PRINT << "choose layout ...........";
+        bool test;
         if (_myChooseLayoutFlag) {
-            myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight);
+            myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight, test);
         }  else {
             myLayoutFile = theBaseName + ".spark";
         }
         //load layout
-        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(shared_from_this(), myLayoutFile));
+        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), myLayoutFile));
 
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
@@ -216,5 +152,81 @@ namespace spark {
         AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
         AC_TRACE << "OnFrame duration " << myTimer.elapsed() << " s";
     }
+    
+    std::string
+    findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
+        AC_DEBUG << "......... findBestMatchedLayout for baseName: " << theBaseName;
+        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
+        int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
+        int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
+        std::string myBestMatch = "";
+        std::string myBestLayoutName = "";
+        int myBestLayoutWidth = 0;
+        int myBestLayoutHeight = 0;
+        bool myPortrait = false;
+        
+        bool myExactMatchFlag = false;
+        int myLayoutWidth = 0;
+        int myLayoutHeight = 0;
+        std::string myLayoutName = "";
+        for (unsigned int i = 0; i < myFiles.size(); i++) {
+            if (getExtension(myFiles[i]) == "spark") {
+                std::string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
+                std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);
+                XMLNodePtr myNode(new XMLNode(myLayout));
+                if (myNode->nodeName == "Window") {
+                    for (std::map<std::string, std::string>::iterator it = myNode->attributes.begin(); it != myNode->attributes.end(); ++it) {
+                        if (it->first == "name") {
+                            myLayoutName = it->second;
+                        } else if (it->first == "width") {
+                            myLayoutWidth = as<int>(it->second);
+                        } else if (it->first == "height") {
+                            myLayoutHeight = as<int>(it->second);
+                        } else if (it->first == "orientation") {
+                            myPortrait = "portrait" == (it->second);
+                        } 
+                    }
+                }
+                if (i == 0) {
+                    myBestMatch = myChoice;
+                    myBestLayoutName = myLayoutName;
+                    myBestLayoutWidth = myLayoutWidth;
+                    myBestLayoutHeight = myLayoutHeight;
+                    isPortrait = myPortrait;
+                }
+                int myLayoutsLargerSide = myLayoutWidth > myLayoutHeight ? myLayoutWidth : myLayoutHeight;
+                int myLayoutsSmallerSide = myScreensLargerSide ==  myLayoutHeight ? myLayoutWidth : myLayoutHeight;
+                //AC_PRINT << "check layout '" << myLayoutName << " width " << myLayoutWidth << "'" << " height " << myLayoutHeight << " screen :" << theScreenWidth << " x" << theScreenHeight << "  myChoice " << myChoice << " myFiles.size()="<< myFiles.size();
+                if (myLayoutsLargerSide == myScreensLargerSide && myLayoutsSmallerSide == myScreensSmallerSide ) {
+                    myBestMatch = myChoice;
+                    myBestLayoutName = myLayoutName;
+                    myBestLayoutWidth = myLayoutWidth;
+                    myBestLayoutHeight = myLayoutHeight;
+                    isPortrait = myPortrait;
+                    myExactMatchFlag = true;
+                    AC_PRINT << "Excellent we have a layout<->device match -> use layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
+                    AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
+                    break;
+                }
+            }
+        }
+        if (!myExactMatchFlag) {
+            AC_PRINT << "Sorry, we did not find layout<->device match -> use default layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
+            AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
+        }
+        return myBestMatch;
+    }
+
+    void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath ) {
+        AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
+        AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
+        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/textures");
+        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/layouts");
+        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders");
+        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models");
+        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts");
+        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath);
+    }
+    
 }
 

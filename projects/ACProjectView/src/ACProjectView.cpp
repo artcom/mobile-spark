@@ -35,6 +35,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 namespace acprojectview {
    
     ACProjectView::ACProjectView():BaseApp("ACProjectView") {
+        _myChooseLayoutFlag = true;
     }
 
     ACProjectView::~ACProjectView() {
