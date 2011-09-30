@@ -41,7 +41,7 @@ namespace spark {
 
 
     BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
-        _myChooseLayoutFlag(false), _mySetupFlag(false), _mySparkRealizedFlag(false) {
+        _myChooseLayoutFlag(false), _mySetupFlag(false) {
         masl::initSignalHandling();
     }
 
@@ -70,14 +70,6 @@ namespace spark {
        
     }
 
-    void BaseApp::realize() {
-        _mySparkRealizedFlag = true;
-        RealizeComponentVisitor myVisitor;
-        visitComponents(myVisitor, _mySparkWindow);
-        I18nComponentVisitor myI18nVisitor;
-        visitComponents(myI18nVisitor, _mySparkWindow);
-    }
-
     void
     BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
         std::string myLayoutFile = "";
@@ -102,7 +94,6 @@ namespace spark {
 
     void BaseApp::onEvent(std::string theEventString) {
         AC_TRACE << "a string event came in :" << theEventString;
-        //masl::dumpstack();
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
             AutoLocker<ThreadLock> myLocker(_myLock);        
@@ -153,6 +144,7 @@ namespace spark {
         AC_TRACE << "OnFrame duration " << myTimer.elapsed() << " s";
     }
     
+   
     std::string
     findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
         AC_DEBUG << "......... findBestMatchedLayout for baseName: " << theBaseName;

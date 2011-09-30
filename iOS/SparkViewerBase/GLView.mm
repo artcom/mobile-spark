@@ -1,5 +1,7 @@
 #import "GLView.h"
 #include <mar/openGL_functions.h>
+#include <spark/BaseApp.h>
+#include <spark/AppProvider.h>
 
 @implementation GLView
 
@@ -20,7 +22,7 @@
     if (self) {
         
         [self createApp];
-        
+        _myApp = spark::AppProvider::get().getApp();
         // Initialization code
         // Apple changed EGL a lot, it is not possible to render to the display directly. 
         // We have to render into a framebuffer, which is displayed to the user
@@ -90,15 +92,14 @@
         }
          //setup DemoApp
         NSString *path = [[NSBundle mainBundle] resourcePath];
-        myApp->setup((0.0),[path UTF8String], width, height);
-        myApp->realize();
+        _myApp->setup((0.0),[path UTF8String], width, height);
 //        NSString *resizeEvent = [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%d,%d]' oldsize='[%d,%d]'/>", width, height, width, height];
-//        myApp->onEvent([resizeEvent UTF8String]); 
+//        _myApp->onEvent([resizeEvent UTF8String]); 
        
         motionManager = [[CMMotionManager alloc] init];
         motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
         
-        eventManager = [[EventManager alloc] initWithSourceView:self targetApp:myApp];
+        eventManager = [[EventManager alloc] initWithSourceView:self];
     }
     return self;
 }
@@ -113,8 +114,8 @@
     
     //render
     NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
-    myApp->onEvent([frameEvent UTF8String]);    
-    myApp->handleEvents();
+    _myApp->onEvent([frameEvent UTF8String]);    
+    _myApp->handleEvents();
     
     glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
     [glContext presentRenderbuffer:GL_RENDERBUFFER];  
@@ -130,8 +131,8 @@
     
     //render
     NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
-    myApp->onEvent([frameEvent UTF8String]);  
-    myApp->handleEvents();
+    _myApp->onEvent([frameEvent UTF8String]);  
+    _myApp->handleEvents();
         
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, framebuffer);
     glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, multisamplingFramebuffer);

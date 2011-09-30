@@ -5,10 +5,8 @@
 #include "string_functions.h"
 
 #ifdef iOS
-    //iOS
     #include <iostream>
 #elif ANDROID
-    //Android
     #include <android/log.h>
 #endif
 

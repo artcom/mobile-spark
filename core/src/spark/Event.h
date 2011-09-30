@@ -86,13 +86,17 @@ namespace spark {
             WindowEvent(const std::string & theType, ComponentPtr theTarget,
                         const unsigned int theNewWidth, const unsigned int theNewHeight, const unsigned int theOldWidth, const unsigned int theOldHeight);
             WindowEvent(const masl::XMLNodePtr theXMLNode);
+            WindowEvent(const std::string & theType, ComponentPtr theTarget, const std::string theWorldname);
+                
             virtual ~WindowEvent();
 
             static const char * const CLASSNAME;
             virtual const char * const &  classname_() const {return WindowEvent::CLASSNAME;};
             static const char * const ON_RESIZE;
+            static const char * const WORLD_REALIZED;
             vector2 size_;
             vector2 oldsize_;
+            std::string worldname_;
     };
 
     typedef masl::Ptr<WindowEvent> WindowEventPtr;

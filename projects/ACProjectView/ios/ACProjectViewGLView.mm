@@ -1,4 +1,6 @@
 #import "ACProjectViewGLView.h"
+
+#include <spark/AppProvider.h>
 #include <ACProjectView.h>
 
 
@@ -6,7 +8,7 @@
 
 - (void) createApp
 {
-    myApp = new acprojectview::ACProjectView();
+    spark::AppProvider::get().setApp(spark::BaseAppPtr(new acprojectview::ACProjectView()));
     //activate Multisample anti aliasing with useMSAA2x, useMSAA4x, useMSAA8x
     MSAAQuality = useNoneMSAA;
     

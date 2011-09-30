@@ -17,6 +17,8 @@ namespace spark {
     const char * const StageEvent::FRAME = "frame";
     const char * const StageEvent::PAUSE = "pause";
     const char * const WindowEvent::ON_RESIZE = "on_resize";
+    const char * const WindowEvent::WORLD_REALIZED = "world_realized";
+        
     const char * const I18nEvent::ON_LANGUAGE_SWITCH = "on_language_switch";
         
     const char * const TouchEvent::TAP = "tap";
@@ -118,6 +120,11 @@ namespace spark {
         size_(theNewWidth, theNewHeight),
         oldsize_(theOldWidth, theOldHeight)
     {}
+    
+    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget, const std::string theWorldname) :
+        Event(theType, theTarget),worldname_(theWorldname)
+    {}
+        
     
     WindowEvent::WindowEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),

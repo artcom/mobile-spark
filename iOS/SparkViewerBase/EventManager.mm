@@ -1,11 +1,11 @@
 #import "EventManager.h"
+#include <spark/AppProvider.h>
 
 @implementation EventManager
 
 
-- (id) initWithSourceView:(UIView*)view targetApp:(spark::BaseApp*)app {
+- (id) initWithSourceView:(UIView*)view {
     _myView = view;
-    _myApp = app;
     _myHeight = _myView.frame.size.height;
     [self createTouchRecognizers];
     return self;
@@ -107,7 +107,7 @@
 
 
 - (void)throwEventToSpark:(NSString*) eventString {
-    _myApp->onEvent([eventString UTF8String]);
+    spark::AppProvider::get().getApp()->onEvent([eventString UTF8String]);
 }
 
 

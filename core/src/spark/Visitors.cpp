@@ -22,6 +22,7 @@ namespace spark {
 
     bool
     RealizeComponentVisitor::visit(ComponentPtr theComponent) {
+        WidgetPtr myWidget = boost::dynamic_pointer_cast<Widget>(theComponent);
         AC_DEBUG << *theComponent << " realize";
         theComponent->realize();
         return true;
@@ -31,16 +32,6 @@ namespace spark {
     OnResumeComponentVisitor::visit(ComponentPtr theComponent) {
         AC_DEBUG << *theComponent << " onResume";
         theComponent->onResume();
-        return true;
-    }
-
-    bool
-    I18nComponentVisitor::visit(ComponentPtr theComponent) {
-        AC_DEBUG << *theComponent << " i18n setup";
-        WidgetPtr myWidget = boost::dynamic_pointer_cast<Widget>(theComponent);
-        if(myWidget && myWidget->getI18nContext()) {
-            myWidget->getI18nContext()->setup();
-        }
         return true;
     }
 
