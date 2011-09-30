@@ -93,7 +93,6 @@
          //setup DemoApp
         NSString *path = [[NSBundle mainBundle] resourcePath];
         _myApp->setup((0.0),[path UTF8String], width, height);
-        _myApp->realize();
 //        NSString *resizeEvent = [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%d,%d]' oldsize='[%d,%d]'/>", width, height, width, height];
 //        _myApp->onEvent([resizeEvent UTF8String]); 
        
