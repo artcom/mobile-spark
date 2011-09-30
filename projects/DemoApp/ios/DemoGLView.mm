@@ -1,4 +1,7 @@
 #import "DemoGLView.h"
+
+#include <spark/AppProvider.h>
+
 #include <DemoApp.h>
 
 
@@ -6,7 +9,7 @@
 
 - (void) createApp
 {
-    myApp = new demoapp::DemoApp();
+    spark::AppProvider::get().setApp(spark::BaseAppPtr(new demoapp::DemoApp()));
     
     //activate Multisample anti aliasing with useMSAA2x, useMSAA4x, useMSAA8x
     MSAAQuality = useNoneMSAA;
