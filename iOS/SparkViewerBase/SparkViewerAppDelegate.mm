@@ -1,6 +1,8 @@
 #import "SparkViewerAppDelegate.h"
 #import "GLView.h"
 #import "SparkViewerViewController.h"
+#include <spark/BaseApp.h>
+
 
 @implementation SparkViewerAppDelegate
 
@@ -15,6 +17,30 @@
     myGLView = [[GLView alloc]initWithFrame:[window bounds]];
 }
 
+
+-(CGRect)getWindowBoundsWithBaseLayout:(NSString*) baseLayout {
+    isPortrait = NO; 
+    CGRect windowBounds = [[UIScreen mainScreen] bounds];
+    std::string filename = spark::findBestMatchedLayout("/main",windowBounds.size.width, windowBounds.size.height, isPortrait);
+    CGRect translate = [window bounds]; 
+    if (!isPortrait) {
+        float oldwidth = windowBounds.size.width ;
+        windowBounds.size.width = windowBounds.size.height;
+        windowBounds.size.height = oldwidth;
+        translate.origin.y=20;  //XXX:  don't ask
+    } else {
+        translate.origin.y=40;  //XXX:  don't ask
+    }
+    window.bounds=translate;
+    return windowBounds;
+}
+
+-(void) initializeAssetProvider:(NSString*) projectName 
+{
+    NSString *path = [[NSBundle mainBundle] resourcePath];
+    spark::assetProviderSetup([path UTF8String],[projectName UTF8String]);
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     SparkViewerViewController *aViewController = [[SparkViewerViewController alloc] initWithNibName:nil bundle:nil];
@@ -23,6 +49,10 @@
 
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
+    
+    
+    
+    
     [self createGLView];
     self.window.rootViewController = self.sparkViewerViewController;
     [self.sparkViewerViewController setPortrait:self.isPortrait];
