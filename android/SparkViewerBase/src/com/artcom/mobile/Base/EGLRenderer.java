@@ -42,7 +42,6 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
         NativeBinding.initBinding();
         if (!NativeBinding.ourActivity._mySparkWorldIsLoaded) {
             NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME + _myPackageExtension, context), _myScreenWidth,  _myScreenHeight);
-            NativeBinding.sparkRealize();
             NativeBinding.ourActivity._mySparkWorldIsLoaded = true;
         } else {
             NativeBinding.onResume();
