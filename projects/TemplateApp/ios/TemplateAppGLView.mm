@@ -1,4 +1,6 @@
 #import "TemplateAppGLView.h"
+
+#include <spark/AppProvider.h>
 #include <TemplateApp.h>
 
 
@@ -6,7 +8,7 @@
 
 - (void) createApp
 {
-    myApp = new templateapp::TemplateApp();
+    spark::AppProvider::get().setApp(spark::BaseAppPtr(new templateapp::TemplateApp()));
     //activate Multisample anti aliasing with useMSAA2x, useMSAA4x, useMSAA8x
     MSAAQuality = useNoneMSAA;
     

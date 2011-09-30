@@ -25,11 +25,6 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_setup(JNIEnv * 
     env->ReleaseStringUTFChars(apkFile, myAssetPath);
 }
 
-JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_sparkRealize(JNIEnv * env, jobject obj) {
-    if (!spark::AppProvider::get().getApp()->isSparkRealized()) {
-        CALL_NATIVE(spark::AppProvider::get().getApp()->realize());        
-    }
-}
 
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNIEnv * env, jobject obj) {
     android::AndroidMobileSDKPtr myAndroidSDK = android::AndroidMobileSDKPtr(new android::AndroidMobileSDK());
