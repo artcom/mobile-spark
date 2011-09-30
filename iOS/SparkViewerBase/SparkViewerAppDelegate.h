@@ -17,7 +17,7 @@
 
 -(void)createGLView;
 -(CGRect)getWindowBoundsWithBaseLayout:(NSString*) baseLayout ;
--(void)initializeAssetProvider:(NSString *) projectName ;
+-(void)initialize:(NSString *) projectName ;
 
 
 @property bool isPortrait;
