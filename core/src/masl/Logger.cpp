@@ -28,6 +28,16 @@ namespace masl {
     }
     
     void
+    Logger::setSeverity() {
+        const char * myEnv = getenv(LOG_GLOBAL_VERBOSITY_ENV);
+        
+        std::string myLogLevelString(myEnv);
+        _myGlobalSeverity = getSeverityFromString(masl::trimall(myLogLevelString), SEV_WARNING);
+
+        parseEnvModuleSeverity();
+    }
+
+    void
     Logger::setSeverity(const Severity theSeverity) {
         _myGlobalSeverity = theSeverity;
         parseEnvModuleSeverity();
@@ -175,7 +185,8 @@ namespace masl {
     }
     
     Severity
-    Logger::getSeverityFromString(std::string theString, Severity theDefault) const {
+    Logger::getSeverityFromString(const std::string & theString, Severity theDefault) const {
+        if (theString.empty()) return theDefault;
         std::vector<std::string> mySeverities(SeverityName, SeverityName + SEVERITIES);
         for (std::vector<std::string>::size_type i = 0; i < mySeverities.size(); ++i) {
             if (mySeverities[i] == theString) {

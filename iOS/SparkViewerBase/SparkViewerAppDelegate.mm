@@ -1,6 +1,8 @@
 #import "SparkViewerAppDelegate.h"
 #import "GLView.h"
 #import "SparkViewerViewController.h"
+#include <masl/Logger.h>
+
 #include <spark/BaseApp.h>
 
 
@@ -35,10 +37,11 @@
     return windowBounds;
 }
 
--(void) initializeAssetProvider:(NSString*) projectName 
+-(void) initialize:(NSString*) projectName 
 {
     NSString *path = [[NSBundle mainBundle] resourcePath];
     spark::assetProviderSetup([path UTF8String],[projectName UTF8String]);
+    masl::Logger::get().setLoggerTopLevelTag([projectName UTF8String]);
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -47,7 +50,7 @@
     [self setSparkViewerViewController:aViewController];
     [aViewController release];
     // Override point for customization after application launch
-    [window makeKeyAndVisible];
+    //[window makeKeyAndVisible];
     
     // create a pointer to a dictionary
     NSDictionary *dictionary;
@@ -56,10 +59,11 @@
     NSString * finalPath = [bundle pathForResource:@"Environment" ofType:@"plist"];
     dictionary = [NSDictionary dictionaryWithContentsOfFile:finalPath];
     for (id key in dictionary) {
-        NSLog(@"bundle: key=%@, value=%@", key, [dictionary objectForKey:key]);
-        //putenv([NSString stringWithFormat:@"%@=%@", key, [dictionary objectForKey:key]]);
+        NSString* envstring = [NSString stringWithFormat:@"%@=%@", key, [dictionary objectForKey:key]];
+        const char *env = [envstring UTF8String]; 
+        putenv((char*)env);
     }
-    
+    masl::Logger::get().setSeverity();
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
     
     

@@ -5,7 +5,7 @@
 
 - (void)createGLView {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];    
-    [self initializeAssetProvider:@"ACProjectView"];
+    [self initialize:@"ACProjectView"];
     myGLView = [[ACProjectViewGLView alloc]initWithFrame: [self getWindowBoundsWithBaseLayout:@"/main"]];
 
 }

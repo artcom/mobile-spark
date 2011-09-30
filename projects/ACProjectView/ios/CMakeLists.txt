@@ -142,3 +142,9 @@ add_custom_command(
     POST_BUILD 
     COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/core/
 )
+
+add_custom_command( 
+    TARGET ${EXECUTABLE_NAME} 
+    POST_BUILD 
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp ${PROJECT_SOURCE_DIR}../../iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+)
