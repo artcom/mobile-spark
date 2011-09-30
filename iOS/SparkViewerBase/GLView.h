@@ -25,32 +25,35 @@ typedef enum {
 @interface GLView : UIView {
 
     @private
-    EAGLContext *glContext;    
-    GLuint framebuffer;
-    GLuint renderbuffer;
-    GLuint depthRenderbuffer;
-    GLuint multisamplingFramebuffer;
-    GLuint multisamplingRenderbuffer;
-    GLint width;
-    GLint height;
-    BOOL animating;
-    EventManager *eventManager;
-    CADisplayLink *displayLink;
-    CMMotionManager *motionManager;
+        EAGLContext *glContext;    
+        GLuint framebuffer;
+        GLuint renderbuffer;
+        GLuint depthRenderbuffer;
+        GLuint multisamplingFramebuffer;
+        GLuint multisamplingRenderbuffer;
+        GLint width;
+        GLint height;
+        BOOL animating;
+        EventManager *eventManager;
+        CADisplayLink *displayLink;
+        CMMotionManager *motionManager;
     
     @protected
-#ifdef __cplusplus
-    spark::BaseApp *myApp;
-    GLViewMSAAQuality MSAAQuality;
-    int frameInterval;
-#endif
+
+    #ifdef __cplusplus
+        spark::BaseApp *myApp;
+        GLViewMSAAQuality MSAAQuality;
+        int frameInterval;
+    #endif
 
 }
+
 
 - (void) createApp;
 - (void) render:(id)sender;
 - (void) renderWithMSAA:(id)sender;
 - (void) startAnimation;
 - (void) stopAnimation;
+
 
 @end

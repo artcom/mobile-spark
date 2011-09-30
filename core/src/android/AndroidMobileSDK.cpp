@@ -24,7 +24,7 @@ namespace android {
             }
         }       
     }
-    masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, int theTextureId, int theFontSize,
+    masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
                                                 const std::string & theFontPath) {
         masl::TextInfo myTextInfo;
@@ -53,7 +53,7 @@ namespace android {
                 jclass myIntegerClass = env->GetObjectClass(myInt);
 
                 jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");
-                myTextInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+                myTextInfo.textureID = env->CallIntMethod(myInt, intValueMethod, 0);
 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);
                 myTextInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
@@ -98,7 +98,7 @@ namespace android {
                 jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);
                 jclass myIntegerClass = env->GetObjectClass(myInt);
                 jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");
-                myCameraInfo.textureID = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+                myCameraInfo.textureID = env->CallIntMethod(myInt, intValueMethod, 0);
 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);
                 myCameraInfo.width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);

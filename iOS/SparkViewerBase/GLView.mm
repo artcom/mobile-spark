@@ -3,6 +3,7 @@
 
 @implementation GLView
 
+
 + (Class) layerClass
 {    
     return [CAEAGLLayer class];
@@ -23,8 +24,6 @@
         // Initialization code
         // Apple changed EGL a lot, it is not possible to render to the display directly. 
         // We have to render into a framebuffer, which is displayed to the user
-        NSLog(@"in initWithFrame");
-
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         eaglLayer.opaque = TRUE;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -57,7 +56,7 @@
         
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
-        
+        NSLog(@"width=%d, height=%d",width,height);
         if (MSAAQuality > 0) {
             //Create Multisampling Buffer
             glGenFramebuffers(1, &multisamplingFramebuffer);
@@ -82,7 +81,6 @@
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
         }
-        
         //Test Frame Buffer
         GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER) ;
         if(status != GL_FRAMEBUFFER_COMPLETE) {
@@ -90,13 +88,12 @@
             NSLog(@"failed to make complete framebuffer object %x", status);
             
         }
-        
-        //setup DemoApp
+         //setup DemoApp
         NSString *path = [[NSBundle mainBundle] resourcePath];
         myApp->setup((0.0),[path UTF8String], width, height);
         myApp->realize();
-        NSString *resizeEvent = [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%d,%d]' oldsize='[%d,%d]'/>", width, height, width, height];
-        myApp->onEvent([resizeEvent UTF8String]); 
+//        NSString *resizeEvent = [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%d,%d]' oldsize='[%d,%d]'/>", width, height, width, height];
+//        myApp->onEvent([resizeEvent UTF8String]); 
        
         motionManager = [[CMMotionManager alloc] init];
         motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
@@ -190,6 +187,7 @@
         [motionManager stopDeviceMotionUpdates];
     }
 }
+
 
 - (void)dealloc
 {
