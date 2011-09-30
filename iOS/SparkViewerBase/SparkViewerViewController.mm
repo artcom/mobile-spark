@@ -19,14 +19,6 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {   
     if(isPortrait) return NO;
-    NSLog(@"isPortrait %i", isPortrait);
-    NSLog(@"isPortrait %d", interfaceOrientation);
-
-     NSLog(@"interfaceOrientation == UIInterfaceOrientationPortrait %i", interfaceOrientation == UIInterfaceOrientationPortrait);
-    NSLog(@"interfaceOrientation == UIInterfaceOrientationLandscapeLeft %i", interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
-    NSLog(@"interfaceOrientation == UIInterfaceOrientationLandscapeRight %i", interfaceOrientation == UIInterfaceOrientationLandscapeRight);
-
-    //if(isPortrait) return (interfaceOrientation == UIInterfaceOrientationPortrait);
     return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
 }
 

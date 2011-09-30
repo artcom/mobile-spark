@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<Window name="ProjectView" fullscreen="true" i18nContext="global-i18n" width="768" height="1024" orientation="portrait" clearColor="[0.5,0.2,0.8,1]">
+
+    <Template name="Project" src="/project.spark"/>
+    <Template name="ProjectViewer" src="/projectViewer.spark"/>
+    
+    <I18nContext name="global-i18n" defaultLanguage="de">
+        <I18nItem name="hello_text">
+            <de><![CDATA[Willkommen]]> </de>
+            <en><![CDATA[Welcome]]> </en>
+        </I18nItem>
+        <I18nItem name="language">
+            <de>/en.png</de>
+            <en>/de.png</en>
+        </I18nItem>
+        <I18nItem name="kinetik_title">
+            <de>Kinetische Skulptur</de>
+            <en>Kinetic sculpture</en>
+        </I18nItem>
+        <I18nItem name="kinetik_subtitle">
+            <de>Museum München, 2008</de>
+            <en>Museum Munich, 2008</en>
+        </I18nItem>
+        <I18nItem name="kinetik_text">
+            <de>
+            <![CDATA[Die Kinetische Skulptur übersetzt den Prozess der Formfindung in Kunst und Design metaphorisch in den Raum.\n714 Metallkugeln bewegen sich im Zusammenspiel aus Mechanik, Elektronik und Code durch eine siebenminütige Narration. Auf einer Fläche von sechs Quadratmetern an feinen Stahlseilen hängend, werden sie einzeln über computergesteuerte Schrittmotoren bewegt. Anfangs bildet die Installation einen chaotischen Zustand ab, dann miteinander im Wettstreit liegende Formen bis diese schließlich zu einem finalen Objekt werden. Dieser Prozess wird in einer Reihe von Visualisierungsvariationen dargestellt.]]>
+            </de>
+            <en>
+            <![CDATA[EN-Die Kinetische Skulptur übersetzt den Prozess der Formfindung in Kunst und Design metaphorisch in den Raum.\n714 Metallkugeln bewegen sich im Zusammenspiel aus Mechanik, Elektronik und Code durch eine siebenminütige Narration. Auf einer Fläche von sechs Quadratmetern an feinen Stahlseilen hängend, werden sie einzeln über computergesteuerte Schrittmotoren bewegt. Anfangs bildet die Installation einen chaotischen Zustand ab, dann miteinander im Wettstreit liegende Formen bis diese schließlich zu einem finalen Objekt werden. Dieser Prozess wird in einer Reihe von Visualisierungsvariationen dargestellt.]]>
+            </en>
+        </I18nItem>
+        <I18nItem name="belvedere_title">
+            <de>DAS NEUE OESTERREICH</de>
+            <en>The new austria</en>
+        </I18nItem>
+        <I18nItem name="belvedere_subtitle">
+            <de>Schloss Belvedere Wien, 2005</de>
+            <en>Schloss Belvedere Wien, 2005</en>
+        </I18nItem>
+        <I18nItem name="duality_title">
+            <de>DUALITY</de>
+            <en>DUALITY</en>
+        </I18nItem>
+        <I18nItem name="duality_subtitle">
+            <de>Tokio, 2007</de>
+            <en>Tokio, 2007</en>
+        </I18nItem>
+        <I18nItem name="jurascope_title">
+            <de>Juraskope</de>
+            <en>Juraskope</en>
+        </I18nItem>
+        <I18nItem name="jurascope_subtitle">
+            <de>Museum für Naturkunde, Berlin, 2007</de>
+            <en>Museum for nature, Berlin, 2007</en>
+        </I18nItem>        
+        <I18nItem name="level_green_title">
+            <de>Level Green</de>
+            <en>Level Green</en>
+        </I18nItem>
+        <I18nItem name="level_green_subtitle">
+            <de>Autostadt Wolfsburg, 2009</de>
+            <en>Autostadt Wolfsburg, 2009</en>
+        </I18nItem>        
+        <I18nItem name="terravision_title">
+            <de>Terravision</de>
+            <en>Terravision</en>
+        </I18nItem>
+        <I18nItem name="terravision_subtitle">
+            <de>1994</de>
+            <en>1994</en>
+        </I18nItem>        
+        <I18nItem name="project_1_title">
+            <de>Project Test 1</de>
+            <en>Project Test 1</en>
+        </I18nItem>
+        <I18nItem name="project_1_subtitle">
+            <de>low resolution square</de>
+            <en>low resolution square</en>
+        </I18nItem>        
+        <I18nItem name="project_2_title">
+            <de>Project Test 2</de>
+            <en>Project Test 2</en>
+        </I18nItem>
+        <I18nItem name="project_2_subtitle">
+            <de>medium resolution 393x236</de>
+            <en>medium resolution 393x236</en>
+        </I18nItem>        
+        <I18nItem name="project_3_title">
+            <de>Project Test 3</de>
+            <en>Project Test 3</en>
+        </I18nItem>
+        <I18nItem name="project_3_subtitle">
+            <de>portrait picture 282x375</de>
+            <en>portrait picture 282x375</en>
+        </I18nItem>        
+        
+    </I18nContext>
+
+    <!-- userinterface is located in 2dworld -->
+    <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
+
+    <World name="2dworld">    
+        <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
+        
+        <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
+        
+        <Transform name="startscreen">
+            <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]"/>
+            <Image name="logo" x="0" y="30" z="6" src="/ac_logo_140px.png"/> 
+            <Text name="deutsch" text="DEUTSCH" x="10" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
+            <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
+            <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
+        </Transform>        
+        
+        <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
+        
+            
+            <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle" src="/belvedere_teaser_thumb_01.png">
+	            <ContentImage src="/duality_teaser_thumb_01.png"/>
+            </Project>
+
+
+            <Project name="project2" title_I18n="duality_title" subtitle_I18n="duality_subtitle" src="/duality_teaser_thumb_01.png" >
+            </Project>
+            
+            <Project name="project3" title_I18n="jurascope_title" subtitle_I18n="jurascope_subtitle" src="/juraskope_teaser_thumb.png">
+            </Project>
+
+            <Project name="project4" title_I18n="kinetik_title" subtitle_I18n="kinetik_subtitle" description_I18n="kinetik_text" src="/kinetik_teaser_thumb.png">
+                <ContentImage src="/kinetische_skulptur_klein_1_1.png"/>
+                <ContentImage src="/kinetische_skulptur_klein_1_0.5.png"/>
+                <ContentImage src="/kinetische_skulptur_klein_0.5_1.png"/>
+                <ContentImage src="/kinetische_skulptur_01.png"/>
+                <ContentImage src="/kinetische_skulptur_02.png"/>
+	            <ContentImage src="/kinetische_skulptur_03.png"/>
+	        </Project>
+	        
+
+            <Project name="project5" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" src="/levelgreen_teaser_thumb.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+            </Project>
+
+
+            <Project name="project6" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle"  src="/terravision_teaser_thumb.png">
+            </Project>
+
+            <Project name="project7" title_I18n="project_1_title" subtitle_I18n="project_1_subtitle" src="/test1.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+            </Project>
+            
+	        <Project name="project8" title_I18n="project_2_title" subtitle_I18n="project_2_subtitle" src="/test1.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+            </Project>
+
+            <Project name="project9" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" src="/levelgreen_teaser_thumb.png">
+                <ContentImage src="/level_green_01.png"/>
+                <ContentImage src="/level_green_02.png"/>
+	            <ContentImage src="/level_green_03.png"/>
+            </Project>
+            
+             <Project name="project10" title_I18n="project_3_title" subtitle_I18n="project_3_subtitle"  src="/test3.png">
+            </Project>
+
+            <Project name="project11" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle"  src="/terravision_teaser_thumb.png">
+            </Project>
+          
+        </ProjectMenu>	
+        
+        <ProjectViewer name="projectViewer" visible="false">
+        </ProjectViewer>
+
+        <!--Text name="hellotext" y="400" x="10" z="13" i18nId="hello_text" color="[1,1,0,1]" fontsize="32"/-->
+
+    </World>        
+</Window>

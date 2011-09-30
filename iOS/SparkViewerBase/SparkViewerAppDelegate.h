@@ -12,9 +12,13 @@
     @protected
         bool isPortrait;
 
+    
 }
 
 -(void)createGLView;
+-(CGRect)getWindowBoundsWithBaseLayout:(NSString*) baseLayout ;
+-(void)initializeAssetProvider:(NSString *) projectName ;
+
 
 @property bool isPortrait;
 @property (nonatomic, retain) IBOutlet UIWindow *window;
