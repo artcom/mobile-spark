@@ -4,6 +4,8 @@
 #include <animation/DelayAnimation.h>
 #include <animation/Easing.h>
 
+#include <boost/progress.hpp>
+
 #include "spark/Image.h"
 #include "ProjectMenu.h"
 
@@ -45,12 +47,13 @@ namespace acprojectview {
         _myHeight = _myWindowPtr->getSize()[1];
         int dx = _myWidth / _myHorizontalTiling;
         int dy = _myHeight / _myVerticalTiling;
-        int iconWidth = dx - _myGapX;
-        int iconHeight = dy - _myGapY;
+        //int iconWidth = dx - _myGapX;
+        //int iconHeight = dy - _myGapY;
         const VectorOfComponentPtr & myChildren = myPtr->getChildrenByType(ProjectImpl::SPARK_TYPE);
         _myNumberOfSlides = (myChildren.size()-1)/(_myHorizontalTiling * _myVerticalTiling);
         AC_PRINT << "---------------------------------- number of slides" << _myNumberOfSlides;
         AC_PRINT << "---------------------------------- number of childs" << myChildren.size();
+        boost::timer::timer myTimer;
 
         for (size_t i = 0; i < myChildren.size(); i++) {
             ProjectImplPtr myProject = boost::static_pointer_cast<ProjectImpl>(myChildren[i]);
@@ -58,16 +61,18 @@ namespace acprojectview {
             TextPtr titlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("title"));
             TextPtr subtitlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("subtitle"));
             // update text sizes:
-            titlePtr->setMaxWidth(iconWidth-titlePtr->getX()*2);
-            subtitlePtr->setMaxWidth(iconWidth-subtitlePtr->getX()*2);
-            titlePtr->setY(subtitlePtr->getTextSize()[1]);
-            titlePtr->realize();
-            subtitlePtr->realize();
-            int textSpace = titlePtr->getTextSize()[1] + subtitlePtr->getTextSize()[1];
+            //titlePtr->setMaxWidth(iconWidth-titlePtr->getX()*2);
+            //subtitlePtr->setMaxWidth(iconWidth-subtitlePtr->getX()*2);
+            //titlePtr->setY(subtitlePtr->getTextSize()[1]);
+            //titlePtr->realize();
+            //subtitlePtr->realize();
+            //int textSpace = titlePtr->getTextSize()[1] + subtitlePtr->getTextSize()[1];
             // set Position:
             myProject->setX(_myGapX/2 + dx * (i/_myVerticalTiling)); 
             myProject->setY(_myGapY/2 + dy * (i % _myVerticalTiling));
-            // scale preview image:
+
+
+/*            // scale preview image:
             float scaleX = iconWidth / (image->getTextureSize()[0]);
             float scaleY = (iconHeight - textSpace) / (image->getTextureSize()[1]);
             float scale = std::min(scaleX, scaleY);
@@ -75,8 +80,9 @@ namespace acprojectview {
             image->setScaleY(scale);
             // center image: 
             image->setX( (iconWidth - scale * image->getTextureSize()[0])/2.0);
-            image->setY( (textSpace + iconHeight - scale * image->getTextureSize()[1])/2.0);
+            image->setY( (textSpace + iconHeight - scale * image->getTextureSize()[1])/2.0);*/
         }
+        AC_PRINT << "******************************************************* " << myTimer.elapsed();
     }
     
     int ProjectMenu::getPreviewWidth() {

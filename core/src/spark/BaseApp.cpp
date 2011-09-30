@@ -41,7 +41,7 @@ namespace spark {
 
 
     BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
-        _myChooseLayoutFlag(false), _mySetupFlag(false), _mySparkRealizedFlag(false) {
+        _myChooseLayoutFlag(false), _mySetupFlag(false) {
         masl::initSignalHandling();
     }
 
@@ -74,14 +74,6 @@ namespace spark {
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/models");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/fonts");
         AssetProviderSingleton::get().ap()->addIncludePath(appPath_);
-    }
-
-    void BaseApp::realize() {
-        _mySparkRealizedFlag = true;
-        RealizeComponentVisitor myVisitor;
-        visitComponents(myVisitor, _mySparkWindow);
-        I18nComponentVisitor myI18nVisitor;
-        visitComponents(myI18nVisitor, _mySparkWindow);
     }
 
     std::string

@@ -40,7 +40,6 @@ public class NativeBinding {
   public static native void putEnv(String theEnvVar);
   public static native void onResume();
   public static native void initBinding();
-  public static native void sparkRealize();
   public static native void onEvent(String theEvent);
   public static native void handleEvents();
 

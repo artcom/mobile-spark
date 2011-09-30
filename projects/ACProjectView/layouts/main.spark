@@ -97,18 +97,26 @@
     </I18nContext>
 
     <!-- userinterface is located in 2dworld -->
-    <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
+    <View name="loaderView" world="loaderworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
+    <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera" visible="false"/>
+    <World name="loaderworld" sensible="false">    
+        <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
+        <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
+        <Transform name="startscreen">
+            <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]"/>
+            <Image name="logo" x="12" y="30" z="6" src="/ac_logo_140px.png"/> 
+            <AppLoaderAnim name="apploaderanim" x="200" y="200" z="20">
+                <Image name="anim_01" x="0" y="0" src="/acapp_loader01.png" visible="false"/> 
+                <Image name="anim_02" x="0" y="0" src="/acapp_loader02.png" visible="true"/> 
+                <Image name="anim_03" x="0" y="0" src="/acapp_loader03.png" visible="false"/> 
+                <Image name="anim_04" x="0" y="0" src="/acapp_loader04.png" visible="false"/>         
+            </AppLoaderAnim>
+        </Transform>        
+    </World>
 
     <World name="2dworld">    
-        <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
-        
+        <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>            
         <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
-        <AppLoaderAnim x="200" y="200" z="20">
-            <Image name="anim_01" x="0" y="0" src="/acapp_loader01.png" visible="false"/> 
-            <Image name="anim_02" x="0" y="0" src="/acapp_loader02.png" visible="false"/> 
-            <Image name="anim_03" x="0" y="0" src="/acapp_loader03.png" visible="false"/> 
-            <Image name="anim_04" x="0" y="0" src="/acapp_loader04.png" visible="false"/>         
-        </AppLoaderAnim>
         <Transform name="startscreen">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]"/>
             <Image name="logo" x="12" y="30" z="6" src="/ac_logo_140px.png"/> 

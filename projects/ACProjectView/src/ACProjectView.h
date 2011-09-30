@@ -26,6 +26,8 @@ namespace acprojectview {
             void onProjectItem(spark::EventPtr theEvent);
             void onLanguageSwitchDe(spark::EventPtr theEvent);
             void onLanguageSwitchEn(spark::EventPtr theEvent);
+            void onWorldRealized(spark::EventPtr theEvent);
+                
             void onBack(spark::EventPtr theEvent);
             void onSwipeCB(spark::EventPtr theEvent);
             void onStartScreenClicked(spark::EventPtr theEvent);

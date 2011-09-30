@@ -20,7 +20,10 @@ namespace acprojectview {
             
             int getPreviewWidth();
             int getPreviewHeight();
-            
+            int getHorizontalTiling() { return _myHorizontalTiling;}
+            int getVerticalTiling() { return _myVerticalTiling;}
+            int getGapX() {return _myGapX;}
+            int getGapY() {return _myGapY;}
         private:
             void onSwipeLeftCB(spark::EventPtr theEvent);
             void onSwipeRightCB(spark::EventPtr theEvent);

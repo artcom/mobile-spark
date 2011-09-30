@@ -20,6 +20,11 @@ namespace spark {
 
     I18nContext::~I18nContext() {
     }
+    
+    void 
+    I18nContext::realize() {
+        switchLanguage(defaultLanguage_);
+    }    
 
     void
     I18nContext::switchLanguage(const LANGUAGE theLanguage) {
@@ -61,6 +66,11 @@ namespace spark {
 
     I18nItem::~I18nItem() {
     }
+    
+    void 
+    I18nItem::realize() {
+        language_ = boost::static_pointer_cast<I18nContext>(getParent())->getDefaultLanguage();
+    }
 
     void 
     I18nItem::switchLanguage(const LANGUAGE theLanguage) {
@@ -70,7 +80,10 @@ namespace spark {
     }
 
     std::string 
-    I18nItem::getLanguageData(const LANGUAGE theLanguage) const {
+    I18nItem::getLanguageData(const LANGUAGE theLanguage){
+        if (language_ == NO_LANGUAGE) {
+            realize();
+        }
         std::string myData = "";
         const LANGUAGE myLanguage = (theLanguage != NO_LANGUAGE ? theLanguage : language_);
         std::map<LANGUAGE, std::string>::const_iterator it = languageData_.find(myLanguage);
