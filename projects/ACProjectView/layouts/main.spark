@@ -123,7 +123,11 @@
             <Text name="deutsch" text="DEUTSCH" x="10" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
             <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
             <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
+            <Transform name="idlescreen" x="10" y="80" z="10">
+                <Image name="idleimage" width="100" height="100" src="/level_green_03.png"/>
+            </Transform>
         </Transform>        
+
         
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
         
