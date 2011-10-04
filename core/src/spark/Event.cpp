@@ -121,7 +121,7 @@ namespace spark {
         oldsize_(theOldWidth, theOldHeight)
     {}
     
-    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget, const std::string theWorldname) :
+    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theWorldname) :
         Event(theType, theTarget),worldname_(theWorldname)
     {}
         

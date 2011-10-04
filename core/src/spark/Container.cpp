@@ -26,6 +26,7 @@ namespace spark {
 
     void
     Container::realize() {
+        Component::realize();
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             (*it)->setParent(shared_from_this());
         }

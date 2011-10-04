@@ -14,8 +14,8 @@ namespace spark {
             virtual void realize();
             void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
 
-            void setI18nId(std::string theNewI18nId);
-            void setI18nData(std::string theData);
+            void setI18nId(const std::string & theNewI18nId);
+            void setI18nData(const std::string & theData);
             
         protected:
             std::string data_;
