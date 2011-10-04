@@ -21,6 +21,8 @@ namespace spark {
             float getWorldZ() const;
         protected:
             virtual void propagateAlpha();
+            std::string vertexShader_;
+            std::string fragmentShader_;
         private:
             mar::ShapePtr _myShape;
     };

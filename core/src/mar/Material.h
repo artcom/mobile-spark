@@ -24,7 +24,7 @@ namespace mar {
     class Material {
     public:
         virtual ~Material();
-        virtual void createShader();
+        virtual void createShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void loadShader(const matrix & theMatrix);
         virtual void initGL();
         void setAlpha(const float theAlpha) {alpha_ = theAlpha; transparency_ |= (alpha_ != 1.0);};
@@ -36,7 +36,7 @@ namespace mar {
         bool transparency_;
     protected:
         Material();
-        virtual void setShader();
+        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void setHandles();
         GLuint getHandle(const std::string & theName) const;
 
@@ -72,7 +72,7 @@ namespace mar {
         GLuint colorHandle;
 
     private:
-        virtual void setShader();
+        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void setHandles();
     };
     typedef masl::Ptr<UnlitColoredMaterial> UnlitColoredMaterialPtr;
@@ -86,7 +86,7 @@ namespace mar {
         TexturePtr getTexture() const {return _myTexture;}
         TexturePtr _myTexture;
     private:
-        virtual void setShader();
+        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         std::string _mySrc;
 
     };
