@@ -18,15 +18,21 @@ namespace spark {
         virtual bool visit(ComponentPtr theComponent);
     };
 
-    class RealizeComponentVisitor : public ComponentVisitor {
+    class RealizeComponentsButWorldAndWindowVisitor : public ComponentVisitor {
     public:
         virtual bool visit(ComponentPtr theComponent);
     };
+    
     class OnPauseComponentVisitor : public ComponentVisitor {
     public:
         virtual bool visit(ComponentPtr theComponent);
     };
-
+    
+    class I18nComponentVisitor : public ComponentVisitor {
+	public:
+		virtual bool visit(ComponentPtr theComponent);
+	};
+		
     class OnResumeComponentVisitor : public ComponentVisitor {
     public:
         virtual bool visit(ComponentPtr theComponent);

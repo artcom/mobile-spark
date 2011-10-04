@@ -62,7 +62,6 @@ namespace spark {
 
 #ifdef ANDROID
         assetProviderSetup(theAssetPath, appPath_);
-        AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
 #endif
 #ifdef iOS
         MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
@@ -210,7 +209,12 @@ namespace spark {
     }
 
     void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath ) {
+#ifdef iOS
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
+#endif            
+#ifdef ANDROID
+        AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
+#endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/textures");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/layouts");
