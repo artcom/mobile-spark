@@ -18,6 +18,8 @@ namespace animation {
 
     private:
         std::vector<AnimationPtr> _myAnimations;
+        std::vector<AnimationPtr> _myOnFrameCollectedAnimations;
+        bool _myIsInOnFrame;
         masl::UInt64 _myAnimationTime;
 
         void removeFinished();
