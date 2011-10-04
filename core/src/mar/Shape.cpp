@@ -7,7 +7,7 @@
 namespace mar {
 
     //////////////////////////////////////////////////////////////Shape
-    Shape::Shape(const bool theTextureFlag) : _myTextureFlag(theTextureFlag), _myTransparency(Transparency::UNKNOWN) {
+    Shape::Shape(const bool theTextureFlag) : _myTextureFlag(theTextureFlag){
         _myBoundingBox.min.zero(); _myBoundingBox.min[3] = 1;
         _myBoundingBox.max.zero(); _myBoundingBox.max[3] = 1;
         _myBoundingBox.max[0] = _myBoundingBox.max[1] = 1.0f;
@@ -75,20 +75,14 @@ namespace mar {
     }
 
     bool Shape::isTransparent() {
-        if (_myTransparency != Transparency::UNKNOWN) {
-            return (_myTransparency == Transparency::TRANSPARENT);
-        } else {
-            for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
-                                                          it != elementList.end(); ++it) {
-                ElementPtr element = *it;
-                if (element->material->transparency_) {
-                    _myTransparency = Transparency::TRANSPARENT;
-                    return true;
-                }
+        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
+                                                      it != elementList.end(); ++it) {
+            ElementPtr element = *it;
+            if (element->material->transparency_) {
+                return true;
             }
-            _myTransparency = Transparency::OPAQUE;
-            return false;
         }
+        return false;        
     }
 
     /////////////////////////////////////////////////////////////RectangleShape
