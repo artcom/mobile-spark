@@ -4,7 +4,7 @@
     @private
         UIView *_myView;
         float _myHeight;
-        UIGestureRecognizer *recognizer;
+        UIGestureRecognizer *recognizerPan;
         UIGestureRecognizer *recognizerSwipe;
 }
 
