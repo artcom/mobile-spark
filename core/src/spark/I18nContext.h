@@ -44,7 +44,6 @@ namespace spark {
         I18nItem(const spark::BaseAppPtr& theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~I18nItem();
         virtual void switchLanguage(const LANGUAGE theLanguage);
-        virtual void realize();        
         std::string getLanguageData(const LANGUAGE theLanguage = NO_LANGUAGE);
         static const char * const SPARK_TYPE;             
         virtual const char * const & getType() const { return I18nItem::SPARK_TYPE;};

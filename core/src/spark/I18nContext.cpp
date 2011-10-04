@@ -68,11 +68,6 @@ namespace spark {
     }
     
     void 
-    I18nItem::realize() {
-        language_ = boost::static_pointer_cast<I18nContext>(getParent())->getDefaultLanguage();
-    }
-
-    void 
     I18nItem::switchLanguage(const LANGUAGE theLanguage) {
         language_ = theLanguage;
         EventPtr myEvent = EventPtr(new I18nEvent(I18nEvent::ON_LANGUAGE_SWITCH, shared_from_this()));
