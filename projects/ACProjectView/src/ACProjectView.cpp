@@ -263,24 +263,6 @@ namespace acprojectview {
         _myStartScreenPtr->setVisible(true);
         _myStartScreenPtr->setSensible(true);
         _myStartScreenPtr->setAlpha(1.0);
-        //ken burns effect, not correct yet
-        _myKenBurnsAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
-        WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setAlpha, 0, 1, 300, animation::EasingFnc(animation::linearTween)));
-        WidgetPropertyAnimationPtr myXAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setX, 10, 100, 3000, animation::EasingFnc(animation::linearTween)));
-        WidgetPropertyAnimationPtr myYAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setY, 10, 200, 3000, animation::EasingFnc(animation::linearTween)));
-        WidgetPropertyAnimationPtr myScaleXAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setScaleX, 1, 1.5, 3000, animation::EasingFnc(animation::linearTween)));
-        WidgetPropertyAnimationPtr myScaleYAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setScaleY, 1, 1.5, 3000, animation::EasingFnc(animation::linearTween)));
-        _myKenBurnsAnimation->add(myXAnimation);
-        _myKenBurnsAnimation->add(myYAnimation);
-        _myKenBurnsAnimation->add(myScaleXAnimation);
-        _myKenBurnsAnimation->add(myScaleYAnimation);
-        _myKenBurnsAnimation->setLoop(true);
-        animation::AnimationManager::get().play(_myKenBurnsAnimation);
     }
     
 }
