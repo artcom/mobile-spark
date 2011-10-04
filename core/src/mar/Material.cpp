@@ -39,6 +39,11 @@ namespace mar {
         checkGlError("glUseProgram");
         glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, theMatrix.data());
         glUniform1f(alphaHandle, alpha_);
+        for (std::map<std::string, std::pair<GLuint, float> >::const_iterator it = customHandlesAndValues_.begin(); 
+                it != customHandlesAndValues_.end(); ++it) {
+            AC_TRACE << "set value in shader " << it->first << "  " << it->second.first << "  " << it->second.second;
+            glUniform1f(it->second.first, it->second.second);
+        }
     }
 
     void Material::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
@@ -51,6 +56,12 @@ namespace mar {
         alphaHandle = getHandle("a_alpha");
     }
 
+    void Material::setCustomHandles(const std::vector<std::string> & theCustomHandles) {
+        for (std::vector<std::string>::const_iterator it = theCustomHandles.begin(); it != theCustomHandles.end(); ++it) {
+            customHandlesAndValues_[*it] = std::pair<GLuint, float>(getHandle(*it), 0.0);
+        }
+    }
+
     GLuint Material::getHandle(const std::string & theName) const {
         GLuint myHandle = glGetUniformLocation(shaderProgram, theName.c_str());
         if (myHandle > MAX_NUM_HANDLES) {
@@ -58,6 +69,18 @@ namespace mar {
             throw ProblemWithHandleException("handle for " + theName + " seems to be strange. Maybe it's not found in shader.", PLUS_FILE_LINE);
         }
         return myHandle;
+    }
+    
+    void 
+    Material::setCustomValues(const std::map<std::string, float> & theCustomValues) {
+        for (std::map<std::string, float>::const_iterator it = theCustomValues.begin(); it != theCustomValues.end(); ++it) {
+            AC_TRACE << "setCustomValues, search " << it->first;
+            std::map<std::string, std::pair<GLuint, float> >::iterator value_it = customHandlesAndValues_.find(it->first);
+            if (value_it != customHandlesAndValues_.end()) {
+                AC_TRACE << "found -> value " << it->second;
+                value_it->second.second = it->second;
+            }
+        }
     }
 
     //////////////////////////////////////////////////// UnlitColoredMaterial
