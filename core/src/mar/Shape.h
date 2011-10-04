@@ -18,14 +18,6 @@ namespace mar {
         vector4 max;
     };
 
-    struct Transparency {
-        enum type {
-            TRANSPARENT,
-            OPAQUE,
-            UNKNOWN
-        };
-    };
-
     class Shape {
     public:
         Shape(const bool theTexturedFlag = false);
@@ -45,7 +37,6 @@ namespace mar {
         size_t _myDataPerVertex;
         BoundingBox _myBoundingBox;
     private:
-        Transparency::type _myTransparency;
     };
     typedef masl::Ptr<Shape> ShapePtr;
 

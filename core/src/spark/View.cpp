@@ -41,6 +41,7 @@ namespace spark {
     void
     View::renderWorld(ComponentPtr theWorld) {
         ensureCamera();
+        AC_TRACE << " View::renderWorld ------------------ ";
         WidgetPtr myWorld = boost::static_pointer_cast<spark::Widget>(theWorld);
         myWorld->prerender(matrixStack);
         RenderList myRenderList;
