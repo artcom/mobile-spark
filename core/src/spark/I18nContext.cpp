@@ -23,6 +23,7 @@ namespace spark {
     
     void 
     I18nContext::realize() {
+        Container::realize();
         switchLanguage(defaultLanguage_);
     }    
 
@@ -41,7 +42,7 @@ namespace spark {
     void
     I18nContext::addChild(const ComponentPtr theChild) {
         Container::addChild(theChild);
-        I18nItemPtr myChild = boost::static_pointer_cast<I18nItem>(theChild); // XXX
+        I18nItemPtr myChild = boost::dynamic_pointer_cast<I18nItem>(theChild);
         if (!myChild) {
             throw I18nItemNotFoundException("adding child " + theChild->getName() + " to I18nContext " + getName() + " does not work because theChild is not an I18nItem", PLUS_FILE_LINE);
         }
@@ -75,9 +76,9 @@ namespace spark {
     }
 
     std::string 
-    I18nItem::getLanguageData(const LANGUAGE theLanguage){
+    I18nItem::getLanguageData(const LANGUAGE theLanguage) const {
         if (language_ == NO_LANGUAGE) {
-            realize();
+            AC_WARNING << "I18nItem " << *this << " is not realized yet";
         }
         std::string myData = "";
         const LANGUAGE myLanguage = (theLanguage != NO_LANGUAGE ? theLanguage : language_);

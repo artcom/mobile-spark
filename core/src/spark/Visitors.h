@@ -28,11 +28,6 @@ namespace spark {
         virtual bool visit(ComponentPtr theComponent);
     };
     
-    class I18nComponentVisitor : public ComponentVisitor {
-	public:
-		virtual bool visit(ComponentPtr theComponent);
-	};
-		
     class OnResumeComponentVisitor : public ComponentVisitor {
     public:
         virtual bool visit(ComponentPtr theComponent);

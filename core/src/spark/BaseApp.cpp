@@ -89,7 +89,7 @@ namespace spark {
         _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
     }
 
-    void BaseApp::onEvent(std::string theEventString) {
+    void BaseApp::onEvent(const std::string & theEventString) {
         AC_TRACE << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
@@ -143,7 +143,7 @@ namespace spark {
     
    
     std::string
-    findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
+    findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
         AC_DEBUG << "......... findBestMatchedLayout for baseName: " << theBaseName;
         std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
