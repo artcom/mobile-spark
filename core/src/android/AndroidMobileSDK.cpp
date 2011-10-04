@@ -69,7 +69,7 @@ namespace android {
         return myTextInfo;
     }
 
-    void AndroidMobileSDK::freezeMobileOrientation(std::string theOrientation) {
+    void AndroidMobileSDK::freezeMobileOrientation(const std::string & theOrientation) {
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "freezeOrientation", "(Ljava/lang/String;)V");

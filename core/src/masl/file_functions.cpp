@@ -111,7 +111,7 @@ namespace masl {
     }
 
     void 
-    getDirectoryEntries(const string & thePath,  std::vector<string> & theDirEntries, string theFilter) {
+    getDirectoryEntries(const std::string & thePath,  std::vector<std::string> & theDirEntries, const std::string & theFilter) {
         if (!fileExists(thePath)) {
             return;
         }

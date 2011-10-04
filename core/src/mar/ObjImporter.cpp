@@ -174,7 +174,7 @@ namespace mar {
 
 
 
-    void ObjImporter::importObj(std::string theObjFileName, ShapePtr theShape) {
+    void ObjImporter::importObj(const std::string & theObjFileName, ShapePtr theShape) {
         vertices_.clear();
         normals_.clear();
         texData_.clear();
