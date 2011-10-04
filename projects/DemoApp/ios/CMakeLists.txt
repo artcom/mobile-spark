@@ -148,6 +148,6 @@ add_custom_command(
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp ${PROJECT_SOURCE_DIR}../../iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp ${PROJECT_SOURCE_DIR}/../../iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
 )
    
