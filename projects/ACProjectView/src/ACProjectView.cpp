@@ -13,7 +13,6 @@
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
 #include <animation/SequenceAnimation.h>
-#include <animation/DelayAnimation.h>
 #include <animation/Easing.h>
 
 #include "ACProjectViewComponentMapInitializer.h"
@@ -100,11 +99,11 @@ namespace acprojectview {
         spark::WidgetPtr myLoadAnim = boost::static_pointer_cast<Window>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("apploaderanim", true));
         myLoadAnim->setX(_mySparkWindow->getSize()[0]/2.0);
         myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
-            
+
     }
     
     void ACProjectView::onStartScreenClicked(EventPtr theEvent) {
-        AC_PRINT << "clicked on startscreen";
+        AC_DEBUG << "clicked on startscreen";
         _myStartScreenPtr->setSensible(false);
         _myProjectMenu->setSensible(true);
         _myProjectMenu->arrangeProjects();
@@ -131,7 +130,7 @@ namespace acprojectview {
     void ACProjectView::onFinishIdleFade() {
         _myStartScreenPtr->setVisible(false);
     }
-    
+
     void ACProjectView::onProjectItem(EventPtr theEvent) {
         AC_PRINT << "clicked on project: "<< theEvent->getTarget()->getParent()->getName();
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
@@ -231,9 +230,59 @@ namespace acprojectview {
             boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("loaderView"))->setVisible(false);
             boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("mainView"))->setVisible(true);
         }
-        AC_PRINT << "######################### world realized: " << myEvent->worldname_;
+        AC_DEBUG << "######################### world realized: " << myEvent->worldname_;
+        if (myEvent->worldname_ == "2dworld") {
+            initIdle();
+        }
     }
 
+    //idle
+    void ACProjectView::initIdle() {
+        AC_DEBUG << "init idle";
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        _myIdleScreenImagePtr =  boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage", true));
+        _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
+        _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
+        animation::AnimationManager::get().play(_myIdleDelay);
+        spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
+        _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
+    }
+
+    void ACProjectView::onTouch(spark::EventPtr theEvent) {
+        _myStartScreenPtr->setVisible(false);
+        _myStartScreenPtr->setSensible(false);
+        if (_myIdleDelay) {
+            _myIdleDelay->cancel();
+            AC_DEBUG << "on touch restart idle delay";
+            animation::AnimationManager::get().play(_myIdleDelay);
+        }
+    }
+
+    void ACProjectView::onIdle() {
+        AC_DEBUG << "on Idle";
+        _myStartScreenPtr->setVisible(true);
+        _myStartScreenPtr->setSensible(true);
+        _myStartScreenPtr->setAlpha(1.0);
+        //ken burns effect, not correct yet
+        _myKenBurnsAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setAlpha, 0, 1, 300, animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myXAnimation = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setX, 10, 100, 3000, animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myYAnimation = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setY, 10, 200, 3000, animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myScaleXAnimation = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setScaleX, 1, 1.5, 3000, animation::EasingFnc(animation::linearTween)));
+        WidgetPropertyAnimationPtr myScaleYAnimation = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(_myIdleScreenImagePtr, &Widget::setScaleY, 1, 1.5, 3000, animation::EasingFnc(animation::linearTween)));
+        _myKenBurnsAnimation->add(myXAnimation);
+        _myKenBurnsAnimation->add(myYAnimation);
+        _myKenBurnsAnimation->add(myScaleXAnimation);
+        _myKenBurnsAnimation->add(myScaleYAnimation);
+        _myKenBurnsAnimation->setLoop(true);
+        animation::AnimationManager::get().play(_myKenBurnsAnimation);
+    }
+    
 }
 
 

@@ -9,13 +9,17 @@ namespace animation {
     }
 
     void AnimationManager::play(AnimationPtr theAnimation) {
-        _myAnimations.push_back(theAnimation);
-        theAnimation->play(_myAnimationTime);
+        if (_myIsInOnFrame) {
+            _myOnFrameCollectedAnimations.push_back(theAnimation);
+        } else {
+            _myAnimations.push_back(theAnimation);
+            theAnimation->play(_myAnimationTime);
+        }
     }
 
     void AnimationManager::doFrame(const masl::UInt64 theCurrentMillis) {
+        _myIsInOnFrame = true;
         _myAnimationTime = theCurrentMillis;
-        AC_TRACE << "AnimationManager::doFrame " << _myAnimationTime;
         for (std::vector<AnimationPtr>::iterator it = _myAnimations.begin(); it != _myAnimations.end(); ++it) {
             AnimationPtr myAnimation = (*it);
             if (myAnimation->isRunning()) {
@@ -23,6 +27,12 @@ namespace animation {
             }
         }
         removeFinished();
+        _myIsInOnFrame = false;
+        for (std::vector<AnimationPtr>::iterator it = _myOnFrameCollectedAnimations.begin(); it != _myOnFrameCollectedAnimations.end(); ++it) {
+            _myAnimations.push_back(*it);
+            (*it)->play(_myAnimationTime);
+        }
+        _myOnFrameCollectedAnimations.clear();
     }
 
     void AnimationManager::removeFinished() {
