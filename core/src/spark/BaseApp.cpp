@@ -60,9 +60,7 @@ namespace spark {
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
 
-#ifdef ANDROID
         assetProviderSetup(theAssetPath, appPath_);
-#endif
 #ifdef iOS
         MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
 #endif
@@ -211,8 +209,7 @@ namespace spark {
     void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath ) {
 #ifdef iOS
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
-#endif            
-#ifdef ANDROID
+#elif ANDROID
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
 #endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
