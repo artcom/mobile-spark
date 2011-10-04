@@ -48,7 +48,8 @@ namespace spark {
         if(data_.empty()) return;
         float width = _myXMLNode->getAttributeAs<float>("width", -1);
         float height = _myXMLNode->getAttributeAs<float>("height", -1);
-        setShape(ShapeFactory::get().createRectangle(true, width >= 0 ? width : 0, height >= 0 ? height : 0, data_));
+        setShape(ShapeFactory::get().createRectangle(true, width >= 0 ? width : 0, height >= 0 ? height : 0, 
+                                                     vertexShader_, fragmentShader_, data_));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         if (width == -1 || height == -1) {
             width = width == -1 ? myMaterial->getTexture()->width_ : width;

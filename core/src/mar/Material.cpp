@@ -20,8 +20,8 @@ namespace mar {
     Material::~Material() {
     }
 
-    void Material::createShader() {
-        setShader();
+    void Material::createShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
+        setShader(theVertexShader, theFragmentShader);
     }
     void Material::initGL() {
         shaderProgram = createProgram(_myVertexShader, _myFragmentShader);
@@ -41,8 +41,9 @@ namespace mar {
         glUniform1f(alphaHandle, alpha_);
     }
 
-    void Material::setShader() {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_VERTEX_SHADER);
+    void Material::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
+        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+                          theVertexShader.empty() ? DEFAULT_VERTEX_SHADER : theVertexShader);
     }
 
     void Material::setHandles() {
@@ -71,9 +72,10 @@ namespace mar {
         glUniform4fv(colorHandle, 1, &(diffuse_[0]));
     }
 
-    void UnlitColoredMaterial::setShader() {
-        Material::setShader();
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_COLORED_FRAGMENT_SHADER);
+    void UnlitColoredMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
+        Material::setShader(theVertexShader, theFragmentShader);
+        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+                            theFragmentShader.empty() ? DEFAULT_COLORED_FRAGMENT_SHADER : theFragmentShader);
 
     }
 
@@ -101,9 +103,11 @@ namespace mar {
         glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
     }
 
-    void UnlitTexturedMaterial::setShader() {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_VERTEX_SHADER);
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(DEFAULT_TEXTURED_FRAGMENT_SHADER);
+    void UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
+        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+                          theVertexShader.empty() ? DEFAULT_TEXTURED_VERTEX_SHADER : theVertexShader);
+        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+                          theFragmentShader.empty() ? DEFAULT_TEXTURED_FRAGMENT_SHADER : theFragmentShader);
 
     }
     void UnlitTexturedMaterial::initGL() {

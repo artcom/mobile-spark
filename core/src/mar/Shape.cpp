@@ -92,7 +92,8 @@ namespace mar {
     }
 
     /////////////////////////////////////////////////////////////RectangleShape
-    RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight,
+    RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight, 
+                                   const std::string & theVertexShader, const std::string & theFragmentShader, 
                                    const std::string & theTextureSrc)
         : Shape(theTextureFlag), width_(theWidth), height_(theHeight) {
         ElementPtr myElement;
@@ -106,7 +107,7 @@ namespace mar {
         }
         myElement->material = myMaterial;
         elementList.push_back(myElement);
-        myMaterial->createShader();
+        myMaterial->createShader(theVertexShader, theFragmentShader);
         setVertexData();
         initGL();
         _myBoundingBox.max[0] = theWidth;
@@ -283,8 +284,10 @@ namespace mar {
     ShapeFactory::~ShapeFactory() {}
 
     ShapePtr ShapeFactory::createRectangle(const bool theTextureFlag, const float theWidth, const float theHeight,
+                                           const std::string & theVertexShader, const std::string & theFragmentShader,
                                            const std::string & theTextureSrc) {
-        return ShapePtr(new RectangleShape(theTextureFlag, theWidth, theHeight, theTextureSrc));
+        return ShapePtr(new RectangleShape(theTextureFlag, theWidth, theHeight, 
+                            theVertexShader, theFragmentShader, theTextureSrc));
     }
 
     ShapePtr ShapeFactory::createNinePatch(const std::string & theTextureSrc,
