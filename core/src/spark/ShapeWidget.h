@@ -10,6 +10,8 @@ namespace spark {
         public:
             ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ShapeWidget() = 0;
+            
+            virtual void prerender(MatrixStack& theCurrentMatrixStack);
             virtual void render(const matrix & theP) const;
             virtual void onResume();
 
@@ -23,6 +25,7 @@ namespace spark {
             virtual void propagateAlpha();
             std::string vertexShader_;
             std::string fragmentShader_;
+            std::map<std::string, float> customShaderValues_;
         private:
             mar::ShapePtr _myShape;
     };

@@ -1,5 +1,6 @@
 #include "Image.h"
 
+#include <masl/string_functions.h> //select1st
 #include <mar/png_functions.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
@@ -48,8 +49,12 @@ namespace spark {
         if(data_.empty()) return;
         float width = _myXMLNode->getAttributeAs<float>("width", -1);
         float height = _myXMLNode->getAttributeAs<float>("height", -1);
+        std::vector<std::string> myHandles;
+        myHandles.reserve(customShaderValues_.size());
+        std::transform(customShaderValues_.begin(), customShaderValues_.end(), std::back_inserter(myHandles),
+                       masl::select1st<std::map<std::string, float>::value_type>()) ;
         setShape(ShapeFactory::get().createRectangle(true, width >= 0 ? width : 0, height >= 0 ? height : 0, 
-                                                     vertexShader_, fragmentShader_, data_));
+                                                     vertexShader_, fragmentShader_, myHandles, data_));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         if (width == -1 || height == -1) {
             width = width == -1 ? myMaterial->getTexture()->width_ : width;

@@ -124,7 +124,7 @@
             <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
             <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
             <Transform name="idlescreen" x="10" y="80" z="10">
-                <Image name="idleimage" width="100" height="100" src="/level_green_03.png"/>
+                <Image name="idleimage" width="600" height="370" alpha="1.0" z="1" src="/level_green_03.png" fragment_shader="/kenburnseffect.glsl" custom_shader_handles="a_time"/>
             </Transform>
         </Transform>        
 

@@ -28,12 +28,15 @@ namespace mar {
         virtual void loadShader(const matrix & theMatrix);
         virtual void initGL();
         void setAlpha(const float theAlpha) {alpha_ = theAlpha; transparency_ |= (alpha_ != 1.0);};
+        void setCustomValues(const std::map<std::string, float> & theCustomValues);
+        void setCustomHandles(const std::vector<std::string> & theCustomHandles);
 
         GLuint shaderProgram;
         GLuint mvpHandle;
         GLuint alphaHandle;
-
+        std::map<std::string, std::pair<GLuint, float> > customHandlesAndValues_; //maps handle string to pair of handle and value
         bool transparency_;
+
     protected:
         Material();
         virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");

@@ -31,6 +31,7 @@ namespace mar {
         Shape(const bool theTexturedFlag = false);
         virtual ~Shape();
         void render(const matrix & theMvp) const;
+        void updateHandles(const std::map<std::string, float> & theShaderValues);
         void initGL();
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {}
@@ -54,6 +55,7 @@ namespace mar {
     public:
         RectangleShape(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0,
                        const std::string & theVertexShader = "", const std::string & theFragmentShader = "",
+                       const std::vector<std::string> & theCustomHandles = std::vector<std::string>(),
                        const std::string & theTextureSrc = "");
         virtual ~RectangleShape();
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3);
@@ -96,6 +98,7 @@ namespace mar {
     public:
         ShapePtr createRectangle(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, 
                                  const std::string & theVertexShader = "" , const std::string & theFragmentShader = "",
+                                 const std::vector<std::string> & theCustomHandles = std::vector<std::string>(),
                                  const std::string & theTextureSrc = "");
         ~ShapeFactory();
         ShapePtr createNinePatch(const std::string & theTextureSrc, const float theLeftEdge = 0,
