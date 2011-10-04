@@ -8,7 +8,7 @@
     _myView = view;
     _myHeight = _myView.frame.size.height;
     [self createTouchRecognizers];
-    recognizer.delegate = self;
+    recognizerPan.delegate = self;
     recognizerSwipe.delegate = self;
     return self;
 }
@@ -16,7 +16,7 @@
 
 
 - (void)createTouchRecognizers {
-    //UIGestureRecognizer *recognizer;
+    UIGestureRecognizer *recognizer;
     //single tap
     recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [(UITapGestureRecognizer *)recognizer setNumberOfTouchesRequired:1];
@@ -39,10 +39,10 @@
     recognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotationGesture:)];
     [_myView addGestureRecognizer:recognizer];
     [recognizer release];
+    
     // pan gesture
-    recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-    [_myView addGestureRecognizer:recognizer];
-    //[recognizer release];
+    recognizerPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    [_myView addGestureRecognizer:recognizerPan];
     // swipe left
     recognizerSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
     [(UISwipeGestureRecognizer *)recognizerSwipe setDirection:UISwipeGestureRecognizerDirectionLeft];
@@ -62,7 +62,7 @@
 
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)recognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)recognizerSwipe {
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)recognizerPan shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)recognizerSwipe {
     return YES;
 }
 
@@ -94,7 +94,7 @@
 
 
 - (void)handlePinchGesture:(UIGestureRecognizer *)theRecognizer {
-    CGFloat factor = [(UIPinchGestureRecognizer *)recognizer scale];
+    CGFloat factor = [(UIPinchGestureRecognizer *)theRecognizer scale];
     NSLog(@"Pinch-Zoom-Scale :   %f", factor);
     [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pinch' factor='%f'/>", factor]];
 }
@@ -121,6 +121,7 @@
         case UISwipeGestureRecognizerDirectionDown: 
             myDir=@"down";
             break;
+        default: return;
     }
     NSString *eventCall = [NSString  stringWithFormat:@"<GestureEvent type='swipe-%@' direction='%@'/>",myDir,myDir];
     [self throwEventToSpark:eventCall];
@@ -134,7 +135,7 @@
 
 - (void)dealloc
 {
-    [recognizer release];
+    [recognizerPan release];
     
     [recognizerSwipe release];
     
