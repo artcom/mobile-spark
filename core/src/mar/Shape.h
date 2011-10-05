@@ -18,19 +18,12 @@ namespace mar {
         vector4 max;
     };
 
-    struct Transparency {
-        enum type {
-            TRANSPARENT,
-            OPAQUE,
-            UNKNOWN
-        };
-    };
-
     class Shape {
     public:
         Shape(const bool theTexturedFlag = false);
         virtual ~Shape();
         void render(const matrix & theMvp) const;
+        void updateHandles(const std::map<std::string, float> & theShaderValues);
         void initGL();
         virtual void setDimensions(const float theWidth, const float theHeight) = 0;
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {}
@@ -45,7 +38,6 @@ namespace mar {
         size_t _myDataPerVertex;
         BoundingBox _myBoundingBox;
     private:
-        Transparency::type _myTransparency;
     };
     typedef masl::Ptr<Shape> ShapePtr;
 
@@ -53,6 +45,8 @@ namespace mar {
     class RectangleShape : public Shape {
     public:
         RectangleShape(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0,
+                       const std::string & theVertexShader = "", const std::string & theFragmentShader = "",
+                       const std::vector<std::string> & theCustomHandles = std::vector<std::string>(),
                        const std::string & theTextureSrc = "");
         virtual ~RectangleShape();
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3);
@@ -93,7 +87,10 @@ namespace mar {
 
     class ShapeFactory : public masl::Singleton<ShapeFactory> {
     public:
-        ShapePtr createRectangle(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, const std::string & theTextureSrc = "");
+        ShapePtr createRectangle(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, 
+                                 const std::string & theVertexShader = "" , const std::string & theFragmentShader = "",
+                                 const std::vector<std::string> & theCustomHandles = std::vector<std::string>(),
+                                 const std::string & theTextureSrc = "");
         ~ShapeFactory();
         ShapePtr createNinePatch(const std::string & theTextureSrc, const float theLeftEdge = 0,
                 const float theTopEdge = 0, const float theRightEdge = 0, const float theBottomEdge = 0,

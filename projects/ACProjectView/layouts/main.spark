@@ -116,16 +116,20 @@
 
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>            
-        <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
+        <Rectangle name="background2" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
         <Transform name="startscreen">
-            <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]"/>
+            <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
             <Image name="logo" x="12" y="30" z="6" src="/ac_logo_140px.png"/> 
             <Text name="deutsch" text="DEUTSCH" x="10" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
             <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
             <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
+            <Transform name="idlescreen" x="10" y="80" z="10">
+                <Image name="idleimage" width="600" height="370" alpha="1.0" z="1" src="/level_green_03.png" fragment_shader="/kenburnseffect.glsl" custom_shader_handles="a_time"/>
+            </Transform>
         </Transform>        
+
         
-        <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" >
+        <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" visible="true">
         
             
             <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle" src="/belvedere_teaser_thumb_01.png">

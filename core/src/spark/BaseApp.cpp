@@ -60,9 +60,7 @@ namespace spark {
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
 
-#ifdef ANDROID
         assetProviderSetup(theAssetPath, appPath_);
-#endif
 #ifdef iOS
         MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
 #endif
@@ -80,7 +78,7 @@ namespace spark {
             myLayoutFile = theBaseName + ".spark";
         }
         //load layout
-        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(BaseAppPtr(this), myLayoutFile));
+        _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(shared_from_this(), myLayoutFile));
 
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
@@ -91,7 +89,7 @@ namespace spark {
         _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
     }
 
-    void BaseApp::onEvent(std::string theEventString) {
+    void BaseApp::onEvent(const std::string & theEventString) {
         AC_TRACE << "a string event came in :" << theEventString;
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
@@ -145,7 +143,7 @@ namespace spark {
     
    
     std::string
-    findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
+    findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
         AC_DEBUG << "......... findBestMatchedLayout for baseName: " << theBaseName;
         std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
@@ -211,8 +209,7 @@ namespace spark {
     void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath ) {
 #ifdef iOS
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
-#endif            
-#ifdef ANDROID
+#elif ANDROID
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath)));
 #endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");

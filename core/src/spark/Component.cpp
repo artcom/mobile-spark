@@ -47,9 +47,9 @@ namespace spark {
             _myRealizedFlag = true;
         } else {
             _myRealizedAndAllChildrenFlag = true;
-            for (int i = 0; i < _myChildren.size() ; i++) {
-                if (!_myChildren[i]->isAllRealized()) {
-                    _myChildren[i]->realizeASync();    
+            for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+                if (!(*it)->isAllRealized()) {
+                    (*it)->realizeASync();
                     _myRealizedAndAllChildrenFlag = false;
                     break;
                 }

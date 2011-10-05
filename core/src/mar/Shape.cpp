@@ -7,7 +7,7 @@
 namespace mar {
 
     //////////////////////////////////////////////////////////////Shape
-    Shape::Shape(const bool theTextureFlag) : _myTextureFlag(theTextureFlag), _myTransparency(Transparency::UNKNOWN) {
+    Shape::Shape(const bool theTextureFlag) : _myTextureFlag(theTextureFlag){
         _myBoundingBox.min.zero(); _myBoundingBox.min[3] = 1;
         _myBoundingBox.max.zero(); _myBoundingBox.max[3] = 1;
         _myBoundingBox.max[0] = _myBoundingBox.max[1] = 1.0f;
@@ -55,6 +55,13 @@ namespace mar {
     }
 #endif
 
+    void Shape::updateHandles(const std::map<std::string, float> & theShaderValues) {
+        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
+                                                      it != elementList.end(); ++it) {
+            (*it)->material->setCustomValues(theShaderValues);
+        }
+    }
+
     void Shape::initGL() {
         //AC_PRINT << "Shape::init GL";
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
@@ -75,24 +82,20 @@ namespace mar {
     }
 
     bool Shape::isTransparent() {
-        if (_myTransparency != Transparency::UNKNOWN) {
-            return (_myTransparency == Transparency::TRANSPARENT);
-        } else {
-            for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
-                                                          it != elementList.end(); ++it) {
-                ElementPtr element = *it;
-                if (element->material->transparency_) {
-                    _myTransparency = Transparency::TRANSPARENT;
-                    return true;
-                }
+        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
+                                                      it != elementList.end(); ++it) {
+            ElementPtr element = *it;
+            if (element->material->transparency_) {
+                return true;
             }
-            _myTransparency = Transparency::OPAQUE;
-            return false;
         }
+        return false;        
     }
 
     /////////////////////////////////////////////////////////////RectangleShape
-    RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight,
+    RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight, 
+                                   const std::string & theVertexShader, const std::string & theFragmentShader, 
+                                   const std::vector<std::string> & theCustomHandles,
                                    const std::string & theTextureSrc)
         : Shape(theTextureFlag), width_(theWidth), height_(theHeight) {
         ElementPtr myElement;
@@ -106,9 +109,10 @@ namespace mar {
         }
         myElement->material = myMaterial;
         elementList.push_back(myElement);
-        myMaterial->createShader();
+        myMaterial->createShader(theVertexShader, theFragmentShader);
         setVertexData();
         initGL();
+        myMaterial->setCustomHandles(theCustomHandles);
         _myBoundingBox.max[0] = theWidth;
         _myBoundingBox.max[1] = theHeight;
     }
@@ -283,8 +287,11 @@ namespace mar {
     ShapeFactory::~ShapeFactory() {}
 
     ShapePtr ShapeFactory::createRectangle(const bool theTextureFlag, const float theWidth, const float theHeight,
+                                           const std::string & theVertexShader, const std::string & theFragmentShader,
+                                           const std::vector<std::string> & theCustomHandles,
                                            const std::string & theTextureSrc) {
-        return ShapePtr(new RectangleShape(theTextureFlag, theWidth, theHeight, theTextureSrc));
+        return ShapePtr(new RectangleShape(theTextureFlag, theWidth, theHeight, 
+                            theVertexShader, theFragmentShader, theCustomHandles, theTextureSrc));
     }
 
     ShapePtr ShapeFactory::createNinePatch(const std::string & theTextureSrc,

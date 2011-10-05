@@ -20,13 +20,9 @@ namespace spark {
 
         LANGUAGE getLanguage() const { return language_;};
         LANGUAGE getDefaultLanguage() const { return defaultLanguage_;};
-        virtual void switchLanguage(const LANGUAGE theLanguage);
+        void switchLanguage(const LANGUAGE theLanguage);
         virtual void addChild(const ComponentPtr theChild);
         virtual void realize();        
-        inline void setup() {
-            switchLanguage(defaultLanguage_);
-        };
-
 
         static const char * const SPARK_TYPE;             
         virtual const char * const & getType() const { return I18nContext::SPARK_TYPE;};
@@ -44,7 +40,7 @@ namespace spark {
         I18nItem(const spark::BaseAppPtr& theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~I18nItem();
         virtual void switchLanguage(const LANGUAGE theLanguage);
-        std::string getLanguageData(const LANGUAGE theLanguage = NO_LANGUAGE);
+        std::string getLanguageData(const LANGUAGE theLanguage = NO_LANGUAGE) const;
         static const char * const SPARK_TYPE;             
         virtual const char * const & getType() const { return I18nItem::SPARK_TYPE;};
     private:

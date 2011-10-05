@@ -24,19 +24,22 @@ namespace mar {
     class Material {
     public:
         virtual ~Material();
-        virtual void createShader();
+        virtual void createShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void loadShader(const matrix & theMatrix);
         virtual void initGL();
         void setAlpha(const float theAlpha) {alpha_ = theAlpha; transparency_ |= (alpha_ != 1.0);};
+        void setCustomValues(const std::map<std::string, float> & theCustomValues);
+        void setCustomHandles(const std::vector<std::string> & theCustomHandles);
 
         GLuint shaderProgram;
         GLuint mvpHandle;
         GLuint alphaHandle;
-
+        std::map<std::string, std::pair<GLuint, float> > customHandlesAndValues_; //maps handle string to pair of handle and value
         bool transparency_;
+
     protected:
         Material();
-        virtual void setShader();
+        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void setHandles();
         GLuint getHandle(const std::string & theName) const;
 
@@ -53,11 +56,11 @@ namespace mar {
         virtual void loadShader(const matrix & theMatrix);
         void setDiffuseColor(const vector3 & theColor) {
             diffuse_ = vector4(theColor, alpha_);
-            transparency_ = (diffuse_[3] != 1.0);
+            transparency_ |= (diffuse_[3] != 1.0);
         }
         void setDiffuseColor(const vector4 & theColor) {
             diffuse_ = theColor;
-            transparency_ = (diffuse_[3] != 1.0);
+            transparency_ |= (diffuse_[3] != 1.0);
         }
         vector4 getDiffuseColor() const {
             return diffuse_;
@@ -72,7 +75,7 @@ namespace mar {
         GLuint colorHandle;
 
     private:
-        virtual void setShader();
+        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void setHandles();
     };
     typedef masl::Ptr<UnlitColoredMaterial> UnlitColoredMaterialPtr;
@@ -86,7 +89,7 @@ namespace mar {
         TexturePtr getTexture() const {return _myTexture;}
         TexturePtr _myTexture;
     private:
-        virtual void setShader();
+        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         std::string _mySrc;
 
     };

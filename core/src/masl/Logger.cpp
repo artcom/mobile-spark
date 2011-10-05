@@ -116,7 +116,6 @@ namespace masl {
 
 
         #ifdef iOS
-            //iOS
         switch (theSeverity) {
             case SEV_TRACE:
                 std::cout << myLogTag.c_str() << " TRACE: " << myText.c_str() << "\n";
@@ -136,13 +135,15 @@ namespace masl {
             case SEV_ERROR:
                 std::cout << myLogTag.c_str() << " ERROR: " << myText.c_str() << "\n";
                 break;
+            case SEV_TESTRESULT :
+                std::cout << myLogTag.c_str() << " TEST: " << myText.c_str() << "\n";
+                break;
             default:
                 throw Exception("Unknown logger severity");
                 break;
         }
 
         #elif ANDROID
-            //Android
         switch (theSeverity) {
             case SEV_TRACE :
                 __android_log_print(ANDROID_LOG_VERBOSE, myLogTag.c_str(), myText.c_str());//__VA_ARGS__)

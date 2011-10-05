@@ -44,6 +44,7 @@ namespace mar {
                         glGetShaderInfoLog(shader, infoLen, NULL, buf);
                         AC_ERROR << "Could not compile shader " << shaderType << ": \n" << buf;
                         free(buf);
+                        //XXX does not throw
                         throw ShaderCreationException("Could not compile shader " + shaderType, PLUS_FILE_LINE);
                     }
                     glDeleteShader(shader);

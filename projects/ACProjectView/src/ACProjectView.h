@@ -2,7 +2,10 @@
 #define _included_mobile_acprojectview_ACProjectView_
 
 /////////////////// Application code, this should be in java or script language later...
+#include <animation/DelayAnimation.h>
+#include <animation/ParallelAnimation.h>
 #include <spark/BaseApp.h>
+#include <spark/Event.h>
 #include "ProjectImpl.h"
 #include "ProjectMenu.h"
 #include "ProjectViewerImpl.h"
@@ -34,21 +37,31 @@ namespace acprojectview {
             void onStartProjectView();
             void onInitiateProjectView();
             void onFinishLoadProjectView();
+            void onReturn2ProjectView();
             void projectViewAnimation(bool showProject);
             void onStartIdleFade();
             void onFinishIdleFade();            
+            void initIdle();
+            void onIdle();
+            void onTouch(spark::EventPtr theEvent);
             void onFinishProjectView();
+
             
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 
             ProjectMenuPtr _myProjectMenu;
             spark::ContainerPtr _myProjectItems;  
             spark::TransformPtr _myStartScreenPtr;
+
+            spark::ImagePtr _myIdleScreenImagePtr;
+            animation::DelayAnimationPtr _myIdleDelay;
+            animation::ParallelAnimationPtr _myKenBurnsAnimation;
         
             unsigned int _myWidth;
             unsigned int _myHeight;
 
             const static unsigned int _myAnimationTime = 400;
+            const static unsigned int _myIdleTime = 50000;
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;

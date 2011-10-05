@@ -12,7 +12,7 @@ namespace spark {
         virtual ~Image();
         virtual void onResume();
         virtual void realize();
-        void setSrc(std::string theSrc);
+        void setSrc(const std::string & theSrc);
         const vector2 & getTextureSize();
 
         static const char * const SPARK_TYPE;
