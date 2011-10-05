@@ -22,7 +22,7 @@ namespace spark {
         virtual ~Window();
 
         void onTouch(EventPtr theEvent);
-        virtual void render();
+        void render();
         virtual void onSizeChanged(EventPtr theEvent);
         virtual void onResume();
         virtual void realize();        

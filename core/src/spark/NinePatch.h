@@ -10,7 +10,7 @@ namespace spark {
         virtual ~NinePatch();
         virtual void onResume();
         virtual void realize();
-        void setSrc(std::string theSrc) { data_ = theSrc; _myDirtyFlag = true;};
+        void setSrc(const std::string & theSrc) { data_ = theSrc; _myDirtyFlag = true;};
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return NinePatch::SPARK_TYPE;};

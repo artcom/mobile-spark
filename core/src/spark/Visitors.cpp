@@ -24,29 +24,17 @@ namespace spark {
 
     bool
     RealizeComponentsButWorldAndWindowVisitor::visit(ComponentPtr theComponent) {
-        WorldPtr myWorldPtr = boost::dynamic_pointer_cast<World>(theComponent);
-        if (myWorldPtr ) {
+        if (theComponent->getType() == World::SPARK_TYPE) {
             return false;
         }
-        WindowPtr myWindowPtr = boost::dynamic_pointer_cast<Window>(theComponent);
-        if (!myWindowPtr ) {
-            WidgetPtr myWidget = boost::dynamic_pointer_cast<Widget>(theComponent);
-            AC_DEBUG << *theComponent << " realize";
-            theComponent->realize();
+        if (theComponent->getType() == Window::SPARK_TYPE) {
+            return true;
         }
+        AC_DEBUG << *theComponent << " realize";
+        theComponent->realize();
         return true;
     }
     
-    bool
-	I18nComponentVisitor::visit(ComponentPtr theComponent) {
-		AC_DEBUG << *theComponent << " i18n setup";
-		WidgetPtr myWidget = boost::dynamic_pointer_cast<Widget>(theComponent);
-		if(myWidget && myWidget->getI18nContext()) {
-		    myWidget->getI18nContext()->setup();
-	    }
-    	return true;
-    }
-	
     bool
     OnResumeComponentVisitor::visit(ComponentPtr theComponent) {
         AC_DEBUG << *theComponent << " onResume";

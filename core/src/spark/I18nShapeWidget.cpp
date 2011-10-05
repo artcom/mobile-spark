@@ -17,12 +17,12 @@ namespace spark {
     }
     
     void 
-    I18nShapeWidget::setI18nData(std::string theData) {
+    I18nShapeWidget::setI18nData(const std::string & theData) {
         data_ = theData;
     }
     
     void 
-    I18nShapeWidget::setI18nId(std::string theNewI18nId) {
+    I18nShapeWidget::setI18nId(const std::string & theNewI18nId) {
         i18nId_ = theNewI18nId;
         attachToI18nItem();
     }
