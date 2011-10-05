@@ -172,13 +172,31 @@ namespace acprojectview {
     void ProjectViewerImpl::onOpenClosePopup(EventPtr theEvent) {
         if (isRendered()) {
             int myTextHeight = _myDescription->getTextSize()[1];    
+            animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             if (!isPopUpOpen()) {
-                _myPopup->setY(0);
-                _myPopup->setAlpha(0.9);
+                WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
+                        new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), 0, 300,
+                            animation::EasingFnc(animation::easeInOutQuad)));
+                WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
+                        new WidgetPropertyAnimation(_myPopup, &Widget::setAlpha, _myPopup->getAlpha(), 0.9, 300,
+                            animation::EasingFnc(animation::easeInOutQuad)));
+                myAnimation->add(myPosYAnimation);
+                myAnimation->add(myAlphaAnimation);
+                //_myPopup->setY(0);
+                //_myPopup->setAlpha(0.9);
             } else {
-                _myPopup->setY(-myTextHeight);
-                _myPopup->setAlpha(0.5);
+                WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
+                        new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), -myTextHeight, 300,
+                            animation::EasingFnc(animation::easeInOutQuad)));
+                WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
+                        new WidgetPropertyAnimation(_myPopup, &Widget::setAlpha, _myPopup->getAlpha(), 0.5, 300,
+                            animation::EasingFnc(animation::easeInOutQuad)));
+                myAnimation->add(myPosYAnimation);
+                myAnimation->add(myAlphaAnimation);
+                //_myPopup->setY(-myTextHeight);
+                //_myPopup->setAlpha(0.5);
             }
+            animation::AnimationManager::get().play(myAnimation);            
 	    }
     }
     void ProjectViewerImpl::onSwipe(EventPtr theEvent) {

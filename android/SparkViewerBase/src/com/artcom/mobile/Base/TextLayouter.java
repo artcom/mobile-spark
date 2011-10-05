@@ -23,7 +23,7 @@ public class TextLayouter {
     int getCanvasHeight() { return _myCanvasHeight; }
     int getCanvasWidth()  { return _myCanvasWidth;  }
 
-    List<TextLine> createLines(Paint myTextPaint) {
+    List<TextLine> createLines(Paint myTextPaint, int theLineHeight) {
         List<TextLine> myResult = new ArrayList<TextLine>();
 
         int myCharacterOnLine = 0;
@@ -35,6 +35,9 @@ public class TextLayouter {
         int myXPos = 0;
         int myLineWidth = 0;
         int myLineHeight = (int)(myMetrics.bottom - myMetrics.top);
+        if (theLineHeight != 0) {
+        	myLineHeight = theLineHeight;
+        }
         int myBaseLine = (int) (- myMetrics.top);
 
         _myCanvasWidth = _myMaxWidth;
