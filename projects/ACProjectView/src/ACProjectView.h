@@ -48,7 +48,8 @@ namespace acprojectview {
             void updateKenBurnsShader();
             void onIdle();
             void onTouch(spark::EventPtr theEvent);
-            float lastTime_;
+            float idleLastTime_;
+            float idleStartTime_;
             std::vector<std::string> idleFiles_;
 
             

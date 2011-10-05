@@ -9,8 +9,8 @@ uniform float       a_time;
 void main() {
     vec2 texCoord = v_texCoord;
     float startS = 0.3;
-    float startT = 0.3;
-    float moveS = 0.2;
+    float startT = 0.1;
+    float moveS = 0.1;
     float moveT = 0.3;
     float startScale = 0.2;
     float endScale = 0.5;

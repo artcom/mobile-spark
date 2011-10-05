@@ -36,7 +36,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace acprojectview {
    
-    ACProjectView::ACProjectView():BaseApp("ACProjectView"), lastTime_(0.0f) {
+    ACProjectView::ACProjectView():BaseApp("ACProjectView"), idleLastTime_(0.0f), idleStartTime_(0.0f) {
         _myChooseLayoutFlag = true;
     }
 
@@ -80,6 +80,7 @@ namespace acprojectview {
 
         spark::TextPtr myGermanButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("deutsch", true));
         spark::TextPtr myEnglishButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("english", true));
+        spark::RectanglePtr myRightBar = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("right_bar", true));
         spark::RectanglePtr myLangSep = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("lang_sep", true));
         myLangSep->setSize(vector2(myLangSep->getShape()->getBoundingBox().max[0], myGermanButton->getTextSize()[1]));
         spark::RectanglePtr myStartBackground = boost::static_pointer_cast<Rectangle>(_myStartScreenPtr->getChildByName("background"));
@@ -88,6 +89,7 @@ namespace acprojectview {
         myEnglishButton->setX(_mySparkWindow->getSize()[0] - myEnglishButton->getTextSize()[0] - 12);
         myLangSep->setX( myEnglishButton->getX() - 12);
         myGermanButton->setX( myLangSep->getX() - myGermanButton->getTextSize()[0] - 12);
+        myRightBar->setX(_mySparkWindow->getSize()[0] - myRightBar->getNode()->getAttributeAs<float>("width",0));
         
         spark::EventCallbackPtr mySwitchLanguageDeCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitchDe));
         myGermanButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageDeCB);
@@ -102,7 +104,6 @@ namespace acprojectview {
         spark::WidgetPtr myLoadAnim = boost::static_pointer_cast<Window>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("apploaderanim", true));
         myLoadAnim->setX(_mySparkWindow->getSize()[0]/2.0);
         myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
-
     }
     
     void ACProjectView::onStartScreenClicked(EventPtr theEvent) {
@@ -255,12 +256,13 @@ namespace acprojectview {
         std::map<std::string, float>::iterator it = _myIdleScreenImagePtr->customShaderValues_.find("a_time");
         if (it != _myIdleScreenImagePtr->customShaderValues_.end()) {
             float time = (animation::AnimationManager::get().getTime() % _myKenBurnsDuration)/(float)_myKenBurnsDuration;
+            time = time < idleStartTime_ ? time + (1.0 - idleStartTime_) : time - idleStartTime_;
             it->second = time;
-            //AC_PRINT << "-------" << time << "  " << lastTime_;
-            if (time < lastTime_) {
+            //AC_PRINT << "------|" << time << "  " << idleLastTime_;
+            if (time < idleLastTime_) {
                 _myIdleScreenImagePtr->setSrc("/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
             }
-            lastTime_ = time;
+            idleLastTime_ = time;
         }
     }
 
@@ -295,6 +297,7 @@ namespace acprojectview {
         _myStartScreenPtr->setVisible(true);
         _myStartScreenPtr->setSensible(true);
         _myStartScreenPtr->setAlpha(1.0);
+        idleStartTime_ = (animation::AnimationManager::get().getTime() % _myKenBurnsDuration)/(float)_myKenBurnsDuration;
     }
 }
 

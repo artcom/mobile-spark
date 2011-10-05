@@ -119,7 +119,8 @@
         <Rectangle name="background2" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
         <Transform name="startscreen" z="11">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
-            <Rectangle name="bar" x="0" y="0" z="12" width="2000" height="75" color="[1,1,1]" alpha="1.0"/>
+            <Rectangle name="left_bar" x="0" y="0" z="12" width="180" height="75" color="[1,1,1]" alpha="1.0"/>
+            <Rectangle name="right_bar" x="0" y="0" z="12" width="260" height="75" color="[1,1,1]" alpha="1.0"/>
             <Image name="logo" x="12" y="30" z="13" src="/ac_logo_140px.png"/> 
             <Text name="deutsch" text="DEUTSCH" x="10" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
             <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
