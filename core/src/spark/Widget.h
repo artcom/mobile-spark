@@ -83,10 +83,6 @@ namespace spark {
         float _actualAlpha;
         bool _visible;
         bool _sensible;
-        //std::string i18nId_;
-        //EventCallbackPtr _myHandleI18nEventCB;
-            
-
     };
 
     typedef masl::Ptr<Widget> WidgetPtr;

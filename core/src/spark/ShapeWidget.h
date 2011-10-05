@@ -3,6 +3,7 @@
 
 #include "Widget.h"
 #include <mar/Shape.h>
+#include <masl/Callback.h>
 
 namespace spark {
 
@@ -21,11 +22,14 @@ namespace spark {
             inline mar::ShapePtr getShape() const {return _myShape;};
             void setShape( mar::ShapePtr theShapePtr);
             float getWorldZ() const;
+
+            std::map<std::string, float> customShaderValues_;
+            masl::CallbackPtr updateShaderValuesCallback_;
+
         protected:
             virtual void propagateAlpha();
             std::string vertexShader_;
             std::string fragmentShader_;
-            std::map<std::string, float> customShaderValues_;
         private:
             mar::ShapePtr _myShape;
     };
