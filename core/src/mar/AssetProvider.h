@@ -18,8 +18,10 @@ namespace mar {
 
         virtual std::vector<std::string> getFilesFromPath(const std::string & theBasePath) const;
         virtual std::string findFile(const std::string & theFilename) const;
+        virtual std::string getAssetPath() const { return assetPath_; };
     protected:
         std::vector<std::string> includePaths_;
+        std::string assetPath_;
     };
     typedef masl::Ptr<AssetProvider> AssetProviderPtr;
 
