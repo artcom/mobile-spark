@@ -244,7 +244,14 @@ namespace acprojectview {
         }
     }
 
-    //idle
+    //////////////////////////////////////////////////////idle
+    void ACProjectView::updateKenBurnsShader() {
+        std::map<std::string, float>::iterator it = _myIdleScreenImagePtr->customShaderValues_.find("a_time");
+        if (it != _myIdleScreenImagePtr->customShaderValues_.end()) {
+            it->second = (animation::AnimationManager::get().getTime() % 100000)/100000.0f;
+        }
+    }
+
     void ACProjectView::initIdle() {
         AC_DEBUG << "init idle";
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
@@ -254,6 +261,7 @@ namespace acprojectview {
         animation::AnimationManager::get().play(_myIdleDelay);
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
+        _myIdleScreenImagePtr->updateShaderValuesCallback_ = masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::updateKenBurnsShader));
     }
 
     void ACProjectView::onTouch(spark::EventPtr theEvent) {
@@ -272,7 +280,6 @@ namespace acprojectview {
         _myStartScreenPtr->setSensible(true);
         _myStartScreenPtr->setAlpha(1.0);
     }
-    
 }
 
 

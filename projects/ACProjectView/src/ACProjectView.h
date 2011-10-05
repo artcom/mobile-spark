@@ -42,6 +42,7 @@ namespace acprojectview {
             void onStartIdleFade();
             void onFinishIdleFade();            
             void initIdle();
+            void updateKenBurnsShader();
             void onIdle();
             void onTouch(spark::EventPtr theEvent);
             void onFinishProjectView();
