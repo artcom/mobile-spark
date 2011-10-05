@@ -18,7 +18,7 @@ namespace mar {
     public:
         virtual ~ObjImporter();
 
-        void importObj(std::string theObjFileName, ShapePtr theShape);
+        void importObj(const std::string & theObjFileName, ShapePtr theShape);
     private:
         void faceParseHelper(std::vector<int> &theFaceData, const std::string & theData) const;
         vector3 getVector3(const std::string & theString) const;

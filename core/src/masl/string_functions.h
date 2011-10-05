@@ -2,6 +2,7 @@
 #define _included_mobile_masl_string_functions_
 
 #include <sstream>
+#include <algorithm>
 #include "Exception.h"
 #include "numeric_functions.h"
 #include "file_functions.h"
@@ -102,6 +103,15 @@ namespace masl {
         myString = masl::trim(myString, "\n");
         return masl::trim(myString, "\r");
     }
+
+    template <typename Pair>
+    struct select1st : std::unary_function<Pair, typename Pair::first_type> 
+    {
+        const typename Pair::first_type& operator()(const Pair& x) const {
+            return x.first;
+        }
+    };
+    
 } //Namespace masl
 
 #endif

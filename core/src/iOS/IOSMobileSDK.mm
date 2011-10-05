@@ -30,7 +30,7 @@ namespace ios
     
     }
     
-    void IOSMobileSDK::freezeMobileOrientation(std::string theOrientation) {
+    void IOSMobileSDK::freezeMobileOrientation(const std::string & theOrientation) {
         
     }
     masl::CameraInfo IOSMobileSDK::getCameraSpec() {

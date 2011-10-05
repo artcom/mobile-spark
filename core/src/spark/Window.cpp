@@ -40,9 +40,6 @@ namespace spark {
         RealizeComponentsButWorldAndWindowVisitor myVisitor;
 		visitComponents(myVisitor, ptr);
 
-		I18nComponentVisitor myI18nVisitor;
-		visitComponents(myI18nVisitor, ptr);
-		
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new WindowCB(ptr, &Window::onSizeChanged));
         addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
         if (_myOrientation != "") {

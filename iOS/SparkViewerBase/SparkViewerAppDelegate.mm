@@ -49,8 +49,6 @@
     SparkViewerViewController *aViewController = [[SparkViewerViewController alloc] initWithNibName:nil bundle:nil];
     [self setSparkViewerViewController:aViewController];
     [aViewController release];
-    // Override point for customization after application launch
-    //[window makeKeyAndVisible];
     
     // create a pointer to a dictionary
     NSDictionary *dictionary;
