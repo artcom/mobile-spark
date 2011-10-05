@@ -5,7 +5,7 @@
 namespace ios
 {
     IOSAssetProvider::IOSAssetProvider(const std::string & theAssetFolderPath)
-    : AssetProvider(), _myAssetFolderPath(theAssetFolderPath)
+    : AssetProvider(), _myAssetFolderPath(theAssetFolderPath), assetPath_(theAssetFolderPath)
     {
     }
 
