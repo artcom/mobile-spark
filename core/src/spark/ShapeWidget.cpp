@@ -29,10 +29,8 @@ namespace spark {
     void 
     ShapeWidget::prerender(MatrixStack& theCurrentMatrixStack) {
         Widget::prerender(theCurrentMatrixStack);
-        //hack, TODO: should be in specialImage
-        std::map<std::string, float>::iterator it = customShaderValues_.find("a_time");
-        if (it != customShaderValues_.end()) {
-            it->second = (animation::AnimationManager::get().getTime() % 100000)/100000.0f;
+        if (customShaderValues_.size() > 0 && updateShaderValuesCallback_) {
+            (*updateShaderValuesCallback_)();
             _myShape->updateHandles(customShaderValues_);
         }
     }
