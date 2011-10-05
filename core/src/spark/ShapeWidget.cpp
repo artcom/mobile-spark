@@ -1,11 +1,41 @@
 #include "ShapeWidget.h"
 
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <iterator>
+
+#include <animation/AnimationManager.h>
+
 namespace spark {
     ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Widget(theApp, theXMLNode)
-    {}
+    {
+        vertexShader_ = getNode()->getAttributeAs<std::string>("vertex_shader","");
+        fragmentShader_ = getNode()->getAttributeAs<std::string>("fragment_shader","");
+        std::string customShaderHandles = getNode()->getAttributeAs<std::string>("custom_shader_handles","");
+        std::istringstream iss(customShaderHandles);
+        std::vector<std::string> myHandles;
+        copy(std::istream_iterator<std::string>(iss),
+             std::istream_iterator<std::string>(),
+             std::back_inserter<std::vector<std::string> >(myHandles));
+        for (std::vector<std::string>::iterator it = myHandles.begin(); it != myHandles.end(); ++it) {
+            customShaderValues_[(*it)] = 0.0f;
+        }
+    }
 
     ShapeWidget::~ShapeWidget() {}
+
+    void 
+    ShapeWidget::prerender(MatrixStack& theCurrentMatrixStack) {
+        Widget::prerender(theCurrentMatrixStack);
+        //hack, TODO: should be in specialImage
+        std::map<std::string, float>::iterator it = customShaderValues_.find("a_time");
+        if (it != customShaderValues_.end()) {
+            it->second = (animation::AnimationManager::get().getTime() % 100000)/100000.0f;
+            _myShape->updateHandles(customShaderValues_);
+        }
+    }
 
     void
     ShapeWidget::render(const matrix & theP) const {

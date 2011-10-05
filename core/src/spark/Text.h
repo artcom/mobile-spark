@@ -12,7 +12,7 @@ namespace spark {
         virtual void realize();
         
         const vector2 & getTextSize();
-        void setText(std::string theText) { data_ = theText; _myDirtyFlag = true;};
+        void setText(const std::string & theText) { data_ = theText; _myDirtyFlag = true;};
         void setMaxWidth(int theMaxWidth) {_myMaxWidth = theMaxWidth; _myDirtyFlag = true;};
         void setMaxHeight(int theMaxHeight) {_myMaxHeight = theMaxHeight; _myDirtyFlag = true;};
         static const char * const SPARK_TYPE;

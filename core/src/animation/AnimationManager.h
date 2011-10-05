@@ -15,9 +15,12 @@ namespace animation {
         bool isPlaying() const { return _myAnimations.size() > 0; };
         void doFrame(const masl::UInt64 theCurrentMillis);
         void init(const masl::UInt64 theCurrentMillis) { _myAnimationTime = theCurrentMillis; };
+        masl::UInt64 getTime() const { return _myAnimationTime; };
 
     private:
         std::vector<AnimationPtr> _myAnimations;
+        std::vector<AnimationPtr> _myOnFrameCollectedAnimations;
+        bool _myIsInOnFrame;
         masl::UInt64 _myAnimationTime;
 
         void removeFinished();

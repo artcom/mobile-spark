@@ -26,14 +26,10 @@ namespace spark {
             virtual void onFrame(EventPtr theEvent);
             virtual void onPause(EventPtr theEvent);
             virtual void onResume();
-
-            virtual void onEvent(std::string theEventString);
+            virtual void onEvent(const std::string & theEventString);
             virtual void handleEvents();
-            void renderText(std::string theMessage, int theOpenGLTextureId);
 
             spark::WindowPtr _mySparkWindow;
-            
-
 
         protected:
             std::string appPath_;
@@ -44,7 +40,7 @@ namespace spark {
             masl::ThreadLock _myLock;
             
     };
-    std::string findBestMatchedLayout(std::string theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait);
+    std::string findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait);
     void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath );
 
     

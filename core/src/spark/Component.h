@@ -6,6 +6,7 @@
 #include <masl/Ptr.h>
 #include <masl/XMLNode.h>
 #include <masl/MatrixStack.h>
+#include <masl/Logger.h>
 
 #include "EventDispatcher.h"
 
@@ -26,7 +27,7 @@ namespace spark {
             return c.print(os);
         }
 
-        virtual void realize() {};
+        virtual void realize() {AC_INFO << "realize " << *this;};
         void realizeASync();
         const bool isAllRealized() const { return _myRealizedAndAllChildrenFlag;}
         virtual void onPause() {};

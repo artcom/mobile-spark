@@ -94,9 +94,11 @@ namespace spark {
     void
     Widget::propagateAlpha() {
         _actualAlpha = getParentAlpha() * _alpha;
+        AC_TRACE << "Widget::propagateAlpha() " << getName();
         for (std::vector<ComponentPtr>::const_iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
             WidgetPtr myChild = boost::dynamic_pointer_cast<Widget>(*it);
             if (myChild) {
+                AC_TRACE << "Widget::propagateAlpha() ->child: " << *myChild;
                 myChild->propagateAlpha();
             }
         }
