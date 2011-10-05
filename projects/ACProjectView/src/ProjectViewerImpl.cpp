@@ -1,5 +1,6 @@
 #include "ProjectViewerImpl.h"
 #include <spark/Window.h>
+#include <spark/Rectangle.h>
 #include <spark/SparkComponentFactory.h>
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
@@ -49,7 +50,7 @@ namespace acprojectview {
         _myWindowPtr = boost::static_pointer_cast<Window>(getRoot());                
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
-        
+        boost::static_pointer_cast<Rectangle>(getChildByName("background"))->setSize(vector2(_myWidth,_myHeight));
         _myDescription->setMaxWidth(_myWidth - (2*_myDescription->getX()));
         _myPopUpTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         

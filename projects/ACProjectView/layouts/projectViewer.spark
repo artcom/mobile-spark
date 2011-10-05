@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ProjectViewerImpl>
 
-    <Rectangle name="background" x="0" y="0" width="800" height="480" color="[0.0,0.0,0.0]"/>
+    <Rectangle name="background" x="0" y="0" width="2000" height="2000" color="[0.0,0.0,0.0]"/>
     <Transform name="image_0_transform">
         <Image name="image" src="" x="0" y="0"/>
     </Transform>        
@@ -14,7 +14,7 @@
     
     <Rectangle name="popup" x="0" y="0" z="10" width="600" height="80" color="[0.0,0.0,0.0]" alpha="0.5">
         <Text name="title" x="10" y="0" z="2" color="[1,1,1,1]" fontsize="32" font="/acswissmed.ttf"/>
-        <Text name="description" x="10" y="0" z="3" color="[1,1,1,1]" fontsize="20" font="/acswisslight.ttf"/>
+        <Text name="description" x="10" y="0" z="3" color="[1,1,1,1]" fontsize="20" font="/acswissmed.ttf"/>
     </Rectangle>
     <!--Image name="textBackground" src="/greyTransparency.png" x="100" y="0" z="1" scaleX="12" scaleY="2"/-->
     
