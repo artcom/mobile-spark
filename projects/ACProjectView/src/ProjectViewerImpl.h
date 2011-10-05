@@ -23,6 +23,7 @@ namespace acprojectview {
             virtual void realize();
             
             static const char * const SPARK_TYPE;             
+            const static unsigned int POPUP_HEIGHT = 50;
             virtual const char * const & getType() const { return ProjectViewerImpl::SPARK_TYPE;};
              
             void draw();
@@ -32,7 +33,7 @@ namespace acprojectview {
             void setHeight(int height) {_myHeight = height;};
             void loadInitialSet();
             void initiateClose();
-
+            bool isPopUpOpen();
        private:
             unsigned int _myCurrentImage;
             unsigned int _myNumberOfImages;
@@ -52,12 +53,13 @@ namespace acprojectview {
             spark::ImagePtr _image2;
             spark::RectanglePtr _myPopup;                
             spark::TextPtr _myDescription;
-            spark::TextPtr _myPopUpTitle;                
+            spark::TextPtr _myPopUpTitle;      
+            spark::TextPtr _myPopUpSubTitle;
             spark::WindowPtr _myWindowPtr;
             void changeImage(int dir);
             void onAnimationFinished();
             void onLoadNextImages();
-            void onSwipePopup(spark::EventPtr theEvent);
+            void onOpenClosePopup(spark::EventPtr theEvent);
             void autoScaleImage(spark::ImagePtr theImage);
 
 

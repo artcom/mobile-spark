@@ -28,8 +28,10 @@ namespace acprojectview {
         _myPopup = boost::static_pointer_cast<Rectangle>(getChildByName("popup"));
         _myDescription = boost::static_pointer_cast<Text>(_myPopup->getChildByName("description"));
         _myPopUpTitle = boost::static_pointer_cast<Text>(_myPopup->getChildByName("title"));
+        _myPopUpSubTitle = boost::static_pointer_cast<Text>(_myPopup->getChildByName("subtitle"));
         _myDescription->setText("");   
         _myPopUpTitle->setText("");   
+        _myPopUpSubTitle->setText("");   
     }
 
     ProjectViewerImpl::~ProjectViewerImpl() {}
@@ -42,16 +44,18 @@ namespace acprojectview {
         getRoot()->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
         getRoot()->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
 
-        spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipePopup));
-        getRoot()->addEventListener(GestureEvent::SWIPE_UP, mySwipeUpDownCB);
-        getRoot()->addEventListener(GestureEvent::SWIPE_DOWN, mySwipeUpDownCB);
+    
+        spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
+        _myPopup->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB);
             
         _myWindowPtr = boost::static_pointer_cast<Window>(getRoot());                
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
         
-        _myDescription->setMaxWidth(_myWidth - (2*_myDescription->getX()));
+        _myDescription->setMaxWidth( (_myWidth/2.0) - _myDescription->getX() - _myDescription->getX()/2.0);
+        
         _myPopUpTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
+        _myPopUpSubTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         
         _myPopup->getShape()->setDimensions(_myWidth, 0);
             
@@ -62,7 +66,6 @@ namespace acprojectview {
         string myTitle_I18n = currentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
         string mySubTitle_I18n = currentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
             
-        AC_PRINT << "################# : " << myDescription_I18n;
         _myIsAnimating = false;     
         _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
@@ -78,12 +81,14 @@ namespace acprojectview {
          // bind i18n item to description widget
         _myDescription->setI18nId(myDescription_I18n);         
          _myPopUpTitle->setI18nId(myTitle_I18n);
-         
-         int myHiddenPopUpHeight = std::max(30, int(_myPopUpTitle->getTextSize()[1]));
+         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);
+         int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
          int myTextHeight = _myDescription->getTextSize()[1];
          _myPopup->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
          
-         _myPopUpTitle->setY(myTextHeight);
+         _myPopUpSubTitle->setY(myTextHeight+10);
+         _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
+         
          _myPopup->setY(-myTextHeight);
          _myPopup->setAlpha(0.5);
          
@@ -159,11 +164,15 @@ namespace acprojectview {
              autoScaleImage(_image2);
         }        
     }
+    bool ProjectViewerImpl::isPopUpOpen() {
+        int myTextHeight = _myDescription->getTextSize()[1];            
+        return (_myPopup->getY() != -myTextHeight);
+    }
     
-    void ProjectViewerImpl::onSwipePopup(EventPtr theEvent) {
+    void ProjectViewerImpl::onOpenClosePopup(EventPtr theEvent) {
         if (isRendered()) {
-            int myTextHeight = _myDescription->getTextSize()[1];            
-            if (theEvent->getType() == "swipe-up") {
+            int myTextHeight = _myDescription->getTextSize()[1];    
+            if (!isPopUpOpen()) {
                 _myPopup->setY(0);
                 _myPopup->setAlpha(0.9);
             } else {
