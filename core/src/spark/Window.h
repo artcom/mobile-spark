@@ -28,6 +28,8 @@ namespace spark {
         virtual void realize();        
         vector4 getClearColor() const { return _myClearColor;};
         vector2 getSize() const;
+        void setSize(int theWidth, int theHeight) {_myWidth=theWidth; _myHeight=theHeight;};
+
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Window::SPARK_TYPE;};
     private:
