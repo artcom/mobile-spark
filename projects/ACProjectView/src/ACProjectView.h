@@ -61,7 +61,7 @@ namespace acprojectview {
             unsigned int _myHeight;
 
             const static unsigned int _myAnimationTime = 400;
-            const static unsigned int _myIdleTime = 5000;
+            const static unsigned int _myIdleTime = 50000;
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;

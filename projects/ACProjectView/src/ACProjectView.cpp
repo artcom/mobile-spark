@@ -157,7 +157,7 @@ namespace acprojectview {
     void ACProjectView::onStartProjectView() {        
         _myProjectViewer->setVisible(true);
     }    
-    void ACProjectView::onFinishLoadProjectView() {        
+    void ACProjectView::onFinishLoadProjectView() {   
         _myProjectViewer->loadInitialSet();
         _myProjectMenu->setVisible(false);
     }
@@ -200,15 +200,17 @@ namespace acprojectview {
                     animation::EasingFnc(animation::easeInOutQuad)));
            
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
-         myParallel->setOnPlay(masl::CallbackPtr(
+        myParallel->setOnPlay(masl::CallbackPtr(
                          new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartProjectView)));
             
         myParallel->add(myZoomAnimationX);
         myParallel->add(myZoomAnimationY);
         myParallel->add(myTransAnimationX);
         myParallel->add(myTransAnimationY);
+        animation::DelayAnimationPtr myLittleAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(20));
 
         mySeqAnimation->add(myParallel);
+        mySeqAnimation->add(myLittleAnim);
         if (showProject) {                       
             mySeqAnimation->setOnFinish(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
