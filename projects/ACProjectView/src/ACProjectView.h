@@ -41,11 +41,15 @@ namespace acprojectview {
             void projectViewAnimation(bool showProject);
             void onStartIdleFade();
             void onFinishIdleFade();            
+            void onFinishProjectView();
+
+            //idle
             void initIdle();
             void updateKenBurnsShader();
             void onIdle();
             void onTouch(spark::EventPtr theEvent);
-            void onFinishProjectView();
+            float lastTime_;
+            std::vector<std::string> idleFiles_;
 
             
             ProjectImplPtr _myCurrentProject; 
@@ -63,6 +67,7 @@ namespace acprojectview {
 
             const static unsigned int _myAnimationTime = 400;
             const static unsigned int _myIdleTime = 50000;
+            const static unsigned int _myKenBurnsDuration = 100000;
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
