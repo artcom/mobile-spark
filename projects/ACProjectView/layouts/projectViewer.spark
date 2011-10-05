@@ -12,14 +12,10 @@
         <Image name="image" src="" x="0" y="0"/>
     </Transform>        
     
-    <Rectangle name="popup" x="0" y="0" z="10" width="600" height="80" color="[0.0,0.0,0.0]" alpha="0.5">
-        <Text name="title" x="10" y="0" z="2" color="[1,1,1,1]" fontsize="32" font="/acswissmed.ttf"/>
-        <Text name="description" x="10" y="0" z="3" color="[1,1,1,1]" fontsize="20" font="/acswissmed.ttf"/>
-    </Rectangle>
-    <!--Image name="textBackground" src="/greyTransparency.png" x="100" y="0" z="1" scaleX="12" scaleY="2"/-->
-    
-    
-    <!--Image name="arrowRight" src="/arrow_right.png" x="740" y="30" z="1"/>
-    <Image name="arrowLeft" src="/arrow_left.png" x="10" y="30" z="1"/-->
 
+    <Rectangle name="popup" x="0" y="0" z="10" width="600" height="80" color="[0.0,0.0,0.0]" alpha="0.5" sensible="true">
+        <Text name="title" x="20" y="0" z="2" color="[0.333,0.77,0.91,1]" fontsize="16" font="/acswissmed.ttf" sensible="false"/>
+        <Text name="subtitle" x="20" y="0" z="3" color="[1,1,1,1]" fontsize="14" font="/acswissmed.ttf" sensible="false"/>        
+        <Text name="description" x="20" y="0" z="4" color="[1,1,1,1]" lineHeight="18" fontsize="13" font="/acswissmed.ttf" sensible="false"/>
+    </Rectangle>
 </ProjectViewerImpl>

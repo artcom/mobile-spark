@@ -143,11 +143,14 @@ namespace acprojectview {
 
     
     void ACProjectView::onBack(EventPtr theEvent) {
-        if (_myProjectMenu->isSensible()) return;
-        MobileSDK_Singleton::get().getNative()->vibrate(10);                
-        projectViewAnimation(false);
-        _myProjectMenu->setSensible(true);
-        _myProjectViewer->setSensible(false);
+        if (_myProjectMenu->isSensible()) return;            
+        TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
+        if (myEvent->getY() > ProjectViewerImpl::POPUP_HEIGHT * 2 && !_myProjectViewer->isPopUpOpen()) { 
+            MobileSDK_Singleton::get().getNative()->vibrate(10);                
+            projectViewAnimation(false);
+            _myProjectMenu->setSensible(true);
+            _myProjectViewer->setSensible(false);
+        }
     }
     
     void ACProjectView::onInitiateProjectView() {        

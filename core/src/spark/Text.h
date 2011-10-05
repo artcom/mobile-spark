@@ -25,6 +25,7 @@ namespace spark {
         vector2 _myTextSize;
         int _myMaxWidth;
         int _myMaxHeight;
+        int _myLineHeight;
         std::string _myFontPath;
         std::string _myTextAlign;
             
