@@ -143,7 +143,9 @@ namespace spark {
         Event(theXMLNode),
         x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)),
         y_(theXMLNode->getAttributeAs<unsigned int>("y", 0))
-    {}
+    {
+    }
+    
 
     TouchEvent::~TouchEvent() {}
 
