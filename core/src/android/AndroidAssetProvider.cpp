@@ -10,10 +10,11 @@
 using namespace std;
 namespace android {
 
-    AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath)
+    AndroidAssetProvider::AndroidAssetProvider(const std::string & theApkPath, const std::string & theAppPath)
         : AssetProvider(), _myApkArchive(NULL)
     {
         android::loadAPK(&_myApkArchive, theApkPath);
+        assetPath_ =  "/sdcard/" + theAppPath;
     }
 
     AndroidAssetProvider::~AndroidAssetProvider() {

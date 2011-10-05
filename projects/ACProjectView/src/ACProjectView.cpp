@@ -3,6 +3,9 @@
 
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
+#include <masl/numeric_functions.h>
+
+#include <mar/AssetProvider.h>
 
 #include <spark/Window.h>
 #include <spark/Event.h>
@@ -33,7 +36,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace acprojectview {
    
-    ACProjectView::ACProjectView():BaseApp("ACProjectView") {
+    ACProjectView::ACProjectView():BaseApp("ACProjectView"), lastTime_(0.0f) {
         _myChooseLayoutFlag = true;
     }
 
@@ -251,7 +254,13 @@ namespace acprojectview {
     void ACProjectView::updateKenBurnsShader() {
         std::map<std::string, float>::iterator it = _myIdleScreenImagePtr->customShaderValues_.find("a_time");
         if (it != _myIdleScreenImagePtr->customShaderValues_.end()) {
-            it->second = (animation::AnimationManager::get().getTime() % 100000)/100000.0f;
+            float time = (animation::AnimationManager::get().getTime() % _myKenBurnsDuration)/(float)_myKenBurnsDuration;
+            it->second = time;
+            //AC_PRINT << "-------" << time << "  " << lastTime_;
+            if (time < lastTime_) {
+                _myIdleScreenImagePtr->setSrc("/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+            }
+            lastTime_ = time;
         }
     }
 
@@ -259,12 +268,16 @@ namespace acprojectview {
         AC_DEBUG << "init idle";
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myIdleScreenImagePtr =  boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage", true));
+        vector2 myWindowDimensions = _mySparkWindow->getSize();
+        _myIdleScreenImagePtr->getNode()->attributes["width"] = as_string(myWindowDimensions[0]);
+        _myIdleScreenImagePtr->getNode()->attributes["height"] = as_string(myWindowDimensions[1]);
         _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
         _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
         animation::AnimationManager::get().play(_myIdleDelay);
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _myIdleScreenImagePtr->updateShaderValuesCallback_ = masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::updateKenBurnsShader));
+        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
     }
 
     void ACProjectView::onTouch(spark::EventPtr theEvent) {

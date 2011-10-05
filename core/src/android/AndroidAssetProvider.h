@@ -11,7 +11,7 @@
 namespace android {
     class AndroidAssetProvider : public mar::AssetProvider {
     public:
-        AndroidAssetProvider(const std::string & theApkPath);
+        AndroidAssetProvider(const std::string & theApkPath, const std::string & theAppPath);
         virtual ~AndroidAssetProvider();
 
         virtual std::string getStringFromFile(const std::string & theFileName) const;
