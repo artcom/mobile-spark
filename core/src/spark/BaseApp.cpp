@@ -79,7 +79,7 @@ namespace spark {
         }
         //load layout
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(shared_from_this(), myLayoutFile));
-
+        _mySparkWindow->setSize(theScreenWidth,theScreenHeight);
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
