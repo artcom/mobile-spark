@@ -13,7 +13,7 @@ namespace ios
     void IOSMobileSDK::vibrate(long theDurationMillisec) {
     }
 
-    masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath) {
+    masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, int theLineHeight) {
         masl::TextInfo textInfo;        
         
         TextRendererPtr textRenderer = TextRendererPtr(new TextRenderer());

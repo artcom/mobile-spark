@@ -23,6 +23,7 @@ namespace spark {
         _myTextColor(_myXMLNode->getAttributeAs<vector4>("color", vector4(1,1,1,1))),
         _myMaxWidth(_myXMLNode->getAttributeAs<int>("maxWidth", 0)),
         _myMaxHeight(_myXMLNode->getAttributeAs<int>("maxHeight", 0)),
+        _myLineHeight(_myXMLNode->getAttributeAs<int>("lineHeight", 0)),
         _myTextAlign(_myXMLNode->getAttributeAs<std::string>("align", "left"))
     {
         setI18nData(getNode()->getAttributeAs<std::string>("text", ""));
@@ -64,7 +65,7 @@ namespace spark {
         I18nShapeWidget::build();
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
         masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
-                                         _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath);
+                                         _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight);
         _myTextSize[0] = myTextInfo.width;
         _myTextSize[1] = myTextInfo.height;
         getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
