@@ -32,7 +32,6 @@ namespace acprojectview {
                 myImage->setVisible(false);
                 myImage->setSensible(false);
             }
-            AC_PRINT << "add image to images : " << myImage->getName();
         }
         _myImages[_myCurrentImageIndex]->setVisible(true);
     }
@@ -45,8 +44,6 @@ namespace acprojectview {
         if (myDiff > float(1000)/_myImages.size()) {
             _myImages[_myCurrentImageIndex]->setVisible(false);
             _myCurrentImageIndex = (_myCurrentImageIndex+1)%_myImages.size();
-            //_myCurrentImageIndex = _myCurrentImageIndex%_myImages.size();
-            //AC_PRINT << "tic : "<< _myCurrentImageIndex;
             _myImages[_myCurrentImageIndex]->setVisible(true);
             
             _myLastTime = myEvent->getCurrentTime();

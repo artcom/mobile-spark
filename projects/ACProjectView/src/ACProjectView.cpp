@@ -159,9 +159,13 @@ namespace acprojectview {
     }    
     void ACProjectView::onFinishLoadProjectView() {        
         _myProjectViewer->loadInitialSet();
+        _myProjectMenu->setVisible(false);
     }
     void ACProjectView::onFinishProjectView() {        
         _myProjectViewer->setVisible(false);
+    }
+    void ACProjectView::onReturn2ProjectView() {        
+        _myProjectMenu->setVisible(true);
     }
     
     
@@ -212,6 +216,8 @@ namespace acprojectview {
             _myProjectViewer->initiateClose();
             mySeqAnimation->setOnFinish(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
+            mySeqAnimation->setOnPlay(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onReturn2ProjectView)));
 
         }
         animation::AnimationManager::get().play(mySeqAnimation);

@@ -37,6 +37,7 @@ namespace acprojectview {
             void onStartProjectView();
             void onInitiateProjectView();
             void onFinishLoadProjectView();
+            void onReturn2ProjectView();
             void projectViewAnimation(bool showProject);
             void onStartIdleFade();
             void onFinishIdleFade();            
