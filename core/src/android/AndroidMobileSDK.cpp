@@ -26,14 +26,14 @@ namespace android {
     }
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
-                                                const std::string & theFontPath) {
+                                                const std::string & theFontPath, int theLineHeight) {
         masl::TextInfo myTextInfo;
         if (env) {
             env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
-            jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[IIILjava/lang/String;Ljava/lang/String;)Ljava/util/List;");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[IIILjava/lang/String;Ljava/lang/String;I)Ljava/util/List;");
             if(myMethodId != 0) {
-                jvalue myArgs[8];
+                jvalue myArgs[9];
                 myArgs[0].l =  env->NewStringUTF(theMessage.c_str());
                 myArgs[1].i = theTextureId;
                 myArgs[2].i = theFontSize;
@@ -45,6 +45,7 @@ namespace android {
                 myArgs[5].i = theMaxHeight;
                 myArgs[6].l = env->NewStringUTF(theAlign.c_str());;
                 myArgs[7].l =  env->NewStringUTF(theFontPath.c_str());
+                myArgs[8].i =  theLineHeight;
                 jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");

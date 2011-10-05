@@ -48,7 +48,8 @@ public class NativeBinding {
   public static native void setSeverity(Severity theSeverity);
 
 
-  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, int maxWidth, int maxHeight, String theAlign, String theFontpath) {
+  public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, 
+		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight) {
     List<Integer> myResult = new ArrayList<Integer>();
     TextLayouter myLayouter = new TextLayouter(theMessage, theFontSize, maxWidth, maxHeight);
 
@@ -68,7 +69,7 @@ public class NativeBinding {
     }
     textPaint.setTypeface(myTypeFace);
 
-    List<TextLine> myLines = myLayouter.createLines(textPaint);
+    List<TextLine> myLines = myLayouter.createLines(textPaint, theLineHeight);
 
     //AC_Log.print(String.format("CanvasHeight: %d, %d", myLayouter.getCanvasWidth(), myLayouter.getCanvasHeight()));
     Bitmap myBitmap = Bitmap.createBitmap(Math.max(1, myLayouter.getCanvasWidth()), Math.max(1, myLayouter.getCanvasHeight()), Bitmap.Config.ARGB_8888);
