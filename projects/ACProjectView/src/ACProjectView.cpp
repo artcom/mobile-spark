@@ -266,6 +266,8 @@ namespace acprojectview {
         _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
+        _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
+        _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
         masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
         onIdle();
     }
@@ -303,7 +305,7 @@ namespace acprojectview {
     }
 
     void ACProjectView::onKenBurnsImageFadeStart() {
-        AC_TRACE << "_____________________________________ fade start, load to " << firstIdleImageVisible_?1:0;
+        AC_TRACE << "_____________________________________ fade start, load to " << (firstIdleImageVisible_?1:0);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/large_images/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
         vector2 myWindowDimensions = _mySparkWindow->getSize();
         _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
@@ -314,12 +316,14 @@ namespace acprojectview {
         myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?1:0], &Widget::setAlpha, 0, 1, _myKenBurnsFadeDuration)));
         myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?0:1], &Widget::setAlpha, 1, 0, _myKenBurnsFadeDuration)));
         animation::AnimationManager::get().play(myFadeAnimation);
+        std::map<std::string, float>::iterator it = _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->customShaderValues_.find("a_mode");
+        it->second = masl::random(0.0f, 1.0f);
         firstIdleImageVisible_ = !firstIdleImageVisible_;
         swappedIdleImages_ = true;
     }
 
     void ACProjectView::onKenBurnsImageFadeEnd() {
-        AC_PRINT << "_________________________________ fade finished";
+        AC_DEBUG << "_________________________________ fade finished";
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(false);
     }
 
@@ -342,7 +346,6 @@ namespace acprojectview {
             _myKenBurnsAnimation->cancel();
             _myKenBurnsAnimation = animation::ParallelAnimationPtr();
         }
-        AC_DEBUG << "on Idle";
         _myStartScreenPtr->setVisible(true);
         _myStartScreenPtr->setSensible(true);
         _myStartScreenPtr->setAlpha(1.0);
@@ -352,6 +355,10 @@ namespace acprojectview {
         _myIdleScreenImagePtrs[1]->setAlpha(0.0);
         firstIdleImageVisible_ = true;
         swappedIdleImages_ = true;
+        _myProjectViewer->setVisible(false);
+        _myProjectViewer->setSensible(false);
+        _myProjectMenu->setVisible(true);
+        _myProjectMenu->setSensible(true);
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myKenBurnsAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         _myKenBurnsAnimation->add(ACProjectViewPropertyAnimationPtr(new ACProjectViewPropertyAnimation(ptr, &ACProjectView::updateKenBurnsShader, 0.0f, 1.0f, _myKenBurnsDuration)));
