@@ -174,7 +174,7 @@ Terravision is an isochronous realisation of Neal Stephenson’s literary idea i
             <en>ART+COM</en>
         </I18nItem>
         <I18nItem name="artcom_subtitle">
-            <de>low resolution square</de>
+            <de>mit neuen Medien Räume gestalten</de>
             <en>designing spaces with New Media</en>
         </I18nItem>        
         <I18nItem name="artcom_text">
@@ -319,16 +319,22 @@ The monograph published by Gestalten Verlag presents a selection of projects fro
                 <ContentImage src="/large_images/bookrelease_main_02.png"/>
             </Project>
             
-            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/bookrelease_teaser_thumb.png">
-                <ContentImage src="/large_images/dirk.png"/>
-                <ContentImage src="/large_images/joachim.png"/>
-	            <ContentImage src="/large_images/andreas.png"/>
+            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/artcom_teaser_thumb.png">
+                <ContentImage src="/large_images/blub.png"/>
+                <ContentImage src="/large_images/dieter.png"/>
+	            <ContentImage src="/large_images/flur.png"/>
+	            <ContentImage src="/large_images/gl.png"/>
+	            <ContentImage src="/large_images/gruppe.png"/>
+	            <ContentImage src="/large_images/hand.png"/>
+	            <ContentImage src="/large_images/interns.png"/>
+	            <ContentImage src="/large_images/js.png"/>
+	            <ContentImage src="/large_images/probebau.png"/>
             </Project>
 
           
         </ProjectMenu>	
         
-        <ProjectViewer name="projectViewer" visible="false">
+        <ProjectViewer name="projectViewer" visible="false" sensible="false" z="100">
         </ProjectViewer>
     </World>        
 </Window>
