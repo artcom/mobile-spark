@@ -12,6 +12,7 @@ namespace spark {
         virtual ~Image();
         virtual void onResume();
         virtual void realize();
+        const std::string & getSrc() const {return data_;} 
         void setSrc(const std::string & theSrc);
         void setSize(float theWidth, float theHeight) {_myWidth=theWidth; _myHeight=theHeight; realize();};
         void fitToSize(float theWidth, float theHeight);
@@ -27,7 +28,6 @@ namespace spark {
         float _myHeight;
         float _myTextureScaleX;
         float _myTextureScaleY;
-
     };
 
     typedef masl::Ptr<Image> ImagePtr;
