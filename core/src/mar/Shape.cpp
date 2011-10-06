@@ -96,8 +96,11 @@ namespace mar {
     RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight, 
                                    const std::string & theVertexShader, const std::string & theFragmentShader, 
                                    const std::vector<std::string> & theCustomHandles,
-                                   const std::string & theTextureSrc)
+                                   const std::string & theTextureSrc, const float theXYCoordScaleX, float const theXYCoordScaleY)
         : Shape(theTextureFlag), width_(theWidth), height_(theHeight) {
+        _myXYCoordScaleX=theXYCoordScaleX; 
+        _myXYCoordScaleY=theXYCoordScaleY;
+
         ElementPtr myElement;
         MaterialPtr myMaterial;
         if (theTextureFlag) {
@@ -119,7 +122,8 @@ namespace mar {
 
     RectangleShape::~RectangleShape() {
     }
-
+    
+    
     void RectangleShape::setVertexData() {
         ElementPtr myElement = elementList[0];
         _myDataPerVertex = 3 + (_myTextureFlag ? 2 : 0);
@@ -128,7 +132,7 @@ namespace mar {
         myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices) * _myDataPerVertex]);
         GLushort indices[] = {0, 1, 2, 2, 1, 3};
         myElement->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[myElement->numIndices]);
-        int myXYCoords[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+        float myXYCoords[] = {0.0f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f,1.0f, 1.0f};
 
         for (size_t i = 0, l = myElement->numVertices; i < l; ++i) {
             (myElement->vertexData_)[i * _myDataPerVertex + 0] = myXYCoords[i * 2 + 0] * width_;
@@ -136,8 +140,8 @@ namespace mar {
             (myElement->vertexData_)[i * _myDataPerVertex + 2] = 0;
 
             if (_myTextureFlag) {
-                (myElement->vertexData_)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0];
-                (myElement->vertexData_)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1];
+                (myElement->vertexData_)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0]*_myXYCoordScaleX;
+                (myElement->vertexData_)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1]*_myXYCoordScaleY;
             }
         }
 
@@ -289,9 +293,9 @@ namespace mar {
     ShapePtr ShapeFactory::createRectangle(const bool theTextureFlag, const float theWidth, const float theHeight,
                                            const std::string & theVertexShader, const std::string & theFragmentShader,
                                            const std::vector<std::string> & theCustomHandles,
-                                           const std::string & theTextureSrc) {
+                                           const std::string & theTextureSrc, const float theXYCoordScaleX, const float theXYCoordScaleY) {
         return ShapePtr(new RectangleShape(theTextureFlag, theWidth, theHeight, 
-                            theVertexShader, theFragmentShader, theCustomHandles, theTextureSrc));
+                            theVertexShader, theFragmentShader, theCustomHandles, theTextureSrc, theXYCoordScaleX, theXYCoordScaleY));
     }
 
     ShapePtr ShapeFactory::createNinePatch(const std::string & theTextureSrc,

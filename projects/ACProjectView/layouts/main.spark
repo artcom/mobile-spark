@@ -132,7 +132,7 @@
         </Transform>        
 
         
-        <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="20" y-gap="20" visible="true">
+        <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="2" y-gap="2" visible="true">
         
             
             <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle" src="/small_images/belvedere_teaser_thumb_01.png">

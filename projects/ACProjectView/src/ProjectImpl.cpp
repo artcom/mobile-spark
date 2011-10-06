@@ -2,6 +2,8 @@
 #include "ProjectMenu.h"
 #include <spark/Window.h>
 #include <spark/SparkComponentFactory.h>
+#include <mar/shape.h>
+
 
 using namespace spark;
 
@@ -57,22 +59,26 @@ namespace acprojectview {
         
         titleComponent_->setY(subtitleComponent_->getTextSize()[1]);
         
+        //imageComponent_->setSize(iconWidth, iconHeight);
+
         
         
-        
-        int textSpace = titleComponent_->getTextSize()[1] + subtitleComponent_->getTextSize()[1];
+        //int textSpace = titleComponent_->getTextSize()[1] + subtitleComponent_->getTextSize()[1];
         // set Position:
         //setX(myMenu->getGapX()/2 + dx * (i/myVerticalTiling)); 
         //setY(myMenu->getGapY()/2 + dy * (i % myVerticalTiling));
         // scale preview image:
-        float scaleX = iconWidth / (imageComponent_->getTextureSize()[0]);
-        float scaleY = (iconHeight - textSpace) / (imageComponent_->getTextureSize()[1]);
-        float scale = std::min(scaleX, scaleY);
-        imageComponent_->setScaleX(scale);
-        imageComponent_->setScaleY(scale);
-        // center image: 
-        imageComponent_->setX( (iconWidth - scale * imageComponent_->getTextureSize()[0])/2.0);
-        imageComponent_->setY( (textSpace + iconHeight - scale * imageComponent_->getTextureSize()[1])/2.0);
+        
+//        float scaleX = iconWidth / (imageComponent_->getTextureSize()[0]);
+//        //float scaleY = (iconHeight - textSpace) / (imageComponent_->getTextureSize()[1]);
+//        float scaleY = iconHeight / (imageComponent_->getTextureSize()[1]);
+//        float scale = std::max(scaleX, scaleY);
+//        imageComponent_->setScaleX(scale);
+//        imageComponent_->setScaleY(scale);
+        imageComponent_->fitToSize(iconWidth, iconHeight);
+         // center image: 
+        //imageComponent_->setX( 0);//(iconWidth - scale * imageComponent_->getTextureSize()[0])/2.0);
+        imageComponent_->setY( 0);//(textSpace + iconHeight - scale * imageComponent_->getTextureSize()[1])/2.0);
         
     }    
 }

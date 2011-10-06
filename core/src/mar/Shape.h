@@ -47,7 +47,8 @@ namespace mar {
         RectangleShape(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0,
                        const std::string & theVertexShader = "", const std::string & theFragmentShader = "",
                        const std::vector<std::string> & theCustomHandles = std::vector<std::string>(),
-                       const std::string & theTextureSrc = "");
+                       const std::string & theTextureSrc = "", 
+                       const float theXYCoordScaleX=1.0f, const float theXYCoordScaleY=1.0f);
         virtual ~RectangleShape();
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3);
         virtual void setDimensions(const float theWidth, const float theHeight);
@@ -55,6 +56,9 @@ namespace mar {
         void setVertexData();
         float width_;
         float height_;
+        float _myXYCoordScaleX;
+        float _myXYCoordScaleY;
+
     };
 
     class NinePatchShape : public Shape {
@@ -90,7 +94,7 @@ namespace mar {
         ShapePtr createRectangle(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, 
                                  const std::string & theVertexShader = "" , const std::string & theFragmentShader = "",
                                  const std::vector<std::string> & theCustomHandles = std::vector<std::string>(),
-                                 const std::string & theTextureSrc = "");
+                                 const std::string & theTextureSrc = "", const float theXYCoordScaleX=1.0f, const float theXYCoordScaleY=1.0f);
         ~ShapeFactory();
         ShapePtr createNinePatch(const std::string & theTextureSrc, const float theLeftEdge = 0,
                 const float theTopEdge = 0, const float theRightEdge = 0, const float theBottomEdge = 0,
