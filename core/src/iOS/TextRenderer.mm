@@ -50,7 +50,6 @@ namespace ios {
             //Defeault Font
             font = CTFontCreateWithName(CFSTR("Helvetica"), theFontSize, NULL);
         }
-        font = CTFontCreateWithName(CFSTR("Helvetica"), theFontSize, NULL);
         //add Font as an attribute to the string
         CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFStringGetLength((CFStringRef)string)), kCTFontAttributeName, font);
         CFRelease(font);
@@ -111,6 +110,12 @@ namespace ios {
             
             CGContextSetAllowsFontSmoothing(context, YES);
             CGContextSetShouldSmoothFonts(context, YES);
+            
+            CGContextSetAllowsFontSubpixelPositioning(context, YES);
+            CGContextSetShouldSubpixelPositionFonts(context, YES);
+            
+            CGContextSetAllowsFontSubpixelQuantization(context,YES);
+            CGContextSetShouldSubpixelQuantizeFonts(context,YES);
             
             CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
 
