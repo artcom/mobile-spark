@@ -267,7 +267,7 @@ namespace acprojectview {
         animation::AnimationManager::get().play(_myIdleDelay);
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
-        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/ACProjectView/textures/large_images/", idleFiles_, "");
+        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
     }
 
     void ACProjectView::updateKenBurnsShader(float theProgress) {

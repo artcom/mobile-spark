@@ -3,7 +3,6 @@
 #include <spark/Window.h>
 #include <spark/SparkComponentFactory.h>
 
-
 using namespace spark;
 
 namespace acprojectview {
