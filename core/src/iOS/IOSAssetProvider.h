@@ -7,7 +7,7 @@
 namespace ios {
 class IOSAssetProvider : public mar::AssetProvider {
 public:
-    IOSAssetProvider(const std::string & theAssetFolderPath);
+    IOSAssetProvider(const std::string & theAssetFolderPath, const std::string & theAppPath);
     virtual ~IOSAssetProvider();
     virtual std::string getStringFromFile(const std::string & theFile) const;
     virtual std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const;

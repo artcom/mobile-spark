@@ -5,10 +5,10 @@
 
 namespace ios
 {
-    IOSAssetProvider::IOSAssetProvider(const std::string & theAssetFolderPath)
+    IOSAssetProvider::IOSAssetProvider(const std::string & theAssetFolderPath, const std::string & theAppPath)
     : AssetProvider(), _myAssetFolderPath(theAssetFolderPath)
     {
-        assetPath_=theAssetFolderPath;
+        assetPath_ = theAppPath + "/" + theAssetFolderPath;
     }
 
     IOSAssetProvider::~IOSAssetProvider()
