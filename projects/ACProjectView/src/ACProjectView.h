@@ -42,7 +42,9 @@ namespace acprojectview {
             void onStartIdleFade();
             void onFinishIdleFade();            
             void onFinishProjectView();
-
+            void onShowProjectViewPopup();
+            void onHideProjectViewPopup();
+            
             //idle
             void initIdle();
             void updateKenBurnsShader(float theProgress);

@@ -166,7 +166,14 @@ namespace acprojectview {
     void ACProjectView::onStartProjectView() {        
         _myProjectViewer->setVisible(true);
     }    
-    void ACProjectView::onFinishLoadProjectView() {   
+    void ACProjectView::onShowProjectViewPopup() {        
+        _myProjectViewer->showPopup(true);
+    }    
+    void ACProjectView::onHideProjectViewPopup() {        
+        _myProjectViewer->showPopup(false);
+    }    
+    
+    void ACProjectView::onFinishLoadProjectView() {           
         _myProjectViewer->loadInitialSet();
         _myProjectMenu->setVisible(false);
     }
@@ -185,6 +192,11 @@ namespace acprojectview {
             animation::DelayAnimationPtr myInitiateProjectViewAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(40));
             myInitiateProjectViewAnim->setOnPlay(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onInitiateProjectView)));
+            mySeqAnimation->add(myInitiateProjectViewAnim);
+        } else {
+            animation::DelayAnimationPtr myInitiateProjectViewAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(5));
+            myInitiateProjectViewAnim->setOnPlay(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onHideProjectViewPopup)));
             mySeqAnimation->add(myInitiateProjectViewAnim);
         }
   
@@ -211,6 +223,9 @@ namespace acprojectview {
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myParallel->setOnPlay(masl::CallbackPtr(
                          new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartProjectView)));
+        myParallel->setOnFinish(masl::CallbackPtr(
+                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onShowProjectViewPopup)));
+
             
         myParallel->add(myZoomAnimationX);
         myParallel->add(myZoomAnimationY);

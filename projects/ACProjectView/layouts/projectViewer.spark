@@ -13,9 +13,11 @@
     </Transform>        
     
 
-    <Rectangle name="popup" x="0" y="0" z="10" width="600" height="80" color="[0.0,0.0,0.0]" alpha="0.5" sensible="true">
+    <Transform name="popup" x="0" y="0" z="10">
+        <Rectangle name="popup_bg" width="600" height="80" color="[0.0,0.0,0.0]" alpha="0.5" sensible="true"/>
         <Text name="title" x="20" y="0" z="2" color="[0.333,0.77,0.91,1]" fontsize="16" font="/acswissmed.ttf" sensible="false"/>
         <Text name="subtitle" x="20" y="0" z="3" color="[1,1,1,1]" fontsize="14" font="/acswissmed.ttf" sensible="false"/>        
-        <Text name="description" x="20" y="0" z="4" color="[1,1,1,1]" lineHeight="18" fontsize="13" font="/acswissmed.ttf" sensible="false"/>
-    </Rectangle>
+        <Text name="description" x="20" y="0" z="4" color="[1,1,1,1]" lineHeight="18" maxHeight="250" fontsize="13" font="/acswissmed.ttf" sensible="false"/>
+        <Image name="pfeil" x="200" y="0" z="5" src="/pfeil.png"/>
+    </Transform>        
 </ProjectViewerImpl>
