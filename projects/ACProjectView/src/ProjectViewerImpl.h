@@ -51,8 +51,10 @@ namespace acprojectview {
             spark::ImagePtr _image0;
             spark::ImagePtr _image1;
             spark::ImagePtr _image2;
-            spark::RectanglePtr _myPopup;                
+            spark::TransformPtr _myPopup;                
+            spark::RectanglePtr _myPopupBG;                
             spark::TextPtr _myDescription;
+            spark::ImagePtr _myPopUpPfeil;
             spark::TextPtr _myPopUpTitle;      
             spark::TextPtr _myPopUpSubTitle;
             spark::WindowPtr _myWindowPtr;

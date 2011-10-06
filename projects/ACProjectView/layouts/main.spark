@@ -267,6 +267,17 @@ The monograph published by Gestalten Verlag presents a selection of projects fro
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="2" y-gap="2" visible="true">
         
             
+            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/artcom_teaser_thumb.png">
+                <ContentImage src="/large_images/blub.png"/>
+                <ContentImage src="/large_images/dieter.png"/>
+	            <ContentImage src="/large_images/flur.png"/>
+	            <ContentImage src="/large_images/gl.png"/>
+	            <ContentImage src="/large_images/gruppe.png"/>
+	            <ContentImage src="/large_images/hand.png"/>
+	            <ContentImage src="/large_images/interns.png"/>
+	            <ContentImage src="/large_images/js.png"/>
+	            <ContentImage src="/large_images/probebau.png"/>
+            </Project>
             <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle"  description_I18n="belvedere_text" src="/small_images/belvedere_teaser_thumb_01.png">
                 <ContentImage src="/large_images/belvedere_main_01.png"/>
                 <ContentImage src="/large_images/belvedere_main_02.png"/>
@@ -318,21 +329,7 @@ The monograph published by Gestalten Verlag presents a selection of projects fro
             <Project name="project7" title_I18n="artcom_book_title" subtitle_I18n="artcom_book_subtitle" description_I18n="artcom_book_text" src="/small_images/bookrelease_teaser_thumb.png">
                 <ContentImage src="/large_images/bookrelease_main_01.png"/>
                 <ContentImage src="/large_images/bookrelease_main_02.png"/>
-            </Project>
-            
-            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/artcom_teaser_thumb.png">
-                <ContentImage src="/large_images/blub.png"/>
-                <ContentImage src="/large_images/dieter.png"/>
-	            <ContentImage src="/large_images/flur.png"/>
-	            <ContentImage src="/large_images/gl.png"/>
-	            <ContentImage src="/large_images/gruppe.png"/>
-	            <ContentImage src="/large_images/hand.png"/>
-	            <ContentImage src="/large_images/interns.png"/>
-	            <ContentImage src="/large_images/js.png"/>
-	            <ContentImage src="/large_images/probebau.png"/>
-            </Project>
-
-          
+            </Project>                      
         </ProjectMenu>	
         
         <ProjectViewer name="projectViewer" visible="false" sensible="false" z="100">

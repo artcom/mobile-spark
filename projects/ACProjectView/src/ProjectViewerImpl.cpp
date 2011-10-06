@@ -26,13 +26,18 @@ namespace acprojectview {
         _image0 = boost::static_pointer_cast<Image>(_imageTransform0->getChildByName("image"));
         _image1 = boost::static_pointer_cast<Image>(_imageTransform1->getChildByName("image"));
         _image2 = boost::static_pointer_cast<Image>(_imageTransform2->getChildByName("image"));
-        _myPopup = boost::static_pointer_cast<Rectangle>(getChildByName("popup"));
+        _myPopup = boost::static_pointer_cast<Transform>(getChildByName("popup"));
+        _myPopupBG = boost::static_pointer_cast<Rectangle>(_myPopup->getChildByName("popup_bg"));
+                    
         _myDescription = boost::static_pointer_cast<Text>(_myPopup->getChildByName("description"));
         _myPopUpTitle = boost::static_pointer_cast<Text>(_myPopup->getChildByName("title"));
         _myPopUpSubTitle = boost::static_pointer_cast<Text>(_myPopup->getChildByName("subtitle"));
+        _myPopUpPfeil = boost::static_pointer_cast<Image>(_myPopup->getChildByName("pfeil"));
+
         _myDescription->setText("");   
         _myPopUpTitle->setText("");   
         _myPopUpSubTitle->setText("");   
+        
     }
 
     ProjectViewerImpl::~ProjectViewerImpl() {}
@@ -47,7 +52,7 @@ namespace acprojectview {
 
     
         spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
-        _myPopup->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB);
+        _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB);
             
         _myWindowPtr = boost::static_pointer_cast<Window>(getRoot());                
         _myWidth = _myWindowPtr->getSize()[0];
@@ -60,7 +65,7 @@ namespace acprojectview {
         _myPopUpTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         _myPopUpSubTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         
-        _myPopup->getShape()->setDimensions(_myWidth, 0);
+        _myPopupBG->getShape()->setDimensions(_myWidth, 0);
             
     }
 
@@ -87,13 +92,17 @@ namespace acprojectview {
          _myPopUpSubTitle->setI18nId(mySubTitle_I18n);
          int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
          int myTextHeight = _myDescription->getTextSize()[1];
-         _myPopup->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
+         _myPopupBG->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
          
          _myPopUpSubTitle->setY(myTextHeight+10);
          _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
+
+         _myPopUpPfeil->setX(_myWidth - _myPopUpPfeil->getTextureSize()[0] - 20);
+         _myPopUpPfeil->setY(myTextHeight+10);
          
          _myPopup->setY(-myTextHeight);
-         _myPopup->setAlpha(0.5);
+         _myPopupBG->setAlpha(0.5);
+         //_myPopUpPfeil->setAlpha(1.0);
          
          _imageTransform0->setX(0);
          _imageTransform1->setX(_myWidth);
@@ -108,6 +117,7 @@ namespace acprojectview {
          _imageTransform0->setVisible(true);
          _imageTransform1->setVisible(false);
          _imageTransform2->setVisible(false);
+         
          setVisible(false);
     }
     
@@ -180,7 +190,7 @@ namespace acprojectview {
                         new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), 0, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopup, &Widget::setAlpha, _myPopup->getAlpha(), 0.9, 300,
+                        new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.9, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 myAnimation->add(myPosYAnimation);
                 myAnimation->add(myAlphaAnimation);
@@ -191,7 +201,7 @@ namespace acprojectview {
                         new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), -myTextHeight, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopup, &Widget::setAlpha, _myPopup->getAlpha(), 0.5, 300,
+                        new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.5, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 myAnimation->add(myPosYAnimation);
                 myAnimation->add(myAlphaAnimation);

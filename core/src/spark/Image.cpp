@@ -77,7 +77,6 @@ namespace spark {
             _myHeight = _myHeight == -1 ? myMaterial->getTexture()->height_ : _myHeight;
             //dimensions have to be set after image size is known
             getShape()->setDimensions(_myWidth, _myHeight);
-            AC_PRINT << "********* Image::build -> " << data_ << " size: " << _myWidth << "/" << _myHeight;
         }
     }
 }
