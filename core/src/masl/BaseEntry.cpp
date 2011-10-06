@@ -33,7 +33,9 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_log(JNIEnv * en
     jclass enumClass = env->FindClass("com/artcom/mobile/Base/Severity");
     jmethodID getOrdinalMethod = env->GetMethodID(enumClass, "ordinal", "()I");
     int value = env->CallIntMethod(theSeverity, getOrdinalMethod);
-    masl::Logger::get().log(/*myTime,*/ (masl::Severity)value, myFilename, theLineNumber, myMessage);
+    if (masl::Logger::get().ifLog((masl::Severity)value, myFilename, theLineNumber)) {
+        masl::Logger::get().log(/*myTime,*/ (masl::Severity)value, myFilename, theLineNumber, myMessage);
+    }
     env->ReleaseStringUTFChars(theFilename, myFilename);
     env->ReleaseStringUTFChars(theMessage, myMessage);
 
