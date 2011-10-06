@@ -38,7 +38,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 namespace acprojectview {
    
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
-        firstIdleImageVisible_(true), swappedIdleImages_(true) {
+        firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false) {
         _myChooseLayoutFlag = true;
     }
 
@@ -138,6 +138,10 @@ namespace acprojectview {
     }
 
     void ACProjectView::onProjectItem(EventPtr theEvent) {
+        if (_myAnimatingFlag) {
+            return;
+        }
+        _myAnimatingFlag = true;
         AC_PRINT << "clicked on project: "<< theEvent->getTarget()->getParent()->getName();
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
         _myProjectViewer->setVisible(true);
@@ -176,8 +180,10 @@ namespace acprojectview {
     void ACProjectView::onFinishLoadProjectView() {           
         _myProjectViewer->loadInitialSet();
         _myProjectMenu->setVisible(false);
+        _myAnimatingFlag = false;
     }
     void ACProjectView::onFinishProjectView() {        
+        _myAnimatingFlag = false;        
         _myProjectViewer->setVisible(false);
     }
     void ACProjectView::onReturn2ProjectView() {        
@@ -238,9 +244,13 @@ namespace acprojectview {
         if (showProject) {                       
             mySeqAnimation->setOnFinish(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
+            mySeqAnimation->setOnCancel(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
         } else {
             _myProjectViewer->initiateClose();
             mySeqAnimation->setOnFinish(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
+            mySeqAnimation->setOnCancel(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
             mySeqAnimation->setOnPlay(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onReturn2ProjectView)));

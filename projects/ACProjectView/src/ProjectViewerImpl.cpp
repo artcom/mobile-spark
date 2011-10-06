@@ -87,7 +87,7 @@ namespace acprojectview {
          _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
 
          _myPopUpPfeil->setX(_myWidth - _myPopUpPfeil->getTextureSize()[0] - 20);
-         _myPopUpPfeil->setY(myTextHeight+10);
+         _myPopUpPfeil->setY((50 + _myPopUpPfeil->getTextureSize()[1] ) /2.0  + myTextHeight - _myPopUpPfeil->getTextureSize()[1]);
         _myPopup->setY(-myTextHeight);
             
         _myIsAnimating = false;     
