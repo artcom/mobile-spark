@@ -71,10 +71,10 @@ namespace spark {
         setShape(ShapeFactory::get().createRectangle(true, _myWidth >= 0 ? _myWidth : 0, _myHeight >= 0 ? _myHeight : 0, 
                                                      vertexShader_, fragmentShader_, myHandles, data_,_myTextureScaleX,_myTextureScaleY));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
+        _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
         if (_myWidth == -1 || _myHeight == -1) {
             _myWidth = _myWidth == -1 ? myMaterial->getTexture()->width_ : _myWidth;
             _myHeight = _myHeight == -1 ? myMaterial->getTexture()->height_ : _myHeight;
-            _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
             //dimensions have to be set after image size is known
             getShape()->setDimensions(_myWidth, _myHeight);
         }
