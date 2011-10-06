@@ -75,14 +75,14 @@
 - (void)handleDoubleTap:(UITapGestureRecognizer *)theRecognizer {
     CGPoint location = [theRecognizer locationInView:_myView];
     NSLog(@"Double-Touch on  :   %f, %f", location.x, location.y);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='doubleTap' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
+    [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='doubletap' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
 }
 
 
 - (void)handleLongPressed:(UIGestureRecognizer *)theRecognizer {
     CGPoint location = [theRecognizer locationInView:_myView];
     NSLog(@"long Pressed  :   %f, %f", location.x, location.y);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='longPressed' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
+    [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='longpress' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
 }
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)theRecognizer {
