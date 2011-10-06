@@ -44,12 +44,10 @@ namespace acprojectview {
         ProjectMenuPtr myPtr = boost::static_pointer_cast<ProjectMenu>(shared_from_this());
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
-        int dx = _myWidth / _myHorizontalTiling;
-        int dy = _myHeight / _myVerticalTiling;
+        float dx = (_myWidth - (_myHorizontalTiling-1)*_myGapY) / _myHorizontalTiling;
+        float dy = (_myHeight - (_myVerticalTiling-1)*_myGapX) / _myVerticalTiling;
         const VectorOfComponentPtr & myChildren = myPtr->getChildrenByType(ProjectImpl::SPARK_TYPE);
         _myNumberOfSlides = (myChildren.size()-1)/(_myHorizontalTiling * _myVerticalTiling);
-        AC_PRINT << "---------------------------------- number of slides" << _myNumberOfSlides;
-        AC_PRINT << "---------------------------------- number of childs" << myChildren.size();
         boost::timer::timer myTimer;
 
         for (size_t i = 0; i < myChildren.size(); i++) {
@@ -58,10 +56,10 @@ namespace acprojectview {
             TextPtr titlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("title"));
             TextPtr subtitlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("subtitle"));
             // set Position:
-            myProject->setX(_myGapX/2 + dx * (i/_myVerticalTiling)); 
-            myProject->setY(_myGapY/2 + dy * (i % _myVerticalTiling));
+            myProject->setX((i/_myVerticalTiling)*(_myGapX + dx)); 
+            myProject->setY((i % _myVerticalTiling)*(_myGapY + dy));
         }
-        AC_PRINT << "******************************************************* " << myTimer.elapsed();
+         AC_PRINT << "******************************************************* " << myTimer.elapsed();
     }
     
     int ProjectMenu::getPreviewWidth() {
@@ -95,7 +93,8 @@ namespace acprojectview {
         _myIsAnimating = true;      
         _myCurrentSlide += dir;
         WidgetPropertyAnimationPtr changeAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myPtr, &Widget::setX, myPtr->getX(), myPtr->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(myPtr, &Widget::setX, myPtr->getX(), 
+                    myPtr->getX()-(_myWidth+_myGapX*(_myHorizontalTiling-1))*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
          
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());

@@ -38,11 +38,8 @@ namespace acprojectview {
         int myHorizontalTiling = myMenu->getHorizontalTiling();
         int myVerticalTiling = myMenu->getVerticalTiling();
 
-        int dx = myWidth / myHorizontalTiling;
-        int dy = myHeight / myVerticalTiling;
-        int iconWidth = dx - myMenu->getGapX();
-        int iconHeight = dy - myMenu->getGapY();
-        
+        int iconWidth = (myWidth-(myHorizontalTiling-1)*myMenu->getGapX()) / myHorizontalTiling;
+        int iconHeight = (myHeight-(myVerticalTiling-1)*myMenu->getGapY()) / myVerticalTiling;
         if (src.size() >0 ) {
             imageComponent_->setSrc(src);
         }
@@ -58,29 +55,7 @@ namespace acprojectview {
         }
         
         boost::static_pointer_cast<Rectangle>(getChildByName("textplane"))->setSize(vector2(iconWidth, 50));
-        
-
-        //titleComponent_->setY(subtitleComponent_->getTextSize()[1]);
-        
-        //imageComponent_->setSize(iconWidth, iconHeight);
-
-        
-        
-        //int textSpace = titleComponent_->getTextSize()[1] + subtitleComponent_->getTextSize()[1];
-        // set Position:
-        //setX(myMenu->getGapX()/2 + dx * (i/myVerticalTiling)); 
-        //setY(myMenu->getGapY()/2 + dy * (i % myVerticalTiling));
-        // scale preview image:
-        
-//        float scaleX = iconWidth / (imageComponent_->getTextureSize()[0]);
-//        //float scaleY = (iconHeight - textSpace) / (imageComponent_->getTextureSize()[1]);
-//        float scaleY = iconHeight / (imageComponent_->getTextureSize()[1]);
-//        float scale = std::max(scaleX, scaleY);
-//        imageComponent_->setScaleX(scale);
-//        imageComponent_->setScaleY(scale);
-        imageComponent_->fitToSize(iconWidth, iconHeight);
-         // center image: 
-        //imageComponent_->setX( 0);//(iconWidth - scale * imageComponent_->getTextureSize()[0])/2.0);
+         imageComponent_->fitToSize(iconWidth, iconHeight);
         imageComponent_->setY( 0);//(textSpace + iconHeight - scale * imageComponent_->getTextureSize()[1])/2.0);
         
     }    
