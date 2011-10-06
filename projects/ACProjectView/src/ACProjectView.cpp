@@ -260,16 +260,14 @@ namespace acprojectview {
         _myIdleScreenImagePtrs.push_back(boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage_1", true)));
         _myIdleScreenImagePtrs.push_back(boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage_2", true)));
         vector2 myWindowDimensions = _mySparkWindow->getSize();
-        _myIdleScreenImagePtrs.at(0)->getNode()->attributes["width"] = as_string(myWindowDimensions[0]);
-        _myIdleScreenImagePtrs.at(0)->getNode()->attributes["height"] = as_string(myWindowDimensions[1]);
-        _myIdleScreenImagePtrs[1]->getNode()->attributes["width"] = as_string(myWindowDimensions[0]);
-        _myIdleScreenImagePtrs[1]->getNode()->attributes["height"] = as_string(myWindowDimensions[1]);
+        _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
+        _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
         _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
         animation::AnimationManager::get().play(_myIdleDelay);
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
-        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
+        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/ACProjectView/textures/large_images/", idleFiles_, "");
     }
 
     void ACProjectView::updateKenBurnsShader(float theProgress) {
@@ -290,7 +288,7 @@ namespace acprojectview {
 
     void ACProjectView::onKenBurnsImageFadeStart() {
         AC_PRINT << "_____________________________________ fade start, load to " << firstIdleImageVisible_?1:0;
-        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/large_images/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(true);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setAlpha(0.0f);
         animation::ParallelAnimationPtr myFadeAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());

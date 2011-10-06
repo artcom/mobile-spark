@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ProjectImpl>
     <Image name="image" src="" y="0" />
-    <Text name="title" x="10" y="20" z="2" color="[0.333,0.77,0.91,1]" fontsize="16" font="/acswissmed.ttf"/>
-    <Text name="subtitle" x="10" y="20" z="2" color="[1,1,1,1]" fontsize="14" font="/acswissmed.ttf"/>
+    <Text name="title" x="20" y="28" z="2" color="[0.333,0.77,0.91,1]" fontsize="16" font="/acswissmed.ttf"/>
+    <Text name="subtitle" x="20" y="10" z="3" color="[1,1,1,1]" fontsize="14" font="/acswissmed.ttf"/>
 </ProjectImpl>

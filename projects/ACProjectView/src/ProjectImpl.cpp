@@ -2,7 +2,6 @@
 #include "ProjectMenu.h"
 #include <spark/Window.h>
 #include <spark/SparkComponentFactory.h>
-#include <mar/shape.h>
 
 
 using namespace spark;
@@ -57,7 +56,7 @@ namespace acprojectview {
             subtitleComponent_->setI18nId(mySubTitle_I18n);
         }
         
-        titleComponent_->setY(subtitleComponent_->getTextSize()[1]);
+        //titleComponent_->setY(subtitleComponent_->getTextSize()[1]);
         
         //imageComponent_->setSize(iconWidth, iconHeight);
 
