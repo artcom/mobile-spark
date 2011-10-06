@@ -74,6 +74,7 @@ namespace acprojectview {
         
             unsigned int _myWidth;
             unsigned int _myHeight;
+            bool _myAnimatingFlag;
 
             const static unsigned int _myAnimationTime = 400;
     };
