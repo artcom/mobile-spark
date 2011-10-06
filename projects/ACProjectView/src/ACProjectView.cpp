@@ -305,6 +305,9 @@ namespace acprojectview {
     void ACProjectView::onKenBurnsImageFadeStart() {
         AC_TRACE << "_____________________________________ fade start, load to " << firstIdleImageVisible_?1:0;
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/large_images/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        vector2 myWindowDimensions = _mySparkWindow->getSize();
+        _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
+        _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(true);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setAlpha(0.0f);
         animation::ParallelAnimationPtr myFadeAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
