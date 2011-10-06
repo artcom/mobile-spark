@@ -29,8 +29,10 @@ namespace spark {
     void 
     ShapeWidget::prerender(MatrixStack& theCurrentMatrixStack) {
         Widget::prerender(theCurrentMatrixStack);
-        if (customShaderValues_.size() > 0 && updateShaderValuesCallback_) {
-            (*updateShaderValuesCallback_)();
+        if (isVisible() && customShaderValues_.size() > 0) {
+            if (updateShaderValuesCallback_) {
+                (*updateShaderValuesCallback_)();
+            }
             _myShape->updateHandles(customShaderValues_);
         }
     }
