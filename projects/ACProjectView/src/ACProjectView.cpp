@@ -38,7 +38,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 namespace acprojectview {
    
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
-        firstIdleImageVisible_(true), swappedIdleImages_(true) {
+        firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false) {
         _myChooseLayoutFlag = true;
     }
 
@@ -138,6 +138,10 @@ namespace acprojectview {
     }
 
     void ACProjectView::onProjectItem(EventPtr theEvent) {
+        if (_myAnimatingFlag) {
+            return;
+        }
+        _myAnimatingFlag = true;
         AC_PRINT << "clicked on project: "<< theEvent->getTarget()->getParent()->getName();
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
         _myProjectViewer->setVisible(true);
@@ -176,8 +180,10 @@ namespace acprojectview {
     void ACProjectView::onFinishLoadProjectView() {           
         _myProjectViewer->loadInitialSet();
         _myProjectMenu->setVisible(false);
+        _myAnimatingFlag = false;
     }
     void ACProjectView::onFinishProjectView() {        
+        _myAnimatingFlag = false;        
         _myProjectViewer->setVisible(false);
     }
     void ACProjectView::onReturn2ProjectView() {        
@@ -238,9 +244,13 @@ namespace acprojectview {
         if (showProject) {                       
             mySeqAnimation->setOnFinish(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
+            mySeqAnimation->setOnCancel(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
         } else {
             _myProjectViewer->initiateClose();
             mySeqAnimation->setOnFinish(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
+            mySeqAnimation->setOnCancel(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
             mySeqAnimation->setOnPlay(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onReturn2ProjectView)));
@@ -269,6 +279,14 @@ namespace acprojectview {
     }
 
     //////////////////////////////////////////////////////idle
+    const unsigned int ACProjectView::_myIdleTime = 20000;
+    const unsigned int ACProjectView::_myKenBurnsDuration = 32000;
+    const unsigned int ACProjectView::_myKenBurnsFadeDuration = 4000;
+    const float ACProjectView::d = _myKenBurnsDuration + _myKenBurnsFadeDuration;
+    const float ACProjectView::rd = d/_myKenBurnsDuration;
+    const float ACProjectView::lt = _myKenBurnsFadeDuration/(2.0f*_myKenBurnsDuration);
+    const float ACProjectView::ut = 1.0f - lt;
+
     void ACProjectView::initIdle() {
         AC_DEBUG << "init idle";
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
@@ -291,24 +309,19 @@ namespace acprojectview {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         std::map<std::string, float>::iterator it1 = _myIdleScreenImagePtrs[0]->customShaderValues_.find("a_time");
         std::map<std::string, float>::iterator it2 = _myIdleScreenImagePtrs[1]->customShaderValues_.find("a_time");
-        float d = _myKenBurnsDuration + _myKenBurnsFadeDuration;
-        float rd = d/_myKenBurnsDuration;
-        float lt = _myKenBurnsFadeDuration/(2.0f*_myKenBurnsDuration);
-        float ut = 1.0f - lt;
-        float p = theProgress;
         float t[2];
-        AC_TRACE << "rd " << rd << " ts " << lt << "|" << ut;
+        //AC_TRACE << "rd " << rd << " ts " << lt << "|" << ut;
         if (theProgress < lt) {
             swappedIdleImages_ = false;
-            t[firstIdleImageVisible_?0:1] = (lt + p)/rd;
-            t[firstIdleImageVisible_?1:0] = (1 + lt + p)/rd;
+            t[firstIdleImageVisible_?0:1] = (lt + theProgress)/rd;
+            t[firstIdleImageVisible_?1:0] = (1 + lt + theProgress)/rd;
             AC_TRACE << "<lt" << t[0] << "|" << t[1];
         } else if (theProgress > ut && swappedIdleImages_) {
-            t[firstIdleImageVisible_?0:1] = (p - ut)/rd;
-            t[firstIdleImageVisible_?1:0] = (1 + p - ut)/rd;
+            t[firstIdleImageVisible_?0:1] = (theProgress - ut)/rd;
+            t[firstIdleImageVisible_?1:0] = (1 + theProgress - ut)/rd;
             AC_TRACE << ">ut" << t[0] << "|" << t[1];
         } else {
-            t[firstIdleImageVisible_?0:1] = (lt + p)/rd;
+            t[firstIdleImageVisible_?0:1] = (lt + theProgress)/rd;
         }
         if (it1 != _myIdleScreenImagePtrs[0]->customShaderValues_.end()) {
             it1->second = t[0];
@@ -316,7 +329,7 @@ namespace acprojectview {
         if (it2 != _myIdleScreenImagePtrs[1]->customShaderValues_.end()) {
             it2->second = t[1];
         }
-        AC_TRACE << "updateKenBurnsShader " << theProgress <<  "time " << t[0] << " " << t[2] << "first " << firstIdleImageVisible_;
+        //AC_TRACE << "updateKenBurnsShader " << theProgress <<  "time " << t[0] << " " << t[2] << "first " << firstIdleImageVisible_;
     }
 
     void ACProjectView::onKenBurnsImageFadeStart() {
