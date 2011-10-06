@@ -38,7 +38,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 namespace acprojectview {
    
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
-        firstIdleImageVisible_(true) {
+        firstIdleImageVisible_(true), swappedIdleImages_(true) {
         _myChooseLayoutFlag = true;
     }
 
@@ -274,20 +274,36 @@ namespace acprojectview {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         std::map<std::string, float>::iterator it1 = _myIdleScreenImagePtrs[0]->customShaderValues_.find("a_time");
         std::map<std::string, float>::iterator it2 = _myIdleScreenImagePtrs[1]->customShaderValues_.find("a_time");
-        float halfFadeProgress = _myKenBurnsFadeDuration/(2.0f*_myKenBurnsDuration);
-        float beforeFadeProgress = (_myKenBurnsDuration - _myKenBurnsFadeDuration/2.0f)/_myKenBurnsDuration;
-        float time = (theProgress < halfFadeProgress ? 1.0 - halfFadeProgress + theProgress : theProgress - halfFadeProgress);
+        float d = _myKenBurnsDuration + _myKenBurnsFadeDuration;
+        float rd = d/_myKenBurnsDuration;
+        float lt = _myKenBurnsFadeDuration/(2.0f*_myKenBurnsDuration);
+        float ut = 1.0f - lt;
+        float p = theProgress;
+        float t[2];
+        AC_TRACE << "rd " << rd << " ts " << lt << "|" << ut;
+        if (theProgress < lt) {
+            swappedIdleImages_ = false;
+            t[firstIdleImageVisible_?0:1] = (lt + p)/rd;
+            t[firstIdleImageVisible_?1:0] = (1 + lt + p)/rd;
+            AC_TRACE << "<lt" << t[0] << "|" << t[1];
+        } else if (theProgress > ut && swappedIdleImages_) {
+            t[firstIdleImageVisible_?0:1] = (p - ut)/rd;
+            t[firstIdleImageVisible_?1:0] = (1 + p - ut)/rd;
+            AC_TRACE << ">ut" << t[0] << "|" << t[1];
+        } else {
+            t[firstIdleImageVisible_?0:1] = (lt + p)/rd;
+        }
         if (it1 != _myIdleScreenImagePtrs[0]->customShaderValues_.end()) {
-            it1->second = time;
+            it1->second = t[0];
         }
         if (it2 != _myIdleScreenImagePtrs[1]->customShaderValues_.end()) {
-            it2->second = time;
+            it2->second = t[1];
         }
-        //AC_PRINT << "updateKenBurnsShader " << theProgress <<  "time " << time << " thresholds " << halfFadeProgress << "  " << beforeFadeProgress << "first " << firstIdleImageVisible_;
+        AC_TRACE << "updateKenBurnsShader " << theProgress <<  "time " << t[0] << " " << t[2] << "first " << firstIdleImageVisible_;
     }
 
     void ACProjectView::onKenBurnsImageFadeStart() {
-        AC_PRINT << "_____________________________________ fade start, load to " << firstIdleImageVisible_?1:0;
+        AC_TRACE << "_____________________________________ fade start, load to " << firstIdleImageVisible_?1:0;
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/large_images/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(true);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setAlpha(0.0f);
@@ -296,6 +312,7 @@ namespace acprojectview {
         myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?0:1], &Widget::setAlpha, 1, 0, _myKenBurnsFadeDuration)));
         animation::AnimationManager::get().play(myFadeAnimation);
         firstIdleImageVisible_ = !firstIdleImageVisible_;
+        swappedIdleImages_ = true;
     }
 
     void ACProjectView::onKenBurnsImageFadeEnd() {
@@ -326,6 +343,7 @@ namespace acprojectview {
         _myIdleScreenImagePtrs[0]->setAlpha(1.0);
         _myIdleScreenImagePtrs[1]->setVisible(false);
         firstIdleImageVisible_ = true;
+        swappedIdleImages_ = false;
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myKenBurnsAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         _myKenBurnsAnimation->add(ACProjectViewPropertyAnimationPtr(new ACProjectViewPropertyAnimation(ptr, &ACProjectView::updateKenBurnsShader, 0.0f, 1.0f, _myKenBurnsDuration)));

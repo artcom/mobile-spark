@@ -51,6 +51,7 @@ namespace acprojectview {
             void onKenBurnsImageFadeEnd();
             void onTouch(spark::EventPtr theEvent);
             bool firstIdleImageVisible_;
+            bool swappedIdleImages_;
             std::vector<std::string> idleFiles_;
             std::vector<spark::ImagePtr> _myIdleScreenImagePtrs;
             animation::DelayAnimationPtr _myIdleDelay;
