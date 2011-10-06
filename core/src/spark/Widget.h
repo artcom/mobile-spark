@@ -58,7 +58,10 @@ namespace spark {
         matrix _myLocalMatrix; //scale, roation and translation of this node
         
     protected:
-        virtual void build() {};
+        virtual void build() {
+            AC_DEBUG << "build widget " << *this;
+            _myDirtyFlag = false;
+        };
         float getActualAlpha() const { return _actualAlpha;};
         float getParentAlpha() const;
         virtual void propagateAlpha();

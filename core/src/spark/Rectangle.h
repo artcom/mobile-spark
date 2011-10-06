@@ -8,7 +8,6 @@ namespace spark {
     public:
         Rectangle(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Rectangle();
-        void setSize(vector2 theSize);
         
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Rectangle::SPARK_TYPE;};

@@ -14,8 +14,6 @@ namespace spark {
         I18nShapeWidget(theApp, theXMLNode) 
     {
         setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
-        _myWidth = _myXMLNode->getAttributeAs<float>("width", -1);
-        _myHeight = _myXMLNode->getAttributeAs<float>("height", -1);
         _myTextureScaleX=1;
         _myTextureScaleY=1;   
     }
@@ -48,7 +46,7 @@ namespace spark {
     } 
     
     void 
-    Image::fitToSize(float theWidth, float theHeight) {
+    Image::fitToSize(const float theWidth, const float theHeight) {
         vector2 textureSize = getTextureSize();
         float scaleX = theWidth / textureSize[0];
         float scaleY = theHeight / textureSize[1];
@@ -68,7 +66,7 @@ namespace spark {
         myHandles.reserve(customShaderValues_.size());
         std::transform(customShaderValues_.begin(), customShaderValues_.end(), std::back_inserter(myHandles),
                        masl::select1st<std::map<std::string, float>::value_type>()) ;
-        setShape(ShapeFactory::get().createRectangle(true, _myWidth >= 0 ? _myWidth : 0, _myHeight >= 0 ? _myHeight : 0, 
+        setShape(ShapeFactory::get().createRectangle(true, _myWidth, _myHeight, 
                                                      vertexShader_, fragmentShader_, myHandles, data_,_myTextureScaleX,_myTextureScaleY));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
