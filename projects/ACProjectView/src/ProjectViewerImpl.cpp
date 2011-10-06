@@ -71,11 +71,26 @@ namespace acprojectview {
     }
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {                
-        boost::timer::timer myTimer;
-        _myPopup->setVisible(false);
+        showPopup(false);            
+        _myCurrentProject = currentProject;
+
+        string myTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
+        string mySubTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
+         _myPopUpTitle->setI18nId(myTitle_I18n);
+         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
+
+         int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
+         int myTextHeight = 250;
+         _myPopupBG->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
+         
+         _myPopUpSubTitle->setY(myTextHeight+10);
+         _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
+
+         _myPopUpPfeil->setX(_myWidth - _myPopUpPfeil->getTextureSize()[0] - 20);
+         _myPopUpPfeil->setY(myTextHeight+10);
+        _myPopup->setY(-myTextHeight);
             
         _myIsAnimating = false;     
-        _myCurrentProject = currentProject;
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
          _myNumberOfImages = _myContentImages.size();
          if (_myNumberOfImages < 1) {
@@ -85,26 +100,7 @@ namespace acprojectview {
              return;
          }
          _imageTransform0->setVisible(true);
-         
-         // bind i18n item to description widget
-        /*_myDescription->setI18nId(myDescription_I18n);         
-         _myPopUpTitle->setI18nId(myTitle_I18n);
-         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
-         int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
-         int myTextHeight = _myDescription->getTextSize()[1];
-         _myPopupBG->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
-         
-         _myPopUpSubTitle->setY(myTextHeight+10);
-         _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
-
-         _myPopUpPfeil->setX(_myWidth - _myPopUpPfeil->getTextureSize()[0] - 20);
-         _myPopUpPfeil->setY(myTextHeight+10);
-         _myPopup->setY(-myTextHeight);
-         _myPopupBG->setAlpha(0.5);*/
-AC_PRINT << "*******************************************************(1) showProject" << myTimer.elapsed();             
-         
-         //_myPopUpPfeil->setAlpha(1.0);
-         
+                  
          _imageTransform0->setX(0);
          _imageTransform1->setX(_myWidth);
          _imageTransform2->setX(-_myWidth);
@@ -119,7 +115,6 @@ AC_PRINT << "*******************************************************(1) showProj
          _imageTransform2->setVisible(false);
          
          setVisible(false);
-        AC_PRINT << "******************************************************* showProject" << myTimer.elapsed();             
     }
     
     void ProjectViewerImpl::autoScaleImage(ImagePtr theImage) {
@@ -168,27 +163,27 @@ AC_PRINT << "*******************************************************(1) showProj
             _imageTransform2->setVisible(true);
         }
     }
-    void ProjectViewerImpl::loadInitialSet() {        
-        _myPopup->setVisible(true);        
-
-        string myDescription_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("description_I18n","");
-        string myTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
-        string mySubTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
+    void ProjectViewerImpl::showPopup(bool theFlag) {       
+        /*int myPopUpPos = 250;
+        int myPopUpHeight = 250;
         
-        _myDescription->setI18nId(myDescription_I18n);         
-         _myPopUpTitle->setI18nId(myTitle_I18n);
-         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
-         int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
-         int myTextHeight = _myDescription->getTextSize()[1];
-         _myPopupBG->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
-         
-         _myPopUpSubTitle->setY(myTextHeight+10);
-         _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
+        if (theFlag) {
+            myPopUpPos = -250;
+            myPopUpHeight = 300;
+        } else {
+            myPopUpPos = 0;
+            myPopUpHeight = 50;
+        }        
+        _myPopup->setY(myPopUpPos);
+        _myPopupBG->setSize(vector2(_myWidth, myPopUpHeight));
+        _myDescription->setVisible(theFlag);*/
+        _myPopup->setVisible(theFlag);        
+    }
+    void ProjectViewerImpl::loadInitialSet() {        
 
-         _myPopUpPfeil->setX(_myWidth - _myPopUpPfeil->getTextureSize()[0] - 20);
-         _myPopUpPfeil->setY(myTextHeight+10);
-         _myPopup->setY(-myTextHeight);
-         _myPopupBG->setAlpha(0.5);
+        string myDescription_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("description_I18n","");        
+        _myDescription->setI18nId(myDescription_I18n);         
+        
         
          if (_myNumberOfImages > 0) {
              _image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[1%_myNumberOfImages])->getSrc());
