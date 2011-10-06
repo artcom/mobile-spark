@@ -1,6 +1,7 @@
 #include "ProjectImpl.h"
 #include "ProjectMenu.h"
 #include <spark/Window.h>
+#include <spark/Rectangle.h>
 #include <spark/SparkComponentFactory.h>
 #include <mar/shape.h>
 
@@ -32,7 +33,7 @@ namespace acprojectview {
         imageComponent_ = boost::static_pointer_cast<Image>(getChildByName("image"));
         titleComponent_ = boost::static_pointer_cast<Text>(getChildByName("title"));
         subtitleComponent_ = boost::static_pointer_cast<Text>(getChildByName("subtitle"));
-            
+                
         unsigned myWidth = myWindowPtr->getSize()[0];
         unsigned myHeight = myWindowPtr->getSize()[1];
         ProjectMenuPtr myMenu =  boost::static_pointer_cast<ProjectMenu>(getParent());
@@ -53,10 +54,14 @@ namespace acprojectview {
            titleComponent_->setI18nId(myTitle_I18n);           
         }
         if (mySubTitle_I18n.size() > 0) {
+            
             subtitleComponent_->setMaxWidth(iconWidth-subtitleComponent_->getX()*2);
             subtitleComponent_->setI18nId(mySubTitle_I18n);
         }
         
+        boost::static_pointer_cast<Rectangle>(getChildByName("textplane"))->setSize(vector2(iconWidth, 50));
+        
+
         //titleComponent_->setY(subtitleComponent_->getTextSize()[1]);
         
         //imageComponent_->setSize(iconWidth, iconHeight);
