@@ -50,7 +50,7 @@ namespace ios {
             //Defeault Font
             font = CTFontCreateWithName(CFSTR("Helvetica"), theFontSize, NULL);
         }
-
+        font = CTFontCreateWithName(CFSTR("Helvetica"), theFontSize, NULL);
         //add Font as an attribute to the string
         CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFStringGetLength((CFStringRef)string)), kCTFontAttributeName, font);
         CFRelease(font);
