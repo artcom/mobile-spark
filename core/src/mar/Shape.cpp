@@ -97,7 +97,7 @@ namespace mar {
                                    const std::string & theVertexShader, const std::string & theFragmentShader, 
                                    const std::vector<std::string> & theCustomHandles,
                                    const std::string & theTextureSrc, const float theXYCoordScaleX, float const theXYCoordScaleY)
-        : Shape(theTextureFlag), width_(theWidth), height_(theHeight) {
+        : Shape(theTextureFlag), width_(std::max(theWidth, 0.f)), height_(std::max(theHeight, 0.f)) {
         _myXYCoordScaleX=theXYCoordScaleX; 
         _myXYCoordScaleY=theXYCoordScaleY;
 

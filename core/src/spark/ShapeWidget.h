@@ -22,6 +22,8 @@ namespace spark {
             inline mar::ShapePtr getShape() const {return _myShape;};
             void setShape( mar::ShapePtr theShapePtr);
             float getWorldZ() const;
+            void setSize(const float theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
+            void setSize(const vector2 & theSize);
 
             std::map<std::string, float> customShaderValues_;
             masl::CallbackPtr updateShaderValuesCallback_;
@@ -30,6 +32,8 @@ namespace spark {
             virtual void propagateAlpha();
             std::string vertexShader_;
             std::string fragmentShader_;
+            float _myWidth;
+            float _myHeight;
         private:
             mar::ShapePtr _myShape;
     };
