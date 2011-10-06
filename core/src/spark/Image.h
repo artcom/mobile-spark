@@ -14,8 +14,7 @@ namespace spark {
         virtual void realize();
         const std::string & getSrc() const {return data_;} 
         void setSrc(const std::string & theSrc);
-        void setSize(float theWidth, float theHeight) {_myWidth=theWidth; _myHeight=theHeight; realize();};
-        void fitToSize(float theWidth, float theHeight);
+        void fitToSize(const float theWidth, const float theHeight);
         const vector2 & getTextureSize();
 
         static const char * const SPARK_TYPE;
@@ -23,9 +22,7 @@ namespace spark {
     protected:
         virtual void build();
     private:
-        vector2 _myTextureSize;   
-        float _myWidth;
-        float _myHeight;
+        vector2 _myTextureSize;
         float _myTextureScaleX;
         float _myTextureScaleY;
     };
