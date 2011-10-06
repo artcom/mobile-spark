@@ -9,6 +9,7 @@
 #include <animation/Easing.h>
 
 
+#include <boost/progress.hpp>
 
 using namespace spark;
 using namespace std;
@@ -69,10 +70,9 @@ namespace acprojectview {
             
     }
 
-    void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {
-        string myDescription_I18n = currentProject->getNode()->getAttributeAs<std::string>("description_I18n","");
-        string myTitle_I18n = currentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
-        string mySubTitle_I18n = currentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
+    void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {                
+        boost::timer::timer myTimer;
+        _myPopup->setVisible(false);
             
         _myIsAnimating = false;     
         _myCurrentProject = currentProject;
@@ -87,9 +87,9 @@ namespace acprojectview {
          _imageTransform0->setVisible(true);
          
          // bind i18n item to description widget
-        _myDescription->setI18nId(myDescription_I18n);         
+        /*_myDescription->setI18nId(myDescription_I18n);         
          _myPopUpTitle->setI18nId(myTitle_I18n);
-         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);
+         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
          int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
          int myTextHeight = _myDescription->getTextSize()[1];
          _myPopupBG->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
@@ -99,9 +99,10 @@ namespace acprojectview {
 
          _myPopUpPfeil->setX(_myWidth - _myPopUpPfeil->getTextureSize()[0] - 20);
          _myPopUpPfeil->setY(myTextHeight+10);
-         
          _myPopup->setY(-myTextHeight);
-         _myPopupBG->setAlpha(0.5);
+         _myPopupBG->setAlpha(0.5);*/
+AC_PRINT << "*******************************************************(1) showProject" << myTimer.elapsed();             
+         
          //_myPopUpPfeil->setAlpha(1.0);
          
          _imageTransform0->setX(0);
@@ -110,16 +111,15 @@ namespace acprojectview {
          _myCurrentImage = 0;
          _myDisplayedImage = 0;
          _myCurrentSlot=0;
-
-         _image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());
-            
+        
+         _image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());            
          autoScaleImage(_image0);
-         
          _imageTransform0->setVisible(true);
          _imageTransform1->setVisible(false);
          _imageTransform2->setVisible(false);
          
          setVisible(false);
+        AC_PRINT << "******************************************************* showProject" << myTimer.elapsed();             
     }
     
     void ProjectViewerImpl::autoScaleImage(ImagePtr theImage) {
@@ -168,7 +168,28 @@ namespace acprojectview {
             _imageTransform2->setVisible(true);
         }
     }
-    void ProjectViewerImpl::loadInitialSet() {
+    void ProjectViewerImpl::loadInitialSet() {        
+        _myPopup->setVisible(true);        
+
+        string myDescription_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("description_I18n","");
+        string myTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
+        string mySubTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
+        
+        _myDescription->setI18nId(myDescription_I18n);         
+         _myPopUpTitle->setI18nId(myTitle_I18n);
+         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
+         int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
+         int myTextHeight = _myDescription->getTextSize()[1];
+         _myPopupBG->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
+         
+         _myPopUpSubTitle->setY(myTextHeight+10);
+         _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
+
+         _myPopUpPfeil->setX(_myWidth - _myPopUpPfeil->getTextureSize()[0] - 20);
+         _myPopUpPfeil->setY(myTextHeight+10);
+         _myPopup->setY(-myTextHeight);
+         _myPopupBG->setAlpha(0.5);
+        
          if (_myNumberOfImages > 0) {
              _image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[1%_myNumberOfImages])->getSrc());
              autoScaleImage(_image1);

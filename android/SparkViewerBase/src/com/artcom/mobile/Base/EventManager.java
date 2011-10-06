@@ -130,13 +130,13 @@ public class EventManager {
         //-------------------------------------------------------------------------
         private void doubleTapHandler() {
             AC_Log.debug(" ########### double tap: " + startX + ", " + startY);
-            String myEvent = "<TouchEvent type='doubleTap' x='" + startX + "' y='" + startY + "'/>";
+            String myEvent = "<TouchEvent type='doubletap' x='" + startX + "' y='" + startY + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
         private void longPressedHandler() {
             AC_Log.debug(" ########### longPressed: " + startX + ", " + startY);
-            String myEvent = "<TouchEvent type='longPressed' x='" + startX + "' y='" + startY + "'/>";
+            String myEvent = "<TouchEvent type='longpress' x='" + startX + "' y='" + startY + "'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
