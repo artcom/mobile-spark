@@ -249,7 +249,7 @@ The monograph published by Gestalten Verlag presents a selection of projects fro
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>            
         <Rectangle name="background2" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
-        <Transform name="startscreen" z="11">
+        <Transform name="startscreen" z="211">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
             <Rectangle name="left_bar" x="0" y="0" z="12" width="180" height="75" color="[1,1,1]" alpha="1.0"/>
             <Rectangle name="right_bar" x="0" y="0" z="12" width="260" height="75" color="[1,1,1]" alpha="1.0"/>
@@ -258,8 +258,8 @@ The monograph published by Gestalten Verlag presents a selection of projects fro
             <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
             <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
             <Transform name="idlescreen" z="10">
-                <Image name="idleimage_1" z="0" alpha="1.0" src="/large_images/kinetische_skulptur_03.png" fragment_shader="/kenburnseffect.glsl" custom_shader_handles="a_time"/>
-                <Image name="idleimage_2" z="1" alpha="0.0" visible="false" src="/large_images/level_green_03.png" fragment_shader="/kenburnseffect.glsl" custom_shader_handles="a_time"/>
+                <Image name="idleimage_1" z="0" alpha="1.0" src="/large_images/kinetische_skulptur_03.png" fragment_shader="/kenburnseffect.glsl" custom_shader_handles="a_time a_mode"/>
+                <Image name="idleimage_2" z="1" alpha="0.0" visible="false" src="/large_images/level_green_03.png" fragment_shader="/kenburnseffect.glsl" custom_shader_handles="a_time a_mode"/>
             </Transform>
         </Transform>        
 
@@ -267,6 +267,17 @@ The monograph published by Gestalten Verlag presents a selection of projects fro
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="2" y-gap="2" visible="true">
         
             
+            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/artcom_teaser_thumb.png">
+                <ContentImage src="/large_images/blub.png"/>
+                <ContentImage src="/large_images/dieter.png"/>
+	            <ContentImage src="/large_images/flur.png"/>
+	            <ContentImage src="/large_images/gl.png"/>
+	            <ContentImage src="/large_images/gruppe.png"/>
+	            <ContentImage src="/large_images/hand.png"/>
+	            <ContentImage src="/large_images/interns.png"/>
+	            <ContentImage src="/large_images/js.png"/>
+	            <ContentImage src="/large_images/probebau.png"/>
+            </Project>
             <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle"  description_I18n="belvedere_text" src="/small_images/belvedere_teaser_thumb_01.png">
                 <ContentImage src="/large_images/belvedere_main_01.png"/>
                 <ContentImage src="/large_images/belvedere_main_02.png"/>
@@ -318,21 +329,7 @@ The monograph published by Gestalten Verlag presents a selection of projects fro
             <Project name="project7" title_I18n="artcom_book_title" subtitle_I18n="artcom_book_subtitle" description_I18n="artcom_book_text" src="/small_images/bookrelease_teaser_thumb.png">
                 <ContentImage src="/large_images/bookrelease_main_01.png"/>
                 <ContentImage src="/large_images/bookrelease_main_02.png"/>
-            </Project>
-            
-            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/artcom_teaser_thumb.png">
-                <ContentImage src="/large_images/blub.png"/>
-                <ContentImage src="/large_images/dieter.png"/>
-	            <ContentImage src="/large_images/flur.png"/>
-	            <ContentImage src="/large_images/gl.png"/>
-	            <ContentImage src="/large_images/gruppe.png"/>
-	            <ContentImage src="/large_images/hand.png"/>
-	            <ContentImage src="/large_images/interns.png"/>
-	            <ContentImage src="/large_images/js.png"/>
-	            <ContentImage src="/large_images/probebau.png"/>
-            </Project>
-
-          
+            </Project>                      
         </ProjectMenu>	
         
         <ProjectViewer name="projectViewer" visible="false" sensible="false" z="100">

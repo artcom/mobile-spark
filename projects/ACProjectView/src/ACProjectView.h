@@ -42,7 +42,9 @@ namespace acprojectview {
             void onStartIdleFade();
             void onFinishIdleFade();            
             void onFinishProjectView();
-
+            void onShowProjectViewPopup();
+            void onHideProjectViewPopup();
+            
             //idle
             void initIdle();
             void updateKenBurnsShader(float theProgress);
@@ -68,7 +70,7 @@ namespace acprojectview {
 
             const static unsigned int _myAnimationTime = 400;
             const static unsigned int _myIdleTime = 50000;
-            const static unsigned int _myKenBurnsDuration = 12000;
+            const static unsigned int _myKenBurnsDuration = 32000;
             const static unsigned int _myKenBurnsFadeDuration = 4000;
     };
 
