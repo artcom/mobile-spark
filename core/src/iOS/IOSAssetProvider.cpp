@@ -2,11 +2,13 @@
 #include <masl/file_functions.h>
 #include <mar/png_functions.h>
 
+
 namespace ios
 {
     IOSAssetProvider::IOSAssetProvider(const std::string & theAssetFolderPath)
-    : AssetProvider(), _myAssetFolderPath(theAssetFolderPath), assetPath_(theAssetFolderPath)
+    : AssetProvider(), _myAssetFolderPath(theAssetFolderPath)
     {
+        assetPath_=theAssetFolderPath;
     }
 
     IOSAssetProvider::~IOSAssetProvider()
