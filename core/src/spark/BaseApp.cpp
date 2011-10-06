@@ -83,8 +83,11 @@ namespace spark {
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
+            
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
+        _mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
+            
         spark::EventCallbackPtr myOnPauseCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onPause));
         _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
     }
