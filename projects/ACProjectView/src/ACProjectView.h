@@ -67,7 +67,7 @@ namespace acprojectview {
             unsigned int _myHeight;
 
             const static unsigned int _myAnimationTime = 400;
-            const static unsigned int _myIdleTime = 50000;
+            const static unsigned int _myIdleTime = 20000;
             const static unsigned int _myKenBurnsDuration = 32000;
             const static unsigned int _myKenBurnsFadeDuration = 4000;
     };
