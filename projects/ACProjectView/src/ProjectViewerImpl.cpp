@@ -132,19 +132,18 @@ namespace acprojectview {
             
             float myWidthScale = float(myWindowWidth) / myNewWidth;
             float myHeightScale = float(myWindowHeight) / myNewHeight;
-
             if (myWidthScale > myHeightScale) {
                 myNewWidth *= myHeightScale;
                 myNewHeight *= myHeightScale;
             } else {
                 myNewWidth *= myWidthScale;
                 myNewHeight *= myWidthScale;                
-            }                                        
+            }         
         }
-        theImage->setScaleX(float(myNewWidth)/myImageWidth);
-        theImage->setScaleY(float(myNewHeight)/myImageHeight);
+        
         theImage->setX(float(myWindowWidth - myNewWidth) / 2.0);
         theImage->setY(float(myWindowHeight - myNewHeight) / 2.0);
+        theImage->setSize(myNewWidth, myNewHeight);
     }
     
     void ProjectViewerImpl::initiateClose() {
