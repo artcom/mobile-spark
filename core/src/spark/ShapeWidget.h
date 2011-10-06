@@ -20,7 +20,6 @@ namespace spark {
                                         const matrix & theProjectionMatrix) const;
 
             inline mar::ShapePtr getShape() const {return _myShape;};
-            void setShape( mar::ShapePtr theShapePtr);
             float getWorldZ() const;
             void setSize(const float theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
             void setSize(const vector2 & theSize);
@@ -29,11 +28,10 @@ namespace spark {
             masl::CallbackPtr updateShaderValuesCallback_;
 
         protected:
+            void setShape( mar::ShapePtr theShapePtr);
             virtual void propagateAlpha();
             std::string vertexShader_;
             std::string fragmentShader_;
-            float _myWidth;
-            float _myHeight;
         private:
             mar::ShapePtr _myShape;
     };

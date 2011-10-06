@@ -66,15 +66,12 @@ namespace spark {
         myHandles.reserve(customShaderValues_.size());
         std::transform(customShaderValues_.begin(), customShaderValues_.end(), std::back_inserter(myHandles),
                        masl::select1st<std::map<std::string, float>::value_type>()) ;
-        setShape(ShapeFactory::get().createRectangle(true, _myWidth, _myHeight, 
+        setShape(ShapeFactory::get().createRectangle(true, 1, 1, 
                                                      vertexShader_, fragmentShader_, myHandles, data_,_myTextureScaleX,_myTextureScaleY));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
-        if (_myWidth == -1 || _myHeight == -1) {
-            _myWidth = _myWidth == -1 ? myMaterial->getTexture()->width_ : _myWidth;
-            _myHeight = _myHeight == -1 ? myMaterial->getTexture()->height_ : _myHeight;
-            //dimensions have to be set after image size is known
-            getShape()->setDimensions(_myWidth, _myHeight);
-        }
+        float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
+        float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);
+        setSize(myWidth, myHeight);
     }
 }
