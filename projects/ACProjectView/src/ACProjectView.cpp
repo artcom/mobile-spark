@@ -15,6 +15,7 @@
 
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
+#include <animation/PropertyAnimation.h>
 #include <animation/SequenceAnimation.h>
 #include <animation/Easing.h>
 
@@ -36,7 +37,8 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace acprojectview {
    
-    ACProjectView::ACProjectView():BaseApp("ACProjectView"), idleLastTime_(0.0f), idleStartTime_(0.0f) {
+    ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
+        firstIdleImageVisible_(true) {
         _myChooseLayoutFlag = true;
     }
 
@@ -252,34 +254,55 @@ namespace acprojectview {
     }
 
     //////////////////////////////////////////////////////idle
-    void ACProjectView::updateKenBurnsShader() {
-        std::map<std::string, float>::iterator it = _myIdleScreenImagePtr->customShaderValues_.find("a_time");
-        if (it != _myIdleScreenImagePtr->customShaderValues_.end()) {
-            float time = (animation::AnimationManager::get().getTime() % _myKenBurnsDuration)/(float)_myKenBurnsDuration;
-            time = time < idleStartTime_ ? time + (1.0 - idleStartTime_) : time - idleStartTime_;
-            it->second = time;
-            //AC_PRINT << "------|" << time << "  " << idleLastTime_;
-            if (time < idleLastTime_) {
-                _myIdleScreenImagePtr->setSrc("/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
-            }
-            idleLastTime_ = time;
-        }
-    }
-
     void ACProjectView::initIdle() {
         AC_DEBUG << "init idle";
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        _myIdleScreenImagePtr =  boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage", true));
+        _myIdleScreenImagePtrs.push_back(boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage_1", true)));
+        _myIdleScreenImagePtrs.push_back(boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage_2", true)));
         vector2 myWindowDimensions = _mySparkWindow->getSize();
-        _myIdleScreenImagePtr->getNode()->attributes["width"] = as_string(myWindowDimensions[0]);
-        _myIdleScreenImagePtr->getNode()->attributes["height"] = as_string(myWindowDimensions[1]);
+        _myIdleScreenImagePtrs.at(0)->getNode()->attributes["width"] = as_string(myWindowDimensions[0]);
+        _myIdleScreenImagePtrs.at(0)->getNode()->attributes["height"] = as_string(myWindowDimensions[1]);
+        _myIdleScreenImagePtrs[1]->getNode()->attributes["width"] = as_string(myWindowDimensions[0]);
+        _myIdleScreenImagePtrs[1]->getNode()->attributes["height"] = as_string(myWindowDimensions[1]);
         _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
         _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
         animation::AnimationManager::get().play(_myIdleDelay);
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
-        _myIdleScreenImagePtr->updateShaderValuesCallback_ = masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::updateKenBurnsShader));
         masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
+    }
+
+    void ACProjectView::updateKenBurnsShader(float theProgress) {
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        std::map<std::string, float>::iterator it1 = _myIdleScreenImagePtrs[0]->customShaderValues_.find("a_time");
+        std::map<std::string, float>::iterator it2 = _myIdleScreenImagePtrs[1]->customShaderValues_.find("a_time");
+        float halfFadeProgress = _myKenBurnsFadeDuration/(2.0f*_myKenBurnsDuration);
+        float beforeFadeProgress = (_myKenBurnsDuration - _myKenBurnsFadeDuration/2.0f)/_myKenBurnsDuration;
+        float time = (theProgress < halfFadeProgress ? 1.0 - halfFadeProgress + theProgress : theProgress - halfFadeProgress);
+        if (it1 != _myIdleScreenImagePtrs[0]->customShaderValues_.end()) {
+            it1->second = time;
+        }
+        if (it2 != _myIdleScreenImagePtrs[1]->customShaderValues_.end()) {
+            it2->second = time;
+        }
+        //AC_PRINT << "updateKenBurnsShader " << theProgress <<  "time " << time << " thresholds " << halfFadeProgress << "  " << beforeFadeProgress << "first " << firstIdleImageVisible_;
+    }
+
+    void ACProjectView::onKenBurnsImageFadeStart() {
+        AC_PRINT << "_____________________________________ fade start, load to " << firstIdleImageVisible_?1:0;
+        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(true);
+        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setAlpha(0.0f);
+        animation::ParallelAnimationPtr myFadeAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?1:0], &Widget::setAlpha, 0, 1, _myKenBurnsFadeDuration)));
+        myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?0:1], &Widget::setAlpha, 1, 0, _myKenBurnsFadeDuration)));
+        animation::AnimationManager::get().play(myFadeAnimation);
+        firstIdleImageVisible_ = !firstIdleImageVisible_;
+    }
+
+    void ACProjectView::onKenBurnsImageFadeEnd() {
+        AC_PRINT << "_________________________________ fade finished";
+        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(false);
     }
 
     void ACProjectView::onTouch(spark::EventPtr theEvent) {
@@ -290,6 +313,10 @@ namespace acprojectview {
             AC_DEBUG << "on touch restart idle delay";
             animation::AnimationManager::get().play(_myIdleDelay);
         }
+        if (_myKenBurnsAnimation) {
+            _myKenBurnsAnimation->cancel();
+            _myKenBurnsAnimation = animation::ParallelAnimationPtr();
+        }
     }
 
     void ACProjectView::onIdle() {
@@ -297,7 +324,25 @@ namespace acprojectview {
         _myStartScreenPtr->setVisible(true);
         _myStartScreenPtr->setSensible(true);
         _myStartScreenPtr->setAlpha(1.0);
-        idleStartTime_ = (animation::AnimationManager::get().getTime() % _myKenBurnsDuration)/(float)_myKenBurnsDuration;
+        _myIdleScreenImagePtrs[0]->setVisible(true);
+        _myIdleScreenImagePtrs[0]->setAlpha(1.0);
+        _myIdleScreenImagePtrs[1]->setVisible(false);
+        firstIdleImageVisible_ = true;
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        _myKenBurnsAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+        _myKenBurnsAnimation->add(ACProjectViewPropertyAnimationPtr(new ACProjectViewPropertyAnimation(ptr, &ACProjectView::updateKenBurnsShader, 0.0f, 1.0f, _myKenBurnsDuration)));
+        animation::SequenceAnimationPtr myFadeSequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
+        animation::DelayAnimationPtr myFadeDelay0 = animation::DelayAnimationPtr(new animation::DelayAnimation(_myKenBurnsFadeDuration/2.0f));
+        animation::DelayAnimationPtr myFadeDelay1 = animation::DelayAnimationPtr(new animation::DelayAnimation(_myKenBurnsDuration - _myKenBurnsFadeDuration));
+        animation::DelayAnimationPtr myFadeDelay2 = animation::DelayAnimationPtr(new animation::DelayAnimation(_myKenBurnsFadeDuration/2.0f));
+        myFadeDelay2->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onKenBurnsImageFadeStart)));
+        myFadeDelay0->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onKenBurnsImageFadeEnd)));
+        myFadeSequence->add(myFadeDelay0);
+        myFadeSequence->add(myFadeDelay1);
+        myFadeSequence->add(myFadeDelay2);
+        _myKenBurnsAnimation->add(myFadeSequence);
+        _myKenBurnsAnimation->setLoop(true);
+        animation::AnimationManager::get().play(_myKenBurnsAnimation);
     }
 }
 

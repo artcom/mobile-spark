@@ -45,34 +45,41 @@ namespace acprojectview {
 
             //idle
             void initIdle();
-            void updateKenBurnsShader();
+            void updateKenBurnsShader(float theProgress);
             void onIdle();
+            void onKenBurnsImageFadeStart();
+            void onKenBurnsImageFadeEnd();
             void onTouch(spark::EventPtr theEvent);
-            float idleLastTime_;
-            float idleStartTime_;
+            bool firstIdleImageVisible_;
             std::vector<std::string> idleFiles_;
-
+            std::vector<spark::ImagePtr> _myIdleScreenImagePtrs;
+            animation::DelayAnimationPtr _myIdleDelay;
+            animation::ParallelAnimationPtr _myKenBurnsAnimation;
             
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 
             ProjectMenuPtr _myProjectMenu;
             spark::ContainerPtr _myProjectItems;  
             spark::TransformPtr _myStartScreenPtr;
-
-            spark::ImagePtr _myIdleScreenImagePtr;
-            animation::DelayAnimationPtr _myIdleDelay;
-            animation::ParallelAnimationPtr _myKenBurnsAnimation;
         
             unsigned int _myWidth;
             unsigned int _myHeight;
 
             const static unsigned int _myAnimationTime = 400;
-            const static unsigned int _myIdleTime = 50000;
-            const static unsigned int _myKenBurnsDuration = 100000;
+            const static unsigned int _myIdleTime = 5000;
+            const static unsigned int _myKenBurnsDuration = 8000;
+            const static unsigned int _myKenBurnsFadeDuration = 4000;
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
     typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr> ACProjectViewEventCB;
+
+    //animations
+    typedef void (ACProjectView::* ACProjectViewPropertySetterFunction)(float);
+    typedef void (ACProjectView::* ACProjectViewMemberFunction)();
+    typedef animation::PropertyAnimation<ACProjectViewPtr, ACProjectViewPropertySetterFunction> ACProjectViewPropertyAnimation;
+    typedef masl::Ptr<ACProjectViewPropertyAnimation>  ACProjectViewPropertyAnimationPtr;
+
 };
 
 #endif 
