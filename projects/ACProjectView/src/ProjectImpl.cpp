@@ -57,7 +57,7 @@ namespace acprojectview {
             subtitleComponent_->setI18nId(mySubTitle_I18n);
         }
         
-        titleComponent_->setY(subtitleComponent_->getTextSize()[1]);
+        //titleComponent_->setY(subtitleComponent_->getTextSize()[1]);
         
         //imageComponent_->setSize(iconWidth, iconHeight);
 
