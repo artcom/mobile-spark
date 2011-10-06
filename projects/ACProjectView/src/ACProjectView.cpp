@@ -258,9 +258,8 @@ namespace acprojectview {
             float time = (animation::AnimationManager::get().getTime() % _myKenBurnsDuration)/(float)_myKenBurnsDuration;
             time = time < idleStartTime_ ? time + (1.0 - idleStartTime_) : time - idleStartTime_;
             it->second = time;
-            //AC_PRINT << "------|" << time << "  " << idleLastTime_;
             if (time < idleLastTime_) {
-                _myIdleScreenImagePtr->setSrc("/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+                _myIdleScreenImagePtr->setSrc("/large_images/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
             }
             idleLastTime_ = time;
         }
@@ -271,15 +270,14 @@ namespace acprojectview {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myIdleScreenImagePtr =  boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage", true));
         vector2 myWindowDimensions = _mySparkWindow->getSize();
-        _myIdleScreenImagePtr->getNode()->attributes["width"] = as_string(myWindowDimensions[0]);
-        _myIdleScreenImagePtr->getNode()->attributes["height"] = as_string(myWindowDimensions[1]);
+        _myIdleScreenImagePtr->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
         _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
         animation::AnimationManager::get().play(_myIdleDelay);
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _myIdleScreenImagePtr->updateShaderValuesCallback_ = masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::updateKenBurnsShader));
-        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
+        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/ACProjectView/textures/large_images/", idleFiles_, "");
     }
 
     void ACProjectView::onTouch(spark::EventPtr theEvent) {
