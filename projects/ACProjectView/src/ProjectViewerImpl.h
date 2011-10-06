@@ -34,6 +34,7 @@ namespace acprojectview {
             void loadInitialSet();
             void initiateClose();
             bool isPopUpOpen();
+            void showPopup(bool theFlag);
        private:
             unsigned int _myCurrentImage;
             unsigned int _myCurrentSlot;

@@ -42,7 +42,9 @@ namespace acprojectview {
             void onStartIdleFade();
             void onFinishIdleFade();            
             void onFinishProjectView();
-
+            void onShowProjectViewPopup();
+            void onHideProjectViewPopup();
+            
             //idle
             void initIdle();
             void updateKenBurnsShader(float theProgress);
@@ -56,7 +58,14 @@ namespace acprojectview {
             std::vector<spark::ImagePtr> _myIdleScreenImagePtrs;
             animation::DelayAnimationPtr _myIdleDelay;
             animation::ParallelAnimationPtr _myKenBurnsAnimation;
-            
+            const static unsigned int _myIdleTime;
+            const static unsigned int _myKenBurnsDuration;
+            const static unsigned int _myKenBurnsFadeDuration;
+            const static float d;
+            const static float rd;
+            const static float lt;
+            const static float ut;
+
             ProjectImplPtr _myCurrentProject; 
             ProjectViewerImplPtr _myProjectViewer; 
             ProjectMenuPtr _myProjectMenu;
@@ -67,9 +76,6 @@ namespace acprojectview {
             unsigned int _myHeight;
 
             const static unsigned int _myAnimationTime = 400;
-            const static unsigned int _myIdleTime = 50000;
-            const static unsigned int _myKenBurnsDuration = 32000;
-            const static unsigned int _myKenBurnsFadeDuration = 4000;
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
