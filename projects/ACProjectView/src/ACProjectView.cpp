@@ -277,7 +277,7 @@ namespace acprojectview {
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _myIdleScreenImagePtr->updateShaderValuesCallback_ = masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::updateKenBurnsShader));
-        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/ACProjectView/textures/large_images/", idleFiles_, "");
+        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
     }
 
     void ACProjectView::onTouch(spark::EventPtr theEvent) {

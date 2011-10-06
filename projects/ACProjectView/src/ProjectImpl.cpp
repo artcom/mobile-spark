@@ -3,8 +3,6 @@
 #include <spark/Window.h>
 #include <spark/Rectangle.h>
 #include <spark/SparkComponentFactory.h>
-#include <mar/shape.h>
-
 
 using namespace spark;
 
