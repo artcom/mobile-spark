@@ -328,7 +328,7 @@ The monograph published by Gestalten Verlag presents a selection of projects fro
           
         </ProjectMenu>	
         
-        <ProjectViewer name="projectViewer" visible="false">
+        <ProjectViewer name="projectViewer" visible="false" sensible="false" z="100">
         </ProjectViewer>
     </World>        
 </Window>

@@ -100,7 +100,8 @@ namespace acprojectview {
          _imageTransform2->setX(-_myWidth);
          _myCurrentImage = 0;
          _myDisplayedImage = 0;
-         
+         _myCurrentSlot=0;
+
          _image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());
             
          autoScaleImage(_image0);
@@ -214,6 +215,7 @@ namespace acprojectview {
         _imageTransform1->setVisible(true);
         _imageTransform2->setVisible(true);
         _myDirection =dir;
+        _myCurrentSlot = (_myCurrentSlot + dir+3) %3;
         WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(_imageTransform0, &Widget::setX, _imageTransform0->getX(), _imageTransform0->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
@@ -243,13 +245,13 @@ namespace acprojectview {
     }
     
     void ProjectViewerImpl::onLoadNextImages() {
-        if ((_myCurrentImage-_myDirection+3)%3 == 0) {
+        if ((_myCurrentSlot + _myDirection+3)%3 == 0) {
             _image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
             autoScaleImage(_image0);
-        } else if ((_myCurrentImage-_myDirection+3)%3 == 1) {
+        } else if ((_myCurrentSlot + _myDirection+3)%3 == 1) {
             _image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
             autoScaleImage(_image1);
-        } else if ((_myCurrentImage-_myDirection+3)%3 == 2) {
+        } else if ((_myCurrentSlot + _myDirection+3)%3 == 2) {
             _image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[(_myCurrentImage+_myDirection*2+_myNumberOfImages) %_myNumberOfImages])->getSrc());
             autoScaleImage(_image2);
         }
@@ -258,13 +260,12 @@ namespace acprojectview {
         
     }
     void ProjectViewerImpl::onAnimationFinished() {
-        if ((_myCurrentImage-_myDirection+3)%3 == 0) {
-            _imageTransform0->setX((_imageTransform0->getX() + _myWidth*_myDirection) * -1);
-        } else if ((_myCurrentImage-_myDirection+3)%3 == 1) {
-            _imageTransform1->setX((_imageTransform1->getX() + _myWidth*_myDirection) * -1);
-        } else if ((_myCurrentImage-_myDirection+3)%3 == 2) {
-            _imageTransform2->setX((_imageTransform2->getX() + _myWidth*_myDirection) * -1);
-        }
+        if (_imageTransform0->getX() > _myWidth+1) _imageTransform0->setX(-_myWidth);
+        if (_imageTransform1->getX() > _myWidth+1) _imageTransform1->setX(-_myWidth);
+        if (_imageTransform2->getX() > _myWidth+1) _imageTransform2->setX(-_myWidth);
+        if (_imageTransform0->getX() < -_myWidth-1) _imageTransform0->setX(_myWidth);
+        if (_imageTransform1->getX() < -_myWidth-1) _imageTransform1->setX(_myWidth);
+        if (_imageTransform2->getX() < -_myWidth-1) _imageTransform2->setX(_myWidth);
     }
 
         

@@ -36,6 +36,7 @@ namespace acprojectview {
             bool isPopUpOpen();
        private:
             unsigned int _myCurrentImage;
+            unsigned int _myCurrentSlot;
             unsigned int _myNumberOfImages;
             int _myWidth;
             int _myHeight;
