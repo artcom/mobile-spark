@@ -264,10 +264,10 @@ namespace acprojectview {
         _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
         _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
-        animation::AnimationManager::get().play(_myIdleDelay);
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
+        onIdle();
     }
 
     void ACProjectView::updateKenBurnsShader(float theProgress) {
@@ -335,6 +335,10 @@ namespace acprojectview {
     }
 
     void ACProjectView::onIdle() {
+        if (_myKenBurnsAnimation) {
+            _myKenBurnsAnimation->cancel();
+            _myKenBurnsAnimation = animation::ParallelAnimationPtr();
+        }
         AC_DEBUG << "on Idle";
         _myStartScreenPtr->setVisible(true);
         _myStartScreenPtr->setSensible(true);
@@ -342,8 +346,9 @@ namespace acprojectview {
         _myIdleScreenImagePtrs[0]->setVisible(true);
         _myIdleScreenImagePtrs[0]->setAlpha(1.0);
         _myIdleScreenImagePtrs[1]->setVisible(false);
+        _myIdleScreenImagePtrs[1]->setAlpha(0.0);
         firstIdleImageVisible_ = true;
-        swappedIdleImages_ = false;
+        swappedIdleImages_ = true;
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myKenBurnsAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         _myKenBurnsAnimation->add(ACProjectViewPropertyAnimationPtr(new ACProjectViewPropertyAnimation(ptr, &ACProjectView::updateKenBurnsShader, 0.0f, 1.0f, _myKenBurnsDuration)));
