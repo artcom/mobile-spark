@@ -37,6 +37,21 @@
             <de>Schloss Belvedere Wien, 2005</de>
             <en>Schloss Belvedere Wien, 2005</en>
         </I18nItem>
+        <I18nItem name="belvedere_text">
+            <de>
+            <![CDATA[Im Jahr 2005 beging Österreich den 50. Jahrestag seiner Unabhängigkeit. Das Schloss Belvedere in Wien zeigte aus diesem Anlass eine Ausstellung zu 100 Jahren österreichischer Geschichte. Zentrales Exponat: die Unabhängigkeitserklärung im Original.
+
+Die Ausstellung wurde von drei Parteien gestaltet. Entlang der linken Wandseite inszenierte ein Szenograph historische Objekte, Artefakte und Dokumente. Ein Kurator zeichnete verantwortlich für die rechte Wandseite. Hier wurde österreichische Kunst aus den vergangenen 100 Jahren gezeigt. Den Freiraum zwischen den Wänden – im wörtlichen wie im übertragenen Sinne zwischen Design und Kunst – gestaltete ART+COM.
+
+Im Mittelpunkt der Inszenierung stand eine 250 Meter lange österreichische Fahne. Diese zog sich durch alle Ausstellungsräume und fungierte als „Erzähler“. 17 mediale Installationen, auf der Fahne platziert oder in diese integriert, machten die österreichische Geschichte interaktiv erlebbar.]]>
+            </de>
+            <en>
+            <![CDATA[In 2005, Austria celebrated its 50 years of independence. For this occasion, an exhibition about 100 years of Austrian history was shown in the Belvedere palace in Vienna. At its centre: the original Treaty of Independence.
+
+This exhibition was designed by three parties: an exhibition designer got the left walls of the exhibition space to develop a system for exhibiting objects, artefacts and documents explaining and contextualising the Austrian history. The right wall had been given to an art curator to exhibit 100 years of Austrian art. The space between the walls and between design and art (literally and metaphorically) was given to ART+COM. For this, the Berlin studio designed a 250 meters long Austrian flag. The concept was to use the flag as a narrator to explain and comment on the national history. The flag was extended by weaving 17 media installations into it.]]>
+            </en>
+        </I18nItem>
+        
         <I18nItem name="duality_title">
             <de>DUALITY</de>
             <en>DUALITY</en>
@@ -44,6 +59,26 @@
         <I18nItem name="duality_subtitle">
             <de>Tokio, 2007</de>
             <en>Tokio, 2007</en>
+        </I18nItem>
+        <I18nItem name="duality_text">
+            <de>
+            <![CDATA[Duality ist für einen Neubaukomplex im Stadtzentrum Tokios entwickelt worden. Im Gegensatz zu üblichen „Kunst am Bau“-Projekten war hier die Intention, eine interaktive Installation zu gestalten, die inhaltlich auf ihre Umgebung und physisch auf die Passanten eingeht.
+
+Als Standort für die Arbeit wurde die Schnittstelle zwischen einem Fußgängerweg und einem angrenzenden künstlichen See gewählt. Die Thematik des Wechselspiels zwischen „flüssig” (Wasser) und „fest” (Weg) wurde um die Komponenten „real“ (Wasserwellen) und „virtuell“ (Lichtwellen) erweitert.
+
+Weiß-monochrome LED-Paneele sind auf einer Fläche von 4 x 4 Metern in den Gehweg eingelassen und mit satiniertem Glas abgedeckt. Wägezellen in den Glasscheiben messen die genaue Position und Trittstärke von Schritten und lösen auf der LED-Fläche virtuelle Wasserwellen aus. Stoßen diese Wellen aus Licht an den Rand des Sees, werden sie mittels präzise gesteuerten mechanischen Aktuatoren als reale Wellen ins Wasser fortgeführt.
+
+Die Umgebung reagiert auf die Vorbeigehenden und verändert sich durch sie. Die Installation wird zu einem identitätsstiftenden Moment für den Ort.]]>
+            </de>
+            <en>
+            <![CDATA[Duality was created for a new development site in the center of Tokyo. Compared to the traditional “art in public space sculptures” the goal was to design an interactive installation that responds to its location in terms of the content and physically to the passers by.
+
+The boundary between a walkway and an adjacent artificial pond was chosen as the location for the work. This interface between “liquid” (water) and “solid” (land) was thematically used and augmented by the question of “real” (water ripples) and “virtual” (artificial light waves).
+
+On the walkway, a 4 x 4 meter white monochrome LED plane was installed and covered with a sand-blasted, opalescent glass. The glass tiles are equipped with load cells measuring the exact position and power of each footstep, triggering corresponding virtual waves on the LED plane. When these virtual waves reach the pond’s border, they extend into the water by precisely controlled mechanical actuators.
+
+The perceivable reaction in the environment creates different sense of identification with the surroundings.]]>
+            </en>
         </I18nItem>
         <I18nItem name="jurascope_title">
             <de>Juraskope</de>
@@ -53,6 +88,31 @@
             <de>Museum für Naturkunde, Berlin, 2007</de>
             <en>Museum for nature, Berlin, 2007</en>
         </I18nItem>        
+        <I18nItem name="jurascope_text">
+            <de>
+            <![CDATA[Für die neue Dauerausstellung im Museum für Naturkunde hat ART+COM das timescope weiterentwickelt zu einem Juraskop. Sieben dieser medialen Fernrohre, zwei davon barrierefrei, stellen die Verbindung zwischen dem Besucher bekannten Darstellungen von Dinosauriern im Kino und den Originalexponaten her. An zwei Positionen im Sauriersaal befinden sich die Standpunkte der Geräte, von denen aus alle Tiere gut sichtbar sind.
+
+Blickt der Besucher durch das Juraskop, sieht er zunächst die Skelette im Saal. Er wählt einen Saurier durch Schwenken des Juraskops an und startet so die Animation des Tiers: Nacheinander erscheinen innere Organe, Muskeln und Haut. Das Tier wird in seine natürliche Lebenswelt versetzt und beginnt sich in ihr zu bewegen, zu fressen, zu jagen. Geräusche der Umgebung und des Tieres tragen zum Erlebnis bei.
+
+Die Sequenz dauert ca. 30 Sekunden, dann kehrt der Saurier an seine Ausgangsposition zurück, erstarrt und ist wieder als Skelett im Sauriersaal zu sehen. Der Besucher kann nun einen der anderen Saurier anwählen oder sich zu der zweiten Gruppe von Juraskopen begeben.
+
+Alle sieben im Museum aufgestellten Skelette sind in den Juraskopen animiert zu sehen. Einige Tiere sind einzeln zu sehen, andere im Kontakt mit Artgenossen oder Feinden. So versucht der Elaphrosaurus, einen Dysalotosaurus zu erlegen.
+
+Die Juraskope sind eine gemeinsame Entwicklung von ART+COM und der WALL AG.]]>
+            </de>
+            <en>
+            <![CDATA[For the new permanent exhibition at Berlin’s Museum of Natural History, ART+COM has developed its timescope to a Jurascope. Seven of these media telescopes, two of them barrier-free, connect the visitors’ knowledge of dinosaurs from movies with the original exhibits. The units are located at two positions in the dinosaur hall, where all animals are clearly visible.
+
+When visitors look through a Jurascope, at first they will see the skeletons in the hall. By then turning the Jurascope, they can choose a dinosaur and start the animation: One after the other inner organs, muscles, and skin will appear. The animal is brought to its natural habitat and starts moving, feeding and hunting there. Sounds from the environment and the animal itself contribute to the experience.
+
+The sequence lasts around 30 seconds, then the dinosaur moves back to its former position, freezes and is once more a skeleton in the hall. Visitors may now choose another dinosaur or move to the second group of Jurascopes.
+
+All seven skeletons exhibited in the museum can be seen in animation in the jurascopes. Some of the animals are on their own, others in contact with fellows or enemies. Thus, the Elaphrosaurus tries to hunt down a Dysalotosaurus.
+
+Jurascopes are a joint development of ART+COM and WALL AG.]]>
+            </en>
+        </I18nItem>        
+        
         <I18nItem name="level_green_title">
             <de>Level Green</de>
             <en>Level Green</en>
@@ -60,6 +120,26 @@
         <I18nItem name="level_green_subtitle">
             <de>Autostadt Wolfsburg, 2009</de>
             <en>Autostadt Wolfsburg, 2009</en>
+        </I18nItem>        
+        <I18nItem name="level_green_text">
+            <de>
+            <![CDATA[Nachhaltigkeit – allgegenwärtiges Schlagwort in Diskussionen um Wirtschaft, Umwelt und Gesellschaft und doch ein schwer fassbarer abstrakter Begriff. ART+COM übersetzt das Thema für die Autostadt Wolfsburg in eine Ausstellung, die das komplexe Konzept der Nachhaltigkeit aufschlüsselt und erfahrbar macht, ohne mahnend den Zeigefinger zu heben.
+
+Auf rund 1000 Quadratmetern können sich Besucher in sieben Themenbereichen unter anderem über die Folgen des Klimawandels, zur Bedeutung von Nachhaltigkeit für die Wirtschaft und Gesellschaft, über Mobilitätskonzepte der Zukunft und nachhaltige Entwicklungen bei Volkswagen informieren. Insgesamt 25 mediale Exponate bieten Anknüpfungspunkte sich aktiv mit dem Thema zu beschäftigen und herauszufinden, welche Potentiale für nachhaltiges Handeln jeder Einzelne nutzen kann.
+
+Die Medien fügen sich nahtlos in die von J. MAYER H. entworfene Ausstellungsarchitektur ein. Spezielle Formate widmen sich den unterschiedlichen Aspekten der Nachhaltigkeitsidee: Datenskulpturen veranschaulichen einfach verständlich Zahlen und Fakten, erlauben Vergleiche und stellen Zusammenhänge her. Interaktive Medienwände strukturieren umfangreiche Themen und ermöglichen per Berührung einen spielerischen Informationszugang. Besucher erhalten einen Überblick und können dann selbst entscheiden, wie tief sie in das Thema einsteigen. Interaktive Installationen fordern auf, eigene Lebensgewohnheiten zu überprüfen oder Fragen zur Nachhaltigkeit zu beantworten und stellen so einen persönlichen Bezug zum Thema her.
+
+Die Ausstellung „Level Green – Die Idee der Nachhaltigkeit“ ist täglich von 9:00 bis 18:00 Uhr geöffnet.]]>
+            </de>
+            <en>
+            <![CDATA[Sustainability – though ubiquitous in discussions of economy, ecology and society – remains an elusive, abstract term. ART+COM translated the topic, without a wagging finger, into an exhibition by breaking down the complex concepts of sustainability and transferring them into tangible experiences.
+
+At the Autostadt, Volkswagen's theme park and communications platform in Wolfsburg, visitors can learn about the consequences of climate change, the importance of sustainability for the economy and society, mobility concepts for the future and Volkswagen’s specific approaches towards sustainability. Covering about 1000 square metres, the exhibition space is divided into six themed areas. With a total of 25 media exhibits, various starting points are offered to actively engage with the topic and discover practices that each individual can adopt for sustainable development.
+
+The media integrate seamlessly into the exhibition’s architecture, designed by J. MAYER H. Special formats address the different facets of sustainability: Data sculptures visualise and contextualize facts and figures, making them easily-understandable and allowing for straightforward comparisons. Interactive media walls unravel comprehensive themes and enable playful access to data via touching. After getting an overview, visitors can decide how deep they want to delve into the topic. Interactive installations further invite reflection on one’s own lifestyle and habits and call for answers to questions on sustainability, thus creating a personal connection to the issue.
+
+The exhibition “Level Green – The concept of sustainability” is open daily from 9:00 to 18:00.]]>
+            </en>
         </I18nItem>        
         <I18nItem name="terravision_title">
             <de>Terravision</de>
@@ -69,29 +149,81 @@
             <de>1994</de>
             <en>1994</en>
         </I18nItem>        
-        <I18nItem name="project_1_title">
-            <de>Project Test 1</de>
-            <en>Project Test 1</en>
+        <I18nItem name="terravision_text">
+            <de>
+            <![CDATA[Terravision ist eine virtuelle Abbildung der Erde, die auf Satellitenbildern, Luftaufnahmen, Höhen- und Architekturdaten basiert. Es dient als System zur räumlichen Organisation und für räumlichen Zugang zu Informationen.
+
+Nutzer können sich stufenlos von der Gesamtansicht der Erde bis hin zu hochaufgelösten Abbildungen von Gebäuden und Objekten navigieren. Zusätzlich zu der fotorealistischen Darstellung der Erde bietet das System eine Vielzahl von zuzuschaltenden Informationsebenen und ermöglicht neben der räumlichen auch die zeitliche Navigation. Mit Terravision ist zum ersten Mal die Visualisierung und die vollkommen freie Navigation innerhalb eines unendlich großen Datenraums möglich geworden. Die hierfür notwendigen Daten sind dezentral auf Servern weltweit verteilt.
+
+Als Schnittstellen für die Navigation dienen drei Module: ein großer Globus zur Steuerung des Planeten, eine 3D-Maus, die einen Flug über die virtuelle Erde ermöglicht und ein Touchscreen zur Interaktion mit dargestellten Objekten und Informationsebenen.
+
+Der Zeit weit voraus, ist Terravision sowohl Vorläufer von Google Earth als auch die Verwirklichung der Idee „Earth“ aus Neal Stephensons Roman „Snow Crash“.]]>
+            </de>
+            <en>
+            <![CDATA[Terravision is a networked virtual representation of the earth based on satellite images, aerial shots, altitude data and architectural data. It serves as an environment to organise and access information spatially. Users can navigate seamlessly from overviews of the earth to extremely detailed objects and buildings.
+
+Additionally to the photorealistic representation of the earth, all kinds of spatial information-data are integrated. Even historical aerial shots and architectural data are offered in the system; this allows users to navigate not only spatially but also through time. All data are distributed and networked and are streamed into the system according to the user’s needs.
+
+Terravision was the first system to provide a seamless navigation and visualisation in a massively large spatial data environment. In order to navigate this data, three core components were created as an interface. A large sphere referencing the globe to pilot the planet; a 3D mouse to fly around; and a touch screen to interact with objects on the virtual earth.
+
+Terravision is an isochronous realisation of Neal Stephenson’s literary idea in the novel "Snow Crash" as well as a prequel to Google Earth.]]>
+            </en>
+        </I18nItem>        
+        <I18nItem name="artcom_title">
+            <de>ART+COM</de>
+            <en>ART+COM</en>
         </I18nItem>
-        <I18nItem name="project_1_subtitle">
+        <I18nItem name="artcom_subtitle">
             <de>low resolution square</de>
-            <en>low resolution square</en>
+            <en>designing spaces with New Media</en>
         </I18nItem>        
-        <I18nItem name="project_2_title">
-            <de>Project Test 2</de>
-            <en>Project Test 2</en>
-        </I18nItem>
-        <I18nItem name="project_2_subtitle">
-            <de>medium resolution 393x236</de>
-            <en>medium resolution 393x236</en>
+        <I18nItem name="artcom_text">
+            <de>
+            <![CDATA[Eine interdisziplinäre Gruppe von Designern, Architekten und Künstlern aus dem Umfeld der Hochschule der Künste Berlin und Hackern aus dem ChaosComputerClub sieht bereits Mitte der 1980er voraus, dass die aufkeimenden digitalen Technologien nicht nur ein neues Werkzeug sind, sondern das Potential zum Kommunikationsmedium haben.
+
+Die Gruppe gründet 1988 den ART+COM e.V. mit dem Ziel, das Medium Computer und seine gestalterischen, künstlerischen und technologischen Aspekte praktisch zu erforschen. Um die auch bald folgenden, kommerziell beauftragten Projekte durchzuführen, wird der Verein 1994 in eine GmbH umgewandelt. Seit 1998 ist das Gestaltungsbüro eine nicht börsennotierte AG, getragen von den ehemaligen Vereinsmitgliedern, Mitarbeitern und dem Vorstand.
+
+Von Beginn an hat ART+COM in vorderster Reihe an der Entwicklung dieses neuen Mediums gearbeitet und heute selbstverständliche
+
+Kommunikationsformen, Gestaltungsprinzipien und Technologien vorgedacht und realisiert.  Das Spektrum reicht inhaltlich von gestalterischen Kommunikationsprojekten über künstlerische Arbeiten bis hin zu technologischen Entwicklungen und Erfindungen. Formal erstreckt sich die Bandbreite von interaktiven Installationen bis hin zu medialen Räumen, medial-basierten Szenografien und Architekturen.
+
+Bei allen steht immer die Aussage und der Inhalt im Vordergrund, nie die Technologie. Obwohl in der Zwischenzeit gewachsen und professionalisiert, hat ART+COM heute denselben Anspruch wie vor zwanzig Jahren: Originäre und innovative Projekte zu gestalten und damit die Zukunft der medialen Kommunikation vorauszudenken. ]]>
+            </de>
+            <en>
+            <![CDATA[By the mid-1980s an interdisciplinary group of designers, architects and artists coming from various departments of the Berlin University of the Arts and hackers from the ChaosComputerClub foresaw that the upcoming digital technology was not only a tool, but potentially a (mass) medium. Therefore ART+COM was founded as an non-profit organisation to explore the new mediums applied possibilities in the fields of art, design, science and technology.
+
+In 1994 when ART+COM received commissions of commercial projects the organisation became officially a company with limited liability. Since 1998 the design studio is owned mainly by its employees, board members as well as the former organisation members.
+
+From the very beginning ART+COM has pioneered the development of this medium, and has conceived and realized communication
+
+formats, design principles and technologies that have become pervasive concepts in today’s world. Ranging from artistic installations and design-focused projects to technological innovations and inventions, ART+COM’s work includes different kinds of formats: Autoactive, reactive and interactive objects and installations, media-based environments and architectures.
+
+Although often very complex, the projects are always driven by the content and not by the technology. Despite having grown and professionalised its operations, ART+COM remains dedicated to its original cause from nearly 25 years ago: to design innovative and original projects  to pave the way for the future of media-based communications.]]>
+            </en>
         </I18nItem>        
-        <I18nItem name="project_3_title">
-            <de>Project Test 3</de>
-            <en>Project Test 3</en>
+        <I18nItem name="artcom_book_title">
+            <de>ART+COM-Buch</de>
+            <en>ART+COM-Book</en>
         </I18nItem>
-        <I18nItem name="project_3_subtitle">
-            <de>portrait picture 282x375</de>
-            <en>portrait picture 282x375</en>
+        <I18nItem name="artcom_book_subtitle">
+            <de>Launch am 12. September </de>
+            <en>Launch on September, 12th </en>
+        </I18nItem>        
+        <I18nItem name="artcom_book_text">
+            <de>
+            <![CDATA[Die drei Autoren Joachim Sauter, Dr. Susanne Jaschko und Jussi Ängeslevä stellen „ART+COM – Medien, Räume und Installationen“ am 12. September um 19 Uhr im Berliner Gestalten Space vor. In einem öffentlichen Vortrag führen sie durch das Buch und zeichnen anhand von Schlüsselprojekten auch die Geschichte der Neuen Medien aus der ART+COM-Perspektive nach.
+
+Die vom Bureau Mario Lombardo gestaltete Monografie erscheint im Gestalten Verlag und präsentiert auf 250 Seiten ausgewählte Projekte aus der über 23-jährigen Geschichte ART+COMs. An der Schnittstelle von Gestaltung, Kunst und Technik sind Arbeiten entstanden, die den Weg des Studios markieren und zu ihrer Entstehungszeit wichtige gestalterische Impulse für die Entwicklung der Kommunikation mit Neuen Medien gaben. Neben umfangreichen Bilderstrecken beschreiben Textbeiträge die Arbeitsweise der interdisziplinären Gruppe und erlauben neben Einblicken in die Geschichte auch Ausblicke auf die Zukunft der Neuen Medien im Raum.
+
+„ART+COM – Medien, Räume und Installationen“ erscheint in deutscher und in englischer Sprache.]]>
+            </de>
+            <en>
+            <![CDATA[The authors Joachim Sauter, Dr. Susanne Jaschko and Jussi Ängeslevä will introduce “ART+COM: Media Spaces and Installations“ at the Gestalten Space in Berlin on September, 12th at 7 pm. They will present some of the key projects outlined in the book and explore the history and future of new media from an ART+COM perspective. The event is public.
+
+The monograph published by Gestalten Verlag presents a selection of projects from the 23 year history of ART+COM. Created at the intersection of design, art and technology, these works highlight the milestones in the journey, which provided influential design impulses to the field of communication with new media. Additionally to comprehensive photo spreads, texts characterize the interdisciplinary working methods of the ART+COM-team and give insight into both the past and the future of new media in space.
+
+“ART+COM – Media Spaces and Installations“ is released in both German and  English.]]>
+            </en>
         </I18nItem>        
         
     </I18nContext>
@@ -135,15 +267,24 @@
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="2" y-gap="2" visible="true">
         
             
-            <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle" src="/small_images/belvedere_teaser_thumb_01.png">
-                <ContentImage src="/large_images/duality_teaser_thumb_01.png"/>
+            <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle"  description_I18n="belvedere_text" src="/small_images/belvedere_teaser_thumb_01.png">
+                <ContentImage src="/large_images/belvedere_main_01.png"/>
+                <ContentImage src="/large_images/belvedere_main_02.png"/>
+                <ContentImage src="/large_images/belvedere_main_03.png"/>
+                <ContentImage src="/large_images/belvedere_main_04.png"/>
             </Project>
 
 
-            <Project name="project2" title_I18n="duality_title" subtitle_I18n="duality_subtitle" src="/small_images/duality_teaser_thumb_01.png" >
+            <Project name="project2" title_I18n="duality_title" subtitle_I18n="duality_subtitle" description_I18n="duality_text" src="/small_images/duality_teaser_thumb_01.png" >
+                <ContentImage src="/large_images/duality_main_01.png"/>            
+                <ContentImage src="/large_images/duality_main_02.png"/>            
+                <ContentImage src="/large_images/duality_main_03.png"/>            
+                <ContentImage src="/large_images/duality_main_04.png"/>            
             </Project>
             
-            <Project name="project3" title_I18n="jurascope_title" subtitle_I18n="jurascope_subtitle" src="/small_images/juraskope_teaser_thumb.png">
+            <Project name="project3" title_I18n="jurascope_title" subtitle_I18n="jurascope_subtitle" description_I18n="jurascope_text" src="/small_images/juraskope_teaser_thumb.png">
+                <ContentImage src="/large_images/juraskope_main_02.png"/>
+                <ContentImage src="/large_images/juraskope_main_03.png"/>
             </Project>
 
             <Project name="project4" title_I18n="kinetik_title" subtitle_I18n="kinetik_subtitle" description_I18n="kinetik_text" src="/small_images/kinetik_teaser_thumb.png">
@@ -156,39 +297,35 @@
 	        </Project>
 	        
 
-            <Project name="project5" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" src="/small_images/levelgreen_teaser_thumb.png">
+            <Project name="project5" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" description_I18n="level_green_text" src="/small_images/levelgreen_teaser_thumb.png">
                 <ContentImage src="/large_images/level_green_01.png"/>
                 <ContentImage src="/large_images/level_green_02.png"/>
 	            <ContentImage src="/large_images/level_green_03.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_02.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_03.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_04.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_05.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_06.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_07.png"/>
             </Project>
 
 
-            <Project name="project6" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle"  src="/small_images/terravision_teaser_thumb.png">
+            <Project name="project6" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle" description_I18n="terravision_text" src="/small_images/terravision_teaser_thumb.png">
+	            <ContentImage src="/large_images/terravision_main_01.png"/>
+	            <ContentImage src="/large_images/terravision_main_02.png"/>
             </Project>
 
-            <Project name="project7" title_I18n="project_1_title" subtitle_I18n="project_1_subtitle" src="/small_images/test1.png">
-                <ContentImage src="/large_images/level_green_01.png"/>
-                <ContentImage src="/large_images/level_green_02.png"/>
-	            <ContentImage src="/large_images/level_green_03.png"/>
+            <Project name="project7" title_I18n="artcom_book_title" subtitle_I18n="artcom_book_subtitle" description_I18n="artcom_book_text" src="/small_images/bookrelease_teaser_thumb.png">
+                <ContentImage src="/large_images/bookrelease_main_01.png"/>
+                <ContentImage src="/large_images/bookrelease_main_02.png"/>
             </Project>
             
-            <Project name="project8" title_I18n="project_2_title" subtitle_I18n="project_2_subtitle" src="/small_images/test1.png">
-                <ContentImage src="/large_images/level_green_01.png"/>
-                <ContentImage src="/large_images/level_green_02.png"/>
-	            <ContentImage src="/large_images/level_green_03.png"/>
+            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/bookrelease_teaser_thumb.png">
+                <ContentImage src="/large_images/dirk.png"/>
+                <ContentImage src="/large_images/joachim.png"/>
+	            <ContentImage src="/large_images/andreas.png"/>
             </Project>
 
-            <Project name="project9" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" src="/small_images/levelgreen_teaser_thumb.png">
-                <ContentImage src="/large_images/level_green_01.png"/>
-                <ContentImage src="/large_images/level_green_02.png"/>
-	            <ContentImage src="/large_images/level_green_03.png"/>
-            </Project>
-            
-            <Project name="project10" title_I18n="project_3_title" subtitle_I18n="project_3_subtitle"  src="/small_images/test3.png">
-            </Project>
-
-            <Project name="project11" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle"  src="/small_images/terravision_teaser_thumb.png">
-            </Project>
           
         </ProjectMenu>	
         
