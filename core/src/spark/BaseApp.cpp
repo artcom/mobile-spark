@@ -208,7 +208,7 @@ namespace spark {
 
     void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath ) {
 #ifdef iOS
-        AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath)));
+        AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath, theAppPath)));
 #elif ANDROID
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
 #endif
