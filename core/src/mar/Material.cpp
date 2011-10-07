@@ -121,8 +121,13 @@ namespace mar {
     UnlitTexturedMaterial::~UnlitTexturedMaterial() {
     }
 
+    void UnlitTexturedMaterial::setHandles() {
+        Material::setHandles();
+        textureMatrixHandle = getHandle("u_textureMatrix");
+    }
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
+        glUniformMatrix4fv(textureMatrixHandle, 1, GL_FALSE, _myTexture->matrix_.data());
         glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
     }
 

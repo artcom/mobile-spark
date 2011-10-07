@@ -23,6 +23,13 @@ namespace spark {
     }
 
     bool
+    ReparentComponentVisitor::visit(ComponentPtr theComponent) {
+        AC_DEBUG << *theComponent << " reparent";
+        theComponent->reparent();
+        return true;
+    }
+
+    bool
     RealizeComponentsButWorldAndWindowVisitor::visit(ComponentPtr theComponent) {
         if (theComponent->getType() == World::SPARK_TYPE) {
             return false;

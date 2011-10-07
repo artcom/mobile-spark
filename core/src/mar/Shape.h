@@ -20,7 +20,7 @@ namespace mar {
 
     class Shape {
     public:
-        Shape(const bool theTexturedFlag = false);
+        Shape(const bool theTexturedFlag = false, const float theWidth = 0, const float theHeight = 0);
         virtual ~Shape();
         void render(const matrix & theMvp) const;
         void updateHandles(const std::map<std::string, float> & theShaderValues);
@@ -31,12 +31,16 @@ namespace mar {
         void setBoundingBox(const vector4 & theMin, const vector4 & theMax);
         bool isTransparent();
 
+        float getWidth() const { return width_;};
+        float getHeight() const { return height_;};
         void setAlpha(const float theAlpha);
         std::vector<ElementPtr> elementList;
     protected:
         bool _myTextureFlag;   //XXX does not make any sense, texture is decided at element level
         size_t _myDataPerVertex;
         BoundingBox _myBoundingBox;
+        float width_;
+        float height_;
     private:
     };
     typedef masl::Ptr<Shape> ShapePtr;
@@ -47,18 +51,12 @@ namespace mar {
         RectangleShape(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0,
                        const std::string & theVertexShader = "", const std::string & theFragmentShader = "",
                        const std::vector<std::string> & theCustomHandles = std::vector<std::string>(),
-                       const std::string & theTextureSrc = "", 
-                       const float theXYCoordScaleX=1.0f, const float theXYCoordScaleY=1.0f);
+                       const std::string & theTextureSrc = "");
         virtual ~RectangleShape();
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3);
         virtual void setDimensions(const float theWidth, const float theHeight);
     private:
         void setVertexData();
-        float width_;
-        float height_;
-        float _myXYCoordScaleX;
-        float _myXYCoordScaleY;
-
     };
 
     class NinePatchShape : public Shape {
@@ -70,8 +68,6 @@ namespace mar {
         virtual void setDimensions(const float theWidth, const float theHeight);
     private:
         void setVertexData();
-        float width_;
-        float height_;
         float leftEdge_;
         float topEdge_;
         float rightEdge_;
@@ -94,7 +90,7 @@ namespace mar {
         ShapePtr createRectangle(const bool theTexturedFlag, const float theWidth = 0, const float theHeight = 0, 
                                  const std::string & theVertexShader = "" , const std::string & theFragmentShader = "",
                                  const std::vector<std::string> & theCustomHandles = std::vector<std::string>(),
-                                 const std::string & theTextureSrc = "", const float theXYCoordScaleX=1.0f, const float theXYCoordScaleY=1.0f);
+                                 const std::string & theTextureSrc = "");
         ~ShapeFactory();
         ShapePtr createNinePatch(const std::string & theTextureSrc, const float theLeftEdge = 0,
                 const float theTopEdge = 0, const float theRightEdge = 0, const float theBottomEdge = 0,
