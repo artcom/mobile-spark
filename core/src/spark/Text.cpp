@@ -43,12 +43,20 @@ namespace spark {
         I18nShapeWidget::realize();
     }
     
+    void
+    Text::onPause() {
+        I18nShapeWidget::onPause();
+        if (getShape()) {
+            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+            mar::TexturePtr myTexture = myMaterial->getTexture();
+            myTexture->unbind();
+        }
+    }
     
     void
     Text::onResume() {
         I18nShapeWidget::onResume();
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
-        myMaterial->getTexture()->setTextureId(0); //new texture should be generated
         _myDirtyFlag = true;
     }
 

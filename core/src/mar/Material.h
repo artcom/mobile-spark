@@ -90,7 +90,9 @@ namespace mar {
         TexturePtr _myTexture;
     private:
         virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
+        virtual void setHandles();
         std::string _mySrc;
+        GLuint textureMatrixHandle;
 
     };
     typedef masl::Ptr<UnlitTexturedMaterial> UnlitTexturedMaterialPtr;

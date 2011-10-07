@@ -35,6 +35,10 @@ JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_initBinding(JNI
 }
 
 
+JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onPause(JNIEnv * env, jobject obj) {
+    CALL_NATIVE(spark::AppProvider::get().getApp()->onPause());
+}
+
 JNIEXPORT void JNICALL Java_com_artcom_mobile_Base_NativeBinding_onResume(JNIEnv * env, jobject obj) {
     CALL_NATIVE(spark::AppProvider::get().getApp()->onResume());
 }

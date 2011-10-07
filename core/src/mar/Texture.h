@@ -17,6 +17,7 @@ namespace mar {
             GLuint width_;
             GLuint height_;
             bool transparency_;
+            matrix matrix_;
         private:
             GLuint textureId_;
     };
