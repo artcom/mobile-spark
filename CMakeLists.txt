@@ -11,12 +11,16 @@ add_subdirectory(acmake)
 find_package(AcMake)
 
 
-set(REQUIRED_PACKAGES Boost Cml libXML2)
+set(REQUIRED_PACKAGES Boost Cml libXML2 libCurl)
 foreach(PACKAGE ${REQUIRED_PACKAGES})
     find_package(${PACKAGE})
 endforeach()
 
 add_subdirectory(core)
+
+#add_library(LIBCURL STATIC IMPORTED)
+#set_property(TARGET LIBCURL PROPERTY
+#            IMPORTED_LOCATION ${libCurl_LIBRARY_DIRS})
 
 if(ANDROID)
     # add imported target
