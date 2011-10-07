@@ -53,7 +53,7 @@ public class NativeBinding {
 		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight, int theStartIndex) {
     List<Integer> myResult = new ArrayList<Integer>();
     String myMessage = theMessage.substring(theStartIndex, theMessage.length());
-    AC_Log.print(String.format("Message length: %s", myMessage));
+    //AC_Log.print(String.format("Message length: %s", myMessage));
     TextLayouter myLayouter = new TextLayouter(myMessage, theFontSize, maxWidth, maxHeight);
     // Draw the text
     Paint textPaint = new Paint();
