@@ -15,6 +15,7 @@ namespace acprojectview {
             static const char * const SPARK_TYPE;             
             virtual const char * const & getType() const { return AppLoaderAnim::SPARK_TYPE;};
                 
+            void removeOnFrameListener(spark::EventPtr theEvent);
             void realize();
             void onFrame(spark::EventPtr theEvent);
 
@@ -23,6 +24,7 @@ namespace acprojectview {
             double _myLastTime;
             int _myCurrentImageIndex;
             std::vector<spark::ImagePtr> _myImages;
+            spark::EventCallbackPtr _myFrameCB;
             
     };
     typedef masl::Ptr<AppLoaderAnim>AppLoaderAnimPtr;

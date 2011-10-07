@@ -21,9 +21,12 @@ namespace acprojectview {
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
         AppLoaderAnimPtr ptr = boost::static_pointer_cast<AppLoaderAnim>(shared_from_this());
             
-        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new AppLoaderAnimCB(ptr, &AppLoaderAnim::onFrame));
-        myWindow->addEventListener(StageEvent::FRAME, myFrameCB);
+        _myFrameCB = EventCallbackPtr(new AppLoaderAnimCB(ptr, &AppLoaderAnim::onFrame));
+        myWindow->addEventListener(StageEvent::FRAME, _myFrameCB);
             
+        spark::EventCallbackPtr myCB = EventCallbackPtr(new AppLoaderAnimCB(ptr, &AppLoaderAnim::removeOnFrameListener));
+        myWindow->addEventListener(WindowEvent::WORLD_REALIZED, myCB);
+
         const VectorOfComponentPtr & myChildren = getChildrenByType("Image");
         for (size_t i = 0; i < myChildren.size(); i++) {
             ImagePtr myImage = boost::static_pointer_cast<Image>(myChildren[i]);
@@ -36,6 +39,16 @@ namespace acprojectview {
         _myImages[_myCurrentImageIndex]->setVisible(true);
     }
     
+    void
+    AppLoaderAnim::removeOnFrameListener(EventPtr theEvent) {
+        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
+        AC_PRINT << *myEvent;
+        if (myEvent->worldname_ == "2dworld") {
+            WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
+            myWindow->removeEventListener(StageEvent::FRAME, _myFrameCB);
+
+        }
+    }
     void
     AppLoaderAnim::onFrame(EventPtr theEvent) {
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
