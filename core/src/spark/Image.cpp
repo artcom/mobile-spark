@@ -1,5 +1,6 @@
 #include "Image.h"
 
+#include <cml/mathlib/matrix_transform.h>
 #include <masl/string_functions.h> //select1st
 #include <mar/png_functions.h>
 #include "BaseApp.h"
@@ -14,8 +15,6 @@ namespace spark {
         I18nShapeWidget(theApp, theXMLNode) 
     {
         setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
-        _myTextureScaleX=1;
-        _myTextureScaleY=1;   
     }
 
     Image::~Image() {
@@ -27,9 +26,22 @@ namespace spark {
     }
 
     void
+    Image::onPause() {
+        I18nShapeWidget::onPause();
+        if (getShape()) {
+            UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+            TexturePtr myTexture = myMaterial->getTexture();
+            myTexture->unbind();
+        }
+    }
+
+    void
     Image::onResume() {
         I18nShapeWidget::onResume();
         _myDirtyFlag = true;
+        if (getShape()) {
+            fitToSize(getShape()->getWidth(), getShape()->getHeight());
+        }
     }
 
     const vector2 &
@@ -47,12 +59,16 @@ namespace spark {
     
     void 
     Image::fitToSize(const float theWidth, const float theHeight) {
-        vector2 textureSize = getTextureSize();
-        float scaleX = theWidth / textureSize[0];
-        float scaleY = theHeight / textureSize[1];
+        if (_myDirtyFlag) {
+            build();
+        }
+        float scaleX = theWidth / _myTextureSize[0];
+        float scaleY = theHeight / _myTextureSize[1];
         float scale = std::max(scaleX, scaleY);
-        _myTextureScaleX=scaleX/scale;
-        _myTextureScaleY=scaleY/scale;
+
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        TexturePtr myTexture = myMaterial->getTexture();
+        cml::matrix_scale_2D(myTexture->matrix_, scaleX/scale, scaleY/scale);
         setSize(theWidth, theHeight);
     }
 
@@ -62,12 +78,13 @@ namespace spark {
         I18nShapeWidget::build();
         if(data_.empty()) return;
         
+        AC_DEBUG<<"build image " << *this << " with src: "<<data_;
         std::vector<std::string> myHandles;
         myHandles.reserve(customShaderValues_.size());
         std::transform(customShaderValues_.begin(), customShaderValues_.end(), std::back_inserter(myHandles),
                        masl::select1st<std::map<std::string, float>::value_type>()) ;
         setShape(ShapeFactory::get().createRectangle(true, 1, 1, 
-                                                     vertexShader_, fragmentShader_, myHandles, data_,_myTextureScaleX,_myTextureScaleY));
+                                                     vertexShader_, fragmentShader_, myHandles, data_));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);

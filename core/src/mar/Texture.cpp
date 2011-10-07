@@ -1,12 +1,14 @@
 #include "Texture.h"
 #include <masl/Logger.h>
+#include <masl/numeric_functions.h>
 
 namespace mar {
-    Texture::Texture() :textureId_(0){
+    Texture::Texture() :matrix_(cml::identity_4x4()), textureId_(0) {
+        AC_DEBUG << "create Texture " << (void*)this;
     }
 
     Texture::~Texture() {
-        AC_DEBUG << "delete Texture " << (void*)this;
+        AC_DEBUG << "delete Texture " << (void*)this << " texid: "<<textureId_;
         unbind();
     }
 
@@ -17,6 +19,7 @@ namespace mar {
 
     void
     Texture::setTextureId(GLuint theTextureId){
+        AC_DEBUG << "setTexture " << theTextureId << " for Texture: " << (void*)this;
         textureId_ = theTextureId;
     }
 

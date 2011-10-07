@@ -88,8 +88,6 @@ namespace spark {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
         _mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
             
-        spark::EventCallbackPtr myOnPauseCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onPause));
-        _mySparkWindow->addEventListener(StageEvent::PAUSE, myOnPauseCB);
     }
 
     void BaseApp::onEvent(const std::string & theEventString) {
@@ -101,7 +99,8 @@ namespace spark {
         }
     }
 
-    void BaseApp::onPause(EventPtr theEvent) {
+    void BaseApp::onPause() {
+        AC_DEBUG << "BaseApp::onPause";
         if (_mySparkWindow) {
             OnPauseComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
@@ -109,7 +108,7 @@ namespace spark {
     }
 
     void BaseApp::onResume() {
-        AC_TRACE << "onResume";
+        AC_DEBUG << "BaseApp::onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
