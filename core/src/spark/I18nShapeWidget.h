@@ -12,15 +12,16 @@ namespace spark {
             I18nShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~I18nShapeWidget() = 0;
             virtual void realize();
-            void handleI18nOnLanguageSwitch(const EventPtr theEvent = EventPtr());
+            void handleI18nOnLanguageSwitch(const EventPtr theEvent);
 
             void setI18nId(const std::string & theNewI18nId);
             void setI18nData(const std::string & theData);
         protected:
             std::string data_;
         private:            
-            void attachToI18nItem();            
+            void attachToI18nItem();
             std::string i18nId_;
+            EventCallbackPtr _myHandleLanguageSwitch;
             
     };
     typedef masl::Ptr<I18nShapeWidget> I18nShapeWidgetPtr;
