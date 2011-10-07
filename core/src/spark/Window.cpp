@@ -37,6 +37,8 @@ namespace spark {
         Widget::realize();
         WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());
             
+        ReparentComponentVisitor myReparentVisitor;
+		visitComponents(myReparentVisitor, ptr);
         RealizeComponentsButWorldAndWindowVisitor myVisitor;
 		visitComponents(myVisitor, ptr);
 

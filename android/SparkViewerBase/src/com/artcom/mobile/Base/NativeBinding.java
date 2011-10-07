@@ -38,6 +38,7 @@ public class NativeBinding {
 
   public static native void setup(long currentMillis, String apkFilePath, int theScreenWidth, int theScreenHeight);
   public static native void putEnv(String theEnvVar);
+  public static native void onPause();
   public static native void onResume();
   public static native void initBinding();
   public static native void onEvent(String theEvent);

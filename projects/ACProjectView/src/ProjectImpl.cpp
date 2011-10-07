@@ -19,8 +19,6 @@ namespace acprojectview {
 
     void ProjectImpl::realize() {
         Transform::realize();
-        WindowPtr myWindowPtr = boost::static_pointer_cast<Window>(getRoot());
-            
         std::string src = _myXMLNode->getAttributeAs<std::string>("src",""); 
         std::string title = _myXMLNode->getAttributeAs<std::string>("title",""); 
         std::string subtitle = _myXMLNode->getAttributeAs<std::string>("subtitle",""); 
@@ -32,6 +30,23 @@ namespace acprojectview {
         titleComponent_ = boost::static_pointer_cast<Text>(getChildByName("title"));
         subtitleComponent_ = boost::static_pointer_cast<Text>(getChildByName("subtitle"));
                 
+        if (src.size() >0 ) {
+            imageComponent_->setSrc(src);
+        }
+         
+        if (myTitle_I18n.size() > 0) {
+           titleComponent_->setI18nId(myTitle_I18n);           
+        }
+        if (mySubTitle_I18n.size() > 0) {
+            subtitleComponent_->setI18nId(mySubTitle_I18n);
+        }
+        fitToSize();
+    }    
+
+    void ProjectImpl::fitToSize() {
+        WindowPtr myWindowPtr = boost::static_pointer_cast<Window>(getRoot());
+            
+                
         unsigned myWidth = myWindowPtr->getSize()[0];
         unsigned myHeight = myWindowPtr->getSize()[1];
         ProjectMenuPtr myMenu =  boost::static_pointer_cast<ProjectMenu>(getParent());
@@ -40,22 +55,12 @@ namespace acprojectview {
 
         int iconWidth = (myWidth-(myHorizontalTiling-1)*myMenu->getGapX()) / myHorizontalTiling;
         int iconHeight = (myHeight-(myVerticalTiling-1)*myMenu->getGapY()) / myVerticalTiling;
-        if (src.size() >0 ) {
-            imageComponent_->setSrc(src);
-        }
          
-        if (myTitle_I18n.size() > 0) {
-           titleComponent_->setMaxWidth(iconWidth-titleComponent_->getX()*2);
-           titleComponent_->setI18nId(myTitle_I18n);           
-        }
-        if (mySubTitle_I18n.size() > 0) {
-            
-            subtitleComponent_->setMaxWidth(iconWidth-subtitleComponent_->getX()*2);
-            subtitleComponent_->setI18nId(mySubTitle_I18n);
-        }
+        titleComponent_->setMaxWidth(iconWidth-titleComponent_->getX()*2);
+        subtitleComponent_->setMaxWidth(iconWidth-subtitleComponent_->getX()*2);
         
         boost::static_pointer_cast<Rectangle>(getChildByName("textplane"))->setSize(vector2(iconWidth, 50));
-         imageComponent_->fitToSize(iconWidth, iconHeight);
+        imageComponent_->fitToSize(iconWidth, iconHeight);
         imageComponent_->setY( 0);//(textSpace + iconHeight - scale * imageComponent_->getTextureSize()[1])/2.0);
         
     }    

@@ -7,7 +7,8 @@
 namespace mar {
 
     //////////////////////////////////////////////////////////////Shape
-    Shape::Shape(const bool theTextureFlag) : _myTextureFlag(theTextureFlag){
+    Shape::Shape(const bool theTextureFlag, const float theWidth, const float theHeight) : _myTextureFlag(theTextureFlag), width_(std::max(theWidth, 0.f)), height_(std::max(theHeight, 0.f))
+    {
         _myBoundingBox.min.zero(); _myBoundingBox.min[3] = 1;
         _myBoundingBox.max.zero(); _myBoundingBox.max[3] = 1;
         _myBoundingBox.max[0] = _myBoundingBox.max[1] = 1.0f;
@@ -96,10 +97,9 @@ namespace mar {
     RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight, 
                                    const std::string & theVertexShader, const std::string & theFragmentShader, 
                                    const std::vector<std::string> & theCustomHandles,
-                                   const std::string & theTextureSrc, const float theXYCoordScaleX, float const theXYCoordScaleY)
-        : Shape(theTextureFlag), width_(std::max(theWidth, 0.f)), height_(std::max(theHeight, 0.f)) {
-        _myXYCoordScaleX=theXYCoordScaleX; 
-        _myXYCoordScaleY=theXYCoordScaleY;
+                                   const std::string & theTextureSrc)
+        : Shape(theTextureFlag, theWidth, theHeight)
+    {
 
         ElementPtr myElement;
         MaterialPtr myMaterial;
@@ -140,8 +140,8 @@ namespace mar {
             (myElement->vertexData_)[i * _myDataPerVertex + 2] = 0;
 
             if (_myTextureFlag) {
-                (myElement->vertexData_)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0]*_myXYCoordScaleX;
-                (myElement->vertexData_)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1]*_myXYCoordScaleY;
+                (myElement->vertexData_)[i * _myDataPerVertex + 3] = myXYCoords[i * 2 + 0];
+                (myElement->vertexData_)[i * _myDataPerVertex + 4] = myXYCoords[i * 2 + 1];
             }
         }
 
@@ -185,8 +185,9 @@ namespace mar {
     NinePatchShape::NinePatchShape(const std::string & theTextureSrc,
         const float theLeftEdge, const float theTopEdge,  const float theRightEdge, const float theBottomEdge,
         const float theWidth, const float theHeight):
-        Shape(true), width_(theWidth), height_(theHeight),
-        leftEdge_(theLeftEdge), topEdge_(theTopEdge), rightEdge_(theRightEdge), bottomEdge_(theBottomEdge) {
+        Shape(true, theWidth, theHeight),
+        leftEdge_(theLeftEdge), topEdge_(theTopEdge), rightEdge_(theRightEdge), bottomEdge_(theBottomEdge) 
+    {
         ElementPtr myElement = ElementPtr(new ElementWithTexture());
         UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc));
         myElement->material = myMaterial;
@@ -293,9 +294,9 @@ namespace mar {
     ShapePtr ShapeFactory::createRectangle(const bool theTextureFlag, const float theWidth, const float theHeight,
                                            const std::string & theVertexShader, const std::string & theFragmentShader,
                                            const std::vector<std::string> & theCustomHandles,
-                                           const std::string & theTextureSrc, const float theXYCoordScaleX, const float theXYCoordScaleY) {
+                                           const std::string & theTextureSrc) {
         return ShapePtr(new RectangleShape(theTextureFlag, theWidth, theHeight, 
-                            theVertexShader, theFragmentShader, theCustomHandles, theTextureSrc, theXYCoordScaleX, theXYCoordScaleY));
+                            theVertexShader, theFragmentShader, theCustomHandles, theTextureSrc));
     }
 
     ShapePtr ShapeFactory::createNinePatch(const std::string & theTextureSrc,

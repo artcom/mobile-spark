@@ -24,7 +24,7 @@ namespace spark {
             bool isSetup() const {return _mySetupFlag;}
             void loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight);
             virtual void onFrame(EventPtr theEvent);
-            virtual void onPause(EventPtr theEvent);
+            virtual void onPause();
             virtual void onResume();
             virtual void onEvent(const std::string & theEventString);
             virtual void handleEvents();

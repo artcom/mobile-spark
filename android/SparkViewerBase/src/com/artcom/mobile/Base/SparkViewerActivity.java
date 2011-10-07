@@ -70,8 +70,7 @@ public class SparkViewerActivity extends Activity {
         AC_Log.print("----------------------SparkViewer paused");
         super.onPause();
         mView.onPause();
-        String myEvent = "<StageEvent type='pause'/>";
-        NativeBinding.onEvent(myEvent);
+        NativeBinding.onPause();
         CameraTexture.closeCamera();
         Sensors.disableAllSensors();
     }
@@ -84,9 +83,6 @@ public class SparkViewerActivity extends Activity {
         AC_Log.print("------------------------SparkViewer resumed");
         super.onResume();
         mView.onResume();
-        Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
-        AC_Log.setSeverity(mySeverity);
-        AC_Log.print("severity: " + mySeverity);
     }
 
 }

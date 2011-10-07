@@ -13,7 +13,7 @@ namespace spark {
         _myName(theXMLNode->name),
         _myParent(),
         _myRealizedFlag(false),
-        _myRealizedAndAllChildrenFlag(false)
+        _myRealizedAllChildrenFlag(false)
     {}
 
     Component::~Component() {
@@ -42,18 +42,17 @@ namespace spark {
     
     void
     Component::realizeASync() {
-        if (!_myRealizedFlag) {
+        _myRealizedAllChildrenFlag = true;
+        for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            if (!(*it)->isAllRealized()) {
+                (*it)->realizeASync();
+                _myRealizedAllChildrenFlag = false;
+                break;
+            }
+        }
+        if (_myRealizedAllChildrenFlag) {
             realize();
             _myRealizedFlag = true;
-        } else {
-            _myRealizedAndAllChildrenFlag = true;
-            for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-                if (!(*it)->isAllRealized()) {
-                    (*it)->realizeASync();
-                    _myRealizedAndAllChildrenFlag = false;
-                    break;
-                }
-            }
         }
     }
 }

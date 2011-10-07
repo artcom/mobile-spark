@@ -33,6 +33,10 @@ namespace spark {
         virtual bool visit(ComponentPtr theComponent);
     };
 
+    class ReparentComponentVisitor : public ComponentVisitor {
+    public:
+        virtual bool visit(ComponentPtr theComponent);
+    };
     class CollectAABBComponentVisitor : public ComponentVisitor {
     public:
         CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList,
