@@ -8,11 +8,8 @@ namespace spark {
     }
 
     I18nShapeWidget::~I18nShapeWidget() {
-        I18nShapeWidgetPtr ptr = boost::static_pointer_cast<I18nShapeWidget>(shared_from_this());        
-        EventCallbackPtr myHandleLanguageSwitch = EventCallbackPtr(new I18nWidgetEventCallback(ptr, &I18nShapeWidget::handleI18nOnLanguageSwitch));
-        
-        if (_myI18nItem && _myI18nItem->hasEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch) ) {
-            _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
+        if (_myI18nItem && _myI18nItem->hasEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch) ) {
+            _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch);
         }
     }
     
@@ -30,6 +27,8 @@ namespace spark {
     void
     I18nShapeWidget::realize()  {
         ShapeWidget::realize();
+        I18nShapeWidgetPtr ptr = boost::static_pointer_cast<I18nShapeWidget>(shared_from_this());        
+        _myHandleLanguageSwitch = EventCallbackPtr(new I18nWidgetEventCallback(ptr, &I18nShapeWidget::handleI18nOnLanguageSwitch));
         if (!i18nId_.empty()) {
             attachToI18nItem();
         }            
@@ -43,12 +42,10 @@ namespace spark {
     }
     void
     I18nShapeWidget::attachToI18nItem() {
-        I18nShapeWidgetPtr ptr = boost::static_pointer_cast<I18nShapeWidget>(shared_from_this());        
-        EventCallbackPtr myHandleLanguageSwitch = EventCallbackPtr(new I18nWidgetEventCallback(ptr, &I18nShapeWidget::handleI18nOnLanguageSwitch));
         
         if (_myI18nItem) {
-            if (_myI18nItem->hasEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch)) {
-                _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
+            if (_myI18nItem->hasEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch)) {
+                _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch);
             }
             _myI18nItem = I18nItemPtr();
         }
@@ -57,8 +54,8 @@ namespace spark {
             if (!_myI18nItem) {
                 throw I18nItemNotFoundException("no i18n item named " + i18nId_, PLUS_FILE_LINE);
             }
-            _myI18nItem->addEventListener(I18nEvent::ON_LANGUAGE_SWITCH, myHandleLanguageSwitch);
-            myHandleLanguageSwitch->execute(spark::EventPtr());
+            _myI18nItem->addEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch);
+            _myHandleLanguageSwitch->execute(spark::EventPtr());
         } else {
             data_ = "";
         }
