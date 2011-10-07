@@ -24,7 +24,9 @@ namespace spark {
         _myMaxWidth(_myXMLNode->getAttributeAs<int>("maxWidth", 0)),
         _myMaxHeight(_myXMLNode->getAttributeAs<int>("maxHeight", 0)),
         _myLineHeight(_myXMLNode->getAttributeAs<int>("lineHeight", 0)),
-        _myTextAlign(_myXMLNode->getAttributeAs<std::string>("align", "left"))
+        _myTextAlign(_myXMLNode->getAttributeAs<std::string>("align", "left")),
+        _myRenderedGlyphIndex(0),
+        _myTextStartPos(0)
     {
         setI18nData(getNode()->getAttributeAs<std::string>("text", ""));
         
@@ -59,15 +61,37 @@ namespace spark {
         }
         return _myTextSize;
     }
-
+    int 
+    Text::getRenderedGlyphIndex() { 
+        if (_myDirtyFlag) {
+            build();
+        }
+        return _myRenderedGlyphIndex;
+    };
+    
+    int 
+    Text::getTotalGlyphCount() { 
+        if (_myDirtyFlag) {
+            build();
+        }
+        return _myTotalGlyphCount;
+    };
+    
+    void
+    Text::setStartIndex(unsigned int theIndex) {
+        _myTextStartPos = (theIndex<=data_.size() ? theIndex:0);
+        AC_PRINT <<"incoming index : " << theIndex << "->" << _myTextStartPos;
+    }    
     void
     Text::build() {
         I18nShapeWidget::build();
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
         masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
-                                         _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight);
+                                         _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
         _myTextSize[0] = myTextInfo.width;
         _myTextSize[1] = myTextInfo.height;
+        _myRenderedGlyphIndex = _myTextStartPos + myTextInfo.renderedGlyphIndex;
+        _myTotalGlyphCount = myTextInfo.totalGlyphCount;
         getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
         myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
         myMaterial->transparency_ = true;

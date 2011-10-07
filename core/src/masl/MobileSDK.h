@@ -15,6 +15,8 @@ namespace masl {
         unsigned int textureID;
         int width;
         int height;
+        int renderedGlyphIndex;
+        int totalGlyphCount;
     };
 
     class MobileSDK {
@@ -22,7 +24,7 @@ namespace masl {
         virtual void vibrate(long theDurationMillisec) = 0;                                
         virtual TextInfo renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                     vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
-                                    const std::string & theFontPath, int theLineHeight) = 0;
+                                    const std::string & theFontPath, int theLineHeight, int theStartIndex) = 0;
         virtual void updateCameraTexture() = 0;
         virtual void freezeMobileOrientation(const std::string & theOrientation) = 0;
         virtual CameraInfo getCameraSpec() = 0;
