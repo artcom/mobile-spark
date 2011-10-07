@@ -58,9 +58,6 @@ namespace acprojectview {
         spark::RectanglePtr myBackground = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("2dworld")->getChildByName("background2"));
         myBackground->setSize(_mySparkWindow->getSize());
                     
-        _myWidth = _myProjectMenu->getPreviewWidth();
-        _myHeight = _myProjectMenu->getPreviewHeight();
-        
         _myProjectMenu->setSensible(false);
         _myStartScreenPtr =  boost::static_pointer_cast<Transform>(_mySparkWindow->getChildByName("2dworld")->getChildByName("startscreen",true));
         spark::EventCallbackPtr startToMenuAniCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onStartScreenClicked));
@@ -192,6 +189,9 @@ namespace acprojectview {
     
     
     void ACProjectView::projectViewAnimation(bool showProject){
+        int myProjectMenuItemWidth = _myProjectMenu->getIconWidth();
+        int myProjectMenuItemHeight = _myProjectMenu->getIconHeight();
+        int mySlide = _myProjectMenu->getCurrentSlide();
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         if (showProject) {               
@@ -205,11 +205,10 @@ namespace acprojectview {
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onHideProjectViewPopup)));
             mySeqAnimation->add(myInitiateProjectViewAnim);
         }
-  
-        int toX = showProject ? 0 : _myCurrentProject->getX()+_myWidth/2;
-        int fromX   = showProject ? _myCurrentProject->getX()+_myWidth/2 : 0;
-        int toY = showProject ? 0 : _myCurrentProject->getY()+_myHeight/2;
-        int fromY   = showProject ? _myCurrentProject->getY()+_myHeight/2 : 0;
+        int toX = showProject ? 0 : _myCurrentProject->getX()+ myProjectMenuItemWidth/2 - mySlide*_mySparkWindow->getSize()[0];
+        int fromX   = showProject ? _myCurrentProject->getX()+ myProjectMenuItemWidth/2  - mySlide*_mySparkWindow->getSize()[0]: 0;
+        int toY = showProject ? 0 : _myCurrentProject->getY()+ myProjectMenuItemHeight/2;
+        int fromY   = showProject ? _myCurrentProject->getY()+ myProjectMenuItemHeight/2 : 0;
         int toScale = showProject ? 1 :  0;
         int fromScale   = showProject ? 0 :  1;
         

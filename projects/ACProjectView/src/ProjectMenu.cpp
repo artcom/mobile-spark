@@ -44,8 +44,8 @@ namespace acprojectview {
         ProjectMenuPtr myPtr = boost::static_pointer_cast<ProjectMenu>(shared_from_this());
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
-        float dx = (_myWidth - (_myHorizontalTiling-1)*_myGapY) / _myHorizontalTiling;
-        float dy = (_myHeight - (_myVerticalTiling-1)*_myGapX) / _myVerticalTiling;
+        _myIconWidth = (_myWidth - (_myHorizontalTiling-1)*_myGapY) / _myHorizontalTiling;
+        _myIconHeight = (_myHeight - (_myVerticalTiling-1)*_myGapX) / _myVerticalTiling;
         const VectorOfComponentPtr & myChildren = myPtr->getChildrenByType(ProjectImpl::SPARK_TYPE);
         _myNumberOfSlides = (myChildren.size()-1)/(_myHorizontalTiling * _myVerticalTiling);
         boost::timer::timer myTimer;
@@ -56,19 +56,12 @@ namespace acprojectview {
             TextPtr titlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("title"));
             TextPtr subtitlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("subtitle"));
             // set Position:
-            myProject->setX((i/_myVerticalTiling)*(_myGapX + dx)); 
-            myProject->setY((i % _myVerticalTiling)*(_myGapY + dy));
+            myProject->setX((i/_myVerticalTiling)*(_myGapX + _myIconWidth)); 
+            myProject->setY((i % _myVerticalTiling)*(_myGapY + _myIconHeight));
         }
          AC_PRINT << "******************************************************* " << myTimer.elapsed();
     }
     
-    int ProjectMenu::getPreviewWidth() {
-        return 200;
-    }
-    
-    int ProjectMenu::getPreviewHeight(){
-        return 200;
-    }
     
     void
     ProjectMenu::onSwipeLeftCB(EventPtr theEvent) {

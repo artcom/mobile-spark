@@ -18,12 +18,13 @@ namespace acprojectview {
 
             void arrangeProjects();
             
-            int getPreviewWidth();
-            int getPreviewHeight();
+            int getIconWidth() {return _myIconWidth;}
+            int getIconHeight() {return _myIconHeight;}
             int getHorizontalTiling() { return _myHorizontalTiling;}
             int getVerticalTiling() { return _myVerticalTiling;}
             int getGapX() {return _myGapX;}
             int getGapY() {return _myGapY;}
+            int getCurrentSlide() {return _myCurrentSlide;};
         private:
             void onSwipeLeftCB(spark::EventPtr theEvent);
             void onSwipeRightCB(spark::EventPtr theEvent);
@@ -34,6 +35,8 @@ namespace acprojectview {
             spark::WindowPtr _myWindowPtr;
             int _myVerticalTiling;
             int _myHorizontalTiling;
+            int _myIconWidth;
+            int _myIconHeight;
             int _myGapX;
             int _myGapY;
             int _myWidth;
