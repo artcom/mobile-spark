@@ -141,7 +141,6 @@ namespace acprojectview {
         if (_myAnimatingFlag) {
             return;
         }
-        _myAnimatingFlag = true;
         AC_PRINT << "clicked on project: "<< theEvent->getTarget()->getParent()->getName();
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
         _myProjectViewer->setVisible(true);
@@ -153,7 +152,9 @@ namespace acprojectview {
 
     
     void ACProjectView::onBack(EventPtr theEvent) {
-        if (_myProjectMenu->isSensible()) return;            
+        if (_myAnimatingFlag || _myProjectMenu->isSensible()) {
+            return;
+        }
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         if (myEvent->getY() > ProjectViewerImpl::POPUP_HEIGHT * 2 && !_myProjectViewer->isPopUpOpen()) { 
             MobileSDK_Singleton::get().getNative()->vibrate(10);                
@@ -192,6 +193,7 @@ namespace acprojectview {
     
     
     void ACProjectView::projectViewAnimation(bool showProject){
+        _myAnimatingFlag = true;
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         if (showProject) {               
@@ -356,14 +358,16 @@ namespace acprojectview {
     }
 
     void ACProjectView::onTouch(spark::EventPtr theEvent) {
-        _myStartScreenPtr->setVisible(false);
-        _myStartScreenPtr->setSensible(false);
         if (_myIdleDelay) {
             _myIdleDelay->cancel();
             AC_DEBUG << "on touch restart idle delay";
             animation::AnimationManager::get().play(_myIdleDelay);
         }
         if (_myKenBurnsAnimation) {
+            _myProjectMenu->setVisible(true);
+            _myProjectMenu->setSensible(true);
+            _myStartScreenPtr->setVisible(false);
+            _myStartScreenPtr->setSensible(false);
             _myKenBurnsAnimation->cancel();
             _myKenBurnsAnimation = animation::ParallelAnimationPtr();
         }
@@ -385,8 +389,8 @@ namespace acprojectview {
         swappedIdleImages_ = true;
         _myProjectViewer->setVisible(false);
         _myProjectViewer->setSensible(false);
-        _myProjectMenu->setVisible(true);
-        _myProjectMenu->setSensible(true);
+        _myProjectMenu->setVisible(false);
+        _myProjectMenu->setSensible(false);
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myKenBurnsAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         _myKenBurnsAnimation->add(ACProjectViewPropertyAnimationPtr(new ACProjectViewPropertyAnimation(ptr, &ACProjectView::updateKenBurnsShader, 0.0f, 1.0f, _myKenBurnsDuration)));
