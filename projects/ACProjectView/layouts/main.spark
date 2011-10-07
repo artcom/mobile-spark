@@ -144,6 +144,23 @@
             </en>
         </I18nItem>        
         
+        <I18nItem name="spark_mobile_title">
+            <de>Spark geht Mobile</de>
+            <en>Spark goes Mobile</en>
+        </I18nItem>
+        <I18nItem name="spark_mobile_subtitle">
+            <de>Mobile Application Framework</de>
+            <en>Mobile Application Framework</en>
+        </I18nItem>        
+        <I18nItem name="spark_mobile_text">
+            <de>
+            <![CDATA[]]>
+            </de>
+            <en>
+            <![CDATA[]]>
+            </en>
+        </I18nItem>        
+        
     </I18nContext>
 
     <!-- userinterface is located in 2dworld -->
@@ -245,6 +262,9 @@
 	            <ContentImage src="/large_images/terravision_main_02.png"/>
             </Project>
 
+            <Project name="spark_mobile" title_I18n="spark_mobile_title" subtitle_I18n="spark_mobile_subtitle" description_I18n="spark_mobile_text" src="/small_images/Spark_Schichten_thumb.png">
+                <ContentImage src="/large_images/Spark_Schichten.png"/>
+            </Project>                      
             <Project name="project7" title_I18n="artcom_book_title" subtitle_I18n="artcom_book_subtitle" description_I18n="artcom_book_text" src="/small_images/bookrelease_teaser_thumb.png">
                 <ContentImage src="/large_images/bookrelease_main_01.png"/>
                 <ContentImage src="/large_images/bookrelease_main_02.png"/>
