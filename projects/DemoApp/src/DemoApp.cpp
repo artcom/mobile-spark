@@ -41,7 +41,30 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace demoapp {
 
-	
+    // Define our struct for accepting LCs output
+    struct BufferStruct {
+        char * buffer;
+        size_t size;
+    };
+
+    // This is the function we pass to LC, which writes the output to a BufferStruct
+    static size_t curlCallback(void *ptr, size_t size, size_t nmemb, void *data) {
+        AC_PRINT << "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+        size_t realsize = size * nmemb;
+        struct BufferStruct * mem = (struct BufferStruct *) data;
+        mem->buffer = (char *)realloc(mem->buffer, mem->size + realsize + 1);
+        if ( mem->buffer ) {
+            memcpy( &( mem->buffer[ mem->size ] ), ptr, realsize );
+            mem->size += realsize;
+            mem->buffer[ mem->size ] = 0;
+        }
+        AC_PRINT << "curlCallback size: " << realsize;
+        AC_PRINT << "buffer " << mem->buffer;
+        return realsize;
+    }
+
+
+
     WidgetPropertyAnimationPtr myAmazoneRotation;
 
     DemoApp::DemoApp():BaseApp("DemoApp"), _myCurrentSlide(0) {
@@ -60,14 +83,19 @@ namespace demoapp {
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         //test curl
         AC_PRINT << "CURL TEST in DEMO APP _______________________________________________________";
-	    CURL *curl;
+	    CURL *myHandle;
         CURLcode res;
-        curl = curl_easy_init();
-        if (curl) {
-            curl_easy_setopt(curl, CURLOPT_URL, "google.com");
-            res = curl_easy_perform(curl);
-            /* always cleanup */
-            curl_easy_cleanup(curl);
+        BufferStruct output;
+        output.size = 0;
+        output.buffer = NULL;
+        curl_global_init( CURL_GLOBAL_ALL );
+        myHandle = curl_easy_init();
+        if (myHandle) {
+            curl_easy_setopt(myHandle, CURLOPT_URL, "www.google.de");
+            curl_easy_setopt(myHandle, CURLOPT_WRITEFUNCTION, curlCallback); // Passing the function pointer to LC
+            curl_easy_setopt(myHandle, CURLOPT_WRITEDATA, (void *)&output); // Passing our BufferStruct to LC
+            res = curl_easy_perform( myHandle );
+            curl_easy_cleanup( myHandle );
             if (res == 0) {
                 AC_PRINT << "0 response";
             } else {
