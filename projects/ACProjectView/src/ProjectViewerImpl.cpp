@@ -29,13 +29,11 @@ namespace acprojectview {
         _image2 = boost::static_pointer_cast<Image>(_imageTransform2->getChildByName("image"));
         _myPopup = boost::static_pointer_cast<Transform>(getChildByName("popup"));
         _myPopupBG = boost::static_pointer_cast<Rectangle>(_myPopup->getChildByName("popup_bg"));
-                    
-        _myDescription = boost::static_pointer_cast<Text>(_myPopup->getChildByName("description"));
+        _myDescription = boost::static_pointer_cast<MultiColumnText>(_myPopup->getChildByName("description"));
         _myPopUpTitle = boost::static_pointer_cast<Text>(_myPopup->getChildByName("title"));
         _myPopUpSubTitle = boost::static_pointer_cast<Text>(_myPopup->getChildByName("subtitle"));
         _myPopUpPfeil = boost::static_pointer_cast<Image>(_myPopup->getChildByName("pfeil"));
 
-        _myDescription->setText("");   
         _myPopUpTitle->setText("");   
         _myPopUpSubTitle->setText("");   
         
@@ -60,8 +58,6 @@ namespace acprojectview {
         _myHeight = _myWindowPtr->getSize()[1];
 
         boost::static_pointer_cast<Rectangle>(getChildByName("background"))->setSize(vector2(_myWidth,_myHeight));
-        _myDescription->setMaxWidth(_myWidth - (2*_myDescription->getX()));
-        _myDescription->setMaxWidth( (_myWidth/2.0) - _myDescription->getX() - _myDescription->getX()/2.0);
         
         _myPopUpTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         _myPopUpSubTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
@@ -164,22 +160,11 @@ namespace acprojectview {
         }
     }
     void ProjectViewerImpl::showPopup(bool theFlag) {       
-        /*int myPopUpPos = 250;
-        int myPopUpHeight = 250;
-        
-        if (theFlag) {
-            myPopUpPos = -250;
-            myPopUpHeight = 300;
-        } else {
-            myPopUpPos = 0;
-            myPopUpHeight = 50;
-        }        
-        _myPopup->setY(myPopUpPos);
-        _myPopupBG->setSize(vector2(_myWidth, myPopUpHeight));
-        _myDescription->setVisible(theFlag);*/
         _myPopup->setVisible(theFlag);        
     }
     void ProjectViewerImpl::loadInitialSet() {        
+
+        _myDescription->setMaxWidth( (_myWidth/2.0) - _myDescription->getColumnSpace() - _myDescription->getColumnSpace()/2.0);
 
         string myDescription_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("description_I18n","");        
         _myDescription->setI18nId(myDescription_I18n);         
@@ -194,13 +179,13 @@ namespace acprojectview {
         }        
     }
     bool ProjectViewerImpl::isPopUpOpen() {
-        int myTextHeight = _myDescription->getTextSize()[1];            
+        int myTextHeight = 250;
         return (_myPopup->getY() != -myTextHeight);
     }
     
     void ProjectViewerImpl::onOpenClosePopup(EventPtr theEvent) {
         if (isRendered()) {
-            int myTextHeight = _myDescription->getTextSize()[1];    
+            int myTextHeight = 250;
             animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             if (!isPopUpOpen()) {
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(

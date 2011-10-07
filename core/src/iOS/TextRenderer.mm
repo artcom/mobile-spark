@@ -30,6 +30,7 @@ namespace ios {
         CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFStringGetLength((CFStringRef)string)), kCTForegroundColorAttributeName, color);
         CFRelease(color);
         
+        
         //Create Font and add it as an attribute to the string.
         //Get Font data
         CTFontRef font;
@@ -53,6 +54,12 @@ namespace ios {
         //add Font as an attribute to the string
         CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFStringGetLength((CFStringRef)string)), kCTFontAttributeName, font);
         CFRelease(font);
+        
+        CGFloat strokeStrength = -50/theFontSize; // dirty: increase contrast for small font sizes  
+        CFNumberRef stroke = CFNumberCreate (NULL, kCFNumberCGFloatType, &strokeStrength);
+        CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFStringGetLength((CFStringRef)string)), kCTStrokeWidthAttributeName, stroke);
+        CFRelease(stroke);
+
         
         //Set alignment
         CTTextAlignment alignment = kCTLeftTextAlignment;
@@ -103,21 +110,21 @@ namespace ios {
             // Initialize a Bitmap context and set the text matrix to a known value.
             GLubyte *bitmapData = (GLubyte *) calloc((textureWidth * textureHeight * 4), sizeof(GLubyte));
             CGContextRef context = CGBitmapContextCreate(bitmapData, textureWidth, textureHeight, 8, textureWidth * 4, rgbColorSpace, kCGImageAlphaPremultipliedLast);
-//            CGContextSetRGBFillColor(context, 0, 0, 0, 0);
-//            
-//            CGContextSetAllowsAntialiasing(context, YES);
-//            CGContextSetShouldAntialias(context, YES);
-//            
-//            CGContextSetAllowsFontSmoothing(context, YES);
-//            CGContextSetShouldSmoothFonts(context, YES);
-//            
-//            CGContextSetAllowsFontSubpixelPositioning(context, YES);
-//            CGContextSetShouldSubpixelPositionFonts(context, YES);
-//            
-//            CGContextSetAllowsFontSubpixelQuantization(context,YES);
-//            CGContextSetShouldSubpixelQuantizeFonts(context,YES);
-//            
-//            CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+            CGContextSetRGBFillColor(context, 0, 0, 0, 0);
+            
+            CGContextSetAllowsAntialiasing(context, YES);
+            CGContextSetShouldAntialias(context, YES);
+            
+            CGContextSetAllowsFontSmoothing(context, YES);
+            CGContextSetShouldSmoothFonts(context, YES);
+            
+            CGContextSetAllowsFontSubpixelPositioning(context, YES);
+            CGContextSetShouldSubpixelPositionFonts(context, YES);
+            
+            CGContextSetAllowsFontSubpixelQuantization(context,YES);
+            CGContextSetShouldSubpixelQuantizeFonts(context,YES);
+            
+            CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
 
             CGContextSetTextMatrix(context, CGAffineTransformIdentity);
             // Flip the context so that the Bitmap is rendered right side up
@@ -147,6 +154,7 @@ namespace ios {
             }
             
             glBindTexture(GL_TEXTURE_2D, texture);
+            
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

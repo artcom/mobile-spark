@@ -12,6 +12,7 @@
 
 #include "ProjectImpl.h"
 #include "ContentImage.h"
+#include "MultiColumnText.h"
 
 
 namespace acprojectview {
@@ -55,7 +56,7 @@ namespace acprojectview {
             spark::ImagePtr _image2;
             spark::TransformPtr _myPopup;                
             spark::RectanglePtr _myPopupBG;                
-            spark::TextPtr _myDescription;
+            MultiColumnTextPtr _myDescription;
             spark::ImagePtr _myPopUpPfeil;
             spark::TextPtr _myPopUpTitle;      
             spark::TextPtr _myPopUpSubTitle;
