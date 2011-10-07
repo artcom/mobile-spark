@@ -5,6 +5,8 @@
 #include <masl/XMLUtils.h>
 #include <mar/AssetProvider.h>
 
+#include "Visitors.h"
+
 
 using namespace masl;
 using namespace mar;
@@ -72,7 +74,10 @@ namespace spark {
         XMLNodePtr myNode(new XMLNode(theNode));
         resolveTemplates(theApp, myNode);
         ComponentPtr myComponentPtr = createComponent(theApp, myNode);
-        myComponentPtr->realize();
+        ReparentComponentVisitor myReparentVisitor;
+		visitComponents(myReparentVisitor, myComponentPtr);
+        RealizeComponentsButWorldAndWindowVisitor myVisitor;
+		visitComponents(myVisitor, myComponentPtr);
         return myComponentPtr;
     }
 
