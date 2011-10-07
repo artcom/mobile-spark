@@ -16,7 +16,6 @@ namespace spark {
 
             void setI18nId(const std::string & theNewI18nId);
             void setI18nData(const std::string & theData);
-            
         protected:
             std::string data_;
         private:            

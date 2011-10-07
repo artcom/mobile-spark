@@ -50,10 +50,11 @@ public class NativeBinding {
 
 
   public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, 
-		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight) {
+		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight, int theStartIndex) {
     List<Integer> myResult = new ArrayList<Integer>();
-    TextLayouter myLayouter = new TextLayouter(theMessage, theFontSize, maxWidth, maxHeight);
-
+    String myMessage = theMessage.substring(theStartIndex, theMessage.length());
+    AC_Log.print(String.format("Message length: %s", myMessage));
+    TextLayouter myLayouter = new TextLayouter(myMessage, theFontSize, maxWidth, maxHeight);
     // Draw the text
     Paint textPaint = new Paint();
     textPaint.setTextSize(theFontSize);
@@ -71,7 +72,6 @@ public class NativeBinding {
     textPaint.setTypeface(myTypeFace);
 
     List<TextLine> myLines = myLayouter.createLines(textPaint, theLineHeight);
-
     //AC_Log.print(String.format("CanvasHeight: %d, %d", myLayouter.getCanvasWidth(), myLayouter.getCanvasHeight()));
     Bitmap myBitmap = Bitmap.createBitmap(Math.max(1, myLayouter.getCanvasWidth()), Math.max(1, myLayouter.getCanvasHeight()), Bitmap.Config.ARGB_8888);
     Canvas myCanvas = new Canvas(myBitmap);
@@ -85,6 +85,7 @@ public class NativeBinding {
         } else if (theAlign.compareTo("right") == 0) {
             myXOffset = (int) (myBitmap.getWidth() - myLines.get(i)._myWidth);
         }
+        //if (myLines.get(i)._myYPos )
         myCanvas.drawText(myLines.get(i)._myLineOfText, myLines.get(i)._myXPos + myXOffset, myLines.get(i)._myYPos, textPaint);
         //AC_Log.print(String.format("Line %d '%s' at (%d,%d)" , i, myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos));
     }
@@ -116,7 +117,9 @@ public class NativeBinding {
     myResult.add(textures[0]);
     myResult.add(myBitmap.getWidth());
     myResult.add(myBitmap.getHeight());
-
+    myResult.add(myLayouter.getRenderedGlyphIndex());
+    myResult.add(theMessage.length());
+   
     return myResult;
   }
   private static ByteBuffer extract(Bitmap bmp, boolean theYFlipFlag)
