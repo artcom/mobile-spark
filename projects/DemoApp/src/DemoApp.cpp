@@ -2,6 +2,8 @@
 
 #include <cstdlib>
 
+#include <curl/curl.h>
+
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 
@@ -56,6 +58,29 @@ namespace demoapp {
     }
 
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
+        //test curl
+        AC_PRINT << "CURL TEST in DEMO APP _______________________________________________________";
+	    CURL *curl;
+        CURLcode res;
+        curl = curl_easy_init();
+        if (curl) {
+            curl_easy_setopt(curl, CURLOPT_URL, "google.com");
+            res = curl_easy_perform(curl);
+            /* always cleanup */
+            curl_easy_cleanup(curl);
+            if (res == 0) {
+                AC_PRINT << "0 response";
+            } else {
+                AC_PRINT << "code " << res;
+            }
+        } else {
+            AC_PRINT << "no curl";
+        } 
+        AC_PRINT << "endof CURL TEST in DEMO APP _______________________________________________________";
+
+
+
+
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
         
