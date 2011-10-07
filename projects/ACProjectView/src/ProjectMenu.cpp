@@ -44,31 +44,24 @@ namespace acprojectview {
         ProjectMenuPtr myPtr = boost::static_pointer_cast<ProjectMenu>(shared_from_this());
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
-        float dx = (_myWidth - (_myHorizontalTiling-1)*_myGapY) / _myHorizontalTiling;
-        float dy = (_myHeight - (_myVerticalTiling-1)*_myGapX) / _myVerticalTiling;
+        _myIconWidth = (_myWidth - (_myHorizontalTiling-1)*_myGapY) / _myHorizontalTiling;
+        _myIconHeight = (_myHeight - (_myVerticalTiling-1)*_myGapX) / _myVerticalTiling;
         const VectorOfComponentPtr & myChildren = myPtr->getChildrenByType(ProjectImpl::SPARK_TYPE);
         _myNumberOfSlides = (myChildren.size()-1)/(_myHorizontalTiling * _myVerticalTiling);
         boost::timer::timer myTimer;
-
         for (size_t i = 0; i < myChildren.size(); i++) {
             ProjectImplPtr myProject = boost::static_pointer_cast<ProjectImpl>(myChildren[i]);
             ImagePtr image = boost::static_pointer_cast<spark::Image>(myProject->getChildByName("image"));
             TextPtr titlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("title"));
             TextPtr subtitlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("subtitle"));
             // set Position:
-            myProject->setX((i/_myVerticalTiling)*(_myGapX + dx)); 
-            myProject->setY((i % _myVerticalTiling)*(_myGapY + dy));
+            int xnr=i/_myVerticalTiling;
+            myProject->setX((xnr*_myIconWidth) + _myGapX*(xnr-xnr/_myHorizontalTiling)); 
+            myProject->setY((i % _myVerticalTiling)*(_myGapY + _myIconHeight));
         }
          AC_PRINT << "******************************************************* " << myTimer.elapsed();
     }
     
-    int ProjectMenu::getPreviewWidth() {
-        return 200;
-    }
-    
-    int ProjectMenu::getPreviewHeight(){
-        return 200;
-    }
     
     void
     ProjectMenu::onSwipeLeftCB(EventPtr theEvent) {
@@ -94,7 +87,7 @@ namespace acprojectview {
         _myCurrentSlide += dir;
         WidgetPropertyAnimationPtr changeAnimation = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myPtr, &Widget::setX, myPtr->getX(), 
-                    myPtr->getX()-(_myWidth+_myGapX*(_myHorizontalTiling-1))*dir, 300,
+                    myPtr->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
          
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
