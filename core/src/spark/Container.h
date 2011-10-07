@@ -15,7 +15,7 @@ namespace spark {
         Container(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Container() = 0;
         
-        virtual void realize();
+        virtual void reparent();
         virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const; 
         virtual void addChild(const ComponentPtr theChild);

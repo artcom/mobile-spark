@@ -8,6 +8,7 @@ namespace spark {
     public:
         Text(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Text();
+        virtual void onPause();
         virtual void onResume();
         virtual void realize();
         

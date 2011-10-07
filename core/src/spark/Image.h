@@ -10,6 +10,7 @@ namespace spark {
     public:
         Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Image();
+        virtual void onPause();
         virtual void onResume();
         virtual void realize();
         const std::string & getSrc() const {return data_;} 
@@ -23,8 +24,6 @@ namespace spark {
         virtual void build();
     private:
         vector2 _myTextureSize;
-        float _myTextureScaleX;
-        float _myTextureScaleY;
     };
 
     typedef masl::Ptr<Image> ImagePtr;
