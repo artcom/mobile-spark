@@ -26,14 +26,14 @@ namespace android {
     }
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
-                                                const std::string & theFontPath, int theLineHeight) {
+                                                const std::string & theFontPath, int theLineHeight, int theStartIndex) {
         masl::TextInfo myTextInfo;
         if (env) {
             env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
-            jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[IIILjava/lang/String;Ljava/lang/String;I)Ljava/util/List;");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "renderText", "(Ljava/lang/String;II[IIILjava/lang/String;Ljava/lang/String;II)Ljava/util/List;");
             if(myMethodId != 0) {
-                jvalue myArgs[9];
+                jvalue myArgs[10];
                 myArgs[0].l =  env->NewStringUTF(theMessage.c_str());
                 myArgs[1].i = theTextureId;
                 myArgs[2].i = theFontSize;
@@ -46,6 +46,7 @@ namespace android {
                 myArgs[6].l = env->NewStringUTF(theAlign.c_str());;
                 myArgs[7].l =  env->NewStringUTF(theFontPath.c_str());
                 myArgs[8].i =  theLineHeight;
+                myArgs[9].i =  theStartIndex;
                 jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
@@ -61,6 +62,13 @@ namespace android {
 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);
                 myTextInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+                
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);
+                myTextInfo.renderedGlyphIndex = (jint)env->CallIntMethod(myInt, intValueMethod, 0);    
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);
+                myTextInfo.totalGlyphCount = (jint)env->CallIntMethod(myInt, intValueMethod, 0);    
+                            
 
             } else {
                 AC_WARNING  << "Sorry, java-rendertext not found";
