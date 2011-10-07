@@ -1,15 +1,15 @@
 precision mediump float;
 precision lowp int;
  
-uniform sampler2D   s_textureMap;
-varying vec2        v_texCoord;
-uniform float       a_alpha; 
+uniform mat4 u_mvpMatrix;
+uniform mat4 u_textureMatrix;
+attribute vec4 a_position;
+attribute vec4 a_texCoord0;
+varying vec4 v_texCoord;
 uniform float       a_time;
 uniform float       a_mode;
  
 void main() {
-    vec2 texCoord = v_texCoord;
-
     float startS, startT, moveS, moveT, startScale, endScale;
     if (a_mode < 0.2) {
         startS = 0.5;
@@ -48,11 +48,13 @@ void main() {
         endScale = 0.6;
     }
     
-    texCoord.s = startS + texCoord.s * (startScale + (endScale - startScale) * a_time) + moveS * a_time;
-    texCoord.t = startT + texCoord.t * (startScale + (endScale - startScale) * a_time) + moveT * a_time;
+    v_texCoord = a_texCoord0 * u_textureMatrix;
+    v_texCoord.s = startS + v_texCoord.s * (startScale + (endScale - startScale) * a_time) + moveS * a_time;
+    v_texCoord.t = startT + v_texCoord.t * (startScale + (endScale - startScale) * a_time) + moveT * a_time;
 
-    vec4 tex = texture2D(s_textureMap, texCoord);
-    gl_FragColor = vec4(tex.rgb, tex.a * a_alpha);
+ 
+    // Here we set the final position to this vertex.
+    gl_Position = u_mvpMatrix * a_position;
 }
 
 

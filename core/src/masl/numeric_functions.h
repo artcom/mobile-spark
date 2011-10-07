@@ -4,6 +4,7 @@
 #include <cml/cml.h>
 #include <cml/util.h>
 #include <cml/mathlib/typedef.h>
+#include <cml/mathlib/misc.h>
 #include <cml/vector/vector_ops.h>
 
 typedef cml::constantsf constants;

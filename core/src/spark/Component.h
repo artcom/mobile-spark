@@ -27,10 +27,11 @@ namespace spark {
             return c.print(os);
         }
 
+        virtual void reparent() {AC_INFO << "reparent " << *this;};
         virtual void realize() {AC_INFO << "realize " << *this;};
         void realizeASync();
-        const bool isAllRealized() const { return _myRealizedAndAllChildrenFlag;}
-        virtual void onPause() {};
+        const bool isAllRealized() const { return _myRealizedAllChildrenFlag;}
+        virtual void onPause() {AC_INFO << "onPause " << *this;};
         virtual void onResume() {};
         virtual void prerender(MatrixStack& theCurrentMatrixStack) {};
         virtual void render(const matrix & theProjectionMatrix) const {};
@@ -52,7 +53,7 @@ namespace spark {
     private:
         ComponentPtr _myParent;
         bool _myRealizedFlag;
-        bool _myRealizedAndAllChildrenFlag;
+        bool _myRealizedAllChildrenFlag;
     };
 };
 #endif

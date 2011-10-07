@@ -13,6 +13,7 @@ namespace acprojectview {
             ProjectImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ProjectImpl();
             virtual void realize();
+            void fitToSize();
             
             static const char * const SPARK_TYPE;             
             virtual const char * const & getType() const { return ProjectImpl::SPARK_TYPE;};
