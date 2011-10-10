@@ -91,7 +91,7 @@ namespace spark {
         _myTextSize[0] = myTextInfo.width;
         _myTextSize[1] = myTextInfo.height;
         _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
-        getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
+        setSize(_myTextSize[0], _myTextSize[1]);
         myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
         myMaterial->transparency_ = true;
     }

@@ -33,7 +33,15 @@ namespace spark {
             std::string vertexShader_;
             std::string fragmentShader_;
         private:
+            enum ORIGIN_MODE {
+                NO_ORIGIN,
+                CENTER_ORIGIN,
+                EXPLICIT_ORIGIN
+            };
             mar::ShapePtr _myShape;
+            vector2 _myOrigin;
+            ORIGIN_MODE _myOriginMode;
+                
     };
     typedef masl::Ptr<ShapeWidget> ShapeWidgetPtr;
 };

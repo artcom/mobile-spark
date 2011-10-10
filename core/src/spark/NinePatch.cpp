@@ -36,16 +36,12 @@ namespace spark {
     NinePatch::build() {
         I18nShapeWidget::build();
         if(data_.empty()) return;
-        float width = _myXMLNode->getAttributeAs<float>("width", -1);
-        float height = _myXMLNode->getAttributeAs<float>("height", -1);
 
-        setShape(mar::ShapeFactory::get().createNinePatch(data_, edgeLeft_, edgeTop_, edgeRight_, edgeBottom_,
-                    width >= 0 ? width : 0, height >= 0 ? height : 0));
+        setShape(mar::ShapeFactory::get().createNinePatch(data_, edgeLeft_, edgeTop_, edgeRight_, edgeBottom_, 100, 100));
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
-        if (width == -1 || height == -1) {
-            width = width == -1 ? myMaterial->getTexture()->width_ : width;
-            height = height == -1 ? myMaterial->getTexture()->height_ : height;
-            getShape()->setDimensions(width, height);
-        }
+
+        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->width_);
+        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->height_);
+        setSize(width, height);
     }
 }

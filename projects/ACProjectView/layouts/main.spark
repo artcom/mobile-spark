@@ -201,7 +201,7 @@
 
         
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="2" y-gap="2" visible="true">
-        
+
             
             <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/artcom_teaser_thumb.png">
                 <ContentImage src="/large_images/blub.png"/>

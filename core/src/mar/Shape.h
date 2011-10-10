@@ -25,7 +25,7 @@ namespace mar {
         void render(const matrix & theMvp) const;
         void updateHandles(const std::map<std::string, float> & theShaderValues);
         void initGL();
-        virtual void setDimensions(const float theWidth, const float theHeight) = 0;
+        virtual void setDimensions(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) = 0;
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {};
         const BoundingBox & getBoundingBox() const { return _myBoundingBox;};
         void setBoundingBox(const vector4 & theMin, const vector4 & theMax);
@@ -54,9 +54,9 @@ namespace mar {
                        const std::string & theTextureSrc = "");
         virtual ~RectangleShape();
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3);
-        virtual void setDimensions(const float theWidth, const float theHeight);
+        virtual void setDimensions(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner);
     private:
-        void setVertexData();
+        void setVertexData(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner);
     };
 
     class NinePatchShape : public Shape {
@@ -65,9 +65,9 @@ namespace mar {
                 const float theTopEdge, const float theRightEdge, const float theBottomEdge,
                 const float theWidth = 0, const float theHeight = 0);
         virtual ~NinePatchShape();
-        virtual void setDimensions(const float theWidth, const float theHeight);
+        virtual void setDimensions(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner);
     private:
-        void setVertexData();
+        void setVertexData(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner);
         float leftEdge_;
         float topEdge_;
         float rightEdge_;
@@ -80,7 +80,7 @@ namespace mar {
     public:
         ObjShape();
         virtual ~ObjShape();
-        virtual void setDimensions(const float theWidth, const float theHeight) {};
+        virtual void setDimensions(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) {};
     };
     typedef masl::Ptr<ObjShape> ObjShapePtr;
 

@@ -12,12 +12,11 @@
         <Image name="image" src="" x="0" y="0"/>
     </Transform>        
     
-
     <Transform name="popup" x="0" y="0" z="10">
         <Rectangle name="popup_bg" width="600" height="80" color="[0.0,0.0,0.0]" alpha="0.5" sensible="true"/>
         <Text name="title" x="20" y="0" z="2" color="[0.333,0.77,0.91,1]" fontsize="16" font="/acswissmed.ttf" sensible="false"/>
         <Text name="subtitle" x="20" y="0" z="3" color="[1,1,1,1]" fontsize="14" font="/acswissmed.ttf" sensible="false"/>        
         <MultiColumnText name="description" x="0" y="0" z="4" columnSpace="20" sensible="false"/>
-        <Image name="pfeil" x="200" y="0" z="5" src="/pfeil.png"/>
+        <Image name="pfeil" x="0" y="0" z="5" src="/pfeil.png" origin="center"/>
     </Transform>        
 </ProjectViewerImpl>
