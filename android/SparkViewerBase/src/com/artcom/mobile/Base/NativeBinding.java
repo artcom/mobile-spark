@@ -117,9 +117,12 @@ public class NativeBinding {
     myResult.add(textures[0]);
     myResult.add(myBitmap.getWidth());
     myResult.add(myBitmap.getHeight());
-    myResult.add(myLayouter.getRenderedGlyphIndex());
-    myResult.add(theMessage.length());
-   
+    if (myLayouter.getRenderedGlyphIndex() > 0) {
+        myResult.add(theStartIndex + myLayouter.getRenderedGlyphIndex());   
+    } else {
+    	// we are all through the text
+    	myResult.add(-1);
+    }
     return myResult;
   }
   private static ByteBuffer extract(Bitmap bmp, boolean theYFlipFlag)

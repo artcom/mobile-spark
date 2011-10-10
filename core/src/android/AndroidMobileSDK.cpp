@@ -65,11 +65,7 @@ namespace android {
                 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);
                 myTextInfo.renderedGlyphIndex = (jint)env->CallIntMethod(myInt, intValueMethod, 0);    
-
-                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);
-                myTextInfo.totalGlyphCount = (jint)env->CallIntMethod(myInt, intValueMethod, 0);    
                             
-
             } else {
                 AC_WARNING  << "Sorry, java-rendertext not found";
             }

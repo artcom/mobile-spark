@@ -2,6 +2,8 @@
 #include <spark/BaseApp.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/Window.h>
+#include <animation/Easing.h>
+#include <animation/AnimationManager.h>
 
 using namespace spark;
 
@@ -12,7 +14,9 @@ namespace acprojectview {
         
     MultiColumnText::MultiColumnText(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Transform(theApp, theXMLNode),
-          _myColumnSpace(_myXMLNode->getAttributeAs<int>("columnSpace", 10)) {
+          _myColumnSpace(_myXMLNode->getAttributeAs<int>("columnSpace", 10)),
+          _myIniitalXPos(_myXMLNode->getAttributeAs<int>("x", 0)),
+          _myVisibleColumnIndex(0), _myColumnCount(0), _myAnimatingFlag(false) {
 
 
     }
@@ -40,27 +44,62 @@ namespace acprojectview {
     }
     
     void 
+    MultiColumnText::onAnimationFinished() {
+        _myAnimatingFlag = false;
+    }
+    
+    void 
+    MultiColumnText::swipe(int theDir) {
+        int myNewColumnIndex = _myVisibleColumnIndex + theDir;
+        if ((_myVisibleColumnIndex == _myColumnCount-1 && theDir == 1 ) || 
+            (_myVisibleColumnIndex == 0 && theDir == -1) || 
+            _myAnimatingFlag) {
+            // do nothing
+            return;
+        }  
+        _myAnimatingFlag = true;
+        MultiColumnTextPtr ptr = boost::static_pointer_cast<MultiColumnText>(shared_from_this());
+        int myTargetX = -(_myTextPtrs[myNewColumnIndex]->getMaxWidth() + _myColumnSpace) * myNewColumnIndex;
+        
+        WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(ptr, &Widget::setX, getX(), myTargetX, 300,
+                    animation::EasingFnc(animation::easeInOutQuad)));        
+        changeAnimation0->setOnFinish(masl::CallbackPtr(
+                        new masl::MemberFunctionCallback<MultiColumnText, MultiColumnTextPtr>(ptr, &MultiColumnText::onAnimationFinished)));
+                            
+        animation::AnimationManager::get().play(changeAnimation0);
+        _myVisibleColumnIndex = myNewColumnIndex;
+                        
+    }
+    void
+    MultiColumnText::reset() {
+        setX(_myIniitalXPos);
+        _myVisibleColumnIndex = 0;
+    }
+    
+    void 
     MultiColumnText::setI18nId(const std::string & theNewI18nId) {
-        int myColumnCount = 0;
+        setX(_myIniitalXPos);
+        _myVisibleColumnIndex = 0;
+        _myColumnCount = 0;
         _myTextPtrs[0]->setI18nId(theNewI18nId);
         _myTextPtrs[0]->setX(_myColumnSpace);
-        unsigned myRenderedGlyphIndex = _myTextPtrs[0]->getRenderedGlyphIndex();
-        unsigned myMessageLength = _myTextPtrs[0]->getTotalGlyphCount();
-        while (myRenderedGlyphIndex < myMessageLength) {
-            myColumnCount++;
-            if (myColumnCount > _myTextPtrs.size()-1) {
+        int myRenderedGlyphIndex = _myTextPtrs[0]->getRenderedGlyphIndex();
+        while (myRenderedGlyphIndex > 0) {
+            _myColumnCount++;
+            if (_myColumnCount > _myTextPtrs.size()-1) {
                 _myTextPtrs.push_back(createNewColumn());
             }
-            TextPtr myColumn = _myTextPtrs[myColumnCount];
-            myColumn->setMaxWidth(_myTextPtrs[myColumnCount-1]->getMaxWidth());            
+            TextPtr myColumn = _myTextPtrs[_myColumnCount];
+            myColumn->setMaxWidth(_myTextPtrs[_myColumnCount-1]->getMaxWidth());            
             myColumn->setI18nId(theNewI18nId);
-            myColumn->setStartIndex(_myTextPtrs[myColumnCount-1]->getRenderedGlyphIndex());
+            myColumn->setStartIndex(_myTextPtrs[_myColumnCount-1]->getRenderedGlyphIndex());
             myColumn->setVisible(true);
-            myColumn->setX(_myTextPtrs[myColumnCount-1]->getX() + _myTextPtrs[myColumnCount-1]->getMaxWidth() + _myColumnSpace);
-            myColumn->setZ(_myTextPtrs[myColumnCount-1]->getZ() + 1);
-            myRenderedGlyphIndex = _myTextPtrs[myColumnCount]->getRenderedGlyphIndex();
+            myColumn->setX(_myTextPtrs[_myColumnCount-1]->getX() + _myTextPtrs[_myColumnCount-1]->getMaxWidth() + _myColumnSpace);
+            myColumn->setZ(_myTextPtrs[_myColumnCount-1]->getZ() + 1);
+            myRenderedGlyphIndex = _myTextPtrs[_myColumnCount]->getRenderedGlyphIndex();
         }
-        for (int i = myColumnCount+1; i < _myTextPtrs.size(); i++) {        
+        for (int i = _myColumnCount+1; i < _myTextPtrs.size(); i++) {        
             _myTextPtrs[i]->setVisible(false);
         }
     }

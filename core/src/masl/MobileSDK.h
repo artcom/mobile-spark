@@ -16,7 +16,6 @@ namespace masl {
         int width;
         int height;
         int renderedGlyphIndex;
-        int totalGlyphCount;
     };
 
     class MobileSDK {
