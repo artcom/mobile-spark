@@ -48,7 +48,7 @@ namespace ios {
             font = CTFontCreateWithGraphicsFont(theCGFont, theFontSize, NULL, NULL);
             CGFontRelease(theCGFont);
         } else {
-            //Defeault Font
+            //Default Font
             font = CTFontCreateWithName(CFSTR("Helvetica"), theFontSize, NULL);
         }
         //add Font as an attribute to the string
@@ -75,7 +75,6 @@ namespace ios {
         
         //Create Paragraph style and set alignment settings to it
         CGFloat lineHeight = theLineHeight;
-        //NSLog(@"################################### lineHeight %f",lineHeight);
         CTParagraphStyleSetting styleSetting[] = { {kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &alignment} ,
                     { kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(lineHeight), &lineHeight },
                     { kCTParagraphStyleSpecifierMaximumLineHeight, sizeof(lineHeight), &lineHeight }};
@@ -111,7 +110,7 @@ namespace ios {
             textureWidth = 0;
             textureHeight = 0;
         }
-        NSLog(@"--------- theMaxHeight: %d and width: %d", theMaxHeight, theMaxWidth);
+        
         
         if (textureWidth != 0 && textureHeight != 0) {
             // Initialize a Bitmap context and set the text matrix to a known value.
@@ -167,7 +166,6 @@ namespace ios {
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureWidth, (GLsizei)textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapData);
-            NSLog(@"################# CFRANGE: %d %d size: %d  %s", fitRange.location, fitRange.length, theMessage.size(), theMessage.c_str());
             free(bitmapData);
             CGContextRelease(context);
         } else {
@@ -180,7 +178,9 @@ namespace ios {
                 texture = theTextureId;
             }
         }
-        CGColorSpaceRelease(rgbColorSpace);        
+        CGColorSpaceRelease(rgbColorSpace);    
+        renderedGlyphIndex = calcRenderedGlyphIndex(theMessage, string, fitRange);
+
     }
     
     int TextRenderer::getTextureID()
@@ -195,4 +195,28 @@ namespace ios {
     int TextRenderer::getTextureHeight() {
         return textureHeight;
     }
+    
+    int TextRenderer::calcRenderedGlyphIndex(std::string theMessage, NSString* theString, CFRange theFitRange) {
+        NSString * sub = [theString substringToIndex: theFitRange.length];
+        std::string myString([sub UTF8String]);
+        // search specials:
+        int foundSpecials = 0;
+        size_t found;
+
+        found=theMessage.find("\\n");
+        while (found!=std::string::npos) {
+            if (found < theFitRange.length+foundSpecials) foundSpecials++;
+            found=theMessage.find("\\n",found+2);
+        }
+        if(myString.size()+foundSpecials >= theMessage.size()) return -1;
+        return myString.size() + foundSpecials;
+        
+    }
+    
+    int TextRenderer::getRenderedGlyphIndex() {
+               return renderedGlyphIndex;
+    };
+
+    
+    
 }
