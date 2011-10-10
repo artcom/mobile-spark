@@ -2,7 +2,9 @@
 
 #include <cstdlib>
 
-#include <curl/curl.h>
+#ifdef ANDROID
+   #include <curl/curl.h>
+#endif
 
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
@@ -41,6 +43,8 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace demoapp {
 
+#ifdef ANDROID
+
     // Define our struct for accepting LCs output
     struct BufferStruct {
         char * buffer;
@@ -62,8 +66,8 @@ namespace demoapp {
         AC_PRINT << "buffer " << mem->buffer;
         return realsize;
     }
-
-
+#endif
+    
 
     WidgetPropertyAnimationPtr myAmazoneRotation;
 
@@ -81,6 +85,7 @@ namespace demoapp {
     }
 
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
+#ifdef ANDROID
         //test curl
         AC_PRINT << "CURL TEST in DEMO APP _______________________________________________________";
 	    CURL *myHandle;
@@ -105,7 +110,7 @@ namespace demoapp {
             AC_PRINT << "no curl";
         } 
         AC_PRINT << "endof CURL TEST in DEMO APP _______________________________________________________";
-
+#endif
 
 
 
