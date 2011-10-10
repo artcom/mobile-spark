@@ -48,7 +48,7 @@ namespace ios {
             font = CTFontCreateWithGraphicsFont(theCGFont, theFontSize, NULL, NULL);
             CGFontRelease(theCGFont);
         } else {
-            //Defeault Font
+            //Default Font
             font = CTFontCreateWithName(CFSTR("Helvetica"), theFontSize, NULL);
         }
         //add Font as an attribute to the string
@@ -111,6 +111,8 @@ namespace ios {
             textureWidth = 0;
             textureHeight = 0;
         }
+        renderedGlyphIndex = calcRenderedGlyphIndex(theMessage, fitRange);
+
         NSLog(@"--------- theMaxHeight: %d and width: %d", theMaxHeight, theMaxWidth);
         
         if (textureWidth != 0 && textureHeight != 0) {
@@ -195,4 +197,25 @@ namespace ios {
     int TextRenderer::getTextureHeight() {
         return textureHeight;
     }
+    
+    int TextRenderer::calcRenderedGlyphIndex(std::string theMessage, CFRange theFitRange) {
+        int myIndex = theFitRange.length;
+        size_t found;
+        
+        found=theMessage.find_first_of("äöüß");
+        while (found!=std::string::npos)
+        {
+            //myIndex--;
+            found=theMessage.find_first_of("äöüß",found+1);
+        }
+        NSLog(@"_______________ new index: %d", myIndex);
+        return myIndex;
+    }
+    
+    int TextRenderer::getRenderedGlyphIndex() {
+               return renderedGlyphIndex;
+    };
+
+    
+    
 }
