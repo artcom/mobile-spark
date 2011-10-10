@@ -1,7 +1,12 @@
-#include "Widget.h"
 
+#include "Widget.h"
 #include "I18nContext.h"
 #include "BaseApp.h"
+
+#include <masl/numeric_functions.h>
+#include <cml/mathlib/matrix_transform.h>
+#include <cml/mathlib/matrix_rotation.h>
+#include <cml/mathlib/matrix_translation.h>
 
 namespace spark {
     Widget::Widget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
@@ -37,14 +42,28 @@ namespace spark {
 
     void
     Widget::updateMatrix() {
-        MatrixStack helpMatrixStack;
-        helpMatrixStack.loadIdentity();
-        helpMatrixStack.rotateXAxis(_rotationX);
-        helpMatrixStack.rotateYAxis(_rotationY);
-        helpMatrixStack.rotateZAxis(_rotationZ);
-        helpMatrixStack.translate(_x, _y, _z);
-        helpMatrixStack.scale(_scaleX, _scaleY, _scaleZ);
-        _myLocalMatrix = helpMatrixStack.getTop();
+
+        matrix myLocalMatrix;
+        myLocalMatrix.identity();
+        
+        matrix myScalingMatrix;
+        myScalingMatrix.identity();
+        cml::matrix_scale(myScalingMatrix, _scaleX, _scaleY, _scaleZ);
+
+        matrix myRotationMatrix;
+        myRotationMatrix.identity();
+        cml::matrix_rotation_euler(myRotationMatrix, _rotationX, _rotationY, _rotationZ,  cml::euler_order_xyz);
+                
+        matrix myTranslationMatrix;
+        myTranslationMatrix.identity();
+        cml::matrix_translation(myTranslationMatrix, _x, _y, _z);
+
+        myLocalMatrix *= myTranslationMatrix;
+        myLocalMatrix *= myRotationMatrix;
+        myLocalMatrix *= myScalingMatrix;
+        
+        _myLocalMatrix = myLocalMatrix; 
+
     }
 
     //TODO: use visitor?

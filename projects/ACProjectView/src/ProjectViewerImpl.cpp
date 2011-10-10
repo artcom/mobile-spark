@@ -1,4 +1,5 @@
 #include "ProjectViewerImpl.h"
+
 #include <spark/Window.h>
 #include <spark/Rectangle.h>
 #include <spark/SparkComponentFactory.h>
@@ -8,11 +9,12 @@
 #include <animation/DelayAnimation.h>
 #include <animation/Easing.h>
 
-
+#include <masl/numeric_functions.h>
 #include <boost/progress.hpp>
 
 using namespace spark;
 using namespace std;
+using namespace masl;
 
 namespace acprojectview {
         
@@ -62,7 +64,7 @@ namespace acprojectview {
         _myPopUpTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         _myPopUpSubTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         
-        _myPopupBG->getShape()->setDimensions(_myWidth, 0);
+        _myPopupBG->setSize(_myWidth, 0);
             
     }
 
@@ -77,13 +79,13 @@ namespace acprojectview {
 
          int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
          int myTextHeight = 250;
-         _myPopupBG->getShape()->setDimensions(_myWidth, myHiddenPopUpHeight + myTextHeight);
+         _myPopupBG->setSize(_myWidth, myHiddenPopUpHeight + myTextHeight);
          
          _myPopUpSubTitle->setY(myTextHeight+10);
          _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
 
-         _myPopUpPfeil->setX(_myWidth - _myPopUpPfeil->getTextureSize()[0] - 20);
-         _myPopUpPfeil->setY((50 + _myPopUpPfeil->getTextureSize()[1] ) /2.0  + myTextHeight - _myPopUpPfeil->getTextureSize()[1]);
+         _myPopUpPfeil->setX(_myWidth - (_myPopUpPfeil->getTextureSize()[0]/2.0) - 20);
+         _myPopUpPfeil->setY((50 + (_myPopUpPfeil->getTextureSize()[1]/2.0) ) /2.0  + myTextHeight - _myPopUpPfeil->getTextureSize()[1]);
         _myPopup->setY(-myTextHeight);
             
         _myIsAnimating = false;     
@@ -194,10 +196,13 @@ namespace acprojectview {
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
                         new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.9, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
+                WidgetPropertyAnimationPtr myRotateAnimation = WidgetPropertyAnimationPtr(
+                        new WidgetPropertyAnimation(_myPopUpPfeil, &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), M_PI, 300,
+                            animation::EasingFnc(animation::easeInOutQuad)));
+                                
+                myAnimation->add(myRotateAnimation);
                 myAnimation->add(myPosYAnimation);
                 myAnimation->add(myAlphaAnimation);
-                //_myPopup->setY(0);
-                //_myPopup->setAlpha(0.9);
             } else {
                 _myDescription->reset();
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
@@ -206,10 +211,12 @@ namespace acprojectview {
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
                         new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.5, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
+                WidgetPropertyAnimationPtr myRotateAnimation = WidgetPropertyAnimationPtr(
+                        new WidgetPropertyAnimation(_myPopUpPfeil, &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), 0, 300,
+                            animation::EasingFnc(animation::easeInOutQuad)));
+                myAnimation->add(myRotateAnimation);
                 myAnimation->add(myPosYAnimation);
                 myAnimation->add(myAlphaAnimation);
-                //_myPopup->setY(-myTextHeight);
-                //_myPopup->setAlpha(0.5);
             }
             animation::AnimationManager::get().play(myAnimation);            
 	    }

@@ -15,8 +15,8 @@ namespace spark {
         ShapeWidget(theApp, theXMLNode), _myPortraitMode(true) {
 
         setShape(mar::ShapeFactory::get().createRectangle(true));
+        setSize(500, 500);
         _myColorConversionFlag = _myXMLNode->getAttributeAs<bool>("cpu_color_conversion", false);
-        getShape()->setDimensions(500, 500);
 
     }
 
@@ -79,13 +79,13 @@ namespace spark {
         float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
 		float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
 		if (_myPortraitMode) {
-			getShape()->setDimensions(height, width);
+			setSize(height, width);
             getShape()->setTexCoords(vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight) ,
                                      vector2(width/myCameraInfo.texturewidth,0),
                                      vector2(0,height/myCameraInfo.textureheight),
                                      vector2(0,0));
         } else {
-			getShape()->setDimensions(width, height);
+			setSize(width, height);
             getShape()->setTexCoords(vector2(0,height/myCameraInfo.textureheight),
             						 vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight) ,
                                      vector2(0,0),

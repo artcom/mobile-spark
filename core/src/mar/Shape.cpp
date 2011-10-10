@@ -113,7 +113,7 @@ namespace mar {
         myElement->material = myMaterial;
         elementList.push_back(myElement);
         myMaterial->createShader(theVertexShader, theFragmentShader);
-        setVertexData();
+        setVertexData(vector2(0,0), vector2(theWidth, theHeight));
         initGL();
         myMaterial->setCustomHandles(theCustomHandles);
         _myBoundingBox.max[0] = theWidth;
@@ -124,7 +124,7 @@ namespace mar {
     }
     
     
-    void RectangleShape::setVertexData() {
+    void RectangleShape::setVertexData(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) {
         ElementPtr myElement = elementList[0];
         _myDataPerVertex = 3 + (_myTextureFlag ? 2 : 0);
         myElement->numVertices = 4;
@@ -150,6 +150,31 @@ namespace mar {
         }
     }
 
+    void RectangleShape::setDimensions(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) {
+        ElementPtr myElement = elementList[0];
+
+        myElement->vertexData_[0] = theLowerLeftCorner[0];
+        myElement->vertexData_[0 + 1] = theLowerLeftCorner[1];
+        
+        myElement->vertexData_[_myDataPerVertex] = theUpperRightCorner[0];
+        myElement->vertexData_[_myDataPerVertex + 1] = theLowerLeftCorner[1];
+        
+        myElement->vertexData_[_myDataPerVertex*2] = theLowerLeftCorner[0];
+        myElement->vertexData_[(_myDataPerVertex*2) + 1] = theUpperRightCorner[1];
+
+        myElement->vertexData_[_myDataPerVertex*3] = theUpperRightCorner[0];
+        myElement->vertexData_[(_myDataPerVertex*3) + 1] =  theUpperRightCorner[1];
+
+        width_ = theUpperRightCorner[0] - theLowerLeftCorner[0];
+        height_ = theUpperRightCorner[1] - theLowerLeftCorner[1];
+        _myBoundingBox.min[0] = theLowerLeftCorner[0];
+        _myBoundingBox.min[1] = theLowerLeftCorner[1];
+        _myBoundingBox.max[0] = theUpperRightCorner[0];
+        _myBoundingBox.max[1] = theUpperRightCorner[1];
+        
+        myElement->updateCompleteVertexBuffersContent();
+    }
+    
     void RectangleShape::setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {
         ElementPtr myElement = elementList[0];
         if (_myTextureFlag) {
@@ -166,19 +191,6 @@ namespace mar {
             (myElement->vertexData_)[3 * _myDataPerVertex + 4] = theUV3[1];
             myElement->updateCompleteVertexBuffersContent();
         }
-    }
-
-    void RectangleShape::setDimensions(const float theWidth, const float theHeight) {
-        ElementPtr myElement = elementList[0];
-        myElement->vertexData_[_myDataPerVertex] = theWidth;
-        myElement->vertexData_[_myDataPerVertex*3] = theWidth;
-        myElement->vertexData_[_myDataPerVertex*2 + 1] = theHeight;
-        myElement->vertexData_[_myDataPerVertex*3 + 1] = theHeight;
-        _myBoundingBox.max[0] = theWidth;
-        _myBoundingBox.max[1] = theHeight;
-        width_ = theWidth;
-        height_ = theHeight;
-        myElement->updateCompleteVertexBuffersContent();
     }
 
     //////////////////////////////////////////////////////////////NinePatchShape
@@ -199,7 +211,7 @@ namespace mar {
         imageHeight_ = myMaterial->getTexture()->height_;
         imageHeight_ = imageHeight_ > 0 ? imageHeight_ : 1;
 
-        setVertexData();
+        setVertexData(vector2(0,0), vector2(theWidth, theHeight));
         initGL();
         _myBoundingBox.max[0] = theWidth;
         _myBoundingBox.max[1] = theHeight;
@@ -208,7 +220,7 @@ namespace mar {
     NinePatchShape::~NinePatchShape() {
     }
 
-    void NinePatchShape::setVertexData() {
+    void NinePatchShape::setVertexData(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) {
         ElementPtr myElement = elementList[0];
         _myDataPerVertex = 5; //position and texcoord
         size_t vertices_per_side = 4;
@@ -221,29 +233,29 @@ namespace mar {
                 float myX, myY;
                 float myS, myT;
                 if (j== 0) {
-                    myX = 0;
+                    myX = theLowerLeftCorner[0];
                     myS = 0;
                 } else if (j == vertices_per_side - 3) {
-                    myX = cml::clamp(leftEdge_ ,0.0f , width_);
+                    myX = cml::clamp(leftEdge_ , theLowerLeftCorner[0] , theUpperRightCorner[0]);
                     myS = cml::clamp(leftEdge_/imageWidth_, 0.0f, 1.0f);
                 } else if (j == vertices_per_side - 2) {
-                    myX = cml::clamp(width_ - rightEdge_, std::min(leftEdge_, width_), width_);
+                    myX = cml::clamp(theUpperRightCorner[0] - rightEdge_, std::min(leftEdge_, theUpperRightCorner[0]), theUpperRightCorner[0]);
                     myS = cml::clamp((imageWidth_ - rightEdge_)/imageWidth_, 0.0f, 1.0f);
                 } else if (j == vertices_per_side - 1) {
-                    myX = cml::clamp(width_, std::min(leftEdge_, width_), width_);
+                    myX = cml::clamp(theUpperRightCorner[0], std::min(leftEdge_, theUpperRightCorner[0]), theUpperRightCorner[0]);
                     myS = 1.0f;
                 }
                 if (i == 0) {
-                    myY = 0;
+                    myY = theLowerLeftCorner[1];
                     myT = 0.0f;
                 } else if (i == vertices_per_side - 3) {
-                    myY = cml::clamp(bottomEdge_,0.0f,height_);
+                    myY = cml::clamp(bottomEdge_,theLowerLeftCorner[1],theUpperRightCorner[1]);
                     myT = cml::clamp(bottomEdge_/imageHeight_, 0.0f, 1.0f);
                 } else if (i == vertices_per_side - 2) {
-                    myY = cml::clamp(height_ - topEdge_, std::min(bottomEdge_,height_),height_);
+                    myY = cml::clamp(theUpperRightCorner[1] - topEdge_, std::min(bottomEdge_,theUpperRightCorner[1]),theUpperRightCorner[1]);
                     myT = cml::clamp((imageHeight_-topEdge_)/imageHeight_, 0.0f, 1.0f);
                 } else if (i == vertices_per_side - 1) {
-                    myY = cml::clamp(height_, std::min(bottomEdge_,height_),height_);
+                    myY = cml::clamp(theUpperRightCorner[1], std::min(bottomEdge_,theUpperRightCorner[1]),theUpperRightCorner[1]);
                     myT = 1.0f;
                 }
 
@@ -271,12 +283,19 @@ namespace mar {
         }
     }
 
-    void NinePatchShape::setDimensions(const float theWidth, const float theHeight) {
-        width_ = theWidth;
-        height_ = theHeight;
-        _myBoundingBox.max[0] = theWidth;
-        _myBoundingBox.max[1] = theHeight;
-        setVertexData();
+    void NinePatchShape::setDimensions(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) {
+        width_ = theUpperRightCorner[0] - theLowerLeftCorner[0];
+        height_ = theUpperRightCorner[1] - theLowerLeftCorner[1];
+
+        _myBoundingBox.min[0] = theLowerLeftCorner[0];
+        _myBoundingBox.min[1] = theLowerLeftCorner[1];
+        _myBoundingBox.max[0] = theUpperRightCorner[0];
+        _myBoundingBox.max[1] = theUpperRightCorner[1];
+
+        setVertexData(theLowerLeftCorner, theUpperRightCorner);
+        ElementPtr myElement = elementList[0];        
+        myElement->updateCompleteVertexBuffersContent();
+        
     }
 
 
