@@ -52,7 +52,6 @@ namespace spark {
         VectorOfComponentPtr _myChildren;
     private:
         ComponentPtr _myParent;
-        bool _myRealizedFlag;
         bool _myRealizedAllChildrenFlag;
     };
 };
