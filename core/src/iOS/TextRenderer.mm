@@ -208,7 +208,7 @@ namespace ios {
             if (found < theFitRange.length+foundSpecials) foundSpecials++;
             found=theMessage.find("\\n",found+2);
         }
-        if(myString.size()+foundSpecials >= theMessage.size()) return -1;
+        if(myString.size()+foundSpecials +1 >= theMessage.size()) return -1;
         return myString.size() + foundSpecials;
         
     }
