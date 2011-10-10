@@ -112,6 +112,10 @@ public class TextLayouter {
             }
             if (myBaseLine > _myCanvasHeight) {
             	break;
+            } else {
+                if (i == myBlocks.size()-1) {
+                	_myRendereredGlypthIndex = -1;
+                }
             }
         }
         return myResult;

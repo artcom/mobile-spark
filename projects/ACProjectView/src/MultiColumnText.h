@@ -22,14 +22,19 @@ namespace acprojectview {
             void setMaxHeight(int theMaxHeight);
             void setI18nId(const std::string & theNewI18nId);
             const int & getColumnSpace() const { return _myColumnSpace; };
-                
+            void swipe(int theDir);                
             void realize();
-
+            void reset();
                     
         private:
+            void onAnimationFinished();
             spark::TextPtr createNewColumn();
             std::vector<spark::TextPtr> _myTextPtrs;
             int _myColumnSpace;
+            int _myIniitalXPos;
+            int _myVisibleColumnIndex;
+            int _myColumnCount;
+            bool _myAnimatingFlag;
             
     };
     typedef masl::Ptr<MultiColumnText>MultiColumnTextPtr;

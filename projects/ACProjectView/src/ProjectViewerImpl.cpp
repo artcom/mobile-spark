@@ -199,6 +199,7 @@ namespace acprojectview {
                 //_myPopup->setY(0);
                 //_myPopup->setAlpha(0.9);
             } else {
+                _myDescription->reset();
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
                         new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), -myTextHeight, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
@@ -215,8 +216,12 @@ namespace acprojectview {
     }
     void ProjectViewerImpl::onSwipe(EventPtr theEvent) {
         if (isRendered()) {
-    	    changeImage(theEvent->getType() == "swipe-right" ? -1 :  +1);
-	    }
+            if (isPopUpOpen()) {
+    	        _myDescription->swipe((theEvent->getType() == "swipe-right" ? -1 :  +1));
+	        } else {
+    	        changeImage(theEvent->getType() == "swipe-right" ? -1 :  +1);
+	        }
+        }
     }
     
     void ProjectViewerImpl::changeImage(int dir) {
