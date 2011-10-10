@@ -24,7 +24,7 @@ namespace ios {
         int getTextureHeight();
         int getRenderedGlyphIndex();
     private:
-        int calcRenderedGlyphIndex(std::string theMessage, CFRange fitRange);
+        int calcRenderedGlyphIndex(std::string theMessage, NSString* theString, CFRange fitRange);
 
         GLuint  texture;
         int textureWidth;
