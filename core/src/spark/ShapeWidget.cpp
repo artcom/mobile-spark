@@ -9,7 +9,7 @@
 
 namespace spark {
     ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
-        : Widget(theApp, theXMLNode)
+        : Widget(theApp, theXMLNode), _myOriginMode(NO_ORIGIN), _myOrigin(vector2(0,0))
     {
         vertexShader_ = getNode()->getAttributeAs<std::string>("vertex_shader","");
         fragmentShader_ = getNode()->getAttributeAs<std::string>("fragment_shader","");
@@ -21,6 +21,15 @@ namespace spark {
              std::back_inserter<std::vector<std::string> >(myHandles));
         for (std::vector<std::string>::iterator it = myHandles.begin(); it != myHandles.end(); ++it) {
             customShaderValues_[(*it)] = 0.0f;
+        }        
+        std::string myOriginStr = getNode()->getAttributeAs<std::string>("origin","");
+        if (myOriginStr == "") {
+            _myOriginMode = NO_ORIGIN;
+        } else if (myOriginStr == "center") {
+            _myOriginMode = CENTER_ORIGIN;
+        } else {
+            _myOriginMode = EXPLICIT_ORIGIN;
+            _myOrigin = masl::as<vector2>(myOriginStr);
         }
     }
 
@@ -159,7 +168,14 @@ namespace spark {
     void
     ShapeWidget::setSize(const vector2 & theSize) {
         if (getShape()) {
-            getShape()->setDimensions(theSize[0], theSize[1]);
+            if (_myOriginMode == NO_ORIGIN) {
+                _myOrigin = vector2(0,0);
+            } else if (_myOriginMode == CENTER_ORIGIN) {
+                _myOrigin = theSize * 0.5;
+            }
+            vector2 myLowerLeftCorner = _myOrigin * -1.0f;
+            vector2 myUpperRightCorner = theSize - _myOrigin;
+            getShape()->setDimensions(myLowerLeftCorner, myUpperRightCorner);
         }
     }
 
