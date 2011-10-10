@@ -11,7 +11,7 @@ namespace ios {
     }
     
     void TextRenderer::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, 
-                                  vector4 theColor, float theMaxWidth, float theMaxHeight, const std::string & theAlign, const std::string &theFontPath) 
+                                  vector4 theColor, float theMaxWidth, float theMaxHeight, const std::string & theAlign, const std::string &theFontPath, int theLineHeight) 
     {
         CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
 
@@ -74,8 +74,12 @@ namespace ios {
         }
         
         //Create Paragraph style and set alignment settings to it
-        CTParagraphStyleSetting styleSetting[] = { {kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &alignment} };
-        CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(styleSetting, 1);
+        CGFloat lineHeight = theLineHeight;
+        //NSLog(@"################################### lineHeight %f",lineHeight);
+        CTParagraphStyleSetting styleSetting[] = { {kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &alignment} ,
+                    { kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(lineHeight), &lineHeight },
+                    { kCTParagraphStyleSpecifierMaximumLineHeight, sizeof(lineHeight), &lineHeight }};
+        CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(styleSetting, sizeof(styleSetting) / sizeof(styleSetting[0]));
         
         //add paragraphStyle as an attribute to the string
         CFAttributedStringSetAttribute(attrString, CFRangeMake(0, CFAttributedStringGetLength(attrString)), kCTParagraphStyleAttributeName, paragraphStyle);
@@ -84,27 +88,30 @@ namespace ios {
         // Create the framesetter with the attributed string.
         CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attrString);
         CFRelease(attrString);
-        
+        CFRange fitRange;
         //Determine the optimal Texture size        
         if (theMaxWidth != 0 && theMaxHeight != 0) {
+            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(theMaxWidth, theMaxHeight), &fitRange);
+
             textureWidth = ceil(theMaxWidth);
             textureHeight = ceil(theMaxHeight);
         } else if (theMaxWidth == 0 && theMaxHeight == 0) {
-            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), nil);
+            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), &fitRange);
             textureWidth = ceil(suggestedSize.width);
             textureHeight = ceil(suggestedSize.height);
         } else if (theMaxWidth == 0) {
-            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(CGFLOAT_MAX, theMaxHeight), nil);
+            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(CGFLOAT_MAX, theMaxHeight), &fitRange);
             textureWidth = ceil(suggestedSize.width);
             textureHeight = ceil(theMaxHeight);
         } else if ( theMaxHeight == 0){
-            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(theMaxWidth, CGFLOAT_MAX), nil);
+            suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(theMaxWidth, CGFLOAT_MAX), &fitRange);
             textureWidth = ceil(theMaxWidth);
             textureHeight = ceil(suggestedSize.height);
         } else {
             textureWidth = 0;
             textureHeight = 0;
         }
+        NSLog(@"--------- theMaxHeight: %d and width: %d", theMaxHeight, theMaxWidth);
         
         if (textureWidth != 0 && textureHeight != 0) {
             // Initialize a Bitmap context and set the text matrix to a known value.
@@ -160,7 +167,7 @@ namespace ios {
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureWidth, (GLsizei)textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapData);
-            
+            NSLog(@"################# CFRANGE: %d %d size: %d  %s", fitRange.location, fitRange.length, theMessage.size(), theMessage.c_str());
             free(bitmapData);
             CGContextRelease(context);
         } else {
