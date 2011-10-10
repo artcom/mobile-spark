@@ -24,7 +24,7 @@ namespace ios
         textInfo.textureID = textRenderer.get()->getTextureID();
         textInfo.height = textRenderer.get()->getTextureHeight();
         textInfo.width = textRenderer.get()->getTextureWidth();
-        textInfo.renderedGlyphIndex = theMessage.size();
+        textInfo.renderedGlyphIndex = textRenderer.get()->getRenderedGlyphIndex();
         return textInfo;
     }
 
