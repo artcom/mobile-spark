@@ -4,7 +4,7 @@
 
 namespace spark {
 
-    Component::Component(): EventDispatcher(),_myRealizedFlag(false) {
+    Component::Component(): EventDispatcher() {
     }
 
     Component::Component(const masl::XMLNodePtr theXMLNode):
@@ -12,7 +12,6 @@ namespace spark {
         _myXMLNode(theXMLNode),
         _myName(theXMLNode->name),
         _myParent(),
-        _myRealizedFlag(false),
         _myRealizedAllChildrenFlag(false)
     {}
 
@@ -52,7 +51,6 @@ namespace spark {
         }
         if (_myRealizedAllChildrenFlag) {
             realize();
-            _myRealizedFlag = true;
         }
     }
 }

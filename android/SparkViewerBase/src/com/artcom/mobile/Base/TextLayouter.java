@@ -110,6 +110,9 @@ public class TextLayouter {
                 myBaseLine += myLineHeight;
                 //AC_Log.print(String.format("_myCanvasHeight %d %d", _myCanvasHeight, _myMaxHeight));
             }
+            if (myBaseLine > _myCanvasHeight) {
+            	break;
+            }
         }
         return myResult;
     }

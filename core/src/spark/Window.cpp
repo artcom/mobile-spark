@@ -48,7 +48,7 @@ namespace spark {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             _myUnrealizedWorlds.push_back(getChildByName(myView->getWorldName()));
         }
-        AC_PRINT << "worlds realize _myUnrealizedWorlds : "<< _myUnrealizedWorlds.size();        
+        AC_INFO << "worlds realize _myUnrealizedWorlds : "<< _myUnrealizedWorlds.size();        
     }
 
     vector2
@@ -68,10 +68,10 @@ namespace spark {
     void
     Window::onTouch(EventPtr theEvent) {
         TouchEventPtr myPickEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
-        AC_INFO<<"hallo evt: "<< myPickEvent->getType() << " x: "<< myPickEvent->getX();
+        AC_INFO << "Window::onTouch " << myPickEvent->getType() << " x: "<< myPickEvent->getX() << " y: " << myPickEvent->getY();
         ComponentPtr myPicked = pick2DAABBStyle(myPickEvent->getX(), myPickEvent->getY());
         if (myPicked) {
-            AC_PRINT << "____________picked " << *myPicked;
+            AC_INFO << "____________picked " << *myPicked;
             EventPtr myEvent = EventPtr(new TouchEvent(TouchEvent::PICKED, myPicked, myPickEvent->getX(), myPickEvent->getY()));
             (*myEvent)();
         } else {

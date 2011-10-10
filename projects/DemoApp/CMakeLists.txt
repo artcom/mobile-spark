@@ -13,13 +13,22 @@ find_package(AcMake)
 set(spark_DIR ../../core/src/spark)
 find_package(spark)
 
-set(REQUIRED_PACKAGES Boost Cml libXML2)
+set(REQUIRED_PACKAGES Boost Cml libXML2 libCurl)
 foreach(PACKAGE ${REQUIRED_PACKAGES})
     find_package(${PACKAGE})
 endforeach()
 
+add_library(libCurl STATIC IMPORTED)
+set_property(TARGET libCurl PROPERTY
+            IMPORTED_LOCATION ${libCurl_LIBRARY_DIRS})
+message("set library dirs ${libCurl_LIBRARY_DIRS}")
+
 
 include_directories(../../core/src)
+include_directories(${libCurl_INCLUDE_DIRS})
+
+
+
 add_subdirectory(src)
 if(IOS)
     add_subdirectory(ios)
