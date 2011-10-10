@@ -20,7 +20,6 @@ namespace spark {
         const vector2 & getTextSize();
         const int getMaxWidth() const { return _myMaxWidth;};
         int getRenderedGlyphIndex();
-        int getTotalGlyphCount();
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Text::SPARK_TYPE;};
@@ -36,7 +35,6 @@ namespace spark {
         std::string _myFontPath;
         std::string _myTextAlign;
         int _myRenderedGlyphIndex;     
-        int _myTotalGlyphCount;     
         int _myTextStartPos; 
     };
 

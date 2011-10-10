@@ -76,15 +76,7 @@ namespace spark {
         }
         return _myRenderedGlyphIndex;
     };
-    
-    int 
-    Text::getTotalGlyphCount() { 
-        if (_myDirtyFlag) {
-            build();
-        }
-        return _myTotalGlyphCount;
-    };
-    
+        
     void
     Text::setStartIndex(unsigned int theIndex) {
         _myTextStartPos = (theIndex<=data_.size() ? theIndex:0);
@@ -98,8 +90,7 @@ namespace spark {
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
         _myTextSize[0] = myTextInfo.width;
         _myTextSize[1] = myTextInfo.height;
-        _myRenderedGlyphIndex = _myTextStartPos + myTextInfo.renderedGlyphIndex;
-        _myTotalGlyphCount = myTextInfo.totalGlyphCount;
+        _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
         getShape()->setDimensions(_myTextSize[0], _myTextSize[1]);
         myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
         myMaterial->transparency_ = true;
