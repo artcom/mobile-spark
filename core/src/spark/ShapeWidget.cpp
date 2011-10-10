@@ -9,7 +9,7 @@
 
 namespace spark {
     ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
-        : Widget(theApp, theXMLNode), _myOriginMode(NO_ORIGIN), _myOrigin(vector2(0,0))
+        : Widget(theApp, theXMLNode), _myOrigin(vector2(0,0)), _myOriginMode(NO_ORIGIN) 
     {
         vertexShader_ = getNode()->getAttributeAs<std::string>("vertex_shader","");
         fragmentShader_ = getNode()->getAttributeAs<std::string>("fragment_shader","");
