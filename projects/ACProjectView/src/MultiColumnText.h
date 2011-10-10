@@ -31,9 +31,9 @@ namespace acprojectview {
             spark::TextPtr createNewColumn();
             std::vector<spark::TextPtr> _myTextPtrs;
             int _myColumnSpace;
-            int _myIniitalXPos;
-            int _myVisibleColumnIndex;
-            int _myColumnCount;
+            int _myInitalXPos;
+            std::vector<spark::TextPtr>::size_type _myVisibleColumnIndex;
+            std::vector<spark::TextPtr>::size_type _myColumnCount;
             bool _myAnimatingFlag;
             
     };

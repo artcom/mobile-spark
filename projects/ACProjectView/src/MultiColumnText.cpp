@@ -15,7 +15,7 @@ namespace acprojectview {
     MultiColumnText::MultiColumnText(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Transform(theApp, theXMLNode),
           _myColumnSpace(_myXMLNode->getAttributeAs<int>("columnSpace", 10)),
-          _myIniitalXPos(_myXMLNode->getAttributeAs<int>("x", 0)),
+          _myInitalXPos(_myXMLNode->getAttributeAs<int>("x", 0)),
           _myVisibleColumnIndex(0), _myColumnCount(0), _myAnimatingFlag(false) {
 
 
@@ -31,14 +31,14 @@ namespace acprojectview {
 
     void 
     MultiColumnText::setMaxWidth(int theMaxWidth) {
-        for (unsigned int i = 0; i < _myTextPtrs.size(); i++) {
+        for (std::vector<spark::TextPtr>::size_type i = 0; i < _myTextPtrs.size(); i++) {
             _myTextPtrs[i]->setMaxWidth(theMaxWidth);
         }
     }
         
     void 
     MultiColumnText::setMaxHeight(int theMaxHeight) {
-        for (unsigned int i = 0; i < _myTextPtrs.size(); i++) {        
+        for (std::vector<spark::TextPtr>::size_type i = 0; i < _myTextPtrs.size(); i++) {        
             _myTextPtrs[i]->setMaxHeight(theMaxHeight);
         }
     }
@@ -73,13 +73,13 @@ namespace acprojectview {
     }
     void
     MultiColumnText::reset() {
-        setX(_myIniitalXPos);
+        setX(_myInitalXPos);
         _myVisibleColumnIndex = 0;
     }
     
     void 
     MultiColumnText::setI18nId(const std::string & theNewI18nId) {
-        setX(_myIniitalXPos);
+        setX(_myInitalXPos);
         _myVisibleColumnIndex = 0;
         _myColumnCount = 0;
         _myTextPtrs[0]->setI18nId(theNewI18nId);
@@ -99,7 +99,7 @@ namespace acprojectview {
             myColumn->setZ(_myTextPtrs[_myColumnCount-1]->getZ() + 1);
             myRenderedGlyphIndex = _myTextPtrs[_myColumnCount]->getRenderedGlyphIndex();
         }
-        for (int i = _myColumnCount+1; i < _myTextPtrs.size(); i++) {        
+        for (std::vector<spark::TextPtr>::size_type i = _myColumnCount+1; i < _myTextPtrs.size(); i++) {        
             _myTextPtrs[i]->setVisible(false);
         }
     }
