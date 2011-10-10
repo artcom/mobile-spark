@@ -22,10 +22,14 @@ namespace ios {
         int getTextureID();
         int getTextureWidth();
         int getTextureHeight();
+        int getRenderedGlyphIndex();
     private:
+        int calcRenderedGlyphIndex(std::string theMessage, CFRange fitRange);
+
         GLuint  texture;
         int textureWidth;
         int textureHeight;
+        int renderedGlyphIndex;
         CGSize suggestedSize;
     };
     typedef masl::Ptr<TextRenderer> TextRendererPtr;
