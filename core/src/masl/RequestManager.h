@@ -4,7 +4,6 @@
 #include "Request.h"
 
 #include <vector>
-#ifdef USE_CURL
 
 namespace masl {
 
@@ -28,6 +27,5 @@ namespace masl {
     };
 }
 
-#endif
 #endif
 

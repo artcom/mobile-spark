@@ -1,21 +1,18 @@
 #include "RequestManager.h"
-#ifdef USE_CURL
-
-#include <curl/curl.h>
 
 #include <iostream>
+#include <curl/curl.h>
+
+#include "Logger.h"
 
 #define DB(x) // x;
 
-using namespace std;
-
 
 namespace masl {
-
     void
     RequestManager::checkCurlStatus(CURLMcode theStatusCode, const std::string & theWhere) {
         if (theStatusCode != CURLM_OK && theStatusCode != CURLM_CALL_MULTI_PERFORM) {
-            throw INetException(std::string("Curl Multi Error: ") + asl::as_string(theStatusCode), theWhere);
+            throw INetException(std::string("Curl Multi Error: ") + as_string(theStatusCode), theWhere);
         }
     }
 
@@ -45,7 +42,7 @@ namespace masl {
 
     bool 
     RequestManager::removeRequest(Request* theRequest) {
-        vector<RequestPtr>::iterator it;
+        std::vector<RequestPtr>::iterator it;
 
         for (it=_myRequests.begin();  it != _myRequests.end(); ++it) {
             if (&(*(*it)) == theRequest) {
@@ -130,4 +127,3 @@ namespace masl {
         return myRunningHandles;
     }
 }
-#endif

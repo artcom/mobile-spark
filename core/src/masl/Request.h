@@ -1,12 +1,10 @@
 #ifndef _included_mobile_masl_request_
 #define _included_mobile_masl_request_
 
-#ifdef USE_URL
-
 #include <string>
-#include <curl/curl.h>
 #include <vector>
 #include <map>
+#include <curl/curl.h>
 
 #include "Exception.h"
 #include "Ptr.h"
@@ -15,41 +13,21 @@ namespace masl {
 
     typedef std::map<std::string, std::string> CookieJar;
 
-    DEFINE_EXCEPTION(INetException, masl::Exception);
+    DECLARE_EXCEPTION(INetException, masl::Exception);
 
-    enum AuthentTypeEnum {
-        BASIC,
-        DIGEST,
-        ANY,
-        AuthentTypeEnum_MAX
-    };
-
-    const char * const AuthentTypeStrings[] = {
-        "BASIC",
-        "DIGEST",
-        "ANY",
-        ""
-    };
-
-    DEFINE_ENUM(AuthentType, AuthentTypeEnum, Y60_INET_DECL);
+    enum AuthentType { BASIC, DIGEST, ANY };
 
     class RequestManager;
 
-    /**
-     * @ingroup y60inet
-     * HTTP Request.
-     *
-     */
-    class Y60_INET_DECL Request {
+    class Request {
         friend class RequestManager;
 
         public:
-            Request(const std::string & theURL, const std::string & theUserAgent = std::string("Y60/")+asl::ourRevision);
+            Request(const std::string & theURL, const std::string & theUserAgent = std::string("acMobileSpark"));
             virtual ~Request();
             CURL * getHandle() const;
             long getResponseCode() const;
             std::string getResponseString() const;
-            const asl::Block & getResponseBlock() const;
             std::string getErrorString() const;
             const std::string & getURL() const;
             void setLowSpeedLimit(unsigned theBytesPerSec);
@@ -70,10 +48,7 @@ namespace masl {
 
             // request-method type methods
             size_t put(const std::string & thePutData);
-            size_t putBlock(const asl::Ptr<asl::Block> & theBlock);
             size_t post(const std::string & thePostData);
-            size_t postFile(const std::string & theFilename);
-            size_t postBlock(const asl::Ptr<asl::ReadableBlock> & theBlock);
             void http_delete();
             void get();
             void head();
@@ -81,7 +56,6 @@ namespace masl {
             const std::multimap<std::string,std::string> & getResponseHeaders() const;
             std::string getResponseHeader(const std::string & theHeader) const;
             std::vector<std::string> getAllResponseHeaders(const std::string & theHeader) const;
-            time_t getResponseHeaderAsDate(const std::string & theHeader) const;
             unsigned getLowSpeedLimit(void) const;
             unsigned getLowSpeedTimeout(void) const;
 
@@ -91,8 +65,6 @@ namespace masl {
             //TODO: I'm not sure if this function is in the right place...
             static std::string urlEncode(const std::string & theUrl);
             static std::string urlDecode(const std::string & theUrl);
-
-            static time_t getTimeFromHTTPDate(const std::string & theHTTPDate );
 
         protected:
             // callback hooks
@@ -126,8 +98,7 @@ namespace masl {
             unsigned            _myLowSpeedTimeout;
             struct curl_slist * _myHttpHeaderList;
             std::string         _myPostBuffer;
-            asl::Ptr<asl::ReadableBlock> _myPostBlock;
-            asl::Block          _myResponseBlock;
+            std::string         _myResponseString;
             std::vector<char>   _myErrorBuffer;
             std::string         _mySSLCertificateFilename;
             std::multimap<std::string, std::string> _myResponseHeaders;
@@ -138,10 +109,7 @@ namespace masl {
             bool                _myVerifyPeerFlag;
     };
 
-    typedef asl::Ptr<Request> RequestPtr;
-    typedef asl::WeakPtr<Request> RequestWeakPtr;
-
+    typedef masl::Ptr<Request> RequestPtr;
 }
 
-#endif
 #endif
