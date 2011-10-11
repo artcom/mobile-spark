@@ -1,6 +1,8 @@
 #include "XMLUtils.h"
 
-#include "XMLNode.h"
+#include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+
 #include "Logger.h"
 
 namespace masl {
@@ -114,7 +116,8 @@ namespace masl {
     }
     //
     //XXX: the user should call xmlFreeDoc(doc)
-    xmlDocPtr loadXMLFromMemory(const std::string & theXMLString) {
+    xmlDocPtr 
+    loadXMLFromMemory(const std::string & theXMLString) {
         /*
         * this initialises the library and check potential ABI mismatches
         * between the version it was compiled for and the actual shared
@@ -137,6 +140,51 @@ namespace masl {
         /* free up the resulting document */
         //xmlFreeDoc(doc);
         return doc;
+    }
+
+    std::vector<XMLNodePtr> 
+    loadXMLFromMemoryWithXPath(const std::string & theXMLString, const std::string & theXPath) {
+        LIBXML_TEST_VERSION
+        std::vector<XMLNodePtr> result;
+#if defined(LIBXML_XPATH_ENABLED) && defined(LIBXML_SAX1_ENABLED)
+        xmlDocPtr doc;
+        xmlXPathContextPtr xpathCtx; 
+        xmlXPathObjectPtr xpathObj; 
+
+        //parse without context
+        doc = xmlReadMemory(theXMLString.c_str(), strlen(theXMLString.c_str()), "unused.xml", NULL, 0);
+        if (doc == NULL) {
+            AC_ERROR << "Failed to parse XMLString (use loadXMLFromMemoryValidate to get more information)";
+            throw XMLParsingException("Failed to parse XMLString", PLUS_FILE_LINE);
+            return result;
+        }
+
+        xpathCtx = xmlXPathNewContext(doc);
+        if(xpathCtx == NULL) {
+            AC_ERROR << "Error: unable to create new XPath context";
+            xmlFreeDoc(doc); 
+            return result;
+        }
+    
+        xpathObj = xmlXPathEvalExpression((const xmlChar *)theXPath.c_str(), xpathCtx);
+        if(xpathObj == NULL) {
+            AC_ERROR << "Error: unable to evaluate xpath expression " << theXPath;
+            xmlXPathFreeContext(xpathCtx); 
+            xmlFreeDoc(doc); 
+            return result;
+        }
+
+        xmlNodeSetPtr nodeSet = xpathObj->nodesetval;
+        size_t size = (nodeSet ? nodeSet->nodeNr : 0);
+        for (size_t i = 0; i < size; ++i) {
+            result.push_back(XMLNodePtr(new XMLNode(nodeSet->nodeTab[i])));
+        }
+
+        xmlXPathFreeObject(xpathObj);
+        xmlXPathFreeContext(xpathCtx); 
+        xmlFreeDoc(doc); 
+#endif
+        return result;
     }
 }
 
