@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <SlideImpl>
     <Text name="title" sensible="false" x="10" y="400" z="12" color="[1,1,1,1]" fontsize="36" />
-    <Text name="subtitle" sensible="false" x="10" y="350" z="13" color="[0,0,0,1]" fontsize="20" />
+    <Text name="subtitle" sensible="false" x="10" y="350" z="13" color="[0.5,0.9,0,1]" fontsize="20" />
 </SlideImpl>
