@@ -126,6 +126,12 @@ namespace demoapp {
         myRequest->setOnDoneCallback(cb);
         myRequest->get();
         _myRequestManager.performRequest(myRequest);
+
+        myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/rectangles.spark"));
+        cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onSparkRequestReady));
+        myRequest->setOnDoneCallback(cb);
+        myRequest->get();
+        _myRequestManager.performRequest(myRequest);
 #endif
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
@@ -201,12 +207,19 @@ namespace demoapp {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("datefromserver", true));
         myText->setText(theRequest->getResponseString());
     }
+    void DemoApp::onSparkRequestReady(RequestPtr theRequest) {
+        spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromString(ptr, theRequest->getResponseString());
+        myTransform->addChild(myNewSpark);
+    }
 
     void DemoApp::onControlButton(EventPtr theEvent) {
         AC_DEBUG << "on control button";
         //ourVibratorFlag = true;
         MobileSDK_Singleton::get().getNative()->vibrate(10);        
-    	changeSlide(theEvent->getTarget()->getName() == "backbutton" ? -1 :  +1);    }
+    	changeSlide(theEvent->getTarget()->getName() == "backbutton" ? -1 :  +1);    
+    }
     
     void DemoApp::onStartSlideSwipe() {
         AC_PRINT << "set : " << _mySlides[_myNextSlide]->getName() << " to visible";

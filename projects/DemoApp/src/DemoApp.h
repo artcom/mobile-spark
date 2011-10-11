@@ -48,6 +48,7 @@ namespace demoapp {
             masl::RequestManager _myRequestManager;
             void onTextRequestReady(masl::RequestPtr theRequest);
             void onDateRequestReady(masl::RequestPtr theRequest);
+            void onSparkRequestReady(masl::RequestPtr theRequest);
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;
