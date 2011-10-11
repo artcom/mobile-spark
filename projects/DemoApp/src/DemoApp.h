@@ -2,6 +2,7 @@
 #define _included_mobile_demoapp_DemoApp_
 
 /////////////////// Application code, this should be in java or script language later...
+#include <masl/RequestManager.h>
 #include <spark/BaseApp.h>
 #include <spark/Transform.h>
 #include <spark/View.h>
@@ -35,7 +36,6 @@ namespace demoapp {
             void onSizeChanged(spark::EventPtr theEvent);
             void onFrame(spark::EventPtr theEvent);
 
-
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
             void onStartSlideSwipe();
             void onFinishSlideSwipe();
@@ -44,6 +44,10 @@ namespace demoapp {
             std::vector<SlideImplPtr> _mySlides;
             unsigned _myCurrentSlide;
             unsigned _myNextSlide;
+
+            masl::RequestManager _myRequestManager;
+            masl::RequestPtr _myRequest;
+            void onCurlRequestReady();
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;

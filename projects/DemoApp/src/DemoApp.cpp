@@ -2,10 +2,7 @@
 
 #include <cstdlib>
 
-#ifdef ANDROID
-   #include <curl/curl.h>
-#endif
-
+#include <masl/Callback.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 
@@ -43,35 +40,6 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace demoapp {
 
-#ifdef ANDROID
-
-    // Define our struct for accepting LCs output
-    struct BufferStruct {
-        char * buffer;
-        size_t size;
-    };
-    std::string curlResult;
-
-    // This is the function we pass to LC, which writes the output to a BufferStruct
-    static size_t curlCallback(void *ptr, size_t size, size_t nmemb, void *data) {
-        //AC_PRINT << "curlCallback";
-        size_t realsize = size * nmemb;
-        struct BufferStruct * mem = (struct BufferStruct *) data;
-        mem->buffer = (char *)realloc(mem->buffer, mem->size + realsize + 1);
-        if ( mem->buffer ) {
-            memcpy( &( mem->buffer[ mem->size ] ), ptr, realsize );
-            mem->size += realsize;
-            mem->buffer[ mem->size ] = 0;
-        }
-        //AC_PRINT << "curlCallback size: " << realsize;
-        //AC_PRINT << "buffer " << mem->buffer;  //AC_PRINT does not print long strings
-        curlResult = mem->buffer;
-        //AC_PRINT << "total result length " << curlResult.size();
-        return realsize;
-    }
-#endif
-    
-
     WidgetPropertyAnimationPtr myAmazoneRotation;
 
     DemoApp::DemoApp():BaseApp("DemoApp"), _myCurrentSlide(0) {
@@ -88,34 +56,6 @@ namespace demoapp {
     }
 
     void DemoApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
-#ifdef ANDROID
-        //test curl
-        AC_PRINT << "CURL TEST in DEMO APP _______________________________________________________";
-	    CURL *myHandle;
-        CURLcode res;
-        BufferStruct output;
-        output.size = 0;
-        output.buffer = NULL;
-        curl_global_init( CURL_GLOBAL_ALL );
-        myHandle = curl_easy_init();
-        if (myHandle) {
-            curl_easy_setopt(myHandle, CURLOPT_URL, "http://www.artcom.de/aktuell/rss.xml");
-            curl_easy_setopt(myHandle, CURLOPT_WRITEFUNCTION, curlCallback); // Passing the function pointer to LC
-            curl_easy_setopt(myHandle, CURLOPT_WRITEDATA, (void *)&output); // Passing our BufferStruct to LC
-            res = curl_easy_perform( myHandle );
-            curl_easy_cleanup( myHandle );
-            if (res == 0) {
-                AC_PRINT << "0 response, ok";
-            } else {
-                AC_PRINT << "something went wrong, code " << res;
-            }
-        } else {
-            AC_PRINT << "no curl";
-        } 
-        AC_PRINT << "endof CURL TEST in DEMO APP _______________________________________________________";
-#endif
-
-
 
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
@@ -175,10 +115,12 @@ namespace demoapp {
         _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
 
 #ifdef ANDROID
-        TextPtr myRssText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("rss", true));
-        myRssText->setText("excerpt: "+curlResult.substr(0,100));
+        _myRequest = masl::RequestPtr(new masl::Request("http://www.artcom.de/aktuell/rss.xml"));
+        masl::CallbackPtr cb = masl::CallbackPtr(new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onCurlRequestReady));
+        _myRequest->setOnDoneCallback(cb);
+        _myRequest->get();
+        _myRequestManager.performRequest(_myRequest);
 #endif
-
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone
@@ -245,6 +187,14 @@ namespace demoapp {
         AC_DEBUG << "found #" << _mySlides.size() << " slides";        
     }
 
+    void DemoApp::onCurlRequestReady() {
+        AC_PRINT << "--------------------------- curl request Ready";
+        AC_PRINT << _myRequest->getResponseCode();
+        AC_PRINT << _myRequest->getResponseString();
+        TextPtr myRssText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("rss", true));
+        myRssText->setText(_myRequest->getResponseString().substr(0,100));
+    }
+
     void DemoApp::onControlButton(EventPtr theEvent) {
         AC_DEBUG << "on control button";
         //ourVibratorFlag = true;
@@ -275,12 +225,8 @@ namespace demoapp {
     }
     
     void DemoApp::onFrame(EventPtr theEvent) {
-        /*if (ourVibratorFlag) {
-            MobileSDK_Singleton::get().getNative()->vibrate(10);        
-            ourVibratorFlag = false;
-        }*/
-        
         BaseApp::onFrame(theEvent);            
+        _myRequestManager.handleRequests();
     }
     
     void DemoApp::changeSlide(int theDirection) {
