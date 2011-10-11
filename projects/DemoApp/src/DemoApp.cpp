@@ -50,10 +50,11 @@ namespace demoapp {
         char * buffer;
         size_t size;
     };
+    std::string curlResult;
 
     // This is the function we pass to LC, which writes the output to a BufferStruct
     static size_t curlCallback(void *ptr, size_t size, size_t nmemb, void *data) {
-        AC_PRINT << "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+        //AC_PRINT << "curlCallback";
         size_t realsize = size * nmemb;
         struct BufferStruct * mem = (struct BufferStruct *) data;
         mem->buffer = (char *)realloc(mem->buffer, mem->size + realsize + 1);
@@ -62,8 +63,10 @@ namespace demoapp {
             mem->size += realsize;
             mem->buffer[ mem->size ] = 0;
         }
-        AC_PRINT << "curlCallback size: " << realsize;
-        AC_PRINT << "buffer " << mem->buffer;
+        //AC_PRINT << "curlCallback size: " << realsize;
+        //AC_PRINT << "buffer " << mem->buffer;  //AC_PRINT does not print long strings
+        curlResult = mem->buffer;
+        //AC_PRINT << "total result length " << curlResult.size();
         return realsize;
     }
 #endif
@@ -96,15 +99,15 @@ namespace demoapp {
         curl_global_init( CURL_GLOBAL_ALL );
         myHandle = curl_easy_init();
         if (myHandle) {
-            curl_easy_setopt(myHandle, CURLOPT_URL, "www.google.de");
+            curl_easy_setopt(myHandle, CURLOPT_URL, "http://www.artcom.de/aktuell/rss.xml");
             curl_easy_setopt(myHandle, CURLOPT_WRITEFUNCTION, curlCallback); // Passing the function pointer to LC
             curl_easy_setopt(myHandle, CURLOPT_WRITEDATA, (void *)&output); // Passing our BufferStruct to LC
             res = curl_easy_perform( myHandle );
             curl_easy_cleanup( myHandle );
             if (res == 0) {
-                AC_PRINT << "0 response";
+                AC_PRINT << "0 response, ok";
             } else {
-                AC_PRINT << "code " << res;
+                AC_PRINT << "something went wrong, code " << res;
             }
         } else {
             AC_PRINT << "no curl";
@@ -171,6 +174,10 @@ namespace demoapp {
         spark::EventCallbackPtr mySensorGyroCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorGyroEvent));
         _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
 
+#ifdef ANDROID
+        TextPtr myRssText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("rss", true));
+        myRssText->setText("excerpt: "+curlResult.substr(0,100));
+#endif
 
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;

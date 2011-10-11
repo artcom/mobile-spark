@@ -75,7 +75,7 @@ namespace spark {
             build();
         }
         return _myRenderedGlyphIndex;
-    };
+    }
         
     void
     Text::setStartIndex(unsigned int theIndex) {
