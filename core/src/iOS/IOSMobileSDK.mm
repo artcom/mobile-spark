@@ -3,10 +3,12 @@
 #include "TextRenderer.h"
 #include <masl/Logger.h>
 
+#import "Camera.h"
 
 namespace ios 
 {
-    IOSMobileSDK::IOSMobileSDK() {}
+    IOSMobileSDK::IOSMobileSDK(){
+            }
 
     IOSMobileSDK::~IOSMobileSDK() {}
 
@@ -28,25 +30,36 @@ namespace ios
         return textInfo;
     }
 
-    void IOSMobileSDK::updateCameraTexture() {
-    
-    }
-    
     void IOSMobileSDK::freezeMobileOrientation(const std::string & theOrientation) {
         
     }
     masl::CameraInfo IOSMobileSDK::getCameraSpec() {
+        Camera * myCamera = [Camera instance];
         masl::CameraInfo cameraInfo;
-        
+        cameraInfo.width = [myCamera getWidth];
+        cameraInfo.height = [myCamera getHeight];
+        cameraInfo.texturewidth = [myCamera getWidth];
+        cameraInfo.textureheight = [myCamera getHeight];
+        cameraInfo.textureID = [myCamera getTextureID];
+
         return cameraInfo;
     }
-    void IOSMobileSDK::startCameraCapture(bool theColorConversionFlag) {
+    void IOSMobileSDK::startCameraCapture(bool /*theColorConversionFlag*/) {
+        Camera * myCamera = [Camera instance];
+        [myCamera startCameraCapture];
     
     }
-    void IOSMobileSDK::stopCameraCapture() {
+    void IOSMobileSDK::updateCameraTexture() {
+        Camera * myCamera = [Camera instance];
+        [myCamera updateCameraTexture];
+    }
     
+    void IOSMobileSDK::stopCameraCapture() {
+        Camera * myCamera = [Camera instance];
+        [myCamera stopCameraCapture];
     }
     bool IOSMobileSDK::isCameraCapturing() {
-        return false;
+        Camera * myCamera = [Camera instance];
+        return [myCamera isCameraCapturing];
     }
 }

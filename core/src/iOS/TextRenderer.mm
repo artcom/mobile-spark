@@ -200,7 +200,7 @@ namespace ios {
         NSString * sub = [theString substringToIndex: theFitRange.length];
         std::string myString([sub UTF8String]);
         // search specials:
-        int foundSpecials = 0;
+        unsigned int foundSpecials = 0;
         size_t found;
 
         found=theMessage.find("\\n");
