@@ -1,9 +1,8 @@
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
 
-set(EXTERNS Boost Cml libXML2)
+set(EXTERNS Boost Cml libXML2 libCurl)
 if(ANDROID)
-    list(APPEND EXTERNS libCurl)
     find_library(log_LIBRARY_DIRS log )
     list(APPEND EXTERNS log)
 endif(ANDROID)
