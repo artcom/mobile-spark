@@ -411,6 +411,9 @@ namespace masl {
 
     void
     Request::onDone() {
+        if (_myOnDoneCallback) {
+            (*_myOnDoneCallback)();
+        }
     };
 
     // //////////////////////////////////////////////////////////

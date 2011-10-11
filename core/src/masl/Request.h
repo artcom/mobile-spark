@@ -6,6 +6,7 @@
 #include <map>
 #include <curl/curl.h>
 
+#include "Callback.h"
 #include "Exception.h"
 #include "Ptr.h"
 
@@ -45,6 +46,7 @@ namespace masl {
             void setCredentials(const std::string & theUsername, const std::string & thePassword,
                                 AuthentType theAuthentType = ANY);
             void setFollowLocation(bool theFollowFlag);
+            void setOnDoneCallback(CallbackPtr theOnDoneCallback) { _myOnDoneCallback = theOnDoneCallback; };
 
             // request-method type methods
             size_t put(const std::string & thePutData);
@@ -62,7 +64,7 @@ namespace masl {
             void addHttpHeader(const std::string & theKey, const std::string & theValue);
             void addHttpHeaderAsDate(const std::string & theKey, const time_t & theValue);
 
-            //TODO: I'm not sure if this function is in the right place...
+            //asl-TODO: I'm not sure if this function is in the right place...
             static std::string urlEncode(const std::string & theUrl);
             static std::string urlDecode(const std::string & theUrl);
 
@@ -107,6 +109,7 @@ namespace masl {
             std::string         _myAuthentData;
             bool                _myVerboseFlag;
             bool                _myVerifyPeerFlag;
+            CallbackPtr         _myOnDoneCallback;
     };
 
     typedef masl::Ptr<Request> RequestPtr;
