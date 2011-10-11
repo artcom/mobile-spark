@@ -263,17 +263,13 @@ namespace masl {
         
         size_t myMaxSize = theSrcSize * theNumberOfElements;
         if ( myMaxSize < 1 ) {
-             return 0;
+            return 0;
         }
-
         if ( myData->position < myData->dataString.size() ) {
-            
             *(char *) theDestPtr = myData->dataString[myData->position];
             myData->position++;
-            
             return 1;
         } 
-        
         return 0;        
     }
     
@@ -412,7 +408,7 @@ namespace masl {
     void
     Request::onDone() {
         if (_myOnDoneCallback) {
-            (*_myOnDoneCallback)();
+            (*_myOnDoneCallback)(shared_from_this());
         }
     };
 

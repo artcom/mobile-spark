@@ -115,11 +115,17 @@ namespace demoapp {
         _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
 
 #ifdef ANDROID
-        _myRequest = masl::RequestPtr(new masl::Request("http://www.artcom.de/aktuell/rss.xml"));
-        masl::CallbackPtr cb = masl::CallbackPtr(new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onCurlRequestReady));
-        _myRequest->setOnDoneCallback(cb);
-        _myRequest->get();
-        _myRequestManager.performRequest(_myRequest);
+        masl::RequestPtr  myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/string.txt"));
+        masl::RequestCallbackPtr cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onTextRequestReady));
+        myRequest->setOnDoneCallback(cb);
+        myRequest->get();
+        _myRequestManager.performRequest(myRequest);
+
+        myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/currentDate.php"));
+        cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onDateRequestReady));
+        myRequest->setOnDoneCallback(cb);
+        myRequest->get();
+        _myRequestManager.performRequest(myRequest);
 #endif
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
@@ -187,12 +193,13 @@ namespace demoapp {
         AC_DEBUG << "found #" << _mySlides.size() << " slides";        
     }
 
-    void DemoApp::onCurlRequestReady() {
-        AC_PRINT << "--------------------------- curl request Ready";
-        AC_PRINT << _myRequest->getResponseCode();
-        AC_PRINT << _myRequest->getResponseString();
-        TextPtr myRssText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("rss", true));
-        myRssText->setText(_myRequest->getResponseString().substr(0,100));
+    void DemoApp::onTextRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("textfromserver", true));
+        myText->setText(theRequest->getResponseString());
+    }
+    void DemoApp::onDateRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("datefromserver", true));
+        myText->setText(theRequest->getResponseString());
     }
 
     void DemoApp::onControlButton(EventPtr theEvent) {

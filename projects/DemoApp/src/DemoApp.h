@@ -46,8 +46,8 @@ namespace demoapp {
             unsigned _myNextSlide;
 
             masl::RequestManager _myRequestManager;
-            masl::RequestPtr _myRequest;
-            void onCurlRequestReady();
+            void onTextRequestReady(masl::RequestPtr theRequest);
+            void onDateRequestReady(masl::RequestPtr theRequest);
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;

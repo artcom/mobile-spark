@@ -1,6 +1,7 @@
 #ifndef _included_mobile_masl_request_
 #define _included_mobile_masl_request_
 
+#include <boost/enable_shared_from_this.hpp>
 #include <string>
 #include <vector>
 #include <map>
@@ -19,8 +20,10 @@ namespace masl {
     enum AuthentType { BASIC, DIGEST, ANY };
 
     class RequestManager;
+    class RequestCallback;
+    typedef masl::Ptr<RequestCallback> RequestCallbackPtr;
 
-    class Request {
+    class Request : public boost::enable_shared_from_this<Request> {
         friend class RequestManager;
 
         public:
@@ -46,7 +49,7 @@ namespace masl {
             void setCredentials(const std::string & theUsername, const std::string & thePassword,
                                 AuthentType theAuthentType = ANY);
             void setFollowLocation(bool theFollowFlag);
-            void setOnDoneCallback(CallbackPtr theOnDoneCallback) { _myOnDoneCallback = theOnDoneCallback; };
+            void setOnDoneCallback(RequestCallbackPtr theOnDoneCallback) { _myOnDoneCallback = theOnDoneCallback; };
 
             // request-method type methods
             size_t put(const std::string & thePutData);
@@ -109,10 +112,62 @@ namespace masl {
             std::string         _myAuthentData;
             bool                _myVerboseFlag;
             bool                _myVerifyPeerFlag;
-            CallbackPtr         _myOnDoneCallback;
+            RequestCallbackPtr  _myOnDoneCallback;
     };
 
     typedef masl::Ptr<Request> RequestPtr;
+
+    ////////////////////////////////////////////////////////////////////////
+    //Request Callbacks ////////////////////////////////////////////////////
+
+    class RequestCallback {
+    public:
+        virtual ~RequestCallback() {};
+        virtual void execute(RequestPtr theRequest) const = 0;
+        virtual void operator() (RequestPtr theRequest) {execute(theRequest);};
+    };
+
+    typedef masl::Ptr<RequestCallback> RequestCallbackPtr;
+
+
+    typedef void (*FreeFunctionRequestPtr)(RequestPtr);
+
+    class FreeFunctionRequestCallback : public RequestCallback {
+    public:
+        FreeFunctionRequestCallback(FreeFunctionRequestPtr theFunctionPtr):
+            RequestCallback(),
+            _myFunctionPointer(theFunctionPtr) {
+        };
+        virtual ~FreeFunctionRequestCallback() {};
+
+        virtual void execute(RequestPtr theRequest) const {
+            _myFunctionPointer(theRequest);
+        };
+    private:
+        FreeFunctionRequestPtr _myFunctionPointer;
+    };
+    typedef masl::Ptr<FreeFunctionRequestCallback> FreeFunctionRequestCallbackPtr;
+
+
+
+    template < typename T, typename TP>
+    class MemberFunctionRequestCallback : public RequestCallback {
+    public:
+        MemberFunctionRequestCallback(TP theObject, void (T::*theFunctionPtr)(RequestPtr)):
+            _myObjectPtr(theObject),
+            _myFunctionPointer(theFunctionPtr) {
+        };
+        virtual ~MemberFunctionRequestCallback() {};
+
+        virtual void execute(RequestPtr theRequest) const {
+            (_myObjectPtr.get()->*_myFunctionPointer)(theRequest);
+        };
+    private:
+        TP _myObjectPtr;
+        void (T::*_myFunctionPointer)(RequestPtr);
+    };
+
+
 }
 
 #endif
