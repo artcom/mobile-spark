@@ -4,7 +4,9 @@
 #include <masl/MobileSDK.h>
 #include <masl/numeric_functions.h>
 
+
 namespace ios {
+    
     class IOSMobileSDK : public masl::MobileSDK {
     public:
         IOSMobileSDK();
@@ -19,6 +21,7 @@ namespace ios {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
+        
     };
 
     typedef masl::Ptr<IOSMobileSDK> IOSMobileSDKPtr;

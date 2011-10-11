@@ -14,4 +14,5 @@ ac_add_library(
 ADD_FRAMEWORK(iOS CoreGraphics)
 ADD_FRAMEWORK(iOS QuartzCore)
 ADD_FRAMEWORK(iOS CoreText)
-
+ADD_FRAMEWORK(iOS CoreMedia)
+ADD_FRAMEWORK(iOS AVFoundation)
