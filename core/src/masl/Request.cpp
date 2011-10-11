@@ -1,7 +1,5 @@
 #include "Request.h"
 
-#ifdef USE_URL
-
 #include <iostream>
 
 #define CURL_VERBOSE 0
@@ -12,11 +10,11 @@
 #undef verify
 #endif
 
-IMPLEMENT_ENUM(inet::AuthentType, inet::AuthentTypeStrings);
 
 namespace masl {
+    DEFINE_EXCEPTION(INetException, masl::Exception);
 
-    Request::Request(const string & theURL, const string & theUserAgent)
+    Request::Request(const std::string & theURL, const std::string & theUserAgent)
         : _myURL(theURL),
         _myUserAgent(theUserAgent),
         _myCurlHandle(0),
@@ -34,7 +32,7 @@ namespace masl {
         myStatus = curl_easy_setopt(_myCurlHandle, CURLOPT_URL, _myURL.c_str());
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
 
-        curl_easy_setopt(_myCurlHandle, CURLOPT_ERRORBUFFER, asl::begin_ptr(_myErrorBuffer));
+        curl_easy_setopt(_myCurlHandle, CURLOPT_ERRORBUFFER, &_myErrorBuffer[0]);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
 
         setVerbose(CURL_VERBOSE);
@@ -78,9 +76,9 @@ namespace masl {
     }
 
     void
-    Request::checkCurlStatus(CURLcode theStatusCode, const string & theWhere) const {
+    Request::checkCurlStatus(CURLcode theStatusCode, const std::string & theWhere) const {
         if (theStatusCode != CURLE_OK) {
-            throw INetException(string(asl::begin_ptr(_myErrorBuffer)), theWhere);
+            throw INetException(std::string(&_myErrorBuffer[0]), theWhere);
         }
     }
 
@@ -89,7 +87,7 @@ namespace masl {
         return _myCurlHandle;
     }
 
-    const string &
+    const std::string &
     Request::getURL() const {
         return _myURL;
     }
@@ -119,12 +117,7 @@ namespace masl {
 
     std::string
     Request::getResponseString() const {
-        return std::string(_myResponseBlock.strbegin(), _myResponseBlock.strend());
-    };
-
-    const asl::Block &
-    Request::getResponseBlock() const {
-        return _myResponseBlock;
+        return _myResponseString;
     };
 
     void
@@ -154,7 +147,7 @@ namespace masl {
         setLowSpeedTimeout(theSeconds);
     }
 
-    const multimap<std::string,std::string> &
+    const std::multimap<std::string,std::string> &
     Request::getResponseHeaders() const {
         return _myResponseHeaders;
     }
@@ -170,8 +163,8 @@ namespace masl {
     }
 
     std::string
-    Request::getResponseHeader(const string & theHeader) const {
-        multimap<string,string>::const_iterator it = _myResponseHeaders.find(theHeader);
+    Request::getResponseHeader(const std::string & theHeader) const {
+        std::multimap<std::string,std::string>::const_iterator it = _myResponseHeaders.find(theHeader);
         if (it != _myResponseHeaders.end()) {
             return it->second;
         }
@@ -179,8 +172,8 @@ namespace masl {
     }
 
     std::vector<std::string>
-    Request::getAllResponseHeaders(const string & theHeader) const {
-        multimap<string,string>::const_iterator it = _myResponseHeaders.begin();
+    Request::getAllResponseHeaders(const std::string & theHeader) const {
+        std::multimap<std::string,std::string>::const_iterator it = _myResponseHeaders.begin();
         std::vector<std::string> myResults;
         while (it != _myResponseHeaders.end()) {
             if (it->first == theHeader) {
@@ -191,21 +184,9 @@ namespace masl {
         return myResults;
     }
 
-    time_t
-    Request::getResponseHeaderAsDate(const string & theHeader) const {
-        return getTimeFromHTTPDate( getResponseHeader(theHeader).c_str());
-    }
-
-    time_t
-    Request::getTimeFromHTTPDate(const std::string & theHTTPDate ) {
-        Time myTime;
-        myTime.parse(theHTTPDate);
-        return static_cast<time_t>(myTime);
-    }
-
-    string
+    std::string
     Request::getErrorString() const {
-        return string(asl::begin_ptr(_myErrorBuffer));
+        return std::string(&_myErrorBuffer[0]);
     }
 
     void
@@ -260,14 +241,14 @@ namespace masl {
         addHttpHeader(theKey, myBuffer);
     }
 
-    string
+    std::string
     Request::urlEncode(const std::string & theUrl) {
-        return string(curl_escape(theUrl.c_str(), 0));
+        return std::string(curl_escape(theUrl.c_str(), 0));
     }
 
-    string
+    std::string
     Request::urlDecode(const std::string & theUrl) {
-        return string(curl_unescape(theUrl.c_str(), 0));
+        return std::string(curl_unescape(theUrl.c_str(), 0));
     }
     
     struct WriteString {
@@ -318,49 +299,6 @@ namespace masl {
         return thePutData.size();
     }
 
-    struct WriteBlock {
-        asl::Ptr<Block> dataBlock;
-        unsigned int position;
-    };
-
-    static size_t read_block_callback( void *theDestPtr, size_t theSrcSize, size_t theNumberOfElements, void *theInputStream )
-    {
-
-        struct WriteBlock *myData = (struct WriteBlock*) theInputStream;
-
-        size_t myMaxSize = theSrcSize * theNumberOfElements;
-        if (myMaxSize < 1) {
-            return 0; // end of transmission
-        }
-
-        if (myData->position < myData->dataBlock->size()) {
-            *(unsigned char*)theDestPtr = *(myData->dataBlock->begin() + myData->position);
-            myData->position++;
-            return 1;
-        }
-
-        return 0;
-    }
-
-    size_t 
-    Request::putBlock( const asl::Ptr<Block> & theBlock ) {
-
-        struct WriteBlock * myPayloadBlock = new WriteBlock();
-        myPayloadBlock->dataBlock = theBlock;
-		myPayloadBlock->position  = 0;
-
-        CURLcode myStatus = curl_easy_setopt( _myCurlHandle, CURLOPT_UPLOAD, true );        
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
-
-        myStatus = curl_easy_setopt( _myCurlHandle, CURLOPT_READFUNCTION, read_block_callback );
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
-
-        myStatus = curl_easy_setopt( _myCurlHandle, CURLOPT_READDATA, myPayloadBlock );
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
-
-		return theBlock->size();
-    }
-
     // request-method type methods
     size_t
     Request::post(const std::string & thePostData) {
@@ -373,26 +311,6 @@ namespace masl {
         myStatus = curl_easy_setopt(_myCurlHandle, CURLOPT_POSTFIELDSIZE, _myPostBuffer.size());
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         return _myPostBuffer.size();
-    }
-
-    size_t
-    Request::postBlock(const asl::Ptr<ReadableBlock> & theBlock) {
-        _myPostBlock = theBlock;
-        DB(AC_TRACE << "Posting Block with size=" << _myPostBlock->size() << endl);
-        CURLcode myStatus = curl_easy_setopt(_myCurlHandle, CURLOPT_POST, true);
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
-        myStatus = curl_easy_setopt(_myCurlHandle, CURLOPT_POSTFIELDS, _myPostBlock->begin());
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
-        myStatus = curl_easy_setopt(_myCurlHandle, CURLOPT_POSTFIELDSIZE, _myPostBlock->size());
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
-        return _myPostBlock->size();
-    }
-
-    size_t
-    Request::postFile(const std::string & theFilename) {
-        DB(AC_TRACE << "Posting File '" << theFilename << endl);
-        asl::Ptr<ReadableBlock> myFileBlock(new ConstMappedBlock(asl::expandEnvironment(theFilename)));
-        return postBlock(myFileBlock);
     }
 
     void
@@ -433,8 +351,8 @@ namespace masl {
             _myCookieBuffer += ";";
         }
 
-        string::size_type myDelimit = theCookie.find(";");
-        if (myDelimit == string::npos) {
+        std::string::size_type myDelimit = theCookie.find(";");
+        if (myDelimit == std::string::npos) {
             _myCookieBuffer += theCookie;
         } else {
             _myCookieBuffer += theCookie.substr(0, myDelimit);
@@ -455,17 +373,18 @@ namespace masl {
     // virtual callback hooks
     size_t
     Request::onData(const char * theData, size_t theReceivedByteCount) {
-        _myResponseBlock.append(theData, theReceivedByteCount);
+        //_myResponseBlock.append(theData, theReceivedByteCount);
+        _myResponseString.append(theData);
         return theReceivedByteCount;
     }
 
     bool
-    Request::onResponseHeader(const string & theHeader) {
+    Request::onResponseHeader(const std::string & theHeader) {
         // divide into key/value pairs
-        string::size_type myColon = theHeader.find(":");
-        if (myColon != string::npos) {
-            string myKey = theHeader.substr(0,myColon);
-            string myValue = theHeader.substr(myColon+2);
+        std::string::size_type myColon = theHeader.find(":");
+        if (myColon != std::string::npos) {
+            std::string myKey = theHeader.substr(0,myColon);
+            std::string myValue = theHeader.substr(myColon+2);
             DB(AC_TRACE << "adding '" << myKey << "' / '" << myValue << "'" << endl);
             _myResponseHeaders.insert(make_pair(myKey, myValue));
         } else {
@@ -520,10 +439,10 @@ namespace masl {
     size_t
     Request::curlHeaderCallback( void *theData, size_t theBlockCount, size_t theBlockSize, void *theRequestObject) {
         Request * myRequest = static_cast<Request*>(theRequestObject);
-        string myHeader(static_cast<char*>(theData), theBlockSize*theBlockCount);
+        std::string myHeader(static_cast<char*>(theData), theBlockSize*theBlockCount);
         // remove trailing newline
-        string::size_type myEndOfLine = myHeader.find_first_of("\r\n");
-        if (myEndOfLine != string::npos) {
+        std::string::size_type myEndOfLine = myHeader.find_first_of("\r\n");
+        if (myEndOfLine != std::string::npos) {
             myHeader.erase(myEndOfLine);
         }
         if (myHeader.size()) {
@@ -535,4 +454,3 @@ namespace masl {
     }
 }
 
-#endif
