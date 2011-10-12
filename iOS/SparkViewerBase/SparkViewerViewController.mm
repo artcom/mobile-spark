@@ -19,7 +19,7 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {   
     if(isPortrait) return NO;
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 -(void)setPortrait:(bool)thePortrait {
