@@ -72,18 +72,6 @@ namespace demoapp {
 
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 
-        AC_PRINT << "___________________________________________store file";
-        mar::AssetProviderSingleton::get().ap()->storeInFile("testtesttesttesttest.txt","store this again in file");
-        std::vector<char> testbindary;
-        testbindary.push_back('a');
-        testbindary.push_back('b');
-        testbindary.push_back('c');
-        testbindary.push_back('d');
-        testbindary.push_back('e');
-        testbindary.push_back('f');
-        testbindary.push_back('g');
-        mar::AssetProviderSingleton::get().ap()->storeInFile("binarytesttesttest.txt",testbindary);
-
         //test free function on touch
         spark::EventCallbackPtr myFreeCB = EventCallbackPtr(new FreeFunctionEventCallback(freeFunctionEventCB));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myFreeCB);
@@ -133,18 +121,12 @@ namespace demoapp {
         _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
 
 #ifdef ANDROID
-        masl::RequestPtr  myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/string.txt"));
-        masl::RequestCallbackPtr cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onTextRequestReady));
-        myRequest->setOnDoneCallback(cb);
-        myRequest->get();
-        _myRequestManager.performRequest(myRequest);
-
-        myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/currentDate.php"));
-        cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onDateRequestReady));
-        myRequest->setOnDoneCallback(cb);
-        myRequest->get();
-        _myRequestManager.performRequest(myRequest);
-
+        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/string.txt",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onTextRequestReady)));
+        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/currentDate.php",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onDateRequestReady)));
 #endif
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
@@ -372,13 +354,11 @@ namespace demoapp {
         mySequence->add(myAnimation2);
         mySequence->setLoop(true);
         animation::AnimationManager::get().play(mySequence);
+
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
-        masl::RequestPtr myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/scene.spark"));
-        masl::RequestCallbackPtr cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onSparkRequestReady));
-        myRequest->setOnDoneCallback(cb);
-        myRequest->get();
-        //todo
-        //_myRequestManager.performRequest(myRequest);
+        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onSparkRequestReady)));
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {

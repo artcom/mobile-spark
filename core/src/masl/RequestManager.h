@@ -12,9 +12,13 @@ namespace masl {
             RequestManager();
             virtual ~RequestManager();
             void performRequest(RequestPtr theRequest);
-            /// must be called periodically
+            // !!!must be called periodically
             int handleRequests(bool theBlockingFlag = false);
             int getActiveCount() const { return _myRequests.size(); };
+
+            //convenience functions
+            void getRequest(const std::string & theUrl, RequestCallbackPtr theCB);
+
         protected:
             virtual bool removeRequest(Request* theRequest);
         private:

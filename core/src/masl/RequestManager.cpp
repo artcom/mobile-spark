@@ -126,4 +126,12 @@ namespace masl {
         } while (myStatus == CURLM_CALL_MULTI_PERFORM);
         return myRunningHandles;
     }
+
+    void 
+    RequestManager::getRequest(const std::string & theUrl, RequestCallbackPtr theCB) {
+        masl::RequestPtr myRequest = masl::RequestPtr(new masl::Request(theUrl));
+        myRequest->setOnDoneCallback(theCB);
+        myRequest->get();
+        performRequest(myRequest);
+    }
 }
