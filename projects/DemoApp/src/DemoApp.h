@@ -50,6 +50,8 @@ namespace demoapp {
             void onTextRequestReady(masl::RequestPtr theRequest);
             void onDateRequestReady(masl::RequestPtr theRequest);
             void onSparkRequestReady(masl::RequestPtr theRequest);
+            void onAssetRequestReady(masl::RequestPtr theRequest);
+            void onAllAssetsRequestReady(masl::RequestPtr theRequest);
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;

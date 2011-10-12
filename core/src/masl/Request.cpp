@@ -87,9 +87,14 @@ namespace masl {
         return _myCurlHandle;
     }
 
-    const std::string &
-    Request::getURL() const {
-        return _myURL;
+    std::string 
+    Request::getResponseString() const {
+        return std::string(&_myResponseBlock[0],_myResponseBlock.size());
+    }
+
+    std::vector<char>  
+    Request::getResponseBinary() const {
+        return _myResponseBlock;
     }
 
     void
@@ -114,11 +119,6 @@ namespace masl {
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         return myResponseCode;
     }
-
-    std::string
-    Request::getResponseString() const {
-        return _myResponseString;
-    };
 
     void
     Request::setVerbose(bool theVerboseFlag) {
@@ -369,8 +369,8 @@ namespace masl {
     // virtual callback hooks
     size_t
     Request::onData(const char * theData, size_t theReceivedByteCount) {
-        //_myResponseBlock.append(theData, theReceivedByteCount);
-        _myResponseString.append(theData);
+        copy(theData, theData + theReceivedByteCount, back_inserter(_myResponseBlock));
+        std::string test(&_myResponseBlock[0], _myResponseBlock.size());
         return theReceivedByteCount;
     }
 

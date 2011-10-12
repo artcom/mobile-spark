@@ -32,6 +32,7 @@ namespace spark {
 
         ComponentPtr loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath);
         ComponentPtr loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode);
+        std::vector<std::string> createSrcListFromSpark(const std::string & theSparkString);
 
     private:
         CallbackMap createCallbackMap_;

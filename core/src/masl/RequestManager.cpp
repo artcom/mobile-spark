@@ -128,10 +128,20 @@ namespace masl {
     }
 
     void 
-    RequestManager::getRequest(const std::string & theUrl, RequestCallbackPtr theCB) {
+    RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
         masl::RequestPtr myRequest = masl::RequestPtr(new masl::Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
         myRequest->get();
         performRequest(myRequest);
+    }
+
+    void
+    RequestManager::getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
+                                  const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB) {
+        //TODO
+        if (theURLLastPartList.size() > 0) {
+            AC_PRINT << "create get requst for " << theBaseURL << theURLLastPartList[0];
+            getRequest(theBaseURL + theURLLastPartList[0], theOneReadyCB);
+        }
     }
 }

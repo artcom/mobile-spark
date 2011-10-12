@@ -32,8 +32,9 @@ namespace masl {
             CURL * getHandle() const;
             long getResponseCode() const;
             std::string getResponseString() const;
+            std::vector<char> getResponseBinary() const;
             std::string getErrorString() const;
-            const std::string & getURL() const;
+            const std::string & getURL() const { return _myURL;};
             void setLowSpeedLimit(unsigned theBytesPerSec);
             void setLowSpeedTimeout(unsigned theSeconds);
             void setTimeoutParams(unsigned theBytesPerSec, unsigned theSeconds);
@@ -103,7 +104,7 @@ namespace masl {
             unsigned            _myLowSpeedTimeout;
             struct curl_slist * _myHttpHeaderList;
             std::string         _myPostBuffer;
-            std::string         _myResponseString;
+            std::vector<char>   _myResponseBlock;
             std::vector<char>   _myErrorBuffer;
             std::string         _mySSLCertificateFilename;
             std::multimap<std::string, std::string> _myResponseHeaders;
