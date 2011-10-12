@@ -1,10 +1,14 @@
 #include "DemoApp.h"
 
 #include <cstdlib>
+#include <sys/stat.h>
 
 #include <masl/Callback.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
+#include <masl/file_functions.h>
+
+#include <mar/AssetProvider.h>
 
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
@@ -59,7 +63,10 @@ namespace demoapp {
 
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
-        
+
+        mar::AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/downloads/");
+        mkdir(std::string(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads").c_str(), 755);
+
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
@@ -89,6 +96,10 @@ namespace demoapp {
         spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("languagebutton", true);
         myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
 
+        spark::EventCallbackPtr myLoadSceneCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLoadScene));
+        spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
+        myLoadButton->addEventListener(TouchEvent::PICKED, myLoadSceneCB);
+
 		//touch gestures
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myAnimationCB);
@@ -115,23 +126,12 @@ namespace demoapp {
         _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
 
 #ifdef ANDROID
-        masl::RequestPtr  myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/string.txt"));
-        masl::RequestCallbackPtr cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onTextRequestReady));
-        myRequest->setOnDoneCallback(cb);
-        myRequest->get();
-        _myRequestManager.performRequest(myRequest);
-
-        myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/currentDate.php"));
-        cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onDateRequestReady));
-        myRequest->setOnDoneCallback(cb);
-        myRequest->get();
-        _myRequestManager.performRequest(myRequest);
-
-        myRequest = masl::RequestPtr(new masl::Request("http://www.einsfeld.de/mobile-spark/rectangles.spark"));
-        cb = masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onSparkRequestReady));
-        myRequest->setOnDoneCallback(cb);
-        myRequest->get();
-        _myRequestManager.performRequest(myRequest);
+        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/string.txt",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onTextRequestReady)));
+        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/currentDate.php",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onDateRequestReady)));
 #endif
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
@@ -208,9 +208,28 @@ namespace demoapp {
         myText->setText(theRequest->getResponseString());
     }
     void DemoApp::onSparkRequestReady(RequestPtr theRequest) {
-        spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
+        WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
+        myLoadingText->setVisible(false);
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
-        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromString(ptr, theRequest->getResponseString());
+        std::string myNewSpark = theRequest->getResponseString();
+        std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
+        mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/scene.spark", myNewSpark);
+        _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onAssetRequestReady)),
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onAllAssetsRequestReady)));
+    }
+    void DemoApp::onAssetRequestReady(masl::RequestPtr theRequest) {
+        AC_DEBUG << "on Asset ready, request url was " << theRequest->getURL();
+        std::vector<char> myBlock = theRequest->getResponseBinary();
+        mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
+    }
+    void DemoApp::onAllAssetsRequestReady(masl::RequestPtr theRequest) {
+        AC_DEBUG << "on AllAsset Ready";
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
+        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/scene.spark");
         myTransform->addChild(myNewSpark);
     }
 
@@ -343,6 +362,25 @@ namespace demoapp {
                         new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::insertCreatedComponent)));
             animation::AnimationManager::get().play(myDelay);
         }
+    }
+
+    void DemoApp::onLoadScene(EventPtr theEvent) {
+        WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
+        myLoadingText->setVisible(true);
+        WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myLoadingText, &Widget::setX, 30, 300, 500));
+        WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
+                new WidgetPropertyAnimation(myLoadingText, &Widget::setY, 300, 30, 500));
+        animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
+        mySequence->add(myAnimation1);
+        mySequence->add(myAnimation2);
+        mySequence->setLoop(true);
+        animation::AnimationManager::get().play(mySequence);
+
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onSparkRequestReady)));
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {
