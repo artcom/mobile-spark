@@ -12,14 +12,12 @@ namespace spark {
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onPause();
         virtual void realize();
-        virtual void onSizeChanged(EventPtr theEvent);
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Camera::SPARK_TYPE;};
     private:
         void setGeometry();
         bool _myColorConversionFlag;
-        bool _myPortraitMode;
     };
 
     typedef masl::Ptr<Camera> CameraPtr;

@@ -14,6 +14,10 @@ using namespace mar;
 using namespace std;
 
 namespace spark {
+
+    const char * const Orientation::PORTRAIT = "portrait";
+    const char * const Orientation::LANDSCAPE = "landscape";
+    const char * const Orientation::FLOATING = "floating";
     const char * const Window::SPARK_TYPE = "Window";
 
     Window::Window(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
@@ -56,9 +60,9 @@ namespace spark {
         int myScreensLargerSide = _myWidth > _myHeight ? _myWidth : _myHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  _myHeight ? _myWidth : _myHeight;
 
-        if (_myOrientation == "portrait") {
+        if (_myOrientation == Orientation::PORTRAIT) {
             return vector2(myScreensSmallerSide, myScreensLargerSide);
-        } else if (_myOrientation == "landscape") {
+        } else if (_myOrientation == Orientation::LANDSCAPE) {
             return vector2(myScreensLargerSide, myScreensSmallerSide);
         }
         // floating

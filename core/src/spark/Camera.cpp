@@ -12,7 +12,7 @@ namespace spark {
     const char * const Camera::SPARK_TYPE = "Camera";
 
     Camera::Camera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        ShapeWidget(theApp, theXMLNode), _myPortraitMode(true) {
+        ShapeWidget(theApp, theXMLNode) {
 
         setShape(mar::ShapeFactory::get().createRectangle(true));
         _myColorConversionFlag = _myXMLNode->getAttributeAs<bool>("cpu_color_conversion", false);
@@ -25,29 +25,13 @@ namespace spark {
     void
     Camera::realize() {
         ShapeWidget::realize();
-        CameraPtr ptr = boost::static_pointer_cast<Camera>(shared_from_this());
-        EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new CameraCB(ptr, &Camera::onSizeChanged));
-        WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
-        myWindow->addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
-
     }
 
     void
     Camera::onPause() {
         ShapeWidget::onPause();
-        masl::MobileSDK_Singleton::get().getNative()->stopCameraCapture();
-    }
-
-    void
-    Camera::onSizeChanged(EventPtr theEvent) {
-        WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
-        float myRatio = myEvent->size_[0] /myEvent->size_[1];
-        if (myRatio < 1.0) {
-            _myPortraitMode = true;
-            AC_INFO << "Camera::onSizeChanged senkrecht";
-        } else {
-            _myPortraitMode = false;
-            AC_INFO << "Camera::onSizeChanged waagerecht";
+        if (masl::MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
+            masl::MobileSDK_Singleton::get().getNative()->stopCameraCapture();
         }
     }
 
@@ -58,10 +42,15 @@ namespace spark {
             if (!masl::MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
                 masl::MobileSDK_Singleton::get().getNative()->startCameraCapture(_myColorConversionFlag);
             }
+            WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
             masl::CameraInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
-            if (!getShape() || (myCameraInfo.width != 0 && myCameraInfo.width != getShape()->getWidth())) {
+            float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
+            float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
+            float myShapeWidth = (myWindow->getOrientation() == Orientation::PORTRAIT) ? height : width;
+            if (!getShape() || (myShapeWidth != 0 && myShapeWidth != getShape()->getWidth())) {
                 setGeometry();
             }
+            masl::MobileSDK_Singleton::get().getNative()->updateCameraTexture();
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
             if (myCameraInfo.textureID != 0 && myCameraInfo.textureID != myMaterial->getTexture()->getTextureId()) {
                 myMaterial->getTexture()->setTextureId(myCameraInfo.textureID);
@@ -75,10 +64,11 @@ namespace spark {
 
     void
     Camera::setGeometry() {
+        WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
     	masl::CameraInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
         float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
 		float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
-		if (_myPortraitMode) {
+		if (myWindow->getOrientation() == Orientation::PORTRAIT) {
 			setSize(height, width);
             getShape()->setTexCoords(vector2(width/myCameraInfo.texturewidth,height/myCameraInfo.textureheight) ,
                                      vector2(width/myCameraInfo.texturewidth,0),
@@ -91,6 +81,6 @@ namespace spark {
                                      vector2(0,0),
                                      vector2(width/myCameraInfo.texturewidth,0));
         }
-		AC_INFO<< "Camera width x height : " << width << " x " << height;
+		AC_INFO<< "Camera width x height : " << width << " x " << height << " orientation: "<<myWindow->getOrientation();
     }
 }
