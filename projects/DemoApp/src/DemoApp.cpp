@@ -1,10 +1,12 @@
 #include "DemoApp.h"
 
 #include <cstdlib>
+#include <sys/stat.h>
 
 #include <masl/Callback.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
+#include <masl/file_functions.h>
 
 #include <mar/AssetProvider.h>
 
@@ -61,7 +63,10 @@ namespace demoapp {
 
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
-        
+
+        mar::AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/downloads/");
+        mkdir(std::string(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads").c_str(), 755);
+
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
@@ -205,9 +210,26 @@ namespace demoapp {
     void DemoApp::onSparkRequestReady(RequestPtr theRequest) {
         WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
         myLoadingText->setVisible(false);
-        spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
-        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromString(ptr, theRequest->getResponseString());
+        std::string myNewSpark = theRequest->getResponseString();
+        std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
+        mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/scene.spark", myNewSpark);
+        _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onAssetRequestReady)),
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onAllAssetsRequestReady)));
+    }
+    void DemoApp::onAssetRequestReady(masl::RequestPtr theRequest) {
+        AC_PRINT << "................... on Asset ready, request url was " << theRequest->getURL();
+        std::vector<char> myBlock = theRequest->getResponseBinary();
+        mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
+    }
+    void DemoApp::onAllAssetsRequestReady(masl::RequestPtr theRequest) {
+        AC_PRINT << ".................. on AllAsset Ready";
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
+        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "downloads/scene.spark");
         myTransform->addChild(myNewSpark);
     }
 

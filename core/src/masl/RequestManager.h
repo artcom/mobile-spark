@@ -17,7 +17,9 @@ namespace masl {
             int getActiveCount() const { return _myRequests.size(); };
 
             //convenience functions
-            void getRequest(const std::string & theUrl, RequestCallbackPtr theCB);
+            void getRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
+            void getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
+                               const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB);
 
         protected:
             virtual bool removeRequest(Request* theRequest);

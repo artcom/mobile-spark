@@ -216,12 +216,12 @@ namespace spark {
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
 #endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
+        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/textures/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/layouts/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts/");
-        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/");
     }
     
 }
