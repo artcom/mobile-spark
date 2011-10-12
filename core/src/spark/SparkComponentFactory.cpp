@@ -120,6 +120,25 @@ namespace spark {
             }
         }
     }
+
+    std::vector<std::string> 
+    SparkComponentFactory::createSrcListFromSpark(const std::string & theSparkString) {
+        //TODO: this should be done with xpath as soon as libxml2 is compiled with xpath support
+        //assumptions: file names should not contain escaped quotes
+        std::vector<std::string> result;
+        size_t startPos = 0;
+        size_t foundPos;
+        while (std::string::npos != (foundPos = theSparkString.find("src=\"",startPos))) {
+            startPos = foundPos + 5;
+            foundPos = theSparkString.find("\"",startPos);
+            if (foundPos == std::string::npos) {
+                return result;
+            }
+            result.push_back(theSparkString.substr(startPos, foundPos - startPos));
+            startPos = foundPos + 1;
+        }
+        return result;
+    }
 }
 
 

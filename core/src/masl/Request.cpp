@@ -1,6 +1,7 @@
 #include "Request.h"
 
 #include <iostream>
+#include "RequestManager.h"
 
 #define CURL_VERBOSE 0
 #define DB(x) // x
@@ -87,9 +88,14 @@ namespace masl {
         return _myCurlHandle;
     }
 
-    const std::string &
-    Request::getURL() const {
-        return _myURL;
+    std::string 
+    Request::getResponseString() const {
+        return std::string(&_myResponseBlock[0],_myResponseBlock.size());
+    }
+
+    std::vector<char>  
+    Request::getResponseBinary() const {
+        return _myResponseBlock;
     }
 
     void
@@ -114,11 +120,6 @@ namespace masl {
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         return myResponseCode;
     }
-
-    std::string
-    Request::getResponseString() const {
-        return _myResponseString;
-    };
 
     void
     Request::setVerbose(bool theVerboseFlag) {
@@ -369,8 +370,8 @@ namespace masl {
     // virtual callback hooks
     size_t
     Request::onData(const char * theData, size_t theReceivedByteCount) {
-        //_myResponseBlock.append(theData, theReceivedByteCount);
-        _myResponseString.append(theData);
+        copy(theData, theData + theReceivedByteCount, back_inserter(_myResponseBlock));
+        std::string test(&_myResponseBlock[0], _myResponseBlock.size());
         return theReceivedByteCount;
     }
 
@@ -450,6 +451,24 @@ namespace masl {
             }
         }
         return theBlockCount*theBlockSize;
+    }
+
+
+    SequenceRequest::SequenceRequest(RequestManager & theRequestManager, const std::string & theURL,
+                                     const std::string & theUserAgent) : Request(theURL, theUserAgent),
+                                     _myRequestManager(theRequestManager) {
+    }
+
+    void
+    SequenceRequest::onDone() {
+        Request::onDone();
+        if (_myNextRequest) { 
+            _myRequestManager.performRequest(_myNextRequest);
+        } else {
+            if (_myOnAllDoneCallback) {
+                (*_myOnAllDoneCallback)(shared_from_this());
+            }
+        }
     }
 }
 
