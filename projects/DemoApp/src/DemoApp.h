@@ -35,6 +35,7 @@ namespace demoapp {
             void insertCreatedComponent();
             void onSizeChanged(spark::EventPtr theEvent);
             void onFrame(spark::EventPtr theEvent);
+            void onLoadScene(spark::EventPtr theEvent);
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
             void onStartSlideSwipe();
