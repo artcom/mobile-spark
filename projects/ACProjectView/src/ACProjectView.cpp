@@ -39,7 +39,6 @@ namespace acprojectview {
    
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false) {
-        _myChooseLayoutFlag = true;
     }
 
     ACProjectView::~ACProjectView() {

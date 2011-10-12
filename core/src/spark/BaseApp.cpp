@@ -41,7 +41,7 @@ namespace spark {
 
 
     BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
-        _myChooseLayoutFlag(false), _mySetupFlag(false) {
+        _mySetupFlag(false) {
         masl::initSignalHandling();
     }
 
@@ -55,28 +55,19 @@ namespace spark {
     void BaseApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         _mySetupFlag = true;
         ComponentMapInitializer::init();
-        
         //init animationManager with setup-time
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
-
         assetProviderSetup(theAssetPath, appPath_);
 #ifdef iOS
         MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
 #endif
-       
     }
 
-    void
-    BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
-        std::string myLayoutFile = "";
+    void BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
         AC_PRINT << "choose layout ...........";
-        bool test;
-        if (_myChooseLayoutFlag) {
-            myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight, test);
-        }  else {
-            myLayoutFile = theBaseName + ".spark";
-        }
+        bool dummy;
+        std::string myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight, dummy);
         //load layout
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(shared_from_this(), myLayoutFile));
         _mySparkWindow->realize();
@@ -188,7 +179,6 @@ namespace spark {
                 }
                 int myLayoutsLargerSide = myLayoutWidth > myLayoutHeight ? myLayoutWidth : myLayoutHeight;
                 int myLayoutsSmallerSide = myScreensLargerSide ==  myLayoutHeight ? myLayoutWidth : myLayoutHeight;
-                //AC_PRINT << "check layout '" << myLayoutName << " width " << myLayoutWidth << "'" << " height " << myLayoutHeight << " screen :" << theScreenWidth << " x" << theScreenHeight << "  myChoice " << myChoice << " myFiles.size()="<< myFiles.size();
                 if (myLayoutsLargerSide == myScreensLargerSide && myLayoutsSmallerSide == myScreensSmallerSide ) {
                     myBestMatch = myChoice;
                     myBestLayoutName = myLayoutName;
