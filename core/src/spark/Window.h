@@ -16,6 +16,11 @@ namespace mar {
 
 namespace spark {
 
+    struct Orientation {
+        static const char * const PORTRAIT;
+        static const char * const LANDSCAPE;
+        static const char * const FLOATING;
+    };
     class Window : public Widget {
     public:
         Window(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
@@ -26,6 +31,7 @@ namespace spark {
         virtual void onSizeChanged(EventPtr theEvent);
         virtual void onResume();
         virtual void realize();        
+        std::string getOrientation() const { return _myOrientation;};
         vector4 getClearColor() const { return _myClearColor;};
         vector2 getSize() const;
         void setSize(int theWidth, int theHeight) {_myWidth=theWidth; _myHeight=theHeight;};
