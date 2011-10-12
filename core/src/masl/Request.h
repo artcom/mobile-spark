@@ -32,8 +32,9 @@ namespace masl {
             CURL * getHandle() const;
             long getResponseCode() const;
             std::string getResponseString() const;
+            std::vector<char> getResponseBinary() const;
             std::string getErrorString() const;
-            const std::string & getURL() const;
+            const std::string & getURL() const { return _myURL;};
             void setLowSpeedLimit(unsigned theBytesPerSec);
             void setLowSpeedTimeout(unsigned theSeconds);
             void setTimeoutParams(unsigned theBytesPerSec, unsigned theSeconds);
@@ -103,7 +104,7 @@ namespace masl {
             unsigned            _myLowSpeedTimeout;
             struct curl_slist * _myHttpHeaderList;
             std::string         _myPostBuffer;
-            std::string         _myResponseString;
+            std::vector<char>   _myResponseBlock;
             std::vector<char>   _myErrorBuffer;
             std::string         _mySSLCertificateFilename;
             std::multimap<std::string, std::string> _myResponseHeaders;
@@ -116,6 +117,22 @@ namespace masl {
     };
 
     typedef masl::Ptr<Request> RequestPtr;
+
+    class SequenceRequest : public Request {
+        public:
+            SequenceRequest(RequestManager & theRequestManager, const std::string & theURL, 
+                            const std::string & theUserAgent = std::string("acMobileSpark"));
+            virtual ~SequenceRequest() {};
+            void setNextRequest(const RequestPtr theNextRequest) { _myNextRequest = theNextRequest; };
+            void setOnAllDoneCallback(RequestCallbackPtr theOnAllDoneCallback) { _myOnAllDoneCallback = theOnAllDoneCallback; };
+        protected:
+            virtual void onDone();
+        private:
+            RequestPtr _myNextRequest;
+            RequestManager & _myRequestManager;
+            RequestCallbackPtr  _myOnAllDoneCallback;
+    };
+    typedef masl::Ptr<SequenceRequest> SequenceRequestPtr;
 
     ////////////////////////////////////////////////////////////////////////
     //Request Callbacks ////////////////////////////////////////////////////

@@ -35,6 +35,7 @@ namespace demoapp {
             void insertCreatedComponent();
             void onSizeChanged(spark::EventPtr theEvent);
             void onFrame(spark::EventPtr theEvent);
+            void onLoadScene(spark::EventPtr theEvent);
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
             void onStartSlideSwipe();
@@ -49,6 +50,8 @@ namespace demoapp {
             void onTextRequestReady(masl::RequestPtr theRequest);
             void onDateRequestReady(masl::RequestPtr theRequest);
             void onSparkRequestReady(masl::RequestPtr theRequest);
+            void onAssetRequestReady(masl::RequestPtr theRequest);
+            void onAllAssetsRequestReady(masl::RequestPtr theRequest);
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;

@@ -15,6 +15,8 @@ namespace mar {
         virtual std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const = 0;
         virtual bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & width, int & height, bool & rgb) = 0;
         virtual void addIncludePath(const std::string & thePath) = 0;
+        virtual void storeInFile(const std::string & theFileName, const std::string & theData) = 0;
+        virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData) = 0;
 
         virtual std::vector<std::string> getFilesFromPath(const std::string & theBasePath) const;
         virtual std::string findFile(const std::string & theFilename) const;
