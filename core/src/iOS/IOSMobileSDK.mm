@@ -45,21 +45,18 @@ namespace ios
         return cameraInfo;
     }
     void IOSMobileSDK::startCameraCapture(bool /*theColorConversionFlag*/) {
-        Camera * myCamera = [Camera instance];
-        [myCamera startCameraCapture];
-    
+        [[Camera instance] startCameraCapture];
     }
+
     void IOSMobileSDK::updateCameraTexture() {
-        Camera * myCamera = [Camera instance];
-        [myCamera updateCameraTexture];
+        [[Camera instance] updateCameraTexture];
     }
     
     void IOSMobileSDK::stopCameraCapture() {
-        Camera * myCamera = [Camera instance];
-        [myCamera stopCameraCapture];
+        [[Camera instance] stopCameraCapture];
     }
+    
     bool IOSMobileSDK::isCameraCapturing() {
-        Camera * myCamera = [Camera instance];
-        return [myCamera isCameraCapturing];
+        [[Camera instance] isCameraCapturing];
     }
 }

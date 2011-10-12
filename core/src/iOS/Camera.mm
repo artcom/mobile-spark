@@ -81,23 +81,7 @@
 }
 
 - (void)updateCameraTexture {
-//	CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-//	height = CVPixelBufferGetHeight(pixelBuffer);
-//	width = CVPixelBufferGetWidth(pixelBuffer);
-//	AC_PRINT<<"updateCameraTexture width: "<<width <<" height: "<<height;
-//    
-//    
-//	glBindTexture(GL_TEXTURE_2D, textureID);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//	// This is necessary for non-power-of-two textures
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//	
-//	// Using BGRA extension to pull in video frame data directly
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(pixelBuffer));
-//    
-//	CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    // maybe move gl binding from capture output here
 }
 
 
@@ -157,12 +141,6 @@
 	if (videoPreviewLayer == nil)
 	{
 		videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:captureSession];
-        
-        if ([videoPreviewLayer isOrientationSupported]) 
-		{
-            [videoPreviewLayer setOrientation:AVCaptureVideoOrientationPortrait];
-        }
-        
         [videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
 	}
 	
