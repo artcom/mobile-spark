@@ -114,7 +114,7 @@ namespace masl {
             if (myMaxFd != -1) {
                 select(myMaxFd+1, &myReadHandles, &myWriteHandles, &myExceptHandles, &tv);
             }
-         }
+        }
         int myRunningHandles;
         do {
             myStatus = curl_multi_perform(_myCurlMultiHandle, &myRunningHandles);
@@ -129,7 +129,7 @@ namespace masl {
 
     void 
     RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
-        masl::RequestPtr myRequest = masl::RequestPtr(new masl::Request(theUrl));
+        RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
         myRequest->get();
         performRequest(myRequest);
@@ -138,10 +138,21 @@ namespace masl {
     void
     RequestManager::getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
                                   const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB) {
-        //TODO
-        if (theURLLastPartList.size() > 0) {
-            AC_PRINT << "create get requst for " << theBaseURL << theURLLastPartList[0];
-            getRequest(theBaseURL + theURLLastPartList[0], theOneReadyCB);
+        RequestPtr myNextRequest;
+        for (int i = theURLLastPartList.size() - 1; i >= 0 ; --i) {
+            std::string myUrl = theBaseURL + "/" + theURLLastPartList[i];
+            SequenceRequestPtr myRequest = SequenceRequestPtr(new SequenceRequest(*this, myUrl));
+            myRequest->setOnDoneCallback(theOneReadyCB);
+            myRequest->get();
+            if (myNextRequest) {
+                myRequest->setNextRequest(myNextRequest);
+            } else {
+                myRequest->setOnAllDoneCallback(theAllReadyCB);
+            }
+            myNextRequest = myRequest;
+        }
+        if (myNextRequest) {
+            performRequest(myNextRequest);
         }
     }
 }
