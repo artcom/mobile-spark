@@ -57,6 +57,6 @@ namespace ios
     }
     
     bool IOSMobileSDK::isCameraCapturing() {
-        [[Camera instance] isCameraCapturing];
+        return [[Camera instance] isCameraCapturing];
     }
 }
