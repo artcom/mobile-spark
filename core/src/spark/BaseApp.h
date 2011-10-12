@@ -33,7 +33,6 @@ namespace spark {
 
         protected:
             std::string appPath_;
-            bool _myChooseLayoutFlag;
             bool _mySetupFlag;       
         private:
             EventPtrList _myEvents;    
