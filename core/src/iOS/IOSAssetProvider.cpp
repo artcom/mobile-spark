@@ -63,4 +63,14 @@ namespace ios
         masl::readFileLineByLine(_myAssetFolderPath + "/" + theFile, content);
         return content;
     }
+
+    void 
+    IOSAssetProvider::storeInFile(const std::string & theFileName, const std::string & theData) {
+        //TODO
+    }
+
+    void 
+    IOSAssetProvider::storeInFile(const std::string & theFileName, const std::vector<char> & theData) {
+        //TODO
+    }
 }
