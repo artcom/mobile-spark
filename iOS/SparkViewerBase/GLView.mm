@@ -93,13 +93,10 @@
          //setup DemoApp
         NSString *path = [[NSBundle mainBundle] resourcePath];
         _myApp->setup((0.0),[path UTF8String], width, height);
-//        NSString *resizeEvent = [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%d,%d]' oldsize='[%d,%d]'/>", width, height, width, height];
-//        _myApp->onEvent([resizeEvent UTF8String]); 
-       
-        motionManager = [[CMMotionManager alloc] init];
-        motionManager.deviceMotionUpdateInterval = 1.0/60.0; //60Hz
         
         eventManager = [[EventManager alloc] initWithSourceView:self];
+        sensorManager = [[Sensors alloc] init];
+
     }
     return self;
 }
@@ -109,9 +106,7 @@
     [EAGLContext setCurrentContext:glContext];
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     
-    CMAttitude *attitude = motionManager.deviceMotion.attitude;
-    //NSLog(@"Euler Angles roll: %f pitch: %f yaw: %f", attitude.roll, attitude.pitch, attitude.yaw);
-    
+   
     //render
     NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
     _myApp->onEvent([frameEvent UTF8String]);    
@@ -125,9 +120,6 @@
 {
     [EAGLContext setCurrentContext:glContext];
     glBindFramebuffer(GL_FRAMEBUFFER, multisamplingFramebuffer);
-    
-    CMAttitude *attitude = motionManager.deviceMotion.attitude;
-    //NSLog(@"Euler Angles roll: %f pitch: %f yaw: %f", attitude.roll, attitude.pitch, attitude.yaw);
     
     //render
     NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
@@ -165,13 +157,10 @@
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         
         animating = TRUE;
+        
+        [sensorManager enable];
     }
     
-    //works only on phones with gyroscope(iPhone4, iPad2)
-    if (motionManager.deviceMotionAvailable)
-    {
-        [motionManager startDeviceMotionUpdates];
-    }
 }
 
 - (void)stopAnimation
@@ -183,10 +172,7 @@
         animating = FALSE;
     }
     
-    if (motionManager.deviceMotionActive)
-    {
-        [motionManager stopDeviceMotionUpdates];
-    }
+    [sensorManager disable];
 }
 
 
@@ -229,8 +215,8 @@
     [eventManager release];
     eventManager = nil;
     
-    [motionManager release];
-    motionManager = nil;
+    [sensorManager release];
+    sensorManager = nil;
     
     [super dealloc];
 }

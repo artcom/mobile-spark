@@ -14,6 +14,8 @@
 #endif
 
 #import "EventManager.h"
+#import "Sensors.h"
+
 
 typedef enum {
     useNoneMSAA = 0,
@@ -35,9 +37,10 @@ typedef enum {
         GLint height;
         BOOL animating;
         EventManager *eventManager;
+        Sensors *sensorManager;
+
         CADisplayLink *displayLink;
-        CMMotionManager *motionManager;
-    
+           
     @protected
 
     #ifdef __cplusplus
