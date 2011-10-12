@@ -1,6 +1,7 @@
 #include "Request.h"
 
 #include <iostream>
+#include "RequestManager.h"
 
 #define CURL_VERBOSE 0
 #define DB(x) // x
@@ -450,6 +451,24 @@ namespace masl {
             }
         }
         return theBlockCount*theBlockSize;
+    }
+
+
+    SequenceRequest::SequenceRequest(RequestManager & theRequestManager, const std::string & theURL,
+                                     const std::string & theUserAgent) : Request(theURL, theUserAgent),
+                                     _myRequestManager(theRequestManager) {
+    }
+
+    void
+    SequenceRequest::onDone() {
+        Request::onDone();
+        if (_myNextRequest) { 
+            _myRequestManager.performRequest(_myNextRequest);
+        } else {
+            if (_myOnAllDoneCallback) {
+                (*_myOnAllDoneCallback)(shared_from_this());
+            }
+        }
     }
 }
 

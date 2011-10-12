@@ -221,15 +221,15 @@ namespace demoapp {
                 ptr, &DemoApp::onAllAssetsRequestReady)));
     }
     void DemoApp::onAssetRequestReady(masl::RequestPtr theRequest) {
-        AC_PRINT << "................... on Asset ready, request url was " << theRequest->getURL();
+        AC_DEBUG << "on Asset ready, request url was " << theRequest->getURL();
         std::vector<char> myBlock = theRequest->getResponseBinary();
         mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
     }
     void DemoApp::onAllAssetsRequestReady(masl::RequestPtr theRequest) {
-        AC_PRINT << ".................. on AllAsset Ready";
+        AC_DEBUG << "on AllAsset Ready";
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
-        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "downloads/scene.spark");
+        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/scene.spark");
         myTransform->addChild(myNewSpark);
     }
 

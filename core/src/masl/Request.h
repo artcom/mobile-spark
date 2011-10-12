@@ -118,6 +118,22 @@ namespace masl {
 
     typedef masl::Ptr<Request> RequestPtr;
 
+    class SequenceRequest : public Request {
+        public:
+            SequenceRequest(RequestManager & theRequestManager, const std::string & theURL, 
+                            const std::string & theUserAgent = std::string("acMobileSpark"));
+            virtual ~SequenceRequest() {};
+            void setNextRequest(const RequestPtr theNextRequest) { _myNextRequest = theNextRequest; };
+            void setOnAllDoneCallback(RequestCallbackPtr theOnAllDoneCallback) { _myOnAllDoneCallback = theOnAllDoneCallback; };
+        protected:
+            virtual void onDone();
+        private:
+            RequestPtr _myNextRequest;
+            RequestManager & _myRequestManager;
+            RequestCallbackPtr  _myOnAllDoneCallback;
+    };
+    typedef masl::Ptr<SequenceRequest> SequenceRequestPtr;
+
     ////////////////////////////////////////////////////////////////////////
     //Request Callbacks ////////////////////////////////////////////////////
 
