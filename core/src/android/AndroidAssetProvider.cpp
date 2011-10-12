@@ -1,5 +1,8 @@
 #include "AndroidAssetProvider.h"
 
+#include <iostream>
+#include <fstream>
+
 #include <masl/Logger.h>
 #include <masl/file_functions.h>
 #include <mar/png_functions.h>
@@ -70,6 +73,20 @@ namespace android {
             throw masl::FileNotFoundException("texture " + theFileName + " was not found in search paths", PLUS_FILE_LINE);
         }
         return android::loadTextureFromPNG(_myApkArchive, myFilename, textureId, width, height, rgb);
+    }
+
+    void 
+    AndroidAssetProvider::storeInFile(const std::string & theFileName, const std::string & theData) {
+        std::ofstream myfile(std::string(assetPath_ + "/" + theFileName).c_str());
+        myfile << theData;
+        myfile.close();
+    }
+
+    void 
+    AndroidAssetProvider::storeInFile(const std::string & theFileName, const std::vector<char> & theData) {
+        std::ofstream myfile(std::string(assetPath_ + "/" + theFileName).c_str(),ofstream::binary);
+        myfile.write(&theData[0],theData.size());
+        myfile.close();
     }
 }
 
