@@ -208,8 +208,6 @@ namespace demoapp {
         myText->setText(theRequest->getResponseString());
     }
     void DemoApp::onSparkRequestReady(RequestPtr theRequest) {
-        WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
-        myLoadingText->setVisible(false);
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         std::string myNewSpark = theRequest->getResponseString();
         std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
@@ -227,6 +225,9 @@ namespace demoapp {
     }
     void DemoApp::onAllAssetsRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on AllAsset Ready";
+        WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
+        myLoadingText->setVisible(false);
+        _myLoadingAnimation->cancel();
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
         ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/scene.spark");
@@ -365,22 +366,27 @@ namespace demoapp {
     }
 
     void DemoApp::onLoadScene(EventPtr theEvent) {
-        WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
-        myLoadingText->setVisible(true);
-        WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myLoadingText, &Widget::setX, 30, 300, 500));
-        WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myLoadingText, &Widget::setY, 300, 30, 500));
-        animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
-        mySequence->add(myAnimation1);
-        mySequence->add(myAnimation2);
-        mySequence->setLoop(true);
-        animation::AnimationManager::get().play(mySequence);
-
-        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
-        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onSparkRequestReady)));
+        ComponentPtr myScene = _mySparkWindow->getChildByName("spark_from_remote_server", true);
+        if (myScene) {
+            boost::static_pointer_cast<spark::Container>(myScene->getParent())->removeChild(myScene);
+        } else {
+            WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
+            myLoadingText->setVisible(true);
+            WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(
+                    new WidgetPropertyAnimation(myLoadingText, &Widget::setX, 30, 300, 500));
+            WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
+                    new WidgetPropertyAnimation(myLoadingText, &Widget::setX, 300, 30, 500));
+            animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
+            mySequence->add(myAnimation1);
+            mySequence->add(myAnimation2);
+            mySequence->setLoop(true);
+            animation::AnimationManager::get().play(mySequence);
+            _myLoadingAnimation = mySequence;
+            DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+            _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
+                masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                    ptr, &DemoApp::onSparkRequestReady)));
+        }
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {

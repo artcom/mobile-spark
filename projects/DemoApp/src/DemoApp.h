@@ -3,6 +3,7 @@
 
 /////////////////// Application code, this should be in java or script language later...
 #include <masl/RequestManager.h>
+#include <animation/Animation.h>
 #include <spark/BaseApp.h>
 #include <spark/Transform.h>
 #include <spark/View.h>
@@ -47,6 +48,7 @@ namespace demoapp {
             unsigned _myNextSlide;
 
             masl::RequestManager _myRequestManager;
+            animation::AnimationPtr _myLoadingAnimation;
             void onTextRequestReady(masl::RequestPtr theRequest);
             void onDateRequestReady(masl::RequestPtr theRequest);
             void onSparkRequestReady(masl::RequestPtr theRequest);
