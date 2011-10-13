@@ -62,7 +62,6 @@ namespace spark {
             unsigned int myMemoryUsage = masl::getUsedMemory();
             unsigned int myTotalMemory = masl::getTotalMemory();
             _myMemoryText->setText("memory: " + masl::as_string(myMemoryUsage) + "/" + masl::as_string(myTotalMemory));
-            //AC_PRINT << masl::getProcessMemoryUsage() << "  " << masl::getFreeMemory() << "  " << masl::getUsedMemory() << "  " << masl::getTotalMemory();
         }
         lasttime_ = myEvent->getCurrentTime();
     }

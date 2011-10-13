@@ -150,6 +150,7 @@
             <Text name="putrequest" x="10" y="640" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="deleterequest" x="10" y="610" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="loading" text="loading..." visible="false" x="10" y="500" z="20"/>
+            <Text name="curl_error" text="" visible="false" x="10" y="500" z="21" color="[1,0,0,1]" fontsize="16"/>
         </Slide>
     </World>        
 
