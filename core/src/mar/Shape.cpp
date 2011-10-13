@@ -19,8 +19,8 @@ namespace mar {
     void
     Shape::setAlpha(const float theAlpha) {
         AC_DEBUG << "Shape setAlpha: " << theAlpha;
-        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
-             it != elementList.end(); ++it)
+        for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
+             it != elementList_.end(); ++it)
         {
             (*it)->material->setAlpha(theAlpha);
         }
@@ -28,8 +28,8 @@ namespace mar {
 
 #ifdef iOS
     void Shape::render(const matrix & theMatrix) const {
-        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
-             it != elementList.end(); ++it) {
+        for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
+             it != elementList_.end(); ++it) {
 
             ElementPtr element = *it;
             element->material->loadShader(theMatrix);
@@ -45,8 +45,8 @@ namespace mar {
 
 #ifdef ANDROID
     void Shape::render(const matrix & theMatrix) const {
-        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
-             it != elementList.end(); ++it) {
+        for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
+             it != elementList_.end(); ++it) {
             ElementPtr element = *it;
             element->loadData(theMatrix);
             glDrawElements(GL_TRIANGLES, element->numIndices, GL_UNSIGNED_SHORT, 0);
@@ -57,16 +57,16 @@ namespace mar {
 #endif
 
     void Shape::updateHandles(const std::map<std::string, float> & theShaderValues) {
-        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
-                                                      it != elementList.end(); ++it) {
+        for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
+                                                      it != elementList_.end(); ++it) {
             (*it)->material->setCustomValues(theShaderValues);
         }
     }
 
     void Shape::initGL() {
         AC_DEBUG << "Shape::init GL";
-        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
-                                                      it != elementList.end(); ++it) {
+        for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
+                                                      it != elementList_.end(); ++it) {
 
             ElementPtr element = *it;
             if (element && element->material ) {
@@ -83,8 +83,8 @@ namespace mar {
     }
 
     bool Shape::isTransparent() {
-        for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
-                                                      it != elementList.end(); ++it) {
+        for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
+                                                      it != elementList_.end(); ++it) {
             ElementPtr element = *it;
             if (element->material->transparency_) {
                 return true;
@@ -111,7 +111,7 @@ namespace mar {
             myMaterial = UnlitColoredMaterialPtr(new UnlitColoredMaterial());
         }
         myElement->material = myMaterial;
-        elementList.push_back(myElement);
+        elementList_.push_back(myElement);
         myMaterial->createShader(theVertexShader, theFragmentShader);
         setVertexData(vector2(0,0), vector2(theWidth, theHeight));
         initGL();
@@ -125,7 +125,7 @@ namespace mar {
     
     
     void RectangleShape::setVertexData(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) {
-        ElementPtr myElement = elementList[0];
+        ElementPtr myElement = elementList_[0];
         _myDataPerVertex = 3 + (_myTextureFlag ? 2 : 0);
         myElement->numVertices = 4;
         myElement->numIndices = 6;
@@ -151,7 +151,7 @@ namespace mar {
     }
 
     void RectangleShape::setDimensions(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) {
-        ElementPtr myElement = elementList[0];
+        ElementPtr myElement = elementList_[0];
 
         myElement->vertexData_[0] = theLowerLeftCorner[0];
         myElement->vertexData_[0 + 1] = theLowerLeftCorner[1];
@@ -176,7 +176,7 @@ namespace mar {
     }
     
     void RectangleShape::setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {
-        ElementPtr myElement = elementList[0];
+        ElementPtr myElement = elementList_[0];
         if (_myTextureFlag) {
             (myElement->vertexData_)[0 * _myDataPerVertex + 3] = theUV0[0];
             (myElement->vertexData_)[0 * _myDataPerVertex + 4] = theUV0[1];
@@ -204,7 +204,7 @@ namespace mar {
         UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc));
         myElement->material = myMaterial;
         myMaterial->createShader();
-        elementList.push_back(myElement);
+        elementList_.push_back(myElement);
 
         imageWidth_ = myMaterial->getTexture()->width_;
         imageWidth_ = imageWidth_ > 0 ? imageWidth_ : 1;
@@ -221,7 +221,7 @@ namespace mar {
     }
 
     void NinePatchShape::setVertexData(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) {
-        ElementPtr myElement = elementList[0];
+        ElementPtr myElement = elementList_[0];
         _myDataPerVertex = 5; //position and texcoord
         size_t vertices_per_side = 4;
         myElement->numIndices = 54; //9 quads * 2 triangles per quad * 3 vertices per triangle
@@ -291,7 +291,7 @@ namespace mar {
         _myBoundingBox.max[1] = theUpperRightCorner[1];
 
         setVertexData(theLowerLeftCorner, theUpperRightCorner);
-        ElementPtr myElement = elementList[0];        
+        ElementPtr myElement = elementList_[0];        
         myElement->updateCompleteVertexBuffersContent();
         
     }

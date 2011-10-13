@@ -34,7 +34,7 @@ namespace mar {
         float getWidth() const { return width_;};
         float getHeight() const { return height_;};
         void setAlpha(const float theAlpha);
-        std::vector<ElementPtr> elementList;
+        std::vector<ElementPtr> elementList_;
     protected:
         bool _myTextureFlag;   //XXX does not make any sense, texture is decided at element level
         size_t _myDataPerVertex;
