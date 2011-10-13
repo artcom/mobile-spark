@@ -137,13 +137,12 @@
             <NinePatch name="i18nninepatch" x="10" y="150" z="13" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" i18nId="lang_ninepatch"/>
         </Slide>
 
-	<Slide name="InternetSlide" title="Internet" subtitle="data from www - press button to load scene">
+	<Slide name="InternetSlide" title="Internet" subtitle="data from www - press button to load scene/remove transform again">
             <NinePatch name="load_button" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
             <Text name="textfromserver" x="10" y="400" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="datefromserver" x="10" y="350" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="loading" text="loading..." visible="false" x="10" y="500" z="20"/>
         </Slide>
-
 
     </World>        
 

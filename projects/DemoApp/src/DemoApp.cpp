@@ -64,9 +64,6 @@ namespace demoapp {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
 
-        mar::AssetProviderSingleton::get().ap()->addIncludePath(appPath_ + "/downloads/");
-        mkdir(std::string(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads").c_str(), 755);
-
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
@@ -125,14 +122,12 @@ namespace demoapp {
         spark::EventCallbackPtr mySensorGyroCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorGyroEvent));
         _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
 
-#ifdef ANDROID
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/string.txt",
             masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
                 ptr, &DemoApp::onTextRequestReady)));
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/currentDate.php",
             masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
                 ptr, &DemoApp::onDateRequestReady)));
-#endif
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone

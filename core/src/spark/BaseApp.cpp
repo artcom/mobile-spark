@@ -204,6 +204,7 @@ namespace spark {
         AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath, theAppPath)));
 #elif ANDROID
         AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
+        mkdir(std::string(AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
 #endif
         AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/");
@@ -212,6 +213,13 @@ namespace spark {
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models/");
         AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts/");
+#ifdef iOS
+        AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/");
+        AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/downloads/");
+#elif ANDROID
+        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/downloads/");
+#endif
+
     }
     
 }
