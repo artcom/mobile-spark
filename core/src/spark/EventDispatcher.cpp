@@ -62,7 +62,7 @@ namespace spark {
         std::list<ComponentPtr> myCaptureList;
         while (myCurrent->getParent()) {
             myCurrent = myCurrent->getParent();
-            myCaptureList.push_front(myCurrent);
+            myCaptureList.push_back(myCurrent);
         }
         // capture phase
         EventListenerKey myCaptureKey(theEvent->getType(), true);
