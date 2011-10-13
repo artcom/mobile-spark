@@ -82,22 +82,6 @@ namespace masl {
                            myStack.getTop().data()[15] == 1 , "top should still be identity");
                 myStack.translate(23, 24, 25);
                 ENSURE_EQUAL(myStack.getSize(), 2);
-                //AC_PRINT << myStack.getTop().data()[0] << "  " <<
-                //           myStack.getTop().data()[1] << "  " <<
-                //           myStack.getTop().data()[2] << "  " <<
-                //           myStack.getTop().data()[3] << "  " <<
-                //           myStack.getTop().data()[4] << "  " <<
-                //           myStack.getTop().data()[5] << "  " <<
-                //           myStack.getTop().data()[6] << "  " <<
-                //           myStack.getTop().data()[7] << "  " <<
-                //           myStack.getTop().data()[8] << "  " <<
-                //           myStack.getTop().data()[9] << "  " <<
-                //           myStack.getTop().data()[10]<< "  " <<
-                //           myStack.getTop().data()[11]<< "  " <<
-                //           myStack.getTop().data()[12]<< "  " <<
-                //           myStack.getTop().data()[13]<< "  " <<
-                //           myStack.getTop().data()[14]<< "  " <<
-                //           myStack.getTop().data()[15];
                 ENSURE_MSG(myStack.getTop().data()[0] == 1 &&
                            myStack.getTop().data()[1] == 0 &&
                            myStack.getTop().data()[2] == 0 &&

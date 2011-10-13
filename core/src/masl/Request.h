@@ -51,6 +51,7 @@ namespace masl {
                                 AuthentType theAuthentType = ANY);
             void setFollowLocation(bool theFollowFlag);
             void setOnDoneCallback(RequestCallbackPtr theOnDoneCallback) { _myOnDoneCallback = theOnDoneCallback; };
+            void setOnErrorCallback(RequestCallbackPtr theOnErrorCallback) { _myOnErrorCallback = theOnErrorCallback; };
 
             // request-method type methods
             size_t put(const std::string & thePutData);
@@ -114,6 +115,7 @@ namespace masl {
             bool                _myVerboseFlag;
             bool                _myVerifyPeerFlag;
             RequestCallbackPtr  _myOnDoneCallback;
+            RequestCallbackPtr  _myOnErrorCallback;
     };
 
     typedef masl::Ptr<Request> RequestPtr;

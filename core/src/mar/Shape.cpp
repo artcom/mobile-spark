@@ -64,7 +64,7 @@ namespace mar {
     }
 
     void Shape::initGL() {
-        //AC_PRINT << "Shape::init GL";
+        AC_DEBUG << "Shape::init GL";
         for (std::vector<ElementPtr>::const_iterator it = elementList.begin();
                                                       it != elementList.end(); ++it) {
 
@@ -265,7 +265,6 @@ namespace mar {
                 myElement->vertexData_[v * _myDataPerVertex + 2] = 0;
                 myElement->vertexData_[v * _myDataPerVertex + 3] = myS;
                 myElement->vertexData_[v * _myDataPerVertex + 4] = myT;
-                //AC_PRINT << v << " " << myX << " " << myY << " tex " << myS << " " << myT;
             }
         }
         int indices[] = { 0, 1, 4, 4, 1, 5,
@@ -279,7 +278,6 @@ namespace mar {
                          10,11,14,14,11,15 };
         for (size_t i = 0; i < myElement->numIndices; ++i) {
             (myElement->indexDataVBO_)[i] = indices[i];
-            //AC_PRINT << "indices " << i << "  " << indices[i];
         }
     }
 

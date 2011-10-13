@@ -131,6 +131,9 @@ namespace masl {
     RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
         myRequest->get();
         performRequest(myRequest);
     }
@@ -139,6 +142,9 @@ namespace masl {
     RequestManager::postRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
         myRequest->post(theData);
         performRequest(myRequest);
     }
@@ -147,6 +153,9 @@ namespace masl {
     RequestManager::putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
         myRequest->put(theData);
         performRequest(myRequest);
     }
@@ -155,6 +164,9 @@ namespace masl {
     RequestManager::deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
         myRequest->http_delete();
         performRequest(myRequest);
     }

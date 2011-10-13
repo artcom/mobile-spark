@@ -121,6 +121,11 @@ namespace demoapp {
         spark::EventCallbackPtr mySensorGyroCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorGyroEvent));
         _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
 
+        //http-request stuff
+        _myErrorMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("curl_error", true));
+        _myRequestManager.setOnErrorCallback(
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onErrorRequestCB)));
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/string.txt",
             masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
                 ptr, &DemoApp::onTextRequestReady)));
@@ -137,14 +142,13 @@ namespace demoapp {
         _myRequestManager.deleteRequest("http://www.einsfeld.de/mobile-spark/",
             masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
                 ptr, &DemoApp::onDeleteRequestReady)));
-
         animation::DelayAnimationPtr myRepeatingDateRequest = animation::DelayAnimationPtr(new animation::DelayAnimation(1000));
         myRepeatingDateRequest->setLoop(true);
         myRepeatingDateRequest->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onRepeatingDateRequest)));
         animation::AnimationManager::get().play(myRepeatingDateRequest);
 
-        WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone
+        WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         ComponentPtr myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
         Shape3DPtr myShape = boost::static_pointer_cast<spark::Shape3D>(myComponent);
         myAmazoneRotation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, M_PI * 2, 90000));
@@ -208,6 +212,25 @@ namespace demoapp {
         AC_DEBUG << "found #" << _mySlides.size() << " slides";        
     }
 
+    void DemoApp::onErrorRequestCB(masl::RequestPtr theRequest) {
+        if (!_myLoadingMessage) {
+            _myLoadingMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("loading", true));
+        }
+        _myLoadingMessage->setVisible(false);
+        if (_myErrorExpiredDelay) {
+            _myErrorExpiredDelay->cancel();
+        }
+        AC_DEBUG << "error with request for URL " << theRequest->getURL();
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        _myErrorMessage->setVisible(true);
+        _myErrorMessage->setText("error requesting " + theRequest->getURL());
+        _myErrorExpiredDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(10000));
+        _myErrorExpiredDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onErrorExpired)));
+        animation::AnimationManager::get().play(_myErrorExpiredDelay);
+    }
+    void DemoApp::onErrorExpired() {
+        _myErrorMessage->setVisible(false);
+    }
     void DemoApp::onRepeatingDateRequest() {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/currentDate.php",
@@ -256,8 +279,7 @@ namespace demoapp {
     }
     void DemoApp::onAllAssetsRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on AllAsset Ready";
-        WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
-        myLoadingText->setVisible(false);
+        _myLoadingMessage->setVisible(false);
         _myLoadingAnimation->cancel();
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
@@ -401,12 +423,12 @@ namespace demoapp {
         if (myScene) {
             boost::static_pointer_cast<spark::Container>(myScene->getParent())->removeChild(myScene);
         } else {
-            WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
-            myLoadingText->setVisible(true);
+            _myLoadingMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("loading", true));
+            _myLoadingMessage->setVisible(true);
             WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(
-                    new WidgetPropertyAnimation(myLoadingText, &Widget::setX, 30, 300, 500));
+                    new WidgetPropertyAnimation(_myLoadingMessage, &Widget::setX, 30, 300, 500));
             WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
-                    new WidgetPropertyAnimation(myLoadingText, &Widget::setX, 300, 30, 500));
+                    new WidgetPropertyAnimation(_myLoadingMessage, &Widget::setX, 300, 30, 500));
             animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
             mySequence->add(myAnimation1);
             mySequence->add(myAnimation2);
