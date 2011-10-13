@@ -1,0 +1,14 @@
+<Transform name="spark_from_remote_server">
+    <Image name="background" src="/A_View_on_Hampstead_Heath,_looking_towards_London_by_Francis_Jukes_Sarjent.png"/>
+    <Transform name="transform" x="170" y="70" rotationZ="0.5">
+        <Rectangle name="blueObject" x="30" y="2" width="80" height="20" color="[0,0.0,1.0]"/>
+        <Rectangle name="redObject" y="25" z="0" width="130" height="240" color="[1,0.0,0.0]"/>
+    </Transform>
+    <Rectangle name="greenObject" x="40" y="50" width="70" height="80" z="1" color="[0,1.0,0.0]"/>
+    <Text name="title" x="40" y="270" z="10" color="[0,0,0,1]" text="Testscene from remote server"/>
+    <Image name="icon_0" src="/face-glasses.png" x="0" y="0" z="5"/>
+    <Image name="icon_1" src="/face-devil-grin.png" x="100" y="100" z="5"/>
+    <Image name="icon_2" src="/face-devilish.png" x="200" y="200" z="5"/>
+    <Image name="icon_3" src="/face-devilish-2.png" x="300" y="300" z="5"/>
+    <Image name="icon_4" src="/face-devil-sad.png" x="400" y="400" z="5"/>
+</Transform>
