@@ -144,7 +144,7 @@ namespace android {
                 jvalue myArgs[1];
                 myArgs[0].b = theColorConversionFlag;
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
-                AC_PRINT << "start camera capture";
+                AC_INFO << "start camera capture";
             } else {
                 AC_WARNING  << "Sorry, java-startCamera not found";
             }
@@ -158,7 +158,7 @@ namespace android {
             if(myMethodId != 0) {
                 jvalue myArgs[0];
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
-                AC_PRINT << "stop camera capture";
+                AC_INFO << "stop camera capture";
             } else {
                 AC_WARNING  << "Sorry, java-stopCamera not found";
             }

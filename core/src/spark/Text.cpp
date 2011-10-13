@@ -80,7 +80,7 @@ namespace spark {
     void
     Text::setStartIndex(unsigned int theIndex) {
         _myTextStartPos = (theIndex<=data_.size() ? theIndex:0);
-        AC_PRINT <<"incoming index : " << theIndex << "->" << _myTextStartPos;
+        AC_DEBUG << "incoming index : " << theIndex << "->" << _myTextStartPos;
     }    
     void
     Text::build() {

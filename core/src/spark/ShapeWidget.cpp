@@ -7,6 +7,8 @@
 
 #include <animation/AnimationManager.h>
 
+#define DB(x) // x
+
 namespace spark {
     ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : Widget(theApp, theXMLNode), _myOrigin(vector2(0,0)), _myOriginMode(NO_ORIGIN) 
@@ -104,9 +106,9 @@ namespace spark {
         for (size_t i = 0; i < 8; ++i) {
             corners[i] = mvp * corners[i];
         }
-        //AC_PRINT << "AABB2D " << getName();
-        //AC_PRINT << " bounding box " << myBB.min << ", " << myBB.max;
-        //AC_PRINT << "mv " << _myWorldMVMatrix << "p " << theProjectionMatrix << " final " << mvp;
+        DB(AC_DEBUG << "AABB2D " << getName();)
+        DB(AC_DEBUG << " bounding box " << myBB.min << ", " << myBB.max;)
+        DB(AC_DEBUG << "mv " << _myWorldMVMatrix << "p " << theProjectionMatrix << " final " << mvp;)
 
         mar::BoundingBox myMVPBB;
         myMVPBB.min = corners[0];
@@ -125,7 +127,7 @@ namespace spark {
                 myMVPBB.max[1] = corners[i][1];
             }
         }
-        //AC_PRINT << " projected bounding box " << myMVPBB.min << ", " << myMVPBB.max;
+        DB(AC_DEBUG << " projected bounding box " << myMVPBB.min << ", " << myMVPBB.max;)
 
         //divide by w -> TODO: find cml method
         myMVPBB.min[0] /= myMVPBB.min[3];
@@ -142,8 +144,8 @@ namespace spark {
         myMVPBB.min[1] = (myMVPBB.min[1] + 1) / 2;
         myMVPBB.max[0] = (myMVPBB.max[0] + 1) / 2;
         myMVPBB.max[1] = (myMVPBB.max[1] + 1) / 2;
-        //AC_PRINT << " projected bounding box " << myMVPBB.min << ", " << myMVPBB.max;
-        //AC_PRINT << "pick at " << x << ", " << y;
+        DB(AC_DEBUG << " projected bounding box " << myMVPBB.min << ", " << myMVPBB.max;)
+        DB(AC_DEBUG << "pick at " << x << ", " << y;)
 
         if (x >= myMVPBB.min[0] && x <= myMVPBB.max[0] &&
             y >= myMVPBB.min[1] && y <= myMVPBB.max[1]) {
