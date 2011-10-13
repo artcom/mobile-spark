@@ -49,7 +49,11 @@ namespace demoapp {
 
             masl::RequestManager _myRequestManager;
             animation::AnimationPtr _myLoadingAnimation;
+            animation::AnimationPtr _myErrorExpiredDelay;
+            spark::TextPtr _myLoadingMessage;
+            spark::TextPtr _myErrorMessage;
             void onRepeatingDateRequest();
+            void onErrorExpired();
             void onTextRequestReady(masl::RequestPtr theRequest);
             void onDateRequestReady(masl::RequestPtr theRequest);
             void onSparkRequestReady(masl::RequestPtr theRequest);
@@ -59,6 +63,7 @@ namespace demoapp {
             void onPostRequestReady(masl::RequestPtr theRequest);
             void onPutRequestReady(masl::RequestPtr theRequest);
             void onDeleteRequestReady(masl::RequestPtr theRequest);
+            void onErrorRequestCB(masl::RequestPtr theRequest);
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;
