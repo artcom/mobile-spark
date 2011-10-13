@@ -400,6 +400,9 @@ namespace masl {
 
     void
     Request::onError(CURLcode theError, long theHttpStatus) {
+        if (_myOnErrorCallback) {
+            (*_myOnErrorCallback)(shared_from_this());
+        }
     };
 
     bool
