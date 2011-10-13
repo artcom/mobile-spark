@@ -159,8 +159,8 @@ namespace mar {
         for (std::vector<float>::const_iterator it = temporaryVertexData.begin(); it != temporaryVertexData.end(); ++it) {
             element->vertexData_[vertexDataIndex++] = *it;
         }
-        theShape->elementList.push_back(element);
-        AC_INFO << "num parts " << theShape->elementList.size();
+        theShape->elementList_.push_back(element);
+        AC_INFO << "num parts " << theShape->elementList_.size();
     }
 
     bool ObjImporter::sortByTransparencyFunction(ElementPtr i,ElementPtr j) {
@@ -243,9 +243,9 @@ namespace mar {
             createElementVertices(theShape, element, startFaceIndex);
         }
 
-        std::sort(theShape->elementList.begin(), theShape->elementList.end(), sortByTransparencyFunction);
+        std::sort(theShape->elementList_.begin(), theShape->elementList_.end(), sortByTransparencyFunction);
         AC_INFO << "vertex size " << vertices_.size() << " normals_ size " << normals_.size() << " tex size " << texData_.size();
-        AC_INFO << "faces_ size " << faces_.size() << " objectParts " << theShape->elementList.size();
+        AC_INFO << "faces_ size " << faces_.size() << " objectParts " << theShape->elementList_.size();
         theShape->setBoundingBox(min_, max_);
     }
 }
