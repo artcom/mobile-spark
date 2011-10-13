@@ -15,6 +15,7 @@ namespace masl {
             // !!!handleRequests must be called periodically
             int handleRequests(bool theBlockingFlag = false);
             int getActiveCount() const { return _myRequests.size(); };
+            void setOnErrorCallback(RequestCallbackPtr theOnErrorCallback) { _myDefaultErrorCallback = theOnErrorCallback; };
 
             //convenience functions
             void getRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
@@ -23,6 +24,7 @@ namespace masl {
             void deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
             void getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
                                const RequestCallbackPtr theOneReadyCB, RequestCallbackPtr theAllReadyCB);
+
 
         protected:
             virtual bool removeRequest(Request* theRequest);
@@ -33,6 +35,7 @@ namespace masl {
             void handleMessages();
             std::vector<RequestPtr> _myRequests;
             CURLM * _myCurlMultiHandle;
+            RequestCallbackPtr _myDefaultErrorCallback;
     };
 }
 
