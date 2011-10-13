@@ -9,13 +9,13 @@ namespace mar {
     //////////////////////////////////////////logging
     void printGLString(const char *name, GLenum s) {
         const char *v = (const char *) glGetString(s);
-        AC_PRINT << "GL " << name << " = " << v;
+        AC_INFO << "GL " << name << " = " << v;
     }
 
     void checkGlError(const char* op) {
         for (GLint error = glGetError(); error; error
                 = glGetError()) {
-            AC_PRINT << "after " << op << "() glError (0x" << error << ")";
+            AC_ERROR << "after " << op << "() glError (0x" << error << ")";
         }
     }
 
@@ -39,17 +39,14 @@ namespace mar {
                 GLint infoLen = 0;
                 glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
                 if (infoLen) {
-                    char* buf = (char*) malloc(infoLen);
-                    if (buf) {
-                        glGetShaderInfoLog(shader, infoLen, NULL, buf);
-                        AC_ERROR << "Could not compile shader " << shaderType << ": \n" << buf;
-                        free(buf);
-                        //XXX does not throw
-                        throw ShaderCreationException("Could not compile shader " + shaderType, PLUS_FILE_LINE);
-                    }
+                    char info[infoLen];
+                    glGetShaderInfoLog(shader, infoLen, NULL, info);
+                    AC_ERROR << "Could not compile shader " << shaderType << ": \n" << info;
                     glDeleteShader(shader);
                     shader = 0;
+                    throw ShaderCreationException(std::string("Could not compile shader '") + pSource + std::string("' ") + info, PLUS_FILE_LINE);
                 }
+                glDeleteShader(shader);
             }
         }
         return shader;
@@ -79,16 +76,14 @@ namespace mar {
                 GLint bufLength = 0;
                 glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
                 if (bufLength) {
-                    char* buf = (char*) malloc(bufLength);
-                    if (buf) {
-                        glGetProgramInfoLog(program, bufLength, NULL, buf);
-                        AC_ERROR << "Could not link program:\n " << buf;
-                        free(buf);
-                        throw ShaderCreationException("Could not link program ", PLUS_FILE_LINE);
-                    }
+                    char info[bufLength];
+                    glGetProgramInfoLog(program, bufLength, NULL, info);
+                    AC_ERROR << "Could not link program:\n " << info;
+                    glDeleteProgram(program);
+                    program = 0;
+                    throw ShaderCreationException(std::string("Could not link program ") + info, PLUS_FILE_LINE);
                 }
                 glDeleteProgram(program);
-                program = 0;
             }
         }
         return program;
