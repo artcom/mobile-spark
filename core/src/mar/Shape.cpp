@@ -82,7 +82,7 @@ namespace mar {
         _myBoundingBox.max = theMax;
     }
 
-    bool Shape::isTransparent() {
+    bool Shape::isTransparent() const {
         for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
                                                       it != elementList_.end(); ++it) {
             ElementPtr element = *it;
