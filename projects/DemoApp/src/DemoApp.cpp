@@ -1,7 +1,6 @@
 #include "DemoApp.h"
 
 #include <cstdlib>
-#include <sys/stat.h>
 
 #include <masl/Callback.h>
 #include <masl/Logger.h>
