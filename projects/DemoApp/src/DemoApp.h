@@ -49,11 +49,16 @@ namespace demoapp {
 
             masl::RequestManager _myRequestManager;
             animation::AnimationPtr _myLoadingAnimation;
+            void onRepeatingDateRequest();
             void onTextRequestReady(masl::RequestPtr theRequest);
             void onDateRequestReady(masl::RequestPtr theRequest);
             void onSparkRequestReady(masl::RequestPtr theRequest);
             void onAssetRequestReady(masl::RequestPtr theRequest);
             void onAllAssetsRequestReady(masl::RequestPtr theRequest);
+            void onGetRequestReady(masl::RequestPtr theRequest);
+            void onPostRequestReady(masl::RequestPtr theRequest);
+            void onPutRequestReady(masl::RequestPtr theRequest);
+            void onDeleteRequestReady(masl::RequestPtr theRequest);
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;

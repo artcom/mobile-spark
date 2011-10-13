@@ -283,6 +283,7 @@ namespace masl {
         myPayloadString->dataString = thePutData;
         myPayloadString->position   = 0;
         
+        AC_PRINT << "............... put data " << thePutData;
         // send data
         CURLcode myStatus = curl_easy_setopt(_myCurlHandle, CURLOPT_PUT, true);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);

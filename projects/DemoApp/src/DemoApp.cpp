@@ -129,9 +129,23 @@ namespace demoapp {
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/string.txt",
             masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
                 ptr, &DemoApp::onTextRequestReady)));
-        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/currentDate.php",
+        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/",
             masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onDateRequestReady)));
+                ptr, &DemoApp::onGetRequestReady)));
+        _myRequestManager.postRequest("http://www.einsfeld.de/mobile-spark/", "id=23&value=post data",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onPostRequestReady)));
+        _myRequestManager.putRequest("http://www.einsfeld.de/mobile-spark/", "hello world from put in DemoApp",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onPutRequestReady)));
+        _myRequestManager.deleteRequest("http://www.einsfeld.de/mobile-spark/",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onDeleteRequestReady)));
+
+        animation::DelayAnimationPtr myRepeatingDateRequest = animation::DelayAnimationPtr(new animation::DelayAnimation(1000));
+        myRepeatingDateRequest->setLoop(true);
+        myRepeatingDateRequest->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onRepeatingDateRequest)));
+        animation::AnimationManager::get().play(myRepeatingDateRequest);
 #endif
 
         WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
@@ -199,8 +213,30 @@ namespace demoapp {
         AC_DEBUG << "found #" << _mySlides.size() << " slides";        
     }
 
+    void DemoApp::onRepeatingDateRequest() {
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/currentDate.php",
+            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
+                ptr, &DemoApp::onDateRequestReady)));
+    }
     void DemoApp::onTextRequestReady(RequestPtr theRequest) {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("textfromserver", true));
+        myText->setText(theRequest->getResponseString());
+    }
+    void DemoApp::onGetRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("getrequest", true));
+        myText->setText(theRequest->getResponseString());
+    }
+    void DemoApp::onPostRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("postrequest", true));
+        myText->setText(theRequest->getResponseString());
+    }
+    void DemoApp::onPutRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("putrequest", true));
+        myText->setText(theRequest->getResponseString());
+    }
+    void DemoApp::onDeleteRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("deleterequest", true));
         myText->setText(theRequest->getResponseString());
     }
     void DemoApp::onDateRequestReady(RequestPtr theRequest) {
