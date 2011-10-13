@@ -2,6 +2,7 @@
 
 #include <masl/Logger.h>
 
+#define DB(x) //x
 
 using namespace std;
 namespace android {
@@ -9,7 +10,7 @@ namespace android {
     DEFINE_EXCEPTION(APKLoadingException, masl::Exception)
 
     void loadAPK (zip** theAPKArchive, const string & apkPath) {
-        AC_PRINT << "Loading APK " << apkPath;
+        AC_INFO << "Loading APK " << apkPath;
         *theAPKArchive = zip_open(apkPath.c_str(), 0, NULL);
         if (!(*theAPKArchive)) {
             AC_ERROR << "Error loading APK " << apkPath;
@@ -18,16 +19,16 @@ namespace android {
         }
 
         ////Just for debug, print APK contents
-        //int numFiles = zip_get_num_files(*theAPKArchive);
-        //
-        //for (int i=0; i<numFiles; i++) {
-        //    const char* name = zip_get_name(*theAPKArchive, i, 0);
-        //    if (name == NULL) {
-        //        AC_ERROR << "Error reading zip file name at index " << zip_strerror(*theAPKArchive);
-        //        return;
-        //    }
-        //    AC_PRINT << "File " << i >> ": " << name;
-        //}
+        DB(int numFiles = zip_get_num_files(*theAPKArchive);
+        
+        for (int i=0; i<numFiles; i++) {
+            const char* name = zip_get_name(*theAPKArchive, i, 0);
+            if (name == NULL) {
+                AC_ERROR << "Error reading zip file name at index " << zip_strerror(*theAPKArchive);
+                return;
+            }
+            AC_PRINT << "File " << i >> ": " << name;
+        })
     }
 
     std::string readFromPackage(zip* theAPKArchive, const string &  theFileName) {
@@ -67,7 +68,6 @@ namespace android {
             return content;
         }
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
-        //AC_PRINT << " .... size " << size;
         bool endedWithNewLine = false;
         while (size > 0) {
             newPart = std::string(buffer, size);
@@ -79,7 +79,6 @@ namespace android {
                     content.back().append(item);
                 } else {
                     content.push_back(item);
-                    //AC_PRINT << "push " << item.c_str();
                 }
                 first = false;
             }

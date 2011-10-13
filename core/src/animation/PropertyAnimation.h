@@ -49,16 +49,15 @@ namespace animation {
     template <class O,class T>
     void PropertyAnimation<O, T>::doFrame(const masl::UInt64 theCurrentMillis) {
         Animation::doFrame(theCurrentMillis);
-        //AC_PRINT << "progress " << _myProgress;
         float value = _myStartValue + (_myEndValue - _myStartValue) * _myProgress;
-        //AC_PRINT << "value "  << value;
+        AC_TRACE << "progress " << _myProgress << " value: " << value;
         (_myObjectPtr.get()->*_myPropertyCallback)(value);
     }
 
     template <class O, class T>
     void PropertyAnimation<O, T>::play(const masl::UInt64 theTime, const bool theComeToAnEndFlag) {
         Animation::play(theTime, theComeToAnEndFlag);
-        //AC_PRINT << "property animation set value to start value " << _myStartValue;
+        AC_DEBUG << "property animation set value to start value " << _myStartValue;
         (_myObjectPtr.get()->*_myPropertyCallback)(_myStartValue);
     }
 

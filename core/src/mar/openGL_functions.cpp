@@ -99,7 +99,7 @@ namespace mar {
          }
          checkGlError(std::string(theUniformFlag ? "glGetUniformLocation" : "glGetAttribLocation").
                              append(" ").append(theVariableName).c_str());
-         AC_PRINT << (theUniformFlag?"glGetUniformLocation":"glGetAttribLocation") << "(\"" << theVariableName << "\") = " << myHandle;
+         AC_DEBUG << (theUniformFlag?"glGetUniformLocation":"glGetAttribLocation") << "(\"" << theVariableName << "\") = " << myHandle;
          return myHandle;
      }
 
