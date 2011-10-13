@@ -130,6 +130,7 @@ namespace demoapp {
         _myRequestManager.postRequest("http://www.einsfeld.de/mobile-spark/", "id=23&value=post data",
             masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
                 ptr, &DemoApp::onPostRequestReady)));
+        //data is not visible at server, not sure how this is intended to work in Request.cpp
         _myRequestManager.putRequest("http://www.einsfeld.de/mobile-spark/", "hello world from put in DemoApp",
             masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
                 ptr, &DemoApp::onPutRequestReady)));

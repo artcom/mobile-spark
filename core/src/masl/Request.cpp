@@ -79,6 +79,9 @@ namespace masl {
     void
     Request::checkCurlStatus(CURLcode theStatusCode, const std::string & theWhere) const {
         if (theStatusCode != CURLE_OK) {
+            AC_ERROR << "exception in curl ";
+            AC_ERROR << "where " << theWhere;
+            AC_ERROR << "error " << &_myErrorBuffer[0];
             throw INetException(std::string(&_myErrorBuffer[0]), theWhere);
         }
     }
@@ -283,7 +286,6 @@ namespace masl {
         myPayloadString->dataString = thePutData;
         myPayloadString->position   = 0;
         
-        AC_PRINT << "............... put data " << thePutData;
         // send data
         CURLcode myStatus = curl_easy_setopt(_myCurlHandle, CURLOPT_PUT, true);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
