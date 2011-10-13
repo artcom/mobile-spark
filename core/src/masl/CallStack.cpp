@@ -320,8 +320,8 @@ void CallStack::dump() const
      * Sending a single long log may be truncated since the stack levels can
      * get very deep. So we request function names of each frame individually.
      */
-    for (int i=0; i<int(mCount); i++) {
-        AC_ERROR << toStringSingleLevel(i);
+    for (size_t i = 0; i < mCount; ++i) {
+        AC_PRINT << toStringSingleLevel(i);
     }
 }
 
