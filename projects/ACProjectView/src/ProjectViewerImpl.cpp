@@ -53,7 +53,8 @@ namespace acprojectview {
 
     
         spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
-        _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB);
+        _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, true);
+        _myPopUpPfeil->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, true);
             
         _myWindowPtr = boost::static_pointer_cast<Window>(getRoot());                
         _myWidth = _myWindowPtr->getSize()[0];
@@ -191,7 +192,7 @@ namespace acprojectview {
             animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             if (!isPopUpOpen()) {
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), 0, 300,
+                        new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY()-1, 0, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
                         new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.9, 300,

@@ -11,6 +11,7 @@
 #include "ProjectViewerImpl.h"
 #include "ContentImage.h"
 
+#include <boost/progress.hpp>
 
 #ifdef ANDROID
 extern "C" {
@@ -43,7 +44,7 @@ namespace acprojectview {
             void onFinishIdleFade();            
             void onFinishProjectView();
             void onShowProjectViewPopup();
-            void onHideProjectViewPopup();
+            void onLoadInitialSet();
             
             //idle
             void initIdle();

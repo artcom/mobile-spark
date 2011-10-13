@@ -106,6 +106,7 @@ namespace acprojectview {
     
     void ACProjectView::onStartScreenClicked(EventPtr theEvent) {
         AC_DEBUG << "clicked on startscreen";
+
         _myStartScreenPtr->setSensible(false);
         _myProjectMenu->setSensible(true);
         _myProjectMenu->arrangeProjects();
@@ -137,7 +138,6 @@ namespace acprojectview {
         if (_myAnimatingFlag) {
             return;
         }
-        AC_PRINT << "clicked on project: "<< theEvent->getTarget()->getParent()->getName();
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
         _myProjectViewer->setVisible(true);
         _myProjectViewer->setSensible(true);
@@ -160,8 +160,10 @@ namespace acprojectview {
         }
     }
     
-    void ACProjectView::onInitiateProjectView() {        
+    void ACProjectView::onInitiateProjectView() {   
+        boost::timer::timer myLoadTimer;            
         _myProjectViewer->showProject(_myCurrentProject);
+        
     }
 
     void ACProjectView::onStartProjectView() {        
@@ -170,21 +172,23 @@ namespace acprojectview {
     void ACProjectView::onShowProjectViewPopup() {        
         _myProjectViewer->showPopup(true);
     }    
-    void ACProjectView::onHideProjectViewPopup() {        
-        _myProjectViewer->showPopup(false);
-    }    
     
-    void ACProjectView::onFinishLoadProjectView() {           
-        _myProjectViewer->loadInitialSet();
+    void ACProjectView::onFinishLoadProjectView() {  
         _myProjectMenu->setVisible(false);
-        _myAnimatingFlag = false;
-    }
-    void ACProjectView::onFinishProjectView() {        
         _myAnimatingFlag = false;        
+    }
+
+    void ACProjectView::onFinishProjectView() {        
         _myProjectViewer->setVisible(false);
+        _myAnimatingFlag = false;        
     }
     void ACProjectView::onReturn2ProjectView() {        
+        _myProjectViewer->showPopup(false);
         _myProjectMenu->setVisible(true);
+    }
+    
+    void ACProjectView::onLoadInitialSet() {        
+        _myProjectViewer->loadInitialSet();
     }
     
     
@@ -195,17 +199,6 @@ namespace acprojectview {
         _myAnimatingFlag = true;
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        if (showProject) {               
-            animation::DelayAnimationPtr myInitiateProjectViewAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(40));
-            myInitiateProjectViewAnim->setOnPlay(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onInitiateProjectView)));
-            mySeqAnimation->add(myInitiateProjectViewAnim);
-        } else {
-            animation::DelayAnimationPtr myInitiateProjectViewAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(5));
-            myInitiateProjectViewAnim->setOnPlay(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onHideProjectViewPopup)));
-            mySeqAnimation->add(myInitiateProjectViewAnim);
-        }
         int toX = showProject ? 0 : _myCurrentProject->getX()+ myProjectMenuItemWidth/2 - mySlide*_mySparkWindow->getSize()[0];
         int fromX   = showProject ? _myCurrentProject->getX()+ myProjectMenuItemWidth/2  - mySlide*_mySparkWindow->getSize()[0]: 0;
         int toY = showProject ? 0 : _myCurrentProject->getY()+ myProjectMenuItemHeight/2;
@@ -237,15 +230,22 @@ namespace acprojectview {
         myParallel->add(myZoomAnimationY);
         myParallel->add(myTransAnimationX);
         myParallel->add(myTransAnimationY);
-        animation::DelayAnimationPtr myLittleAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(20));
 
         mySeqAnimation->add(myParallel);
-        mySeqAnimation->add(myLittleAnim);
         if (showProject) {                       
+            mySeqAnimation->setOnPlay(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onInitiateProjectView)));            
             mySeqAnimation->setOnFinish(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
             mySeqAnimation->setOnCancel(masl::CallbackPtr(
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
+
+            animation::DelayAnimationPtr myFrameDelayAnim1 = animation::DelayAnimationPtr(new animation::DelayAnimation(2));
+            animation::DelayAnimationPtr myFrameDelayAnim2 = animation::DelayAnimationPtr(new animation::DelayAnimation(20));
+            myFrameDelayAnim2->setOnPlay(masl::CallbackPtr(
+                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onLoadInitialSet)));
+            mySeqAnimation->add(myFrameDelayAnim1);
+            mySeqAnimation->add(myFrameDelayAnim2);
         } else {
             _myProjectViewer->initiateClose();
             mySeqAnimation->setOnFinish(masl::CallbackPtr(
@@ -256,6 +256,7 @@ namespace acprojectview {
                             new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onReturn2ProjectView)));
 
         }
+
         animation::AnimationManager::get().play(mySeqAnimation);
     }
 
