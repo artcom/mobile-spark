@@ -42,6 +42,21 @@
     NSString *path = [[NSBundle mainBundle] resourcePath];
     spark::assetProviderSetup([path UTF8String],[projectName UTF8String]);
     masl::Logger::get().setLoggerTopLevelTag([projectName UTF8String]);
+    
+    // create download folder
+    NSFileManager *filemgr;
+    NSArray *dirPaths;
+    NSString *docsDir;
+    
+    dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    docsDir = [dirPaths objectAtIndex:0];
+    filemgr =[NSFileManager defaultManager];
+    if ([filemgr createDirectoryAtPath:[docsDir stringByAppendingPathComponent:@"downloads"]
+           withIntermediateDirectories:YES attributes:nil error: NULL] == NO) {
+        NSLog(@"____ download folder creation failed");    
+    }
+    [filemgr release];
+    
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

@@ -1,6 +1,11 @@
 #include "IOSAssetProvider.h"
+
+#include <iostream>
+#include <fstream>
+
 #include <masl/file_functions.h>
 #include <mar/png_functions.h>
+
 
 
 namespace ios
@@ -66,11 +71,15 @@ namespace ios
 
     void 
     IOSAssetProvider::storeInFile(const std::string & theFileName, const std::string & theData) {
-        //TODO
+        std::ofstream myfile(std::string(assetPath_ + "/../../Documents/" + theFileName).c_str());
+        myfile << theData;
+        myfile.close();
     }
 
     void 
     IOSAssetProvider::storeInFile(const std::string & theFileName, const std::vector<char> & theData) {
-        //TODO
+        std::ofstream myfile(std::string(assetPath_ + "/../../Documents/" + theFileName).c_str(),std::ofstream::binary);
+        myfile.write(&theData[0],theData.size());
+        myfile.close();
     }
 }
