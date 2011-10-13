@@ -29,7 +29,7 @@ namespace mar {
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {};
         const BoundingBox & getBoundingBox() const { return _myBoundingBox;};
         void setBoundingBox(const vector4 & theMin, const vector4 & theMax);
-        bool isTransparent();
+        bool isTransparent() const;
 
         float getWidth() const { return width_;};
         float getHeight() const { return height_;};
