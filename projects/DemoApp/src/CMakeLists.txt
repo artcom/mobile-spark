@@ -1,9 +1,9 @@
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
 
-set(EXTERNS Boost libXML2  Cml masl mar animation spark)
+set(EXTERNS Boost libCurl libXML2  Cml masl mar animation spark)
 if (ANDROID) 
-    list(APPEND EXTERNS android libCurl)
+    list(APPEND EXTERNS android)
 else (ANDROID)
     list(APPEND EXTERNS ios)
 endif(ANDROID)

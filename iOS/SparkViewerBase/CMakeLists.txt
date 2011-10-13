@@ -1,7 +1,7 @@
 file(GLOB SOURCES *.m *.mm)
 file(GLOB HEADERS *.h *.pch)
 
-set(EXTERNS Boost Cml libXML2)
+set(EXTERNS libCurl Boost Cml libXML2)
 
 ac_add_library(
     SparkViewerBase SparkViewerBase
