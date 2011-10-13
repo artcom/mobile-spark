@@ -79,6 +79,9 @@ namespace masl {
     void
     Request::checkCurlStatus(CURLcode theStatusCode, const std::string & theWhere) const {
         if (theStatusCode != CURLE_OK) {
+            AC_ERROR << "exception in curl ";
+            AC_ERROR << "where " << theWhere;
+            AC_ERROR << "error " << &_myErrorBuffer[0];
             throw INetException(std::string(&_myErrorBuffer[0]), theWhere);
         }
     }

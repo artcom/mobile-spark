@@ -135,6 +135,30 @@ namespace masl {
         performRequest(myRequest);
     }
 
+    void 
+    RequestManager::postRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB) {
+        RequestPtr myRequest = RequestPtr(new Request(theUrl));
+        myRequest->setOnDoneCallback(theCB);
+        myRequest->post(theData);
+        performRequest(myRequest);
+    }
+    
+    void 
+    RequestManager::putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB) {
+        RequestPtr myRequest = RequestPtr(new Request(theUrl));
+        myRequest->setOnDoneCallback(theCB);
+        myRequest->put(theData);
+        performRequest(myRequest);
+    }
+
+    void 
+    RequestManager::deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
+        RequestPtr myRequest = RequestPtr(new Request(theUrl));
+        myRequest->setOnDoneCallback(theCB);
+        myRequest->http_delete();
+        performRequest(myRequest);
+    }
+
     void
     RequestManager::getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
                                   const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB) {
