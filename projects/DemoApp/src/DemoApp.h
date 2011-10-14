@@ -67,7 +67,8 @@ namespace demoapp {
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;
-    typedef spark::MemberFunctionEventCallback<DemoApp, DemoAppPtr> DemoEventCB;
+    typedef masl::WeakPtr<DemoApp> DemoAppWeakPtr;
+    typedef spark::MemberFunctionEventCallback<DemoApp, DemoAppWeakPtr> DemoEventCB;
 
 };
 

@@ -51,7 +51,8 @@ namespace spark {
     };
 
     typedef masl::Ptr<Window> WindowPtr;
-    typedef MemberFunctionEventCallback<Window, WindowPtr> WindowCB;
+    typedef masl::WeakPtr<Window> WindowWeakPtr;
+    typedef MemberFunctionEventCallback<Window, WindowWeakPtr> WindowCB;
 
     //picking
     bool sortByZ(std::pair<ComponentPtr, float> i, std::pair<ComponentPtr, float> j);
