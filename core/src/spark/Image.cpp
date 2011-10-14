@@ -84,8 +84,8 @@ namespace spark {
         myHandles.reserve(customShaderValues_.size());
         std::transform(customShaderValues_.begin(), customShaderValues_.end(), std::back_inserter(myHandles),
                        masl::select1st<std::map<std::string, float>::value_type>()) ;
-        setShape(ShapeFactory::get().createRectangle(true, 1, 1, 
-                                                     vertexShader_, fragmentShader_, myHandles, data_));
+        bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
+        setShape(ShapeFactory::get().createRectangle(true, 1, 1, vertexShader_, fragmentShader_, myHandles, data_, myCacheFlag));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
         _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
