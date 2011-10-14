@@ -45,8 +45,6 @@ namespace acprojectview {
 
     void ProjectImpl::fitToSize() {
         WindowPtr myWindowPtr = boost::static_pointer_cast<Window>(getRoot());
-            
-                
         unsigned myWidth = myWindowPtr->getSize()[0];
         unsigned myHeight = myWindowPtr->getSize()[1];
         ProjectMenuPtr myMenu =  boost::static_pointer_cast<ProjectMenu>(getParent().lock());

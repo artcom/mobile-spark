@@ -50,8 +50,8 @@ namespace acprojectview {
     };
     typedef masl::Ptr<ProjectMenu> ProjectMenuPtr;
     typedef masl::WeakPtr<ProjectMenu> ProjectMenuWeakPtr;
-    typedef spark::MemberFunctionEventCallback<ProjectMenu, ProjectMenuWeakPtr>ProjectMenuEventCB;
-
+    typedef masl::MemberFunctionCallback<ProjectMenu, ProjectMenuWeakPtr> ProjectMenuCB;
+    typedef spark::MemberFunctionEventCallback<ProjectMenu, ProjectMenuWeakPtr> ProjectMenuEventCB;
 };
 
 #endif

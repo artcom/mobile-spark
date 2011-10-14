@@ -38,8 +38,9 @@ namespace acprojectview {
             
     };
     typedef masl::Ptr<MultiColumnText>MultiColumnTextPtr;
-    typedef spark::MemberFunctionEventCallback<MultiColumnText, MultiColumnTextPtr> MultiColumnTextCB;
-        
+    typedef masl::WeakPtr<MultiColumnText>MultiColumnTextWeakPtr;
+    typedef masl::MemberFunctionCallback<MultiColumnText, MultiColumnTextWeakPtr> MultiColumnTextCB;
+    typedef spark::MemberFunctionEventCallback<MultiColumnText, MultiColumnTextWeakPtr> MultiColumnTextEventCB;
 };
 
 #endif

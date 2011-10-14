@@ -47,12 +47,12 @@ namespace acprojectview {
     ProjectViewerImpl::realize() {
         Transform::realize();
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
-        spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipe));
+        spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onSwipe));
         getRoot()->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
         getRoot()->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
 
     
-        spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
+        spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
         _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, true);
         _myPopUpPfeil->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, true);
             
@@ -252,15 +252,13 @@ namespace acprojectview {
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
-        myAnimation->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<ProjectViewerImpl, ProjectViewerImplPtr>(ptr, &ProjectViewerImpl::onAnimationFinished)));
+        myAnimation->setOnFinish(masl::CallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onAnimationFinished)));
         myAnimation->add(changeAnimation0);
         myAnimation->add(changeAnimation1);
         myAnimation->add(changeAnimation2);
 
         animation::DelayAnimationPtr myReadNextImagesAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(0));
-        myReadNextImagesAnim->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<ProjectViewerImpl, ProjectViewerImplPtr>(ptr, &ProjectViewerImpl::onLoadNextImages)));
+        myReadNextImagesAnim->setOnFinish(masl::CallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onLoadNextImages)));
             
         mySeqAnimation->add(myAnimation);
         mySeqAnimation->add(myReadNextImagesAnim);

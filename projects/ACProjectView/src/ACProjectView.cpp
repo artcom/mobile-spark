@@ -115,10 +115,8 @@ namespace acprojectview {
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        myAnimation->setOnPlay(masl::CallbackPtr(
-                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartIdleFade)));
-        myAnimation->setOnFinish(masl::CallbackPtr(
-                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishIdleFade)));
+        myAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onStartIdleFade)));
+        myAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishIdleFade)));
             
         myParallel->add(myAnimation);
         animation::AnimationManager::get().play(myParallel);
@@ -220,10 +218,8 @@ namespace acprojectview {
                     animation::EasingFnc(animation::easeInOutQuad)));
            
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
-        myParallel->setOnPlay(masl::CallbackPtr(
-                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onStartProjectView)));
-        myParallel->setOnFinish(masl::CallbackPtr(
-                         new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onShowProjectViewPopup)));
+        myParallel->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onStartProjectView)));
+        myParallel->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onShowProjectViewPopup)));
 
             
         myParallel->add(myZoomAnimationX);
@@ -233,28 +229,20 @@ namespace acprojectview {
 
         mySeqAnimation->add(myParallel);
         if (showProject) {                       
-            mySeqAnimation->setOnPlay(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onInitiateProjectView)));            
-            mySeqAnimation->setOnFinish(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
-            mySeqAnimation->setOnCancel(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishLoadProjectView)));
+            mySeqAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onInitiateProjectView))); 
+            mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishLoadProjectView)));
+            mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishLoadProjectView)));
 
             animation::DelayAnimationPtr myFrameDelayAnim1 = animation::DelayAnimationPtr(new animation::DelayAnimation(2));
             animation::DelayAnimationPtr myFrameDelayAnim2 = animation::DelayAnimationPtr(new animation::DelayAnimation(20));
-            myFrameDelayAnim2->setOnPlay(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onLoadInitialSet)));
+            myFrameDelayAnim2->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet)));
             mySeqAnimation->add(myFrameDelayAnim1);
             mySeqAnimation->add(myFrameDelayAnim2);
         } else {
             _myProjectViewer->initiateClose();
-            mySeqAnimation->setOnFinish(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
-            mySeqAnimation->setOnCancel(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onFinishProjectView)));
-            mySeqAnimation->setOnPlay(masl::CallbackPtr(
-                            new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onReturn2ProjectView)));
-
+            mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishProjectView)));
+            mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishProjectView)));
+            mySeqAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onReturn2ProjectView)));
         }
 
         animation::AnimationManager::get().play(mySeqAnimation);
@@ -297,7 +285,7 @@ namespace acprojectview {
         _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
-        _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
+        _myIdleDelay->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onIdle)));
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
@@ -397,8 +385,8 @@ namespace acprojectview {
         animation::DelayAnimationPtr myFadeDelay0 = animation::DelayAnimationPtr(new animation::DelayAnimation(_myKenBurnsFadeDuration/2.0f));
         animation::DelayAnimationPtr myFadeDelay1 = animation::DelayAnimationPtr(new animation::DelayAnimation(_myKenBurnsDuration - _myKenBurnsFadeDuration));
         animation::DelayAnimationPtr myFadeDelay2 = animation::DelayAnimationPtr(new animation::DelayAnimation(_myKenBurnsFadeDuration/2.0f));
-        myFadeDelay2->setOnPlay(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onKenBurnsImageFadeStart)));
-        myFadeDelay0->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onKenBurnsImageFadeEnd)));
+        myFadeDelay2->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onKenBurnsImageFadeStart)));
+        myFadeDelay0->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onKenBurnsImageFadeEnd)));
         myFadeSequence->add(myFadeDelay0);
         myFadeSequence->add(myFadeDelay1);
         myFadeSequence->add(myFadeDelay2);

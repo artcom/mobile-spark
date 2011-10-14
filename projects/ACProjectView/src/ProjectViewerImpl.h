@@ -46,7 +46,6 @@ namespace acprojectview {
             bool _myIsAnimating;
             int _myDirection;
             spark::VectorOfComponentPtr _myContentImages;
-            //std::vector<ContentImage> _myContentImages;
             ProjectImplPtr _myCurrentProject;
             spark::TransformPtr _imageTransform0;
             spark::TransformPtr _imageTransform1;
@@ -72,7 +71,8 @@ namespace acprojectview {
     
     typedef masl::Ptr<ProjectViewerImpl> ProjectViewerImplPtr;
     typedef masl::WeakPtr<ProjectViewerImpl> ProjectViewerImplWeakPtr;
-    typedef spark::MemberFunctionEventCallback<ProjectViewerImpl, ProjectViewerImplWeakPtr> ProjectViewerImplCB;
+    typedef masl::MemberFunctionCallback<ProjectViewerImpl, ProjectViewerImplWeakPtr> ProjectViewerImplCB;
+    typedef spark::MemberFunctionEventCallback<ProjectViewerImpl, ProjectViewerImplWeakPtr> ProjectViewerImplEventCB;
 
 };
 

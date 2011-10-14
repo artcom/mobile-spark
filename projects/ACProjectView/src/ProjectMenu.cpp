@@ -94,8 +94,7 @@ namespace acprojectview {
         animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myAnimation->add(changeAnimation);
         animation::DelayAnimationPtr myDelayAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(0));
-        myDelayAnim->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<ProjectMenu, ProjectMenuPtr>(myPtr, &ProjectMenu::onDelayFinished)));
+        myDelayAnim->setOnFinish(masl::CallbackPtr(new ProjectMenuCB(myPtr, &ProjectMenu::onDelayFinished)));
             
         mySeqAnimation->add(myAnimation);
         mySeqAnimation->add(myDelayAnim);
