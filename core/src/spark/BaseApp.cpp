@@ -74,7 +74,7 @@ namespace spark {
         _mySparkWindow->realize();
         _mySparkWindow->setSize(theScreenWidth,theScreenHeight);
         //register for events
-        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppWeakPtr > ( BaseAppWeakPtr(shared_from_this()), &BaseApp::onFrame));
+        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppWeakPtr > ( BaseAppWeakPtr(BaseAppPtr(shared_from_this())), &BaseApp::onFrame));
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
             
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowWeakPtr>( _mySparkWindow, &Window::onTouch));

@@ -28,7 +28,8 @@ namespace acprojectview {
             
     };
     typedef masl::Ptr<AppLoaderAnim>AppLoaderAnimPtr;
-    typedef spark::MemberFunctionEventCallback<AppLoaderAnim, AppLoaderAnimPtr> AppLoaderAnimCB;
+    typedef masl::WeakPtr<AppLoaderAnim>AppLoaderAnimWeakPtr;
+    typedef spark::MemberFunctionEventCallback<AppLoaderAnim, AppLoaderAnimWeakPtr> AppLoaderAnimCB;
         
 };
 

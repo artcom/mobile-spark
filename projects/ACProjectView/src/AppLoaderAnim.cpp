@@ -62,5 +62,4 @@ namespace acprojectview {
             _myLastTime = myEvent->getCurrentTime();
         }        
     }
-    
 }

@@ -137,12 +137,12 @@ namespace acprojectview {
         if (_myAnimatingFlag) {
             return;
         }
-        AC_PRINT << "clicked on project: "<< theEvent->getTarget()->getParent()->getName();
+        AC_PRINT << "clicked on project: "<< theEvent->getTarget()->getParent().lock()->getName();
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
         _myProjectViewer->setVisible(true);
         _myProjectViewer->setSensible(true);
         _myProjectMenu->setSensible(false);
-        _myCurrentProject = boost::static_pointer_cast<ProjectImpl>(theEvent->getTarget()->getParent());
+        _myCurrentProject = boost::static_pointer_cast<ProjectImpl>(theEvent->getTarget()->getParent().lock());
         projectViewAnimation(true);
     }
 
@@ -297,7 +297,7 @@ namespace acprojectview {
         _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
         _myIdleDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onIdle)));
-        spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr>(ptr, &ACProjectView::onTouch));
+        spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
