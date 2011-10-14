@@ -73,19 +73,17 @@ namespace spark {
     }
 
     
+    //XXX: do not always create new material/shape/texture/elements
     void
     Image::build() {
         I18nShapeWidget::build();
         if(data_.empty()) return;
         
         AC_DEBUG<<"build image " << *this << " with src: "<<data_;
-        std::vector<std::string> myHandles;
-        myHandles.reserve(customShaderValues_.size());
-        std::transform(customShaderValues_.begin(), customShaderValues_.end(), std::back_inserter(myHandles),
-                       masl::select1st<std::map<std::string, float>::value_type>()) ;
-        setShape(ShapeFactory::get().createRectangle(true, 1, 1, 
-                                                     vertexShader_, fragmentShader_, myHandles, data_));
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);    
+        UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(data_));
+        myMaterial->setCustomHandles(customShaderValues_);
+        myMaterial->createShader(vertexShader_, fragmentShader_); 
+        _myShape = ShapePtr(new RectangleShape(myMaterial));
         _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
         float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);

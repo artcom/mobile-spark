@@ -14,7 +14,8 @@ namespace spark {
     Camera::Camera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         ShapeWidget(theApp, theXMLNode) {
 
-        setShape(mar::ShapeFactory::get().createRectangle(true));
+        mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
+        _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
         _myColorConversionFlag = _myXMLNode->getAttributeAs<bool>("cpu_color_conversion", false);
 
     }
