@@ -69,7 +69,9 @@ namespace acprojectview {
             
     }
 
-    void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {                
+    void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {  
+        //boost::timer::timer myTimer;
+                      
         showPopup(false);            
         _myCurrentProject = currentProject;
             
@@ -91,13 +93,17 @@ namespace acprojectview {
          _myDisplayedImage = 0;
          _myCurrentSlot=0;
         
-         _image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());            
+         //_image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());            
+         ImagePtr myProjectEntry =  boost::static_pointer_cast<Image>(currentProject->getChildByName("image"));
+         _image0->setSrc(myProjectEntry->getSrc());            
          autoScaleImage(_image0);
 
          _imageTransform1->setVisible(false);
          _imageTransform2->setVisible(false);
          
          setVisible(false);
+         //AC_PRINT << "******************ProjectViewerImpl::showProject***************************** " << myTimer.elapsed();
+         
     }
     
     void ProjectViewerImpl::autoScaleImage(ImagePtr theImage) {

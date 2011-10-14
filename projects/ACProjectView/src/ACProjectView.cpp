@@ -168,8 +168,7 @@ namespace acprojectview {
     }
     
     void ACProjectView::onInitiateProjectView() {   
-        _myProjectViewer->showProject(_myCurrentProject);
-        
+        _myProjectViewer->showProject(_myCurrentProject);        
     }
 
     void ACProjectView::onStartProjectView() {        
@@ -243,7 +242,9 @@ namespace acprojectview {
                 
             _mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishLoadProjectView)));
             _mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishLoadProjectView)));
-
+        }
+        _mySeqAnimation->add(myParallel);
+        if (showProject) {                       
             animation::DelayAnimationPtr myFrameDelayAnim1 = animation::DelayAnimationPtr(new animation::DelayAnimation(2));
             animation::DelayAnimationPtr myFrameDelayAnim2 = animation::DelayAnimationPtr(new animation::DelayAnimation(20));
             myFrameDelayAnim2->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet)));
@@ -255,7 +256,6 @@ namespace acprojectview {
             _mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::closeProjectView)));
             _mySeqAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onReturn2ProjectView)));
         }
-        _mySeqAnimation->add(myParallel);
 
         animation::AnimationManager::get().play(_mySeqAnimation);
     }
