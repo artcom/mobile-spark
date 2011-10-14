@@ -41,9 +41,6 @@ namespace spark {
     ShapeWidget::prerender(MatrixStack& theCurrentMatrixStack) {
         Widget::prerender(theCurrentMatrixStack);
         if (isVisible() && customShaderValues_.size() > 0) {
-            if (updateShaderValuesCallback_) {
-                (*updateShaderValuesCallback_)();
-            }
             _myShape->updateHandles(customShaderValues_);
         }
     }
@@ -154,17 +151,13 @@ namespace spark {
         return false;
     }
 
+    //XXX: think about initGL, shader cleanup, buffer cleanup
     void
     ShapeWidget::onResume() {
         Widget::onResume();
         if (_myShape) {
             _myShape->initGL();
         }
-    }
-
-    void 
-    ShapeWidget::setShape( mar::ShapePtr theShapePtr) {
-        _myShape = theShapePtr;
     }
 
     void

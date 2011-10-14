@@ -5,6 +5,8 @@
 #include "SparkComponentFactory.h"
 #include "I18nContext.h"
 
+using namespace mar;
+
 namespace spark {
     const char * const NinePatch::SPARK_TYPE = "NinePatch";
 
@@ -37,8 +39,12 @@ namespace spark {
         I18nShapeWidget::build();
         if(data_.empty()) return;
 
-        setShape(mar::ShapeFactory::get().createNinePatch(data_, edgeLeft_, edgeTop_, edgeRight_, edgeBottom_, 100, 100));
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+        UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(data_));
+        myMaterial->setCustomHandles(customShaderValues_);
+        myMaterial->createShader(vertexShader_, fragmentShader_); 
+        NinePatchShapePtr myShape = NinePatchShapePtr(new NinePatchShape(myMaterial));
+        myShape->setEdges(edgeLeft_, edgeTop_, edgeRight_, edgeBottom_);
+        _myShape = myShape;
 
         float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->width_);
         float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->height_);

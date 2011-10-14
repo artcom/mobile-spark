@@ -7,6 +7,8 @@
 #include "AssetProvider.h"
 #include "png_functions.h"
 
+#define DB(x) // x
+
 using namespace masl;
 
 namespace mar {
@@ -70,7 +72,7 @@ namespace mar {
         std::string myMaterialId;
         for (std::vector<std::string>::const_iterator it = theMtlFile.begin(); it != theMtlFile.end(); ++it) {
             std::string line = *it;
-            AC_DEBUG << "line " << line.c_str();
+            DB(AC_DEBUG << "line " << line.c_str();)
             size_t pos = line.find_first_of(" ");
             if (pos == std::string::npos) {
                 continue;
@@ -197,14 +199,14 @@ namespace mar {
         size_t startFaceIndex = 0;
         for (std::vector<std::string>::const_iterator it = theObjFile.begin(); it != theObjFile.end(); ++it) {
             std::string line = *it;
-            AC_DEBUG << "line " << line;
+            DB(AC_DEBUG << "line " << line;)
             size_t pos = line.find_first_of(" ");
             if (pos == std::string::npos) {
                 continue;
             }
             std::string type = line.substr(0,pos);
             std::string data = line.substr(pos+1);
-            AC_DEBUG << "type " << type << ", data " << data;
+            DB(AC_DEBUG << "type " << type << ", data " << data;)
             if (type == "v") {
                 vertices_.push_back(getVector3(data));
             } else if (type == "vt") {
@@ -225,7 +227,7 @@ namespace mar {
                 element->material = materialMap_[data];
                 startFaceIndex = faces_.size();
             } else if (type == "f") {
-                AC_DEBUG << "data:_" << data;
+                DB(AC_DEBUG << "data:_" << data;)
                 std::vector<int> faceVertices;
                 size_t pos1 = data.find_first_of(" ");
                 size_t pos2 = data.find_last_of(" ");

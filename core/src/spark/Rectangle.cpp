@@ -10,9 +10,10 @@ namespace spark {
         ShapeWidget(theApp, theXMLNode),
         _myColor(_myXMLNode->getAttributeAs<vector3>("color", vector3(1,1,1)))
     {
-        setShape(mar::ShapeFactory::get().createRectangle(false, 1, 1));
+        mar::UnlitColoredMaterialPtr myMaterial = mar::UnlitColoredMaterialPtr(new mar::UnlitColoredMaterial());
+        myMaterial->setDiffuseColor(_myColor);
+        _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
         setSize(vector2(getNode()->getAttributeAs<float>("width"), getNode()->getAttributeAs<float>("height")));
-        boost::static_pointer_cast<mar::UnlitColoredMaterial>(getShape()->elementList_[0]->material)->setDiffuseColor(_myColor);
     }
 
     Rectangle::~Rectangle() {

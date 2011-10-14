@@ -25,10 +25,9 @@ namespace spark {
             void setSize(const vector2 & theSize);
 
             std::map<std::string, float> customShaderValues_;
-            masl::CallbackPtr updateShaderValuesCallback_;
 
         protected:
-            void setShape( mar::ShapePtr theShapePtr);
+            mar::ShapePtr _myShape;
             virtual void propagateAlpha();
             std::string vertexShader_;
             std::string fragmentShader_;
@@ -38,7 +37,6 @@ namespace spark {
                 CENTER_ORIGIN,
                 EXPLICIT_ORIGIN
             };
-            mar::ShapePtr _myShape;
             vector2 _myOrigin;
             ORIGIN_MODE _myOriginMode;
                 

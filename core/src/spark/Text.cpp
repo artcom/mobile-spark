@@ -34,7 +34,10 @@ namespace spark {
         if (myFontName != "") {
             _myFontPath = mar::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
-        setShape(mar::ShapeFactory::get().createRectangle(true,500,500));
+        mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
+        myMaterial->setCustomHandles(customShaderValues_);
+        myMaterial->createShader(vertexShader_, fragmentShader_); 
+        _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
     Text::~Text() {

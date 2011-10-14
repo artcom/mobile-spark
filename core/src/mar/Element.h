@@ -34,7 +34,9 @@ namespace mar {
         Element();
         virtual ~Element();
 
-        virtual void loadData(const matrix & theMatrix) const;
+        void initGL();
+        void draw() const;
+        virtual void loadData(const matrix & theMatrix);
         virtual void unloadData() const;
         virtual void createVertexBuffers();
         virtual void updateCompleteVertexBuffersContent();
@@ -45,15 +47,15 @@ namespace mar {
         boost::shared_array<float> vertexData_;    //interleaved
         boost::shared_array<GLushort> indexDataVBO_;
 
-        #ifdef iOS
-        GLuint vertexArrayObject;
-        #endif
-
     protected:
         std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
-        GLuint vertexBuffer;
-        GLuint indexBuffer;
-        unsigned int _myStride;
+        #ifdef iOS
+        GLuint vertexArrayObject_;
+        #endif
+
+        GLuint vertexBuffer_;
+        GLuint indexBuffer_;
+        unsigned int stride_;
     };
 
     typedef masl::Ptr<Element> ElementPtr;
