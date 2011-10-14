@@ -13,7 +13,7 @@ namespace spark {
         virtual void onPause();
         virtual void onResume();
         virtual void realize();
-        const std::string & getSrc() const {return data_;} 
+        const std::string & getSrc() const {return data_;};
         void setSrc(const std::string & theSrc);
         void fitToSize(const float theWidth, const float theHeight);
         const vector2 & getTextureSize();

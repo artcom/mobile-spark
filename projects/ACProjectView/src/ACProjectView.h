@@ -79,7 +79,8 @@ namespace acprojectview {
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
-    typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr> ACProjectViewEventCB;
+    typedef masl::WeakPtr<ACProjectView> ACProjectViewWeakPtr;
+    typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewWeakPtr> ACProjectViewEventCB;
 
     //animations
     typedef void (ACProjectView::* ACProjectViewPropertySetterFunction)(float);

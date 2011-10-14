@@ -71,7 +71,8 @@ namespace acprojectview {
     };
     
     typedef masl::Ptr<ProjectViewerImpl> ProjectViewerImplPtr;
-    typedef spark::MemberFunctionEventCallback<ProjectViewerImpl, ProjectViewerImplPtr> ProjectViewerImplCB;
+    typedef masl::WeakPtr<ProjectViewerImpl> ProjectViewerImplWeakPtr;
+    typedef spark::MemberFunctionEventCallback<ProjectViewerImpl, ProjectViewerImplWeakPtr> ProjectViewerImplCB;
 
 };
 

@@ -18,6 +18,7 @@ namespace spark {
     }
 
     Image::~Image() {
+        AC_INFO << "....destructor image " << getName();
     }
 
     void

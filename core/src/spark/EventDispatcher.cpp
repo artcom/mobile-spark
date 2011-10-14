@@ -60,8 +60,8 @@ namespace spark {
         AC_TRACE << " dispatchEvent " << *theEvent;
         // collect dispatchers to capture on
         std::list<ComponentPtr> myCaptureList;
-        while (myCurrent->getParent()) {
-            myCurrent = myCurrent->getParent();
+        while (myCurrent->getParent().lock()) {
+            myCurrent = myCurrent->getParent().lock();
             myCaptureList.push_back(myCurrent);
         }
         // capture phase

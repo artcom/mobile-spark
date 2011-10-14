@@ -49,7 +49,7 @@ namespace acprojectview {
                 
         unsigned myWidth = myWindowPtr->getSize()[0];
         unsigned myHeight = myWindowPtr->getSize()[1];
-        ProjectMenuPtr myMenu =  boost::static_pointer_cast<ProjectMenu>(getParent());
+        ProjectMenuPtr myMenu =  boost::static_pointer_cast<ProjectMenu>(getParent().lock());
         int myHorizontalTiling = myMenu->getHorizontalTiling();
         int myVerticalTiling = myMenu->getVerticalTiling();
 

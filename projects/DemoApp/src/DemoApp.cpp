@@ -421,7 +421,8 @@ namespace demoapp {
     void DemoApp::onLoadScene(EventPtr theEvent) {
         ComponentPtr myScene = _mySparkWindow->getChildByName("spark_from_remote_server", true);
         if (myScene) {
-            boost::static_pointer_cast<spark::Container>(myScene->getParent())->removeChild(myScene);
+            boost::static_pointer_cast<spark::Container>(myScene->getParent().lock())->removeChild(myScene);
+            myScene = ComponentPtr();
         } else {
             _myLoadingMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("loading", true));
             _myLoadingMessage->setVisible(true);

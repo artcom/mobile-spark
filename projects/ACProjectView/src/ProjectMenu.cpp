@@ -105,6 +105,4 @@ namespace acprojectview {
     void ProjectMenu::onDelayFinished() {        
         _myIsAnimating = false;
     }
-
-    
 }

@@ -16,7 +16,7 @@ namespace spark {
     {}
 
     Component::~Component() {
-        AC_INFO << ".................delete " + _myName;
+        AC_INFO << ".................delete " << _myName;
     }
 
     std::ostream &
@@ -32,8 +32,8 @@ namespace spark {
 
     ComponentPtr
     Component::getRoot() {
-        if (_myParent) {
-            return _myParent->getRoot();
+        if (_myParent.lock()) {
+            return _myParent.lock()->getRoot();
         } else {
             return shared_from_this();
         }
