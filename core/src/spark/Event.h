@@ -257,7 +257,9 @@ namespace spark {
         virtual ~MemberFunctionEventCallback() {};
 
         virtual void execute(EventPtr theEvent) const {
-            (_myObjectPtr.get()->*_myFunctionPointer)(theEvent);
+            if (_myObjectPtr.lock()) {
+                (_myObjectPtr.lock().get()->*_myFunctionPointer)(theEvent);
+            }
         };
     private:
         TP _myObjectPtr;

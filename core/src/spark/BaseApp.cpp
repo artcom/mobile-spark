@@ -67,7 +67,6 @@ namespace spark {
     }
 
     void BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
-        AC_PRINT << "choose layout ...........";
         bool dummy;
         std::string myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight, dummy);
         //load layout
@@ -75,10 +74,10 @@ namespace spark {
         _mySparkWindow->realize();
         _mySparkWindow->setSize(theScreenWidth,theScreenHeight);
         //register for events
-        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
+        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppWeakPtr > ( BaseAppWeakPtr(shared_from_this()), &BaseApp::onFrame));
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
             
-        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
+        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowWeakPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
         _mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
             
@@ -140,7 +139,7 @@ namespace spark {
    
     std::string
     findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
-        AC_DEBUG << "......... findBestMatchedLayout for baseName: " << theBaseName;
+        AC_PRINT << "......... findBestMatchedLayout for baseName: " << theBaseName << " with screen resolution: " << theScreenWidth << "/" << theScreenHeight;
         std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
