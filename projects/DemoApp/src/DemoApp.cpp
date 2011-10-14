@@ -138,7 +138,7 @@ namespace demoapp {
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onDeleteRequestReady)));
         animation::DelayAnimationPtr myRepeatingDateRequest = animation::DelayAnimationPtr(new animation::DelayAnimation(1000));
         myRepeatingDateRequest->setLoop(true);
-        myRepeatingDateRequest->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onRepeatingDateRequest)));
+        myRepeatingDateRequest->setOnFinish(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::onRepeatingDateRequest)));
         animation::AnimationManager::get().play(myRepeatingDateRequest);
 
         //animation of amazone
@@ -219,7 +219,7 @@ namespace demoapp {
         _myErrorMessage->setVisible(true);
         _myErrorMessage->setText("error requesting " + theRequest->getURL());
         _myErrorExpiredDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(10000));
-        _myErrorExpiredDelay->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onErrorExpired)));
+        _myErrorExpiredDelay->setOnFinish(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::onErrorExpired)));
         animation::AnimationManager::get().play(_myErrorExpiredDelay);
     }
     void DemoApp::onErrorExpired() {
@@ -317,8 +317,7 @@ namespace demoapp {
         AC_INFO << "change slide: " << theDirection << " next slide:" << _myNextSlide << " currentslide: " << _myCurrentSlide;
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         animation::ParallelAnimationPtr mySequence = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
-        mySequence->setOnPlay(masl::CallbackPtr(
-                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onStartSlideSwipe)));
+        mySequence->setOnPlay(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::onStartSlideSwipe)));
         WidgetPropertyAnimationPtr mySwipeOut = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myCurrentSlide], 
                                                 &Widget::setX, 0, _mySparkWindow->getSize()[0] * theDirection * -1, 500,
                                                 animation::EasingFnc(animation::easeInOutQuad)));
@@ -326,8 +325,7 @@ namespace demoapp {
         WidgetPropertyAnimationPtr mySwipeIn = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myNextSlide], 
                                                 &Widget::setX, _mySparkWindow->getSize()[0] * theDirection, 0, 500,
                                                 animation::EasingFnc(animation::easeInOutQuad)));
-        mySequence->setOnFinish(masl::CallbackPtr(
-                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onFinishSlideSwipe)));
+        mySequence->setOnFinish(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::onFinishSlideSwipe)));
     	mySequence->add(mySwipeOut);
     	mySequence->add(mySwipeIn);
         animation::AnimationManager::get().play(mySequence);
@@ -403,8 +401,7 @@ namespace demoapp {
             //TRICK: this has to be done on main thread -> use delay animation with 0 duration achieve this
             animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(0));
             DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
-            myDelay->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::insertCreatedComponent)));
+            myDelay->setOnFinish(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::insertCreatedComponent)));
             animation::AnimationManager::get().play(myDelay);
         }
     }
