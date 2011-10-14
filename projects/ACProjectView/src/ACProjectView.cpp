@@ -16,7 +16,6 @@
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
 #include <animation/PropertyAnimation.h>
-#include <animation/SequenceAnimation.h>
 #include <animation/Easing.h>
 
 #include "ACProjectViewComponentMapInitializer.h"
@@ -39,7 +38,7 @@ namespace acprojectview {
    
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false) {
-    }
+    } 
 
     ACProjectView::~ACProjectView() {
     }
@@ -134,7 +133,10 @@ namespace acprojectview {
 
     void ACProjectView::onProjectItem(EventPtr theEvent) {
         if (_myAnimatingFlag) {
-            return;
+            if (_mySeqAnimation) {
+                _mySeqAnimation->cancel();
+            }
+            //return;
         }
         MobileSDK_Singleton::get().getNative()->vibrate(10);                
         _myProjectViewer->setVisible(true);
@@ -146,9 +148,16 @@ namespace acprojectview {
 
     
     void ACProjectView::onBack(EventPtr theEvent) {
-        if (_myAnimatingFlag || _myProjectMenu->isSensible()) {
-            return;
+        if (_myAnimatingFlag) {
+            if (_mySeqAnimation) {
+                _mySeqAnimation->cancel();
+            }
+            //return;
         }
+        
+        /*if (_myAnimatingFlag || _myProjectMenu->isSensible()) {
+            return;
+        }*/
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         if (myEvent->getY() > ProjectViewerImpl::POPUP_HEIGHT * 2 && !_myProjectViewer->isPopUpOpen()) { 
             MobileSDK_Singleton::get().getNative()->vibrate(10);                
@@ -159,7 +168,6 @@ namespace acprojectview {
     }
     
     void ACProjectView::onInitiateProjectView() {   
-        boost::timer::timer myLoadTimer;            
         _myProjectViewer->showProject(_myCurrentProject);
         
     }
@@ -176,8 +184,9 @@ namespace acprojectview {
         _myAnimatingFlag = false;        
     }
 
-    void ACProjectView::onFinishProjectView() {        
+    void ACProjectView::closeProjectView() {        
         _myProjectViewer->setVisible(false);
+        _myProjectMenu->setVisible(true);
         _myAnimatingFlag = false;        
     }
     void ACProjectView::onReturn2ProjectView() {        
@@ -195,7 +204,7 @@ namespace acprojectview {
         int myProjectMenuItemHeight = _myProjectMenu->getIconHeight();
         int mySlide = _myProjectMenu->getCurrentSlide();
         _myAnimatingFlag = true;
-        animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
+        _mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         int toX = showProject ? 0 : _myCurrentProject->getX()+ myProjectMenuItemWidth/2 - mySlide*_mySparkWindow->getSize()[0];
         int fromX   = showProject ? _myCurrentProject->getX()+ myProjectMenuItemWidth/2  - mySlide*_mySparkWindow->getSize()[0]: 0;
@@ -227,25 +236,28 @@ namespace acprojectview {
         myParallel->add(myTransAnimationX);
         myParallel->add(myTransAnimationY);
 
-        mySeqAnimation->add(myParallel);
         if (showProject) {                       
-            mySeqAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onInitiateProjectView))); 
-            mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishLoadProjectView)));
-            mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishLoadProjectView)));
+            animation::DelayAnimationPtr myPreAnimation = animation::DelayAnimationPtr(new animation::DelayAnimation(2));                
+            myPreAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onInitiateProjectView))); 
+            _mySeqAnimation->add(myPreAnimation);
+                
+            _mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishLoadProjectView)));
+            _mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishLoadProjectView)));
 
             animation::DelayAnimationPtr myFrameDelayAnim1 = animation::DelayAnimationPtr(new animation::DelayAnimation(2));
             animation::DelayAnimationPtr myFrameDelayAnim2 = animation::DelayAnimationPtr(new animation::DelayAnimation(20));
             myFrameDelayAnim2->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet)));
-            mySeqAnimation->add(myFrameDelayAnim1);
-            mySeqAnimation->add(myFrameDelayAnim2);
+            _mySeqAnimation->add(myFrameDelayAnim1);
+            _mySeqAnimation->add(myFrameDelayAnim2);
         } else {
             _myProjectViewer->initiateClose();
-            mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishProjectView)));
-            mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishProjectView)));
-            mySeqAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onReturn2ProjectView)));
+            _mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::closeProjectView)));
+            _mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::closeProjectView)));
+            _mySeqAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onReturn2ProjectView)));
         }
+        _mySeqAnimation->add(myParallel);
 
-        animation::AnimationManager::get().play(mySeqAnimation);
+        animation::AnimationManager::get().play(_mySeqAnimation);
     }
 
     void ACProjectView::onLanguageSwitchDe(EventPtr theEvent) {

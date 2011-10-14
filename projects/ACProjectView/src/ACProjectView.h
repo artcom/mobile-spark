@@ -2,6 +2,7 @@
 #define _included_mobile_acprojectview_ACProjectView_
 
 /////////////////// Application code, this should be in java or script language later...
+#include <animation/SequenceAnimation.h>
 #include <animation/DelayAnimation.h>
 #include <animation/ParallelAnimation.h>
 #include <spark/BaseApp.h>
@@ -42,7 +43,7 @@ namespace acprojectview {
             void projectViewAnimation(bool showProject);
             void onStartIdleFade();
             void onFinishIdleFade();            
-            void onFinishProjectView();
+            void closeProjectView();
             void onShowProjectViewPopup();
             void onLoadInitialSet();
             
@@ -74,7 +75,7 @@ namespace acprojectview {
             spark::TransformPtr _myStartScreenPtr;
         
             bool _myAnimatingFlag;
-
+            animation::SequenceAnimationPtr _mySeqAnimation;
             const static unsigned int _myAnimationTime = 400;
     };
 
