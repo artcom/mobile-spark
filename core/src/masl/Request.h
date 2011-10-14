@@ -168,7 +168,7 @@ namespace masl {
     typedef masl::Ptr<FreeFunctionRequestCallback> FreeFunctionRequestCallbackPtr;
 
 
-
+    //TP should be weakPtr
     template < typename T, typename TP>
     class MemberFunctionRequestCallback : public RequestCallback {
     public:
@@ -179,7 +179,9 @@ namespace masl {
         virtual ~MemberFunctionRequestCallback() {};
 
         virtual void execute(RequestPtr theRequest) const {
-            (_myObjectPtr.get()->*_myFunctionPointer)(theRequest);
+            if (_myObjectPtr.lock()) {
+                (_myObjectPtr.lock().get()->*_myFunctionPointer)(theRequest);
+            }
         };
     private:
         TP _myObjectPtr;

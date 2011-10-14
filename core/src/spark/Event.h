@@ -245,8 +245,7 @@ namespace spark {
     };
     typedef masl::Ptr<FreeFunctionEventCallback> FreeFunctionEventCallbackPtr;
 
-
-
+    //TP should be weakPtr
     template < typename T, typename TP>
     class MemberFunctionEventCallback : public EventCallback {
     public:
