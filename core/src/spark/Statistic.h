@@ -25,7 +25,8 @@ namespace spark {
     };
 
     typedef masl::Ptr<Statistic> StatisticPtr;
-    typedef MemberFunctionEventCallback<Statistic, StatisticPtr> StatisticCB;
+    typedef masl::WeakPtr<Statistic> StatisticWeakPtr;
+    typedef MemberFunctionEventCallback<Statistic, StatisticWeakPtr> StatisticCB;
 
 };
 #endif

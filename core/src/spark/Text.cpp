@@ -38,6 +38,7 @@ namespace spark {
     }
 
     Text::~Text() {
+        AC_INFO << "....destructor text " << getName();
     }
 
     void

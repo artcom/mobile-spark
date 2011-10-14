@@ -8,6 +8,7 @@ namespace spark {
     }
 
     I18nShapeWidget::~I18nShapeWidget() {
+        AC_INFO << "delete I18nShapeWidget " << getName();
         if (_myI18nItem && _myI18nItem->hasEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch) ) {
             _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch);
         }
@@ -40,9 +41,9 @@ namespace spark {
         _myDirtyFlag = true;
         AC_DEBUG << "on language switch data " << data_;
     }
+
     void
     I18nShapeWidget::attachToI18nItem() {
-        
         if (_myI18nItem) {
             if (_myI18nItem->hasEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch)) {
                 _myI18nItem->removeEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch);
@@ -61,6 +62,4 @@ namespace spark {
         }
         _myDirtyFlag = true;
     }
-    
-
 }
