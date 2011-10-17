@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "RequestManager.h"
+#include "AssetProvider.h"
 
 #define CURL_VERBOSE 0
 #define DB(x) // x
@@ -15,8 +16,10 @@
 namespace masl {
     DEFINE_EXCEPTION(INetException, masl::Exception);
 
-    Request::Request(const std::string & theURL, const std::string & theUserAgent)
-        : _myURL(theURL),
+    Request::Request(const std::string & theURL, const std::string & thePersistenceFolder,
+                     const std::string & theUserAgent)
+      : _myURL(theURL),
+        _myPersistenceFolder(thePersistenceFolder),
         _myUserAgent(theUserAgent),
         _myCurlHandle(0),
         _myLowSpeedLimit(0),
@@ -396,28 +399,35 @@ namespace masl {
 
     void
     Request::onStart() {
-    };
+    }
 
     void
     Request::onError(CURLcode theError, long theHttpStatus) {
         if (_myOnErrorCallback) {
             (*_myOnErrorCallback)(shared_from_this());
         }
-    };
+        if (!_myPersistenceFolder.empty()) {
+            std::string fileToFind = _myPersistenceFolder + masl::getFilenamePart(_myURL);
+            _myResponseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
+            if (_myResponseBlock.size() > 0) {
+                onDone();
+            }
+        }
+    }
 
     bool
     Request::onProgress(double theDownloadTotal, double theCurrentDownload,
                 double theUploadTotal, double theCurrentUpdate)
     {
         return true;
-    };  // return false to abort transfer
+    }  // return false to abort transfer
 
     void
     Request::onDone() {
         if (_myOnDoneCallback) {
             (*_myOnDoneCallback)(shared_from_this());
         }
-    };
+    }
 
     // //////////////////////////////////////////////////////////
     //
@@ -461,7 +471,9 @@ namespace masl {
 
 
     SequenceRequest::SequenceRequest(RequestManager & theRequestManager, const std::string & theURL,
-                                     const std::string & theUserAgent) : Request(theURL, theUserAgent),
+                                     const std::string & thePersistenceFolder,
+                                     const std::string & theUserAgent) 
+                                    : Request(theURL, thePersistenceFolder, theUserAgent),
                                      _myRequestManager(theRequestManager) {
     }
 
