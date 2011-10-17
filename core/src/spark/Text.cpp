@@ -35,9 +35,10 @@ namespace spark {
         if (myFontName != "") {
             _myFontPath = mar::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
-        mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
+        mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
+        myMaterial->setTexture(mar::TexturePtr(new mar::Texture()));
         myMaterial->setCustomHandles(customShaderValues_);
-        myMaterial->createShader(vertexShader_, fragmentShader_); 
+        myMaterial->setShader(vertexShader_, fragmentShader_); 
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
@@ -53,7 +54,7 @@ namespace spark {
     Text::onPause() {
         I18nShapeWidget::onPause();
         if (getShape()) {
-            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             mar::TexturePtr myTexture = myMaterial->getTexture();
             myTexture->unbind();
         }
@@ -62,7 +63,7 @@ namespace spark {
     void
     Text::onResume() {
         I18nShapeWidget::onResume();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         _myDirtyFlag = true;
     }
 
@@ -89,7 +90,7 @@ namespace spark {
     void
     Text::build() {
         I18nShapeWidget::build();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
         _myTextSize[0] = myTextInfo.width;

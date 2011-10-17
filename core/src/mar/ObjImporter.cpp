@@ -82,7 +82,6 @@ namespace mar {
             if (type == "newmtl") {
                 if (myMaterial) {  //save old material in map
                     materialMap_[myMaterialId] = myMaterial;
-                    myMaterial->createShader();
                 }
                 myMaterialId = data;
                 myMaterial = MaterialPtr(new UnlitColoredMaterial()); //XXX: here we do not know if we need textures
@@ -111,7 +110,6 @@ namespace mar {
         }
         if (myMaterial) {
             materialMap_[myMaterialId] = myMaterial;
-            myMaterial->createShader();
         }
         AC_INFO << "num materials " << materialMap_.size();
     }

@@ -153,12 +153,12 @@ namespace spark {
         return false;
     }
 
-    //XXX: think about initGL, shader cleanup, buffer cleanup
+    //ANDROID ONLY: gl context is lost, so reset all buffers/shaders/textures to zero to create new ones
     void
     ShapeWidget::onResume() {
         Widget::onResume();
         if (_myShape) {
-            _myShape->initGL();
+            _myShape->resetGL();
         }
     }
 

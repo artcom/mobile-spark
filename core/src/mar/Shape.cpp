@@ -47,12 +47,13 @@ namespace mar {
         }
     }
 
+    //ANDROID ONLY: gl context is lost, so reset all elements
     void
-    Shape::initGL() {
-        AC_DEBUG << "Shape::init GL";
+    Shape::resetGL() {
+        AC_DEBUG << "Shape::resetGL";
         for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
                                                       it != elementList_.end(); ++it) {
-            (*it)->initGL();
+            (*it)->resetGL();
         }
     }
 
