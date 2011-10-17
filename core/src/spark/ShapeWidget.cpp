@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <iterator>
 
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include <animation/AnimationManager.h>
 
 #define DB(x) // x

@@ -2,8 +2,12 @@
 #define _included_mobile_spark_ShapeWidget_
 
 #include "Widget.h"
-#include <mar/Shape.h>
 #include <masl/Callback.h>
+
+namespace mar {
+    class Shape;
+    typedef masl::Ptr<Shape> ShapePtr;
+}
 
 namespace spark {
 

@@ -2,6 +2,8 @@
 
 #include <masl/MobileSDK.h>
 #include <mar/AssetProvider.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 
 #ifdef ANDROID
     #include <android/AndroidAssetProvider.h>
@@ -12,7 +14,6 @@
 
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include "I18nContext.h"
 
 namespace spark {
     const char * const Text::SPARK_TYPE = "Text";

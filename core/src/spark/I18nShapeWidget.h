@@ -1,9 +1,7 @@
 #ifndef _included_mobile_spark_I18nShapeWidget_
 #define _included_mobile_spark_I18nShapeWidget_
 
-#include "Widget.h"
 #include "ShapeWidget.h"
-#include <mar/Shape.h>
 
 namespace spark {
 

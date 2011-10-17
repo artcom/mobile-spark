@@ -1,7 +1,8 @@
 #include "Camera.h"
 
 #include <masl/MobileSDK.h>
-#include <masl/Exception.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 
 #include "BaseApp.h"
 #include "Window.h"

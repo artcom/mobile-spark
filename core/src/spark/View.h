@@ -1,7 +1,6 @@
 #ifndef _included_mobile_spark_View_
 #define _included_mobile_spark_View_
 
-#include <mar/Viewport.h>
 #include <masl/MatrixStack.h>
 
 #include "RenderCamera.h"
@@ -9,6 +8,10 @@
 namespace masl {
     class XMLNode;
     typedef masl::Ptr<XMLNode> XMLNodePtr;
+};
+namespace mar {
+    class Viewport;
+    typedef masl::Ptr<Viewport> ViewportPtr;
 };
 
 namespace spark {
