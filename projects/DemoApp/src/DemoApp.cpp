@@ -260,7 +260,7 @@ namespace demoapp {
         _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAssetRequestReady)),
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),
-            "/downloads/", true, false);
+            "/downloads/", true, true);
         AC_DEBUG << "headers of spark-request";
         std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
         for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
@@ -283,7 +283,7 @@ namespace demoapp {
         _myLoadingAnimation->cancel();
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
-        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/scene.spark");
+        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/scene.spark");
         myTransform->addChild(myNewSpark);
     }
 

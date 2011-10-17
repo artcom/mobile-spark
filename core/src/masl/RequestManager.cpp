@@ -4,6 +4,8 @@
 #include <curl/curl.h>
 
 #include "Logger.h"
+#include "AssetProvider.h"
+
 
 #define DB(x) // x;
 
@@ -130,6 +132,19 @@ namespace masl {
     RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
                                const std::string & thePersistenceFolder,
                                const bool thePersistFlag, const bool theConservativeFlag) {
+        if (theConservativeFlag && !thePersistenceFolder.empty()) {
+            std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(theUrl);
+            if (!AssetProviderSingleton::get().ap()->findFile(fileToFind).empty()) {
+                std::vector<char> responseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
+                if (responseBlock.size() > 0) {
+                    RequestPtr request = RequestPtr(new Request(theUrl, responseBlock));
+                    if (theCB) {
+                        (*theCB)(request);
+                        return;
+                    }
+                } 
+            }
+        }
         RequestPtr myRequest = RequestPtr(new Request(theUrl, thePersistenceFolder, thePersistFlag));
         myRequest->setOnDoneCallback(theCB);
         if (_myDefaultErrorCallback) {
@@ -180,6 +195,20 @@ namespace masl {
         RequestPtr myNextRequest;
         for (int i = theURLLastPartList.size() - 1; i >= 0 ; --i) {
             std::string myUrl = theBaseURL + "/" + theURLLastPartList[i];
+            if (theConservativeFlag && !thePersistenceFolder.empty()) {
+                std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(myUrl);
+                if (!AssetProviderSingleton::get().ap()->findFile(fileToFind).empty()) {
+                    std::vector<char> responseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
+                    if (responseBlock.size() > 0) {
+                        Request* r = new Request(myUrl, responseBlock);
+                        RequestPtr myRequest = RequestPtr(r);
+                        if (theOneReadyCB) {
+                            (*theOneReadyCB)(myRequest);
+                            continue;
+                        }
+                    } 
+                }
+            }
             SequenceRequestPtr myRequest = SequenceRequestPtr(
                 new SequenceRequest(*this, myUrl, thePersistenceFolder, thePersistFlag));
             myRequest->setOnDoneCallback(theOneReadyCB);
@@ -191,8 +220,10 @@ namespace masl {
             }
             myNextRequest = myRequest;
         }
-        if (myNextRequest) {
+        if (myNextRequest) { //this is now the first one that should be executed
             performRequest(myNextRequest);
+        } else if (theAllReadyCB) {
+            (*theAllReadyCB)(RequestPtr());
         }
     }
 }
