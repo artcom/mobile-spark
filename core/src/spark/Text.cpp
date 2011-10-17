@@ -36,7 +36,6 @@ namespace spark {
             _myFontPath = mar::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
-        myMaterial->setTexture(mar::TexturePtr(new mar::Texture()));
         myMaterial->getTexture()->transparency_ = true;
         myMaterial->setCustomHandles(customShaderValues_);
         myMaterial->setShader(vertexShader_, fragmentShader_); 

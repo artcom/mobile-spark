@@ -39,12 +39,18 @@ namespace spark {
         I18nShapeWidget::build();
         if(data_.empty()) return;
 
-        UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(data_));
-        myMaterial->setCustomHandles(customShaderValues_);
-        myMaterial->setShader(vertexShader_, fragmentShader_); 
-        NinePatchShapePtr myShape = NinePatchShapePtr(new NinePatchShape(myMaterial));
-        myShape->setEdges(edgeLeft_, edgeTop_, edgeRight_, edgeBottom_);
-        _myShape = myShape;
+        UnlitTexturedMaterialPtr myMaterial;
+        if (!getShape()) {
+            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(data_));
+            myMaterial->setCustomHandles(customShaderValues_);
+            myMaterial->setShader(vertexShader_, fragmentShader_); 
+            NinePatchShapePtr myShape = NinePatchShapePtr(new NinePatchShape(myMaterial));
+            myShape->setEdges(edgeLeft_, edgeTop_, edgeRight_, edgeBottom_);
+            _myShape = myShape;
+        } else {
+            myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+            myMaterial->getTexture()->setSrc(data_);
+        }
 
         float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->width_);
         float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->height_);

@@ -19,7 +19,14 @@ namespace mar {
     Texture::setSrc(const std::string & theSrc) {
         AC_DEBUG << "setSrc " << theSrc << " for Texture: " << (void*)this;
         src_ = theSrc;
-        loadTextureFromPNG(src_, shared_from_this());
+        unbind();
+        if (!src_.empty()) {
+            loadTextureFromPNG(src_, shared_from_this());
+        } else {
+            width_ = 0;
+            height_ = 0;
+            transparency_ = false;
+        }
     }
     void
     Texture::setTextureId(GLuint theTextureId) {
