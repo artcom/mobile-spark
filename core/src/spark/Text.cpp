@@ -91,6 +91,7 @@ namespace spark {
     Text::build() {
         I18nShapeWidget::build();
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+        myMaterial->getTexture()->transparency_ = true;
         masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
         _myTextSize[0] = myTextInfo.width;

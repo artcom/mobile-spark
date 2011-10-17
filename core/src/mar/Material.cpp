@@ -180,7 +180,7 @@ namespace mar {
 
     void
     UnlitTexturedMaterial::setTexture(const TexturePtr theTexture) {
-        texture_ = TexturePtr(new Texture());
+        texture_ = theTexture;
     }
 
     void
