@@ -26,6 +26,7 @@ namespace mar {
         virtual ~Material();
         virtual void createShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void loadShader(const matrix & theMatrix);
+        virtual void unloadShader();
         void initGL();
         void setAlpha(const float theAlpha) {alpha_ = theAlpha; transparency_ |= (alpha_ != 1.0);};
         void setCustomValues(const std::map<std::string, float> & theCustomValues);

@@ -10,15 +10,21 @@
 #include "png_functions.h"
 
 
+
 namespace mar {
 
     DEFINE_EXCEPTION(ProblemWithHandleException, masl::Exception)
 
     Material::Material() : transparency_(false), alpha_(1.0),
                            shaderProgram_(0), mvpHandle_(0), alphaHandle_(0) 
-    {}
+    {
+        AC_DEBUG << "Material::ctor "<<(void*)this;
+    }
 
     Material::~Material() {
+        AC_DEBUG << "Material::dtor "<<(void*)this;
+        glUseProgram(0);
+        glDeleteProgram(shaderProgram_);
     }
 
     void
@@ -28,11 +34,14 @@ namespace mar {
 
     void
     Material::bindAttributes() {
+        AC_DEBUG << "Material::bindAttributes "<<(void*)this;
         glBindAttribLocation(shaderProgram_, VERTEX_POS_INDEX, "a_position");
+        ASSERT_GL("glBindAttribLocation", PLUS_FILE_LINE);
     }
 
     void
     Material::initGL() {
+        AC_DEBUG << "Material initGL "<<(void*)this;
         if (vertexShader_.empty() || fragmentShader_.empty()) {
             setShader();
         }
@@ -45,8 +54,13 @@ namespace mar {
         bindAttributes();
         setHandles();
         glLinkProgram(shaderProgram_);
+        ASSERT_GL("glLinkProgram", PLUS_FILE_LINE);
     }
 
+    void
+    Material::unloadShader() {
+        //glUseProgram(0);
+    }
     void
     Material::loadShader(const matrix & theMatrix) {
         if (vertexShader_.empty() || fragmentShader_.empty()) {
@@ -56,7 +70,7 @@ namespace mar {
             initGL();
         }
         glUseProgram(shaderProgram_);
-        checkGlError("glUseProgram");
+        ASSERT_GL("glUseProgram", PLUS_FILE_LINE);
         glUniformMatrix4fv(mvpHandle_, 1, GL_FALSE, theMatrix.data());
         glUniform1f(alphaHandle_, alpha_);
         for (std::map<std::string, std::pair<GLuint, float> >::const_iterator it = customHandlesAndValues_.begin(); 
@@ -64,6 +78,7 @@ namespace mar {
             AC_TRACE << "set value in shader " << it->first << "  " << it->second.first << "  " << it->second.second;
             glUniform1f(it->second.first, it->second.second);
         }
+        ASSERT_GL("Material::loadShader", PLUS_FILE_LINE);
     }
 
     void
@@ -75,7 +90,7 @@ namespace mar {
     void
     Material::setHandles() {
         mvpHandle_ = getHandle("u_mvpMatrix");
-        alphaHandle_ = getHandle("a_alpha");
+        alphaHandle_ = getHandle("u_alpha");
         for (std::map<std::string, std::pair<GLuint, float> >::iterator it = customHandlesAndValues_.begin(); 
                 it != customHandlesAndValues_.end(); ++it)
         {
@@ -92,7 +107,7 @@ namespace mar {
 
     GLuint
     Material::getHandle(const std::string & theName) const {
-        GLuint myHandle = glGetUniformLocation(shaderProgram_, theName.c_str());
+        GLuint myHandle = getShaderVariableHandleUniform(shaderProgram_, theName);
         if (myHandle > MAX_NUM_HANDLES) {
             AC_ERROR << "Strange Handle " << theName << ". Maybe it is not found in shader.";
             throw ProblemWithHandleException("handle for " + theName + " seems to be strange. Maybe it's not found in shader.", PLUS_FILE_LINE);
@@ -122,6 +137,7 @@ namespace mar {
     void UnlitColoredMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glUniform4fv(colorHandle_, 1, &(diffuse_[0]));
+        ASSERT_GL("UnlitColoredMaterial::loadShader", PLUS_FILE_LINE);
     }
 
     void UnlitColoredMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
@@ -133,7 +149,7 @@ namespace mar {
 
     void UnlitColoredMaterial::setHandles() {
         Material::setHandles();
-        colorHandle_ = getHandle("a_color");
+        colorHandle_ = getHandle("u_color");
     }
 
     //////////////////////////////////////////////////// UnlitTexturedMaterial
@@ -156,9 +172,11 @@ namespace mar {
         Material::loadShader(theMatrix);
         glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, texture_->matrix_.data());
         glBindTexture(GL_TEXTURE_2D, texture_->getTextureId());
+        ASSERT_GL("UnlitTexturedMaterial::loadShader", PLUS_FILE_LINE);
     }
 
     void UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
+        AC_DEBUG << "Material::setShader vsh: " << theVertexShader << " fsh: " << theFragmentShader;
         vertexShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
                           theVertexShader.empty() ? DEFAULT_TEXTURED_VERTEX_SHADER : theVertexShader);
         fragmentShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
@@ -170,6 +188,7 @@ namespace mar {
     UnlitTexturedMaterial::bindAttributes() {
         Material::bindAttributes();
         glBindAttribLocation(shaderProgram_, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
+        ASSERT_GL("UnlitTexturedMaterial::bindAttributes", PLUS_FILE_LINE);
     }
 
 }
