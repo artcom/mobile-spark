@@ -30,6 +30,7 @@ namespace masl {
             Request(const std::string & theURL, const std::string & thePersistenceFolder = "", 
                     const bool thePersistFlag = false, 
                     const std::string & theUserAgent = std::string("acMobileSpark"));
+            Request(const std::string & theURL, const std::vector<char> theBlock);
             virtual ~Request();
             CURL * getHandle() const;
             long getResponseCode() const;

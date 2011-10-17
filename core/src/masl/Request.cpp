@@ -74,10 +74,18 @@ namespace masl {
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
     }
 
+    Request::Request(const std::string & theURL, const std::vector<char> theBlock):
+        _myURL(theURL),
+        _myCurlHandle(0),
+        _myResponseBlock(theBlock) {
+    }
+
     Request::~Request() {
         DB(AC_TRACE << "cleaning up " << _myURL << endl);
-        curl_slist_free_all (_myHttpHeaderList);
-        curl_easy_cleanup(_myCurlHandle);
+        if (_myCurlHandle) {
+            curl_slist_free_all (_myHttpHeaderList);
+            curl_easy_cleanup(_myCurlHandle);
+        }
     }
 
     void
