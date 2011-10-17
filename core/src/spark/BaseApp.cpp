@@ -20,6 +20,8 @@
 #include <masl/AssetProvider.h>
 #include <animation/AnimationManager.h>
 
+#include <mar/TextureLoader.h>
+
 
 #ifdef ANDROID
     #include <android/AndroidAssetProvider.h>
@@ -94,6 +96,7 @@ namespace spark {
 
     void BaseApp::onPause() {
         AC_DEBUG << "BaseApp::onPause";
+        mar::TextureLoader::get().clear();
         if (_mySparkWindow) {
             OnPauseComponentVisitor myVisitor;
             visitComponents(myVisitor, _mySparkWindow);
