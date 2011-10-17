@@ -17,9 +17,10 @@ namespace masl {
     DEFINE_EXCEPTION(INetException, masl::Exception);
 
     Request::Request(const std::string & theURL, const std::string & thePersistenceFolder,
-                     const std::string & theUserAgent)
+                     const bool thePersistFlag, const std::string & theUserAgent)
       : _myURL(theURL),
         _myPersistenceFolder(thePersistenceFolder),
+        _myPersistFlag(thePersistFlag),
         _myUserAgent(theUserAgent),
         _myCurlHandle(0),
         _myLowSpeedLimit(0),
@@ -73,10 +74,18 @@ namespace masl {
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
     }
 
+    Request::Request(const std::string & theURL, const std::vector<char> theBlock):
+        _myURL(theURL),
+        _myCurlHandle(0),
+        _myResponseBlock(theBlock) {
+    }
+
     Request::~Request() {
         DB(AC_TRACE << "cleaning up " << _myURL << endl);
-        curl_slist_free_all (_myHttpHeaderList);
-        curl_easy_cleanup(_myCurlHandle);
+        if (_myCurlHandle) {
+            curl_slist_free_all (_myHttpHeaderList);
+            curl_easy_cleanup(_myCurlHandle);
+        }
     }
 
     void
@@ -406,13 +415,7 @@ namespace masl {
         if (_myOnErrorCallback) {
             (*_myOnErrorCallback)(shared_from_this());
         }
-        if (!_myPersistenceFolder.empty()) {
-            std::string fileToFind = _myPersistenceFolder + masl::getFilenamePart(_myURL);
-            _myResponseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
-            if (_myResponseBlock.size() > 0) {
-                onDone();
-            }
-        }
+        getPersistedDataIfAvailable();
     }
 
     bool
@@ -424,9 +427,26 @@ namespace masl {
 
     void
     Request::onDone() {
+        if (_myPersistFlag && !_myPersistenceFolder.empty()) {
+            AssetProviderSingleton::get().ap()->storeInFile(
+                    _myPersistenceFolder + masl::getFilenamePart(_myURL), _myResponseBlock);
+        }
         if (_myOnDoneCallback) {
             (*_myOnDoneCallback)(shared_from_this());
         }
+    }
+
+    bool
+    Request::getPersistedDataIfAvailable() {
+        if (!_myPersistenceFolder.empty()) {
+            std::string fileToFind = _myPersistenceFolder + masl::getFilenamePart(_myURL);
+            _myResponseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
+            if (_myResponseBlock.size() > 0) {
+                onDone();
+                return true;
+            }
+        }
+        return false;
     }
 
     // //////////////////////////////////////////////////////////
@@ -472,8 +492,9 @@ namespace masl {
 
     SequenceRequest::SequenceRequest(RequestManager & theRequestManager, const std::string & theURL,
                                      const std::string & thePersistenceFolder,
-                                     const std::string & theUserAgent) 
-                                    : Request(theURL, thePersistenceFolder, theUserAgent),
+                                     const bool thePersistFlag, const std::string & theUserAgent) 
+                                    : Request(theURL, thePersistenceFolder, 
+                                              thePersistFlag, theUserAgent),
                                      _myRequestManager(theRequestManager) {
     }
 
