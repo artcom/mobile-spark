@@ -28,6 +28,7 @@ namespace masl {
 
         public:
             Request(const std::string & theURL, const std::string & thePersistenceFolder = "", 
+                    const bool thePersistFlag = false, 
                     const std::string & theUserAgent = std::string("acMobileSpark"));
             virtual ~Request();
             CURL * getHandle() const;
@@ -96,10 +97,12 @@ namespace masl {
             //
             Request();
             void checkCurlStatus(CURLcode theStatusCode, const std::string & theWhere) const;
+            bool getPersistedDataIfAvailable();
 
         private:
             std::string         _myURL;
             std::string         _myPersistenceFolder;
+            bool                _myPersistFlag;
             std::string         _myProxy;
             std::string         _myUserAgent;
             CURL *              _myCurlHandle;
@@ -125,7 +128,7 @@ namespace masl {
     class SequenceRequest : public Request {
         public:
             SequenceRequest(RequestManager & theRequestManager, const std::string & theURL, 
-                            const std::string & thePersistenceFolder = "",
+                            const std::string & thePersistenceFolder = "", const bool thePersistFlag = false, 
                             const std::string & theUserAgent = std::string("acMobileSpark"));
             virtual ~SequenceRequest() {};
             void setNextRequest(const RequestPtr theNextRequest) { _myNextRequest = theNextRequest; };

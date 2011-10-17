@@ -19,15 +19,15 @@ namespace masl {
 
             //convenience functions
             void getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
-                            const std::string & thePersistenceFolder = "");
+                            const std::string & thePersistenceFolder = "", 
+                            const bool thePersistFlag = false, const bool theConservativeFlag = false);
             void postRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
             void getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
                                const RequestCallbackPtr theOneReadyCB, RequestCallbackPtr theAllReadyCB,
-                               const std::string & thePersistenceFolder = "");
-
-
+                               const std::string & thePersistenceFolder = "",
+                               const bool thePersistFlag = false, const bool theConservativeFlag = false);
         protected:
             virtual bool removeRequest(Request* theRequest);
         private:
