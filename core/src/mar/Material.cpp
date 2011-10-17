@@ -1,9 +1,9 @@
 #include "Material.h"
 
+#include <masl/AssetProvider.h>
 #include <masl/CallStack.h>
 #include <masl/Logger.h>
 
-#include "AssetProvider.h"
 #include "Texture.h"
 #include "Element.h"
 #include "openGL_functions.h"
@@ -49,7 +49,7 @@ namespace mar {
     }
 
     void Material::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        _myVertexShader = masl::AssetProviderSingleton::get().ap()->getStringFromFile(
                           theVertexShader.empty() ? DEFAULT_VERTEX_SHADER : theVertexShader);
     }
 
@@ -99,7 +99,7 @@ namespace mar {
 
     void UnlitColoredMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
         Material::setShader(theVertexShader, theFragmentShader);
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        _myFragmentShader = masl::AssetProviderSingleton::get().ap()->getStringFromFile(
                             theFragmentShader.empty() ? DEFAULT_COLORED_FRAGMENT_SHADER : theFragmentShader);
 
     }
@@ -135,9 +135,9 @@ namespace mar {
     }
 
     void UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        _myVertexShader = masl::AssetProviderSingleton::get().ap()->getStringFromFile(
                           theVertexShader.empty() ? DEFAULT_TEXTURED_VERTEX_SHADER : theVertexShader);
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        _myFragmentShader = masl::AssetProviderSingleton::get().ap()->getStringFromFile(
                           theFragmentShader.empty() ? DEFAULT_TEXTURED_FRAGMENT_SHADER : theFragmentShader);
 
     }

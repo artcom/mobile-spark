@@ -56,6 +56,28 @@ namespace masl {
     }
 
     bool
+    readBinaryFile(const std::string & theUTF8Filename, std::vector<char> & theContent) {
+         FILE * pFile;
+         std::string filepath;
+         searchFile(theUTF8Filename, filepath, true);
+         char *myCharBuffer;
+         pFile = fopen (filepath.c_str(),"rb");
+         if (pFile == NULL) {
+             throw OpenFileFailed("Error opening file " + theUTF8Filename, PLUS_FILE_LINE);
+         } else {
+            fseek(pFile,0,SEEK_END); //go to end
+            int len=ftell(pFile); //get position at end (length)
+            fseek(pFile,0,SEEK_SET); //go to beg.
+            myCharBuffer=(char *)malloc(len + 1); //malloc buffer
+            memset(myCharBuffer, 0, len + 1);
+            fread(myCharBuffer,len,1,pFile); //read into buffer
+            fclose(pFile);
+            copy(myCharBuffer, myCharBuffer + len, back_inserter(theContent));
+            free(myCharBuffer);
+        }
+        return true;
+    }
+    bool
     readFileLineByLine(const std::string & theUTF8Filename, std::vector<std::string> & theContent) {
         const size_t MAX_LENGTH = 1000;
         char buffer[MAX_LENGTH];

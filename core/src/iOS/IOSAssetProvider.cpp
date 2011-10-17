@@ -20,7 +20,7 @@ namespace ios
     {
     }
 
-    bool IOSAssetProvider::loadTextureFromPNG(const std::string & theFile, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb)
+    bool IOSAssetProvider::loadTextureFromPNG(const std::string & theFile, unsigned int & textureId, int & outWidth, int & outHeight, bool & rgb)
     {
         if (theFile.size() > 0 && theFile[0] == '/') {
             std::string filePath;
@@ -32,7 +32,6 @@ namespace ios
         }
         return mar::loadTextureFromPNG(_myAssetFolderPath + "/" + theFile, textureId, outWidth, outHeight, rgb);
     }
-
 
     std::string
     IOSAssetProvider::getStringFromFile(const std::string & theFile) const {
@@ -51,6 +50,22 @@ namespace ios
         return content;
     }
 
+    std::string
+    IOSAssetProvider::getBlockFromFile(const std::string & theFile) const {
+        std::vector<char> content;
+        if (theFile.size() > 0 && theFile[0] == '/') {
+            std::string filePath;
+            if (masl::searchFile(includePaths_, theFile, filePath)) {
+                masl::readBinaryFile(filePath, content);
+            } else {
+                AC_ERROR << "file " << theFile << " was not found in search paths";
+                throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
+            }
+            return content;
+        }
+        masl::readBinaryFile(_myAssetFolderPath + "/" + theFile, content);
+        return content;
+    }
 
     std::vector<std::string>
     IOSAssetProvider::getLineByLineFromFile(const std::string & theFile) const {

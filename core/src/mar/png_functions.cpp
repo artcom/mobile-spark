@@ -1,6 +1,6 @@
 #include "png_functions.h"
 
-#include "AssetProvider.h"
+#include <masl/AssetProvider.h>
 #include "Texture.h"
 
 
@@ -12,7 +12,7 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     GLuint textureId;
     int width, height;
     bool rgb;
-    if (AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb)) {
+    if (masl::AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb)) {
         theTexture->setTextureId(textureId);
         theTexture->transparency_ = !rgb;
         theTexture->width_ = width;

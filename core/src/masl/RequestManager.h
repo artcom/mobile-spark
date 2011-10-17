@@ -18,12 +18,14 @@ namespace masl {
             void setOnErrorCallback(RequestCallbackPtr theOnErrorCallback) { _myDefaultErrorCallback = theOnErrorCallback; };
 
             //convenience functions
-            void getRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
+            void getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
+                            const std::string & thePersistenceFolder = "");
             void postRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
             void getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
-                               const RequestCallbackPtr theOneReadyCB, RequestCallbackPtr theAllReadyCB);
+                               const RequestCallbackPtr theOneReadyCB, RequestCallbackPtr theAllReadyCB,
+                               const std::string & thePersistenceFolder = "");
 
 
         protected:
