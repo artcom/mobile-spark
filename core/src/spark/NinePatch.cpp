@@ -1,9 +1,9 @@
 #include "NinePatch.h"
 
-#include <mar/png_functions.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include "I18nContext.h"
 
 using namespace mar;
 

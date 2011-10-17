@@ -1,5 +1,7 @@
 #include "Rectangle.h"
 
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include "SparkComponentFactory.h"
 
 namespace spark {

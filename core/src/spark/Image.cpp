@@ -1,8 +1,8 @@
 #include "Image.h"
 
 #include <cml/mathlib/matrix_transform.h>
-#include <masl/string_functions.h> //select1st
-#include <mar/png_functions.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
 

@@ -6,6 +6,7 @@
 #include <masl/numeric_functions.h>
 
 #include <mar/AssetProvider.h>
+#include <mar/Shape.h>
 
 #include <spark/Window.h>
 #include <spark/Event.h>
