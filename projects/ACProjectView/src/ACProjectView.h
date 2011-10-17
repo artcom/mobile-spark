@@ -86,7 +86,7 @@ namespace acprojectview {
     //animations
     typedef void (ACProjectView::* ACProjectViewPropertySetterFunction)(float);
     typedef void (ACProjectView::* ACProjectViewMemberFunction)();
-    typedef animation::PropertyAnimation<ACProjectViewPtr, ACProjectViewPropertySetterFunction> ACProjectViewPropertyAnimation;
+    typedef animation::PropertyAnimation<ACProjectViewWeakPtr, ACProjectViewPropertySetterFunction> ACProjectViewPropertyAnimation;
     typedef masl::Ptr<ACProjectViewPropertyAnimation>  ACProjectViewPropertyAnimationPtr;
 
 };

@@ -192,13 +192,16 @@ namespace acprojectview {
             animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             if (!isPopUpOpen()) {
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY()-1, 0, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopup)), 
+                            &Widget::setY, _myPopup->getY()-1, 0, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.9, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopupBG)), 
+                            &Widget::setAlpha, _myPopupBG->getAlpha(), 0.9, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myRotateAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopUpPfeil, &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), M_PI, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopUpPfeil)), 
+                            &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), M_PI, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                                 
                 myAnimation->add(myRotateAnimation);
@@ -207,13 +210,16 @@ namespace acprojectview {
             } else {
                 _myDescription->reset();
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), -myTextHeight, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopup)), 
+                            &Widget::setY, _myPopup->getY(), -myTextHeight, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.5, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopupBG)), 
+                            &Widget::setAlpha, _myPopupBG->getAlpha(), 0.5, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myRotateAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopUpPfeil, &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), 0, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopUpPfeil)), 
+                            &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), 0, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 myAnimation->add(myRotateAnimation);
                 myAnimation->add(myPosYAnimation);
@@ -240,13 +246,13 @@ namespace acprojectview {
         _myDirection =dir;
         _myCurrentSlot = (_myCurrentSlot + dir+3) %3;
         WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_imageTransform0, &Widget::setX, _imageTransform0->getX(), _imageTransform0->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform0)), &Widget::setX, _imageTransform0->getX(), _imageTransform0->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr changeAnimation1 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_imageTransform1, &Widget::setX, _imageTransform1->getX(), _imageTransform1->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform1)), &Widget::setX, _imageTransform1->getX(), _imageTransform1->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr changeAnimation2 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_imageTransform2, &Widget::setX, _imageTransform2->getX(), _imageTransform2->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform2)), &Widget::setX, _imageTransform2->getX(), _imageTransform2->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());

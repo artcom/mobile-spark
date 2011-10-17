@@ -62,7 +62,7 @@ namespace acprojectview {
         int myTargetX = -(_myTextPtrs[myNewColumnIndex]->getMaxWidth() + _myColumnSpace) * myNewColumnIndex;
         
         WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(ptr, &Widget::setX, getX(), myTargetX, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(ptr)), &Widget::setX, getX(), myTargetX, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));        
         changeAnimation0->setOnFinish(masl::CallbackPtr(new MultiColumnTextCB(ptr, &MultiColumnText::onAnimationFinished)));
                             
