@@ -1,6 +1,7 @@
 #include "openGL_functions.h"
 
 #include <masl/Logger.h>
+#include <masl/string_functions.h>
 
 namespace mar {
 
@@ -18,7 +19,7 @@ namespace mar {
         for (GLint error = glGetError(); error; error
                 = glGetError()) {
             AC_PRINT << "after " << op << "() glError (" << error << ") " << where;
-            //throw GLRenderException("glError(" + error + "after " + op, where);
+            throw GLRenderException(std::string("glError(") + masl::as_string(error) + "after " + op, where);
         }
     }
 
