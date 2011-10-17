@@ -46,7 +46,7 @@
             float myRoll = deviceMotionData.attitude.roll*180/M_PI;
             float myYaw = deviceMotionData.attitude.yaw*180/M_PI;
             float myPitch = deviceMotionData.attitude.pitch*180/M_PI;
-            NSString *eventCall = [NSString  stringWithFormat:@"<SensorEvent type='ORIENTATION' value0='%f' value1='%f' value2='%f'/>",myYaw, myRoll, myPitch];
+            NSString *eventCall = [NSString  stringWithFormat:@"<SensorEvent type='ORIENTATION' value0='%f' value1='%f' value2='%f'/>",myYaw, myPitch, myRoll];
             [self throwEventToSpark:eventCall];
         }];
         
