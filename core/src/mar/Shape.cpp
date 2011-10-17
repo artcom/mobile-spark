@@ -198,6 +198,8 @@ namespace mar {
         edgeRight_ = theRightEdge;
         edgeBottom_ = theBottomEdge;
         setVertexData();
+        ElementPtr myElement = elementList_[0];
+        myElement->updateCompleteVertexBuffersContent();
     }
 
     void

@@ -5,17 +5,20 @@
 namespace mar {
 
     DEFINE_EXCEPTION(ShaderCreationException, masl::Exception)
+    DEFINE_EXCEPTION(GLRenderException, masl::Exception)
 
     //////////////////////////////////////////logging
+
     void printGLString(const char *name, GLenum s) {
         const char *v = (const char *) glGetString(s);
         AC_INFO << "GL " << name << " = " << v;
     }
 
-    void checkGlError(const char* op) {
+    void checkGlError(const std::string & op, const std::string & where) {
         for (GLint error = glGetError(); error; error
                 = glGetError()) {
-            AC_ERROR << "after " << op << "() glError (" << error << ")";
+            AC_PRINT << "after " << op << "() glError (" << error << ") " << where;
+            //throw GLRenderException("glError(" + error + "after " + op, where);
         }
     }
 
@@ -80,12 +83,16 @@ namespace mar {
                     glGetProgramInfoLog(program, bufLength, NULL, info);
                     AC_ERROR << "Could not link program:\n " << info;
                     glDeleteProgram(program);
+                    glDeleteShader(vertexShader);
+                    glDeleteShader(pixelShader);
                     program = 0;
                     throw ShaderCreationException(std::string("Could not link program ") + info, PLUS_FILE_LINE);
                 }
                 glDeleteProgram(program);
             }
         }
+        glDeleteShader(vertexShader);
+        glDeleteShader(pixelShader);
         return program;
     }
 
@@ -97,8 +104,8 @@ namespace mar {
          } else {
              myHandle = glGetAttribLocation(theProgram, theVariableName.c_str());
          }
-         checkGlError(std::string(theUniformFlag ? "glGetUniformLocation" : "glGetAttribLocation").
-                             append(" ").append(theVariableName).c_str());
+        ASSERT_GL(std::string(theUniformFlag ? "glGetUniformLocation" : "glGetAttribLocation").
+                             append(" ").append(theVariableName).c_str(), PLUS_FILE_LINE);
          AC_DEBUG << (theUniformFlag?"glGetUniformLocation":"glGetAttribLocation") << "(\"" << theVariableName << "\") = " << myHandle;
          return myHandle;
      }

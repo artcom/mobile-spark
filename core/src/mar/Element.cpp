@@ -1,5 +1,6 @@
 #include "Element.h"
 #include <masl/Logger.h>
+#include <mar/openGL_functions.h>
 
 
 namespace mar {
@@ -16,10 +17,16 @@ namespace mar {
     }
 
     Element::~Element() {
-        glDeleteBuffers(1, &vertexBuffer_);
-        glDeleteBuffers(1, &indexBuffer_);
+        if (vertexBuffer_) {
+            glDeleteBuffers(1, &vertexBuffer_);
+        }
+        if (indexBuffer_) {
+            glDeleteBuffers(1, &indexBuffer_);
+        }
 #ifdef iOS
-        glDeleteVertexArraysOES(1, &vertexArrayObject_);
+        if (vertexArrayObject_) {
+            glDeleteVertexArraysOES(1, &vertexArrayObject_);
+        }
 #endif
     }
 
@@ -63,6 +70,7 @@ namespace mar {
 #elif ANDROID
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 #endif
+        ASSERT_GL("Element::createVertexBuffers", PLUS_FILE_LINE);
     }
 
     void
@@ -70,7 +78,6 @@ namespace mar {
         material->loadShader(theMatrix);
         if (!vertexBuffer_ || ! indexBuffer_) {
             createVertexBuffers();
-            updateCompleteVertexBuffersContent();
         }
 #ifdef ANDROID
         int offset = 0;
@@ -82,6 +89,7 @@ namespace mar {
         }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer_);
 #endif
+        ASSERT_GL("Element::loadData", PLUS_FILE_LINE);
     }
 
     void
@@ -93,6 +101,8 @@ namespace mar {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 #endif
+        material->unloadShader();
+        ASSERT_GL("Element::unloadData", PLUS_FILE_LINE);
     }
 
     void
@@ -104,14 +114,17 @@ namespace mar {
 #elif ANDROID
         glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, 0);
 #endif
-        checkGlError("glDrawElements");
+        ASSERT_GL("Element::draw", PLUS_FILE_LINE);
     }
 
 
     void Element::updateCompleteVertexBuffersContent() {
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
-        glBufferSubData(GL_ARRAY_BUFFER,0,(numVertices * stride_), vertexData_.get());
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        if (vertexBuffer_) {
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+            glBufferSubData(GL_ARRAY_BUFFER,0,(numVertices * stride_), vertexData_.get());
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            ASSERT_GL("Element::updateCompleteVertexBuffersContent", PLUS_FILE_LINE);
+        }
     }
 
     /////////////////////////////////////////////////////////////ElementWithNormals
