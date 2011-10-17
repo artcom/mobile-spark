@@ -50,7 +50,7 @@ namespace ios
         return content;
     }
 
-    std::string
+    std::vector<char>
     IOSAssetProvider::getBlockFromFile(const std::string & theFile) const {
         std::vector<char> content;
         if (theFile.size() > 0 && theFile[0] == '/') {
