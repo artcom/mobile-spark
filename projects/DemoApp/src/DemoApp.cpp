@@ -261,11 +261,23 @@ namespace demoapp {
         _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAssetRequestReady)),
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),"/downloads/");
+        AC_DEBUG << "headers of spark-request";
+        std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
+        for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
+            AC_DEBUG << "http headers " << it->first << ": " << it->second; 
+        }
+        AC_DEBUG << "last modified: " << theRequest->getResponseHeader("Last-Modified");
     }
     void DemoApp::onAssetRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on Asset ready, request url was " << theRequest->getURL();
         std::vector<char> myBlock = theRequest->getResponseBinary();
         masl::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
+        AC_DEBUG << "headers of png-request";
+        std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
+        for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
+            AC_DEBUG << "http headers " << it->first << ": " << it->second; 
+        }
+        AC_DEBUG << "last modified: " << theRequest->getResponseHeader("Last-Modified");
     }
     void DemoApp::onAllAssetsRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on AllAsset Ready";
