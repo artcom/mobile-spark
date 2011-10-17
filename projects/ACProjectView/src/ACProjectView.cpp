@@ -5,7 +5,7 @@
 #include <masl/MobileSDK.h>
 #include <masl/numeric_functions.h>
 
-#include <mar/AssetProvider.h>
+#include <masl/AssetProvider.h>
 
 #include <spark/Window.h>
 #include <spark/Event.h>
@@ -302,7 +302,7 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
+        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
         onIdle();
     }
 
