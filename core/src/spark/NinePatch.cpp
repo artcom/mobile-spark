@@ -41,7 +41,7 @@ namespace spark {
 
         UnlitTexturedMaterialPtr myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(data_));
         myMaterial->setCustomHandles(customShaderValues_);
-        myMaterial->createShader(vertexShader_, fragmentShader_); 
+        myMaterial->setShader(vertexShader_, fragmentShader_); 
         NinePatchShapePtr myShape = NinePatchShapePtr(new NinePatchShape(myMaterial));
         myShape->setEdges(edgeLeft_, edgeTop_, edgeRight_, edgeBottom_);
         _myShape = myShape;

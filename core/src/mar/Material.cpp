@@ -7,7 +7,6 @@
 #include "Texture.h"
 #include "Element.h"
 #include "openGL_functions.h"
-#include "png_functions.h"
 
 
 
@@ -23,13 +22,31 @@ namespace mar {
 
     Material::~Material() {
         AC_DEBUG << "Material::dtor "<<(void*)this;
-        glUseProgram(0);
-        glDeleteProgram(shaderProgram_);
+        deleteShader();
+    }
+
+    //ANDROID ONLY: gl context is lost, so reset shaders
+    void
+    Material::resetGL() {
+        //deleteShader();
+        shaderProgram_ = 0;
     }
 
     void
-    Material::createShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        setShader(theVertexShader, theFragmentShader);
+    Material::deleteShader() {
+        if (shaderProgram_) {
+            glUseProgram(0);
+            glDeleteProgram(shaderProgram_);
+            shaderProgram_ = 0;
+            ASSERT_GL("glDeleteProgram", PLUS_FILE_LINE);
+        }
+    }
+
+    void
+    Material::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
+        AC_DEBUG << "Material::setShader vsh: " << theVertexShader << " fsh: " << theFragmentShader;
+        vertexShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
+                          theVertexShader.empty() ? DEFAULT_VERTEX_SHADER : theVertexShader);
     }
 
     void
@@ -40,8 +57,8 @@ namespace mar {
     }
 
     void
-    Material::initGL() {
-        AC_DEBUG << "Material initGL "<<(void*)this;
+    Material::initShader() {
+        AC_DEBUG << "Material initShader "<<(void*)this;
         if (vertexShader_.empty() || fragmentShader_.empty()) {
             setShader();
         }
@@ -49,7 +66,6 @@ namespace mar {
         if (!shaderProgram_) {
             AC_ERROR << "Could not create program.";
             throw ShaderCreationException("problems during shader program creation of " + vertexShader_ + " or/and " + fragmentShader_, PLUS_FILE_LINE);
-            return;
         }
         bindAttributes();
         setHandles();
@@ -59,15 +75,12 @@ namespace mar {
 
     void
     Material::unloadShader() {
-        //glUseProgram(0);
+        //glUseProgram(0); //XXX: is this neccessary?
     }
     void
     Material::loadShader(const matrix & theMatrix) {
-        if (vertexShader_.empty() || fragmentShader_.empty()) {
-            setShader();
-        }
         if (!shaderProgram_) {
-            initGL();
+            initShader();
         }
         glUseProgram(shaderProgram_);
         ASSERT_GL("glUseProgram", PLUS_FILE_LINE);
@@ -79,12 +92,6 @@ namespace mar {
             glUniform1f(it->second.first, it->second.second);
         }
         ASSERT_GL("Material::loadShader", PLUS_FILE_LINE);
-    }
-
-    void
-    Material::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        vertexShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
-                          theVertexShader.empty() ? DEFAULT_VERTEX_SHADER : theVertexShader);
     }
 
     void
@@ -134,54 +141,78 @@ namespace mar {
     UnlitColoredMaterial::~UnlitColoredMaterial() {
     }
 
-    void UnlitColoredMaterial::loadShader(const matrix & theMatrix) {
+    void
+    UnlitColoredMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glUniform4fv(colorHandle_, 1, &(diffuse_[0]));
         ASSERT_GL("UnlitColoredMaterial::loadShader", PLUS_FILE_LINE);
     }
 
-    void UnlitColoredMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
+    void
+    UnlitColoredMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
         Material::setShader(theVertexShader, theFragmentShader);
         fragmentShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
                             theFragmentShader.empty() ? DEFAULT_COLORED_FRAGMENT_SHADER : theFragmentShader);
 
     }
 
-    void UnlitColoredMaterial::setHandles() {
+    void
+    UnlitColoredMaterial::setHandles() {
         Material::setHandles();
         colorHandle_ = getHandle("u_color");
     }
 
     //////////////////////////////////////////////////// UnlitTexturedMaterial
-    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) : Material(), src_(theSrc), textureMatrixHandle_(0) {
-        texture_ = TexturePtr(new Texture());
-        if (src_ != "") {
-            loadTextureFromPNG(src_, texture_);
-            transparency_ = texture_->transparency_;
-        }
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) : Material(), textureMatrixHandle_(0) {
+        setTexture(theSrc);
     }
 
     UnlitTexturedMaterial::~UnlitTexturedMaterial() {
     }
 
-    void UnlitTexturedMaterial::setHandles() {
+    //ANDROID ONLY: gl context is lost, so reset textures
+    void
+    UnlitTexturedMaterial::resetGL() {
+        Material::resetGL();
+        if (texture_) {
+            setTexture(texture_->getSrc());
+        }
+    }
+
+    void
+    UnlitTexturedMaterial::setTexture(const TexturePtr theTexture) {
+        texture_ = TexturePtr(new Texture());
+        transparency_ = texture_->transparency_;
+    }
+
+    void
+    UnlitTexturedMaterial::setTexture(const std::string & theSrc) {
+        if (theSrc != "") {
+            texture_ = TexturePtr(new Texture());
+            texture_->setSrc(theSrc);
+            transparency_ = texture_->transparency_;
+        }
+    }
+
+    void
+    UnlitTexturedMaterial::setHandles() {
         Material::setHandles();
         textureMatrixHandle_ = getHandle("u_textureMatrix");
     }
-    void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
+
+    void
+    UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, texture_->matrix_.data());
         glBindTexture(GL_TEXTURE_2D, texture_->getTextureId());
         ASSERT_GL("UnlitTexturedMaterial::loadShader", PLUS_FILE_LINE);
     }
 
-    void UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        AC_DEBUG << "Material::setShader vsh: " << theVertexShader << " fsh: " << theFragmentShader;
-        vertexShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
-                          theVertexShader.empty() ? DEFAULT_TEXTURED_VERTEX_SHADER : theVertexShader);
+    void
+    UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
+        Material::setShader(theVertexShader.empty() ? DEFAULT_TEXTURED_VERTEX_SHADER : theVertexShader, theFragmentShader);
         fragmentShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
                           theFragmentShader.empty() ? DEFAULT_TEXTURED_FRAGMENT_SHADER : theFragmentShader);
-
     }
 
     void

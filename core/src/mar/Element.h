@@ -34,12 +34,12 @@ namespace mar {
         Element();
         virtual ~Element();
 
-        void initGL();
+        void resetGL();
         void draw() const;
-        virtual void loadData(const matrix & theMatrix);
-        virtual void unloadData() const;
-        virtual void createVertexBuffers();
-        virtual void updateCompleteVertexBuffersContent();
+        void loadData(const matrix & theMatrix);
+        void unloadData() const;
+        void createVertexBuffers();
+        void updateCompleteVertexBuffersContent();
         MaterialPtr material_;
         unsigned int numVertices_;
         unsigned int numIndices_;
@@ -48,6 +48,7 @@ namespace mar {
         boost::shared_array<GLushort> indexDataVBO_;
 
     protected:
+        void deleteVertexBuffers();
         std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
         #ifdef iOS
         GLuint vertexArrayObject_;

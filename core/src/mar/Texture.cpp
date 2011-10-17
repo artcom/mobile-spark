@@ -12,13 +12,14 @@ namespace mar {
         unbind();
     }
 
-    GLuint
-    Texture::getTextureId() const {
-        return textureId_;
-    }
-
     void
-    Texture::setTextureId(GLuint theTextureId){
+    Texture::setSrc(const std::string & theSrc) {
+        AC_DEBUG << "setSrc " << theSrc << " for Texture: " << (void*)this;
+        src_ = theSrc;
+        loadTextureFromPNG(src_, shared_from_this());
+    }
+    void
+    Texture::setTextureId(GLuint theTextureId) {
         AC_DEBUG << "setTexture " << theTextureId << " for Texture: " << (void*)this;
         textureId_ = theTextureId;
     }

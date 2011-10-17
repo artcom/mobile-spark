@@ -24,7 +24,7 @@ namespace mar {
         virtual ~Shape();
         void render(const matrix & theMvp) const;
         void updateCustomHandles(const std::map<std::string, float> & theShaderValues);
-        void initGL();
+        void resetGL();
         virtual void setDimensions(const vector2 & theLowerLeftCorner, const vector2 & theUpperRightCorner) = 0;
         virtual void setTexCoords(const vector2 & theUV0, const vector2 & theUV1, const vector2 & theUV2, const vector2 & theUV3) {};
         const BoundingBox & getBoundingBox() const { return boundingBox_;};

@@ -17,23 +17,39 @@ namespace mar {
     }
 
     Element::~Element() {
-        if (vertexBuffer_) {
-            glDeleteBuffers(1, &vertexBuffer_);
-        }
-        if (indexBuffer_) {
-            glDeleteBuffers(1, &indexBuffer_);
-        }
+        deleteVertexBuffers();
+    }
+
+    //ANDROID ONLY: gl context is lost, so reset all buffers to get new ones
+    void
+    Element::resetGL() {
+        material_->resetGL();
+        vertexBuffer_ = 0;
+        indexBuffer_ = 0;
 #ifdef iOS
-        if (vertexArrayObject_) {
-            glDeleteVertexArraysOES(1, &vertexArrayObject_);
-        }
+        vertexArrayObject_ = 0;
 #endif
     }
 
     void
-    Element::initGL() {
-        material_->initGL();
-        createVertexBuffers();
+    Element::deleteVertexBuffers() {
+        if (vertexBuffer_) {
+            glDeleteBuffers(1, &vertexBuffer_);
+            ASSERT_GL("glDeleteBuffers vertexBuffer", PLUS_FILE_LINE);
+            vertexBuffer_ = 0;
+        }
+        if (indexBuffer_) {
+            glDeleteBuffers(1, &indexBuffer_);
+            ASSERT_GL("glDeleteBuffers indexBuffer", PLUS_FILE_LINE);
+            indexBuffer_ = 0;
+        }
+#ifdef iOS
+        if (vertexArrayObject_) {
+            glDeleteVertexArraysOES(1, &vertexArrayObject_);
+            vertexArrayObject_ = 0;
+        }
+#endif
+        ASSERT_GL("Element::deleteVertexBuffers", PLUS_FILE_LINE);
     }
 
     void
