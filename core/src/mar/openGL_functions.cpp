@@ -15,7 +15,7 @@ namespace mar {
     void checkGlError(const char* op) {
         for (GLint error = glGetError(); error; error
                 = glGetError()) {
-            AC_ERROR << "after " << op << "() glError (0x" << error << ")";
+            AC_ERROR << "after " << op << "() glError (" << error << ")";
         }
     }
 
