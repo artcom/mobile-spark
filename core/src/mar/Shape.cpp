@@ -40,7 +40,7 @@ namespace mar {
     }
 
     void
-    Shape::updateHandles(const std::map<std::string, float> & theShaderValues) {
+    Shape::updateCustomHandles(const std::map<std::string, float> & theShaderValues) {
         for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
                                                       it != elementList_.end(); ++it) {
             (*it)->material->setCustomValues(theShaderValues);

@@ -76,12 +76,17 @@ namespace mar {
     Material::setHandles() {
         mvpHandle_ = getHandle("u_mvpMatrix");
         alphaHandle_ = getHandle("a_alpha");
+        for (std::map<std::string, std::pair<GLuint, float> >::iterator it = customHandlesAndValues_.begin(); 
+                it != customHandlesAndValues_.end(); ++it)
+        {
+            it->second.first = getHandle(it->first);
+        }
     }
 
     void
     Material::setCustomHandles(const std::map<std::string, float> & theCustomHandles) {
         for (std::map<std::string, float>::const_iterator it = theCustomHandles.begin(); it != theCustomHandles.end(); ++it) {
-            customHandlesAndValues_[it->first] = std::pair<GLuint, float>(getHandle(it->first), it->second);
+            customHandlesAndValues_[it->first] = std::pair<GLuint, float>(0, it->second);
         }
     }
 
