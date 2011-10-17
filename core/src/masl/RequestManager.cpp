@@ -37,7 +37,6 @@ namespace masl {
         theRequest->onStart();
         curl_multi_add_handle(_myCurlMultiHandle, theRequest->getHandle());
         _myRequests.push_back(theRequest);
-
     }
 
     bool 
@@ -129,8 +128,9 @@ namespace masl {
 
     void 
     RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
-                               const std::string & thePersistenceFolder) {
-        RequestPtr myRequest = RequestPtr(new Request(theUrl, thePersistenceFolder));
+                               const std::string & thePersistenceFolder,
+                               const bool thePersistFlag, const bool theConservativeFlag) {
+        RequestPtr myRequest = RequestPtr(new Request(theUrl, thePersistenceFolder, thePersistFlag));
         myRequest->setOnDoneCallback(theCB);
         if (_myDefaultErrorCallback) {
             myRequest->setOnErrorCallback(_myDefaultErrorCallback);
@@ -175,11 +175,13 @@ namespace masl {
     void
     RequestManager::getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
                                   const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB,
-                                  const std::string & thePersistenceFolder) {
+                                  const std::string & thePersistenceFolder, 
+                                  const bool thePersistFlag, const bool theConservativeFlag) {
         RequestPtr myNextRequest;
         for (int i = theURLLastPartList.size() - 1; i >= 0 ; --i) {
             std::string myUrl = theBaseURL + "/" + theURLLastPartList[i];
-            SequenceRequestPtr myRequest = SequenceRequestPtr(new SequenceRequest(*this, myUrl, thePersistenceFolder));
+            SequenceRequestPtr myRequest = SequenceRequestPtr(
+                new SequenceRequest(*this, myUrl, thePersistenceFolder, thePersistFlag));
             myRequest->setOnDoneCallback(theOneReadyCB);
             myRequest->get();
             if (myNextRequest) {

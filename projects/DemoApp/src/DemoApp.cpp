@@ -257,10 +257,10 @@ namespace demoapp {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         std::string myNewSpark = theRequest->getResponseString();
         std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
-        masl::AssetProviderSingleton::get().ap()->storeInFile("downloads/scene.spark", myNewSpark);
         _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAssetRequestReady)),
-            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),"/downloads/");
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),
+            "/downloads/", true, false);
         AC_DEBUG << "headers of spark-request";
         std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
         for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
@@ -270,8 +270,6 @@ namespace demoapp {
     }
     void DemoApp::onAssetRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on Asset ready, request url was " << theRequest->getURL();
-        std::vector<char> myBlock = theRequest->getResponseBinary();
-        masl::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
         AC_DEBUG << "headers of png-request";
         std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
         for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
@@ -439,7 +437,8 @@ namespace demoapp {
             _myLoadingAnimation = mySequence;
             DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
             _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
-                masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),"/downloads/");
+                masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),
+                "/downloads/", true, false);
         }
     }
 
