@@ -57,7 +57,7 @@ namespace masl {
             if (ctxt->valid == 0) {  //does not validate, don't know why
                 AC_ERROR << "Failed to validate " << theFilename;
             } else {
-                AC_DEBUG << "xml is valid";
+                AC_TRACE << "xml is valid";
             }
         }
 
@@ -102,7 +102,7 @@ namespace masl {
                 xmlFreeParserCtxt(ctxt);
                 throw XMLParsingException("Failed to parse XMLString: '" + std::string(myXMLError->message) + "'", PLUS_FILE_LINE); 
             } else {
-                AC_DEBUG << "xml is valid";
+                AC_TRACE << "xml is valid";
             }
         }
 
