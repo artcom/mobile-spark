@@ -109,10 +109,6 @@ namespace demoapp {
         spark::EventCallbackPtr myPinchCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPinchGesture));
         _mySparkWindow->addEventListener(GestureEvent::PINCH, myPinchCB);
         
-        //test pan gestures
-        spark::EventCallbackPtr myPanCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPanGesture));
-        _mySparkWindow->addEventListener(GestureEvent::PAN, myPanCB);
-        
         //test sensors
         spark::EventCallbackPtr mySensorCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorEvent));
         _mySparkWindow->addEventListener(SensorEvent::ORIENTATION, mySensorCB);
@@ -346,20 +342,6 @@ namespace demoapp {
 		}
     }
     
-    float beforeMovePanX, beforeMovePanY;
-    void DemoApp::onPanGesture(EventPtr theEvent) {
-        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
-        	AC_DEBUG << "on Pan Gesture";
-        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-        	float myDX = myEvent->getTranslateX();
-        	float myDY = myEvent->getTranslateY(); 
-        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform");
-            TransformPtr myTransform = boost::static_pointer_cast<Transform>(my3dView);
-    		myTransform->setX(myDX / 4);
-    		myTransform->setY(myDY / 4);
-		}
-    }
-
 
 	void DemoApp::onSensorEvent(EventPtr theEvent) {
 		if (_mySlides[_myCurrentSlide]->getName() != "3D-Viewer-Slide") return;
