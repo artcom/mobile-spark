@@ -18,6 +18,7 @@ namespace demoapp {
             spark::TextPtr subtitleComponent_;
     };
     typedef masl::Ptr<SlideImpl> SlideImplPtr;
+    typedef masl::WeakPtr<SlideImpl> SlideImplWeakPtr;
 };
 
 #endif
