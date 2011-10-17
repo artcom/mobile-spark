@@ -49,7 +49,7 @@ namespace spark {
             float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
             float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
             float myShapeWidth = (myWindow->getOrientation() == Orientation::PORTRAIT) ? height : width;
-            if (!getShape() || (myShapeWidth != 0 && myShapeWidth != getShape()->getWidth())) {
+            if (myShapeWidth != 0 && myShapeWidth != getShape()->getWidth()) {
                 setGeometry();
             }
             masl::MobileSDK_Singleton::get().getNative()->updateCameraTexture();
