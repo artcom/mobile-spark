@@ -27,7 +27,8 @@ namespace masl {
         friend class RequestManager;
 
         public:
-            Request(const std::string & theURL, const std::string & theUserAgent = std::string("acMobileSpark"));
+            Request(const std::string & theURL, const std::string & thePersistenceFolder = "", 
+                    const std::string & theUserAgent = std::string("acMobileSpark"));
             virtual ~Request();
             CURL * getHandle() const;
             long getResponseCode() const;
@@ -98,6 +99,7 @@ namespace masl {
 
         private:
             std::string         _myURL;
+            std::string         _myPersistenceFolder;
             std::string         _myProxy;
             std::string         _myUserAgent;
             CURL *              _myCurlHandle;
@@ -123,6 +125,7 @@ namespace masl {
     class SequenceRequest : public Request {
         public:
             SequenceRequest(RequestManager & theRequestManager, const std::string & theURL, 
+                            const std::string & thePersistenceFolder = "",
                             const std::string & theUserAgent = std::string("acMobileSpark"));
             virtual ~SequenceRequest() {};
             void setNextRequest(const RequestPtr theNextRequest) { _myNextRequest = theNextRequest; };

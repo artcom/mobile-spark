@@ -86,10 +86,9 @@ namespace acprojectview {
         _myIsAnimating = true;      
         _myCurrentSlide += dir;
         WidgetPropertyAnimationPtr changeAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myPtr, &Widget::setX, myPtr->getX(), 
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(myPtr)), &Widget::setX, myPtr->getX(), 
                     myPtr->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
-         
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myAnimation->add(changeAnimation);

@@ -20,15 +20,15 @@ namespace android {
 
         ////Just for debug, print APK contents
         DB(int numFiles = zip_get_num_files(*theAPKArchive);
-        
-        for (int i=0; i<numFiles; i++) {
-            const char* name = zip_get_name(*theAPKArchive, i, 0);
-            if (name == NULL) {
-                AC_ERROR << "Error reading zip file name at index " << zip_strerror(*theAPKArchive);
-                return;
+            for (int i=0; i<numFiles; i++) {
+                const char* name = zip_get_name(*theAPKArchive, i, 0);
+                if (name == NULL) {
+                    AC_ERROR << "Error reading zip file name at index " << zip_strerror(*theAPKArchive);
+                    return;
+                }
+                AC_PRINT << "File " << i >> ": " << name;
             }
-            AC_PRINT << "File " << i >> ": " << name;
-        })
+        )
     }
 
     std::string readFromPackage(zip* theAPKArchive, const string &  theFileName) {
@@ -47,6 +47,26 @@ namespace android {
         char buffer[MAX_LENGTH];
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
         content = std::string(buffer, size);
+        zip_fclose(file);
+        return content;
+    }
+
+    std::vector<char> readBinaryFromPackage(zip* theAPKArchive, const string &  theFileName) {
+        std::vector<char> content;
+        const size_t MAX_LENGTH = 5000;
+        if (!theAPKArchive) {
+            AC_ERROR << "apk broken";
+            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
+        }
+        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
+        if (!file) {
+            AC_ERROR << "Error opening " << theFileName << " from APK";
+            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+            return content;
+        }
+        char buffer[MAX_LENGTH];
+        size_t size = zip_fread(file, buffer, MAX_LENGTH);
+        copy(buffer, buffer + size, back_inserter(content));
         zip_fclose(file);
         return content;
     }

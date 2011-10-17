@@ -18,5 +18,6 @@ namespace spark {
     };
 
     typedef masl::Ptr<Shape3D> Shape3DPtr;
+    typedef masl::WeakPtr<Shape3D> Shape3DWeakPtr;
 };
 #endif

@@ -89,14 +89,15 @@ namespace spark {
     };
 
     typedef masl::Ptr<Widget> WidgetPtr;
+    typedef masl::WeakPtr<Widget> WidgetWeakPtr;
 
     //animations
     typedef void (Widget::* WidgetPropertySetterFunction)(float);
     typedef void (Widget::* WidgetMemberFunction)();
-    typedef animation::PropertyAnimation<WidgetPtr, WidgetPropertySetterFunction> WidgetPropertyAnimation;
+    typedef animation::PropertyAnimation<WidgetWeakPtr, WidgetPropertySetterFunction> WidgetPropertyAnimation;
     typedef masl::Ptr<WidgetPropertyAnimation>  WidgetPropertyAnimationPtr;
-    typedef masl::Ptr<masl::MemberFunctionCallback<Widget, WidgetPtr> > WidgetCallbackPtr;
-    typedef MemberFunctionEventCallback<Widget, WidgetPtr> WidgetEventCallback;
-    typedef masl::Ptr<MemberFunctionEventCallback<Widget, WidgetPtr> > WidgetEventCallbackPtr;
+    typedef masl::Ptr<masl::MemberFunctionCallback<Widget, WidgetWeakPtr> > WidgetCallbackPtr;
+    typedef MemberFunctionEventCallback<Widget, WidgetWeakPtr> WidgetEventCallback;
+    typedef masl::Ptr<MemberFunctionEventCallback<Widget, WidgetWeakPtr> > WidgetEventCallbackPtr;
 };
 #endif

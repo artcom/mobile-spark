@@ -110,7 +110,7 @@ namespace acprojectview {
         _myProjectMenu->setSensible(true);
         _myProjectMenu->arrangeProjects();
         WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myStartScreenPtr, &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myStartScreenPtr)), &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
@@ -214,16 +214,16 @@ namespace acprojectview {
         int fromScale   = showProject ? 0 :  1;
         
         WidgetPropertyAnimationPtr myZoomAnimationX = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myProjectViewer, &Widget::setScaleX, fromScale, toScale, _myAnimationTime,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myProjectViewer)), &Widget::setScaleX, fromScale, toScale, _myAnimationTime,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr myZoomAnimationY = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myProjectViewer, &Widget::setScaleY, fromScale, toScale, _myAnimationTime,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myProjectViewer)), &Widget::setScaleY, fromScale, toScale, _myAnimationTime,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr myTransAnimationX = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myProjectViewer, &Widget::setX, fromX, toX, _myAnimationTime,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myProjectViewer)), &Widget::setX, fromX, toX, _myAnimationTime,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr myTransAnimationY = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_myProjectViewer, &Widget::setY, fromY, toY, _myAnimationTime,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myProjectViewer)), &Widget::setY, fromY, toY, _myAnimationTime,
                     animation::EasingFnc(animation::easeInOutQuad)));
            
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
@@ -342,8 +342,8 @@ namespace acprojectview {
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(true);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setAlpha(0.0f);
         animation::ParallelAnimationPtr myFadeAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
-        myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?1:0], &Widget::setAlpha, 0, 1, _myKenBurnsFadeDuration)));
-        myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?0:1], &Widget::setAlpha, 1, 0, _myKenBurnsFadeDuration)));
+        myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myIdleScreenImagePtrs[firstIdleImageVisible_?1:0])), &Widget::setAlpha, 0, 1, _myKenBurnsFadeDuration)));
+        myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myIdleScreenImagePtrs[firstIdleImageVisible_?0:1])), &Widget::setAlpha, 1, 0, _myKenBurnsFadeDuration)));
         animation::AnimationManager::get().play(myFadeAnimation);
         std::map<std::string, float>::iterator it = _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->customShaderValues_.find("a_mode");
         it->second = masl::random(0.0f, 1.0f);
