@@ -98,6 +98,11 @@ namespace acprojectview {
         spark::WidgetPtr myLoadAnim = boost::static_pointer_cast<Window>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("apploaderanim", true));
         myLoadAnim->setX(_mySparkWindow->getSize()[0]/2.0);
         myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
+        
+        
+    }
+    void ACProjectView::onFrame(EventPtr theEvent) {
+        BaseApp::onFrame(theEvent);
     }
     
    
@@ -130,12 +135,7 @@ namespace acprojectview {
             if (_mySeqAnimation) {
                 _mySeqAnimation->cancel();
             }
-            //return;
         }
-        
-        /*if (_myAnimatingFlag || _myProjectMenu->isSensible()) {
-            return;
-        }*/
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         if (myEvent->getY() > ProjectViewerImpl::POPUP_HEIGHT * 2 && !_myProjectViewer->isPopUpOpen()) { 
             MobileSDK_Singleton::get().getNative()->vibrate(10);                
@@ -172,8 +172,20 @@ namespace acprojectview {
         _myProjectMenu->setVisible(true);
     }
     
-    void ACProjectView::onLoadInitialSet() {        
-        _myProjectViewer->loadInitialSet();
+    void ACProjectView::onLoadInitialSet0() {        
+        _myProjectViewer->loadInitialSet0();
+    }
+    void ACProjectView::onLoadInitialSet1() {        
+        _myProjectViewer->loadInitialSet1();
+    }
+    void ACProjectView::onLoadInitialSet2() {        
+        _myProjectViewer->loadInitialSet2();
+    }
+    void ACProjectView::onLoadInitialSet3() {        
+        _myProjectViewer->loadInitialSet3();
+    }
+    void ACProjectView::onLoadInitialSet4() {        
+        _myProjectViewer->loadInitialSet4();
     }
     
     
@@ -185,12 +197,11 @@ namespace acprojectview {
         _mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         int toX = showProject ? 0 : _myCurrentProject->getX()+ myProjectMenuItemWidth/2 - mySlide*_mySparkWindow->getSize()[0];
-        int fromX   = showProject ? _myCurrentProject->getX()+ myProjectMenuItemWidth/2  - mySlide*_mySparkWindow->getSize()[0]: 0;
+        int fromX   = showProject ? _myCurrentProject->getX()+ myProjectMenuItemWidth/2  - mySlide*_mySparkWindow->getSize()[0]: _myProjectViewer->getX();
         int toY = showProject ? 0 : _myCurrentProject->getY()+ myProjectMenuItemHeight/2;
-        int fromY   = showProject ? _myCurrentProject->getY()+ myProjectMenuItemHeight/2 : 0;
-        int toScale = showProject ? 1 :  0;
-        int fromScale   = showProject ? 0 :  1;
-        
+        int fromY   = showProject ? _myCurrentProject->getY()+ myProjectMenuItemHeight/2 : _myProjectViewer->getY();
+        float toScale = showProject ? 1 :  0;
+        float fromScale   = showProject ? 0 : _myProjectViewer->getScaleX();//showProject ? 0 :  1;
         WidgetPropertyAnimationPtr myZoomAnimationX = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myProjectViewer)), &Widget::setScaleX, fromScale, toScale, _myAnimationTime,
                     animation::EasingFnc(animation::easeInOutQuad)));
@@ -208,12 +219,10 @@ namespace acprojectview {
         myParallel->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onStartProjectView)));
         myParallel->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onShowProjectViewPopup)));
 
-            
         myParallel->add(myZoomAnimationX);
         myParallel->add(myZoomAnimationY);
         myParallel->add(myTransAnimationX);
         myParallel->add(myTransAnimationY);
-
         if (showProject) {                       
             animation::DelayAnimationPtr myPreAnimation = animation::DelayAnimationPtr(new animation::DelayAnimation(2));                
             myPreAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onInitiateProjectView))); 
@@ -225,10 +234,28 @@ namespace acprojectview {
         _mySeqAnimation->add(myParallel);
         if (showProject) {                       
             animation::DelayAnimationPtr myFrameDelayAnim1 = animation::DelayAnimationPtr(new animation::DelayAnimation(2));
-            animation::DelayAnimationPtr myFrameDelayAnim2 = animation::DelayAnimationPtr(new animation::DelayAnimation(20));
-            myFrameDelayAnim2->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet)));
             _mySeqAnimation->add(myFrameDelayAnim1);
-            _mySeqAnimation->add(myFrameDelayAnim2);
+
+            animation::DelayAnimationPtr myloadInitial0Anim= animation::DelayAnimationPtr(new animation::DelayAnimation(200));
+            myloadInitial0Anim->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet0)));
+
+            animation::DelayAnimationPtr myloadInitial1Anim= animation::DelayAnimationPtr(new animation::DelayAnimation(200));
+            myloadInitial1Anim->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet1)));
+
+            animation::DelayAnimationPtr myloadInitial2Anim= animation::DelayAnimationPtr(new animation::DelayAnimation(200));
+            myloadInitial2Anim->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet2)));
+                
+            animation::DelayAnimationPtr myloadInitial3Anim = animation::DelayAnimationPtr(new animation::DelayAnimation(200));
+            myloadInitial3Anim->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet3)));
+
+            animation::DelayAnimationPtr myloadInitial4Anim = animation::DelayAnimationPtr(new animation::DelayAnimation(200));
+            myloadInitial4Anim->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onLoadInitialSet4)));
+                
+            _mySeqAnimation->add(myloadInitial0Anim);
+            _mySeqAnimation->add(myloadInitial1Anim);
+            _mySeqAnimation->add(myloadInitial2Anim);
+            _mySeqAnimation->add(myloadInitial3Anim);
+            _mySeqAnimation->add(myloadInitial4Anim);
         } else {
             _mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::closeProjectView)));
             _mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::closeProjectView)));
@@ -258,7 +285,6 @@ namespace acprojectview {
     }
 
     //////////////////////////////////////////////////////idle
-    const unsigned int ACProjectView::_myIdleTime = 20000;
     const unsigned int ACProjectView::_myKenBurnsDuration = 32000;
     const unsigned int ACProjectView::_myKenBurnsFadeDuration = 4000;
     const float ACProjectView::d = _myKenBurnsDuration + _myKenBurnsFadeDuration;
