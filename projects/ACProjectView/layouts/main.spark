@@ -186,7 +186,7 @@
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>            
         <Rectangle name="background2" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
-        <!--Statistic name="stats" z="300"/-->
+        <Statistic name="stats" z="300"/>
         <Transform name="startscreen" z="211">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
             <Rectangle name="left_bar" x="0" y="0" z="12" width="180" height="75" color="[1,1,1]" alpha="1.0"/>

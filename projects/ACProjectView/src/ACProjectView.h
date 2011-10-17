@@ -45,7 +45,11 @@ namespace acprojectview {
             void onFinishIdleFade();            
             void closeProjectView();
             void onShowProjectViewPopup();
-            void onLoadInitialSet();
+            void onLoadInitialSet0();
+            void onLoadInitialSet1();
+            void onLoadInitialSet2();
+            void onLoadInitialSet3();
+            void onLoadInitialSet4();
             
             //idle
             void initIdle();
@@ -60,7 +64,6 @@ namespace acprojectview {
             std::vector<spark::ImagePtr> _myIdleScreenImagePtrs;
             animation::DelayAnimationPtr _myIdleDelay;
             animation::ParallelAnimationPtr _myKenBurnsAnimation;
-            const static unsigned int _myIdleTime;
             const static unsigned int _myKenBurnsDuration;
             const static unsigned int _myKenBurnsFadeDuration;
             const static float d;
@@ -77,6 +80,10 @@ namespace acprojectview {
             bool _myAnimatingFlag;
             animation::SequenceAnimationPtr _mySeqAnimation;
             const static unsigned int _myAnimationTime = 400;
+            const static unsigned int _myIdleTime = 40000;
+            
+            void onFrame(spark::EventPtr theEvent);
+            
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;

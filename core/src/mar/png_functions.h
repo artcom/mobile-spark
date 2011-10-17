@@ -13,8 +13,8 @@ extern "C" {
 
 namespace mar {
 
-    class Texture;
-    typedef masl::Ptr<Texture> TexturePtr;
+    class TextureInfo;
+    typedef masl::Ptr<TextureInfo> TextureInfoPtr;
 
     DECLARE_EXCEPTION(PngLoadingException, masl::Exception)
 
@@ -29,7 +29,7 @@ namespace mar {
         GLubyte *image_data;
     };
 
-    void loadTextureFromPNG (const std::string & filename, TexturePtr theTexture);
+    void loadTextureFromPNG (const std::string & filename, TextureInfoPtr theTexture);
     bool loadTextureFromPNG(const std::string & filename, GLuint & textureId, int & outWidth, int & outHeight, bool & rgb);
     bool loadTextureFromPNGSkeleton(const std::string & filename, GLuint & outTextureId,
                                     int & outWidth, int & outHeight, bool & outRgb,

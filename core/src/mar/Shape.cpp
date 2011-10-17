@@ -206,9 +206,9 @@ namespace mar {
         myMaterial->createShader();
         elementList.push_back(myElement);
 
-        imageWidth_ = myMaterial->getTexture()->width_;
+        imageWidth_ = myMaterial->getTexture()->getTextureInfo()->width_;
         imageWidth_ = imageWidth_ > 0 ? imageWidth_ : 1;
-        imageHeight_ = myMaterial->getTexture()->height_;
+        imageHeight_ = myMaterial->getTexture()->getTextureInfo()->height_;
         imageHeight_ = imageHeight_ > 0 ? imageHeight_ : 1;
 
         setVertexData(vector2(0,0), vector2(theWidth, theHeight));
