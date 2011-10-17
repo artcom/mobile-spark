@@ -185,8 +185,8 @@ namespace mar {
 
     void
     UnlitTexturedMaterial::setTexture(const std::string & theSrc) {
+        texture_ = TexturePtr(new Texture());
         if (theSrc != "") {
-            texture_ = TexturePtr(new Texture());
             texture_->setSrc(theSrc);
         }
     }
