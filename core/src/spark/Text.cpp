@@ -1,14 +1,7 @@
 #include "Text.h"
 
 #include <masl/MobileSDK.h>
-#include <mar/AssetProvider.h>
-
-#ifdef ANDROID
-    #include <android/AndroidAssetProvider.h>
-#endif
-#ifdef iOS
-    #include <ios/IOSAssetProvider.h>
-#endif
+#include <masl/AssetProvider.h>
 
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
@@ -32,7 +25,7 @@ namespace spark {
         
         std::string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
         if (myFontName != "") {
-            _myFontPath = mar::AssetProviderSingleton::get().ap()->findFile(myFontName);
+            _myFontPath = masl::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
         setShape(mar::ShapeFactory::get().createRectangle(true,500,500));
     }

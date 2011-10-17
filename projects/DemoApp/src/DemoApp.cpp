@@ -2,12 +2,11 @@
 
 #include <cstdlib>
 
+#include <masl/AssetProvider.h>
 #include <masl/Callback.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 #include <masl/file_functions.h>
-
-#include <mar/AssetProvider.h>
 
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
@@ -258,15 +257,15 @@ namespace demoapp {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         std::string myNewSpark = theRequest->getResponseString();
         std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
-        mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/scene.spark", myNewSpark);
+        masl::AssetProviderSingleton::get().ap()->storeInFile("downloads/scene.spark", myNewSpark);
         _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAssetRequestReady)),
-            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)));
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),"/downloads/");
     }
     void DemoApp::onAssetRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on Asset ready, request url was " << theRequest->getURL();
         std::vector<char> myBlock = theRequest->getResponseBinary();
-        mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
+        masl::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
     }
     void DemoApp::onAllAssetsRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on AllAsset Ready";
@@ -428,7 +427,7 @@ namespace demoapp {
             _myLoadingAnimation = mySequence;
             DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
             _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
-                masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)));
+                masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),"/downloads/");
         }
     }
 
