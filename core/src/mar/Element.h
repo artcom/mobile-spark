@@ -40,9 +40,9 @@ namespace mar {
         virtual void unloadData() const;
         virtual void createVertexBuffers();
         virtual void updateCompleteVertexBuffersContent();
-        MaterialPtr material;
-        unsigned int numVertices;
-        unsigned int numIndices;
+        MaterialPtr material_;
+        unsigned int numVertices_;
+        unsigned int numIndices_;
 
         boost::shared_array<float> vertexData_;    //interleaved
         boost::shared_array<GLushort> indexDataVBO_;

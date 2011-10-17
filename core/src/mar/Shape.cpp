@@ -24,7 +24,7 @@ namespace mar {
         for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
              it != elementList_.end(); ++it)
         {
-            (*it)->material->setAlpha(theAlpha);
+            (*it)->material_->setAlpha(theAlpha);
         }
     }
 
@@ -43,7 +43,7 @@ namespace mar {
     Shape::updateCustomHandles(const std::map<std::string, float> & theShaderValues) {
         for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
                                                       it != elementList_.end(); ++it) {
-            (*it)->material->setCustomValues(theShaderValues);
+            (*it)->material_->setCustomValues(theShaderValues);
         }
     }
 
@@ -67,7 +67,7 @@ namespace mar {
         for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
                                                       it != elementList_.end(); ++it) {
             ElementPtr element = *it;
-            if (element->material->transparency_) {
+            if (element->material_->transparency_) {
                 return true;
             }
         }
@@ -85,7 +85,7 @@ namespace mar {
         } else {
             myElement = ElementPtr(new Element());
         }
-        myElement->material = theMaterial;
+        myElement->material_ = theMaterial;
         elementList_.push_back(myElement);
         boundingBox_.max[0] = theWidth;
         boundingBox_.max[1] = theHeight;
@@ -101,14 +101,14 @@ namespace mar {
         bool myTexturedFlag = (boost::dynamic_pointer_cast<ElementWithTexture>(elementList_[0])) ? true : false;
         ElementPtr myElement = elementList_[0];
         dataPerVertex_ = 3 + (myTexturedFlag ? 2 : 0);
-        myElement->numVertices = 4;
-        myElement->numIndices = 6;
-        myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices) * dataPerVertex_]);
+        myElement->numVertices_ = 4;
+        myElement->numIndices_ = 6;
+        myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices_) * dataPerVertex_]);
         GLushort indices[] = {0, 1, 2, 2, 1, 3};
-        myElement->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[myElement->numIndices]);
+        myElement->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[myElement->numIndices_]);
         float myXYCoords[] = {0.0f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f,1.0f, 1.0f};
 
-        for (size_t i = 0, l = myElement->numVertices; i < l; ++i) {
+        for (size_t i = 0, l = myElement->numVertices_; i < l; ++i) {
             (myElement->vertexData_)[i * dataPerVertex_ + 0] = myXYCoords[i * 2 + 0] * getWidth();
             (myElement->vertexData_)[i * dataPerVertex_ + 1] = myXYCoords[i * 2 + 1] * getHeight();
             (myElement->vertexData_)[i * dataPerVertex_ + 2] = 0;
@@ -119,7 +119,7 @@ namespace mar {
             }
         }
 
-        for (size_t i = 0; i < myElement->numIndices; i++) {
+        for (size_t i = 0; i < myElement->numIndices_; i++) {
             myElement->indexDataVBO_[i] = indices[i];
         }
     }
@@ -176,7 +176,7 @@ namespace mar {
     {
         ElementPtr myElement = ElementPtr(new ElementWithTexture());
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(theMaterial);
-        myElement->material = myMaterial;
+        myElement->material_ = myMaterial;
         elementList_.push_back(myElement);
         boundingBox_.max[0] = theWidth;
         boundingBox_.max[1] = theHeight;
@@ -207,10 +207,10 @@ namespace mar {
         ElementPtr myElement = elementList_[0];
         dataPerVertex_ = 5; //position and texcoord
         size_t vertices_per_side = 4;
-        myElement->numIndices = 54; //9 quads * 2 triangles per quad * 3 vertices per triangle
-        myElement->numVertices = vertices_per_side * vertices_per_side;
-        myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices) * dataPerVertex_]);
-        myElement->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[(myElement->numIndices)]);
+        myElement->numIndices_ = 54; //9 quads * 2 triangles per quad * 3 vertices per triangle
+        myElement->numVertices_ = vertices_per_side * vertices_per_side;
+        myElement->vertexData_ = boost::shared_array<float>(new float[(myElement->numVertices_) * dataPerVertex_]);
+        myElement->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[(myElement->numIndices_)]);
         for (size_t i = 0, l = vertices_per_side; i < l; ++i) {
             for (size_t j = 0, m = vertices_per_side; j < m; ++j) {
                 float myX, myY;
@@ -259,7 +259,7 @@ namespace mar {
                           8, 9,12,12, 9,13,
                           9,10,13,13,10,14,
                          10,11,14,14,11,15 };
-        for (size_t i = 0; i < myElement->numIndices; ++i) {
+        for (size_t i = 0; i < myElement->numIndices_; ++i) {
             (myElement->indexDataVBO_)[i] = indices[i];
         }
     }

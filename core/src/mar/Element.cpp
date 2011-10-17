@@ -32,7 +32,7 @@ namespace mar {
 
     void
     Element::initGL() {
-        material->initGL();
+        material_->initGL();
         createVertexBuffers();
     }
 
@@ -46,7 +46,7 @@ namespace mar {
 #endif
         glGenBuffers(1, &vertexBuffer_);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
-        glBufferData(GL_ARRAY_BUFFER, (numVertices * stride_), vertexData_.get(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, (numVertices_ * stride_), vertexData_.get(), GL_STATIC_DRAW);
 
 #ifdef ANDROID
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -63,7 +63,7 @@ namespace mar {
 
         glGenBuffers(1, &indexBuffer_);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer_);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices_ * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW);
 
 #ifdef iOS
         glBindVertexArrayOES(0);
@@ -75,7 +75,7 @@ namespace mar {
 
     void
     Element::loadData(const matrix & theMatrix) {
-        material->loadShader(theMatrix);
+        material_->loadShader(theMatrix);
         if (!vertexBuffer_ || ! indexBuffer_) {
             createVertexBuffers();
         }
@@ -101,7 +101,7 @@ namespace mar {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 #endif
-        material->unloadShader();
+        material_->unloadShader();
         ASSERT_GL("Element::unloadData", PLUS_FILE_LINE);
     }
 
@@ -109,19 +109,19 @@ namespace mar {
     Element::draw() const {
 #ifdef iOS
         glBindVertexArrayOES(vertexArrayObject_);
-        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)0);
+        glDrawElements(GL_TRIANGLES, numIndices_, GL_UNSIGNED_SHORT, (void*)0);
         glBindVertexArrayOES(0);
 #elif ANDROID
-        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, 0);
+        glDrawElements(GL_TRIANGLES, numIndices_, GL_UNSIGNED_SHORT, 0);
 #endif
         ASSERT_GL("Element::draw", PLUS_FILE_LINE);
     }
 
-
+    //XXX: this should not be called from outside, if vertexdata is outdated they should automatically updated
     void Element::updateCompleteVertexBuffersContent() {
         if (vertexBuffer_) {
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
-            glBufferSubData(GL_ARRAY_BUFFER,0,(numVertices * stride_), vertexData_.get());
+            glBufferSubData(GL_ARRAY_BUFFER,0,(numVertices_ * stride_), vertexData_.get());
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             ASSERT_GL("Element::updateCompleteVertexBuffersContent", PLUS_FILE_LINE);
         }
