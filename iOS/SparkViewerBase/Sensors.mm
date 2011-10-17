@@ -1,6 +1,7 @@
 #include <spark/AppProvider.h>
 
 #import "Sensors.h"
+#import <Math.h>
 
 @implementation Sensors
 
@@ -42,7 +43,10 @@
     if([motionManager isDeviceMotionAvailable] && ![motionManager isDeviceMotionActive]) {
         [motionManager setDeviceMotionUpdateInterval:1.0f / 20.0f];
         [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMDeviceMotion *deviceMotionData, NSError *error) {
-            NSString *eventCall = [NSString  stringWithFormat:@"<SensorEvent type='ORIENTATION' value0='%f' value1='%f' value2='%f'/>",deviceMotionData.attitude.roll, deviceMotionData.attitude.yaw, deviceMotionData.attitude.pitch];
+            float myRoll = deviceMotionData.attitude.roll*180/M_PI;
+            float myYaw = deviceMotionData.attitude.yaw*180/M_PI;
+            float myPitch = deviceMotionData.attitude.pitch*180/M_PI;
+            NSString *eventCall = [NSString  stringWithFormat:@"<SensorEvent type='ORIENTATION' value0='%f' value1='%f' value2='%f'/>",myYaw, myRoll, myPitch];
             [self throwEventToSpark:eventCall];
         }];
         
