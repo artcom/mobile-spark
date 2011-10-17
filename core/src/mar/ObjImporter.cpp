@@ -119,8 +119,8 @@ namespace mar {
     void ObjImporter::createElementVertices(ShapePtr theShape, ElementPtr element,
                                          size_t startFaceIndex) {
         size_t dataPerVertex = 3 + 3 + 2;
-        element->numIndices = (faces_.size() - startFaceIndex) * 3;
-        element->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[element->numIndices]);
+        element->numIndices_ = (faces_.size() - startFaceIndex) * 3;
+        element->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[element->numIndices_]);
         std::vector<float> temporaryVertexData;
         std::map<boost::tuple<int, int, int>, int> indexMap;
         int myIndex = 0;
@@ -155,8 +155,8 @@ namespace mar {
                 }
             }
         }
-        element->numVertices = myIndex;
-        element->vertexData_ = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
+        element->numVertices_ = myIndex;
+        element->vertexData_ = boost::shared_array<float>(new float[(element->numVertices_) * dataPerVertex]);
         int vertexDataIndex = 0;
         for (std::vector<float>::const_iterator it = temporaryVertexData.begin(); it != temporaryVertexData.end(); ++it) {
             element->vertexData_[vertexDataIndex++] = *it;
@@ -166,7 +166,7 @@ namespace mar {
     }
 
     bool ObjImporter::sortByTransparencyFunction(ElementPtr i,ElementPtr j) {
-        if (!i->material->transparency_ && j->material->transparency_) {
+        if (!i->material_->transparency_ && j->material_->transparency_) {
             return true;
         } else {
             return false;
@@ -224,7 +224,7 @@ namespace mar {
                     createElementVertices(theShape, element, startFaceIndex);
                 }
                 element = ElementPtr(new ElementWithNormalsAndTexture());
-                element->material = materialMap_[data];
+                element->material_ = materialMap_[data];
                 startFaceIndex = faces_.size();
             } else if (type == "f") {
                 DB(AC_DEBUG << "data:_" << data;)
