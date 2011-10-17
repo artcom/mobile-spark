@@ -18,6 +18,7 @@ namespace masl {
     DECLARE_EXCEPTION(INetException, masl::Exception);
 
     enum AuthentType { BASIC, DIGEST, ANY };
+    enum RequestType { ALWAYS, IF_NEWER, IF_NOT_AVAILABLE };
 
     class RequestManager;
     class RequestCallback;
