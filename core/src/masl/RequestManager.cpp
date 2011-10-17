@@ -1,6 +1,7 @@
 #include "RequestManager.h"
 
 #include <iostream>
+#include <sys/stat.h>
 #include <curl/curl.h>
 
 #include "Logger.h"
@@ -144,6 +145,20 @@ namespace masl {
                     }
                 } 
             }
+        //Not supported yet
+        //} else if (theGetType == REQUEST_IF_NEWER) {
+        //    AC_PRINT << "..............request if newer ...............";
+        //    std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(theUrl);
+        //    std::string foundFile;
+        //    if (!(foundFile = AssetProviderSingleton::get().ap()->findFile(fileToFind)).empty()) {
+        //        struct stat s;
+        //        stat(foundFile.c_str(),&s);
+        //        time_t time = s.st_mtime;
+        //        AC_PRINT << "time of current " << time;
+        //        AC_PRINT << "time converted " << ctime(&time);
+        //        SequenceRequestPtr mySequenceCB = SequenceRequestPtr(new SequenceRequest());
+        //        headRequest(theUrl, mySequenceCB);
+        //    }
         }
         RequestPtr myRequest = RequestPtr(new Request(theUrl, thePersistenceFolder, thePersistFlag));
         myRequest->setOnDoneCallback(theCB);
@@ -151,6 +166,17 @@ namespace masl {
             myRequest->setOnErrorCallback(_myDefaultErrorCallback);
         }
         myRequest->get();
+        performRequest(myRequest);
+    }
+
+    void 
+    RequestManager::headRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
+        RequestPtr myRequest = RequestPtr(new Request(theUrl));
+        myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
+        myRequest->head();
         performRequest(myRequest);
     }
 
@@ -208,6 +234,20 @@ namespace masl {
                         }
                     } 
                 }
+            //Not supported
+            //} else if (theGetType == REQUEST_IF_NEWER) {
+            //    AC_PRINT << "..............request if newer ...............";
+            //    std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(myUrl);
+            //    std::string foundFile;
+            //    if (!(foundFile = AssetProviderSingleton::get().ap()->findFile(fileToFind)).empty()) {
+            //        struct stat s;
+            //        stat(foundFile.c_str(),&s);
+            //        time_t time = s.st_mtime;
+            //        AC_PRINT << "time of current " << time;
+            //        AC_PRINT << "time converted " << ctime(&time);
+            //        //XXX                    
+            //        continue;
+            //    }
             }
             SequenceRequestPtr myRequest = SequenceRequestPtr(
                 new SequenceRequest(*this, myUrl, thePersistenceFolder, thePersistFlag));
