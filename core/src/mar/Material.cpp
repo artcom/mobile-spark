@@ -9,6 +9,8 @@
 #include "openGL_functions.h"
 #include "png_functions.h"
 
+#include "TextureLoader.h"
+
 
 namespace mar {
 
@@ -108,12 +110,13 @@ namespace mar {
     }
 
     //////////////////////////////////////////////////// UnlitTexturedMaterial
-    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) {
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc, const bool theCacheFlag) {
         _mySrc = theSrc;
         _myTexture = TexturePtr(new Texture());
 
         if (_mySrc != "") {
-            loadTextureFromPNG(_mySrc, _myTexture);
+            //loadTextureFromPNG(_mySrc, _myTexture);
+            _myTexture = TextureLoader::get().load(_mySrc, theCacheFlag);
             transparency_ = _myTexture->transparency_;
         }
     }
