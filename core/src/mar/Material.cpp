@@ -14,7 +14,7 @@ namespace mar {
 
     DEFINE_EXCEPTION(ProblemWithHandleException, masl::Exception)
 
-    Material::Material() : transparency_(false), alpha_(1.0),
+    Material::Material() : alpha_(1.0),
                            shaderProgram_(0), mvpHandle_(0), alphaHandle_(0) 
     {
         AC_DEBUG << "Material::ctor "<<(void*)this;
@@ -28,7 +28,6 @@ namespace mar {
     //ANDROID ONLY: gl context is lost, so reset shaders
     void
     Material::resetGL() {
-        //deleteShader();
         shaderProgram_ = 0;
     }
 
@@ -182,7 +181,6 @@ namespace mar {
     void
     UnlitTexturedMaterial::setTexture(const TexturePtr theTexture) {
         texture_ = TexturePtr(new Texture());
-        transparency_ = texture_->transparency_;
     }
 
     void
@@ -190,7 +188,6 @@ namespace mar {
         if (theSrc != "") {
             texture_ = TexturePtr(new Texture());
             texture_->setSrc(theSrc);
-            transparency_ = texture_->transparency_;
         }
     }
 

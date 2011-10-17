@@ -164,7 +164,7 @@ namespace mar {
     }
 
     bool ObjImporter::sortByTransparencyFunction(ElementPtr i,ElementPtr j) {
-        if (!i->material_->transparency_ && j->material_->transparency_) {
+        if (!i->material_->isTransparent() && j->material_->isTransparent()) {
             return true;
         } else {
             return false;

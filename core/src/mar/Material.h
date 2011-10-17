@@ -28,11 +28,11 @@ namespace mar {
         virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void loadShader(const matrix & theMatrix);
         virtual void unloadShader();
-        void setAlpha(const float theAlpha) {alpha_ = theAlpha; transparency_ |= (alpha_ != 1.0);};
+        void setAlpha(const float theAlpha) {alpha_ = theAlpha;};
         void setCustomValues(const std::map<std::string, float> & theCustomValues);
         void setCustomHandles(const std::map<std::string, float> & theCustomHandles);
 
-        bool transparency_;
+        virtual bool isTransparent() const {return alpha_ != 1.0;};
 
     protected:
         Material();
@@ -61,16 +61,16 @@ namespace mar {
         virtual void loadShader(const matrix & theMatrix);
         void setDiffuseColor(const vector3 & theColor) {
             diffuse_ = vector4(theColor, alpha_);
-            transparency_ |= (diffuse_[3] != 1.0);
         }
         void setDiffuseColor(const vector4 & theColor) {
             diffuse_ = theColor;
-            transparency_ |= (diffuse_[3] != 1.0);
         }
         vector4 getDiffuseColor() const {
             return diffuse_;
         }
     
+        virtual bool isTransparent() const {return Material::isTransparent() || diffuse_[3] != 1.0;};
+
         //XXX: mixed property visibility
         //are these 4 actually supported?
         vector4 ambient_;
@@ -95,6 +95,7 @@ namespace mar {
         virtual void loadShader(const matrix & theMatrix);
         TexturePtr getTexture() const {return texture_;}
         void setTexture(const TexturePtr theTexture);
+        virtual bool isTransparent() const {return Material::isTransparent() || ((texture_) ? texture_->transparency_ : false);};
     private:
         void setTexture(const std::string & theSrc);
         virtual void setHandles();

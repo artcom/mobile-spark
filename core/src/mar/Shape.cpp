@@ -68,7 +68,7 @@ namespace mar {
         for (std::vector<ElementPtr>::const_iterator it = elementList_.begin();
                                                       it != elementList_.end(); ++it) {
             ElementPtr element = *it;
-            if (element->material_->transparency_) {
+            if (element->material_->isTransparent()) {
                 return true;
             }
         }

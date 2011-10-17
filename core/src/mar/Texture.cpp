@@ -3,7 +3,10 @@
 #include <masl/numeric_functions.h>
 
 namespace mar {
-    Texture::Texture() :matrix_(cml::identity_4x4()), textureId_(0) {
+    Texture::Texture() :
+        width_(0), height_(0), transparency_(false),
+        matrix_(cml::identity_4x4()), textureId_(0) 
+    {
         AC_DEBUG << "create Texture " << (void*)this;
     }
 
