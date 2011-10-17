@@ -10,13 +10,18 @@ namespace mar {
     }
 
     TextureLoader::~TextureLoader() {}
-
-    TexturePtr TextureLoader::load(const std::string & theSrc, const bool theCacheFlag) {
+        
+    void
+    TextureLoader::clear() {
+        _myTextureMap.clear();
+    }
+        
+    TextureInfoPtr TextureLoader::load(const std::string & theSrc, const bool theCacheFlag) {
         if (_myTextureMap.find(theSrc) != _myTextureMap.end()) {
             AC_INFO << "TextureLoader::load found texture: '" << theSrc << "' in map -> do not reload";
             return _myTextureMap[theSrc];
         } else {
-            TexturePtr myTexture = TexturePtr(new Texture());        
+            TextureInfoPtr myTexture = TextureInfoPtr(new TextureInfo());        
             loadTextureFromPNG(theSrc, myTexture);    
             if (theCacheFlag) {    
                 AC_INFO << "TextureLoader::load texture: '" << theSrc << "' generated store in map";

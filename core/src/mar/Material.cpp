@@ -116,8 +116,8 @@ namespace mar {
 
         if (_mySrc != "") {
             //loadTextureFromPNG(_mySrc, _myTexture);
-            _myTexture = TextureLoader::get().load(_mySrc, theCacheFlag);
-            transparency_ = _myTexture->transparency_;
+            _myTexture->setTextureInfo(TextureLoader::get().load(_mySrc, theCacheFlag));
+            transparency_ = _myTexture->getTextureInfo()->transparency_;
         }
     }
 
@@ -131,7 +131,7 @@ namespace mar {
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glUniformMatrix4fv(textureMatrixHandle, 1, GL_FALSE, _myTexture->matrix_.data());
-        glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
+        glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureInfo()->textureId_);//getTextureId());
     }
 
     void UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {

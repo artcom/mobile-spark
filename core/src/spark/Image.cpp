@@ -32,7 +32,7 @@ namespace spark {
         if (getShape()) {
             UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
             TexturePtr myTexture = myMaterial->getTexture();
-            myTexture->unbind();
+            myTexture->getTextureInfo()->unbind();
         }
     }
 
@@ -87,7 +87,7 @@ namespace spark {
         bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         setShape(ShapeFactory::get().createRectangle(true, 1, 1, vertexShader_, fragmentShader_, myHandles, data_, myCacheFlag));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
-        _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
+        _myTextureSize = vector2(myMaterial->getTexture()->getTextureInfo()->width_, myMaterial->getTexture()->getTextureInfo()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
         float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);
         setSize(myWidth, myHeight);

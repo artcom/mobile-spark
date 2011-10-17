@@ -5,12 +5,13 @@
 #include "Texture.h"
 
 namespace mar {
-    typedef std::map<std::string, TexturePtr> TextureMap;
+    typedef std::map<std::string, TextureInfoPtr> TextureMap;
     class TextureLoader : public masl::Singleton<TextureLoader> {
         public:
             TextureLoader();
             virtual ~TextureLoader();
-            TexturePtr load(const std::string & theSrc, const bool theCacheFlag = false);            
+            void clear();
+            TextureInfoPtr load(const std::string & theSrc, const bool theCacheFlag = false);            
         private:
             TextureMap _myTextureMap;
     };
