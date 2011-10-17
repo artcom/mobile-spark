@@ -37,7 +37,18 @@
     } else { 
         NSLog(@"Accelerometer not available or already active");
     }
-
+    
+    //Orientation
+    if([motionManager isDeviceMotionAvailable] && ![motionManager isDeviceMotionActive]) {
+        [motionManager setDeviceMotionUpdateInterval:1.0f / 20.0f];
+        [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMDeviceMotion *deviceMotionData, NSError *error) {
+            NSString *eventCall = [NSString  stringWithFormat:@"<SensorEvent type='ORIENTATION' value0='%f' value1='%f' value2='%f'/>",deviceMotionData.attitude.roll, deviceMotionData.attitude.yaw, deviceMotionData.attitude.pitch];
+            [self throwEventToSpark:eventCall];
+        }];
+        
+    } else { 
+        NSLog(@"Orientation not available or already active");
+    }
     
 }
 
