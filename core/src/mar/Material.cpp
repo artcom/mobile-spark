@@ -137,11 +137,11 @@ namespace mar {
     }
 
     //////////////////////////////////////////////////// UnlitTexturedMaterial
-    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) : Material(), _mySrc(theSrc), textureMatrixHandle_(0) {
-        _myTexture = TexturePtr(new Texture());
-        if (_mySrc != "") {
-            loadTextureFromPNG(_mySrc, _myTexture);
-            transparency_ = _myTexture->transparency_;
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) : Material(), src_(theSrc), textureMatrixHandle_(0) {
+        texture_ = TexturePtr(new Texture());
+        if (src_ != "") {
+            loadTextureFromPNG(src_, texture_);
+            transparency_ = texture_->transparency_;
         }
     }
 
@@ -154,8 +154,8 @@ namespace mar {
     }
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
-        glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, _myTexture->matrix_.data());
-        glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
+        glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, texture_->matrix_.data());
+        glBindTexture(GL_TEXTURE_2D, texture_->getTextureId());
     }
 
     void UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {

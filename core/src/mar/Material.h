@@ -66,11 +66,13 @@ namespace mar {
         vector4 getDiffuseColor() const {
             return diffuse_;
         }
-
-        vector4 ambient;
-        vector4 specular;
-        float shininess;
-        int illuminationModel;
+    
+        //XXX: mixed property visibility
+        //are these 4 actually supported?
+        vector4 ambient_;
+        vector4 specular_;
+        float shininess_;
+        int illuminationModel_;
     private:
         vector4 diffuse_;
         GLuint colorHandle_;
@@ -86,13 +88,13 @@ namespace mar {
         UnlitTexturedMaterial(const std::string & theSrc = "");
         virtual ~UnlitTexturedMaterial();
         virtual void loadShader(const matrix & theMatrix);
-        TexturePtr getTexture() const {return _myTexture;}
+        TexturePtr getTexture() const {return texture_;}
     private:
         virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void setHandles();
         virtual void bindAttributes();
-        std::string _mySrc;
-        TexturePtr _myTexture;
+        std::string src_;
+        TexturePtr texture_;
         GLuint textureMatrixHandle_;
 
     };

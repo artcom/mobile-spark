@@ -88,22 +88,22 @@ namespace mar {
                 myMaterial = MaterialPtr(new UnlitColoredMaterial()); //XXX: here we do not know if we need textures
             } else if (type == "Ka") {
                 vector4 myColor = getColor(data);
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->ambient = myColor;
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->ambient_ = myColor;
             } else if (type == "Kd") {
                 vector4 myColor = getColor(data);
                 boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->setDiffuseColor(myColor);
             } else if (type == "Ks") {
                 vector4 myColor = getColor(data);
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->specular = myColor;
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->specular_ = myColor;
             } else if (type == "d" || type == "Tr") {
                 UnlitColoredMaterialPtr myUnlitColoredMaterial = boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial);
                 vector4 myDiffuseColor = myUnlitColoredMaterial->getDiffuseColor();
                 myDiffuseColor[3] = masl::as<float>(data);
                 myUnlitColoredMaterial->setDiffuseColor(myDiffuseColor);
             } else if (type == "Ns") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->shininess = masl::as<float>(data);
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->shininess_ = masl::as<float>(data);
             } else if (type == "illum") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel = masl::as<int>(data);
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel_ = masl::as<int>(data);
             } else if (type == "map_Kd") {
                 //XXX: here we know that we need textures
                 myMaterial = MaterialPtr(new UnlitTexturedMaterial("/textures/" + data));
