@@ -51,7 +51,8 @@ namespace acprojectview {
     void 
     MultiColumnText::swipe(int theDir) {
         int myNewColumnIndex = _myVisibleColumnIndex + theDir;
-        if ((_myVisibleColumnIndex == _myColumnCount-1 && theDir == 1 ) || 
+        if (_myColumnCount < 2 || 
+            (_myVisibleColumnIndex == _myColumnCount-1 && theDir == 1 ) || 
             (_myVisibleColumnIndex == 0 && theDir == -1) || 
             _myAnimatingFlag) {
             // do nothing

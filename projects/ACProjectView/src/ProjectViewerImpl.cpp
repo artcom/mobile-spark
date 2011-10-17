@@ -71,9 +71,13 @@ namespace acprojectview {
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {  
         //boost::timer::timer myTimer;
+         int myTextHeight = POPUP_SIZE;        
+         _myPopup->setY(-myTextHeight);
                       
         showPopup(false);            
         _myCurrentProject = currentProject;
+         _myPopUpTitle->setVisible(false);
+         _myPopUpSubTitle->setVisible(false);
             
         _myIsAnimating = false;     
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
@@ -141,6 +145,7 @@ namespace acprojectview {
     }
     
     void ProjectViewerImpl::initiateClose() {
+        setSensible(false);                        
         _imageTransform0->setVisible(false);
         _imageTransform1->setVisible(false);
         _imageTransform2->setVisible(false);
@@ -152,18 +157,21 @@ namespace acprojectview {
             _imageTransform2->setVisible(true);
         }
     }
-    void ProjectViewerImpl::showPopup(bool theFlag) {       
+    void ProjectViewerImpl::showPopup(bool theFlag) {      
         _myPopup->setVisible(theFlag);        
     }
     void ProjectViewerImpl::loadInitialSet() {        
+         _myPopUpTitle->setVisible(true);
+         _myPopUpSubTitle->setVisible(true);
         string myTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
         string mySubTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
          _myPopUpTitle->setI18nId(myTitle_I18n);
          _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
 
          int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
-         int myTextHeight = 250;
+         int myTextHeight = POPUP_SIZE;
          _myPopupBG->setSize(_myWidth, myHiddenPopUpHeight + myTextHeight);
+         _myPopup->setY(-myTextHeight);
          
          _myPopUpSubTitle->setY(myTextHeight+10);
          _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
@@ -187,14 +195,14 @@ namespace acprojectview {
         }        
     }
     bool ProjectViewerImpl::isPopUpOpen() {
-        int myTextHeight = 250;
+        int myTextHeight = POPUP_SIZE;
         return (_myPopup->getY() != -myTextHeight);
     }
     
     void ProjectViewerImpl::onOpenClosePopup(EventPtr theEvent) {
         AC_PRINT << "onOpenClosePopup";
         if (isRendered()) {
-            int myTextHeight = 250;
+            int myTextHeight = POPUP_SIZE;
             animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             if (!isPopUpOpen()) {
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(

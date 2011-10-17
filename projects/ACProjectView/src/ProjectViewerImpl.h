@@ -25,8 +25,10 @@ namespace acprojectview {
             
             static const char * const SPARK_TYPE;             
             const static unsigned int POPUP_HEIGHT = 50;
+            const static unsigned int POPUP_SIZE = 250;
+            
             virtual const char * const & getType() const { return ProjectViewerImpl::SPARK_TYPE;};
-             
+
             void draw();
             void showProject(ProjectImplPtr _myCurrentProject);
             void onSwipe(spark::EventPtr theEvent);
@@ -66,6 +68,8 @@ namespace acprojectview {
             void onOpenClosePopup(spark::EventPtr theEvent);
             void autoScaleImage(spark::ImagePtr theImage);
 
+            const static unsigned int TEXT_HEIGHT = 250;
+            const static unsigned int POPUP_ANIMATION_DURATION = 1300;
 
     };
     
