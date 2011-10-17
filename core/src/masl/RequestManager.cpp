@@ -131,8 +131,8 @@ namespace masl {
     void 
     RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
                                const std::string & thePersistenceFolder,
-                               const bool thePersistFlag, const bool theConservativeFlag) {
-        if (theConservativeFlag && !thePersistenceFolder.empty()) {
+                               const bool thePersistFlag, const GetType theGetType) {
+        if (theGetType == REQUEST_IF_NOT_AVAILABLE && !thePersistenceFolder.empty()) {
             std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(theUrl);
             if (!AssetProviderSingleton::get().ap()->findFile(fileToFind).empty()) {
                 std::vector<char> responseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
@@ -191,11 +191,11 @@ namespace masl {
     RequestManager::getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
                                   const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB,
                                   const std::string & thePersistenceFolder, 
-                                  const bool thePersistFlag, const bool theConservativeFlag) {
+                                  const bool thePersistFlag, const GetType theGetType) {
         RequestPtr myNextRequest;
         for (int i = theURLLastPartList.size() - 1; i >= 0 ; --i) {
             std::string myUrl = theBaseURL + "/" + theURLLastPartList[i];
-            if (theConservativeFlag && !thePersistenceFolder.empty()) {
+            if (theGetType == REQUEST_IF_NOT_AVAILABLE && !thePersistenceFolder.empty()) {
                 std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(myUrl);
                 if (!AssetProviderSingleton::get().ap()->findFile(fileToFind).empty()) {
                     std::vector<char> responseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);

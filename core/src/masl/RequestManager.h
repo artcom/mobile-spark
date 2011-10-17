@@ -7,6 +7,8 @@
 
 namespace masl {
 
+    enum GetType { REQUEST_ALWAYS, REQUEST_IF_NEWER, REQUEST_IF_NOT_AVAILABLE };
+
     class RequestManager {
         public:
             RequestManager();
@@ -20,14 +22,14 @@ namespace masl {
             //convenience functions
             void getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
                             const std::string & thePersistenceFolder = "", 
-                            const bool thePersistFlag = false, const bool theConservativeFlag = false);
+                            const bool thePersistFlag = false, const GetType theGetType = REQUEST_ALWAYS);
             void postRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
             void getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
                                const RequestCallbackPtr theOneReadyCB, RequestCallbackPtr theAllReadyCB,
                                const std::string & thePersistenceFolder = "",
-                               const bool thePersistFlag = false, const bool theConservativeFlag = false);
+                               const bool thePersistFlag = false, const GetType theGetType = REQUEST_ALWAYS);
         protected:
             virtual bool removeRequest(Request* theRequest);
         private:
