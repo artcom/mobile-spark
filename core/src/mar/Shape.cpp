@@ -99,7 +99,6 @@ namespace mar {
     void
     RectangleShape::setVertexData() {
         bool myTexturedFlag = (boost::dynamic_pointer_cast<ElementWithTexture>(elementList_[0])) ? true : false;
-        AC_PRINT << "textured: "<<myTexturedFlag << " width: "<<getWidth() << " height: "<<getHeight(); 
         ElementPtr myElement = elementList_[0];
         dataPerVertex_ = 3 + (myTexturedFlag ? 2 : 0);
         myElement->numVertices = 4;

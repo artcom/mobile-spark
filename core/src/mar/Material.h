@@ -41,8 +41,8 @@ namespace mar {
         GLuint getHandle(const std::string & theName) const;
 
         float alpha_;
-        std::string _myFragmentShader;
-        std::string _myVertexShader;
+        std::string fragmentShader_;
+        std::string vertexShader_;
         GLuint shaderProgram_;
         GLuint mvpHandle_;
         GLuint alphaHandle_;

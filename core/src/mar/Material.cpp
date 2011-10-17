@@ -33,14 +33,13 @@ namespace mar {
 
     void
     Material::initGL() {
-        AC_PRINT << "Material::initGL ";
-        if (_myVertexShader.empty() || _myFragmentShader.empty()) {
+        if (vertexShader_.empty() || fragmentShader_.empty()) {
             setShader();
         }
-        shaderProgram_ = createProgram(_myVertexShader, _myFragmentShader);
+        shaderProgram_ = createProgram(vertexShader_, fragmentShader_);
         if (!shaderProgram_) {
             AC_ERROR << "Could not create program.";
-            throw ShaderCreationException("problems during shader program creation of " + _myVertexShader + " or/and " + _myFragmentShader, PLUS_FILE_LINE);
+            throw ShaderCreationException("problems during shader program creation of " + vertexShader_ + " or/and " + fragmentShader_, PLUS_FILE_LINE);
             return;
         }
         bindAttributes();
@@ -50,7 +49,7 @@ namespace mar {
 
     void
     Material::loadShader(const matrix & theMatrix) {
-        if (_myVertexShader.empty() || _myFragmentShader.empty()) {
+        if (vertexShader_.empty() || fragmentShader_.empty()) {
             setShader();
         }
         if (!shaderProgram_) {
@@ -69,7 +68,7 @@ namespace mar {
 
     void
     Material::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        vertexShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
                           theVertexShader.empty() ? DEFAULT_VERTEX_SHADER : theVertexShader);
     }
 
@@ -122,7 +121,7 @@ namespace mar {
 
     void UnlitColoredMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
         Material::setShader(theVertexShader, theFragmentShader);
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        fragmentShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
                             theFragmentShader.empty() ? DEFAULT_COLORED_FRAGMENT_SHADER : theFragmentShader);
 
     }
@@ -155,9 +154,9 @@ namespace mar {
     }
 
     void UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        vertexShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
                           theVertexShader.empty() ? DEFAULT_TEXTURED_VERTEX_SHADER : theVertexShader);
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        fragmentShader_ = AssetProviderSingleton::get().ap()->getStringFromFile(
                           theFragmentShader.empty() ? DEFAULT_TEXTURED_FRAGMENT_SHADER : theFragmentShader);
 
     }
