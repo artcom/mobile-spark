@@ -308,8 +308,8 @@ namespace acprojectview {
 
     void ACProjectView::updateKenBurnsShader(float theProgress) {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        std::map<std::string, float>::iterator it1 = _myIdleScreenImagePtrs[0]->customShaderValues_.find("a_time");
-        std::map<std::string, float>::iterator it2 = _myIdleScreenImagePtrs[1]->customShaderValues_.find("a_time");
+        std::map<std::string, float>::iterator it1 = _myIdleScreenImagePtrs[0]->customShaderValues_.find("u_time");
+        std::map<std::string, float>::iterator it2 = _myIdleScreenImagePtrs[1]->customShaderValues_.find("u_time");
         float t[2];
         //AC_TRACE << "rd " << rd << " ts " << lt << "|" << ut;
         if (theProgress < lt) {
@@ -345,7 +345,7 @@ namespace acprojectview {
         myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?1:0], &Widget::setAlpha, 0, 1, _myKenBurnsFadeDuration)));
         myFadeAnimation->add(WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_myIdleScreenImagePtrs[firstIdleImageVisible_?0:1], &Widget::setAlpha, 1, 0, _myKenBurnsFadeDuration)));
         animation::AnimationManager::get().play(myFadeAnimation);
-        std::map<std::string, float>::iterator it = _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->customShaderValues_.find("a_mode");
+        std::map<std::string, float>::iterator it = _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->customShaderValues_.find("u_mode");
         it->second = masl::random(0.0f, 1.0f);
         firstIdleImageVisible_ = !firstIdleImageVisible_;
         swappedIdleImages_ = true;
