@@ -5,7 +5,7 @@
 #include <masl/MobileSDK.h>
 #include <masl/numeric_functions.h>
 
-#include <mar/AssetProvider.h>
+#include <masl/AssetProvider.h>
 
 #include <spark/Window.h>
 #include <spark/Event.h>
@@ -162,7 +162,6 @@ namespace acprojectview {
         if (myEvent->getY() > ProjectViewerImpl::POPUP_HEIGHT * 2 && !_myProjectViewer->isPopUpOpen()) { 
             MobileSDK_Singleton::get().getNative()->vibrate(10);                
             projectViewAnimation(false);
-            _myProjectMenu->setSensible(true);
             _myProjectViewer->setSensible(false);
         }
     }
@@ -186,9 +185,11 @@ namespace acprojectview {
     void ACProjectView::closeProjectView() {        
         _myProjectViewer->setVisible(false);
         _myProjectMenu->setVisible(true);
+        _myProjectMenu->setSensible(true);                
         _myAnimatingFlag = false;        
     }
     void ACProjectView::onReturn2ProjectView() {        
+        _myProjectViewer->initiateClose();        
         _myProjectViewer->showPopup(false);
         _myProjectMenu->setVisible(true);
     }
@@ -251,7 +252,6 @@ namespace acprojectview {
             _mySeqAnimation->add(myFrameDelayAnim1);
             _mySeqAnimation->add(myFrameDelayAnim2);
         } else {
-            _myProjectViewer->initiateClose();
             _mySeqAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::closeProjectView)));
             _mySeqAnimation->setOnCancel(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::closeProjectView)));
             _mySeqAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onReturn2ProjectView)));
@@ -302,7 +302,7 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        masl::getDirectoryEntries(mar::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
+        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
         onIdle();
     }
 

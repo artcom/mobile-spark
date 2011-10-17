@@ -128,8 +128,9 @@ namespace masl {
     }
 
     void 
-    RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
-        RequestPtr myRequest = RequestPtr(new Request(theUrl));
+    RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
+                               const std::string & thePersistenceFolder) {
+        RequestPtr myRequest = RequestPtr(new Request(theUrl, thePersistenceFolder));
         myRequest->setOnDoneCallback(theCB);
         if (_myDefaultErrorCallback) {
             myRequest->setOnErrorCallback(_myDefaultErrorCallback);
@@ -173,11 +174,12 @@ namespace masl {
 
     void
     RequestManager::getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
-                                  const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB) {
+                                  const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB,
+                                  const std::string & thePersistenceFolder) {
         RequestPtr myNextRequest;
         for (int i = theURLLastPartList.size() - 1; i >= 0 ; --i) {
             std::string myUrl = theBaseURL + "/" + theURLLastPartList[i];
-            SequenceRequestPtr myRequest = SequenceRequestPtr(new SequenceRequest(*this, myUrl));
+            SequenceRequestPtr myRequest = SequenceRequestPtr(new SequenceRequest(*this, myUrl, thePersistenceFolder));
             myRequest->setOnDoneCallback(theOneReadyCB);
             myRequest->get();
             if (myNextRequest) {
