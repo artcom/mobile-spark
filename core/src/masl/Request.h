@@ -195,8 +195,6 @@ namespace masl {
         TP _myObjectPtr;
         void (T::*_myFunctionPointer)(RequestPtr);
     };
-
-
 }
 
 #endif

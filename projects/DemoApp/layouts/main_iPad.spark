@@ -142,9 +142,10 @@
             <Text name="textfromserver" x="10" y="400" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="datefromserver" x="10" y="350" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="getrequest" x="10" y="300" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="postrequest" x="10" y="270" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="putrequest" x="10" y="240" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="deleterequest" x="10" y="210" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="headrequest" x="10" y="370" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="postrequest" x="10" y="240" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="putrequest" x="10" y="210" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="deleterequest" x="10" y="180" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="loading" text="loading..." visible="false" x="10" y="500" z="20"/>
             <Text name="curl_error" text="" visible="false" x="10" y="500" z="21" color="[1,0,0,1]" fontsize="16"/>
         </Slide>

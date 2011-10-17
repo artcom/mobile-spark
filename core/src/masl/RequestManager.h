@@ -23,6 +23,7 @@ namespace masl {
             void getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
                             const std::string & thePersistenceFolder = "", 
                             const bool thePersistFlag = false, const GetType theGetType = REQUEST_ALWAYS);
+            void headRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
             void postRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB);

@@ -128,6 +128,8 @@ namespace demoapp {
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onTextRequestReady)));
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onGetRequestReady)));
+        _myRequestManager.headRequest("http://www.einsfeld.de/mobile-spark/assets/face-devil-grin.png",
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onHeadRequestReady)));
         _myRequestManager.postRequest("http://www.einsfeld.de/mobile-spark/", "id=23&value=post data",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onPostRequestReady)));
         //data is not visible at server, not sure how this is intended to work in Request.cpp
@@ -237,6 +239,12 @@ namespace demoapp {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("getrequest", true));
         myText->setText(theRequest->getResponseString());
     }
+    void DemoApp::onHeadRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("headrequest", true));
+        myText->setText("last modified from header: " + theRequest->getResponseHeader("Last-Modified"));
+        AC_PRINT << "...................... last mod " << theRequest->getResponseHeader("Last-Modified");
+        AC_PRINT << "the story of stuff " << theRequest->getURL() << "___" << theRequest->getResponseString() << "___";
+    }
     void DemoApp::onPostRequestReady(RequestPtr theRequest) {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("postrequest", true));
         myText->setText(theRequest->getResponseString());
@@ -260,7 +268,7 @@ namespace demoapp {
         _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAssetRequestReady)),
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),
-            "/downloads/", true, masl::REQUEST_ALWAYS);
+            "/downloads/", true, masl::REQUEST_IF_NOT_AVAILABLE);
         AC_DEBUG << "headers of spark-request";
         std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
         for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
@@ -438,7 +446,7 @@ namespace demoapp {
             DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
             _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
                 masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),
-                "/downloads/", true);
+                "/downloads/", true, masl::REQUEST_IF_NEWER);
         }
     }
 
