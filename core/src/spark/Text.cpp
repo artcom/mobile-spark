@@ -37,6 +37,7 @@ namespace spark {
         }
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
         myMaterial->setTexture(mar::TexturePtr(new mar::Texture()));
+        myMaterial->getTexture()->transparency_ = true;
         myMaterial->setCustomHandles(customShaderValues_);
         myMaterial->setShader(vertexShader_, fragmentShader_); 
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
@@ -98,6 +99,5 @@ namespace spark {
         _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
         setSize(_myTextSize[0], _myTextSize[1]);
         myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
-        myMaterial->transparency_ = true;
     }
 }
