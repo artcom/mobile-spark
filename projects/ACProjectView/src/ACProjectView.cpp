@@ -52,15 +52,12 @@ namespace acprojectview {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));
         _myProjectViewer = boost::static_pointer_cast<ProjectViewerImpl>(_mySparkWindow->getChildByName("2dworld")->getChildByName("projectViewer",true));
-
         spark::RectanglePtr myBackground = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("2dworld")->getChildByName("background2"));
         myBackground->setSize(_mySparkWindow->getSize());
                     
         _myProjectMenu->setSensible(false);
         _myStartScreenPtr =  boost::static_pointer_cast<Transform>(_mySparkWindow->getChildByName("2dworld")->getChildByName("startscreen",true));
-        spark::EventCallbackPtr startToMenuAniCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onStartScreenClicked));
-        _myStartScreenPtr->addEventListener(TouchEvent::PICKED, startToMenuAniCB,true);
-        
+               
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onProjectItem));
         spark::EventCallbackPtr myBackCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onBack));
         
@@ -108,26 +105,7 @@ namespace acprojectview {
         BaseApp::onFrame(theEvent);
     }
     
-    void ACProjectView::onStartScreenClicked(EventPtr theEvent) {
-        AC_DEBUG << "clicked on startscreen";
-
-        _myStartScreenPtr->setSensible(false);
-        _myProjectMenu->setSensible(true);
-        _myProjectMenu->arrangeProjects();
-        WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myStartScreenPtr)), &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
-        animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
-            
-        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        myAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onStartIdleFade)));
-        myAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishIdleFade)));
-            
-        myParallel->add(myAnimation);
-        animation::AnimationManager::get().play(myParallel);
-         
-
-    }
-    
+   
     void ACProjectView::onStartIdleFade() {
         _myStartScreenPtr->setVisible(true);
     }
@@ -395,7 +373,16 @@ namespace acprojectview {
             _myStartScreenPtr->setVisible(false);
             _myStartScreenPtr->setSensible(false);
             _myKenBurnsAnimation->cancel();
-            _myKenBurnsAnimation = animation::ParallelAnimationPtr();
+            _myKenBurnsAnimation = animation::ParallelAnimationPtr();//        AC_DEBUG << "clicked on startscreen";
+             _myProjectMenu->arrangeProjects();
+            WidgetPropertyAnimationPtr myAnimation = WidgetPropertyAnimationPtr(
+                  new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myStartScreenPtr)), &Widget::setAlpha, 1, 0, 300, animation::EasingFnc(animation::linearTween)));
+            animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
+            ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+            myAnimation->setOnPlay(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onStartIdleFade)));
+            myAnimation->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onFinishIdleFade)));
+            myParallel->add(myAnimation);
+            animation::AnimationManager::get().play(myParallel);
         }
     }
 
