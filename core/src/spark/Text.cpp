@@ -2,14 +2,32 @@
 
 #include <masl/MobileSDK.h>
 #include <masl/AssetProvider.h>
+#include <masl/checksum.h>
+
+#include <mar/Texture.h>
+#include <mar/TextureLoader.h>
 
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
 #include "I18nContext.h"
 
-namespace spark {
-    const char * const Text::SPARK_TYPE = "Text";
+#include <boost/progress.hpp>
 
+using namespace mar;
+using namespace masl;
+
+namespace spark {
+    
+    TextGlyphIndexMap::TextGlyphIndexMap() {}
+    TextGlyphIndexMap::~TextGlyphIndexMap() {}
+    void TextGlyphIndexMap::store(const unsigned long theKey, int myRenderedGlyphIndex) {_myRenderedGlyphTextureMap[theKey] =  myRenderedGlyphIndex;}         
+    int TextGlyphIndexMap::getIndex(const unsigned long theKey)  {
+        return  (_myRenderedGlyphTextureMap.find(theKey) != _myRenderedGlyphTextureMap.end()) ? _myRenderedGlyphTextureMap[theKey] : -1;
+    }       
+        
+        
+    const char * const Text::SPARK_TYPE = "Text";
+    unsigned Text::ourTextCounter = 0;
     Text::Text(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         I18nShapeWidget(theApp, theXMLNode),
         _myFontSize(_myXMLNode->getAttributeAs<int>("fontsize", 32)),
@@ -19,7 +37,7 @@ namespace spark {
         _myLineHeight(_myXMLNode->getAttributeAs<int>("lineHeight", 0)),
         _myTextAlign(_myXMLNode->getAttributeAs<std::string>("align", "left")),
         _myRenderedGlyphIndex(0),
-        _myTextStartPos(0)
+        _myTextStartPos(0), _myCacheFlag(_myXMLNode->getAttributeAs<bool>("cache", false))
     {
         setI18nData(getNode()->getAttributeAs<std::string>("text", ""));
         
@@ -80,13 +98,38 @@ namespace spark {
     Text::build() {
         I18nShapeWidget::build();
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
-        masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureInfo()->textureId_, _myFontSize,
-                                         _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
-        _myTextSize[0] = myTextInfo.width;
-        _myTextSize[1] = myTextInfo.height;
-        _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
-        setSize(_myTextSize[0], _myTextSize[1]);
-        myMaterial->getTexture()->getTextureInfo()->textureId_ = myTextInfo.textureID;
+        bool myCreateTextureFlag = true;            
+        unsigned long myKey =  masl::initiateCRC32();
+        if (_myCacheFlag) {
+            appendCRC32(myKey, data_.substr(_myTextStartPos, data_.size()));
+            appendCRC32(myKey, as_string(_myFontSize));
+            appendCRC32(myKey, _myFontPath);
+            appendCRC32(myKey, as_string(_myTextColor));
+            TextureInfoPtr myTexturePtr = TextureLoader::get().getTextureInfo(myKey);
+            if (myTexturePtr) {
+                _myTextSize[0] = myTexturePtr->width_;
+                _myTextSize[1] = myTexturePtr->height_;
+                _myRenderedGlyphIndex = TextGlyphIndexMap::get().getIndex(myKey);
+                setSize(_myTextSize[0], _myTextSize[1]);
+                myMaterial->getTexture()->getTextureInfo()->textureId_ = myTexturePtr->textureId_;        
+                myCreateTextureFlag = false;  
+            }      
+        }
+        if (myCreateTextureFlag) {
+            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, 0, _myFontSize,
+                                             _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);                                             
+            _myTextSize[0] = myTextInfo.width;
+            _myTextSize[1] = myTextInfo.height;
+            _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
+            setSize(_myTextSize[0], _myTextSize[1]);
+            myMaterial->getTexture()->getTextureInfo()->width_ =  myTextInfo.width;                
+            myMaterial->getTexture()->getTextureInfo()->height_ = myTextInfo.height;                
+            myMaterial->getTexture()->getTextureInfo()->textureId_ = myTextInfo.textureID;    
+            if (_myCacheFlag) {
+                TextGlyphIndexMap::get().store(myKey, _myRenderedGlyphIndex);
+                TextureLoader::get().storeTextureInfo(myKey, myMaterial->getTexture()->getTextureInfo());
+            }            
+        }
         myMaterial->transparency_ = true;
     }
 }

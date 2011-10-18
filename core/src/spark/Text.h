@@ -4,6 +4,18 @@
 #include "I18nShapeWidget.h"
 
 namespace spark {
+    
+    typedef std::map<unsigned long, int> RenderedGlyphTextureMap;    
+    class TextGlyphIndexMap : public masl::Singleton<TextGlyphIndexMap> {
+        public:
+            TextGlyphIndexMap();
+            virtual ~TextGlyphIndexMap();
+            void store(const unsigned long theKey, int myRenderedGlyphIndex);
+            int getIndex(const unsigned long theKey);
+        private:
+            RenderedGlyphTextureMap _myRenderedGlyphTextureMap;
+    };
+    
     class Text : public I18nShapeWidget {
     public:
         Text(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
@@ -26,6 +38,7 @@ namespace spark {
     protected:
         virtual void build();
     private:
+        static unsigned ourTextCounter;
         int _myFontSize;
         vector4 _myTextColor;
         vector2 _myTextSize;
@@ -36,6 +49,7 @@ namespace spark {
         std::string _myTextAlign;
         int _myRenderedGlyphIndex;     
         int _myTextStartPos; 
+        bool _myCacheFlag;
     };
 
     typedef masl::Ptr<Text> TextPtr;
