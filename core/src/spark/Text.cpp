@@ -43,7 +43,7 @@ namespace spark {
     Text::onPause() {
         I18nShapeWidget::onPause();
         if (getShape()) {
-            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
             mar::TexturePtr myTexture = myMaterial->getTexture();
             myTexture->getTextureInfo()->unbind();
         }
@@ -52,7 +52,7 @@ namespace spark {
     void
     Text::onResume() {
         I18nShapeWidget::onResume();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
         _myDirtyFlag = true;
     }
 
@@ -79,7 +79,7 @@ namespace spark {
     void
     Text::build() {
         I18nShapeWidget::build();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
         masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureInfo()->textureId_, _myFontSize,
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
         _myTextSize[0] = myTextInfo.width;
