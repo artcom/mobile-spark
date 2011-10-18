@@ -1,7 +1,7 @@
+#include "TextureLoader.h"
 
 #include <masl/Logger.h>
 
-#include "TextureLoader.h"
 #include "png_functions.h"
 
 namespace mar {
