@@ -152,14 +152,10 @@ namespace spark {
 
     I18nItemPtr
     Widget::getI18nItemByName(const std::string & theName) const {
-        AC_PRINT << "getI18nItemsByName " << theName;
         I18nItemPtr myI18nItem;
         std::vector<I18nContextPtr> myContexts = getI18nContexts();
-        AC_PRINT << "#contexts " << myContexts.size();
         for (std::vector<I18nContextPtr>::iterator it = myContexts.begin(); it != myContexts.end(); ++it) {
             ComponentPtr myComponent = (*it)->getChildByName(theName);
-            AC_PRINT << "search in " << (*it)->getName();
-            AC_PRINT << "found: " << myComponent;
             if (myComponent && myComponent->getType() == I18nItem::SPARK_TYPE) {
                 return boost::static_pointer_cast<I18nItem>(myComponent);
             }
