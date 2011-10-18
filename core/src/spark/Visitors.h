@@ -11,6 +11,7 @@ namespace spark {
         ComponentVisitor() {};
         virtual ~ComponentVisitor();
         virtual bool visit(ComponentPtr theComponent) = 0;
+        virtual bool preCheck(ComponentPtr theComponent) { return true; };
     };
 
     class PrintComponentVisitor : public ComponentVisitor {
@@ -21,6 +22,7 @@ namespace spark {
     class RealizeComponentsButWorldAndWindowVisitor : public ComponentVisitor {
     public:
         virtual bool visit(ComponentPtr theComponent);
+        virtual bool preCheck(ComponentPtr theComponent);
     };
     
     class OnPauseComponentVisitor : public ComponentVisitor {
@@ -69,12 +71,23 @@ namespace spark {
 
 
     template<class VISITOR> void
-    visitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {
+    parentFirstVisitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {
         bool myContinueTraversal = theVisitor.visit(theComponent);
         if (!myContinueTraversal || theComponent->getChildren().size() == 0) { return; }
         for (std::vector<ComponentPtr>::const_iterator it = theComponent->getChildren().begin();
                                                        it != theComponent->getChildren().end(); ++it) {
-            visitComponents(theVisitor, *it);
+            parentFirstVisitComponents(theVisitor, *it);
+        }
+    };
+
+    template<class VISITOR> void
+    childFirstVisitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {
+        if (theVisitor.preCheck(theComponent)) {
+            for (std::vector<ComponentPtr>::const_iterator it = theComponent->getChildren().begin();
+                                                           it != theComponent->getChildren().end(); ++it) {
+                childFirstVisitComponents(theVisitor, *it);
+            }
+            theVisitor.visit(theComponent);
         }
     };
 

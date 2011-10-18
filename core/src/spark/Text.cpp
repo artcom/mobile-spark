@@ -61,7 +61,7 @@ namespace spark {
     Text::onPause() {
         I18nShapeWidget::onPause();
         if (getShape()) {
-            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
             mar::TexturePtr myTexture = myMaterial->getTexture();
             myTexture->getTextureInfo()->unbind();
         }
@@ -70,7 +70,7 @@ namespace spark {
     void
     Text::onResume() {
         I18nShapeWidget::onResume();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
         _myDirtyFlag = true;
     }
 

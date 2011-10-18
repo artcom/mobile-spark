@@ -12,7 +12,7 @@ namespace spark {
     {
         setShape(mar::ShapeFactory::get().createRectangle(false, 1, 1));
         setSize(vector2(getNode()->getAttributeAs<float>("width"), getNode()->getAttributeAs<float>("height")));
-        boost::static_pointer_cast<mar::UnlitColoredMaterial>(getShape()->elementList[0]->material)->setDiffuseColor(_myColor);
+        boost::static_pointer_cast<mar::UnlitColoredMaterial>(getShape()->elementList_[0]->material)->setDiffuseColor(_myColor);
     }
 
     Rectangle::~Rectangle() {
