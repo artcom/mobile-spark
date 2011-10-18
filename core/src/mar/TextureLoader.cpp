@@ -1,5 +1,6 @@
 
 #include <masl/Logger.h>
+#include <masl/checksum.h>
 
 #include "TextureLoader.h"
 #include "png_functions.h"
@@ -17,18 +18,42 @@ namespace mar {
     }
         
     TextureInfoPtr TextureLoader::load(const std::string & theSrc, const bool theCacheFlag) {
-        if (_myTextureMap.find(theSrc) != _myTextureMap.end()) {
+        unsigned long myKey = masl::initiateCRC32();
+        masl::appendCRC32(myKey, theSrc);     
+        
+        if (_myTextureMap.find(myKey) != _myTextureMap.end()) {
             AC_INFO << "TextureLoader::load found texture: '" << theSrc << "' in map -> do not reload";
-            return _myTextureMap[theSrc];
+            return _myTextureMap[myKey];
         } else {
             TextureInfoPtr myTexture = TextureInfoPtr(new TextureInfo());        
             loadTextureFromPNG(theSrc, myTexture);    
             if (theCacheFlag) {    
                 AC_INFO << "TextureLoader::load texture: '" << theSrc << "' generated store in map";
-                _myTextureMap[theSrc] = myTexture;
+                storeTextureInfo(myKey, myTexture);
             }
             return myTexture;
         }
     }
+    
+    TextureInfoPtr 
+    TextureLoader::getTextureInfo(const unsigned long theKey) {
+        if (_myTextureMap.find(theKey) != _myTextureMap.end()) {
+            return _myTextureMap[theKey];
+        } else {
+            return TextureInfoPtr();                    
+        }
+        
+    }
+        
+    void 
+    TextureLoader::storeTextureInfo(const unsigned long theKey, TextureInfoPtr theTextureInfo) {
+        TextureInfoPtr myTexture = TextureInfoPtr(new TextureInfo());        
+        myTexture->width_ = theTextureInfo->width_;
+        myTexture->height_ = theTextureInfo->height_;
+        myTexture->textureId_ = theTextureInfo->textureId_;
+        myTexture->transparency_ = theTextureInfo->transparency_;
+        _myTextureMap[theKey] = myTexture;    
+    }
+
 }
 
