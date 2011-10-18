@@ -65,7 +65,7 @@ namespace acprojectview {
     
     void
     ProjectMenu::onSwipeLeftCB(EventPtr theEvent) {
-        if (isRendered()) {        
+        if (isRendered() && isSensible()) {        
             AC_PRINT << "Swipe menu";
             changeSlide(1);
         }
@@ -73,7 +73,7 @@ namespace acprojectview {
     
     void
     ProjectMenu::onSwipeRightCB(EventPtr theEvent) {
-        if (isRendered()) {        
+        if (isRendered() && isSensible()) {        
             AC_PRINT << "Swipe menu";
             changeSlide(-1);
         }

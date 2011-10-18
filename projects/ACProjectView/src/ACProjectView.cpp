@@ -157,8 +157,8 @@ namespace acprojectview {
     
     void ACProjectView::onFinishLoadProjectView() {  
         _myProjectMenu->setVisible(false);
+        _myProjectMenu->setSensible(false);        
         _myAnimatingFlag = false;        
-        AC_PRINT << "----------------------------------------------------- animation done";
     }
 
     void ACProjectView::closeProjectView() {        
@@ -369,7 +369,7 @@ namespace acprojectview {
         }
         if (_myKenBurnsAnimation) {
             _myProjectMenu->setVisible(true);
-            _myProjectMenu->setSensible(true);
+            _myProjectMenu->setSensible(true);            
             _myStartScreenPtr->setVisible(false);
             _myStartScreenPtr->setSensible(false);
             _myKenBurnsAnimation->cancel();

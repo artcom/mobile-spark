@@ -7,7 +7,7 @@
 
 
 namespace acprojectview {
-
+    
     class ProjectImpl : public spark::Transform {
         public: 
             ProjectImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
