@@ -36,8 +36,11 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace acprojectview {
    
+    const std::string ACProjectView::BASE_URL = "http://www.einsfeld.de/mobile-spark/ACProjectView/";
+
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
-        firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false) {
+        firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
+        loadCount_(0) {
     } 
 
     ACProjectView::~ACProjectView() {
@@ -46,9 +49,40 @@ namespace acprojectview {
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         ACProjectViewComponentMapInitializer::init();        
-
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
-        
+        std::vector<std::string> myOnSetupNeededAssets;
+        myOnSetupNeededAssets.push_back("layouts/i18n.spark");
+        myOnSetupNeededAssets.push_back("layouts/inner_menu.spark");
+        _myRequestManager.getAllRequest(ACProjectView::BASE_URL, myOnSetupNeededAssets, 
+            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)));
+    }
+
+    void ACProjectView::onAssetReady(masl::RequestPtr theRequest) {
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        if (loadCount_ == 0) {
+            AC_PRINT << ".............................onI18nRequestReady";
+            std::string myNewSpark = theRequest->getResponseString();
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromString(ptr, myNewSpark);
+            spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
+            for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
+                myTransform->addChild(*it);
+            }
+        } else if (loadCount_ == 1) {
+            AC_PRINT << ".............................onMenuRequestReady";
+            std::string myNewSpark = theRequest->getResponseString();
+            AC_PRINT << "0";
+            spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromString(ptr, myNewSpark, myTransform);
+            AC_PRINT << "3";
+            onLoadCompolete();
+        }
+        loadCount_++;
+    }
+
+    void ACProjectView::onLoadCompolete() {
+        AC_PRINT << "onLoadComplete";
+        loadCount_ = 0;
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));
         _myProjectViewer = boost::static_pointer_cast<ProjectViewerImpl>(_mySparkWindow->getChildByName("2dworld")->getChildByName("projectViewer",true));
@@ -103,6 +137,7 @@ namespace acprojectview {
     }
     void ACProjectView::onFrame(EventPtr theEvent) {
         BaseApp::onFrame(theEvent);
+        _myRequestManager.handleRequests(); //TODO: move to BaseApp?
     }
     
    
