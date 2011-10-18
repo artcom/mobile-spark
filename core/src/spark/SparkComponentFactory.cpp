@@ -64,16 +64,21 @@ namespace spark {
     }
 
     ComponentPtr
-    SparkComponentFactory::loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath) {
+    SparkComponentFactory::loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath,
+                                                       const ContainerPtr theParent) {
         std::string myLayout = masl::AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
-        return loadSparkComponentsFromString(theApp, myLayout);
+        return loadSparkComponentsFromString(theApp, myLayout, theParent);
     }
 
     ComponentPtr
-    SparkComponentFactory::loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode) {
+    SparkComponentFactory::loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode, 
+                                                         const ContainerPtr theParent) {
         XMLNodePtr myNode(new XMLNode(theNode));
         resolveTemplates(theApp, myNode);
         ComponentPtr myComponentPtr = createComponent(theApp, myNode);
+        if (theParent) {
+            theParent->addChild(myComponentPtr);
+        }
         ReparentComponentVisitor myReparentVisitor;
 		visitComponents(myReparentVisitor, myComponentPtr);
         RealizeComponentsButWorldAndWindowVisitor myVisitor;

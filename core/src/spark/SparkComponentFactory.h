@@ -6,6 +6,7 @@
 #include "BaseApp.h"
 
 #include "Component.h"
+#include "Container.h"
 
 namespace spark {
 
@@ -30,8 +31,10 @@ namespace spark {
         bool unregisterComponent(const std::string & theComponentName);
         ComponentPtr createComponent(const BaseAppPtr theApp, const masl::XMLNodePtr theNode) const;
 
-        ComponentPtr loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath);
-        ComponentPtr loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode);
+        ComponentPtr loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath, 
+                                                 const ContainerPtr theParent = ContainerPtr());
+        ComponentPtr loadSparkComponentsFromString(const BaseAppPtr theApp, const std::string & theNode,
+                                                   const ContainerPtr theParent = ContainerPtr());
         std::vector<std::string> createSrcListFromSpark(const std::string & theSparkString);
 
     private:
