@@ -51,8 +51,8 @@ namespace acprojectview {
         int myHorizontalTiling = myMenu->getHorizontalTiling();
         int myVerticalTiling = myMenu->getVerticalTiling();
 
-        int iconWidth = (myWidth-(myHorizontalTiling-1)*myMenu->getGapX()) / myHorizontalTiling;
-        int iconHeight = (myHeight-(myVerticalTiling-1)*myMenu->getGapY()) / myVerticalTiling;
+        int iconWidth = (myWidth-(myHorizontalTiling-1)*(myMenu->getGapX()-1)) / myHorizontalTiling;
+        int iconHeight = (myHeight-(myVerticalTiling-1)*(myMenu->getGapY()-1)) / myVerticalTiling;
          
         titleComponent_->setMaxWidth(iconWidth-titleComponent_->getX()*2);
         subtitleComponent_->setMaxWidth(iconWidth-subtitleComponent_->getX()*2);

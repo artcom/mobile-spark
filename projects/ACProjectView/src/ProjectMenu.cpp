@@ -44,8 +44,8 @@ namespace acprojectview {
         ProjectMenuPtr myPtr = boost::static_pointer_cast<ProjectMenu>(shared_from_this());
         _myWidth = _myWindowPtr->getSize()[0];
         _myHeight = _myWindowPtr->getSize()[1];
-        _myIconWidth = (_myWidth - (_myHorizontalTiling-1)*_myGapY) / _myHorizontalTiling;
-        _myIconHeight = (_myHeight - (_myVerticalTiling-1)*_myGapX) / _myVerticalTiling;
+        _myIconWidth = (_myWidth - (_myHorizontalTiling-1)*(_myGapX-1)) / _myHorizontalTiling;
+        _myIconHeight = (_myHeight - (_myVerticalTiling-1)*(_myGapY-1)) / _myVerticalTiling;
         const VectorOfComponentPtr & myChildren = myPtr->getChildrenByType(ProjectImpl::SPARK_TYPE);
         _myNumberOfSlides = (myChildren.size()-1)/(_myHorizontalTiling * _myVerticalTiling);
         boost::timer::timer myTimer;
