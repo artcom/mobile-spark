@@ -55,7 +55,8 @@ namespace acprojectview {
         myOnSetupNeededAssets.push_back("layouts/i18n.spark");
         myOnSetupNeededAssets.push_back("layouts/inner_menu.spark");
         _myRequestManager.getAllRequest(ACProjectView::BASE_URL, myOnSetupNeededAssets, 
-            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)));
+            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
+            masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
     }
 
     void ACProjectView::onAssetReady(masl::RequestPtr theRequest) {
@@ -71,10 +72,16 @@ namespace acprojectview {
         } else if (loadCount_ == 1) {
             AC_PRINT << ".............................onMenuRequestReady";
             std::string myNewSpark = theRequest->getResponseString();
-            AC_PRINT << "0";
+            std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
+            _myRequestManager.getAllRequest(BASE_URL+"/textures/", assetList,
+                masl::RequestCallbackPtr(),
+                masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
+                "/downloads/", true, masl::REQUEST_IF_NOT_AVAILABLE);
+            AC_PRINT << "on menu request ready done";
+        } else if (loadCount_ == 2) {
+            AC_PRINT << ".............................onAssetsReady";
             spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
-            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromString(ptr, myNewSpark, myTransform);
-            AC_PRINT << "3";
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/layouts/inner_menu.spark", myTransform);
             onLoadCompolete();
         }
         loadCount_++;
@@ -341,7 +348,7 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
+        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/textures/large_images/", idleFiles_, "");
         onIdle();
     }
 
@@ -374,7 +381,7 @@ namespace acprojectview {
 
     void ACProjectView::onKenBurnsImageFadeStart() {
         AC_TRACE << "_____________________________________ fade start, load to " << (firstIdleImageVisible_?1:0);
-        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/large_images/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/downloads/textures/large_images/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
         vector2 myWindowDimensions = _mySparkWindow->getSize();
         _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);

@@ -1,0 +1,67 @@
+     <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="2" y-gap="2" visible="true">
+            <Project name="project7" title_I18n="artcom_book_title" subtitle_I18n="artcom_book_subtitle" description_I18n="artcom_book_text" src="/large_images/bookrelease_main_01.png">
+                <ContentImage src="/large_images/bookrelease_main_01.png"/>
+                <ContentImage src="/large_images/bookrelease_main_02.png"/>
+            </Project>  
+
+            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/large_images/blub.png">
+                <ContentImage src="/large_images/blub.png"/>
+                <ContentImage src="/large_images/dieter.png"/>
+	            <ContentImage src="/large_images/flur.png"/>
+	            <ContentImage src="/large_images/gl.png"/>
+	            <ContentImage src="/large_images/gruppe.png"/>
+	            <ContentImage src="/large_images/hand.png"/>
+	            <ContentImage src="/large_images/interns.png"/>
+	            <ContentImage src="/large_images/js.png"/>
+	            <ContentImage src="/large_images/probebau.png"/>
+            </Project>
+            <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle"  description_I18n="belvedere_text" src="/large_images/belvedere_main_01.png">
+                <ContentImage src="/large_images/belvedere_main_01.png"/>
+                <ContentImage src="/large_images/belvedere_main_02.png"/>
+                <ContentImage src="/large_images/belvedere_main_03.png"/>
+                <ContentImage src="/large_images/belvedere_main_04.png"/>
+            </Project>
+
+
+            <Project name="project2" title_I18n="duality_title" subtitle_I18n="duality_subtitle" description_I18n="duality_text" src="/large_images/duality_main_01.png" >
+                <ContentImage src="/large_images/duality_main_01.png"/>            
+                <ContentImage src="/large_images/duality_main_02.png"/>            
+                <ContentImage src="/large_images/duality_main_03.png"/>            
+                <ContentImage src="/large_images/duality_main_04.png"/>            
+            </Project>
+            
+            <Project name="project3" title_I18n="jurascope_title" subtitle_I18n="jurascope_subtitle" description_I18n="jurascope_text" src="/large_images/juraskope_main_02.png">
+                <ContentImage src="/large_images/juraskope_main_02.png"/>
+                <ContentImage src="/large_images/juraskope_main_03.png"/>
+            </Project>
+
+            <Project name="project4" title_I18n="kinetik_title" subtitle_I18n="kinetik_subtitle" description_I18n="kinetik_text" src="/large_images/kinetische_skulptur_01.png">
+                <ContentImage src="/large_images/kinetische_skulptur_01.png"/>
+                <ContentImage src="/large_images/kinetische_skulptur_02.png"/>
+	            <ContentImage src="/large_images/kinetische_skulptur_03.png"/>
+	        </Project>
+	        
+
+            <Project name="project5" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" description_I18n="level_green_text" src="/large_images/level_green_01.png">
+                <ContentImage src="/large_images/level_green_01.png"/>
+                <ContentImage src="/large_images/level_green_02.png"/>
+	            <ContentImage src="/large_images/level_green_03.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_02.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_03.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_04.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_05.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_06.png"/>
+	            <ContentImage src="/large_images/levelgreen_main_07.png"/>
+            </Project>
+
+
+            <Project name="project6" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle" description_I18n="terravision_text" src="/large_images/terravision_main_01.png">
+	            <ContentImage src="/large_images/terravision_main_01.png"/>
+	            <ContentImage src="/large_images/terravision_main_02.png"/>
+            </Project>
+
+            <Project name="spark_mobile" title_I18n="spark_mobile_title" subtitle_I18n="spark_mobile_subtitle" description_I18n="spark_mobile_text" src="/large_images/Spark_Schichten.png">
+                <ContentImage src="/large_images/Spark_Schichten.png"/>
+            </Project>                      
+                              
+        </ProjectMenu>	
