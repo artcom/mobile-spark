@@ -89,9 +89,12 @@ namespace acprojectview {
 
     void ACProjectView::onErrorRequest(masl::RequestPtr theRequest) {
         AC_ERROR << "............ACProjectView onError for URL " << theRequest->getURL();
-        TextPtr myErrorText = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("error"));
-        myErrorText->setVisible(true);
-        myErrorText->setText("error: internet connection required for initial setup");
+        //display error message if data has not been persisted
+        if (masl::AssetProviderSingleton::get().ap()->findFile("/downloads/i18n.spark").empty()) {
+            TextPtr myErrorText = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("error"));
+            myErrorText->setVisible(true);
+            myErrorText->setText("error: internet connection required for initial setup");
+        }
     }
 
     void ACProjectView::onAssetReady(masl::RequestPtr theRequest) {

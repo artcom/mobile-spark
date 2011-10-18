@@ -444,7 +444,7 @@ namespace masl {
             if (foundFile.empty()) {
                 return false;
             }
-            _myResponseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(foundFile);
+            _myResponseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
             if (_myResponseBlock.size() > 0) {
                 onDone();
                 return true;
