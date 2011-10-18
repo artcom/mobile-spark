@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "RequestManager.h"
+#include "AssetProvider.h"
 
 #define CURL_VERBOSE 0
 #define DB(x) // x
@@ -15,8 +16,11 @@
 namespace masl {
     DEFINE_EXCEPTION(INetException, masl::Exception);
 
-    Request::Request(const std::string & theURL, const std::string & theUserAgent)
-        : _myURL(theURL),
+    Request::Request(const std::string & theURL, const std::string & thePersistenceFolder,
+                     const bool thePersistFlag, const std::string & theUserAgent)
+      : _myURL(theURL),
+        _myPersistenceFolder(thePersistenceFolder),
+        _myPersistFlag(thePersistFlag),
         _myUserAgent(theUserAgent),
         _myCurlHandle(0),
         _myLowSpeedLimit(0),
@@ -70,10 +74,18 @@ namespace masl {
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
     }
 
+    Request::Request(const std::string & theURL, const std::vector<char> theBlock):
+        _myURL(theURL),
+        _myCurlHandle(0),
+        _myResponseBlock(theBlock) {
+    }
+
     Request::~Request() {
         DB(AC_TRACE << "cleaning up " << _myURL << endl);
-        curl_slist_free_all (_myHttpHeaderList);
-        curl_easy_cleanup(_myCurlHandle);
+        if (_myCurlHandle) {
+            curl_slist_free_all (_myHttpHeaderList);
+            curl_easy_cleanup(_myCurlHandle);
+        }
     }
 
     void
@@ -396,25 +408,46 @@ namespace masl {
 
     void
     Request::onStart() {
-    };
+    }
 
     void
     Request::onError(CURLcode theError, long theHttpStatus) {
-    };
+        if (_myOnErrorCallback) {
+            (*_myOnErrorCallback)(shared_from_this());
+        }
+        getPersistedDataIfAvailable();
+    }
 
     bool
     Request::onProgress(double theDownloadTotal, double theCurrentDownload,
                 double theUploadTotal, double theCurrentUpdate)
     {
         return true;
-    };  // return false to abort transfer
+    }  // return false to abort transfer
 
     void
     Request::onDone() {
+        if (_myPersistFlag && !_myPersistenceFolder.empty()) {
+            AssetProviderSingleton::get().ap()->storeInFile(
+                    _myPersistenceFolder + masl::getFilenamePart(_myURL), _myResponseBlock);
+        }
         if (_myOnDoneCallback) {
             (*_myOnDoneCallback)(shared_from_this());
         }
-    };
+    }
+
+    bool
+    Request::getPersistedDataIfAvailable() {
+        if (!_myPersistenceFolder.empty()) {
+            std::string fileToFind = _myPersistenceFolder + masl::getFilenamePart(_myURL);
+            _myResponseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
+            if (_myResponseBlock.size() > 0) {
+                onDone();
+                return true;
+            }
+        }
+        return false;
+    }
 
     // //////////////////////////////////////////////////////////
     //
@@ -458,7 +491,10 @@ namespace masl {
 
 
     SequenceRequest::SequenceRequest(RequestManager & theRequestManager, const std::string & theURL,
-                                     const std::string & theUserAgent) : Request(theURL, theUserAgent),
+                                     const std::string & thePersistenceFolder,
+                                     const bool thePersistFlag, const std::string & theUserAgent) 
+                                    : Request(theURL, thePersistenceFolder, 
+                                              thePersistFlag, theUserAgent),
                                      _myRequestManager(theRequestManager) {
     }
 

@@ -3,7 +3,7 @@
 
 #include <masl/Logger.h>
 #include <masl/XMLUtils.h>
-#include <mar/AssetProvider.h>
+#include <masl/AssetProvider.h>
 
 #include "Visitors.h"
 
@@ -65,7 +65,7 @@ namespace spark {
 
     ComponentPtr
     SparkComponentFactory::loadSparkComponentsFromFile(const BaseAppPtr theApp, const std::string & thePath) {
-        std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
+        std::string myLayout = masl::AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
         return loadSparkComponentsFromString(theApp, myLayout);
     }
 
@@ -75,15 +75,15 @@ namespace spark {
         resolveTemplates(theApp, myNode);
         ComponentPtr myComponentPtr = createComponent(theApp, myNode);
         ReparentComponentVisitor myReparentVisitor;
-		visitComponents(myReparentVisitor, myComponentPtr);
+		parentFirstVisitComponents(myReparentVisitor, myComponentPtr);
         RealizeComponentsButWorldAndWindowVisitor myVisitor;
-		visitComponents(myVisitor, myComponentPtr);
+		childFirstVisitComponents(myVisitor, myComponentPtr);
         return myComponentPtr;
     }
 
     XMLNodePtr
     SparkComponentFactory::loadXMLNodeFromFile(const BaseAppPtr theApp, const std::string & thePath) {
-        std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
+        std::string myLayout = masl::AssetProviderSingleton::get().ap()->getStringFromFile(thePath);
         return loadXMLNodeFromString(theApp, myLayout);
     }
 

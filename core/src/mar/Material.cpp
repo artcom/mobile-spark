@@ -1,13 +1,15 @@
 #include "Material.h"
 
+#include <masl/AssetProvider.h>
 #include <masl/CallStack.h>
 #include <masl/Logger.h>
 
-#include "AssetProvider.h"
 #include "Texture.h"
 #include "Element.h"
 #include "openGL_functions.h"
 #include "png_functions.h"
+
+#include "TextureLoader.h"
 
 
 namespace mar {
@@ -47,7 +49,7 @@ namespace mar {
     }
 
     void Material::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        _myVertexShader = masl::AssetProviderSingleton::get().ap()->getStringFromFile(
                           theVertexShader.empty() ? DEFAULT_VERTEX_SHADER : theVertexShader);
     }
 
@@ -97,7 +99,7 @@ namespace mar {
 
     void UnlitColoredMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
         Material::setShader(theVertexShader, theFragmentShader);
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        _myFragmentShader = masl::AssetProviderSingleton::get().ap()->getStringFromFile(
                             theFragmentShader.empty() ? DEFAULT_COLORED_FRAGMENT_SHADER : theFragmentShader);
 
     }
@@ -108,13 +110,14 @@ namespace mar {
     }
 
     //////////////////////////////////////////////////// UnlitTexturedMaterial
-    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) {
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc, const bool theCacheFlag) {
         _mySrc = theSrc;
         _myTexture = TexturePtr(new Texture());
 
         if (_mySrc != "") {
-            loadTextureFromPNG(_mySrc, _myTexture);
-            transparency_ = _myTexture->transparency_;
+            //loadTextureFromPNG(_mySrc, _myTexture);
+            _myTexture->setTextureInfo(TextureLoader::get().load(_mySrc, theCacheFlag));
+            transparency_ = _myTexture->getTextureInfo()->transparency_;
         }
     }
 
@@ -128,13 +131,13 @@ namespace mar {
     void UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glUniformMatrix4fv(textureMatrixHandle, 1, GL_FALSE, _myTexture->matrix_.data());
-        glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureId());
+        glBindTexture(GL_TEXTURE_2D, _myTexture->getTextureInfo()->textureId_);//getTextureId());
     }
 
     void UnlitTexturedMaterial::setShader(const std::string & theVertexShader, const std::string & theFragmentShader) {
-        _myVertexShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        _myVertexShader = masl::AssetProviderSingleton::get().ap()->getStringFromFile(
                           theVertexShader.empty() ? DEFAULT_TEXTURED_VERTEX_SHADER : theVertexShader);
-        _myFragmentShader = AssetProviderSingleton::get().ap()->getStringFromFile(
+        _myFragmentShader = masl::AssetProviderSingleton::get().ap()->getStringFromFile(
                           theFragmentShader.empty() ? DEFAULT_TEXTURED_FRAGMENT_SHADER : theFragmentShader);
 
     }

@@ -43,6 +43,23 @@ namespace android {
         return readFromPackage(_myApkArchive, theFileName);
     }
 
+    std::vector<char>
+    AndroidAssetProvider::getBlockFromFile(const std::string & theFileName) const {
+        if (theFileName.size() > 0 && theFileName[0] == '/') {
+            //unzipped, read from sdcard
+            std::vector<char> myContent;
+            std::string filePath;
+            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+                masl::readBinaryFile(filePath, myContent);
+            } else {
+                AC_ERROR << "file " << theFileName << " was not found in search paths";
+                throw masl::FileNotFoundException("file " + theFileName + " was not found in search paths", PLUS_FILE_LINE);
+            }
+            return myContent;
+        }
+        return readBinaryFromPackage(_myApkArchive, theFileName);
+    }
+
     std::vector<std::string>
     AndroidAssetProvider::getLineByLineFromFile(const std::string & theFileName) const {
         if (theFileName.size() > 0 && theFileName[0] == '/') {
@@ -61,7 +78,7 @@ namespace android {
     }
 
     bool
-    AndroidAssetProvider::loadTextureFromPNG(const std::string & theFileName, GLuint & textureId, int & width, int & height, bool & rgb) {
+    AndroidAssetProvider::loadTextureFromPNG(const std::string & theFileName, unsigned int & textureId, int & width, int & height, bool & rgb) {
         std::string myFilename = masl::trimall(theFileName);
         if (myFilename.size() > 0 && myFilename[0] == '/') {
             //unzipped, read from sdcard

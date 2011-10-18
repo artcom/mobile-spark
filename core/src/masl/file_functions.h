@@ -15,6 +15,7 @@ namespace masl {
     /// read a complete file into a string
     bool fileExists(const std::string & theFilename);
     bool readFile(const std::string & thePath, std::string & theContent);
+    bool readBinaryFile(const std::string & theUTF8Filename, std::vector<char> & theContent);
     std::string getFilenamePart(const std::string & theFileName);
     std::string getDirectoryPart(const std::string & theFileName);
     void getDirectoryEntries(const std::string & thePath,  std::vector<std::string> & theDirEntries, const std::string & theFilter);

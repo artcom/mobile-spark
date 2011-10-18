@@ -24,15 +24,21 @@ namespace acprojectview {
             virtual void realize();
             
             static const char * const SPARK_TYPE;             
-            const static unsigned int POPUP_HEIGHT = 50;
+            const static int POPUP_HEIGHT = 50;
+            const static int POPUP_SIZE = 250;
+            
             virtual const char * const & getType() const { return ProjectViewerImpl::SPARK_TYPE;};
-             
+
             void draw();
             void showProject(ProjectImplPtr _myCurrentProject);
             void onSwipe(spark::EventPtr theEvent);
             void setWidth(int width) {_myWidth = width;};
             void setHeight(int height) {_myHeight = height;};
-            void loadInitialSet();
+            void loadInitialSet0();
+            void loadInitialSet1();
+            void loadInitialSet2();
+            void loadInitialSet3();
+            void loadInitialSet4();
             void initiateClose();
             bool isPopUpOpen();
             void showPopup(bool theFlag);
@@ -46,7 +52,6 @@ namespace acprojectview {
             bool _myIsAnimating;
             int _myDirection;
             spark::VectorOfComponentPtr _myContentImages;
-            //std::vector<ContentImage> _myContentImages;
             ProjectImplPtr _myCurrentProject;
             spark::TransformPtr _imageTransform0;
             spark::TransformPtr _imageTransform1;
@@ -67,11 +72,14 @@ namespace acprojectview {
             void onOpenClosePopup(spark::EventPtr theEvent);
             void autoScaleImage(spark::ImagePtr theImage);
 
+            const static unsigned int POPUP_ANIMATION_DURATION = 1300;
 
     };
     
     typedef masl::Ptr<ProjectViewerImpl> ProjectViewerImplPtr;
-    typedef spark::MemberFunctionEventCallback<ProjectViewerImpl, ProjectViewerImplPtr> ProjectViewerImplCB;
+    typedef masl::WeakPtr<ProjectViewerImpl> ProjectViewerImplWeakPtr;
+    typedef masl::MemberFunctionCallback<ProjectViewerImpl, ProjectViewerImplWeakPtr> ProjectViewerImplCB;
+    typedef spark::MemberFunctionEventCallback<ProjectViewerImpl, ProjectViewerImplWeakPtr> ProjectViewerImplEventCB;
 
 };
 

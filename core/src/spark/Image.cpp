@@ -18,6 +18,7 @@ namespace spark {
     }
 
     Image::~Image() {
+        AC_INFO << "....destructor image " << getName();
     }
 
     void
@@ -31,7 +32,7 @@ namespace spark {
         if (getShape()) {
             UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
             TexturePtr myTexture = myMaterial->getTexture();
-            myTexture->unbind();
+            myTexture->getTextureInfo()->unbind();
         }
     }
 
@@ -83,10 +84,10 @@ namespace spark {
         myHandles.reserve(customShaderValues_.size());
         std::transform(customShaderValues_.begin(), customShaderValues_.end(), std::back_inserter(myHandles),
                        masl::select1st<std::map<std::string, float>::value_type>()) ;
-        setShape(ShapeFactory::get().createRectangle(true, 1, 1, 
-                                                     vertexShader_, fragmentShader_, myHandles, data_));
+        bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
+        setShape(ShapeFactory::get().createRectangle(true, 1, 1, vertexShader_, fragmentShader_, myHandles, data_, myCacheFlag));
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);    
-        _myTextureSize = vector2(myMaterial->getTexture()->width_, myMaterial->getTexture()->height_);
+        _myTextureSize = vector2(myMaterial->getTexture()->getTextureInfo()->width_, myMaterial->getTexture()->getTextureInfo()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
         float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);
         setSize(myWidth, myHeight);

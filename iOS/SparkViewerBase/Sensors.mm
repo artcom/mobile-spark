@@ -1,6 +1,7 @@
 #include <spark/AppProvider.h>
 
 #import "Sensors.h"
+#import <Math.h>
 
 @implementation Sensors
 
@@ -37,7 +38,21 @@
     } else { 
         NSLog(@"Accelerometer not available or already active");
     }
-
+    
+    //Orientation
+    if([motionManager isDeviceMotionAvailable] && ![motionManager isDeviceMotionActive]) {
+        [motionManager setDeviceMotionUpdateInterval:1.0f / 20.0f];
+        [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMDeviceMotion *deviceMotionData, NSError *error) {
+            float myRoll = deviceMotionData.attitude.roll*180/M_PI;
+            float myYaw = deviceMotionData.attitude.yaw*180/M_PI;
+            float myPitch = deviceMotionData.attitude.pitch*180/M_PI;
+            NSString *eventCall = [NSString  stringWithFormat:@"<SensorEvent type='ORIENTATION' value0='%f' value1='%f' value2='%f'/>",myYaw, myPitch, myRoll];
+            [self throwEventToSpark:eventCall];
+        }];
+        
+    } else { 
+        NSLog(@"Orientation not available or already active");
+    }
     
 }
 

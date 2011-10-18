@@ -23,10 +23,9 @@
         </I18nItem>
         <I18nItem name="kinetik_text">
             <de>
+            <![CDATA[Die Kinetische Skulptur übersetzt den Prozess der Formfindung in Kunst und Design metaphorisch in den Raum.\n714 Metallkugeln bewegen sich im Zusammenspiel aus Mechanik, Elektronik und Code durch eine siebenminütige Narration. Auf einer Fläche von sechs Quadratmetern an feinen Stahlseilen hängend, werden sie einzeln über computergesteuerte Schrittmotoren bewegt. Anfangs bildet die Installation einen chaotischen Zustand ab, dann miteinander im Wettstreit liegende Formen bis diese schließlich zu einem finalen Objekt werden. Dieser Prozess wird in einer Reihe von Visualisierungsvariationen dargestellt.]]>
 
-            <!--[CDATA[Die Kinetische Skulptur übersetzt den Prozess der Formfindung in Kunst und Design metaphorisch in den Raum.\n714 Metallkugeln bewegen sich im Zusammenspiel aus Mechanik, Elektronik und Code durch eine siebenminütige Narration. Auf einer Fläche von sechs Quadratmetern an feinen Stahlseilen hängend, werden sie einzeln über computergesteuerte Schrittmotoren bewegt. Anfangs bildet die Installation einen chaotischen Zustand ab, dann miteinander im Wettstreit liegende Formen bis diese schließlich zu einem finalen Objekt werden. Dieser Prozess wird in einer Reihe von Visualisierungsvariationen dargestellt.]]-->
-
-		<![CDATA[0000 nnnn 0002 ääää 0004 0005 0006 0007 0008 0009\n0010 0011 0012 0013 0014 0015 0016 0017 0018 0019\n0020 0021 0022 0023 0024 0025 0026 0027 0028 0029\n0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0092 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0103 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0181 0182 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 ÖÖÖÖ 0199 ]]>
+		<!--[CDATA[0000 nnnn 0002 ääää 0004 0005 0006 0007 0008 0009\n0010 0011 0012 0013 0014 0015 0016 0017 0018 0019\n0020 0021 0022 0023 0024 0025 0026 0027 0028 0029\n0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0092 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0103 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0181 0182 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 ÖÖÖÖ 0199 ]]-->
             </de>
             <en>
             <![CDATA[EN-Die Kinetische Skulptur übersetzt den Prozess der Formfindung in Kunst und Design metaphorisch in den Raum.\n714 Metallkugeln bewegen sich im Zusammenspiel aus Mechanik, Elektronik und Code durch eine siebenminütige Narration. Auf einer Fläche von sechs Quadratmetern an feinen Stahlseilen hängend, werden sie einzeln über computergesteuerte Schrittmotoren bewegt. Anfangs bildet die Installation einen chaotischen Zustand ab, dann miteinander im Wettstreit liegende Formen bis diese schließlich zu einem finalen Objekt werden. Dieser Prozess wird in einer Reihe von Visualisierungsvariationen dargestellt.]]>
@@ -187,7 +186,7 @@
     <World name="2dworld">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>            
         <Rectangle name="background2" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
-        <!--Statistic name="stats" z="300"/-->
+        <Statistic name="stats" z="300"/>
         <Transform name="startscreen" z="211">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
             <Rectangle name="left_bar" x="0" y="0" z="12" width="180" height="75" color="[1,1,1]" alpha="1.0"/>
@@ -206,7 +205,7 @@
         <ProjectMenu name="main" x-tiling="2" y-tiling="2" x-gap="2" y-gap="2" visible="true">
 
             
-            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/small_images/artcom_teaser_thumb.png">
+            <Project name="project8" title_I18n="artcom_title" subtitle_I18n="artcom_subtitle" description_I18n="artcom_text" src="/large_images/blub.png">
                 <ContentImage src="/large_images/blub.png"/>
                 <ContentImage src="/large_images/dieter.png"/>
 	            <ContentImage src="/large_images/flur.png"/>
@@ -217,7 +216,7 @@
 	            <ContentImage src="/large_images/js.png"/>
 	            <ContentImage src="/large_images/probebau.png"/>
             </Project>
-            <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle"  description_I18n="belvedere_text" src="/small_images/belvedere_teaser_thumb_01.png">
+            <Project name="project1" title_I18n="belvedere_title" subtitle_I18n="belvedere_subtitle"  description_I18n="belvedere_text" src="/large_images/belvedere_main_01.png">
                 <ContentImage src="/large_images/belvedere_main_01.png"/>
                 <ContentImage src="/large_images/belvedere_main_02.png"/>
                 <ContentImage src="/large_images/belvedere_main_03.png"/>
@@ -225,29 +224,26 @@
             </Project>
 
 
-            <Project name="project2" title_I18n="duality_title" subtitle_I18n="duality_subtitle" description_I18n="duality_text" src="/small_images/duality_teaser_thumb_01.png" >
+            <Project name="project2" title_I18n="duality_title" subtitle_I18n="duality_subtitle" description_I18n="duality_text" src="/large_images/duality_main_01.png" >
                 <ContentImage src="/large_images/duality_main_01.png"/>            
                 <ContentImage src="/large_images/duality_main_02.png"/>            
                 <ContentImage src="/large_images/duality_main_03.png"/>            
                 <ContentImage src="/large_images/duality_main_04.png"/>            
             </Project>
             
-            <Project name="project3" title_I18n="jurascope_title" subtitle_I18n="jurascope_subtitle" description_I18n="jurascope_text" src="/small_images/juraskope_teaser_thumb.png">
+            <Project name="project3" title_I18n="jurascope_title" subtitle_I18n="jurascope_subtitle" description_I18n="jurascope_text" src="/large_images/juraskope_main_02.png">
                 <ContentImage src="/large_images/juraskope_main_02.png"/>
                 <ContentImage src="/large_images/juraskope_main_03.png"/>
             </Project>
 
-            <Project name="project4" title_I18n="kinetik_title" subtitle_I18n="kinetik_subtitle" description_I18n="kinetik_text" src="/small_images/kinetik_teaser_thumb.png">
-                <ContentImage src="/large_images/kinetische_skulptur_klein_1_1.png"/>
-                <ContentImage src="/large_images/kinetische_skulptur_klein_1_0.5.png"/>
-                <ContentImage src="/large_images/kinetische_skulptur_klein_0.5_1.png"/>
+            <Project name="project4" title_I18n="kinetik_title" subtitle_I18n="kinetik_subtitle" description_I18n="kinetik_text" src="/large_images/kinetische_skulptur_01.png">
                 <ContentImage src="/large_images/kinetische_skulptur_01.png"/>
                 <ContentImage src="/large_images/kinetische_skulptur_02.png"/>
 	            <ContentImage src="/large_images/kinetische_skulptur_03.png"/>
 	        </Project>
 	        
 
-            <Project name="project5" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" description_I18n="level_green_text" src="/small_images/levelgreen_teaser_thumb.png">
+            <Project name="project5" title_I18n="level_green_title" subtitle_I18n="level_green_subtitle" description_I18n="level_green_text" src="/large_images/level_green_01.png">
                 <ContentImage src="/large_images/level_green_01.png"/>
                 <ContentImage src="/large_images/level_green_02.png"/>
 	            <ContentImage src="/large_images/level_green_03.png"/>
@@ -260,15 +256,15 @@
             </Project>
 
 
-            <Project name="project6" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle" description_I18n="terravision_text" src="/small_images/terravision_teaser_thumb.png">
+            <Project name="project6" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle" description_I18n="terravision_text" src="/large_images/terravision_main_01.png">
 	            <ContentImage src="/large_images/terravision_main_01.png"/>
 	            <ContentImage src="/large_images/terravision_main_02.png"/>
             </Project>
 
-            <Project name="spark_mobile" title_I18n="spark_mobile_title" subtitle_I18n="spark_mobile_subtitle" description_I18n="spark_mobile_text" src="/small_images/Spark_Schichten_thumb.png">
+            <Project name="spark_mobile" title_I18n="spark_mobile_title" subtitle_I18n="spark_mobile_subtitle" description_I18n="spark_mobile_text" src="/large_images/Spark_Schichten.png">
                 <ContentImage src="/large_images/Spark_Schichten.png"/>
             </Project>                      
-            <Project name="project7" title_I18n="artcom_book_title" subtitle_I18n="artcom_book_subtitle" description_I18n="artcom_book_text" src="/small_images/bookrelease_teaser_thumb.png">
+            <Project name="project7" title_I18n="artcom_book_title" subtitle_I18n="artcom_book_subtitle" description_I18n="artcom_book_text" src="/large_images/bookrelease_main_01.png">
                 <ContentImage src="/large_images/bookrelease_main_01.png"/>
                 <ContentImage src="/large_images/bookrelease_main_02.png"/>
             </Project>                      

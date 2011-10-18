@@ -82,7 +82,7 @@ namespace mar {
 
     class UnlitTexturedMaterial : public Material {
     public:
-        UnlitTexturedMaterial(const std::string & theSrc);
+        UnlitTexturedMaterial(const std::string & theSrc, const bool theCacheFlag = false);
         virtual ~UnlitTexturedMaterial();
         virtual void loadShader(const matrix & theMatrix);
         virtual void initGL();

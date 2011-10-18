@@ -18,6 +18,7 @@ namespace masl {
     DECLARE_EXCEPTION(INetException, masl::Exception);
 
     enum AuthentType { BASIC, DIGEST, ANY };
+    enum RequestType { ALWAYS, IF_NEWER, IF_NOT_AVAILABLE };
 
     class RequestManager;
     class RequestCallback;
@@ -27,7 +28,10 @@ namespace masl {
         friend class RequestManager;
 
         public:
-            Request(const std::string & theURL, const std::string & theUserAgent = std::string("acMobileSpark"));
+            Request(const std::string & theURL, const std::string & thePersistenceFolder = "", 
+                    const bool thePersistFlag = false, 
+                    const std::string & theUserAgent = std::string("acMobileSpark"));
+            Request(const std::string & theURL, const std::vector<char> theBlock);
             virtual ~Request();
             CURL * getHandle() const;
             long getResponseCode() const;
@@ -51,6 +55,7 @@ namespace masl {
                                 AuthentType theAuthentType = ANY);
             void setFollowLocation(bool theFollowFlag);
             void setOnDoneCallback(RequestCallbackPtr theOnDoneCallback) { _myOnDoneCallback = theOnDoneCallback; };
+            void setOnErrorCallback(RequestCallbackPtr theOnErrorCallback) { _myOnErrorCallback = theOnErrorCallback; };
 
             // request-method type methods
             size_t put(const std::string & thePutData);
@@ -94,9 +99,12 @@ namespace masl {
             //
             Request();
             void checkCurlStatus(CURLcode theStatusCode, const std::string & theWhere) const;
+            bool getPersistedDataIfAvailable();
 
         private:
             std::string         _myURL;
+            std::string         _myPersistenceFolder;
+            bool                _myPersistFlag;
             std::string         _myProxy;
             std::string         _myUserAgent;
             CURL *              _myCurlHandle;
@@ -114,6 +122,7 @@ namespace masl {
             bool                _myVerboseFlag;
             bool                _myVerifyPeerFlag;
             RequestCallbackPtr  _myOnDoneCallback;
+            RequestCallbackPtr  _myOnErrorCallback;
     };
 
     typedef masl::Ptr<Request> RequestPtr;
@@ -121,6 +130,7 @@ namespace masl {
     class SequenceRequest : public Request {
         public:
             SequenceRequest(RequestManager & theRequestManager, const std::string & theURL, 
+                            const std::string & thePersistenceFolder = "", const bool thePersistFlag = false, 
                             const std::string & theUserAgent = std::string("acMobileSpark"));
             virtual ~SequenceRequest() {};
             void setNextRequest(const RequestPtr theNextRequest) { _myNextRequest = theNextRequest; };
@@ -166,7 +176,7 @@ namespace masl {
     typedef masl::Ptr<FreeFunctionRequestCallback> FreeFunctionRequestCallbackPtr;
 
 
-
+    //TP should be weakPtr
     template < typename T, typename TP>
     class MemberFunctionRequestCallback : public RequestCallback {
     public:
@@ -177,14 +187,14 @@ namespace masl {
         virtual ~MemberFunctionRequestCallback() {};
 
         virtual void execute(RequestPtr theRequest) const {
-            (_myObjectPtr.get()->*_myFunctionPointer)(theRequest);
+            if (_myObjectPtr.lock()) {
+                (_myObjectPtr.lock().get()->*_myFunctionPointer)(theRequest);
+            }
         };
     private:
         TP _myObjectPtr;
         void (T::*_myFunctionPointer)(RequestPtr);
     };
-
-
 }
 
 #endif

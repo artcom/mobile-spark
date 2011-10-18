@@ -22,13 +22,12 @@ namespace spark {
             void attachToI18nItem();
             std::string i18nId_;
             EventCallbackPtr _myHandleLanguageSwitch;
-            
     };
+
     typedef masl::Ptr<I18nShapeWidget> I18nShapeWidgetPtr;
-        
-    typedef MemberFunctionEventCallback<I18nShapeWidget, I18nShapeWidgetPtr> I18nWidgetEventCallback;
+    typedef masl::WeakPtr<I18nShapeWidget> I18nShapeWidgetWeakPtr;
+    typedef MemberFunctionEventCallback<I18nShapeWidget, I18nShapeWidgetWeakPtr> I18nWidgetEventCallback;
     typedef masl::Ptr<I18nWidgetEventCallback > I18nWidgetEventCallbackPtr;
-        
 };
 
 #endif

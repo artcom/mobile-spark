@@ -1,10 +1,10 @@
 #include "ObjImporter.h"
 
 #include <boost/tuple/tuple_comparison.hpp>
+#include <masl/AssetProvider.h>
 #include <masl/Logger.h>
 #include <masl/string_functions.h>
 
-#include "AssetProvider.h"
 #include "png_functions.h"
 
 using namespace masl;
@@ -186,9 +186,9 @@ namespace mar {
         min_[3] = max_[3] = 1;
         AC_DEBUG << "import obj " << theObjFileName;
         const std::vector<std::string> theObjFile =
-            AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".obj"));
+            masl::AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".obj"));
         const std::vector<std::string> theMtlFile =
-            AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".mtl"));
+            masl::AssetProviderSingleton::get().ap()->getLineByLineFromFile(theObjFileName + std::string(".mtl"));
         AC_DEBUG << "got data from files " << theObjFile.size() << "  " << theMtlFile.size();
         importMaterialMap(theMtlFile);
 

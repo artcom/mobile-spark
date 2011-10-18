@@ -86,16 +86,14 @@ namespace acprojectview {
         _myIsAnimating = true;      
         _myCurrentSlide += dir;
         WidgetPropertyAnimationPtr changeAnimation = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myPtr, &Widget::setX, myPtr->getX(), 
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(myPtr)), &Widget::setX, myPtr->getX(), 
                     myPtr->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
-         
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myAnimation->add(changeAnimation);
         animation::DelayAnimationPtr myDelayAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(0));
-        myDelayAnim->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<ProjectMenu, ProjectMenuPtr>(myPtr, &ProjectMenu::onDelayFinished)));
+        myDelayAnim->setOnFinish(masl::CallbackPtr(new ProjectMenuCB(myPtr, &ProjectMenu::onDelayFinished)));
             
         mySeqAnimation->add(myAnimation);
         mySeqAnimation->add(myDelayAnim);
@@ -105,6 +103,4 @@ namespace acprojectview {
     void ProjectMenu::onDelayFinished() {        
         _myIsAnimating = false;
     }
-
-    
 }

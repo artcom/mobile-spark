@@ -47,13 +47,14 @@ namespace acprojectview {
     ProjectViewerImpl::realize() {
         Transform::realize();
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
-        spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onSwipe));
+        spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onSwipe));
         getRoot()->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
         getRoot()->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
 
     
-        spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
-        _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB);
+        spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
+        _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, true);
+        _myPopUpPfeil->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, true);
             
         _myWindowPtr = boost::static_pointer_cast<Window>(getRoot());                
         _myWidth = _myWindowPtr->getSize()[0];
@@ -68,25 +69,15 @@ namespace acprojectview {
             
     }
 
-    void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {                
+    void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {  
+        //boost::timer::timer myTimer;
+         int myTextHeight = POPUP_SIZE;        
+         _myPopup->setY(-myTextHeight);
+                      
         showPopup(false);            
         _myCurrentProject = currentProject;
-
-        string myTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
-        string mySubTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
-         _myPopUpTitle->setI18nId(myTitle_I18n);
-         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
-
-         int myHiddenPopUpHeight = POPUP_HEIGHT;//std::max(30, int(_myPopUpTitle->getTextSize()[1]));
-         int myTextHeight = 250;
-         _myPopupBG->setSize(_myWidth, myHiddenPopUpHeight + myTextHeight);
-         
-         _myPopUpSubTitle->setY(myTextHeight+10);
-         _myPopUpTitle->setY(myTextHeight + 10 + _myPopUpSubTitle->getTextSize()[1]);
-
-         _myPopUpPfeil->setX(_myWidth - (_myPopUpPfeil->getTextureSize()[0]/2.0) - 20);
-         _myPopUpPfeil->setY((50 + (_myPopUpPfeil->getTextureSize()[1]/2.0) ) /2.0  + myTextHeight - _myPopUpPfeil->getTextureSize()[1]);
-        _myPopup->setY(-myTextHeight);
+         _myPopUpTitle->setVisible(false);
+         _myPopUpSubTitle->setVisible(false);
             
         _myIsAnimating = false;     
          _myContentImages = _myCurrentProject->getChildrenByType(ContentImage::SPARK_TYPE);
@@ -106,13 +97,17 @@ namespace acprojectview {
          _myDisplayedImage = 0;
          _myCurrentSlot=0;
         
-         _image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());            
+         //_image0->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[0])->getSrc());            
+         ImagePtr myProjectEntry =  boost::static_pointer_cast<Image>(currentProject->getChildByName("image"));
+         _image0->setSrc(myProjectEntry->getSrc());            
          autoScaleImage(_image0);
-         _imageTransform0->setVisible(true);
+
          _imageTransform1->setVisible(false);
          _imageTransform2->setVisible(false);
          
          setVisible(false);
+         //AC_PRINT << "******************ProjectViewerImpl::showProject***************************** " << myTimer.elapsed();
+         
     }
     
     void ProjectViewerImpl::autoScaleImage(ImagePtr theImage) {
@@ -150,6 +145,7 @@ namespace acprojectview {
     }
     
     void ProjectViewerImpl::initiateClose() {
+        setSensible(false);                        
         _imageTransform0->setVisible(false);
         _imageTransform1->setVisible(false);
         _imageTransform2->setVisible(false);
@@ -161,43 +157,71 @@ namespace acprojectview {
             _imageTransform2->setVisible(true);
         }
     }
-    void ProjectViewerImpl::showPopup(bool theFlag) {       
+    void ProjectViewerImpl::showPopup(bool theFlag) {      
         _myPopup->setVisible(theFlag);        
     }
-    void ProjectViewerImpl::loadInitialSet() {        
+    
+    void ProjectViewerImpl::loadInitialSet0() {    
+         _myPopupBG->setSize(_myWidth, POPUP_HEIGHT + POPUP_SIZE);
+         _myPopup->setY(-POPUP_SIZE);
+
+        string myTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("title_I18n","");
+         _myPopUpTitle->setVisible(true);
+         _myPopUpTitle->setI18nId(myTitle_I18n);
+         _myPopUpTitle->getTextSize();
+    }
+    void ProjectViewerImpl::loadInitialSet1() {    
+        string mySubTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
+         _myPopUpSubTitle->setVisible(true);
+         _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
+         _myPopUpSubTitle->getTextSize();
+
+         _myPopUpSubTitle->setY(POPUP_SIZE+10);
+         _myPopUpTitle->setY(POPUP_SIZE + 10 + _myPopUpSubTitle->getTextSize()[1]);
+    }
+    void ProjectViewerImpl::loadInitialSet2() {    
+
+         _myPopUpPfeil->setX(_myWidth - (_myPopUpPfeil->getTextureSize()[0]/2.0) - 20);
+         _myPopUpPfeil->setY((50 + (_myPopUpPfeil->getTextureSize()[1]/2.0) ) /2.0  + POPUP_SIZE - _myPopUpPfeil->getTextureSize()[1]);
 
         _myDescription->setMaxWidth( (_myWidth/2.0) - _myDescription->getColumnSpace() - _myDescription->getColumnSpace()/2.0);
 
         string myDescription_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("description_I18n","");        
         _myDescription->setI18nId(myDescription_I18n);         
-        
-        
+    }
+    void ProjectViewerImpl::loadInitialSet3() {    
          if (_myNumberOfImages > 0) {
              _image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[1%_myNumberOfImages])->getSrc());
              autoScaleImage(_image1);
+            }
 
+    }
+    void ProjectViewerImpl::loadInitialSet4() {    
+         if (_myNumberOfImages > 0) {
              _image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[_myNumberOfImages-1])->getSrc());
              autoScaleImage(_image2);
         }        
     }
     bool ProjectViewerImpl::isPopUpOpen() {
-        int myTextHeight = 250;
-        return (_myPopup->getY() != -myTextHeight);
+        return (_myPopup->getY() != -POPUP_SIZE);
     }
     
     void ProjectViewerImpl::onOpenClosePopup(EventPtr theEvent) {
         if (isRendered()) {
-            int myTextHeight = 250;
+            int myTextHeight = POPUP_SIZE;
             animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
             if (!isPopUpOpen()) {
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), 0, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopup)), 
+                            &Widget::setY, _myPopup->getY()-1, 0, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.9, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopupBG)), 
+                            &Widget::setAlpha, _myPopupBG->getAlpha(), 0.9, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myRotateAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopUpPfeil, &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), M_PI, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopUpPfeil)), 
+                            &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), M_PI, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                                 
                 myAnimation->add(myRotateAnimation);
@@ -206,13 +230,16 @@ namespace acprojectview {
             } else {
                 _myDescription->reset();
                 WidgetPropertyAnimationPtr myPosYAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopup, &Widget::setY, _myPopup->getY(), -myTextHeight, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopup)), 
+                            &Widget::setY, _myPopup->getY(), -myTextHeight, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myAlphaAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopupBG, &Widget::setAlpha, _myPopupBG->getAlpha(), 0.5, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopupBG)), 
+                            &Widget::setAlpha, _myPopupBG->getAlpha(), 0.5, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 WidgetPropertyAnimationPtr myRotateAnimation = WidgetPropertyAnimationPtr(
-                        new WidgetPropertyAnimation(_myPopUpPfeil, &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), 0, 300,
+                        new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myPopUpPfeil)), 
+                            &Widget::setRotationZ, _myPopUpPfeil->getRotationZ(), 0, 300,
                             animation::EasingFnc(animation::easeInOutQuad)));
                 myAnimation->add(myRotateAnimation);
                 myAnimation->add(myPosYAnimation);
@@ -239,27 +266,25 @@ namespace acprojectview {
         _myDirection =dir;
         _myCurrentSlot = (_myCurrentSlot + dir+3) %3;
         WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_imageTransform0, &Widget::setX, _imageTransform0->getX(), _imageTransform0->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform0)), &Widget::setX, _imageTransform0->getX(), _imageTransform0->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr changeAnimation1 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_imageTransform1, &Widget::setX, _imageTransform1->getX(), _imageTransform1->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform1)), &Widget::setX, _imageTransform1->getX(), _imageTransform1->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr changeAnimation2 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(_imageTransform2, &Widget::setX, _imageTransform2->getX(), _imageTransform2->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform2)), &Widget::setX, _imageTransform2->getX(), _imageTransform2->getX()-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         ProjectViewerImplPtr ptr = boost::static_pointer_cast<ProjectViewerImpl>(shared_from_this());
-        myAnimation->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<ProjectViewerImpl, ProjectViewerImplPtr>(ptr, &ProjectViewerImpl::onAnimationFinished)));
+        myAnimation->setOnFinish(masl::CallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onAnimationFinished)));
         myAnimation->add(changeAnimation0);
         myAnimation->add(changeAnimation1);
         myAnimation->add(changeAnimation2);
 
         animation::DelayAnimationPtr myReadNextImagesAnim = animation::DelayAnimationPtr(new animation::DelayAnimation(0));
-        myReadNextImagesAnim->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<ProjectViewerImpl, ProjectViewerImplPtr>(ptr, &ProjectViewerImpl::onLoadNextImages)));
+        myReadNextImagesAnim->setOnFinish(masl::CallbackPtr(new ProjectViewerImplCB(ptr, &ProjectViewerImpl::onLoadNextImages)));
             
         mySeqAnimation->add(myAnimation);
         mySeqAnimation->add(myReadNextImagesAnim);

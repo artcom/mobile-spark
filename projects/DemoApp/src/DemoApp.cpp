@@ -2,12 +2,11 @@
 
 #include <cstdlib>
 
+#include <masl/AssetProvider.h>
 #include <masl/Callback.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 #include <masl/file_functions.h>
-
-#include <mar/AssetProvider.h>
 
 #include <animation/AnimationManager.h>
 #include <animation/ParallelAnimation.h>
@@ -109,10 +108,6 @@ namespace demoapp {
         spark::EventCallbackPtr myPinchCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPinchGesture));
         _mySparkWindow->addEventListener(GestureEvent::PINCH, myPinchCB);
         
-        //test pan gestures
-        spark::EventCallbackPtr myPanCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPanGesture));
-        _mySparkWindow->addEventListener(GestureEvent::PAN, myPanCB);
-        
         //test sensors
         spark::EventCallbackPtr mySensorCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorEvent));
         _mySparkWindow->addEventListener(SensorEvent::ORIENTATION, mySensorCB);
@@ -121,39 +116,39 @@ namespace demoapp {
         spark::EventCallbackPtr mySensorGyroCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorGyroEvent));
         _mySparkWindow->addEventListener(SensorEvent::GYROSCOPE, mySensorGyroCB);
 
+        //http-request stuff
+        _myErrorMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("curl_error", true));
+        _myRequestManager.setOnErrorCallback(
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onErrorRequestCB)));
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/string.txt",
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onTextRequestReady)));
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onTextRequestReady)));
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/",
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onGetRequestReady)));
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onGetRequestReady)));
+        _myRequestManager.headRequest("http://www.einsfeld.de/mobile-spark/assets/face-devil-grin.png",
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onHeadRequestReady)));
         _myRequestManager.postRequest("http://www.einsfeld.de/mobile-spark/", "id=23&value=post data",
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onPostRequestReady)));
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onPostRequestReady)));
         //data is not visible at server, not sure how this is intended to work in Request.cpp
         _myRequestManager.putRequest("http://www.einsfeld.de/mobile-spark/", "hello world from put in DemoApp",
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onPutRequestReady)));
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onPutRequestReady)));
         _myRequestManager.deleteRequest("http://www.einsfeld.de/mobile-spark/",
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onDeleteRequestReady)));
-
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onDeleteRequestReady)));
         animation::DelayAnimationPtr myRepeatingDateRequest = animation::DelayAnimationPtr(new animation::DelayAnimation(1000));
         myRepeatingDateRequest->setLoop(true);
-        myRepeatingDateRequest->setOnFinish(masl::CallbackPtr(new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onRepeatingDateRequest)));
+        myRepeatingDateRequest->setOnFinish(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::onRepeatingDateRequest)));
         animation::AnimationManager::get().play(myRepeatingDateRequest);
 
-        WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         //animation of amazone
+        WidgetPropertyAnimationPtr myXRotate, myYRotate, myZRotate;
         ComponentPtr myComponent = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform")->getChildByName("theAmazone");
-        Shape3DPtr myShape = boost::static_pointer_cast<spark::Shape3D>(myComponent);
+        WidgetWeakPtr myShape = WidgetWeakPtr(WidgetPtr(boost::static_pointer_cast<spark::Shape3D>(myComponent)));
         myAmazoneRotation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, M_PI * 2, 90000));
         myAmazoneRotation->setLoop(true);
         animation::AnimationManager::get().play(myAmazoneRotation);
 
         //animation of 3d object
         myComponent = my2DWorld->getChildByName("funnyShape", true);
-        myShape = boost::static_pointer_cast<spark::Shape3D>(myComponent);
+        myShape = WidgetWeakPtr(WidgetPtr(boost::static_pointer_cast<spark::Shape3D>(myComponent)));
         myXRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationX, 0, 6.28, 7000));
         myXRotate->setLoop(true);
         myYRotate = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myShape, &Widget::setRotationY, 0, 6.28, 9000));
@@ -166,7 +161,7 @@ namespace demoapp {
 
         //add looping sequence animation for rectangle
         myComponent = my2DWorld->getChildByName("AnimatedRectangleSlide")->getChildByName("transform")->getChildByName("redObject");
-        RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myComponent);
+        WidgetWeakPtr myRectangle = WidgetWeakPtr(WidgetPtr(boost::static_pointer_cast<spark::Rectangle>(myComponent)));
         WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 0.7, 8, 500));
         WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(myRectangle, &Widget::setScaleY, 8, 0.7, 1500, animation::EasingFnc(animation::easeInOutQuint)));
@@ -208,11 +203,29 @@ namespace demoapp {
         AC_DEBUG << "found #" << _mySlides.size() << " slides";        
     }
 
+    void DemoApp::onErrorRequestCB(masl::RequestPtr theRequest) {
+        if (!_myLoadingMessage) {
+            _myLoadingMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("loading", true));
+        }
+        _myLoadingMessage->setVisible(false);
+        if (_myErrorExpiredDelay) {
+            _myErrorExpiredDelay->cancel();
+        }
+        AC_DEBUG << "error with request for URL " << theRequest->getURL();
+        DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
+        _myErrorMessage->setVisible(true);
+        _myErrorMessage->setText("error requesting " + theRequest->getURL());
+        _myErrorExpiredDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(10000));
+        _myErrorExpiredDelay->setOnFinish(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::onErrorExpired)));
+        animation::AnimationManager::get().play(_myErrorExpiredDelay);
+    }
+    void DemoApp::onErrorExpired() {
+        _myErrorMessage->setVisible(false);
+    }
     void DemoApp::onRepeatingDateRequest() {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/currentDate.php",
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onDateRequestReady)));
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onDateRequestReady)));
     }
     void DemoApp::onTextRequestReady(RequestPtr theRequest) {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("textfromserver", true));
@@ -221,6 +234,12 @@ namespace demoapp {
     void DemoApp::onGetRequestReady(RequestPtr theRequest) {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("getrequest", true));
         myText->setText(theRequest->getResponseString());
+    }
+    void DemoApp::onHeadRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("headrequest", true));
+        myText->setText("last modified from header: " + theRequest->getResponseHeader("Last-Modified"));
+        AC_PRINT << "...................... last mod " << theRequest->getResponseHeader("Last-Modified");
+        AC_PRINT << "the story of stuff " << theRequest->getURL() << "___" << theRequest->getResponseString() << "___";
     }
     void DemoApp::onPostRequestReady(RequestPtr theRequest) {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("postrequest", true));
@@ -242,26 +261,33 @@ namespace demoapp {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         std::string myNewSpark = theRequest->getResponseString();
         std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
-        mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/scene.spark", myNewSpark);
         _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onAssetRequestReady)),
-            masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                ptr, &DemoApp::onAllAssetsRequestReady)));
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAssetRequestReady)),
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),
+            "/downloads/", true, masl::REQUEST_IF_NOT_AVAILABLE);
+        AC_DEBUG << "headers of spark-request";
+        std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
+        for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
+            AC_DEBUG << "http headers " << it->first << ": " << it->second; 
+        }
+        AC_DEBUG << "last modified: " << theRequest->getResponseHeader("Last-Modified");
     }
     void DemoApp::onAssetRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on Asset ready, request url was " << theRequest->getURL();
-        std::vector<char> myBlock = theRequest->getResponseBinary();
-        mar::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
+        AC_DEBUG << "headers of png-request";
+        std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
+        for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
+            AC_DEBUG << "http headers " << it->first << ": " << it->second; 
+        }
+        AC_DEBUG << "last modified: " << theRequest->getResponseHeader("Last-Modified");
     }
     void DemoApp::onAllAssetsRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on AllAsset Ready";
-        WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
-        myLoadingText->setVisible(false);
+        _myLoadingMessage->setVisible(false);
         _myLoadingAnimation->cancel();
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
-        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/scene.spark");
+        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/scene.spark");
         myTransform->addChild(myNewSpark);
     }
 
@@ -304,17 +330,17 @@ namespace demoapp {
         AC_INFO << "change slide: " << theDirection << " next slide:" << _myNextSlide << " currentslide: " << _myCurrentSlide;
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         animation::ParallelAnimationPtr mySequence = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
-        mySequence->setOnPlay(masl::CallbackPtr(
-                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onStartSlideSwipe)));
-        WidgetPropertyAnimationPtr mySwipeOut = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myCurrentSlide], 
+        mySequence->setOnPlay(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::onStartSlideSwipe)));
+        WidgetPropertyAnimationPtr mySwipeOut = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(
+                                                WidgetWeakPtr(WidgetPtr(_mySlides[_myCurrentSlide])),
                                                 &Widget::setX, 0, _mySparkWindow->getSize()[0] * theDirection * -1, 500,
                                                 animation::EasingFnc(animation::easeInOutQuad)));
         _myNextSlide = (_myCurrentSlide + _mySlides.size() + theDirection) % _mySlides.size();
-        WidgetPropertyAnimationPtr mySwipeIn = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(_mySlides[_myNextSlide], 
-                                                &Widget::setX, _mySparkWindow->getSize()[0] * theDirection, 0, 500,
-                                                animation::EasingFnc(animation::easeInOutQuad)));
-        mySequence->setOnFinish(masl::CallbackPtr(
-                    new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::onFinishSlideSwipe)));
+        WidgetPropertyAnimationPtr mySwipeIn = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(
+                                               WidgetWeakPtr(WidgetPtr(_mySlides[_myNextSlide])),
+                                               &Widget::setX, _mySparkWindow->getSize()[0] * theDirection, 0, 500,
+                                               animation::EasingFnc(animation::easeInOutQuad)));
+        mySequence->setOnFinish(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::onFinishSlideSwipe)));
     	mySequence->add(mySwipeOut);
     	mySequence->add(mySwipeIn);
         animation::AnimationManager::get().play(mySequence);
@@ -333,20 +359,6 @@ namespace demoapp {
 		}
     }
     
-    float beforeMovePanX, beforeMovePanY;
-    void DemoApp::onPanGesture(EventPtr theEvent) {
-        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
-        	AC_DEBUG << "on Pan Gesture";
-        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-        	float myDX = myEvent->getTranslateX();
-        	float myDY = myEvent->getTranslateY(); 
-        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform");
-            TransformPtr myTransform = boost::static_pointer_cast<Transform>(my3dView);
-    		myTransform->setX(myDX / 4);
-    		myTransform->setY(myDY / 4);
-		}
-    }
-
 
 	void DemoApp::onSensorEvent(EventPtr theEvent) {
 		if (_mySlides[_myCurrentSlide]->getName() != "3D-Viewer-Slide") return;
@@ -390,8 +402,7 @@ namespace demoapp {
             //TRICK: this has to be done on main thread -> use delay animation with 0 duration achieve this
             animation::DelayAnimationPtr myDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(0));
             DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
-            myDelay->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<DemoApp, DemoAppPtr>(ptr, &DemoApp::insertCreatedComponent)));
+            myDelay->setOnFinish(masl::CallbackPtr(new DemoCB(ptr, &DemoApp::insertCreatedComponent)));
             animation::AnimationManager::get().play(myDelay);
         }
     }
@@ -399,14 +410,15 @@ namespace demoapp {
     void DemoApp::onLoadScene(EventPtr theEvent) {
         ComponentPtr myScene = _mySparkWindow->getChildByName("spark_from_remote_server", true);
         if (myScene) {
-            boost::static_pointer_cast<spark::Container>(myScene->getParent())->removeChild(myScene);
+            boost::static_pointer_cast<spark::Container>(myScene->getParent().lock())->removeChild(myScene);
+            myScene = ComponentPtr();
         } else {
-            WidgetPtr myLoadingText = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("loading", true));
-            myLoadingText->setVisible(true);
+            _myLoadingMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("loading", true));
+            _myLoadingMessage->setVisible(true);
             WidgetPropertyAnimationPtr myAnimation1 = WidgetPropertyAnimationPtr(
-                    new WidgetPropertyAnimation(myLoadingText, &Widget::setX, 30, 300, 500));
+                    new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myLoadingMessage)), &Widget::setX, 30, 300, 500));
             WidgetPropertyAnimationPtr myAnimation2 = WidgetPropertyAnimationPtr(
-                    new WidgetPropertyAnimation(myLoadingText, &Widget::setX, 300, 30, 500));
+                    new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_myLoadingMessage)), &Widget::setX, 300, 30, 500));
             animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
             mySequence->add(myAnimation1);
             mySequence->add(myAnimation2);
@@ -415,8 +427,8 @@ namespace demoapp {
             _myLoadingAnimation = mySequence;
             DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
             _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
-                masl::RequestCallbackPtr(new masl::MemberFunctionRequestCallback<DemoApp, DemoAppPtr>(
-                    ptr, &DemoApp::onSparkRequestReady)));
+                masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),
+                "/downloads/", true, masl::REQUEST_IF_NEWER);
         }
     }
 
@@ -440,15 +452,15 @@ namespace demoapp {
         //add parallel animations
         ComponentPtr mySlide = _mySparkWindow->getChildByName("2dworld")->getChildByName("AnimatedRectangleSlide");
         ComponentPtr myObject = mySlide->getChildByName("greenObject");
-        RectanglePtr myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        WidgetWeakPtr myRectangle = WidgetWeakPtr(WidgetPtr(boost::static_pointer_cast<spark::Rectangle>(myObject)));
         WidgetPropertyAnimationPtr myAnimationX = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myRectangle, &Widget::setX, myRectangle->getX(), myEvent->getX(), 1000,
+                new WidgetPropertyAnimation(myRectangle, &Widget::setX, myRectangle.lock()->getX(), myEvent->getX(), 1000,
                     animation::EasingFnc(animation::easeInOutElastic)));
         WidgetPropertyAnimationPtr myAnimationY = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(myRectangle, &Widget::setY, myRectangle->getY(), myEvent->getY(), 1000,
+                new WidgetPropertyAnimation(myRectangle, &Widget::setY, myRectangle.lock()->getY(), myEvent->getY(), 1000,
                     animation::EasingFnc(animation::easeInOutElastic)));
         myObject = mySlide->getChildByName("transform")->getChildByName("blueObject");
-        myRectangle = boost::static_pointer_cast<spark::Rectangle>(myObject);
+        myRectangle = WidgetWeakPtr(WidgetPtr(boost::static_pointer_cast<spark::Rectangle>(myObject)));
         WidgetPropertyAnimationPtr myRotationAnimation = WidgetPropertyAnimationPtr(new WidgetPropertyAnimation(myRectangle, &Widget::setRotationZ, 0, M_PI * 2, 5000));
         animation::ParallelAnimationPtr myParallel = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
         myParallel->add(myAnimationX);

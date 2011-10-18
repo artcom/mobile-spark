@@ -17,9 +17,11 @@
 #include <masl/AutoLocker.h>
 #include <masl/XMLNode.h>
 #include <masl/CallStack.h>
-
-#include <mar/AssetProvider.h>
+#include <masl/AssetProvider.h>
 #include <animation/AnimationManager.h>
+
+#include <mar/TextureLoader.h>
+
 
 #ifdef ANDROID
     #include <android/AndroidAssetProvider.h>
@@ -67,7 +69,6 @@ namespace spark {
     }
 
     void BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
-        AC_PRINT << "choose layout ...........";
         bool dummy;
         std::string myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight, dummy);
         //load layout
@@ -75,10 +76,10 @@ namespace spark {
         _mySparkWindow->realize();
         _mySparkWindow->setSize(theScreenWidth,theScreenHeight);
         //register for events
-        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppPtr > ( shared_from_this(), &BaseApp::onFrame));
+        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppWeakPtr > ( BaseAppWeakPtr(BaseAppPtr(shared_from_this())), &BaseApp::onFrame));
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
             
-        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowPtr>( _mySparkWindow, &Window::onTouch));
+        spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowWeakPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
         _mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
             
@@ -95,9 +96,10 @@ namespace spark {
 
     void BaseApp::onPause() {
         AC_DEBUG << "BaseApp::onPause";
+        mar::TextureLoader::get().clear();
         if (_mySparkWindow) {
             OnPauseComponentVisitor myVisitor;
-            visitComponents(myVisitor, _mySparkWindow);
+            parentFirstVisitComponents(myVisitor, _mySparkWindow);
         }
     }
 
@@ -105,7 +107,7 @@ namespace spark {
         AC_DEBUG << "BaseApp::onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
-            visitComponents(myVisitor, _mySparkWindow);
+            parentFirstVisitComponents(myVisitor, _mySparkWindow);
         }
     }
     
@@ -140,7 +142,7 @@ namespace spark {
    
     std::string
     findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
-        AC_DEBUG << "......... findBestMatchedLayout for baseName: " << theBaseName;
+        AC_PRINT << "......... findBestMatchedLayout for baseName: " << theBaseName << " with screen resolution: " << theScreenWidth << "/" << theScreenHeight;
         std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
@@ -157,7 +159,7 @@ namespace spark {
         for (unsigned int i = 0; i < myFiles.size(); i++) {
             if (getExtension(myFiles[i]) == "spark") {
                 std::string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
-                std::string myLayout = AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);
+                std::string myLayout = masl::AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);
                 XMLNodePtr myNode(new XMLNode(myLayout));
                 if (myNode->nodeName == "Window") {
                     for (std::map<std::string, std::string>::iterator it = myNode->attributes.begin(); it != myNode->attributes.end(); ++it) {
@@ -203,23 +205,23 @@ namespace spark {
 
     void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath ) {
 #ifdef iOS
-        AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath, theAppPath)));
+        masl::AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath, theAppPath)));
 #elif ANDROID
-        AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
-        mkdir(std::string(AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
+        masl::AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
+        mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
 #endif
-        AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
-        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/");
-        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/textures/");
-        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/layouts/");
-        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders/");
-        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models/");
-        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/textures/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/layouts/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts/");
 #ifdef iOS
-        AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/");
-        AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/downloads/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/downloads/");
 #elif ANDROID
-        AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/downloads/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/downloads/");
 #endif
 
     }

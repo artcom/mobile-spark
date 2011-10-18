@@ -40,8 +40,8 @@ namespace spark {
         setShape(mar::ShapeFactory::get().createNinePatch(data_, edgeLeft_, edgeTop_, edgeRight_, edgeBottom_, 100, 100));
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
 
-        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->width_);
-        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->height_);
+        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->getTextureInfo()->width_);
+        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->getTextureInfo()->height_);
         setSize(width, height);
     }
 }

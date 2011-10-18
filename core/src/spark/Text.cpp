@@ -1,14 +1,7 @@
 #include "Text.h"
 
 #include <masl/MobileSDK.h>
-#include <mar/AssetProvider.h>
-
-#ifdef ANDROID
-    #include <android/AndroidAssetProvider.h>
-#endif
-#ifdef iOS
-    #include <ios/IOSAssetProvider.h>
-#endif
+#include <masl/AssetProvider.h>
 
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
@@ -32,12 +25,13 @@ namespace spark {
         
         std::string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
         if (myFontName != "") {
-            _myFontPath = mar::AssetProviderSingleton::get().ap()->findFile(myFontName);
+            _myFontPath = masl::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
         setShape(mar::ShapeFactory::get().createRectangle(true,500,500));
     }
 
     Text::~Text() {
+        AC_INFO << "....destructor text " << getName();
     }
 
     void
@@ -51,7 +45,7 @@ namespace spark {
         if (getShape()) {
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
             mar::TexturePtr myTexture = myMaterial->getTexture();
-            myTexture->unbind();
+            myTexture->getTextureInfo()->unbind();
         }
     }
     
@@ -86,13 +80,13 @@ namespace spark {
     Text::build() {
         I18nShapeWidget::build();
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
-        masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureId(), _myFontSize,
+        masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureInfo()->textureId_, _myFontSize,
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
         _myTextSize[0] = myTextInfo.width;
         _myTextSize[1] = myTextInfo.height;
         _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
         setSize(_myTextSize[0], _myTextSize[1]);
-        myMaterial->getTexture()->setTextureId(myTextInfo.textureID);
+        myMaterial->getTexture()->getTextureInfo()->textureId_ = myTextInfo.textureID;
         myMaterial->transparency_ = true;
     }
 }

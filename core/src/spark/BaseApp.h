@@ -42,8 +42,8 @@ namespace spark {
     std::string findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait);
     void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath );
 
-    
     typedef masl::Ptr<BaseApp> BaseAppPtr;
+    typedef masl::WeakPtr<BaseApp> BaseAppWeakPtr;
 };
 
 #endif

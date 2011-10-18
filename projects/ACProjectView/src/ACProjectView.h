@@ -2,6 +2,7 @@
 #define _included_mobile_acprojectview_ACProjectView_
 
 /////////////////// Application code, this should be in java or script language later...
+#include <animation/SequenceAnimation.h>
 #include <animation/DelayAnimation.h>
 #include <animation/ParallelAnimation.h>
 #include <spark/BaseApp.h>
@@ -11,6 +12,7 @@
 #include "ProjectViewerImpl.h"
 #include "ContentImage.h"
 
+#include <boost/progress.hpp>
 
 #ifdef ANDROID
 extern "C" {
@@ -32,8 +34,6 @@ namespace acprojectview {
             void onWorldRealized(spark::EventPtr theEvent);
                 
             void onBack(spark::EventPtr theEvent);
-            void onSwipeCB(spark::EventPtr theEvent);
-            void onStartScreenClicked(spark::EventPtr theEvent);
             void onStartProjectView();
             void onInitiateProjectView();
             void onFinishLoadProjectView();
@@ -41,9 +41,13 @@ namespace acprojectview {
             void projectViewAnimation(bool showProject);
             void onStartIdleFade();
             void onFinishIdleFade();            
-            void onFinishProjectView();
+            void closeProjectView();
             void onShowProjectViewPopup();
-            void onHideProjectViewPopup();
+            void onLoadInitialSet0();
+            void onLoadInitialSet1();
+            void onLoadInitialSet2();
+            void onLoadInitialSet3();
+            void onLoadInitialSet4();
             
             //idle
             void initIdle();
@@ -58,7 +62,6 @@ namespace acprojectview {
             std::vector<spark::ImagePtr> _myIdleScreenImagePtrs;
             animation::DelayAnimationPtr _myIdleDelay;
             animation::ParallelAnimationPtr _myKenBurnsAnimation;
-            const static unsigned int _myIdleTime;
             const static unsigned int _myKenBurnsDuration;
             const static unsigned int _myKenBurnsFadeDuration;
             const static float d;
@@ -73,17 +76,23 @@ namespace acprojectview {
             spark::TransformPtr _myStartScreenPtr;
         
             bool _myAnimatingFlag;
-
+            animation::SequenceAnimationPtr _mySeqAnimation;
             const static unsigned int _myAnimationTime = 400;
+            const static unsigned int _myIdleTime = 40000;
+            
+            void onFrame(spark::EventPtr theEvent);
+            
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
-    typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewPtr> ACProjectViewEventCB;
+    typedef masl::WeakPtr<ACProjectView> ACProjectViewWeakPtr;
+    typedef masl::MemberFunctionCallback<ACProjectView, ACProjectViewWeakPtr> ACProjectViewCB;
+    typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewWeakPtr> ACProjectViewEventCB;
 
     //animations
     typedef void (ACProjectView::* ACProjectViewPropertySetterFunction)(float);
     typedef void (ACProjectView::* ACProjectViewMemberFunction)();
-    typedef animation::PropertyAnimation<ACProjectViewPtr, ACProjectViewPropertySetterFunction> ACProjectViewPropertyAnimation;
+    typedef animation::PropertyAnimation<ACProjectViewWeakPtr, ACProjectViewPropertySetterFunction> ACProjectViewPropertyAnimation;
     typedef masl::Ptr<ACProjectViewPropertyAnimation>  ACProjectViewPropertyAnimationPtr;
 
 };

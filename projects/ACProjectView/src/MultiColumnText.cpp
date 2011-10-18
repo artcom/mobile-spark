@@ -51,7 +51,8 @@ namespace acprojectview {
     void 
     MultiColumnText::swipe(int theDir) {
         int myNewColumnIndex = _myVisibleColumnIndex + theDir;
-        if ((_myVisibleColumnIndex == _myColumnCount-1 && theDir == 1 ) || 
+        if (_myColumnCount < 2 || 
+            (_myVisibleColumnIndex == _myColumnCount-1 && theDir == 1 ) || 
             (_myVisibleColumnIndex == 0 && theDir == -1) || 
             _myAnimatingFlag) {
             // do nothing
@@ -62,10 +63,9 @@ namespace acprojectview {
         int myTargetX = -(_myTextPtrs[myNewColumnIndex]->getMaxWidth() + _myColumnSpace) * myNewColumnIndex;
         
         WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(ptr, &Widget::setX, getX(), myTargetX, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(ptr)), &Widget::setX, getX(), myTargetX, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));        
-        changeAnimation0->setOnFinish(masl::CallbackPtr(
-                        new masl::MemberFunctionCallback<MultiColumnText, MultiColumnTextPtr>(ptr, &MultiColumnText::onAnimationFinished)));
+        changeAnimation0->setOnFinish(masl::CallbackPtr(new MultiColumnTextCB(ptr, &MultiColumnText::onAnimationFinished)));
                             
         animation::AnimationManager::get().play(changeAnimation0);
         _myVisibleColumnIndex = myNewColumnIndex;
