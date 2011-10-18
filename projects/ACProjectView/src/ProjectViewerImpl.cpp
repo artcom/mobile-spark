@@ -201,6 +201,7 @@ namespace acprojectview {
              _image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[_myNumberOfImages-1])->getSrc());
              autoScaleImage(_image2);
         }        
+        AC_PRINT << "ProjectViewerImpl::loadInitialSet4 done";
     }
     bool ProjectViewerImpl::isPopUpOpen() {
         return (_myPopup->getY() != -POPUP_SIZE);

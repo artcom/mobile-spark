@@ -180,6 +180,7 @@ namespace acprojectview {
     void ACProjectView::onFinishLoadProjectView() {  
         _myProjectMenu->setVisible(false);
         _myAnimatingFlag = false;        
+        AC_PRINT << "----------------------------------------------------- animation done";
     }
 
     void ACProjectView::closeProjectView() {        
