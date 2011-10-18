@@ -39,7 +39,7 @@
             <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
             <Transform name="idlescreen" z="10">
                 <Image name="idleimage_1" z="0" alpha="1.0" src="/large_images/kinetische_skulptur_03.png" vertex_shader="/kenburnseffect.glsl" custom_shader_handles="a_time a_mode"/>
-                <Image name="idleimage_2" z="1" alpha="0.0" visible="false" src="/large_images/level_green_03.png" vertex_shader="/kenburnseffect.glsl" custom_shader_handles="a_time a_mode"/>
+                <Image name="idleimage_2" z="1" alpha="0.0" visible="false" src="/large_images/kinetische_skulptur_03.png" vertex_shader="/kenburnseffect.glsl" custom_shader_handles="a_time a_mode"/>
             </Transform>
         </Transform>        
         <ProjectViewer name="projectViewer" visible="false" sensible="false" z="100">

@@ -49,6 +49,7 @@ namespace acprojectview {
             void onLoadInitialSet2();
             void onLoadInitialSet3();
             void onLoadInitialSet4();
+            void onAllReady();
             
             //idle
             void initIdle();
@@ -86,6 +87,7 @@ namespace acprojectview {
             //HTTP-Requests
             masl::RequestManager _myRequestManager;
             int loadCount_;
+            bool isRealized_;
             const static std::string BASE_URL;
             void onAssetReady(masl::RequestPtr theRequest);
             void onLoadComplete();
