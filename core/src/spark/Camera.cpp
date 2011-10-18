@@ -1,7 +1,8 @@
 #include "Camera.h"
 
 #include <masl/MobileSDK.h>
-#include <masl/Exception.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 
 #include "BaseApp.h"
 #include "Window.h"
@@ -14,7 +15,8 @@ namespace spark {
     Camera::Camera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         ShapeWidget(theApp, theXMLNode) {
 
-        setShape(mar::ShapeFactory::get().createRectangle(true));
+        mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
+        _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
         _myColorConversionFlag = _myXMLNode->getAttributeAs<bool>("cpu_color_conversion", false);
 
     }
@@ -47,11 +49,11 @@ namespace spark {
             float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
             float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
             float myShapeWidth = (myWindow->getOrientation() == Orientation::PORTRAIT) ? height : width;
-            if (!getShape() || (myShapeWidth != 0 && myShapeWidth != getShape()->getWidth())) {
+            if (myShapeWidth != 0 && myShapeWidth != getShape()->getWidth()) {
                 setGeometry();
             }
             masl::MobileSDK_Singleton::get().getNative()->updateCameraTexture();
-            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             if (myCameraInfo.textureID != 0 && myCameraInfo.textureID != myMaterial->getTexture()->getTextureInfo()->textureId_) {
                 myMaterial->getTexture()->getTextureInfo()->textureId_ = myCameraInfo.textureID;
             }

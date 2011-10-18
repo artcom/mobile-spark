@@ -7,11 +7,23 @@
 #include "GlHeaders.h"
 
 namespace mar {
+#define DEBUG_GL
+#ifdef DEBUG_GL
+    #define ASSERT_GL(what, where) \
+    checkGlError(what, where)
+#elif DEBUG
+    #define ASSERT_GL(what, where) \
+    checkGlError(what, where)
+#else
+    #define ASSERT_GL(what, where)
+#endif
+
     DECLARE_EXCEPTION(ShaderCreationException, masl::Exception)
+    DECLARE_EXCEPTION(GLRenderException, masl::Exception)
 
     //////////////////////////////////////////logging
     void printGLString(const char *name, GLenum s);
-    void checkGlError(const char* op);
+    void checkGlError(const std::string & op, const std::string & where = "");
     void printGLInfo();
 
     ///////////////////////////////////////////////////////////////// Shaders
