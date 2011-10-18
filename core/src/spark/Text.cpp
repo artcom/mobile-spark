@@ -97,7 +97,7 @@ namespace spark {
     void
     Text::build() {
         I18nShapeWidget::build();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
         bool myCreateTextureFlag = true;            
         unsigned long myKey =  masl::initiateCRC32();
         if (_myCacheFlag) {
