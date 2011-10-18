@@ -4,6 +4,7 @@
 
 #include <masl/XMLNode.h>
 #include <mar/openGL_functions.h>
+#include <mar/Viewport.h>
 
 #include "SparkComponentFactory.h"
 #include "Widget.h"

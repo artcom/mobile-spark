@@ -1,5 +1,6 @@
 #include "Canvas.h"
 
+#include <masl/Logger.h>
 #include "openGL_functions.h"
 
 
@@ -28,6 +29,7 @@ namespace mar {
 
     void
     Canvas::preRender(vector4 theClearColor) {
+        AC_TRACE << "Canvas::prerender clearcolor: "<<theClearColor;
         glClearColor(theClearColor[0],theClearColor[1],theClearColor[2],theClearColor[3]);
         checkGlError("glClearColor");
         glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);

@@ -24,28 +24,32 @@ namespace mar {
     class Material {
     public:
         virtual ~Material();
-        virtual void createShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
+        virtual void resetGL();
+        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void loadShader(const matrix & theMatrix);
-        virtual void initGL();
-        void setAlpha(const float theAlpha) {alpha_ = theAlpha; transparency_ |= (alpha_ != 1.0);};
+        virtual void unloadShader();
+        void setAlpha(const float theAlpha) {alpha_ = theAlpha;};
         void setCustomValues(const std::map<std::string, float> & theCustomValues);
-        void setCustomHandles(const std::vector<std::string> & theCustomHandles);
+        void setCustomHandles(const std::map<std::string, float> & theCustomHandles);
 
-        GLuint shaderProgram;
-        GLuint mvpHandle;
-        GLuint alphaHandle;
-        std::map<std::string, std::pair<GLuint, float> > customHandlesAndValues_; //maps handle string to pair of handle and value
-        bool transparency_;
+        virtual bool isTransparent() const {return alpha_ != 1.0;};
 
     protected:
         Material();
-        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
+        void initShader();
         virtual void setHandles();
+        virtual void bindAttributes();
         GLuint getHandle(const std::string & theName) const;
 
-        std::string _myFragmentShader;
-        std::string _myVertexShader;
         float alpha_;
+        std::string fragmentShader_;
+        std::string vertexShader_;
+        GLuint shaderProgram_;
+        GLuint mvpHandle_;
+        GLuint alphaHandle_;
+        std::map<std::string, std::pair<GLuint, float> > customHandlesAndValues_; //maps handle string to pair of handle and value
+    private:
+        void deleteShader();
     };
     typedef masl::Ptr<Material> MaterialPtr;
 
@@ -53,46 +57,51 @@ namespace mar {
     public:
         UnlitColoredMaterial();
         virtual ~UnlitColoredMaterial();
+        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void loadShader(const matrix & theMatrix);
         void setDiffuseColor(const vector3 & theColor) {
             diffuse_ = vector4(theColor, alpha_);
-            transparency_ |= (diffuse_[3] != 1.0);
         }
         void setDiffuseColor(const vector4 & theColor) {
             diffuse_ = theColor;
-            transparency_ |= (diffuse_[3] != 1.0);
         }
         vector4 getDiffuseColor() const {
             return diffuse_;
         }
+    
+        virtual bool isTransparent() const {return Material::isTransparent() || diffuse_[3] != 1.0;};
 
-        vector4 ambient;
-        vector4 specular;
-        float shininess;
-        int illuminationModel;
+        //XXX: mixed property visibility
+        //are these 4 actually supported?
+        vector4 ambient_;
+        vector4 specular_;
+        float shininess_;
+        int illuminationModel_;
     private:
         vector4 diffuse_;
-        GLuint colorHandle;
+        GLuint colorHandle_;
 
     private:
-        virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void setHandles();
     };
     typedef masl::Ptr<UnlitColoredMaterial> UnlitColoredMaterialPtr;
 
     class UnlitTexturedMaterial : public Material {
     public:
-        UnlitTexturedMaterial(const std::string & theSrc, const bool theCacheFlag = false);
+        UnlitTexturedMaterial(const std::string & theSrc = "");
         virtual ~UnlitTexturedMaterial();
-        virtual void loadShader(const matrix & theMatrix);
-        virtual void initGL();
-        TexturePtr getTexture() const {return _myTexture;}
-        TexturePtr _myTexture;
-    private:
+        virtual void resetGL();
         virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
+        virtual void loadShader(const matrix & theMatrix);
+        TexturePtr getTexture() const {return texture_;}
+        void setTexture(const TexturePtr theTexture);
+        virtual bool isTransparent() const {return Material::isTransparent() || ((texture_) ? texture_->getTextureInfo()->transparency_ : false);};
+    private:
+        void setTexture(const std::string & theSrc);
         virtual void setHandles();
-        std::string _mySrc;
-        GLuint textureMatrixHandle;
+        virtual void bindAttributes();
+        TexturePtr texture_;
+        GLuint textureMatrixHandle_;
 
     };
     typedef masl::Ptr<UnlitTexturedMaterial> UnlitTexturedMaterialPtr;

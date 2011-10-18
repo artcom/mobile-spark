@@ -2,10 +2,11 @@
 
 #include <masl/MobileSDK.h>
 #include <masl/AssetProvider.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include "I18nContext.h"
 
 namespace spark {
     const char * const Text::SPARK_TYPE = "Text";
@@ -27,7 +28,11 @@ namespace spark {
         if (myFontName != "") {
             _myFontPath = masl::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
-        setShape(mar::ShapeFactory::get().createRectangle(true,500,500));
+        mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
+        myMaterial->getTexture()->getTextureInfo()->transparency_ = true;
+        myMaterial->setCustomHandles(customShaderValues_);
+        myMaterial->setShader(vertexShader_, fragmentShader_); 
+        _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
     Text::~Text() {
@@ -43,7 +48,7 @@ namespace spark {
     Text::onPause() {
         I18nShapeWidget::onPause();
         if (getShape()) {
-            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             mar::TexturePtr myTexture = myMaterial->getTexture();
             myTexture->getTextureInfo()->unbind();
         }
@@ -52,7 +57,7 @@ namespace spark {
     void
     Text::onResume() {
         I18nShapeWidget::onResume();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         _myDirtyFlag = true;
     }
 
@@ -79,7 +84,8 @@ namespace spark {
     void
     Text::build() {
         I18nShapeWidget::build();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+        myMaterial->getTexture()->getTextureInfo()->transparency_ = true;
         masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureInfo()->textureId_, _myFontSize,
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
         _myTextSize[0] = myTextInfo.width;
@@ -87,6 +93,5 @@ namespace spark {
         _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
         setSize(_myTextSize[0], _myTextSize[1]);
         myMaterial->getTexture()->getTextureInfo()->textureId_ = myTextInfo.textureID;
-        myMaterial->transparency_ = true;
     }
 }
