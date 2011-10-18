@@ -39,7 +39,7 @@ namespace mar {
         }
     }    
     
-    Texture::Texture() :matrix_(cml::identity_4x4()) {
+    Texture::Texture() :matrix_(cml::identity_4x4()), _myTextureInfo(TextureInfoPtr(new TextureInfo())) {
     }
 
     Texture::~Texture() {
