@@ -80,9 +80,9 @@ namespace spark {
             theParent->addChild(myComponentPtr);
         }
         ReparentComponentVisitor myReparentVisitor;
-		visitComponents(myReparentVisitor, myComponentPtr);
+		parentFirstVisitComponents(myReparentVisitor, myComponentPtr);
         RealizeComponentsButWorldAndWindowVisitor myVisitor;
-		visitComponents(myVisitor, myComponentPtr);
+		childFirstVisitComponents(myVisitor, myComponentPtr);
         return myComponentPtr;
     }
 
