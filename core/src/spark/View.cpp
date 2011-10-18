@@ -46,7 +46,7 @@ namespace spark {
         myWorld->prerender(matrixStack);
         RenderList myRenderList;
         CollectVisibleNodesVisitor myVisitor(myRenderList);
-        visitComponents(myVisitor, myWorld);
+        parentFirstVisitComponents(myVisitor, myWorld);
         stable_sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
 
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
