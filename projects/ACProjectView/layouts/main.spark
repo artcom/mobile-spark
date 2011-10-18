@@ -12,6 +12,7 @@
 
     <World name="loaderworld" sensible="false">    
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
+        <Text name="error" text="" visible="false" x="200" y="30" color="[1,0,0,1]" z="14" fontsize="22" font="/acswissmed.ttf"/>
         <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
         <Transform name="startscreen">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]"/>
