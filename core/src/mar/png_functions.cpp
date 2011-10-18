@@ -1,6 +1,6 @@
 #include "png_functions.h"
 
-#include "AssetProvider.h"
+#include <masl/AssetProvider.h>
 #include "Texture.h"
 
 
@@ -8,12 +8,12 @@ namespace mar {
 
 DEFINE_EXCEPTION(PngLoadingException, masl::Exception)
 
-void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
+void loadTextureFromPNG(const std::string & filename, TextureInfoPtr theTexture) {
     GLuint textureId;
     int width, height;
     bool rgb;
-    if (AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb)) {
-        theTexture->setTextureId(textureId);
+    if (masl::AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb)) {
+        theTexture->textureId_ = textureId;//setTextureId(textureId);
         theTexture->transparency_ = !rgb;
         theTexture->width_ = width;
         theTexture->height_ = height;

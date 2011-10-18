@@ -60,10 +60,11 @@ namespace animation {
                 float getX() { return x;};
         };
         typedef masl::Ptr<Object> ObjectPtr;
+        typedef masl::WeakPtr<Object> ObjectWeakPtr;
 
         //animations
         typedef void (Object::* ObjectPropertySetterFunction)(float);
-        typedef PropertyAnimation<ObjectPtr, ObjectPropertySetterFunction> ObjectPropertyAnimation;
+        typedef PropertyAnimation<ObjectWeakPtr, ObjectPropertySetterFunction> ObjectPropertyAnimation;
         typedef masl::Ptr<ObjectPropertyAnimation>  ObjectPropertyAnimationPtr;
 
         void perform_AnimationManagerTest() {

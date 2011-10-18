@@ -97,7 +97,7 @@ namespace mar {
     RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight, 
                                    const std::string & theVertexShader, const std::string & theFragmentShader, 
                                    const std::vector<std::string> & theCustomHandles,
-                                   const std::string & theTextureSrc)
+                                   const std::string & theTextureSrc, const bool theCacheFlag)
         : Shape(theTextureFlag, theWidth, theHeight)
     {
 
@@ -105,7 +105,7 @@ namespace mar {
         MaterialPtr myMaterial;
         if (theTextureFlag) {
             myElement = ElementPtr(new ElementWithTexture());
-            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc));
+            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(theTextureSrc, theCacheFlag));
         } else {
             myElement = ElementPtr(new Element());
             myMaterial = UnlitColoredMaterialPtr(new UnlitColoredMaterial());
@@ -206,9 +206,9 @@ namespace mar {
         myMaterial->createShader();
         elementList_.push_back(myElement);
 
-        imageWidth_ = myMaterial->getTexture()->width_;
+        imageWidth_ = myMaterial->getTexture()->getTextureInfo()->width_;
         imageWidth_ = imageWidth_ > 0 ? imageWidth_ : 1;
-        imageHeight_ = myMaterial->getTexture()->height_;
+        imageHeight_ = myMaterial->getTexture()->getTextureInfo()->height_;
         imageHeight_ = imageHeight_ > 0 ? imageHeight_ : 1;
 
         setVertexData(vector2(0,0), vector2(theWidth, theHeight));
@@ -311,9 +311,10 @@ namespace mar {
     ShapePtr ShapeFactory::createRectangle(const bool theTextureFlag, const float theWidth, const float theHeight,
                                            const std::string & theVertexShader, const std::string & theFragmentShader,
                                            const std::vector<std::string> & theCustomHandles,
-                                           const std::string & theTextureSrc) {
+                                           const std::string & theTextureSrc,
+                                           const bool theCacheFlag) {
         return ShapePtr(new RectangleShape(theTextureFlag, theWidth, theHeight, 
-                            theVertexShader, theFragmentShader, theCustomHandles, theTextureSrc));
+                            theVertexShader, theFragmentShader, theCustomHandles, theTextureSrc, theCacheFlag));
     }
 
     ShapePtr ShapeFactory::createNinePatch(const std::string & theTextureSrc,

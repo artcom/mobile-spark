@@ -1,9 +1,12 @@
 #include "RequestManager.h"
 
 #include <iostream>
+#include <sys/stat.h>
 #include <curl/curl.h>
 
 #include "Logger.h"
+#include "AssetProvider.h"
+
 
 #define DB(x) // x;
 
@@ -37,7 +40,6 @@ namespace masl {
         theRequest->onStart();
         curl_multi_add_handle(_myCurlMultiHandle, theRequest->getHandle());
         _myRequests.push_back(theRequest);
-
     }
 
     bool 
@@ -128,10 +130,53 @@ namespace masl {
     }
 
     void 
-    RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
+    RequestManager::getRequest(const std::string & theUrl, const RequestCallbackPtr theCB,
+                               const std::string & thePersistenceFolder,
+                               const bool thePersistFlag, const GetType theGetType) {
+        if (theGetType == REQUEST_IF_NOT_AVAILABLE && !thePersistenceFolder.empty()) {
+            std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(theUrl);
+            if (!AssetProviderSingleton::get().ap()->findFile(fileToFind).empty()) {
+                std::vector<char> responseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
+                if (responseBlock.size() > 0) {
+                    RequestPtr request = RequestPtr(new Request(theUrl, responseBlock));
+                    if (theCB) {
+                        (*theCB)(request);
+                        return;
+                    }
+                } 
+            }
+        //Not supported yet
+        //} else if (theGetType == REQUEST_IF_NEWER) {
+        //    AC_PRINT << "..............request if newer ...............";
+        //    std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(theUrl);
+        //    std::string foundFile;
+        //    if (!(foundFile = AssetProviderSingleton::get().ap()->findFile(fileToFind)).empty()) {
+        //        struct stat s;
+        //        stat(foundFile.c_str(),&s);
+        //        time_t time = s.st_mtime;
+        //        AC_PRINT << "time of current " << time;
+        //        AC_PRINT << "time converted " << ctime(&time);
+        //        SequenceRequestPtr mySequenceCB = SequenceRequestPtr(new SequenceRequest());
+        //        headRequest(theUrl, mySequenceCB);
+        //    }
+        }
+        RequestPtr myRequest = RequestPtr(new Request(theUrl, thePersistenceFolder, thePersistFlag));
+        myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
+        myRequest->get();
+        performRequest(myRequest);
+    }
+
+    void 
+    RequestManager::headRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
-        myRequest->get();
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
+        myRequest->head();
         performRequest(myRequest);
     }
 
@@ -139,6 +184,9 @@ namespace masl {
     RequestManager::postRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
         myRequest->post(theData);
         performRequest(myRequest);
     }
@@ -147,6 +195,9 @@ namespace masl {
     RequestManager::putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
         myRequest->put(theData);
         performRequest(myRequest);
     }
@@ -155,17 +206,51 @@ namespace masl {
     RequestManager::deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
         myRequest->setOnDoneCallback(theCB);
+        if (_myDefaultErrorCallback) {
+            myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+        }
         myRequest->http_delete();
         performRequest(myRequest);
     }
 
     void
     RequestManager::getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
-                                  const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB) {
+                                  const RequestCallbackPtr theOneReadyCB, const RequestCallbackPtr theAllReadyCB,
+                                  const std::string & thePersistenceFolder, 
+                                  const bool thePersistFlag, const GetType theGetType) {
         RequestPtr myNextRequest;
         for (int i = theURLLastPartList.size() - 1; i >= 0 ; --i) {
             std::string myUrl = theBaseURL + "/" + theURLLastPartList[i];
-            SequenceRequestPtr myRequest = SequenceRequestPtr(new SequenceRequest(*this, myUrl));
+            if (theGetType == REQUEST_IF_NOT_AVAILABLE && !thePersistenceFolder.empty()) {
+                std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(myUrl);
+                if (!AssetProviderSingleton::get().ap()->findFile(fileToFind).empty()) {
+                    std::vector<char> responseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
+                    if (responseBlock.size() > 0) {
+                        Request* r = new Request(myUrl, responseBlock);
+                        RequestPtr myRequest = RequestPtr(r);
+                        if (theOneReadyCB) {
+                            (*theOneReadyCB)(myRequest);
+                            continue;
+                        }
+                    } 
+                }
+            //Not supported
+            //} else if (theGetType == REQUEST_IF_NEWER) {
+            //    AC_PRINT << "..............request if newer ...............";
+            //    std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(myUrl);
+            //    std::string foundFile;
+            //    if (!(foundFile = AssetProviderSingleton::get().ap()->findFile(fileToFind)).empty()) {
+            //        struct stat s;
+            //        stat(foundFile.c_str(),&s);
+            //        time_t time = s.st_mtime;
+            //        AC_PRINT << "time of current " << time;
+            //        AC_PRINT << "time converted " << ctime(&time);
+            //        //XXX                    
+            //        continue;
+            //    }
+            }
+            SequenceRequestPtr myRequest = SequenceRequestPtr(
+                new SequenceRequest(*this, myUrl, thePersistenceFolder, thePersistFlag));
             myRequest->setOnDoneCallback(theOneReadyCB);
             myRequest->get();
             if (myNextRequest) {
@@ -175,8 +260,10 @@ namespace masl {
             }
             myNextRequest = myRequest;
         }
-        if (myNextRequest) {
+        if (myNextRequest) { //this is now the first one that should be executed
             performRequest(myNextRequest);
+        } else if (theAllReadyCB) {
+            (*theAllReadyCB)(RequestPtr());
         }
     }
 }

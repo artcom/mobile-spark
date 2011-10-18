@@ -52,8 +52,8 @@ namespace spark {
             }
             masl::MobileSDK_Singleton::get().getNative()->updateCameraTexture();
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
-            if (myCameraInfo.textureID != 0 && myCameraInfo.textureID != myMaterial->getTexture()->getTextureId()) {
-                myMaterial->getTexture()->setTextureId(myCameraInfo.textureID);
+            if (myCameraInfo.textureID != 0 && myCameraInfo.textureID != myMaterial->getTexture()->getTextureInfo()->textureId_) {
+                myMaterial->getTexture()->getTextureInfo()->textureId_ = myCameraInfo.textureID;
             }
         } else {
             if (masl::MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {

@@ -49,21 +49,29 @@ namespace demoapp {
 
             masl::RequestManager _myRequestManager;
             animation::AnimationPtr _myLoadingAnimation;
+            animation::AnimationPtr _myErrorExpiredDelay;
+            spark::TextPtr _myLoadingMessage;
+            spark::TextPtr _myErrorMessage;
             void onRepeatingDateRequest();
+            void onErrorExpired();
             void onTextRequestReady(masl::RequestPtr theRequest);
             void onDateRequestReady(masl::RequestPtr theRequest);
             void onSparkRequestReady(masl::RequestPtr theRequest);
             void onAssetRequestReady(masl::RequestPtr theRequest);
             void onAllAssetsRequestReady(masl::RequestPtr theRequest);
             void onGetRequestReady(masl::RequestPtr theRequest);
+            void onHeadRequestReady(masl::RequestPtr theRequest);
             void onPostRequestReady(masl::RequestPtr theRequest);
             void onPutRequestReady(masl::RequestPtr theRequest);
             void onDeleteRequestReady(masl::RequestPtr theRequest);
+            void onErrorRequestCB(masl::RequestPtr theRequest);
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;
-    typedef spark::MemberFunctionEventCallback<DemoApp, DemoAppPtr> DemoEventCB;
-
+    typedef masl::WeakPtr<DemoApp> DemoAppWeakPtr;
+    typedef masl::MemberFunctionCallback<DemoApp, DemoAppWeakPtr> DemoCB;
+    typedef spark::MemberFunctionEventCallback<DemoApp, DemoAppWeakPtr> DemoEventCB;
+    typedef masl::MemberFunctionRequestCallback<DemoApp, DemoAppWeakPtr> DemoRequestCB;
 };
 
 #endif 

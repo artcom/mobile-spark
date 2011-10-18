@@ -88,8 +88,8 @@ namespace spark {
         if (!_visible) {
             return false;
         } else {
-            if (getParent()) {
-                return getParent()->isRendered();
+            if (getParent().lock()) {
+                return getParent().lock()->isRendered();
             } else {
                 return _visible;
             }
@@ -103,7 +103,7 @@ namespace spark {
     float
     Widget::getParentAlpha() const {
         float myParentAlpha = 1.0;
-        WidgetPtr myParent = boost::dynamic_pointer_cast<Widget>(getParent());
+        WidgetPtr myParent = boost::dynamic_pointer_cast<Widget>(getParent().lock());
         if (myParent) {
             myParentAlpha = myParent->getActualAlpha();
         }
@@ -145,7 +145,7 @@ namespace spark {
             if (myWidget && myWidget->getI18nContext()) {
                 myContexts.push_back(myWidget->getI18nContext());
             }
-            myCurrent = myCurrent->getParent();
+            myCurrent = myCurrent->getParent().lock();
         }
         return myContexts;
     }

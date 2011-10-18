@@ -19,7 +19,7 @@ namespace animation {
         virtual void finish(const masl::UInt64 theTime);
 
     private:
-        const O _myObjectPtr;
+        const O _myObjectPtr;  //should be WeakPtr
         const T _myPropertyCallback;
         const float _myStartValue;
         const float _myEndValue;
@@ -51,20 +51,26 @@ namespace animation {
         Animation::doFrame(theCurrentMillis);
         float value = _myStartValue + (_myEndValue - _myStartValue) * _myProgress;
         AC_TRACE << "progress " << _myProgress << " value: " << value;
-        (_myObjectPtr.get()->*_myPropertyCallback)(value);
+        if (_myObjectPtr.lock()) {
+            (_myObjectPtr.lock().get()->*_myPropertyCallback)(value);
+        }
     }
 
     template <class O, class T>
     void PropertyAnimation<O, T>::play(const masl::UInt64 theTime, const bool theComeToAnEndFlag) {
         Animation::play(theTime, theComeToAnEndFlag);
         AC_DEBUG << "property animation set value to start value " << _myStartValue;
-        (_myObjectPtr.get()->*_myPropertyCallback)(_myStartValue);
+        if (_myObjectPtr.lock()) {
+            (_myObjectPtr.lock().get()->*_myPropertyCallback)(_myStartValue);
+        }
     }
 
     template <class O, class T>
     void PropertyAnimation<O, T>::finish(const masl::UInt64 theTime) {
         Animation::finish(theTime);
-        (_myObjectPtr.get()->*_myPropertyCallback)(_myEndValue);
+        if (_myObjectPtr.lock()) {
+            (_myObjectPtr.lock().get()->*_myPropertyCallback)(_myEndValue);
+        }
     }
 };
 

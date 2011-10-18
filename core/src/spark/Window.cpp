@@ -97,7 +97,6 @@ namespace spark {
         _myWidth = myEvent->size_[0];
         _myHeight= myEvent->size_[1];
     }
-
     void
     Window::render(){
         _myGLCanvas->preRender(getClearColor());
@@ -142,7 +141,7 @@ namespace spark {
             //use relative touch point
             CollectAABBComponentVisitor myVisitor(myPickedComponentList, (float)x/(float)_myWidth, (float)y/(float)_myHeight,
                                                   myView->getCamera()->getProjectionMatrix());
-            visitComponents(myVisitor, getChildByName(myView->getWorldName()));
+            parentFirstVisitComponents(myVisitor, getChildByName(myView->getWorldName()));
         }
         AC_DEBUG << "collected " << myPickedComponentList.size() << " components";
         if (myPickedComponentList.size() > 0) {

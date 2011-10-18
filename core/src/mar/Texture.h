@@ -5,21 +5,30 @@
 #include "openGL_functions.h"
 
 namespace mar {
-
-    class Texture {
+    class TextureInfo {
         public:
-            Texture();
-            ~Texture();
+            TextureInfo();
+            ~TextureInfo();
             void unbind();
-            GLuint getTextureId() const;
-            void setTextureId(GLuint theTextureId);
 
             GLuint width_;
             GLuint height_;
             bool transparency_;
+            GLuint textureId_;        
+        
+    };
+    typedef masl::Ptr<TextureInfo> TextureInfoPtr;
+        
+    class Texture {
+        public:
+            Texture();
+            ~Texture();
+
+            void setTextureInfo(TextureInfoPtr theTextureInfo);
+            TextureInfoPtr getTextureInfo() { return _myTextureInfo;}
             matrix matrix_;
         private:
-            GLuint textureId_;
+            TextureInfoPtr _myTextureInfo;
     };
     typedef masl::Ptr<Texture> TexturePtr;
 

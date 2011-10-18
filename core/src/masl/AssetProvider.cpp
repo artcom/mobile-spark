@@ -1,7 +1,7 @@
 #include "AssetProvider.h"
-#include <masl/file_functions.h>
-namespace mar {
+#include "file_functions.h"
 
+namespace masl {
     AssetProviderSingleton::~AssetProviderSingleton() {}
 
     void

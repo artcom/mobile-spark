@@ -14,6 +14,7 @@ namespace spark {
 
     class Component;
     typedef masl::Ptr<Component> ComponentPtr;
+    typedef masl::WeakPtr<Component> ComponentWeakPtr;
     typedef std::vector<ComponentPtr> VectorOfComponentPtr;
 
     class Component : public EventDispatcher, public boost::enable_shared_from_this<Component> {
@@ -42,7 +43,7 @@ namespace spark {
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
         ComponentPtr getRoot();
         const masl::XMLNodePtr getNode() const { return _myXMLNode; }
-        const ComponentPtr & getParent() const { return _myParent; };
+        const ComponentWeakPtr & getParent() const { return _myParent; };
         void setParent(ComponentPtr theParent) {_myParent = theParent;};
         virtual bool isRendered() const { return true;}
 
@@ -51,7 +52,7 @@ namespace spark {
         std::string _myName;
         VectorOfComponentPtr _myChildren;
     private:
-        ComponentPtr _myParent;
+        ComponentWeakPtr _myParent;
         bool _myRealizedAllChildrenFlag;
     };
 };
