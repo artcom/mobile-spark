@@ -80,9 +80,18 @@ namespace acprojectview {
         std::vector<std::string> myOnSetupNeededAssets;
         myOnSetupNeededAssets.push_back("i18n.spark");
         myOnSetupNeededAssets.push_back("inner_menu.spark");
+        _myRequestManager.setOnErrorCallback(
+            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onErrorRequest)));
         _myRequestManager.getAllRequest(ACProjectView::BASE_URL + "/layouts/", myOnSetupNeededAssets, 
             masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
             masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
+    }
+
+    void ACProjectView::onErrorRequest(masl::RequestPtr theRequest) {
+        AC_ERROR << "............ACProjectView onError for URL " << theRequest->getURL();
+        TextPtr myErrorText = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("error"));
+        myErrorText->setVisible(true);
+        myErrorText->setText("error: internet connection required for initial setup");
     }
 
     void ACProjectView::onAssetReady(masl::RequestPtr theRequest) {
@@ -114,7 +123,6 @@ namespace acprojectview {
 
     void ACProjectView::onLoadComplete() {
         AC_DEBUG << "onLoadComplete";
-        loadCount_ = 0;
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));
         _myProjectViewer = boost::static_pointer_cast<ProjectViewerImpl>(_mySparkWindow->getChildByName("2dworld")->getChildByName("projectViewer",true));
@@ -331,7 +339,7 @@ namespace acprojectview {
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
         if (myEvent->worldname_ == "2dworld") {
             isRealized_ = true;
-            if (loadCount_ == 0) {
+            if (loadCount_ == 3) {
                 onAllReady();
             }
         }

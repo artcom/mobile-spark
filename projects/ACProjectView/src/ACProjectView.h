@@ -90,6 +90,7 @@ namespace acprojectview {
             bool isRealized_;
             const static std::string BASE_URL;
             void onAssetReady(masl::RequestPtr theRequest);
+            void onErrorRequest(masl::RequestPtr theRequest);
             void onLoadComplete();
     };
 

@@ -252,6 +252,9 @@ namespace masl {
             SequenceRequestPtr myRequest = SequenceRequestPtr(
                 new SequenceRequest(*this, myUrl, thePersistenceFolder, thePersistFlag));
             myRequest->setOnDoneCallback(theOneReadyCB);
+            if (_myDefaultErrorCallback) {
+                myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+            }
             myRequest->get();
             if (myNextRequest) {
                 myRequest->setNextRequest(myNextRequest);
