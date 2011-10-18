@@ -52,9 +52,9 @@ namespace acprojectview {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         std::vector<std::string> myOnSetupNeededAssets;
-        myOnSetupNeededAssets.push_back("layouts/i18n.spark");
-        myOnSetupNeededAssets.push_back("layouts/inner_menu.spark");
-        _myRequestManager.getAllRequest(ACProjectView::BASE_URL, myOnSetupNeededAssets, 
+        myOnSetupNeededAssets.push_back("i18n.spark");
+        myOnSetupNeededAssets.push_back("inner_menu.spark");
+        _myRequestManager.getAllRequest(ACProjectView::BASE_URL + "/layouts/", myOnSetupNeededAssets, 
             masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
             masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
     }
@@ -81,13 +81,13 @@ namespace acprojectview {
         } else if (loadCount_ == 2) {
             AC_PRINT << ".............................onAssetsReady";
             spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
-            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/layouts/inner_menu.spark", myTransform);
-            onLoadCompolete();
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/inner_menu.spark", myTransform);
+            onLoadComplete();
         }
         loadCount_++;
     }
 
-    void ACProjectView::onLoadCompolete() {
+    void ACProjectView::onLoadComplete() {
         AC_PRINT << "onLoadComplete";
         loadCount_ = 0;
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
@@ -139,6 +139,7 @@ namespace acprojectview {
         spark::WidgetPtr myLoadAnim = boost::static_pointer_cast<Window>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("apploaderanim", true));
         myLoadAnim->setX(_mySparkWindow->getSize()[0]/2.0);
         myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
+        AC_PRINT << "-----------end of loadComplete";
         
         
     }
@@ -315,12 +316,14 @@ namespace acprojectview {
     }
     
     void ACProjectView::onWorldRealized(EventPtr theEvent) {
+        AC_PRINT << "onWorld Realized";
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
+        AC_PRINT << ".............. world name " << myEvent->worldname_;
         if (myEvent->worldname_ == "2dworld") {
             boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("loaderView"))->setVisible(false);
             boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("mainView"))->setVisible(true);
         }
-        AC_DEBUG << "######################### world realized: " << myEvent->worldname_;
+        AC_DEBUG << "########################################### world realized: " << myEvent->worldname_;
         if (myEvent->worldname_ == "2dworld") {
             initIdle();
         }

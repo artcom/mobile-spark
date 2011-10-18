@@ -1,4 +1,8 @@
 <Transform name="remove_me">
+        <I18nItem name="artcom_title">
+            <de>ART+COM</de>
+            <en>ART+COM</en>
+        </I18nItem>
         <I18nItem name="kinetik_title">
             <de>Kinetische Skulptur</de>
             <en>Kinetic sculpture</en>

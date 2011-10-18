@@ -88,7 +88,7 @@ namespace acprojectview {
             int loadCount_;
             const static std::string BASE_URL;
             void onAssetReady(masl::RequestPtr theRequest);
-            void onLoadCompolete();
+            void onLoadComplete();
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
