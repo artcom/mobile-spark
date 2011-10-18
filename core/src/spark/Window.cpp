@@ -107,10 +107,8 @@ namespace spark {
             ComponentPtr myWorld = getChildByName(myView->getWorldName());
             std::vector<ComponentPtr>::iterator i = find(_myUnrealizedWorlds.begin(), _myUnrealizedWorlds.end(), myWorld);
             if (i != _myUnrealizedWorlds.end()) {
-                AC_PRINT << "11111111111111111111111111 " << myWorld->getName();
                 myWorld->realizeASync();
                 if (myWorld->isAllRealized()) {
-                AC_PRINT << "122222222 all realized";
                     WindowPtr ptr = boost::static_pointer_cast<Window>(shared_from_this());                    
                     EventPtr myEvent = EventPtr(new WindowEvent(WindowEvent::WORLD_REALIZED, ptr, myWorld->getName()));
                     (*myEvent)();                    
