@@ -99,7 +99,7 @@ namespace spark {
         mar::TextureLoader::get().clear();
         if (_mySparkWindow) {
             OnPauseComponentVisitor myVisitor;
-            visitComponents(myVisitor, _mySparkWindow);
+            parentFirstVisitComponents(myVisitor, _mySparkWindow);
         }
     }
 
@@ -107,7 +107,7 @@ namespace spark {
         AC_DEBUG << "BaseApp::onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
-            visitComponents(myVisitor, _mySparkWindow);
+            parentFirstVisitComponents(myVisitor, _mySparkWindow);
         }
     }
     
