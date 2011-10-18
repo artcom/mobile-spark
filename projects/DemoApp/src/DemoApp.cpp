@@ -108,10 +108,6 @@ namespace demoapp {
         spark::EventCallbackPtr myPinchCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPinchGesture));
         _mySparkWindow->addEventListener(GestureEvent::PINCH, myPinchCB);
         
-        //test pan gestures
-        spark::EventCallbackPtr myPanCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onPanGesture));
-        _mySparkWindow->addEventListener(GestureEvent::PAN, myPanCB);
-        
         //test sensors
         spark::EventCallbackPtr mySensorCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onSensorEvent));
         _mySparkWindow->addEventListener(SensorEvent::ORIENTATION, mySensorCB);
@@ -128,6 +124,8 @@ namespace demoapp {
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onTextRequestReady)));
         _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onGetRequestReady)));
+        _myRequestManager.headRequest("http://www.einsfeld.de/mobile-spark/assets/face-devil-grin.png",
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onHeadRequestReady)));
         _myRequestManager.postRequest("http://www.einsfeld.de/mobile-spark/", "id=23&value=post data",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onPostRequestReady)));
         //data is not visible at server, not sure how this is intended to work in Request.cpp
@@ -237,6 +235,12 @@ namespace demoapp {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("getrequest", true));
         myText->setText(theRequest->getResponseString());
     }
+    void DemoApp::onHeadRequestReady(RequestPtr theRequest) {
+        TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("headrequest", true));
+        myText->setText("last modified from header: " + theRequest->getResponseHeader("Last-Modified"));
+        AC_PRINT << "...................... last mod " << theRequest->getResponseHeader("Last-Modified");
+        AC_PRINT << "the story of stuff " << theRequest->getURL() << "___" << theRequest->getResponseString() << "___";
+    }
     void DemoApp::onPostRequestReady(RequestPtr theRequest) {
         TextPtr myText = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("postrequest", true));
         myText->setText(theRequest->getResponseString());
@@ -257,10 +261,10 @@ namespace demoapp {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         std::string myNewSpark = theRequest->getResponseString();
         std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
-        masl::AssetProviderSingleton::get().ap()->storeInFile("downloads/scene.spark", myNewSpark);
         _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAssetRequestReady)),
-            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),"/downloads/");
+            masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),
+            "/downloads/", true, masl::REQUEST_IF_NOT_AVAILABLE);
         AC_DEBUG << "headers of spark-request";
         std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
         for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
@@ -270,8 +274,6 @@ namespace demoapp {
     }
     void DemoApp::onAssetRequestReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "on Asset ready, request url was " << theRequest->getURL();
-        std::vector<char> myBlock = theRequest->getResponseBinary();
-        masl::AssetProviderSingleton::get().ap()->storeInFile("downloads/" + masl::getFilenamePart(theRequest->getURL()), myBlock);
         AC_DEBUG << "headers of png-request";
         std::multimap<std::string, std::string> headers = theRequest->getResponseHeaders();
         for (std::multimap<std::string, std::string>::iterator it = headers.begin(); it != headers.end(); ++it) {
@@ -285,7 +287,7 @@ namespace demoapp {
         _myLoadingAnimation->cancel();
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("InternetSlide", true));
-        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/scene.spark");
+        ComponentPtr myNewSpark = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/scene.spark");
         myTransform->addChild(myNewSpark);
     }
 
@@ -357,20 +359,6 @@ namespace demoapp {
 		}
     }
     
-    float beforeMovePanX, beforeMovePanY;
-    void DemoApp::onPanGesture(EventPtr theEvent) {
-        if (_mySlides[_myCurrentSlide]->getName() =="3D-Viewer-Slide") {
-        	AC_DEBUG << "on Pan Gesture";
-        	GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
-        	float myDX = myEvent->getTranslateX();
-        	float myDY = myEvent->getTranslateY(); 
-        	ComponentPtr my3dView = _mySparkWindow->getChildByName("3dworld")->getChildByName("transform");
-            TransformPtr myTransform = boost::static_pointer_cast<Transform>(my3dView);
-    		myTransform->setX(myDX / 4);
-    		myTransform->setY(myDY / 4);
-		}
-    }
-
 
 	void DemoApp::onSensorEvent(EventPtr theEvent) {
 		if (_mySlides[_myCurrentSlide]->getName() != "3D-Viewer-Slide") return;
@@ -439,7 +427,8 @@ namespace demoapp {
             _myLoadingAnimation = mySequence;
             DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
             _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
-                masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),"/downloads/");
+                masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),
+                "/downloads/", true, masl::REQUEST_IF_NEWER);
         }
     }
 
