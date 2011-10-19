@@ -49,11 +49,11 @@ namespace spark {
             _myShape = myShape;
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            myMaterial->getTexture()->getTextureInfo()->setSrc(data_);
+            myMaterial->getTextureUnit()->getTexture()->setSrc(data_);
         }
 
-        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->getTextureInfo()->width_);
-        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->getTextureInfo()->height_);
+        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTextureUnit()->getTexture()->width_);
+        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTextureUnit()->getTexture()->height_);
         setSize(width, height);
     }
 }

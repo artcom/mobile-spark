@@ -8,7 +8,7 @@ namespace mar {
 
 DEFINE_EXCEPTION(PngLoadingException, masl::Exception)
 
-void loadTextureFromPNG(const std::string & filename, TextureInfoPtr theTexture) {
+void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     GLuint textureId;
     int width, height;
     bool rgb;

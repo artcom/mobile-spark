@@ -29,7 +29,7 @@ namespace spark {
             _myFontPath = masl::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
-        myMaterial->getTexture()->getTextureInfo()->transparency_ = true;
+        myMaterial->getTextureUnit()->getTexture()->transparency_ = true;
         myMaterial->setCustomHandles(customShaderValues_);
         myMaterial->setShader(vertexShader_, fragmentShader_); 
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
@@ -49,8 +49,8 @@ namespace spark {
         I18nShapeWidget::onPause();
         if (getShape()) {
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            mar::TexturePtr myTexture = myMaterial->getTexture();
-            myTexture->getTextureInfo()->unbind();
+            mar::TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
+            myTextureUnit->getTexture()->unbind();
         }
     }
     
@@ -85,13 +85,13 @@ namespace spark {
     Text::build() {
         I18nShapeWidget::build();
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-        myMaterial->getTexture()->getTextureInfo()->transparency_ = true;
-        masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTexture()->getTextureInfo()->textureId_, _myFontSize,
+        myMaterial->getTextureUnit()->getTexture()->transparency_ = true;
+        masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myMaterial->getTextureUnit()->getTexture()->textureId_, _myFontSize,
                                          _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);
         _myTextSize[0] = myTextInfo.width;
         _myTextSize[1] = myTextInfo.height;
         _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
         setSize(_myTextSize[0], _myTextSize[1]);
-        myMaterial->getTexture()->getTextureInfo()->textureId_ = myTextInfo.textureID;
+        myMaterial->getTextureUnit()->getTexture()->textureId_ = myTextInfo.textureID;
     }
 }

@@ -4,7 +4,6 @@
 #include <masl/CallStack.h>
 #include <masl/Logger.h>
 
-#include "Texture.h"
 #include "Element.h"
 #include "openGL_functions.h"
 
@@ -159,33 +158,30 @@ namespace mar {
     }
 
     //////////////////////////////////////////////////// UnlitTexturedMaterial
-    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) : Material(), textureMatrixHandle_(0) {
-        setTexture(theSrc);
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const TexturePtr theTexture) : 
+        textureUnit_(TextureUnitPtr(new TextureUnit(theTexture))), textureMatrixHandle_(0) 
+    {}
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const TextureUnitPtr theTextureUnit) : 
+        textureUnit_(theTextureUnit), textureMatrixHandle_(0) 
+    {}
+    UnlitTexturedMaterial::UnlitTexturedMaterial(const std::string & theSrc) :
+        textureUnit_(TextureUnitPtr(new TextureUnit())), textureMatrixHandle_(0) 
+    {
+        textureUnit_->getTexture()->setSrc(theSrc);
     }
 
     UnlitTexturedMaterial::~UnlitTexturedMaterial() {
     }
 
+    bool
+    UnlitTexturedMaterial::isTransparent() const {
+        return Material::isTransparent() || ((textureUnit_->getTexture()) ? textureUnit_->getTexture()->transparency_ : false);
+    }
     //ANDROID ONLY: gl context is lost, so reset textures
     void
     UnlitTexturedMaterial::resetGL() {
         Material::resetGL();
-        if (texture_) {
-            setTexture(texture_->getTextureInfo()->getSrc());
-        }
-    }
-
-    void
-    UnlitTexturedMaterial::setTexture(const TexturePtr theTexture) {
-        texture_ = theTexture;
-    }
-
-    void
-    UnlitTexturedMaterial::setTexture(const std::string & theSrc) {
-        texture_ = TexturePtr(new Texture());
-        if (theSrc != "") {
-            texture_->getTextureInfo()->setSrc(theSrc);
-        }
+        textureUnit_->getTexture()->setSrc(textureUnit_->getTexture()->getSrc());
     }
 
     void
@@ -197,8 +193,8 @@ namespace mar {
     void
     UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
-        glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, texture_->matrix_.data());
-        glBindTexture(GL_TEXTURE_2D, texture_->getTextureInfo()->textureId_);
+        glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, textureUnit_->matrix_.data());
+        glBindTexture(GL_TEXTURE_2D, textureUnit_->getTexture()->textureId_);
         ASSERT_GL("UnlitTexturedMaterial::loadShader", PLUS_FILE_LINE);
     }
 
