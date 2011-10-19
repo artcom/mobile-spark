@@ -22,13 +22,13 @@ namespace mar {
         masl::appendCRC32(myKey, theSrc);     
         
         if (_myTextureMap.find(myKey) != _myTextureMap.end()) {
-            AC_INFO << "TextureLoader::load found texture: '" << theSrc << "' in map -> do not reload";
+            AC_INFO << "TextureLoader::load found texture: '" << theSrc << "' in map -> do not reload, glid -> "<< _myTextureMap[myKey]->textureId_;
             return _myTextureMap[myKey];
         } else {
             TextureInfoPtr myTexture = TextureInfoPtr(new TextureInfo());        
             loadTextureFromPNG(theSrc, myTexture);    
             if (theCacheFlag) {    
-                AC_INFO << "TextureLoader::load texture: '" << theSrc << "' generated store in map";
+                AC_INFO << "TextureLoader::load texture: '" << theSrc << "' generated store in map, glid -> "<< myTexture->textureId_;
                 storeTextureInfo(myKey, myTexture);
             }
             return myTexture;
@@ -47,12 +47,12 @@ namespace mar {
         
     void 
     TextureLoader::storeTextureInfo(const unsigned long theKey, TextureInfoPtr theTextureInfo) {
-        TextureInfoPtr myTexture = TextureInfoPtr(new TextureInfo());        
+        /*TextureInfoPtr myTexture = TextureInfoPtr(new TextureInfo());        
         myTexture->width_ = theTextureInfo->width_;
         myTexture->height_ = theTextureInfo->height_;
         myTexture->textureId_ = theTextureInfo->textureId_;
-        myTexture->transparency_ = theTextureInfo->transparency_;
-        _myTextureMap[theKey] = myTexture;    
+        myTexture->transparency_ = theTextureInfo->transparency_;*/
+        _myTextureMap[theKey] = theTextureInfo;    
     }
 
 }
