@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Window name="Motorola Xoom" fullscreen="true" i18nContext="global-i18n" clearColor="[0.2,0.2,0.5,1]" orientation="landscape" width="1280" height="752">
+<Window name="Xoom Portrait" fullscreen="true" i18nContext="global-i18n" clearColor="[0, 0.2, 0.1, 1]" orientation="portrait" width="800" height="1232">
 
     <Template name="Controls" src="/controls.spark"/>
     <Template name="Slide" src="/slide.spark"/>
@@ -143,13 +143,13 @@
 
         <Slide name="InternetSlide" title="Internet" subtitle="data from www - press button to load scene/remove transform again">
             <NinePatch name="load_button" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
-            <Text name="textfromserver" x="510" y="700" z="13" maxWidth="350" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="datefromserver" x="510" y="650" z="13" maxWidth="350" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="getrequest" x="10" y="650" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="headrequest" x="10" y="620" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="postrequest" x="10" y="590" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="putrequest" x="10" y="560" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="deleterequest" x="10" y="530" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="textfromserver" x="10" y="800" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="datefromserver" x="10" y="750" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="getrequest" x="10" y="700" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="headrequest" x="10" y="670" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="postrequest" x="10" y="640" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="putrequest" x="10" y="610" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="deleterequest" x="10" y="580" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="loading" text="loading..." visible="false" x="10" y="500" z="20"/>
             <Text name="curl_error" text="" visible="false" x="10" y="500" z="21" color="[1,0,0,1]" fontsize="16"/>
         </Slide>

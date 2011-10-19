@@ -41,6 +41,14 @@ namespace spark {
         theComponent->realize();
         return true;
     }
+
+    bool
+    RealizeComponentsButWorldAndWindowVisitor::preCheck(ComponentPtr theComponent) {
+        if (theComponent->getType() == World::SPARK_TYPE) {
+            return false;
+        }
+        return true;
+    }
     
     bool
     OnResumeComponentVisitor::visit(ComponentPtr theComponent) {

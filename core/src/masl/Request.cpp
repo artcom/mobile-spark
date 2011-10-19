@@ -440,6 +440,10 @@ namespace masl {
     Request::getPersistedDataIfAvailable() {
         if (!_myPersistenceFolder.empty()) {
             std::string fileToFind = _myPersistenceFolder + masl::getFilenamePart(_myURL);
+            std::string foundFile = AssetProviderSingleton::get().ap()->findFile(fileToFind);
+            if (foundFile.empty()) {
+                return false;
+            }
             _myResponseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
             if (_myResponseBlock.size() > 0) {
                 onDone();
