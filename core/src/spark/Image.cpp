@@ -1,6 +1,7 @@
 #include "Image.h"
 
 #include <cml/mathlib/matrix_transform.h>
+#include <mar/TextureLoader.h>
 #include <mar/Shape.h>
 #include <mar/Material.h>
 #include "BaseApp.h"
@@ -26,6 +27,7 @@ namespace spark {
         I18nShapeWidget::realize();
     }
 
+    //XXX: onPause & onResume both unbind texture
     void
     Image::onPause() {
         I18nShapeWidget::onPause();
@@ -80,17 +82,18 @@ namespace spark {
         if(data_.empty()) return;
         
         AC_DEBUG<<"build image " << *this << " with src: "<<data_;
-        //TODO handle cache flag
-        bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         UnlitTexturedMaterialPtr myMaterial;
+        bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         if (!getShape()) {
-            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(data_));
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
+            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
             myMaterial->setCustomHandles(customShaderValues_);
             myMaterial->setShader(vertexShader_, fragmentShader_); 
             _myShape = ShapePtr(new RectangleShape(myMaterial));
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            myMaterial->getTextureUnit()->getTexture()->setSrc(data_);
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
+            myMaterial->getTextureUnit()->setTexture(myTexture);
         }
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->width_, myMaterial->getTextureUnit()->getTexture()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);

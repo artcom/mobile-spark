@@ -13,7 +13,7 @@ namespace mar {
             ~Texture();
             void unbind();
             std::string getSrc() const {return src_;};
-            void setSrc(const std::string & theSrc);
+            void setSrc(const std::string & theSrc = "");
 
             GLuint width_;
             GLuint height_;

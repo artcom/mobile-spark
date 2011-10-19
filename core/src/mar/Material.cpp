@@ -181,7 +181,7 @@ namespace mar {
     void
     UnlitTexturedMaterial::resetGL() {
         Material::resetGL();
-        textureUnit_->getTexture()->setSrc(textureUnit_->getTexture()->getSrc());
+        textureUnit_->getTexture()->setSrc();
     }
 
     void
