@@ -1,7 +1,10 @@
 #include "HttpTransform.h"
 
+#include <masl/XMLUtils.h>
+
 #include <animation/AnimationManager.h>
 #include <animation/DelayAnimation.h>
+#include <animation/SequenceAnimation.h>
 
 #include "SparkComponentFactory.h"
 #include "Window.h"
@@ -20,22 +23,40 @@ namespace spark {
     void
     HttpTransform::realize() {
         Transform::realize();
+        setVisible(false);
         HttpTransformPtr ptr = boost::static_pointer_cast<HttpTransform>(shared_from_this());
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
         spark::EventCallbackPtr myOnFrameCB = EventCallbackPtr(new HttpTransformEventCB(ptr, &HttpTransform::onFrame));
         myWindow->addEventListener(StageEvent::FRAME, myOnFrameCB);
         url_ = _myXMLNode->getAttributeAs<std::string>("url", "");
-        setVisible(false);
-        animation::DelayAnimationPtr myRequestDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(0));
-        myRequestDelay->setOnFinish(masl::CallbackPtr(new HttpTransformCB(ptr, &HttpTransform::startRequest)));
-        animation::AnimationManager::get().play(myRequestDelay);
+        unsigned int loadDelay = _myXMLNode->getAttributeAs<unsigned int>("loadDelay",0);
+        unsigned int refreshInterval = _myXMLNode->getAttributeAs<unsigned int>("refreshInterval",0);
+        std::string requestModeString = _myXMLNode->getAttributeAs<std::string>("requestMode","GET_IF_NOT_AVAILABLE");
+        RequestMode requestMode = (requestModeString == "GET_REPEATING" ? GET_REPEATING :
+                                   (requestModeString == "GET_ALWAYS" ? GET_ALWAYS : GET_IF_NOT_AVAILABLE));
+        if (requestMode == GET_REPEATING) {
+            animation::SequenceAnimationPtr mySequence = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
+            animation::DelayAnimationPtr myRequestDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(loadDelay));
+            myRequestDelay->setOnFinish(masl::CallbackPtr(new HttpTransformCB(ptr, &HttpTransform::startRequest)));
+            animation::DelayAnimationPtr myIntervalDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(refreshInterval));
+            myIntervalDelay->setOnFinish(masl::CallbackPtr(new HttpTransformCB(ptr, &HttpTransform::startRequest)));
+            myIntervalDelay->setLoop(true);
+            mySequence->add(myRequestDelay);
+            mySequence->add(myIntervalDelay);
+            animation::AnimationManager::get().play(mySequence);
+        } else {
+            animation::DelayAnimationPtr myRequestDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(loadDelay));
+            myRequestDelay->setOnFinish(masl::CallbackPtr(new HttpTransformCB(ptr, &HttpTransform::startRequest)));
+            animation::AnimationManager::get().play(myRequestDelay);
+        }
     }
 
-    void HttpTransform::startRequest() {
+    void 
+    HttpTransform::startRequest() {
         HttpTransformPtr ptr = boost::static_pointer_cast<HttpTransform>(shared_from_this());
         requestManager_.getRequest(url_, masl::RequestCallbackPtr(
             new HttpTransformRequestCB(ptr, &HttpTransform::onSparkReady)),
-            "/downloads/", true, masl::REQUEST_IF_NOT_AVAILABLE);
+            "/downloads/", true, masl::REQUEST_IF_NEWER);
     }
 
     void
@@ -53,10 +74,17 @@ namespace spark {
     void
     HttpTransform::onAssetsReady(masl::RequestPtr theRequest) {
         AC_DEBUG << "onAssetsReady";
-        ComponentPtr myNewSparkComponent = 
-            spark::SparkComponentFactory::get().loadSparkComponentsFromString(getApp(), sparkString_);
-        addChild(myNewSparkComponent);
-        setVisible(true);
+        try {
+            ComponentPtr childFromRemote = spark::SparkComponentFactory::get().loadSparkComponentsFromString(getApp(), sparkString_);
+            if (_myChildren.size() > 0) {
+                _myChildren.clear();
+            }
+            addChild(childFromRemote);
+            setVisible(true);
+        } catch(masl::XMLParsingException e) {
+            //this can happen when remote file is not completly stored at the time when it is requested
+            AC_ERROR << "remote spark string is not parsable, ignore it";
+        }
     }
 
     void
