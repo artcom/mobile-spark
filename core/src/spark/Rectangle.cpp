@@ -18,4 +18,9 @@ namespace spark {
     Rectangle::~Rectangle() {
     }
     
+    std::string 
+    Rectangle::getAttributesAsString() const {
+        return ShapeWidget::getAttributesAsString() + " color=\""+masl::as_string(_myColor)+"\"";
+    }
+
 }

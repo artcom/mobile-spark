@@ -26,4 +26,9 @@ namespace spark {
         setShape(mar::ShapeFactory::get().createObj(_mySrc));
     }
 
+    std::string 
+    Shape3D::getAttributesAsString() const {
+        return ShapeWidget::getAttributesAsString() + " src=\""+_mySrc+"\"";
+    }
+
 }

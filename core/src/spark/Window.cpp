@@ -136,6 +136,15 @@ namespace spark {
         //AC_PRINT << *myScene;
     }
 
+    std::string 
+    Window::getAttributesAsString() const {
+        return Widget::getAttributesAsString() + " width=\""+masl::as_string(_myWidth)+"\""
+            " height=\""+masl::as_string(_myHeight)+"\""
+            " fullscreenFlag=\""+masl::as_string(_myFullScreenFlag)+"\""
+            " clearColor=\""+masl::as_string(_myClearColor)+"\""
+            " orientation=\""+_myOrientation+"\"";
+    }
+
 
     //////////////picking
     ComponentPtr

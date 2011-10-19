@@ -67,7 +67,8 @@ namespace spark {
     std::string 
     View::getAttributesAsString() const {
         return Widget::getAttributesAsString() + " world=\""+_myWorldName+"\" pos=\""+
-            masl::as_string(_myGLViewport->getPos())+"\" size=\""+masl::as_string(_myGLViewport->getSize())+"\"";
+            masl::as_string(_myGLViewport->getPos())+"\" size=\""+masl::as_string(_myGLViewport->getSize())+"\""
+            " camera=\""+_myCamera->getName()+"\"";
     }
 
 }
