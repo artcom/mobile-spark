@@ -5,6 +5,8 @@
 #include <animation/Easing.h>
 #include <animation/AnimationManager.h>
 
+#include <boost/progress.hpp>
+
 using namespace spark;
 
 namespace acprojectview {
@@ -82,6 +84,7 @@ namespace acprojectview {
         setX(_myInitalXPos);
         _myVisibleColumnIndex = 0;
         _myColumnCount = 0;
+        _myTextPtrs[0]->setStartIndex(0);
         _myTextPtrs[0]->setI18nId(theNewI18nId);
         _myTextPtrs[0]->setX(_myColumnSpace);
         int myRenderedGlyphIndex = _myTextPtrs[0]->getRenderedGlyphIndex();
@@ -109,7 +112,7 @@ namespace acprojectview {
         MultiColumnTextPtr ptr = boost::static_pointer_cast<MultiColumnText>(shared_from_this());
         BaseAppPtr myBaseAppPtr = boost::dynamic_pointer_cast<BaseApp>(getRoot());
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myBaseAppPtr, 
-                "<Text name=\"text_0\" maxHeight=\"250\" fontsize=\"13\" lineHeight=\"18\" font=\"/acswissmed.ttf\" sensible=\"false\" color=\"[1.0,1.0,1.0,1.0]\"/>"); 
+                "<Text name=\"text_0\" maxHeight=\"250\" fontsize=\"13\" lineHeight=\"18\"  cache=\"true\" font=\"/acswissmed.ttf\" sensible=\"false\" color=\"[1.0,1.0,1.0,1.0]\"/>"); 
         TextPtr myTextPtr = boost::static_pointer_cast<Text>(myCreated);        
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(ptr);
         myContainer->addChild(myTextPtr);

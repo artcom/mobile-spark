@@ -30,7 +30,7 @@ namespace spark {
     Image::onPause() {
         I18nShapeWidget::onPause();
         if (getShape()) {
-            UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+            UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
             TexturePtr myTexture = myMaterial->getTexture();
             myTexture->getTextureInfo()->unbind();
         }
@@ -67,7 +67,7 @@ namespace spark {
         float scaleY = theHeight / _myTextureSize[1];
         float scale = std::max(scaleX, scaleY);
 
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
         TexturePtr myTexture = myMaterial->getTexture();
         cml::matrix_scale_2D(myTexture->matrix_, scaleX/scale, scaleY/scale);
         setSize(theWidth, theHeight);
@@ -86,7 +86,7 @@ namespace spark {
                        masl::select1st<std::map<std::string, float>::value_type>()) ;
         bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         setShape(ShapeFactory::get().createRectangle(true, 1, 1, vertexShader_, fragmentShader_, myHandles, data_, myCacheFlag));
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList[0]->material);    
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);    
         _myTextureSize = vector2(myMaterial->getTexture()->getTextureInfo()->width_, myMaterial->getTexture()->getTextureInfo()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
         float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);

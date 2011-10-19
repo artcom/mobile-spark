@@ -13,7 +13,7 @@ find_package(AcMake)
 set(spark_DIR ../../core/src/spark)
 find_package(spark)
 
-set(REQUIRED_PACKAGES Boost Cml libXML2)
+set(REQUIRED_PACKAGES Boost Cml libXML2 libCurl)
 foreach(PACKAGE ${REQUIRED_PACKAGES})
     find_package(${PACKAGE})
 endforeach()

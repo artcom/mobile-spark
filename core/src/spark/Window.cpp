@@ -106,7 +106,6 @@ namespace spark {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             ComponentPtr myWorld = getChildByName(myView->getWorldName());
             std::vector<ComponentPtr>::iterator i = find(_myUnrealizedWorlds.begin(), _myUnrealizedWorlds.end(), myWorld);
-            
             if (i != _myUnrealizedWorlds.end()) {
                 myWorld->realizeASync();
                 if (myWorld->isAllRealized()) {
@@ -141,7 +140,7 @@ namespace spark {
             //use relative touch point
             CollectAABBComponentVisitor myVisitor(myPickedComponentList, (float)x/(float)_myWidth, (float)y/(float)_myHeight,
                                                   myView->getCamera()->getProjectionMatrix());
-            visitComponents(myVisitor, getChildByName(myView->getWorldName()));
+            parentFirstVisitComponents(myVisitor, getChildByName(myView->getWorldName()));
         }
         AC_DEBUG << "collected " << myPickedComponentList.size() << " components";
         if (myPickedComponentList.size() > 0) {

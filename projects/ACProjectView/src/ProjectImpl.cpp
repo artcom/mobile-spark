@@ -1,8 +1,11 @@
 #include "ProjectImpl.h"
 #include "ProjectMenu.h"
+#include "MultiColumnText.h"
+
 #include <spark/Window.h>
 #include <spark/Rectangle.h>
 #include <spark/SparkComponentFactory.h>
+
 
 using namespace spark;
 
@@ -39,10 +42,17 @@ namespace acprojectview {
         }
         if (mySubTitle_I18n.size() > 0) {
             subtitleComponent_->setI18nId(mySubTitle_I18n);
+            subtitleComponent_->getTextSize();
         }
         fitToSize();
-    }    
 
+        /*std::string myI18n(getNode()->getAttributeAs<std::string>("description_I18n",""));
+        AC_PRINT << "preload project: " << getName() << " i18n: " << myI18n;
+        MultiColumnTextPtr myDescription = boost::static_pointer_cast<MultiColumnText>(getChildByName("dummy_description"));
+        myDescription->setI18nId(myI18n);*/
+    }
+        
+    
     void ProjectImpl::fitToSize() {
         WindowPtr myWindowPtr = boost::static_pointer_cast<Window>(getRoot());
         unsigned myWidth = myWindowPtr->getSize()[0];
