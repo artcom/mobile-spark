@@ -47,6 +47,8 @@ namespace demoapp {
             unsigned _myCurrentSlide;
             unsigned _myNextSlide;
 
+            //http
+            static const std::string BASE_URL;
             masl::RequestManager _myRequestManager;
             animation::AnimationPtr _myLoadingAnimation;
             animation::AnimationPtr _myErrorExpiredDelay;
