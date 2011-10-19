@@ -31,8 +31,8 @@ namespace spark {
         I18nShapeWidget::onPause();
         if (getShape()) {
             UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            TexturePtr myTexture = myMaterial->getTexture();
-            myTexture->getTextureInfo()->unbind();
+            TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
+            myTextureUnit->getTexture()->unbind();
         }
     }
 
@@ -68,8 +68,8 @@ namespace spark {
         float scale = std::max(scaleX, scaleY);
 
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-        TexturePtr myTexture = myMaterial->getTexture();
-        cml::matrix_scale_2D(myTexture->matrix_, scaleX/scale, scaleY/scale);
+        TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
+        cml::matrix_scale_2D(myTextureUnit->matrix_, scaleX/scale, scaleY/scale);
         setSize(theWidth, theHeight);
     }
 
@@ -90,9 +90,9 @@ namespace spark {
             _myShape = ShapePtr(new RectangleShape(myMaterial));
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            myMaterial->getTexture()->getTextureInfo()->setSrc(data_);
+            myMaterial->getTextureUnit()->getTexture()->setSrc(data_);
         }
-        _myTextureSize = vector2(myMaterial->getTexture()->getTextureInfo()->width_, myMaterial->getTexture()->getTextureInfo()->height_);
+        _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->width_, myMaterial->getTextureUnit()->getTexture()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
         float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);
         setSize(myWidth, myHeight);

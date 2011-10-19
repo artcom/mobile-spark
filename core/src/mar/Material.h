@@ -10,7 +10,7 @@
 #include <masl/MatrixStack.h>
 
 #include "GlHeaders.h"
-#include "Texture.h"
+#include "TextureUnit.h"
 
 namespace mar {
     const std::string DEFAULT_VERTEX_SHADER = "/default_vertex.glsl";
@@ -89,18 +89,19 @@ namespace mar {
     class UnlitTexturedMaterial : public Material {
     public:
         UnlitTexturedMaterial(const std::string & theSrc = "");
+        UnlitTexturedMaterial(const TexturePtr theTexture);
+        UnlitTexturedMaterial(const TextureUnitPtr theTextureUnit);
         virtual ~UnlitTexturedMaterial();
         virtual void resetGL();
         virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void loadShader(const matrix & theMatrix);
-        TexturePtr getTexture() const {return texture_;}
-        void setTexture(const TexturePtr theTexture);
-        virtual bool isTransparent() const {return Material::isTransparent() || ((texture_) ? texture_->getTextureInfo()->transparency_ : false);};
+        TextureUnitPtr getTextureUnit() const {return textureUnit_;}
+        void setTextureUnit(const TextureUnitPtr theTextureUnit) { textureUnit_ = theTextureUnit;};
+        virtual bool isTransparent() const;
     private:
-        void setTexture(const std::string & theSrc);
         virtual void setHandles();
         virtual void bindAttributes();
-        TexturePtr texture_;
+        TextureUnitPtr textureUnit_;
         GLuint textureMatrixHandle_;
 
     };
