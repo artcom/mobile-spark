@@ -1,5 +1,6 @@
 #include "NinePatch.h"
 
+#include <mar/TextureLoader.h>
 #include <mar/Shape.h>
 #include <mar/Material.h>
 #include "BaseApp.h"
@@ -34,22 +35,25 @@ namespace spark {
         _myDirtyFlag = true;
     }
 
+    //XXX: is basically a copy of Image::build
     void
     NinePatch::build() {
         I18nShapeWidget::build();
         if(data_.empty()) return;
 
         UnlitTexturedMaterialPtr myMaterial;
+        bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         if (!getShape()) {
-            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(data_));
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
+            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
             myMaterial->setCustomHandles(customShaderValues_);
             myMaterial->setShader(vertexShader_, fragmentShader_); 
             NinePatchShapePtr myShape = NinePatchShapePtr(new NinePatchShape(myMaterial));
             myShape->setEdges(edgeLeft_, edgeTop_, edgeRight_, edgeBottom_);
             _myShape = myShape;
         } else {
-            myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            myMaterial->getTextureUnit()->getTexture()->setSrc(data_);
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
+            myMaterial->getTextureUnit()->setTexture(myTexture);
         }
 
         float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTextureUnit()->getTexture()->width_);
