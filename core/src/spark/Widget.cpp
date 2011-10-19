@@ -179,4 +179,17 @@ namespace spark {
             (*it)->switchLanguage(theLanguage);
         }
     }
+
+    std::string 
+    Widget::getAttributesAsString() const {
+        return Container::getAttributesAsString() + 
+            " visible=\""+masl::as_string(_visible)+"\"" + " sensible=\""+masl::as_string(_sensible)+"\""
+            " alpha=\""+masl::as_string(_alpha)+"\"" + " actualAlpha=\""+masl::as_string(_actualAlpha)+"\"" 
+            " dirtyFlag=\""+masl::as_string(_myDirtyFlag)+"\""
+            " x=\""+masl::as_string(_x)+"\"" + " y=\""+masl::as_string(_y)+"\"" + " z=\""+masl::as_string(_z)+"\"" 
+            " scaleX=\""+masl::as_string(_scaleX)+"\"" + " scaleY=\""+masl::as_string(_scaleY)+"\"" 
+                " scaleZ=\""+masl::as_string(_scaleZ)+"\""
+            " rotationX=\""+masl::as_string(_rotationX)+"\"" + " rotationY=\""+masl::as_string(_rotationY)+"\"" 
+                " rotationZ=\""+masl::as_string(_rotationZ)+"\"";
+    }
 }

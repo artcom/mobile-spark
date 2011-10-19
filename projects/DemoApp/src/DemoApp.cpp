@@ -431,6 +431,7 @@ namespace demoapp {
                 masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),
                 "/downloads/", true, masl::REQUEST_IF_NEWER);
         }
+        _mySparkWindow->dumpScene();
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {
