@@ -126,6 +126,15 @@ namespace spark {
     }
 
 
+    void
+    Window::dumpScene() {
+        AC_PRINT << "--------------------------SceneDump---------------------";
+        PrintNodeVisitor myVisitor;
+		childFirstVisitComponents(myVisitor, shared_from_this());
+        //std::string test ="<Window name=\"xxx\"></Window>";
+        //masl::XMLNodePtr myScene = masl::XMLNodePtr(new masl::XMLNode(test));
+        //AC_PRINT << *myScene;
+    }
 
 
     //////////////picking

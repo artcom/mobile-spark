@@ -64,4 +64,10 @@ namespace spark {
         _myGLViewport->activate(theCanvasWidth, theCanvasHeight);
     }
 
+    std::string 
+    View::getAttributesAsString() const {
+        return Widget::getAttributesAsString() + " world=\""+_myWorldName+"\" pos=\""+
+            masl::as_string(_myGLViewport->getPos())+"\" size=\""+masl::as_string(_myGLViewport->getSize())+"\"";
+    }
+
 }

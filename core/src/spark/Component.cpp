@@ -25,6 +25,11 @@ namespace spark {
         return os;
     }
 
+    std::string 
+    Component::getAttributesAsString() const {
+        return " name=\""+_myName+"\"";
+    }
+
     ComponentPtr
     Component::getChildByName(const std::string & theName, bool theDeepFlag) const {
         return ComponentPtr();
