@@ -92,6 +92,7 @@ namespace spark {
             _myShape = ShapePtr(new RectangleShape(myMaterial));
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+            //XXX:if not caching always generates a new Texture, setSrc would be enough
             TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
