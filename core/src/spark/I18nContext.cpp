@@ -51,7 +51,12 @@ namespace spark {
         }
     }
 
-
+    std::string 
+    I18nContext::getAttributesAsString() const {
+        return Container::getAttributesAsString() + " language=\""+masl::as_string(language_)+"\""
+            " defaultLanguage=\""+masl::as_string(defaultLanguage_)+"\""
+            " needsUpdate=\""+masl::as_string(needsUpdate_)+"\"";
+    }
 
 
     ///////////////////////////////////////////////////////I18nItem
@@ -88,6 +93,8 @@ namespace spark {
         }
         return myData;
     }
+
+
 }
 
 

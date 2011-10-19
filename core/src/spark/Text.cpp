@@ -132,4 +132,14 @@ namespace spark {
         }
         myMaterial->transparency_ = true;
     }
+
+    std::string 
+    Text::getAttributesAsString() const {
+        return I18nShapeWidget::getAttributesAsString() + " fontPath=\""+_myFontPath+"\"" + " textAlign=\""+_myTextAlign+"\""
+            " fontSize=\""+masl::as_string(_myFontSize)+"\" textSize=\""+masl::as_string(_myTextSize)+"\""
+            " cacheFlag=\""+masl::as_string(_myCacheFlag)+"\" textColor=\""+masl::as_string(_myTextColor)+"\""
+            " maxWidth=\""+masl::as_string(_myMaxWidth)+"\" maxHeight=\""+masl::as_string(_myMaxHeight)+"\""
+            " lineHeight=\""+masl::as_string(_myLineHeight)+"\"";
+    }
+
 }

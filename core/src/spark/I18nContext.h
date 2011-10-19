@@ -26,6 +26,7 @@ namespace spark {
 
         static const char * const SPARK_TYPE;             
         virtual const char * const & getType() const { return I18nContext::SPARK_TYPE;};
+        virtual std::string getAttributesAsString() const;
 
     private:
         LANGUAGE  language_;
