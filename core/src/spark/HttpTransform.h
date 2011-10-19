@@ -7,6 +7,7 @@
 
 namespace spark {
 
+    enum RequestMode {GET_ALWAYS, GET_REPEATING, GET_IF_NOT_AVAILABLE};
     class HttpTransform : public Transform {
     public:
         HttpTransform(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
