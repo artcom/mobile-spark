@@ -1,6 +1,6 @@
 #include "Visitors.h"
 
-#include "I18nContext.h"
+#include <mar/Shape.h>
 #include "World.h"
 #include "Window.h"
 

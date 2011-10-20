@@ -1,9 +1,12 @@
 #include "NinePatch.h"
 
-#include <mar/png_functions.h>
+#include <mar/TextureLoader.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include "I18nContext.h"
+
+using namespace mar;
 
 namespace spark {
     const char * const NinePatch::SPARK_TYPE = "NinePatch";
@@ -32,16 +35,30 @@ namespace spark {
         _myDirtyFlag = true;
     }
 
+    //XXX: is basically a copy of Image::build
     void
     NinePatch::build() {
         I18nShapeWidget::build();
         if(data_.empty()) return;
 
-        setShape(mar::ShapeFactory::get().createNinePatch(data_, edgeLeft_, edgeTop_, edgeRight_, edgeBottom_, 100, 100));
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+        UnlitTexturedMaterialPtr myMaterial;
+        bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
+        if (!getShape()) {
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
+            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
+            myMaterial->setCustomHandles(customShaderValues_);
+            myMaterial->setShader(vertexShader_, fragmentShader_); 
+            NinePatchShapePtr myShape = NinePatchShapePtr(new NinePatchShape(myMaterial));
+            myShape->setEdges(edgeLeft_, edgeTop_, edgeRight_, edgeBottom_);
+            _myShape = myShape;
+        } else {
+            myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
+            myMaterial->getTextureUnit()->setTexture(myTexture);
+        }
 
-        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTexture()->getTextureInfo()->width_);
-        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTexture()->getTextureInfo()->height_);
+        float width = _myXMLNode->getAttributeAs<float>("width", myMaterial->getTextureUnit()->getTexture()->width_);
+        float height = _myXMLNode->getAttributeAs<float>("height", myMaterial->getTextureUnit()->getTexture()->height_);
         setSize(width, height);
     }
 }

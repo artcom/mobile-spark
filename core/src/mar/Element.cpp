@@ -1,105 +1,157 @@
 #include "Element.h"
 #include <masl/Logger.h>
+#include <mar/openGL_functions.h>
 
 
 namespace mar {
     /////////////////////////////////////////////////////////////Element
-    Element::Element() {
+    Element::Element():
+        #ifdef iOS
+        vertexArrayObject_(0),
+        #endif
+        vertexBuffer_(0),
+        indexBuffer_(0),
+        stride_(VERTEX_SIZE)
+    {
         _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_POS_INDEX, VERTEX_POS_SIZE, VERTEX_POS_SIZE * sizeof(float)));
-        _myStride = VERTEX_SIZE;
     }
 
     Element::~Element() {
-        glDeleteBuffers(1, &vertexBuffer);
-        glDeleteBuffers(1, &indexBuffer);
+        deleteVertexBuffers();
+    }
+
+    //ANDROID ONLY: gl context is lost, so reset all buffers to get new ones
+    void
+    Element::resetGL() {
+        material_->resetGL();
+        vertexBuffer_ = 0;
+        indexBuffer_ = 0;
 #ifdef iOS
-        glDeleteVertexArraysOES(1, &vertexArrayObject);
+        vertexArrayObject_ = 0;
 #endif
     }
 
+    void
+    Element::deleteVertexBuffers() {
+        if (vertexBuffer_) {
+            glDeleteBuffers(1, &vertexBuffer_);
+            ASSERT_GL("glDeleteBuffers vertexBuffer", PLUS_FILE_LINE);
+            vertexBuffer_ = 0;
+        }
+        if (indexBuffer_) {
+            glDeleteBuffers(1, &indexBuffer_);
+            ASSERT_GL("glDeleteBuffers indexBuffer", PLUS_FILE_LINE);
+            indexBuffer_ = 0;
+        }
 #ifdef iOS
-    void Element::loadData(const matrix & theMatrix) const {
-
+        if (vertexArrayObject_) {
+            glDeleteVertexArraysOES(1, &vertexArrayObject_);
+            vertexArrayObject_ = 0;
+        }
+#endif
+        ASSERT_GL("Element::deleteVertexBuffers", PLUS_FILE_LINE);
     }
 
-    void Element::unloadData() const {
+    void
+    Element::createVertexBuffers() {
 
-    }
-
-    void Element::createVertexBuffers() {
-
+#ifdef iOS
         //Initialize the Vertex Array Object.
-        glGenVertexArraysOES(1, &vertexArrayObject);
-        glBindVertexArrayOES(vertexArrayObject);
-
-        glGenBuffers(1, &vertexBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, (numVertices * _myStride), vertexData_.get(), GL_STATIC_DRAW);
-
-        int offset = 0;
-        for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) {
-            glVertexAttribPointer(it->get<0>(), it->get<1>(), GL_FLOAT, GL_FALSE, _myStride, (GLvoid*)offset);
-            glEnableVertexAttribArray(it->get<0>());
-            offset += it->get<2>();
-        }
-
-        glGenBuffers(1, &indexBuffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW);
-
-        glBindVertexArrayOES(0);
-    }
+        glGenVertexArraysOES(1, &vertexArrayObject_);
+        glBindVertexArrayOES(vertexArrayObject_);
 #endif
+        glGenBuffers(1, &vertexBuffer_);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+        glBufferData(GL_ARRAY_BUFFER, (numVertices_ * stride_), vertexData_.get(), GL_STATIC_DRAW);
+
 #ifdef ANDROID
-    void Element::loadData(const matrix & theMatrix) const {
-        material->loadShader(theMatrix);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+#endif
+
+#ifdef iOS
         int offset = 0;
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) {
-            glVertexAttribPointer(it->get<0>(), it->get<1>(), GL_FLOAT, GL_FALSE, _myStride, (GLvoid*)offset);
+            glVertexAttribPointer(it->get<0>(), it->get<1>(), GL_FLOAT, GL_FALSE, stride_, (GLvoid*)offset);
             glEnableVertexAttribArray(it->get<0>());
             offset += it->get<2>();
         }
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+#endif
+
+        glGenBuffers(1, &indexBuffer_);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer_);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices_ * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW);
+
+#ifdef iOS
+        glBindVertexArrayOES(0);
+#elif ANDROID
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+#endif
+        ASSERT_GL("Element::createVertexBuffers", PLUS_FILE_LINE);
     }
 
-    void Element::unloadData() const {
+    void
+    Element::loadData(const matrix & theMatrix) {
+        material_->loadShader(theMatrix);
+        if (!vertexBuffer_ || ! indexBuffer_) {
+            createVertexBuffers();
+        }
+#ifdef ANDROID
+        int offset = 0;
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+        for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) {
+            glVertexAttribPointer(it->get<0>(), it->get<1>(), GL_FLOAT, GL_FALSE, stride_, (GLvoid*)offset);
+            glEnableVertexAttribArray(it->get<0>());
+            offset += it->get<2>();
+        }
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer_);
+#endif
+        ASSERT_GL("Element::loadData", PLUS_FILE_LINE);
+    }
+
+    void
+    Element::unloadData() const {
+#ifdef ANDROID
         for (std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> >::const_iterator it = _myConfig.begin(); it != _myConfig.end(); ++it) {
             glDisableVertexAttribArray(it->get<0>());
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    }
-
-    void Element::createVertexBuffers() {
-        glGenBuffers(1, &vertexBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, (numVertices * _myStride), vertexData_.get(), GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        glGenBuffers(1, &indexBuffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    }
 #endif
+        material_->unloadShader();
+        ASSERT_GL("Element::unloadData", PLUS_FILE_LINE);
+    }
 
+    void
+    Element::draw() const {
+#ifdef iOS
+        glBindVertexArrayOES(vertexArrayObject_);
+        glDrawElements(GL_TRIANGLES, numIndices_, GL_UNSIGNED_SHORT, (void*)0);
+        glBindVertexArrayOES(0);
+#elif ANDROID
+        glDrawElements(GL_TRIANGLES, numIndices_, GL_UNSIGNED_SHORT, 0);
+#endif
+        ASSERT_GL("Element::draw", PLUS_FILE_LINE);
+    }
 
+    //XXX: this should not be called from outside, if vertexdata is outdated they should automatically updated
     void Element::updateCompleteVertexBuffersContent() {
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferSubData(GL_ARRAY_BUFFER,0,(numVertices * _myStride), vertexData_.get());
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        if (vertexBuffer_) {
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+            glBufferSubData(GL_ARRAY_BUFFER,0,(numVertices_ * stride_), vertexData_.get());
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            ASSERT_GL("Element::updateCompleteVertexBuffersContent", PLUS_FILE_LINE);
+        }
     }
 
     std::string
     Element::getAttributesAsString() const {
-        return "material={"+(material?material->getAttributesAsString():"")+"}";
+        return "material={"+(material_?material_->getAttributesAsString():"")+"}";
     }
 
     /////////////////////////////////////////////////////////////ElementWithNormals
     ElementWithNormals::ElementWithNormals() : Element() {
         _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE, VERTEX_NORMAL_SIZE * sizeof(float)));
-        _myStride = NORMAL_VERTEX_SIZE;
+        stride_ = NORMAL_VERTEX_SIZE;
     }
 
     ElementWithNormals::~ElementWithNormals() {
@@ -108,7 +160,7 @@ namespace mar {
     /////////////////////////////////////////////////////////////ElementWithTexture
     ElementWithTexture::ElementWithTexture() : Element() {
         _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE, VERTEX_TEXCOORD0_SIZE * sizeof(float)));
-        _myStride = TEXTURED_VERTEX_SIZE;
+        stride_ = TEXTURED_VERTEX_SIZE;
     }
 
     ElementWithTexture::~ElementWithTexture() {
@@ -118,7 +170,7 @@ namespace mar {
     ElementWithNormalsAndTexture::ElementWithNormalsAndTexture() : Element() {
         _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE, VERTEX_NORMAL_SIZE * sizeof(float)));
         _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_TEXCOORD0_INDEX, VERTEX_TEXCOORD0_SIZE, VERTEX_TEXCOORD0_SIZE * sizeof(float)));
-        _myStride = TEXTURED_NORMAL_VERTEX_SIZE;
+        stride_ = TEXTURED_NORMAL_VERTEX_SIZE;
     }
 
     ElementWithNormalsAndTexture::~ElementWithNormalsAndTexture() {

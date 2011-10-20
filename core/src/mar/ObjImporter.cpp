@@ -7,6 +7,8 @@
 
 #include "png_functions.h"
 
+#define DB(x) // x
+
 using namespace masl;
 
 namespace mar {
@@ -70,7 +72,7 @@ namespace mar {
         std::string myMaterialId;
         for (std::vector<std::string>::const_iterator it = theMtlFile.begin(); it != theMtlFile.end(); ++it) {
             std::string line = *it;
-            AC_DEBUG << "line " << line.c_str();
+            DB(AC_DEBUG << "line " << line.c_str();)
             size_t pos = line.find_first_of(" ");
             if (pos == std::string::npos) {
                 continue;
@@ -80,28 +82,27 @@ namespace mar {
             if (type == "newmtl") {
                 if (myMaterial) {  //save old material in map
                     materialMap_[myMaterialId] = myMaterial;
-                    myMaterial->createShader();
                 }
                 myMaterialId = data;
                 myMaterial = MaterialPtr(new UnlitColoredMaterial()); //XXX: here we do not know if we need textures
             } else if (type == "Ka") {
                 vector4 myColor = getColor(data);
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->ambient = myColor;
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->ambient_ = myColor;
             } else if (type == "Kd") {
                 vector4 myColor = getColor(data);
                 boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->setDiffuseColor(myColor);
             } else if (type == "Ks") {
                 vector4 myColor = getColor(data);
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->specular = myColor;
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->specular_ = myColor;
             } else if (type == "d" || type == "Tr") {
                 UnlitColoredMaterialPtr myUnlitColoredMaterial = boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial);
                 vector4 myDiffuseColor = myUnlitColoredMaterial->getDiffuseColor();
                 myDiffuseColor[3] = masl::as<float>(data);
                 myUnlitColoredMaterial->setDiffuseColor(myDiffuseColor);
             } else if (type == "Ns") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->shininess = masl::as<float>(data);
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->shininess_ = masl::as<float>(data);
             } else if (type == "illum") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel = masl::as<int>(data);
+                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel_ = masl::as<int>(data);
             } else if (type == "map_Kd") {
                 //XXX: here we know that we need textures
                 myMaterial = MaterialPtr(new UnlitTexturedMaterial("/textures/" + data));
@@ -109,7 +110,6 @@ namespace mar {
         }
         if (myMaterial) {
             materialMap_[myMaterialId] = myMaterial;
-            myMaterial->createShader();
         }
         AC_INFO << "num materials " << materialMap_.size();
     }
@@ -117,8 +117,8 @@ namespace mar {
     void ObjImporter::createElementVertices(ShapePtr theShape, ElementPtr element,
                                          size_t startFaceIndex) {
         size_t dataPerVertex = 3 + 3 + 2;
-        element->numIndices = (faces_.size() - startFaceIndex) * 3;
-        element->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[element->numIndices]);
+        element->numIndices_ = (faces_.size() - startFaceIndex) * 3;
+        element->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[element->numIndices_]);
         std::vector<float> temporaryVertexData;
         std::map<boost::tuple<int, int, int>, int> indexMap;
         int myIndex = 0;
@@ -153,8 +153,8 @@ namespace mar {
                 }
             }
         }
-        element->numVertices = myIndex;
-        element->vertexData_ = boost::shared_array<float>(new float[(element->numVertices) * dataPerVertex]);
+        element->numVertices_ = myIndex;
+        element->vertexData_ = boost::shared_array<float>(new float[(element->numVertices_) * dataPerVertex]);
         int vertexDataIndex = 0;
         for (std::vector<float>::const_iterator it = temporaryVertexData.begin(); it != temporaryVertexData.end(); ++it) {
             element->vertexData_[vertexDataIndex++] = *it;
@@ -164,7 +164,7 @@ namespace mar {
     }
 
     bool ObjImporter::sortByTransparencyFunction(ElementPtr i,ElementPtr j) {
-        if (!i->material->transparency_ && j->material->transparency_) {
+        if (!i->material_->isTransparent() && j->material_->isTransparent()) {
             return true;
         } else {
             return false;
@@ -197,14 +197,14 @@ namespace mar {
         size_t startFaceIndex = 0;
         for (std::vector<std::string>::const_iterator it = theObjFile.begin(); it != theObjFile.end(); ++it) {
             std::string line = *it;
-            AC_DEBUG << "line " << line;
+            DB(AC_DEBUG << "line " << line;)
             size_t pos = line.find_first_of(" ");
             if (pos == std::string::npos) {
                 continue;
             }
             std::string type = line.substr(0,pos);
             std::string data = line.substr(pos+1);
-            AC_DEBUG << "type " << type << ", data " << data;
+            DB(AC_DEBUG << "type " << type << ", data " << data;)
             if (type == "v") {
                 vertices_.push_back(getVector3(data));
             } else if (type == "vt") {
@@ -222,10 +222,10 @@ namespace mar {
                     createElementVertices(theShape, element, startFaceIndex);
                 }
                 element = ElementPtr(new ElementWithNormalsAndTexture());
-                element->material = materialMap_[data];
+                element->material_ = materialMap_[data];
                 startFaceIndex = faces_.size();
             } else if (type == "f") {
-                AC_DEBUG << "data:_" << data;
+                DB(AC_DEBUG << "data:_" << data;)
                 std::vector<int> faceVertices;
                 size_t pos1 = data.find_first_of(" ");
                 size_t pos2 = data.find_last_of(" ");
