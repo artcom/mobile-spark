@@ -53,11 +53,10 @@ namespace android {
     unsigned int
     AndroidAudioEngine::playEffect(const std::string & theFile) const {
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
-        AC_PRINT << "play Effect " << myFoundFile;
+        AC_DEBUG << "play Effect " << myFoundFile;
 		int ret = 0;
 		// int playEffect(String)
 		jmethodID playEffectMethodID = getMethodID("playEffect", "(Ljava/lang/String;)I");
-        AC_PRINT << "method id " << playEffectMethodID;
 		if (playEffectMethodID) {
 			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
 			ret = env->CallStaticIntMethod(classOfSparkViewerActivity, playEffectMethodID, StringArg);

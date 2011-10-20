@@ -446,13 +446,13 @@ namespace demoapp {
     }
 
     void DemoApp::onPlaySound1(EventPtr theEvent) {
-        AC_PRINT << "result of playEffect " << masl::AudioEngine::get().playEffect("test.wav");
+        AC_PRINT << "result of playEffect " << masl::AudioEngineSingleton::get().ae()->playEffect("test.wav");
     }
     void DemoApp::onPlaySound2(EventPtr theEvent) {
-        AC_PRINT << "result of playEffect " << masl::AudioEngine::get().playEffect("test2.mp3");
+        AC_PRINT << "result of playEffect " << masl::AudioEngineSingleton::get().ae()->playEffect("test2.mp3");
     }
     void DemoApp::onPlaySound3(EventPtr theEvent) {
-        AC_PRINT << "result of playEffect " << masl::AudioEngine::get().playEffect("test3.mp3");
+        AC_PRINT << "result of playEffect " << masl::AudioEngineSingleton::get().ae()->playEffect("test3.mp3");
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {
