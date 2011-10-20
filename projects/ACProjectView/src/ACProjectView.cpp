@@ -20,6 +20,7 @@
 #include <animation/Easing.h>
 
 #include "ACProjectViewComponentMapInitializer.h"
+#include "AppLoaderAnim.h"
 
 using namespace spark;
 using namespace masl;
@@ -37,8 +38,11 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace acprojectview {
    
+    const std::string ACProjectView::BASE_URL = "http://www.einsfeld.de/mobile-spark/ACProjectView/";
+
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
-        firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false) {
+        firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
+        loadCount_(0), isRealized_(false) {
     } 
 
     ACProjectView::~ACProjectView() {
@@ -47,9 +51,82 @@ namespace acprojectview {
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         ACProjectViewComponentMapInitializer::init();        
-
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
+
+        spark::TextPtr myGermanButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("deutsch", true));
+        spark::TextPtr myEnglishButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("english", true));
+        spark::RectanglePtr myRightBar = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("right_bar", true));
+        spark::RectanglePtr myLangSep = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("lang_sep", true));
+        myLangSep->setSize(vector2(myLangSep->getShape()->getBoundingBox().max[0], myGermanButton->getTextSize()[1]));
+
+        myEnglishButton->setX(_mySparkWindow->getSize()[0] - myEnglishButton->getTextSize()[0] - 12);
+        myLangSep->setX( myEnglishButton->getX() - 12);
+        myGermanButton->setX( myLangSep->getX() - myGermanButton->getTextSize()[0] - 12);
+        myRightBar->setX(_mySparkWindow->getSize()[0] - myRightBar->getNode()->getAttributeAs<float>("width",0));
         
+        spark::EventCallbackPtr mySwitchLanguageDeCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitchDe));
+        myGermanButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageDeCB);
+
+        spark::EventCallbackPtr mySwitchLanguageEnCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitchEn));
+        myEnglishButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageEnCB);
+            
+        spark::EventCallbackPtr myWorldRealizedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onWorldRealized));
+        _mySparkWindow->addEventListener(WindowEvent::WORLD_REALIZED, myWorldRealizedCB);
+        spark::WidgetPtr myLoadAnim = boost::static_pointer_cast<Window>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("apploaderanim", true));
+        myLoadAnim->setX(_mySparkWindow->getSize()[0]/2.0);
+        myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
+
+        //start to load content from server
+        std::vector<std::string> myOnSetupNeededAssets;
+        myOnSetupNeededAssets.push_back("i18n.spark");
+        myOnSetupNeededAssets.push_back("inner_menu.spark");
+        _myRequestManager.setOnErrorCallback(
+            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onErrorRequest)));
+        _myRequestManager.getAllRequest(ACProjectView::BASE_URL + "/layouts/", myOnSetupNeededAssets, 
+            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
+            masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
+    }
+
+    void ACProjectView::onErrorRequest(masl::RequestPtr theRequest) {
+        AC_ERROR << "............ACProjectView onError for URL " << theRequest->getURL();
+        //display error message if data has not been persisted
+        if (masl::AssetProviderSingleton::get().ap()->findFile("/downloads/i18n.spark").empty()) {
+            TextPtr myErrorText = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("error"));
+            myErrorText->setVisible(true);
+            myErrorText->setText("error: internet connection required for initial setup");
+        }
+    }
+
+    void ACProjectView::onAssetReady(masl::RequestPtr theRequest) {
+        loadCount_++;
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        if (loadCount_ == 1) {
+            AC_DEBUG << ".............................onI18nRequestReady";
+            std::string myNewSpark = theRequest->getResponseString();
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromString(ptr, myNewSpark);
+            spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
+            for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
+                myTransform->addChild(*it);
+            }
+        } else if (loadCount_ == 2) {
+            AC_DEBUG << ".............................onMenuRequestReady " << theRequest;
+            std::string myNewSpark = theRequest->getResponseString();
+            std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
+            _myRequestManager.getAllRequest(BASE_URL+"/textures/", assetList,
+                masl::RequestCallbackPtr(),
+                masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
+                "/downloads/", true, masl::REQUEST_IF_NOT_AVAILABLE);
+        } else if (loadCount_ == 3) {
+            AC_DEBUG << ".............................onAssetsReady";
+            spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/inner_menu.spark", myTransform);
+            onLoadComplete();
+        }
+    }
+
+    void ACProjectView::onLoadComplete() {
+        AC_DEBUG << "onLoadComplete";
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(_mySparkWindow->getChildByName("2dworld")->getChildByName("main",true));
         _myProjectViewer = boost::static_pointer_cast<ProjectViewerImpl>(_mySparkWindow->getChildByName("2dworld")->getChildByName("projectViewer",true));
@@ -58,6 +135,8 @@ namespace acprojectview {
                     
         _myProjectMenu->setSensible(false);
         _myStartScreenPtr =  boost::static_pointer_cast<Transform>(_mySparkWindow->getChildByName("2dworld")->getChildByName("startscreen",true));
+        spark::RectanglePtr myStartBackground = boost::static_pointer_cast<Rectangle>(_myStartScreenPtr->getChildByName("background"));
+        myStartBackground->setSize(_mySparkWindow->getSize());
                
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onProjectItem));
         spark::EventCallbackPtr myBackCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onBack));
@@ -73,37 +152,15 @@ namespace acprojectview {
             }
         }
 
-        spark::TextPtr myGermanButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("deutsch", true));
-        spark::TextPtr myEnglishButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("english", true));
-        spark::RectanglePtr myRightBar = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("right_bar", true));
-        spark::RectanglePtr myLangSep = boost::static_pointer_cast<Rectangle>(_mySparkWindow->getChildByName("lang_sep", true));
-        myLangSep->setSize(vector2(myLangSep->getShape()->getBoundingBox().max[0], myGermanButton->getTextSize()[1]));
-        spark::RectanglePtr myStartBackground = boost::static_pointer_cast<Rectangle>(_myStartScreenPtr->getChildByName("background"));
-        myStartBackground->setSize(_mySparkWindow->getSize());
-        
-        myEnglishButton->setX(_mySparkWindow->getSize()[0] - myEnglishButton->getTextSize()[0] - 12);
-        myLangSep->setX( myEnglishButton->getX() - 12);
-        myGermanButton->setX( myLangSep->getX() - myGermanButton->getTextSize()[0] - 12);
-        myRightBar->setX(_mySparkWindow->getSize()[0] - myRightBar->getNode()->getAttributeAs<float>("width",0));
-        
-        spark::EventCallbackPtr mySwitchLanguageDeCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitchDe));
-        myGermanButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageDeCB);
-
-        spark::EventCallbackPtr mySwitchLanguageEnCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onLanguageSwitchEn));
-        myEnglishButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageEnCB);
-            
-        spark::EventCallbackPtr myWorldRealizedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onWorldRealized));
-        _mySparkWindow->addEventListener(WindowEvent::WORLD_REALIZED, myWorldRealizedCB);
-
-
-        spark::WidgetPtr myLoadAnim = boost::static_pointer_cast<Window>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("apploaderanim", true));
-        myLoadAnim->setX(_mySparkWindow->getSize()[0]/2.0);
-        myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
+        if (isRealized_) {
+            onAllReady();
+        }
         
         
     }
     void ACProjectView::onFrame(EventPtr theEvent) {
         BaseApp::onFrame(theEvent);
+        _myRequestManager.handleRequests(); //TODO: move to BaseApp?
     }
     
    
@@ -158,6 +215,7 @@ namespace acprojectview {
     
     void ACProjectView::onFinishLoadProjectView() {  
         _myProjectMenu->setVisible(false);
+        _myProjectMenu->setSensible(false);        
         _myAnimatingFlag = false;        
     }
 
@@ -273,16 +331,24 @@ namespace acprojectview {
         _mySparkWindow->switchLanguage(spark::EN);
     }
     
+    void ACProjectView::onAllReady() {
+        AC_DEBUG << "_______________________________ON ALL READY";
+        boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("loaderView"))->setVisible(false);
+        boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("mainView"))->setVisible(true);
+        AppLoaderAnimPtr myLoadAnim = boost::static_pointer_cast<AppLoaderAnim>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("apploaderanim", true));
+        myLoadAnim->removeOnFrameListener();
+        initIdle();
+    }
+
     void ACProjectView::onWorldRealized(EventPtr theEvent) {
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
         if (myEvent->worldname_ == "2dworld") {
-            boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("loaderView"))->setVisible(false);
-            boost::static_pointer_cast<View>(_mySparkWindow->getChildByName("mainView"))->setVisible(true);
+            isRealized_ = true;
+            if (loadCount_ == 3) {
+                onAllReady();
+            }
         }
-        AC_DEBUG << "######################### world realized: " << myEvent->worldname_;
-        if (myEvent->worldname_ == "2dworld") {
-            initIdle();
-        }
+        AC_DEBUG << "########################################### world realized: " << myEvent->worldname_;
     }
 
     //////////////////////////////////////////////////////idle
@@ -307,7 +373,7 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/textures/large_images/", idleFiles_, "");
+        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/", idleFiles_, ".png");
         onIdle();
     }
 
@@ -340,7 +406,7 @@ namespace acprojectview {
 
     void ACProjectView::onKenBurnsImageFadeStart() {
         AC_TRACE << "_____________________________________ fade start, load to " << (firstIdleImageVisible_?1:0);
-        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/large_images/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/downloads/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
         vector2 myWindowDimensions = _mySparkWindow->getSize();
         _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
         _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
@@ -369,7 +435,7 @@ namespace acprojectview {
         }
         if (_myKenBurnsAnimation) {
             _myProjectMenu->setVisible(true);
-            _myProjectMenu->setSensible(true);
+            _myProjectMenu->setSensible(true);            
             _myStartScreenPtr->setVisible(false);
             _myStartScreenPtr->setSensible(false);
             _myKenBurnsAnimation->cancel();

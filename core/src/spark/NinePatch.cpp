@@ -52,6 +52,7 @@ namespace spark {
             myShape->setEdges(edgeLeft_, edgeTop_, edgeRight_, edgeBottom_);
             _myShape = myShape;
         } else {
+            myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }

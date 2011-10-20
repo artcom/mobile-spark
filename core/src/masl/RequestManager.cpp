@@ -224,15 +224,15 @@ namespace masl {
             if (theGetType == REQUEST_IF_NOT_AVAILABLE && !thePersistenceFolder.empty()) {
                 std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(myUrl);
                 if (!AssetProviderSingleton::get().ap()->findFile(fileToFind).empty()) {
-                    std::vector<char> responseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
-                    if (responseBlock.size() > 0) {
-                        Request* r = new Request(myUrl, responseBlock);
-                        RequestPtr myRequest = RequestPtr(r);
-                        if (theOneReadyCB) {
+                    if (theOneReadyCB) {
+                        std::vector<char> responseBlock = AssetProviderSingleton::get().ap()->getBlockFromFile(fileToFind);
+                        if (responseBlock.size() > 0) {
+                            Request* r = new Request(myUrl, responseBlock);
+                            RequestPtr myRequest = RequestPtr(r);
                             (*theOneReadyCB)(myRequest);
-                            continue;
                         }
                     } 
+                    continue;
                 }
             //Not supported
             //} else if (theGetType == REQUEST_IF_NEWER) {
@@ -252,6 +252,9 @@ namespace masl {
             SequenceRequestPtr myRequest = SequenceRequestPtr(
                 new SequenceRequest(*this, myUrl, thePersistenceFolder, thePersistFlag));
             myRequest->setOnDoneCallback(theOneReadyCB);
+            if (_myDefaultErrorCallback) {
+                myRequest->setOnErrorCallback(_myDefaultErrorCallback);
+            }
             myRequest->get();
             if (myNextRequest) {
                 myRequest->setNextRequest(myNextRequest);

@@ -2,6 +2,7 @@
 #define _included_mobile_acprojectview_ACProjectView_
 
 /////////////////// Application code, this should be in java or script language later...
+#include <masl/RequestManager.h>
 #include <animation/SequenceAnimation.h>
 #include <animation/DelayAnimation.h>
 #include <animation/ParallelAnimation.h>
@@ -48,6 +49,7 @@ namespace acprojectview {
             void onLoadInitialSet2();
             void onLoadInitialSet3();
             void onLoadInitialSet4();
+            void onAllReady();
             
             //idle
             void initIdle();
@@ -82,11 +84,20 @@ namespace acprojectview {
             
             void onFrame(spark::EventPtr theEvent);
             
+            //HTTP-Requests
+            masl::RequestManager _myRequestManager;
+            int loadCount_;
+            bool isRealized_;
+            const static std::string BASE_URL;
+            void onAssetReady(masl::RequestPtr theRequest);
+            void onErrorRequest(masl::RequestPtr theRequest);
+            void onLoadComplete();
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
     typedef masl::WeakPtr<ACProjectView> ACProjectViewWeakPtr;
     typedef masl::MemberFunctionCallback<ACProjectView, ACProjectViewWeakPtr> ACProjectViewCB;
+    typedef masl::MemberFunctionRequestCallback<ACProjectView, ACProjectViewWeakPtr> ACProjectViewRequestCB;
     typedef spark::MemberFunctionEventCallback<ACProjectView, ACProjectViewWeakPtr> ACProjectViewEventCB;
 
     //animations

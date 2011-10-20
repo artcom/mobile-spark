@@ -75,7 +75,7 @@
         </Slide>
 
         <Slide name="ImagesSlide" title="Images">
-            <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="/texture.png"/>
+            <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="/bluetexture.png"/>
             <Image name="transparent_image" x="250" y="250" z="1" src="/transparenttexture.png"/>
             <Image name="image_from_apk_package" alpha="0.5" x="250" y="50" z="2" src="assets/textures/sparks.png"/>
         </Slide>
@@ -152,6 +152,7 @@
             <Text name="deleterequest" x="10" y="530" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="loading" text="loading..." visible="false" x="10" y="500" z="20"/>
             <Text name="curl_error" text="" visible="false" x="10" y="500" z="21" color="[1,0,0,1]" fontsize="16"/>
+            <HttpTransform name="transform_from_web" url="http://www.einsfeld.de/mobile-spark/DemoApp/remote.spark" loadDelay="5000" requestMode="GET_REPEATING" refreshInterval="10000"/>
         </Slide>
     </World>        
 

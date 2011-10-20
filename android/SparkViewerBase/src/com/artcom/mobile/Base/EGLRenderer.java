@@ -10,7 +10,6 @@ import android.util.DisplayMetrics;
 
 public class EGLRenderer  implements GLSurfaceView.Renderer{
     public static int numFrames = 0;
-    public static long millisec = 0;
     public static final String PACKAGE_NAME = "com.artcom.mobile";
     public static int _myScreenWidth;
     public static int _myScreenHeight;

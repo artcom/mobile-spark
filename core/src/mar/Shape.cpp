@@ -75,6 +75,16 @@ namespace mar {
         return false;        
     }
 
+    std::string
+    Shape::getAttributesAsString() const {
+        std::string s ="width=\""+masl::as_string(getWidth())+"\" height=\""+masl::as_string(getHeight())+"\""
+            " dataPerVertex=\""+masl::as_string(dataPerVertex_)+"\"";
+        if (elementList_.size() == 1) {
+            s += " element={"+elementList_[0]->getAttributesAsString()+"}";
+        }
+        return s;
+    }
+
     /////////////////////////////////////////////////////////////RectangleShape
     RectangleShape::RectangleShape(const MaterialPtr theMaterial, const float theWidth, const float theHeight)
         : Shape(theWidth, theHeight)

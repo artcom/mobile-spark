@@ -1,8 +1,5 @@
 #include "Transform.h"
 
-#include "SparkComponentFactory.h"
-
-
 namespace spark {
     const char * const Transform::SPARK_TYPE = "Transform";
 

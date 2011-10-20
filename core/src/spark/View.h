@@ -28,6 +28,7 @@ namespace spark {
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return View::SPARK_TYPE;};
+        virtual std::string getAttributesAsString() const;
     private:
         void ensureCamera();
 

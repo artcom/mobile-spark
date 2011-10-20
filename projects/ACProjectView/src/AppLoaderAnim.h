@@ -15,7 +15,7 @@ namespace acprojectview {
             static const char * const SPARK_TYPE;             
             virtual const char * const & getType() const { return AppLoaderAnim::SPARK_TYPE;};
                 
-            void removeOnFrameListener(spark::EventPtr theEvent);
+            void removeOnFrameListener();
             void realize();
             void onFrame(spark::EventPtr theEvent);
 
@@ -27,8 +27,8 @@ namespace acprojectview {
             spark::EventCallbackPtr _myFrameCB;
             
     };
-    typedef masl::Ptr<AppLoaderAnim>AppLoaderAnimPtr;
-    typedef masl::WeakPtr<AppLoaderAnim>AppLoaderAnimWeakPtr;
+    typedef masl::Ptr<AppLoaderAnim> AppLoaderAnimPtr;
+    typedef masl::WeakPtr<AppLoaderAnim> AppLoaderAnimWeakPtr;
     typedef spark::MemberFunctionEventCallback<AppLoaderAnim, AppLoaderAnimWeakPtr> AppLoaderAnimCB;
         
 };

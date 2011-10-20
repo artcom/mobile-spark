@@ -15,6 +15,23 @@ namespace spark {
         return true;
     }
 
+    PrintNodeVisitor::PrintNodeVisitor() : depth_(0) {
+    }
+
+    bool 
+    PrintNodeVisitor::preCheck(ComponentPtr theComponent) {
+        depth_++;
+        AC_PRINT << std::string( (depth_-1) * 4, ' ' ) << "<" << theComponent->getType() << theComponent->getAttributesAsString() << ">";
+        return true;
+    }
+
+    bool 
+    PrintNodeVisitor::visit(ComponentPtr theComponent) {
+        AC_PRINT << std::string( (depth_-1) * 4, ' ' ) << "</" << theComponent->getType() << ">";
+        depth_--;
+        return true;
+    }
+
     bool
     OnPauseComponentVisitor::visit(ComponentPtr theComponent) {
         AC_DEBUG << *theComponent << " onPause";

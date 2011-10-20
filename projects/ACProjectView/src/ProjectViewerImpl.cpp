@@ -1,4 +1,5 @@
 #include "ProjectViewerImpl.h"
+#include "ProjectMenu.h"
 
 #include <spark/Window.h>
 #include <spark/Rectangle.h>
@@ -66,7 +67,10 @@ namespace acprojectview {
         _myPopUpSubTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         
         _myPopupBG->setSize(_myWidth, 0);
-            
+
+        ProjectMenuPtr myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(getRoot()->getChildByName("2dworld", true)->getChildByName("main",true));
+        spark::ContainerPtr myProjectItems = boost::static_pointer_cast<spark::Container>(myProjectMenu);
+                        
     }
 
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {  
@@ -162,6 +166,8 @@ namespace acprojectview {
     }
     
     void ProjectViewerImpl::loadInitialSet0() {    
+        //boost::timer::timer myTimer;
+        
          _myPopupBG->setSize(_myWidth, POPUP_HEIGHT + POPUP_SIZE);
          _myPopup->setY(-POPUP_SIZE);
 
@@ -169,8 +175,11 @@ namespace acprojectview {
          _myPopUpTitle->setVisible(true);
          _myPopUpTitle->setI18nId(myTitle_I18n);
          _myPopUpTitle->getTextSize();
+         //AC_PRINT << "******************ProjectViewerImpl::loadInitialSet0***************************** " << myTimer.elapsed();
+         
     }
     void ProjectViewerImpl::loadInitialSet1() {    
+        //boost::timer::timer myTimer;
         string mySubTitle_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("subtitle_I18n","");
          _myPopUpSubTitle->setVisible(true);
          _myPopUpSubTitle->setI18nId(mySubTitle_I18n);         
@@ -178,8 +187,10 @@ namespace acprojectview {
 
          _myPopUpSubTitle->setY(POPUP_SIZE+10);
          _myPopUpTitle->setY(POPUP_SIZE + 10 + _myPopUpSubTitle->getTextSize()[1]);
+         //AC_PRINT << "******************ProjectViewerImpl::loadInitialSet1***************************** " << myTimer.elapsed();
     }
     void ProjectViewerImpl::loadInitialSet2() {    
+        //boost::timer::timer myTimer;
 
          _myPopUpPfeil->setX(_myWidth - (_myPopUpPfeil->getTextureSize()[0]/2.0) - 20);
          _myPopUpPfeil->setY((50 + (_myPopUpPfeil->getTextureSize()[1]/2.0) ) /2.0  + POPUP_SIZE - _myPopUpPfeil->getTextureSize()[1]);
@@ -188,23 +199,30 @@ namespace acprojectview {
 
         string myDescription_I18n = _myCurrentProject->getNode()->getAttributeAs<std::string>("description_I18n","");        
         _myDescription->setI18nId(myDescription_I18n);         
+        //AC_PRINT << "******************ProjectViewerImpl::loadInitialSet2***************************** " << myTimer.elapsed();
     }
     void ProjectViewerImpl::loadInitialSet3() {    
+        //boost::timer::timer myTimer;
          if (_myNumberOfImages > 0) {
              _image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[1%_myNumberOfImages])->getSrc());
              autoScaleImage(_image1);
             }
 
+         //AC_PRINT << "******************ProjectViewerImpl::loadInitialSet3***************************** " << myTimer.elapsed();
     }
     void ProjectViewerImpl::loadInitialSet4() {    
+        //boost::timer::timer myTimer;
          if (_myNumberOfImages > 0) {
              _image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[_myNumberOfImages-1])->getSrc());
              autoScaleImage(_image2);
         }        
+        //AC_PRINT << "ProjectViewerImpl::loadInitialSet4 done";
+         //AC_PRINT << "******************ProjectViewerImpl::loadInitialSet4***************************** " << myTimer.elapsed();
     }
     bool ProjectViewerImpl::isPopUpOpen() {
         return (_myPopup->getY() != -POPUP_SIZE);
     }
+    
     
     void ProjectViewerImpl::onOpenClosePopup(EventPtr theEvent) {
         if (isRendered()) {

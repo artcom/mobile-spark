@@ -64,6 +64,7 @@ public class NativeBinding {
     textPaint.setAntiAlias(true);
     textPaint.setTextAlign(Paint.Align.LEFT);
     Typeface myTypeFace;
+    //myTypeFace = Typeface.defaultFromStyle(Typeface.NORMAL);
     if (theFontpath .compareTo("") != 0) {
         myTypeFace = Typeface.createFromFile(theFontpath);
     } else {
@@ -85,10 +86,10 @@ public class NativeBinding {
         } else if (theAlign.compareTo("right") == 0) {
             myXOffset = (int) (myBitmap.getWidth() - myLines.get(i)._myWidth);
         }
-        //if (myLines.get(i)._myYPos )
         myCanvas.drawText(myLines.get(i)._myLineOfText, myLines.get(i)._myXPos + myXOffset, myLines.get(i)._myYPos, textPaint);
         //AC_Log.print(String.format("Line %d '%s' at (%d,%d)" , i, myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos));
     }
+	//long myTextureStart = System.currentTimeMillis();    	
     int[] textures = new int[1];
     if (theTextureId == 0) {
         GLES20.glGenTextures(1, textures,0);
@@ -111,6 +112,8 @@ public class NativeBinding {
       } catch (Exception theEx) {
           AC_Log.print(String.format("exception %s", theEx.getMessage()));
       }
+      //AC_Log.print(String.format("rendertext glzeugs %d", (System.currentTimeMillis() - myTextureStart)));
+      
     //Clean up
     myBitmap.recycle();
 

@@ -13,5 +13,11 @@ namespace mar {
 
     TextureUnit::~TextureUnit() {
     }
+
+    std::string
+    TextureUnit::getAttributesAsString() const {
+        return "matrix=\""+masl::as_string(matrix_)+"\" "+_myTexture->getAttributesAsString();
+    }
+
 }
 

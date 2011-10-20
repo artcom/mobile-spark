@@ -28,7 +28,8 @@ namespace masl {
             void putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
             void getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
-                               const RequestCallbackPtr theOneReadyCB, RequestCallbackPtr theAllReadyCB,
+                               const RequestCallbackPtr theOneReadyCB, 
+                               RequestCallbackPtr theAllReadyCB = RequestCallbackPtr(),
                                const std::string & thePersistenceFolder = "",
                                const bool thePersistFlag = false, const GetType theGetType = REQUEST_ALWAYS);
         protected:

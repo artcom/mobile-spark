@@ -181,4 +181,12 @@ namespace spark {
         vector3 myTranslation = matrix_get_translation(_myWorldMVMatrix);
         return myTranslation[2];
     }
+
+    std::string 
+    ShapeWidget::getAttributesAsString() const {
+        return Widget::getAttributesAsString() + " origin=\""+masl::as_string(_myOrigin)+"\""
+                " originMode=\""+masl::as_string(_myOriginMode)+"\""
+                " shape={"+(_myShape?_myShape->getAttributesAsString():"")+"}";
+    }
+
 }

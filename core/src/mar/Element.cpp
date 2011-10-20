@@ -143,6 +143,11 @@ namespace mar {
         }
     }
 
+    std::string
+    Element::getAttributesAsString() const {
+        return "material={"+(material_?material_->getAttributesAsString():"")+"}";
+    }
+
     /////////////////////////////////////////////////////////////ElementWithNormals
     ElementWithNormals::ElementWithNormals() : Element() {
         _myConfig.push_back(boost::tuple<unsigned int, unsigned int, unsigned int>(VERTEX_NORMAL_INDEX, VERTEX_NORMAL_SIZE, VERTEX_NORMAL_SIZE * sizeof(float)));
