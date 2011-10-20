@@ -3,13 +3,13 @@
 
     <Rectangle name="background" x="0" y="0" width="2000" height="2000" color="[0.0,0.0,0.0]"/>
     <Transform name="image_0_transform">
-        <Image name="image" src="" x="0" y="0"/>
+        <Image name="image" cache="true"/>
     </Transform>        
     <Transform name="image_1_transform">
-        <Image name="image" src="" x="0" y="0"/>
+        <Image name="image" cache="true"/>
     </Transform>        
     <Transform name="image_2_transform">
-        <Image name="image" src="" x="0" y="0"/>
+        <Image name="image" cache="true"/>
     </Transform>        
     
     <Transform name="popup" x="0" y="0" z="10">

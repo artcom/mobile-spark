@@ -21,7 +21,7 @@ namespace mar {
         unsigned long myKey = masl::initiateCRC32();
         masl::appendCRC32(myKey, theSrc);     
         
-        if (_myTextureMap.find(myKey) != _myTextureMap.end()) {
+        if (theCacheFlag && _myTextureMap.find(myKey) != _myTextureMap.end()) {
             AC_INFO << "TextureLoader::load found texture: '" << theSrc << "' in map -> do not reload, glid -> "<< _myTextureMap[myKey]->textureId_;
             return _myTextureMap[myKey];
         } else {
