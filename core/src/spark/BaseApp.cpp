@@ -217,6 +217,7 @@ namespace spark {
         masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/sounds/");
 #ifdef iOS
         masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/downloads/");

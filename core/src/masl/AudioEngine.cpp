@@ -1,5 +1,7 @@
 #include "AudioEngine.h"
 
+#include "AssetProvider.h"
+
 static JavaVM *gJavaVM = 0;
 static jclass classOfSparkViewerActivity = 0;
 JNIEnv *env = 0;
@@ -44,13 +46,15 @@ namespace masl {
 
     unsigned int
     AudioEngine::playEffect(const std::string & theFile) const {
-        AC_PRINT << "play Effect " << theFile;
+
+        std::string myFoundFile = AssetProviderSingleton::get().ap()->findFile(theFile);
+        AC_PRINT << "play Effect " << myFoundFile;
 		int ret = 0;
 		// int playEffect(String)
 		jmethodID playEffectMethodID = getMethodID("playEffect", "(Ljava/lang/String;)I");
         AC_PRINT << "method id " << playEffectMethodID;
 		if (playEffectMethodID) {
-			jstring StringArg = env->NewStringUTF(theFile.c_str());
+			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
 			ret = env->CallStaticIntMethod(classOfSparkViewerActivity, playEffectMethodID, StringArg);
 		}
 		return (unsigned int)ret;

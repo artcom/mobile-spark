@@ -80,7 +80,6 @@ public class Sound {
     
     public int playEffect(String path){
         Log.i(TAG, "playEffect "+path);
-        //path = "/sdcard/DemoApp/sounds/" + path;
         Integer soundId = this.mPathSoundIDMap.get(path);
         
         if (soundId != null){
@@ -133,9 +132,8 @@ public class Sound {
         int soundId = INVALID_SOUND_ID;
         
         try {
-            //soundId = mSoundPool.load(mContext.getAssets().openFd(path), 0);
             Log.i(TAG, "................................" + path);
-            soundId = mSoundPool.load("/sdcard/DemoApp/sounds/test.wav", 0);
+            soundId = mSoundPool.load(path, 0);
         } catch(Exception e){
              Log.e(TAG, "error: " + e.getMessage(), e);
         }
