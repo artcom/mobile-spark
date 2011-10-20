@@ -6,18 +6,20 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/progress.hpp>
 
-#include <masl/Logger.h>
+#include <masl/AssetProvider.h>
+#include <masl/AudioEngine.h>
+#include <masl/AutoLocker.h>
 #include <masl/BaseEntry.h>
-#include <masl/MobileSDK.h>
-#include <masl/XMLUtils.h>
+#include <masl/CallStack.h>
+#include <masl/Exception.h>
 #include <masl/file_functions.h>
+#include <masl/Logger.h>
+#include <masl/MobileSDK.h>
 #include <masl/signal_functions.h>
 #include <masl/string_functions.h>
-#include <masl/Exception.h>
-#include <masl/AutoLocker.h>
 #include <masl/XMLNode.h>
-#include <masl/CallStack.h>
-#include <masl/AssetProvider.h>
+#include <masl/XMLUtils.h>
+
 #include <animation/AnimationManager.h>
 
 #include <mar/TextureLoader.h>
@@ -25,10 +27,12 @@
 
 #ifdef ANDROID
     #include <android/AndroidAssetProvider.h>
+    #include <android/AndroidAudioEngine.h>
     #include <android/AndroidMobileSDK.h>
 #endif
 #ifdef iOS
     #include <ios/IOSAssetProvider.h>
+    #include <ios/IOSAudioEngine.h>
     #include <ios/IOSMobileSDK.h>
 #endif
 
@@ -206,8 +210,10 @@ namespace spark {
     void assetProviderSetup(const std::string & theAssetPath, const std::string & theAppPath ) {
 #ifdef iOS
         masl::AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath, theAppPath)));
+        masl::AudioEngineSingleton::get().setAudioEngine(ios::IOSAudioEnginePtr(new ios::IOSAudioEngine()));
 #elif ANDROID
         masl::AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
+        masl::AudioEngineSingleton::get().setAudioEngine(android::AndroidAudioEnginePtr(new android::AndroidAudioEngine("com/artcom/mobile/Base/SparkViewerActivity")));
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
 #endif
         masl::AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
@@ -217,6 +223,7 @@ namespace spark {
         masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/sounds/");
 #ifdef iOS
         masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/downloads/");
