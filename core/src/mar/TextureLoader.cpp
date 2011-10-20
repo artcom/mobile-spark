@@ -38,6 +38,7 @@ namespace mar {
     TexturePtr 
     TextureLoader::getTexture(const unsigned long theKey) {
         if (_myTextureMap.find(theKey) != _myTextureMap.end()) {
+            AC_INFO << "TextureLoader::getTexture : '" << theKey << "' in map -> do not reload, glid -> "<< _myTextureMap[theKey]->textureId_;
             return _myTextureMap[theKey];
         } else {
             return TexturePtr();                    
@@ -46,6 +47,7 @@ namespace mar {
         
     void 
     TextureLoader::storeTexture(const unsigned long theKey, TexturePtr theTexture) {
+        AC_INFO << "TextureLoader::storeTexture : '" << theKey << "' generated store in map, glid -> "<< theTexture->textureId_;
         _myTextureMap[theKey] = theTexture;
     }
 

@@ -102,6 +102,8 @@ namespace spark {
     void
     Text::build() {
         I18nShapeWidget::build();
+        AC_DEBUG << "build "<<*this << " caching: " << _myCacheFlag;
+        AC_TRACE << "data: " << data_.substr(_myTextStartPos, data_.size());
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         bool myCreateTextureFlag = true;            
         unsigned long myKey =  masl::initiateCRC32();
@@ -121,7 +123,14 @@ namespace spark {
             }      
         }
         if (myCreateTextureFlag) {
-            TexturePtr myTexture = myMaterial->getTextureUnit()->getTexture();
+            TexturePtr myTexture;
+
+            if (!_myCacheFlag) {
+                myTexture = myMaterial->getTextureUnit()->getTexture();
+            } else {
+                myTexture = TexturePtr(new Texture());
+                myMaterial->getTextureUnit()->setTexture(myTexture);
+            }
             masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myTexture->textureId_, _myFontSize,
                                              _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);                                             
             _myTextSize[0] = myTextInfo.width;
