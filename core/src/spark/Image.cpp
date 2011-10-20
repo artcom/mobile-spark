@@ -1,8 +1,9 @@
 #include "Image.h"
 
 #include <cml/mathlib/matrix_transform.h>
-#include <masl/string_functions.h> //select1st
-#include <mar/png_functions.h>
+#include <mar/TextureLoader.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
 
@@ -26,13 +27,14 @@ namespace spark {
         I18nShapeWidget::realize();
     }
 
+    //XXX: onPause & onResume both unbind texture
     void
     Image::onPause() {
         I18nShapeWidget::onPause();
         if (getShape()) {
-            UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
-            TexturePtr myTexture = myMaterial->getTexture();
-            myTexture->getTextureInfo()->unbind();
+            UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+            TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
+            myTextureUnit->getTexture()->unbind();
         }
     }
 
@@ -45,6 +47,7 @@ namespace spark {
         }
     }
 
+    //TODO maybe remove textureSize member
     const vector2 &
     Image::getTextureSize() {
         if (_myDirtyFlag) {
@@ -67,9 +70,9 @@ namespace spark {
         float scaleY = theHeight / _myTextureSize[1];
         float scale = std::max(scaleX, scaleY);
 
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
-        TexturePtr myTexture = myMaterial->getTexture();
-        cml::matrix_scale_2D(myTexture->matrix_, scaleX/scale, scaleY/scale);
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+        TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
+        cml::matrix_scale_2D(myTextureUnit->matrix_, scaleX/scale, scaleY/scale);
         setSize(theWidth, theHeight);
     }
 
@@ -80,14 +83,21 @@ namespace spark {
         if(data_.empty()) return;
         
         AC_DEBUG<<"build image " << *this << " with src: "<<data_;
-        std::vector<std::string> myHandles;
-        myHandles.reserve(customShaderValues_.size());
-        std::transform(customShaderValues_.begin(), customShaderValues_.end(), std::back_inserter(myHandles),
-                       masl::select1st<std::map<std::string, float>::value_type>()) ;
+        UnlitTexturedMaterialPtr myMaterial;
         bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
-        setShape(ShapeFactory::get().createRectangle(true, 1, 1, vertexShader_, fragmentShader_, myHandles, data_, myCacheFlag));
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material);    
-        _myTextureSize = vector2(myMaterial->getTexture()->getTextureInfo()->width_, myMaterial->getTexture()->getTextureInfo()->height_);
+        if (!getShape()) {
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
+            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
+            myMaterial->setCustomHandles(customShaderValues_);
+            myMaterial->setShader(vertexShader_, fragmentShader_); 
+            _myShape = ShapePtr(new RectangleShape(myMaterial));
+        } else {
+            myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+            //XXX:if not caching always generates a new Texture, setSrc would be enough
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
+            myMaterial->getTextureUnit()->setTexture(myTexture);
+        }
+        _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->width_, myMaterial->getTextureUnit()->getTexture()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
         float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);
         setSize(myWidth, myHeight);
