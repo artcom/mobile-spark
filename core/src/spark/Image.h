@@ -10,7 +10,6 @@ namespace spark {
         virtual ~Image();
         const std::string & getSrc() const {return data_;};
         void setSrc(const std::string & theSrc);
-        void fitToSize(const float theWidth, const float theHeight);
         const vector2 & getTextureSize();
 
         static const char * const SPARK_TYPE;

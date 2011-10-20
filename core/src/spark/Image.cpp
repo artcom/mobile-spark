@@ -1,6 +1,5 @@
 #include "Image.h"
 
-#include <cml/mathlib/matrix_transform.h>
 #include <mar/TextureLoader.h>
 #include <mar/Shape.h>
 #include <mar/Material.h>
@@ -36,22 +35,6 @@ namespace spark {
         data_ = theSrc; _myDirtyFlag = true;
     } 
     
-    //TODO: this is no base functionality, remove it from here
-    void 
-    Image::fitToSize(const float theWidth, const float theHeight) {
-        if (_myDirtyFlag) {
-            build();
-        }
-        float scaleX = theWidth / _myTextureSize[0];
-        float scaleY = theHeight / _myTextureSize[1];
-        float scale = std::max(scaleX, scaleY);
-
-        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-        TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
-        cml::matrix_scale_2D(myTextureUnit->matrix_, scaleX/scale, scaleY/scale);
-        setSize(theWidth, theHeight);
-    }
-
     void
     Image::build() {
         I18nShapeWidget::build();
