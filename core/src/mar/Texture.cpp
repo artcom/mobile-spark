@@ -38,4 +38,11 @@ namespace mar {
             textureId_ = 0;
         }
     }    
+
+    std::string
+    Texture::getAttributesAsString() const {
+        return "src=\""+src_+"\" width=\""+masl::as_string(width_)+"\" height=\""+masl::as_string(height_)+"\""
+            " transparency=\""+masl::as_string(transparency_)+"\""
+            " textureId=\""+masl::as_string(textureId_)+"\"";
+    }
 }

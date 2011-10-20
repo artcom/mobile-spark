@@ -36,6 +36,7 @@ namespace mar {
         void setAlpha(const float theAlpha);
 
         std::vector<ElementPtr> elementList_;
+        virtual std::string getAttributesAsString() const;
     protected:
         size_t dataPerVertex_;
         BoundingBox boundingBox_;

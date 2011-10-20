@@ -47,6 +47,7 @@ namespace spark {
         }
     }
 
+    //TODO maybe remove textureSize member
     const vector2 &
     Image::getTextureSize() {
         if (_myDirtyFlag) {

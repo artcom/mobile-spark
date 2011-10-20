@@ -2,6 +2,7 @@
 #include "SparkComponentFactory.h"
 
 #include "Camera.h"
+#include "HttpTransform.h"
 #include "Image.h"
 #include "I18nContext.h"
 #include "NinePatch.h"
@@ -18,6 +19,7 @@
 namespace spark {
     void ComponentMapInitializer::init() {
         SparkComponentFactory::get().registerComponent(Camera::SPARK_TYPE, spark::create<Camera>);
+        SparkComponentFactory::get().registerComponent(HttpTransform::SPARK_TYPE, spark::create<HttpTransform>);
         SparkComponentFactory::get().registerComponent(Image::SPARK_TYPE, spark::create<Image>);
         SparkComponentFactory::get().registerComponent(I18nContext::SPARK_TYPE, spark::create<I18nContext>);
         SparkComponentFactory::get().registerComponent(I18nItem::SPARK_TYPE, spark::create<I18nItem>);

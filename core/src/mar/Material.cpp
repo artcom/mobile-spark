@@ -130,6 +130,11 @@ namespace mar {
         }
     }
 
+    std::string
+    Material::getAttributesAsString() const {
+        return "alpha=\""+masl::as_string(alpha_)+"\"";
+    }
+
     //////////////////////////////////////////////////// UnlitColoredMaterial
     UnlitColoredMaterial::UnlitColoredMaterial() : Material(), diffuse_(1,1,1,1), colorHandle_(0) {
     }
@@ -212,5 +217,9 @@ namespace mar {
         ASSERT_GL("UnlitTexturedMaterial::bindAttributes", PLUS_FILE_LINE);
     }
 
+    std::string
+    UnlitTexturedMaterial::getAttributesAsString() const {
+        return Material::getAttributesAsString() + " textureUnit={"+textureUnit_->getAttributesAsString()+"}";
+    }
 }
 

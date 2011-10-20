@@ -13,6 +13,7 @@ namespace mar {
             TextureUnit(const TexturePtr theTexture);
             ~TextureUnit();
 
+            std::string getAttributesAsString() const;
             void setTexture(TexturePtr theTexture) {_myTexture = theTexture;};
             TexturePtr getTexture() const { return _myTexture;}
             matrix matrix_;

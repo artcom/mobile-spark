@@ -35,9 +35,11 @@ namespace spark {
         vector4 getClearColor() const { return _myClearColor;};
         vector2 getSize() const;
         void setSize(int theWidth, int theHeight) {_myWidth=theWidth; _myHeight=theHeight;};
+        void dumpScene();
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Window::SPARK_TYPE;};
+        virtual std::string getAttributesAsString() const;
     private:
         int _myWidth;
         int _myHeight;

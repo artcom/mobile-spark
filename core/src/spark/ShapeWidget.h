@@ -29,6 +29,7 @@ namespace spark {
             void setSize(const vector2 & theSize);
 
             std::map<std::string, float> customShaderValues_;
+            virtual std::string getAttributesAsString() const;
 
         protected:
             mar::ShapePtr _myShape;

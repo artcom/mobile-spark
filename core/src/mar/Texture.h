@@ -14,6 +14,7 @@ namespace mar {
             void unbind();
             std::string getSrc() const {return src_;};
             void setSrc(const std::string & theSrc = "");
+            std::string getAttributesAsString() const;
 
             GLuint width_;
             GLuint height_;

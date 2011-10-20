@@ -33,6 +33,7 @@ namespace mar {
         void setCustomHandles(const std::map<std::string, float> & theCustomHandles);
 
         virtual bool isTransparent() const {return alpha_ != 1.0;};
+        virtual std::string getAttributesAsString() const;
 
     protected:
         Material();
@@ -98,9 +99,11 @@ namespace mar {
         TextureUnitPtr getTextureUnit() const {return textureUnit_;}
         void setTextureUnit(const TextureUnitPtr theTextureUnit) { textureUnit_ = theTextureUnit;};
         virtual bool isTransparent() const;
+        virtual std::string getAttributesAsString() const;
     private:
         virtual void setHandles();
         virtual void bindAttributes();
+        //XXX: support multitexturing with multiple texunits
         TextureUnitPtr textureUnit_;
         GLuint textureMatrixHandle_;
 

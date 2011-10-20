@@ -40,6 +40,8 @@ namespace mar {
         void unloadData() const;
         void createVertexBuffers();
         void updateCompleteVertexBuffersContent();
+        std::string getAttributesAsString() const;
+
         MaterialPtr material_;
         unsigned int numVertices_;
         unsigned int numIndices_;
@@ -53,7 +55,6 @@ namespace mar {
         #ifdef iOS
         GLuint vertexArrayObject_;
         #endif
-
         GLuint vertexBuffer_;
         GLuint indexBuffer_;
         unsigned int stride_;

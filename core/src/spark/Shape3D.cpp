@@ -28,4 +28,9 @@ namespace spark {
         mar::ObjImporter::get().importObj(_mySrc, _myShape);
     }
 
+    std::string 
+    Shape3D::getAttributesAsString() const {
+        return ShapeWidget::getAttributesAsString() + " src=\""+_mySrc+"\"";
+    }
+
 }
