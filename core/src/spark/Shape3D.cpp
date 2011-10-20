@@ -1,5 +1,6 @@
 #include "Shape3D.h"
 
+#include <mar/ObjImporter.h>
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
 
@@ -23,7 +24,8 @@ namespace spark {
     void
     Shape3D::build() {
         ShapeWidget::build();
-        setShape(mar::ShapeFactory::get().createObj(_mySrc));
+        _myShape = mar::ShapePtr(new mar::ObjShape());
+        mar::ObjImporter::get().importObj(_mySrc, _myShape);
     }
 
     std::string 

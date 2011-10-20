@@ -16,8 +16,9 @@ namespace masl {
 
     class AudioEngineSingleton : public masl::Singleton<AudioEngineSingleton> {
     public:
-        void setAudioEngine(AudioEnginePtr theAudioEngine);
-        const AudioEnginePtr & ae() const { return _myAudioEngine; };
+        // we want a real singleton -> we need a non purevirtual out-of-line method other than dtor
+        virtual void setAudioEngine(AudioEnginePtr theAudioEngine);
+        const AudioEnginePtr & ae() const { AC_PRINT << "get audio engine " << _myAudioEngine; return _myAudioEngine; };
     private:
         AudioEnginePtr _myAudioEngine;
     };
