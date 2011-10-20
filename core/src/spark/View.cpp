@@ -4,6 +4,7 @@
 
 #include <masl/XMLNode.h>
 #include <mar/openGL_functions.h>
+#include <mar/Viewport.h>
 
 #include "SparkComponentFactory.h"
 #include "Widget.h"
@@ -62,6 +63,13 @@ namespace spark {
         vector2 mySize = _myGLViewport->getSize();
         _myCamera->activate(mySize[0] * theCanvasWidth, mySize[1] * theCanvasHeight);
         _myGLViewport->activate(theCanvasWidth, theCanvasHeight);
+    }
+
+    std::string 
+    View::getAttributesAsString() const {
+        return Widget::getAttributesAsString() + " world=\""+_myWorldName+"\" pos=\""+
+            masl::as_string(_myGLViewport->getPos())+"\" size=\""+masl::as_string(_myGLViewport->getSize())+"\""
+            " camera=\""+_myCamera->getName()+"\"";
     }
 
 }

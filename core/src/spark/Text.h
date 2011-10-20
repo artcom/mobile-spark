@@ -35,6 +35,7 @@ namespace spark {
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Text::SPARK_TYPE;};
+        virtual std::string getAttributesAsString() const;
     protected:
         virtual void build();
     private:

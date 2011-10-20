@@ -3,13 +3,13 @@
 #include <masl/MobileSDK.h>
 #include <masl/AssetProvider.h>
 #include <masl/checksum.h>
-
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include <mar/Texture.h>
 #include <mar/TextureLoader.h>
 
 #include "BaseApp.h"
 #include "SparkComponentFactory.h"
-#include "I18nContext.h"
 
 #include <boost/progress.hpp>
 
@@ -45,7 +45,11 @@ namespace spark {
         if (myFontName != "") {
             _myFontPath = masl::AssetProviderSingleton::get().ap()->findFile(myFontName);
         }
-        setShape(mar::ShapeFactory::get().createRectangle(true,500,500));
+        mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
+        myMaterial->getTextureUnit()->getTexture()->transparency_ = true;
+        myMaterial->setCustomHandles(customShaderValues_);
+        myMaterial->setShader(vertexShader_, fragmentShader_); 
+        _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
     Text::~Text() {
@@ -61,19 +65,20 @@ namespace spark {
     Text::onPause() {
         I18nShapeWidget::onPause();
         if (getShape()) {
-            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
-            mar::TexturePtr myTexture = myMaterial->getTexture();
-            myTexture->getTextureInfo()->unbind();
+            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+            mar::TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
+            myTextureUnit->getTexture()->unbind();
         }
     }
     
     void
     Text::onResume() {
         I18nShapeWidget::onResume();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         _myDirtyFlag = true;
     }
 
+    //TODO maybe remove textSize member
     const vector2 &
     Text::getTextSize() {
         if (_myDirtyFlag) {
@@ -97,7 +102,9 @@ namespace spark {
     void
     Text::build() {
         I18nShapeWidget::build();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material);
+        AC_DEBUG << "build "<<*this << " caching: " << _myCacheFlag;
+        AC_TRACE << "data: " << data_.substr(_myTextStartPos, data_.size());
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         bool myCreateTextureFlag = true;            
         unsigned long myKey =  masl::initiateCRC32();
         if (_myCacheFlag) {
@@ -105,31 +112,49 @@ namespace spark {
             appendCRC32(myKey, as_string(_myFontSize));
             appendCRC32(myKey, _myFontPath);
             appendCRC32(myKey, as_string(_myTextColor));
-            TextureInfoPtr myTexturePtr = TextureLoader::get().getTextureInfo(myKey);
+            TexturePtr myTexturePtr = TextureLoader::get().getTexture(myKey);
             if (myTexturePtr) {
                 _myTextSize[0] = myTexturePtr->width_;
                 _myTextSize[1] = myTexturePtr->height_;
                 _myRenderedGlyphIndex = TextGlyphIndexMap::get().getIndex(myKey);
                 setSize(_myTextSize[0], _myTextSize[1]);
-                myMaterial->getTexture()->getTextureInfo()->textureId_ = myTexturePtr->textureId_;        
+                myMaterial->getTextureUnit()->setTexture(myTexturePtr);
                 myCreateTextureFlag = false;  
             }      
         }
         if (myCreateTextureFlag) {
-            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, 0, _myFontSize,
+            TexturePtr myTexture;
+
+            if (!_myCacheFlag) {
+                myTexture = myMaterial->getTextureUnit()->getTexture();
+            } else {
+                myTexture = TexturePtr(new Texture());
+                myMaterial->getTextureUnit()->setTexture(myTexture);
+            }
+            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myTexture->textureId_, _myFontSize,
                                              _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);                                             
             _myTextSize[0] = myTextInfo.width;
             _myTextSize[1] = myTextInfo.height;
             _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
             setSize(_myTextSize[0], _myTextSize[1]);
-            myMaterial->getTexture()->getTextureInfo()->width_ =  myTextInfo.width;                
-            myMaterial->getTexture()->getTextureInfo()->height_ = myTextInfo.height;                
-            myMaterial->getTexture()->getTextureInfo()->textureId_ = myTextInfo.textureID;    
+            myTexture->width_ =  myTextInfo.width;
+            myTexture->height_ = myTextInfo.height;
+            myTexture->textureId_ = myTextInfo.textureID;
+            myTexture->transparency_ = true;
             if (_myCacheFlag) {
                 TextGlyphIndexMap::get().store(myKey, _myRenderedGlyphIndex);
-                TextureLoader::get().storeTextureInfo(myKey, myMaterial->getTexture()->getTextureInfo());
+                TextureLoader::get().storeTexture(myKey, myTexture);
             }            
         }
-        myMaterial->transparency_ = true;
     }
+
+    std::string 
+    Text::getAttributesAsString() const {
+        return I18nShapeWidget::getAttributesAsString() + " fontPath=\""+_myFontPath+"\"" + " textAlign=\""+_myTextAlign+"\""
+            " fontSize=\""+masl::as_string(_myFontSize)+"\" textSize=\""+masl::as_string(_myTextSize)+"\""
+            " cacheFlag=\""+masl::as_string(_myCacheFlag)+"\" textColor=\""+masl::as_string(_myTextColor)+"\""
+            " maxWidth=\""+masl::as_string(_myMaxWidth)+"\" maxHeight=\""+masl::as_string(_myMaxHeight)+"\""
+            " lineHeight=\""+masl::as_string(_myLineHeight)+"\"";
+    }
+
 }

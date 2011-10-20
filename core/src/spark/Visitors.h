@@ -19,6 +19,15 @@ namespace spark {
         virtual bool visit(ComponentPtr theComponent);
     };
 
+    class PrintNodeVisitor : public ComponentVisitor {
+    public:
+        PrintNodeVisitor();
+        virtual bool visit(ComponentPtr theComponent);
+        virtual bool preCheck(ComponentPtr theComponent);
+    private:
+        int depth_;
+    };
+
     class RealizeComponentsButWorldAndWindowVisitor : public ComponentVisitor {
     public:
         virtual bool visit(ComponentPtr theComponent);

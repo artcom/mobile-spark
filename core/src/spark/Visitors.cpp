@@ -1,6 +1,6 @@
 #include "Visitors.h"
 
-#include "I18nContext.h"
+#include <mar/Shape.h>
 #include "World.h"
 #include "Window.h"
 
@@ -12,6 +12,23 @@ namespace spark {
     bool
     PrintComponentVisitor::visit(ComponentPtr theComponent) {
         AC_PRINT << "component name " << *theComponent;
+        return true;
+    }
+
+    PrintNodeVisitor::PrintNodeVisitor() : depth_(0) {
+    }
+
+    bool 
+    PrintNodeVisitor::preCheck(ComponentPtr theComponent) {
+        depth_++;
+        AC_PRINT << std::string( (depth_-1) * 4, ' ' ) << "<" << theComponent->getType() << theComponent->getAttributesAsString() << ">";
+        return true;
+    }
+
+    bool 
+    PrintNodeVisitor::visit(ComponentPtr theComponent) {
+        AC_PRINT << std::string( (depth_-1) * 4, ' ' ) << "</" << theComponent->getType() << ">";
+        depth_--;
         return true;
     }
 

@@ -62,4 +62,9 @@ namespace spark {
         }
         _myDirtyFlag = true;
     }
+
+    std::string 
+    I18nShapeWidget::getAttributesAsString() const {
+        return ShapeWidget::getAttributesAsString() + " i18nId=\""+i18nId_+"\"";
+    }
 }

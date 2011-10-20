@@ -1,9 +1,7 @@
 #ifndef _included_mobile_spark_I18nShapeWidget_
 #define _included_mobile_spark_I18nShapeWidget_
 
-#include "Widget.h"
 #include "ShapeWidget.h"
-#include <mar/Shape.h>
 
 namespace spark {
 
@@ -16,6 +14,7 @@ namespace spark {
 
             void setI18nId(const std::string & theNewI18nId);
             void setI18nData(const std::string & theData);
+            virtual std::string getAttributesAsString() const;
         protected:
             std::string data_;
         private:            

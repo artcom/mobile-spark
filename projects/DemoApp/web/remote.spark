@@ -1,0 +1,4 @@
+<Transform name="remote_transform" x="100" y="200" z="40">
+    <Text name="remote_text" text="message from remote server" color="[0.1,0.6,0.3,1.0]"/>
+    <Image name="remote_image" src="/web.png" x="90" y="90" z="11"/>
+</Transform>
