@@ -48,7 +48,6 @@ namespace spark {
 
         UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
-        AC_PRINT<<"fitToSize width:"<<theWidth<<","<<theHeight<<" , scale: "<<scale;
         cml::matrix_scale_2D(myTextureUnit->matrix_, scaleX/scale, scaleY/scale);
         setSize(theWidth, theHeight);
     }
@@ -76,7 +75,6 @@ namespace spark {
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->width_, myMaterial->getTextureUnit()->getTexture()->height_);
         float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
         float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);
-        AC_PRINT<<"build width:"<<myWidth<<","<<myHeight;
         setSize(myWidth, myHeight);
     }
 }
