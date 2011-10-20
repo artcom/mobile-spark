@@ -15,6 +15,11 @@ namespace mar {
         _myTextureInfo = theTextureInfo;
     }
 
+    std::string
+    Texture::getAttributesAsString() const {
+        return (_myTextureInfo?_myTextureInfo->getAttributesAsString():"");
+    }
+
     TextureInfo::TextureInfo() :textureId_(0) {
     }    
     TextureInfo::~TextureInfo() {
@@ -30,4 +35,11 @@ namespace mar {
             textureId_ = 0;
         }
     }    
+
+    std::string
+    TextureInfo::getAttributesAsString() const {
+        return "width=\""+masl::as_string(width_)+"\" height=\""+masl::as_string(height_)+"\""
+            " transparency=\""+masl::as_string(transparency_)+"\""
+            " textureId=\""+masl::as_string(textureId_)+"\"";
+    }
 }

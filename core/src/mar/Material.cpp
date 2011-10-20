@@ -85,6 +85,12 @@ namespace mar {
         }
     }
 
+    std::string
+    Material::getAttributesAsString() const {
+        return /*"vertexShader=\""+_myVertexShader+"\" fragmentShader=\""+_myFragmentShader+"\""*/
+            "alpha=\""+masl::as_string(alpha_)+"\"";
+    }
+
     //////////////////////////////////////////////////// UnlitColoredMaterial
     UnlitColoredMaterial::UnlitColoredMaterial(){
     }
@@ -146,5 +152,10 @@ namespace mar {
         glBindAttribLocation(shaderProgram, VERTEX_TEXCOORD0_INDEX, "a_texCoord0");
     }
 
+    std::string
+    UnlitTexturedMaterial::getAttributesAsString() const {
+        return Material::getAttributesAsString() + " src=\""+_mySrc+"\""
+            " texture={"+(_myTexture?_myTexture->getAttributesAsString():"")+"}";
+    }
 }
 
