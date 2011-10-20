@@ -21,6 +21,8 @@ namespace demoapp {
             DemoApp();
             virtual ~DemoApp();
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
+            virtual void onPause();
+            virtual void onResume();
 
         private:
         	void onSwipeGesture(spark::EventPtr theEvent);
@@ -37,6 +39,9 @@ namespace demoapp {
             void onSizeChanged(spark::EventPtr theEvent);
             void onFrame(spark::EventPtr theEvent);
             void onLoadScene(spark::EventPtr theEvent);
+            void onPlaySound1(spark::EventPtr theEvent);
+            void onPlaySound2(spark::EventPtr theEvent);
+            void onPlaySound3(spark::EventPtr theEvent);
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
             void onStartSlideSwipe();
