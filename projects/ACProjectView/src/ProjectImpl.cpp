@@ -38,7 +38,7 @@ namespace acprojectview {
         }
          
         if (myTitle_I18n.size() > 0) {
-           titleComponent_->setI18nId(myTitle_I18n);           
+            titleComponent_->setI18nId(myTitle_I18n);           
         }
         if (mySubTitle_I18n.size() > 0) {
             subtitleComponent_->setI18nId(mySubTitle_I18n);
@@ -52,6 +52,10 @@ namespace acprojectview {
         myDescription->setI18nId(myI18n);*/
     }
         
+    void ProjectImpl::onResume() {
+        Transform::onResume();
+        fitToSize();
+    }
     
     void ProjectImpl::fitToSize() {
         WindowPtr myWindowPtr = boost::static_pointer_cast<Window>(getRoot());

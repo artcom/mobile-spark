@@ -73,6 +73,12 @@ namespace acprojectview {
                         
     }
 
+    void ProjectViewerImpl::onResume() {
+        Transform::onResume();
+        autoScaleImage(_image0);
+        autoScaleImage(_image1);
+        autoScaleImage(_image2);
+    }
     void ProjectViewerImpl::showProject(ProjectImplPtr currentProject) {  
         //boost::timer::timer myTimer;
          int myTextHeight = POPUP_SIZE;        

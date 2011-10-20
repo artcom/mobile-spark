@@ -29,6 +29,7 @@ namespace acprojectview {
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
             
         private:
+            virtual void onResume();
             void onProjectItem(spark::EventPtr theEvent);
             void onLanguageSwitchDe(spark::EventPtr theEvent);
             void onLanguageSwitchEn(spark::EventPtr theEvent);

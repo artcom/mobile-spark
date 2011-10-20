@@ -22,6 +22,7 @@ namespace acprojectview {
             ProjectViewerImpl(const spark::BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
             virtual ~ProjectViewerImpl();
             virtual void realize();
+            virtual void onResume();
             
             static const char * const SPARK_TYPE;             
             const static int POPUP_HEIGHT = 50;

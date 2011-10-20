@@ -163,6 +163,12 @@ namespace acprojectview {
         _myRequestManager.handleRequests(); //TODO: move to BaseApp?
     }
     
+    void ACProjectView::onResume() {
+        BaseApp::onResume();
+        vector2 myWindowDimensions = _mySparkWindow->getSize();
+        _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
+        _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
+    }
    
     void ACProjectView::onStartIdleFade() {
         _myStartScreenPtr->setVisible(true);
