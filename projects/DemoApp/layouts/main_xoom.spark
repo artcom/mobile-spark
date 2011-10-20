@@ -154,6 +154,10 @@
             <Text name="curl_error" text="" visible="false" x="10" y="500" z="21" color="[1,0,0,1]" fontsize="16"/>
             <HttpTransform name="transform_from_web" url="http://www.einsfeld.de/mobile-spark/DemoApp/remote.spark" loadDelay="5000" requestMode="GET_REPEATING" refreshInterval="10000"/>
         </Slide>
+
+        <Slide name="SoundSlide" title="Sound" subtitle="">
+            <NinePatch name="sound_button" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+        </Slide>
     </World>        
 
     <World name="3dworld">    
