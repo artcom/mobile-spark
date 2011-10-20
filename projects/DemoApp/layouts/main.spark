@@ -89,7 +89,7 @@
         </Slide>
 
         <Slide name="3DSlide" title="3D">
-            <Transform alpha="0.5" name="transform" x="100" y="10" >
+            <Transform alpha="1.0" name="transform" x="100" y="10" >
                 <Transform name="rotatetransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
                     <Shape3D name="funnyShape" src="/model"/>
                 </Transform>
@@ -154,11 +154,16 @@
             <Text name="curl_error" text="" visible="false" x="10" y="500" z="21" color="[1,0,0,1]" fontsize="16"/>
             <HttpTransform name="transform_from_web" url="http://www.einsfeld.de/mobile-spark/DemoApp/remote.spark" loadDelay="5000" requestMode="GET_REPEATING" refreshInterval="10000"/>
         </Slide>
+        <Slide name="SoundSlide" title="Sound" subtitle="">
+            <NinePatch name="sound1_button" x="220" y="500" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+            <NinePatch name="sound2_button" x="220" y="300" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+            <NinePatch name="sound3_button" x="220" y="100" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+        </Slide>
     </World>        
 
     <World name="3dworld">    
         <RenderCamera name="3dcamera" z="120" y="-20" x="10" frustum="perspective[60,20,10000]"/>    
-        <Transform sensible="false" name="transform" x="0" y="-50" z="0" scaleX="0.15" scaleY="0.15" scaleZ="0.15" alpha="0.5">
+        <Transform sensible="false" name="transform" x="0" y="-50" z="0" scaleX="0.15" scaleY="0.15" scaleZ="0.15" alpha="1.0">
             <Shape3D name="theAmazone" src="/amazone"/>
         </Transform>
     </World>            
