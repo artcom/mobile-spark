@@ -121,16 +121,16 @@ namespace spark {
             }      
         }
         if (myCreateTextureFlag) {
-            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, 0, _myFontSize,
+            TexturePtr myTexture = myMaterial->getTextureUnit()->getTexture();
+            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myTexture->textureId_, _myFontSize,
                                              _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos);                                             
             _myTextSize[0] = myTextInfo.width;
             _myTextSize[1] = myTextInfo.height;
             _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
             setSize(_myTextSize[0], _myTextSize[1]);
-            TexturePtr myTexture = myMaterial->getTextureUnit()->getTexture();
-            myTexture->width_ =  myTextInfo.width;                
-            myTexture->height_ = myTextInfo.height;                
-            myTexture->textureId_ = myTextInfo.textureID;    
+            myTexture->width_ =  myTextInfo.width;
+            myTexture->height_ = myTextInfo.height;
+            myTexture->textureId_ = myTextInfo.textureID;
             myTexture->transparency_ = true;
             if (_myCacheFlag) {
                 TextGlyphIndexMap::get().store(myKey, _myRenderedGlyphIndex);
