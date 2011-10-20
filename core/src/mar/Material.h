@@ -36,6 +36,7 @@ namespace mar {
         GLuint alphaHandle;
         std::map<std::string, std::pair<GLuint, float> > customHandlesAndValues_; //maps handle string to pair of handle and value
         bool transparency_;
+        virtual std::string getAttributesAsString() const;
 
     protected:
         Material();
@@ -88,6 +89,7 @@ namespace mar {
         virtual void initGL();
         TexturePtr getTexture() const {return _myTexture;}
         TexturePtr _myTexture;
+        virtual std::string getAttributesAsString() const;
     private:
         virtual void setShader(const std::string & theVertexShader = "", const std::string & theFragmentShader = "");
         virtual void setHandles();

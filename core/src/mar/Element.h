@@ -48,6 +48,7 @@ namespace mar {
         #ifdef iOS
         GLuint vertexArrayObject;
         #endif
+        std::string getAttributesAsString() const;
 
     protected:
         std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
