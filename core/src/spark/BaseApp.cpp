@@ -111,7 +111,7 @@ namespace spark {
         AC_DEBUG << "BaseApp::onResume";
         if (_mySparkWindow) {
             OnResumeComponentVisitor myVisitor;
-            parentFirstVisitComponents(myVisitor, _mySparkWindow);
+            childFirstVisitComponents(myVisitor, _mySparkWindow);
         }
     }
     
