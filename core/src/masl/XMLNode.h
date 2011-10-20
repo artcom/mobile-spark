@@ -25,9 +25,8 @@ namespace masl {
             XMLNode(const std::string & theXMLString);
             XMLNode(xmlNode* theNode);
             ~XMLNode();
-            void print() const;
-            std::ostream & print(std::ostream & os) const;
 
+            std::ostream & print(std::ostream & os) const;
             friend inline std::ostream& operator<<(std::ostream& os, const XMLNode& n) {
                 return n.print(os);
             }

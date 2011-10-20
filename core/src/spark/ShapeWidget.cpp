@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <iterator>
 
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include <animation/AnimationManager.h>
 
 #define DB(x) // x
@@ -41,10 +43,7 @@ namespace spark {
     ShapeWidget::prerender(MatrixStack& theCurrentMatrixStack) {
         Widget::prerender(theCurrentMatrixStack);
         if (isVisible() && customShaderValues_.size() > 0) {
-            if (updateShaderValuesCallback_) {
-                (*updateShaderValuesCallback_)();
-            }
-            _myShape->updateHandles(customShaderValues_);
+            _myShape->updateCustomHandles(customShaderValues_);
         }
     }
 
@@ -154,17 +153,13 @@ namespace spark {
         return false;
     }
 
+    //ANDROID ONLY: gl context is lost, so reset all buffers/shaders/textures to zero to create new ones
     void
     ShapeWidget::onResume() {
         Widget::onResume();
         if (_myShape) {
-            _myShape->initGL();
+            _myShape->resetGL();
         }
-    }
-
-    void 
-    ShapeWidget::setShape( mar::ShapePtr theShapePtr) {
-        _myShape = theShapePtr;
     }
 
     void
@@ -186,4 +181,12 @@ namespace spark {
         vector3 myTranslation = matrix_get_translation(_myWorldMVMatrix);
         return myTranslation[2];
     }
+
+    std::string 
+    ShapeWidget::getAttributesAsString() const {
+        return Widget::getAttributesAsString() + " origin=\""+masl::as_string(_myOrigin)+"\""
+                " originMode=\""+masl::as_string(_myOriginMode)+"\""
+                " shape={"+(_myShape?_myShape->getAttributesAsString():"")+"}";
+    }
+
 }

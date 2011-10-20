@@ -2,8 +2,12 @@
 #define _included_mobile_spark_ShapeWidget_
 
 #include "Widget.h"
-#include <mar/Shape.h>
 #include <masl/Callback.h>
+
+namespace mar {
+    class Shape;
+    typedef masl::Ptr<Shape> ShapePtr;
+}
 
 namespace spark {
 
@@ -25,10 +29,10 @@ namespace spark {
             void setSize(const vector2 & theSize);
 
             std::map<std::string, float> customShaderValues_;
-            masl::CallbackPtr updateShaderValuesCallback_;
+            virtual std::string getAttributesAsString() const;
 
         protected:
-            void setShape( mar::ShapePtr theShapePtr);
+            mar::ShapePtr _myShape;
             virtual void propagateAlpha();
             std::string vertexShader_;
             std::string fragmentShader_;
@@ -38,7 +42,6 @@ namespace spark {
                 CENTER_ORIGIN,
                 EXPLICIT_ORIGIN
             };
-            mar::ShapePtr _myShape;
             vector2 _myOrigin;
             ORIGIN_MODE _myOriginMode;
                 

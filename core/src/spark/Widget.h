@@ -23,6 +23,7 @@ namespace spark {
     public:
         Widget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Widget() = 0;
+        virtual std::string getAttributesAsString() const;
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void render(const matrix & theProjectionMatrix) const;
         virtual void realize();

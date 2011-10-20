@@ -106,7 +106,7 @@ public class NativeBinding {
     GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
       try {
-          ByteBuffer bb = extract(myBitmap, false);
+          ByteBuffer bb = extract(myBitmap);
           GLES20.glTexImage2D ( GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, myBitmap.getWidth(), myBitmap.getHeight(), 0,
                                 GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, bb );
       } catch (Exception theEx) {
@@ -128,39 +128,21 @@ public class NativeBinding {
     }
     return myResult;
   }
-  private static ByteBuffer extract(Bitmap bmp, boolean theYFlipFlag)
+  private static ByteBuffer extract(Bitmap bmp)
   {
       ByteBuffer bb = ByteBuffer.allocateDirect(bmp.getHeight() * bmp.getWidth() * 4);
       bb.order(ByteOrder.BIG_ENDIAN);
       IntBuffer ib = bb.asIntBuffer();
       // Convert ARGB -> RGBA
-      int myYStart = 0;
-      if (theYFlipFlag) {
-          myYStart =  bmp.getHeight()-1;
-      }
-      for (int y = myYStart;; )
+      int myXEnd = bmp.getWidth();
+      int myHeight = bmp.getHeight();
+      for (int y = 0; y < myHeight; ++y)
       {
-          for (int x = 0; x < bmp.getWidth(); x++)
+          for (int x = 0; x < myXEnd; ++x)
           {
-              int pix = bmp.getPixel(x, bmp.getHeight() - y - 1);
-              int alpha = ((pix >> 24) & 0xFF);
-              int red = ((pix >> 16) & 0xFF);
-              int green = ((pix >> 8) & 0xFF);
-              int blue = ((pix) & 0xFF);
-              // Make up alpha for interesting effect
-              //ib.put(red << 24 | green << 16 | blue << 8 | ((red + blue + green) / 3));
-              ib.put(red << 24 | green << 16 | blue << 8 | alpha);
-          }
-          if (!theYFlipFlag) {
-              y++;
-              if (y >= bmp.getHeight()) {
-                  break;
-              }
-          } else {
-              y--;
-              if ( y <= 0) {
-                  break;
-              }
+              int pix = bmp.getPixel(x, myHeight - y - 1);
+              int a = ((pix >> 24) & 0xFF);
+              ib.put(a | pix << 8);
           }
       }
       bb.position(0);

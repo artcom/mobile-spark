@@ -126,6 +126,24 @@ namespace spark {
     }
 
 
+    void
+    Window::dumpScene() {
+        AC_PRINT << "--------------------------SceneDump---------------------";
+        PrintNodeVisitor myVisitor;
+		childFirstVisitComponents(myVisitor, shared_from_this());
+        //std::string test ="<Window name=\"xxx\"></Window>";
+        //masl::XMLNodePtr myScene = masl::XMLNodePtr(new masl::XMLNode(test));
+        //AC_PRINT << *myScene;
+    }
+
+    std::string 
+    Window::getAttributesAsString() const {
+        return Widget::getAttributesAsString() + " width=\""+masl::as_string(_myWidth)+"\""
+            " height=\""+masl::as_string(_myHeight)+"\""
+            " fullscreenFlag=\""+masl::as_string(_myFullScreenFlag)+"\""
+            " clearColor=\""+masl::as_string(_myClearColor)+"\""
+            " orientation=\""+_myOrientation+"\"";
+    }
 
 
     //////////////picking

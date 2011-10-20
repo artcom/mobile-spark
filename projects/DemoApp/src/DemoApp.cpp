@@ -43,6 +43,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 namespace demoapp {
 
     WidgetPropertyAnimationPtr myAmazoneRotation;
+    const std::string DemoApp::BASE_URL = "http://www.einsfeld.de/mobile-spark/DemoApp/";
 
     DemoApp::DemoApp():BaseApp("DemoApp"), _myCurrentSlide(0) {
     }
@@ -120,18 +121,18 @@ namespace demoapp {
         _myErrorMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("curl_error", true));
         _myRequestManager.setOnErrorCallback(
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onErrorRequestCB)));
-        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/string.txt",
+        _myRequestManager.getRequest(BASE_URL + "/string.txt",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onTextRequestReady)));
-        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/",
+        _myRequestManager.getRequest(BASE_URL,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onGetRequestReady)));
-        _myRequestManager.headRequest("http://www.einsfeld.de/mobile-spark/assets/face-devil-grin.png",
+        _myRequestManager.headRequest(BASE_URL + "/assets/face-devil-grin.png",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onHeadRequestReady)));
-        _myRequestManager.postRequest("http://www.einsfeld.de/mobile-spark/", "id=23&value=post data",
+        _myRequestManager.postRequest(BASE_URL, "id=23&value=post data",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onPostRequestReady)));
         //data is not visible at server, not sure how this is intended to work in Request.cpp
-        _myRequestManager.putRequest("http://www.einsfeld.de/mobile-spark/", "hello world from put in DemoApp",
+        _myRequestManager.putRequest(BASE_URL, "hello world from put in DemoApp",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onPutRequestReady)));
-        _myRequestManager.deleteRequest("http://www.einsfeld.de/mobile-spark/",
+        _myRequestManager.deleteRequest(BASE_URL,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onDeleteRequestReady)));
         animation::DelayAnimationPtr myRepeatingDateRequest = animation::DelayAnimationPtr(new animation::DelayAnimation(1000));
         myRepeatingDateRequest->setLoop(true);
@@ -224,7 +225,7 @@ namespace demoapp {
     }
     void DemoApp::onRepeatingDateRequest() {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
-        _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/currentDate.php",
+        _myRequestManager.getRequest(BASE_URL + "/currentDate.php",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onDateRequestReady)));
     }
     void DemoApp::onTextRequestReady(RequestPtr theRequest) {
@@ -261,7 +262,7 @@ namespace demoapp {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
         std::string myNewSpark = theRequest->getResponseString();
         std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
-        _myRequestManager.getAllRequest("http://www.einsfeld.de/mobile-spark/assets/", assetList,
+        _myRequestManager.getAllRequest(BASE_URL + "/assets/", assetList,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAssetRequestReady)),
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onAllAssetsRequestReady)),
             "/downloads/", true, masl::REQUEST_IF_NOT_AVAILABLE);
@@ -426,10 +427,11 @@ namespace demoapp {
             animation::AnimationManager::get().play(mySequence);
             _myLoadingAnimation = mySequence;
             DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
-            _myRequestManager.getRequest("http://www.einsfeld.de/mobile-spark/scene.spark",
+            _myRequestManager.getRequest(BASE_URL + "/scene.spark",
                 masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onSparkRequestReady)),
                 "/downloads/", true, masl::REQUEST_IF_NEWER);
         }
+        _mySparkWindow->dumpScene();
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {
