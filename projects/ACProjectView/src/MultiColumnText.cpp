@@ -112,7 +112,7 @@ namespace acprojectview {
         MultiColumnTextPtr ptr = boost::static_pointer_cast<MultiColumnText>(shared_from_this());
         BaseAppPtr myBaseAppPtr = boost::dynamic_pointer_cast<BaseApp>(getRoot());
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myBaseAppPtr, 
-                "<Text name=\"text_0\" maxHeight=\"250\" fontsize=\"13\" lineHeight=\"18\"  cache=\"true\" font=\"/acswissmed.ttf\" sensible=\"false\" color=\"[1.0,1.0,1.0,1.0]\"/>"); 
+                "<Text name=\"text_" + masl::as_string(_myTextPtrs.size()) + "\" maxHeight=\"250\" fontsize=\"13\" lineHeight=\"18\"  cache=\"true\" font=\"/acswissmed.ttf\" sensible=\"false\" color=\"[1.0,1.0,1.0,1.0]\"/>"); 
         TextPtr myTextPtr = boost::static_pointer_cast<Text>(myCreated);        
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(ptr);
         myContainer->addChild(myTextPtr);
