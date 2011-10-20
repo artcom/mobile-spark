@@ -101,6 +101,8 @@ namespace demoapp {
         masl::AudioEngineSingleton::get().ae()->preloadEffect("test.wav");
         masl::AudioEngineSingleton::get().ae()->preloadEffect("test2.mp3");
         masl::AudioEngineSingleton::get().ae()->preloadEffect("test3.mp3");
+        AC_PRINT << "initial effects volume " << masl::AudioEngineSingleton::get().ae()->getEffectsVolume();
+        AC_PRINT << "initial background volume " << masl::AudioEngineSingleton::get().ae()->getBackgroundMusicVolume();
         masl::AudioEngineSingleton::get().ae()->setEffectsVolume(1.0f);
         masl::AudioEngineSingleton::get().ae()->setBackgroundMusicVolume(1.0f);
         masl::AudioEngineSingleton::get().ae()->playBackgroundMusic("background.mp3",true);

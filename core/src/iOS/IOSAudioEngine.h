@@ -9,7 +9,7 @@ namespace ios {
         IOSAudioEngine();
         virtual ~IOSAudioEngine();
 
-        void playBackgroundMusic(const char *path, bool isLoop) const;
+        void playBackgroundMusic(const std::string & theFile, bool isLoop) const;
         void stopBackgroundMusic() const;
         void pauseBackgroundMusic() const;
         void resumeBackgroundMusic() const;
@@ -22,8 +22,8 @@ namespace ios {
         void stopEffect(unsigned int nSoundId) const;
         float getEffectsVolume() const;
         void setEffectsVolume(float volume) const;
-        void preloadEffect(const char *path) const;
-        void unloadEffect(const char* path) const;
+        void preloadEffect(const std::string & theFile) const;
+        void unloadEffect(const std::string & theFile) const;
 
         void end() const;
 
