@@ -9,7 +9,6 @@ JNIEnv *env = 0;
 #ifdef ANDROID
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
-    AC_PRINT << "AudioEngine JNI_OnLoad..............................";
     gJavaVM = vm;
     return JNI_VERSION_1_6;
 }
@@ -19,7 +18,6 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 namespace masl {
 
 	static jmethodID getMethodID(const char *methodName, const char *paramCode) {
-        AC_PRINT << "getMethodId " << methodName << "  " << paramCode;
 		jmethodID ret = 0;
 		if (gJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4) != JNI_OK) {
 			AC_ERROR << "Failed to get the environment using GetEnv()";
@@ -29,9 +27,9 @@ namespace masl {
 			AC_ERROR << "Failed to get the environment using AttachCurrentThread()";
 			return 0;
 		}
-		classOfSparkViewerActivity = env->FindClass("com/artcom/mobile/demoapp/DemoApp");
+		classOfSparkViewerActivity = env->FindClass("com/artcom/mobile/Base/SparkViewerActivity");
 		if (! classOfSparkViewerActivity) {
-			AC_ERROR << "Failed to find class of com/artcom/mobile/demoapp/DemoApp";
+			AC_ERROR << "Failed to find class of com/artcom/mobile/Base/SparkViewerActivity";
 			return 0;
 		}
 		if (env != 0 && classOfSparkViewerActivity != 0) {

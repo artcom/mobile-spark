@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
+import com.artcom.mobile.Base.Sound;
 
 public class SparkViewerActivity extends Activity {
 
@@ -20,7 +21,12 @@ public class SparkViewerActivity extends Activity {
     ASLOpenGLView mView;
     private EventManager eventManager;
     private Sensors sensors;
+    private static Sound soundPlayer;
 
+    public static int playEffect(String path){
+        return soundPlayer.playEffect(path);
+    }    
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	NativeBinding.ourActivity = this;
@@ -50,6 +56,7 @@ public class SparkViewerActivity extends Activity {
 
         mView = new ASLOpenGLView(getApplication(), _myPackageExtension, myScreenWidth, myScreenHeight);
         setContentView(mView);
+        soundPlayer = new Sound(this);
 
     }
 
