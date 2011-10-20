@@ -78,6 +78,7 @@ public class TextLayouter {
             myBlockStartPos = myBlocks.get(i);
             Rect myRect = new Rect();
             while (myBlock.length() > 0 && (_myMaxHeight == 0 || myBaseLine < _myCanvasHeight)) {
+                //AC_Log.print(String.format("while blocks : %d %d %d %d", myBlock.length(), (int)_myMaxHeight, myBaseLine, _myCanvasHeight));
                 myLineWidth = 0;
                 if (_myMaxWidth == 0)  {
                     myCharacterOnLine = myBlock.length();
@@ -119,7 +120,7 @@ public class TextLayouter {
                 //AC_Log.print(String.format("createLines block %d", (System.currentTimeMillis() - myBlockStart)));
                 
             }
-            if (myBaseLine > _myCanvasHeight) {
+            if (_myMaxHeight != 0 && myBaseLine > _myCanvasHeight) {
             	break;
             } else {
                 if (i == myBlocks.size()-1) {

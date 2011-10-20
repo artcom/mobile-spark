@@ -89,7 +89,7 @@
         </Slide>
 
         <Slide name="3DSlide" title="3D">
-            <Transform alpha="0.5" name="transform" x="100" y="10" >
+            <Transform alpha="1.0" name="transform" x="100" y="10" >
                 <Transform name="rotatetransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
                     <Shape3D name="funnyShape" src="/model"/>
                 </Transform>
@@ -158,7 +158,7 @@
 
     <World name="3dworld">    
         <RenderCamera name="3dcamera" z="120" y="-20" x="10" frustum="perspective[60,20,10000]"/>    
-        <Transform sensible="false" name="transform" x="0" y="-50" z="0" scaleX="0.15" scaleY="0.15" scaleZ="0.15" alpha="0.5">
+        <Transform sensible="false" name="transform" x="0" y="-50" z="0" scaleX="0.15" scaleY="0.15" scaleZ="0.15" alpha="1.0">
             <Shape3D name="theAmazone" src="/amazone"/>
         </Transform>
     </World>            
