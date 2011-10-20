@@ -26,6 +26,7 @@ namespace spark {
 
             std::map<std::string, float> customShaderValues_;
             masl::CallbackPtr updateShaderValuesCallback_;
+            virtual std::string getAttributesAsString() const;
 
         protected:
             void setShape( mar::ShapePtr theShapePtr);

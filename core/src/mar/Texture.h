@@ -15,6 +15,7 @@ namespace mar {
             GLuint height_;
             bool transparency_;
             GLuint textureId_;        
+            std::string getAttributesAsString() const;
         
     };
     typedef masl::Ptr<TextureInfo> TextureInfoPtr;
@@ -27,6 +28,7 @@ namespace mar {
             void setTextureInfo(TextureInfoPtr theTextureInfo);
             TextureInfoPtr getTextureInfo() { return _myTextureInfo;}
             matrix matrix_;
+            std::string getAttributesAsString() const;
         private:
             TextureInfoPtr _myTextureInfo;
     };

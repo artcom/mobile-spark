@@ -35,6 +35,7 @@ namespace mar {
         float getHeight() const { return height_;};
         void setAlpha(const float theAlpha);
         std::vector<ElementPtr> elementList_;
+        virtual std::string getAttributesAsString() const;
     protected:
         bool _myTextureFlag;   //XXX does not make any sense, texture is decided at element level
         size_t _myDataPerVertex;

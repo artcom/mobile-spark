@@ -93,6 +93,16 @@ namespace mar {
         return false;        
     }
 
+    std::string
+    Shape::getAttributesAsString() const {
+        std::string s ="width=\""+masl::as_string(width_)+"\" height=\""+masl::as_string(height_)+"\""
+            " dataPerVertex=\""+masl::as_string(_myDataPerVertex)+"\"";
+        if (elementList_.size() == 1) {
+            s += " element={"+elementList_[0]->getAttributesAsString()+"}";
+        }
+        return s;
+    }
+
     /////////////////////////////////////////////////////////////RectangleShape
     RectangleShape::RectangleShape(const bool theTextureFlag, const float theWidth, const float theHeight, 
                                    const std::string & theVertexShader, const std::string & theFragmentShader, 
