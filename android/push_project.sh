@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FOLDERS="models layouts shaders textures fonts" 
+FOLDERS="models layouts shaders textures fonts sounds" 
 if [ "$#" != "0" ]; then
     FOLDERS=$*
 else

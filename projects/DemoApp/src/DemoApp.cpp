@@ -3,6 +3,7 @@
 #include <cstdlib>
 
 #include <masl/AssetProvider.h>
+#include <masl/AudioEngine.h>
 #include <masl/Callback.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
@@ -95,6 +96,10 @@ namespace demoapp {
         spark::EventCallbackPtr myLoadSceneCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLoadScene));
         spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
         myLoadButton->addEventListener(TouchEvent::PICKED, myLoadSceneCB);
+
+        spark::EventCallbackPtr mySoundCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound));
+        spark::ComponentPtr mySoundButton = _mySparkWindow->getChildByName("sound_button", true);
+        mySoundButton->addEventListener(TouchEvent::PICKED, mySoundCB);
 
 		//touch gestures
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
@@ -432,6 +437,11 @@ namespace demoapp {
                 "/downloads/", true, masl::REQUEST_IF_NEWER);
         }
         _mySparkWindow->dumpScene();
+    }
+
+    void DemoApp::onPlaySound(EventPtr theEvent) {
+        AC_PRINT << "play sound.............................";
+        AC_PRINT << "result of playEffect " << masl::AudioEngine::get().playEffect("test.wav");
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {
