@@ -37,6 +37,9 @@ namespace demoapp {
             void onSizeChanged(spark::EventPtr theEvent);
             void onFrame(spark::EventPtr theEvent);
             void onLoadScene(spark::EventPtr theEvent);
+            void onPlaySound1(spark::EventPtr theEvent);
+            void onPlaySound2(spark::EventPtr theEvent);
+            void onPlaySound3(spark::EventPtr theEvent);
 
             void centerSlideTitlesToNewCanvasSize(int theWidth, int theHeight);
             void onStartSlideSwipe();

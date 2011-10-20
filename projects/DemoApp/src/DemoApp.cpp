@@ -3,6 +3,7 @@
 #include <cstdlib>
 
 #include <masl/AssetProvider.h>
+#include <masl/AudioEngine.h>
 #include <masl/Callback.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
@@ -49,6 +50,7 @@ namespace demoapp {
     }
 
     DemoApp::~DemoApp() {
+        masl::AudioEngineSingleton::get().ae()->end();
     }
 
     void freeFunction() {
@@ -95,6 +97,24 @@ namespace demoapp {
         spark::EventCallbackPtr myLoadSceneCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLoadScene));
         spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
         myLoadButton->addEventListener(TouchEvent::PICKED, myLoadSceneCB);
+
+        masl::AudioEngineSingleton::get().ae()->preloadEffect("test.wav");
+        masl::AudioEngineSingleton::get().ae()->preloadEffect("test2.mp3");
+        masl::AudioEngineSingleton::get().ae()->preloadEffect("test3.mp3");
+        AC_PRINT << "initial effects volume " << masl::AudioEngineSingleton::get().ae()->getEffectsVolume();
+        AC_PRINT << "initial background volume " << masl::AudioEngineSingleton::get().ae()->getBackgroundMusicVolume();
+        masl::AudioEngineSingleton::get().ae()->setEffectsVolume(1.0f);
+        masl::AudioEngineSingleton::get().ae()->setBackgroundMusicVolume(1.0f);
+        masl::AudioEngineSingleton::get().ae()->playBackgroundMusic("background.mp3",true);
+        spark::EventCallbackPtr mySound1CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound1));
+        spark::EventCallbackPtr mySound2CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound2));
+        spark::EventCallbackPtr mySound3CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound3));
+        spark::ComponentPtr mySoundButton = _mySparkWindow->getChildByName("sound1_button", true);
+        mySoundButton->addEventListener(TouchEvent::PICKED, mySound1CB);
+        mySoundButton = _mySparkWindow->getChildByName("sound2_button", true);
+        mySoundButton->addEventListener(TouchEvent::PICKED, mySound2CB);
+        mySoundButton = _mySparkWindow->getChildByName("sound3_button", true);
+        mySoundButton->addEventListener(TouchEvent::PICKED, mySound3CB);
 
 		//touch gestures
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
@@ -432,6 +452,16 @@ namespace demoapp {
                 "/downloads/", true, masl::REQUEST_IF_NEWER);
         }
         _mySparkWindow->dumpScene();
+    }
+
+    void DemoApp::onPlaySound1(EventPtr theEvent) {
+        AC_PRINT << "played effect with id " << masl::AudioEngineSingleton::get().ae()->playEffect("test.wav");
+    }
+    void DemoApp::onPlaySound2(EventPtr theEvent) {
+        AC_PRINT << "played effect with id " << masl::AudioEngineSingleton::get().ae()->playEffect("test2.mp3");
+    }
+    void DemoApp::onPlaySound3(EventPtr theEvent) {
+        AC_PRINT << "played effect with id " << masl::AudioEngineSingleton::get().ae()->playEffect("test3.mp3");
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {
