@@ -2,12 +2,16 @@
 #include "ProjectMenu.h"
 #include "MultiColumnText.h"
 
+#include <cml/mathlib/matrix_transform.h>
+#include <mar/Shape.h>
+#include <mar/Material.h>
 #include <spark/Window.h>
 #include <spark/Rectangle.h>
 #include <spark/SparkComponentFactory.h>
 
 
 using namespace spark;
+using namespace mar;
 
 namespace acprojectview {
         
@@ -72,8 +76,17 @@ namespace acprojectview {
         subtitleComponent_->setMaxWidth(iconWidth-subtitleComponent_->getX()*2);
         
         boost::static_pointer_cast<Rectangle>(getChildByName("textplane"))->setSize(vector2(iconWidth, 50));
-        imageComponent_->fitToSize(iconWidth, iconHeight);
         imageComponent_->setY( 0);//(textSpace + iconHeight - scale * imageComponent_->getTextureSize()[1])/2.0);
+
+        vector2 myTextureSize = imageComponent_->getTextureSize();
+        float scaleX = iconWidth / myTextureSize[0];
+        float scaleY = iconHeight / myTextureSize[1];
+        float scale = std::max(scaleX, scaleY);
+
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(imageComponent_->getShape()->elementList_[0]->material_);
+        TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
+        cml::matrix_scale_2D(myTextureUnit->matrix_, scaleX/scale, scaleY/scale);
+        imageComponent_->setSize(iconWidth, iconHeight);
         
     }    
 }

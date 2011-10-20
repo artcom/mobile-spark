@@ -53,6 +53,7 @@ namespace acprojectview {
             void onAllReady();
             
             //idle
+            void fitToWindowSize(const spark::ImagePtr theImage);
             void initIdle();
             void updateKenBurnsShader(float theProgress);
             void onIdle();

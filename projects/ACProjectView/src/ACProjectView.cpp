@@ -1,12 +1,14 @@
 #include "ACProjectView.h"
 #include <cstdlib>
 
+#include <cml/mathlib/matrix_transform.h>
 #include <masl/Logger.h>
 #include <masl/MobileSDK.h>
 #include <masl/numeric_functions.h>
 
 #include <masl/AssetProvider.h>
 #include <mar/Shape.h>
+#include <mar/Material.h>
 
 #include <spark/Window.h>
 #include <spark/Event.h>
@@ -24,6 +26,7 @@
 
 using namespace spark;
 using namespace masl;
+using namespace mar;
 
 /////////////////////////////////////////////////////////////////////////App-Instance
 #ifdef ANDROID
@@ -165,9 +168,8 @@ namespace acprojectview {
     
     void ACProjectView::onResume() {
         BaseApp::onResume();
-        vector2 myWindowDimensions = _mySparkWindow->getSize();
-        _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
-        _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
+        fitToWindowSize(_myIdleScreenImagePtrs[0]);
+        fitToWindowSize(_myIdleScreenImagePtrs[1]);
     }
    
     void ACProjectView::onStartIdleFade() {
@@ -365,14 +367,26 @@ namespace acprojectview {
     const float ACProjectView::lt = _myKenBurnsFadeDuration/(2.0f*_myKenBurnsDuration);
     const float ACProjectView::ut = 1.0f - lt;
 
+    void ACProjectView::fitToWindowSize(const spark::ImagePtr theImage) {
+        vector2 myWindowDimensions = _mySparkWindow->getSize();
+        vector2 myTextureSize = theImage->getTextureSize();
+        float scaleX = myWindowDimensions[0] / myTextureSize[0];
+        float scaleY = myWindowDimensions[1] / myTextureSize[1];
+        float scale = std::max(scaleX, scaleY);
+
+        UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(theImage->getShape()->elementList_[0]->material_);
+        TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
+        cml::matrix_scale_2D(myTextureUnit->matrix_, scaleX/scale, scaleY/scale);
+        theImage->setSize(myWindowDimensions);
+    }
+
     void ACProjectView::initIdle() {
         AC_DEBUG << "init idle";
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         _myIdleScreenImagePtrs.push_back(boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage_1", true)));
         _myIdleScreenImagePtrs.push_back(boost::static_pointer_cast<spark::Image>(_mySparkWindow->getChildByName("2dworld")->getChildByName("idleimage_2", true)));
-        vector2 myWindowDimensions = _mySparkWindow->getSize();
-        _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
-        _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
+        fitToWindowSize(_myIdleScreenImagePtrs[0]);
+        fitToWindowSize(_myIdleScreenImagePtrs[1]);
         _myIdleDelay = animation::DelayAnimationPtr(new animation::DelayAnimation(_myIdleTime));
         _myIdleDelay->setOnFinish(masl::CallbackPtr(new ACProjectViewCB(ptr, &ACProjectView::onIdle)));
         spark::EventCallbackPtr myTouchCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onTouch));
@@ -413,9 +427,8 @@ namespace acprojectview {
     void ACProjectView::onKenBurnsImageFadeStart() {
         AC_TRACE << "_____________________________________ fade start, load to " << (firstIdleImageVisible_?1:0);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/downloads/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
-        vector2 myWindowDimensions = _mySparkWindow->getSize();
-        _myIdleScreenImagePtrs[0]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
-        _myIdleScreenImagePtrs[1]->fitToSize(myWindowDimensions[0], myWindowDimensions[1]);
+        fitToWindowSize(_myIdleScreenImagePtrs[0]);
+        fitToWindowSize(_myIdleScreenImagePtrs[1]);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(true);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setAlpha(0.0f);
         animation::ParallelAnimationPtr myFadeAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
