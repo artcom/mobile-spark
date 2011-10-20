@@ -12,7 +12,6 @@ namespace spark {
     public:
         Statistic(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Statistic();
-        virtual void onPause();
         virtual void onFrame(EventPtr theEvent);
         virtual void realize();
 

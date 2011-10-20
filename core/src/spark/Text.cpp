@@ -56,28 +56,6 @@ namespace spark {
         AC_INFO << "....destructor text " << getName();
     }
 
-    void
-    Text::realize() {
-        I18nShapeWidget::realize();
-    }
-    
-    void
-    Text::onPause() {
-        I18nShapeWidget::onPause();
-        if (getShape()) {
-            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            mar::TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
-            myTextureUnit->getTexture()->unbind();
-        }
-    }
-    
-    void
-    Text::onResume() {
-        I18nShapeWidget::onResume();
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-        _myDirtyFlag = true;
-    }
-
     //TODO maybe remove textSize member
     const vector2 &
     Text::getTextSize() {

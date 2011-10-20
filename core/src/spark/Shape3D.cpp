@@ -18,7 +18,6 @@ namespace spark {
     void
     Shape3D::onResume() {
         ShapeWidget::onResume();
-        _myDirtyFlag = true;
     }
 
     void

@@ -21,11 +21,6 @@ namespace spark {
     }
 
     void
-    Statistic::onPause() {
-        Transform::onPause();
-    }
-
-    void
     Statistic::realize() {
         Transform::realize();
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
