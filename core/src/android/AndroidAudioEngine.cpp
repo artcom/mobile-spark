@@ -18,15 +18,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 
 namespace android {
 
-    AndroidAudioEngine::AndroidAudioEngine(const std::string & theJavaActivity)
-        : AudioEngine()
-    {
-    }
-
-    AndroidAudioEngine::~AndroidAudioEngine() {
-    }
-
-	static jmethodID getMethodID(const char *methodName, const char *paramCode) {
+	static jmethodID getMethodID(const std::string & theJavaActivity, const char *methodName, const char *paramCode) {
 		jmethodID ret = 0;
 		if (gJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4) != JNI_OK) {
 			AC_ERROR << "Failed to get the environment using GetEnv()";
@@ -36,9 +28,9 @@ namespace android {
 			AC_ERROR << "Failed to get the environment using AttachCurrentThread()";
 			return 0;
 		}
-		classOfSparkViewerActivity = env->FindClass("com/artcom/mobile/Base/SparkViewerActivity");
+		classOfSparkViewerActivity = env->FindClass(theJavaActivity.c_str());
 		if (! classOfSparkViewerActivity) {
-			AC_ERROR << "Failed to find class of com/artcom/mobile/Base/SparkViewerActivity";
+			AC_ERROR << "Failed to find class of " << theJavaActivity.c_str();
 			return 0;
 		}
 		if (env != 0 && classOfSparkViewerActivity != 0) {
@@ -50,13 +42,22 @@ namespace android {
 		return ret;
 	}
 
+
+    AndroidAudioEngine::AndroidAudioEngine(const std::string & theJavaActivity)
+        : AudioEngine(), javaActivity_(theJavaActivity)
+    {
+    }
+
+    AndroidAudioEngine::~AndroidAudioEngine() {
+    }
+
     unsigned int
     AndroidAudioEngine::playEffect(const std::string & theFile) const {
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "play Effect " << myFoundFile;
 		int ret = 0;
 		// int playEffect(String)
-		jmethodID playEffectMethodID = getMethodID("playEffect", "(Ljava/lang/String;)I");
+		jmethodID playEffectMethodID = getMethodID(javaActivity_, "playEffect", "(Ljava/lang/String;)I");
 		if (playEffectMethodID) {
 			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
 			ret = env->CallStaticIntMethod(classOfSparkViewerActivity, playEffectMethodID, StringArg);
