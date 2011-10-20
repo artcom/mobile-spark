@@ -97,9 +97,15 @@ namespace demoapp {
         spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
         myLoadButton->addEventListener(TouchEvent::PICKED, myLoadSceneCB);
 
-        spark::EventCallbackPtr mySoundCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound));
-        spark::ComponentPtr mySoundButton = _mySparkWindow->getChildByName("sound_button", true);
-        mySoundButton->addEventListener(TouchEvent::PICKED, mySoundCB);
+        spark::EventCallbackPtr mySound1CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound1));
+        spark::EventCallbackPtr mySound2CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound2));
+        spark::EventCallbackPtr mySound3CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound3));
+        spark::ComponentPtr mySoundButton = _mySparkWindow->getChildByName("sound1_button", true);
+        mySoundButton->addEventListener(TouchEvent::PICKED, mySound1CB);
+        mySoundButton = _mySparkWindow->getChildByName("sound2_button", true);
+        mySoundButton->addEventListener(TouchEvent::PICKED, mySound2CB);
+        mySoundButton = _mySparkWindow->getChildByName("sound3_button", true);
+        mySoundButton->addEventListener(TouchEvent::PICKED, mySound3CB);
 
 		//touch gestures
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
@@ -439,9 +445,14 @@ namespace demoapp {
         _mySparkWindow->dumpScene();
     }
 
-    void DemoApp::onPlaySound(EventPtr theEvent) {
-        AC_PRINT << "play sound.............................";
+    void DemoApp::onPlaySound1(EventPtr theEvent) {
         AC_PRINT << "result of playEffect " << masl::AudioEngine::get().playEffect("test.wav");
+    }
+    void DemoApp::onPlaySound2(EventPtr theEvent) {
+        AC_PRINT << "result of playEffect " << masl::AudioEngine::get().playEffect("test2.mp3");
+    }
+    void DemoApp::onPlaySound3(EventPtr theEvent) {
+        AC_PRINT << "result of playEffect " << masl::AudioEngine::get().playEffect("test3.mp3");
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {
