@@ -161,11 +161,12 @@ public class Music {
         MediaPlayer mediaPlayer = null;
         
         try{            
-            AssetFileDescriptor assetFileDescritor = mContext.getAssets().openFd(path);
+            //AssetFileDescriptor assetFileDescritor = mContext.getAssets().openFd(path);
             
             mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(assetFileDescritor.getFileDescriptor(), 
-                    assetFileDescritor.getStartOffset(), assetFileDescritor.getLength());
+            //mediaPlayer.setDataSource(assetFileDescritor.getFileDescriptor(), 
+            //        assetFileDescritor.getStartOffset(), assetFileDescritor.getLength());
+            mediaPlayer.setDataSource(path);
             mediaPlayer.prepare();
             
             mediaPlayer.setVolume(mLeftVolume, mRightVolume);
