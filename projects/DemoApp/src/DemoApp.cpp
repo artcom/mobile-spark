@@ -50,6 +50,7 @@ namespace demoapp {
     }
 
     DemoApp::~DemoApp() {
+        masl::AudioEngineSingleton::get().ae()->end();
     }
 
     void freeFunction() {
@@ -97,6 +98,12 @@ namespace demoapp {
         spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
         myLoadButton->addEventListener(TouchEvent::PICKED, myLoadSceneCB);
 
+        masl::AudioEngineSingleton::get().ae()->preloadEffect("test.wav");
+        masl::AudioEngineSingleton::get().ae()->preloadEffect("test2.mp3");
+        masl::AudioEngineSingleton::get().ae()->preloadEffect("test3.mp3");
+        masl::AudioEngineSingleton::get().ae()->setEffectsVolume(1.0f);
+        masl::AudioEngineSingleton::get().ae()->setBackgroundMusicVolume(1.0f);
+        masl::AudioEngineSingleton::get().ae()->playBackgroundMusic("background.mp3",true);
         spark::EventCallbackPtr mySound1CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound1));
         spark::EventCallbackPtr mySound2CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound2));
         spark::EventCallbackPtr mySound3CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound3));
@@ -446,13 +453,13 @@ namespace demoapp {
     }
 
     void DemoApp::onPlaySound1(EventPtr theEvent) {
-        AC_PRINT << "result of playEffect " << masl::AudioEngineSingleton::get().ae()->playEffect("test.wav");
+        AC_PRINT << "played effect with id " << masl::AudioEngineSingleton::get().ae()->playEffect("test.wav");
     }
     void DemoApp::onPlaySound2(EventPtr theEvent) {
-        AC_PRINT << "result of playEffect " << masl::AudioEngineSingleton::get().ae()->playEffect("test2.mp3");
+        AC_PRINT << "played effect with id " << masl::AudioEngineSingleton::get().ae()->playEffect("test2.mp3");
     }
     void DemoApp::onPlaySound3(EventPtr theEvent) {
-        AC_PRINT << "result of playEffect " << masl::AudioEngineSingleton::get().ae()->playEffect("test3.mp3");
+        AC_PRINT << "played effect with id " << masl::AudioEngineSingleton::get().ae()->playEffect("test3.mp3");
     }
 
     void DemoApp::onLanguageSwitch(EventPtr theEvent) {
