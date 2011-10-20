@@ -19,6 +19,8 @@ namespace android {
         virtual ~AndroidAudioEngine();
 
         unsigned int playEffect(const std::string & theFile) const;
+    private:
+        std::string javaActivity_;
     };
 
     typedef masl::Ptr<AndroidAudioEngine> AndroidAudioEnginePtr;
