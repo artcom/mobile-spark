@@ -25,11 +25,6 @@ namespace spark {
     }
 
     void
-    Camera::realize() {
-        ShapeWidget::realize();
-    }
-
-    void
     Camera::onPause() {
         ShapeWidget::onPause();
         if (masl::MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
@@ -64,6 +59,7 @@ namespace spark {
         }
     }
 
+    //TODO: setTexCoords vs resume
     void
     Camera::setGeometry() {
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());

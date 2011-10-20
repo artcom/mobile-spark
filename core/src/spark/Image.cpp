@@ -23,25 +23,8 @@ namespace spark {
     }
 
     void
-    Image::realize() {
-        I18nShapeWidget::realize();
-    }
-
-    //XXX: onPause & onResume both unbind texture
-    void
-    Image::onPause() {
-        I18nShapeWidget::onPause();
-        if (getShape()) {
-            UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            TextureUnitPtr myTextureUnit = myMaterial->getTextureUnit();
-            myTextureUnit->getTexture()->unbind();
-        }
-    }
-
-    void
     Image::onResume() {
         I18nShapeWidget::onResume();
-        _myDirtyFlag = true;
         if (getShape()) {
             fitToSize(getShape()->getWidth(), getShape()->getHeight());
         }
@@ -92,7 +75,7 @@ namespace spark {
             _myShape = createCustomShape(myMaterial);
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            //XXX:if not caching always generates a new Texture, setSrc would be enough
+            //XXX:not caching always generates a new Texture, setSrc would be enough
             TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag);
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }

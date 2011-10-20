@@ -8,9 +8,7 @@ namespace spark {
     public:
         Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Image();
-        virtual void onPause();
         virtual void onResume();
-        virtual void realize();
         const std::string & getSrc() const {return data_;};
         void setSrc(const std::string & theSrc);
         void fitToSize(const float theWidth, const float theHeight);

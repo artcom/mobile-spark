@@ -11,7 +11,6 @@ namespace spark {
         virtual ~Camera();
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onPause();
-        virtual void realize();
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Camera::SPARK_TYPE;};

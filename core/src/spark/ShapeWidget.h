@@ -20,6 +20,7 @@ namespace spark {
             
             virtual void prerender(MatrixStack& theCurrentMatrixStack);
             virtual void render(const matrix & theP) const;
+            virtual void onPause();
             virtual void onResume();
 
             virtual bool AABB2Dcontains(const float x, const float y,

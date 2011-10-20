@@ -109,13 +109,10 @@ namespace acprojectview {
     
     TextPtr 
     MultiColumnText::createNewColumn() {
-        MultiColumnTextPtr ptr = boost::static_pointer_cast<MultiColumnText>(shared_from_this());
-        BaseAppPtr myBaseAppPtr = boost::dynamic_pointer_cast<BaseApp>(getRoot());
-        ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myBaseAppPtr, 
+        ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(getApp(), 
                 "<Text name=\"text_" + masl::as_string(_myTextPtrs.size()) + "\" maxHeight=\"250\" fontsize=\"13\" lineHeight=\"18\"  cache=\"true\" font=\"/acswissmed.ttf\" sensible=\"false\" color=\"[1.0,1.0,1.0,1.0]\"/>"); 
+        addChild(myCreated);
         TextPtr myTextPtr = boost::static_pointer_cast<Text>(myCreated);        
-        ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(ptr);
-        myContainer->addChild(myTextPtr);
         return myTextPtr;
     }
      

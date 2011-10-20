@@ -20,9 +20,6 @@ namespace spark {
     public:
         Text(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Text();
-        virtual void onPause();
-        virtual void onResume();
-        virtual void realize();
         
         void setText(const std::string & theText) { data_ = theText; _myDirtyFlag = true;};
         void setMaxWidth(int theMaxWidth) {_myMaxWidth = theMaxWidth; _myDirtyFlag = true;};

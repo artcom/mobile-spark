@@ -32,8 +32,11 @@ namespace spark {
         virtual void realize() {AC_INFO << "realize " << *this;};
         void realizeASync();
         const bool isAllRealized() const { return _myRealizedAllChildrenFlag;}
-        virtual void onPause() {AC_INFO << "onPause " << *this;};
+
+        //currently only used in ANDROID, to handle the loss of the GL context when going in background
+        virtual void onPause() {};
         virtual void onResume() {};
+
         virtual void prerender(MatrixStack& theCurrentMatrixStack) {};
         virtual void render(const matrix & theProjectionMatrix) const {};
 
