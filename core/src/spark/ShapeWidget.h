@@ -7,6 +7,8 @@
 namespace mar {
     class Shape;
     typedef masl::Ptr<Shape> ShapePtr;
+    class Material;
+    typedef masl::Ptr<Material> MaterialPtr;
 }
 
 namespace spark {
@@ -32,6 +34,7 @@ namespace spark {
             virtual std::string getAttributesAsString() const;
 
         protected:
+            virtual mar::ShapePtr createCustomShape(const mar::MaterialPtr theMaterial);
             mar::ShapePtr _myShape;
             virtual void propagateAlpha();
             std::string vertexShader_;

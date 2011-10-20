@@ -1,9 +1,7 @@
 #ifndef _included_mobile_spark_Image_
 #define _included_mobile_spark_Image_
 
-#include "ShapeWidget.h"
 #include "I18nShapeWidget.h"
-#include "Event.h"
 
 namespace spark {
     class Image : public I18nShapeWidget {

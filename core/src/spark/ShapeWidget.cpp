@@ -39,6 +39,12 @@ namespace spark {
 
     ShapeWidget::~ShapeWidget() {}
 
+    mar::ShapePtr
+    ShapeWidget::createCustomShape(const mar::MaterialPtr theMaterial) {
+        return mar::ShapePtr(new mar::RectangleShape(theMaterial));
+    }
+
+
     void 
     ShapeWidget::prerender(MatrixStack& theCurrentMatrixStack) {
         Widget::prerender(theCurrentMatrixStack);

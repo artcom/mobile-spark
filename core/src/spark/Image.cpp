@@ -76,7 +76,6 @@ namespace spark {
         setSize(theWidth, theHeight);
     }
 
-    
     void
     Image::build() {
         I18nShapeWidget::build();
@@ -90,7 +89,7 @@ namespace spark {
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
             myMaterial->setCustomHandles(customShaderValues_);
             myMaterial->setShader(vertexShader_, fragmentShader_); 
-            _myShape = ShapePtr(new RectangleShape(myMaterial));
+            _myShape = createCustomShape(myMaterial);
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             //XXX:if not caching always generates a new Texture, setSrc would be enough
