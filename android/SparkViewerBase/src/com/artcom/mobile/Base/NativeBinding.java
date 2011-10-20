@@ -135,33 +135,38 @@ public class NativeBinding {
       IntBuffer ib = bb.asIntBuffer();
       // Convert ARGB -> RGBA
       int myYStart = 0;
-      if (theYFlipFlag) {
-          myYStart =  bmp.getHeight()-1;
-      }
-      for (int y = myYStart;; )
+      int myXEnd = bmp.getWidth();
+      int myHeight = bmp.getHeight();
+      //if (theYFlipFlag) {
+      //    myYStart =  bmp.getHeight()-1;
+      //}
+      for (int y = myYStart; y < myHeight; )
       {
-          for (int x = 0; x < bmp.getWidth(); x++)
+          for (int x = 0; x < myXEnd; ++x)
           {
-              int pix = bmp.getPixel(x, bmp.getHeight() - y - 1);
-              int alpha = ((pix >> 24) & 0xFF);
-              int red = ((pix >> 16) & 0xFF);
-              int green = ((pix >> 8) & 0xFF);
-              int blue = ((pix) & 0xFF);
-              // Make up alpha for interesting effect
-              //ib.put(red << 24 | green << 16 | blue << 8 | ((red + blue + green) / 3));
-              ib.put(red << 24 | green << 16 | blue << 8 | alpha);
+              int pix = bmp.getPixel(x, myHeight - y - 1);
+              int a = ((pix >> 24) & 0xFF);
+              ib.put(a | pix << 8);
+              //int alpha = ((pix >> 24) & 0xFF);
+              //int red = ((pix >> 16) & 0xFF);
+              //int green = ((pix >> 8) & 0xFF);
+              //int blue = ((pix) & 0xFF);
+              //// Make up alpha for interesting effect
+              ////ib.put(red << 24 | green << 16 | blue << 8 | ((red + blue + green) / 3));
+              //ib.put(red << 24 | green << 16 | blue << 8 | alpha);
           }
-          if (!theYFlipFlag) {
-              y++;
-              if (y >= bmp.getHeight()) {
-                  break;
-              }
-          } else {
-              y--;
-              if ( y <= 0) {
-                  break;
-              }
-          }
+          ++y;
+          //if (!theYFlipFlag) {
+          //    y++;
+          //    if (y >= bmp.getHeight()) {
+          //        break;
+          //    }
+          //} else {
+          //    y--;
+          //    if ( y <= 0) {
+          //        break;
+          //    }
+          //}
       }
       bb.position(0);
       return bb;
