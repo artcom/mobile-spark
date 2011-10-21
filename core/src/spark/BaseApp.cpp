@@ -66,7 +66,9 @@ namespace spark {
         //init animationManager with setup-time
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
+#ifdef ANDROID
         assetProviderSetup(theAssetPath, appPath_);
+#endif
 #ifdef iOS
         MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
 #endif

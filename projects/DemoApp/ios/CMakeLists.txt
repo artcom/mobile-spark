@@ -59,6 +59,8 @@ ADD_FRAMEWORK(${EXECUTABLE_NAME} CoreMedia)
 ADD_FRAMEWORK(${EXECUTABLE_NAME} CoreVideo)
 ADD_FRAMEWORK(${EXECUTABLE_NAME} CoreText)
 ADD_FRAMEWORK(${EXECUTABLE_NAME} AVFoundation)
+ADD_FRAMEWORK(${EXECUTABLE_NAME} OpenAL)
+ADD_FRAMEWORK(${EXECUTABLE_NAME} AudioToolbox)
 
 #Link libraries
 target_link_libraries(${EXECUTABLE_NAME} DemoApp)
@@ -138,6 +140,15 @@ add_custom_command(
     POST_BUILD 
     COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
+
+#copy sounds folder
+set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/sounds)
+add_custom_command( 
+    TARGET ${EXECUTABLE_NAME} 
+    POST_BUILD 
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
+)
+
 
 #copy core/shaders folder
 set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/../../core/shaders)

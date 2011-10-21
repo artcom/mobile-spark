@@ -1,68 +1,78 @@
 #include "IOSAudioEngine.h"
 #include <masl/AssetProvider.h>
+#include "CDAudioManager.h"
+
+#include <masl/CallStack.h>
 
 namespace ios
 {
+    CDBufferManager *bufferManager=nil;
+    CDSoundEngine* soundEngine=nil;
+    CDAudioManager *am=nil;
+
     IOSAudioEngine::IOSAudioEngine()
     : AudioEngine()
     {
+        am = [CDAudioManager sharedManager];
+		soundEngine = am.soundEngine;
+		bufferManager = [[CDBufferManager alloc] initWithEngine:soundEngine];
     }
 
     IOSAudioEngine::~IOSAudioEngine()
     {
+        am = nil;
+        soundEngine = nil;
+        bufferManager = nil;
     }
 
 	void 
     IOSAudioEngine::playBackgroundMusic(const std::string & theFile, bool isLoop) const {
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
+        NSString *iosFileName = [NSString stringWithCString:myFoundFile.c_str() encoding:NSUTF8StringEncoding];
         AC_DEBUG << "playBackgroundMusic " << myFoundFile;
-        //TODO
+        [am playBackgroundMusic:iosFileName loop:isLoop];
 	}
 
 	void 
     IOSAudioEngine::stopBackgroundMusic() const {
         AC_DEBUG << "stopBackgroundMusic";
-        //TODO
+        [am stopBackgroundMusic];
 	}
 
 	void 
     IOSAudioEngine::pauseBackgroundMusic() const {
         AC_DEBUG << "pauseBackgroundMusic";
-        //TODO
+        [am pauseBackgroundMusic];
 	}
 
 	void 
     IOSAudioEngine::resumeBackgroundMusic() const {
         AC_DEBUG << "resumeBackgroundMusic";
-        //TODO
+        [am resumeBackgroundMusic];
 	}
 
 	void 
     IOSAudioEngine::rewindBackgroundMusic() const {
         AC_DEBUG << "rewindBackgroundMusic";
-        //TODO
+        [am rewindBackgroundMusic];
 	}
 
 	bool 
     IOSAudioEngine::isBackgroundMusicPlaying() const {
         AC_DEBUG << "isBackgroundMusicPlaying";
-		bool ret = false;
-        //TODO
-		return ret;
-	}
+        return [am isBackgroundMusicPlaying];
+    }
 
 	float 
     IOSAudioEngine::getBackgroundMusicVolume() const {
         AC_DEBUG << "getBackgroundMusicVolume";
-		float ret = 0.0;
-        //TODO
-		return ret;
-	}
+        return am.backgroundMusic.volume;
+    }
 
 	void 
     IOSAudioEngine::setBackgroundMusicVolume(float volume) const {
         AC_DEBUG << "setBackgroundMusicVolume " << volume;
-        //TODO
+        am.backgroundMusic.volume = volume;
 	}
 
 
@@ -72,50 +82,58 @@ namespace ios
     IOSAudioEngine::playEffect(const std::string & theFile) const {
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "play Effect " << myFoundFile;
-		int ret = 0;
-        //TODO
-		return (unsigned int)ret;
+		NSString *iosFileName = [NSString stringWithCString:myFoundFile.c_str() encoding:NSUTF8StringEncoding];
+
+        int soundId = [bufferManager bufferForFile:iosFileName create:YES];
+        if (soundId != kCDNoBuffer) {
+            return [soundEngine playSound:soundId sourceGroupId:0 pitch:1 pan:0 gain:1 loop:false];
+        } else {
+            return CD_MUTE;
+        }	
     }
 
 	void 
     IOSAudioEngine::stopEffect(unsigned int nSoundId) const {
         AC_DEBUG << "stop Effect with soundId" << nSoundId;
-        //TODO
+        [soundEngine stopSound:nSoundId];
 	}
 
 	float 
     IOSAudioEngine::getEffectsVolume() const {
         AC_DEBUG << "getEffectsVolume";
-		float ret = -1.0;
-        //TODO
-		return ret;
+        return am.soundEngine.masterGain;
 	}
 
 	void 
     IOSAudioEngine::setEffectsVolume(float volume) const {
         AC_DEBUG << "setEffectsVolume " << volume;
-        //TODO
+        am.soundEngine.masterGain = volume;
 	}
 
 	void 
     IOSAudioEngine::preloadEffect(const std::string & theFile) const {
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
+        NSString *iosFileName = [NSString stringWithCString:myFoundFile.c_str() encoding:NSUTF8StringEncoding];
         AC_DEBUG << "preload Effect " << myFoundFile;
-        //TODO
+        int soundId = [bufferManager bufferForFile:iosFileName create:YES];
+        if (soundId == kCDNoBuffer) AC_ERROR << "Denshion::SimpleAudioEngine sound failed to preload "<< iosFileName;
 	}
 
 	void 
     IOSAudioEngine::unloadEffect(const std::string & theFile) const {
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
-        AC_DEBUG << "unload Effect " << myFoundFile;
-        //TODO
-	}
+        NSString *iosFileName = [NSString stringWithCString:myFoundFile.c_str() encoding:NSUTF8StringEncoding];
+        AC_DEBUG << "unload Effect " << iosFileName;
+        [bufferManager releaseBufferForFile:iosFileName];	
+    }
     
 
 	void 
     IOSAudioEngine::end() const {
         AC_DEBUG << "end";
-        //TODO
+        am = nil;
+        [CDAudioManager end];
+        [bufferManager release];
 	}
 
 }
