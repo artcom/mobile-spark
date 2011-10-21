@@ -54,8 +54,8 @@ namespace acprojectview {
 
     
         spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
-        _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, true);
-        _myPopUpPfeil->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, true);
+        _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, Event::BUBBLING);
+        _myPopUpPfeil->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, Event::BUBBLING);
             
         _myWindowPtr = boost::static_pointer_cast<Window>(getRoot());                
         _myWidth = _myWindowPtr->getSize()[0];
