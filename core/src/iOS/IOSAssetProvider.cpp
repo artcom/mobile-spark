@@ -97,4 +97,9 @@ namespace ios
         myfile.write(&theData[0],theData.size());
         myfile.close();
     }
+    
+    std::string IOSAssetProvider::getDownloadPath() const {
+        return getAssetPath()+"/../../Documents/downloads/";
+    }
+    
 }

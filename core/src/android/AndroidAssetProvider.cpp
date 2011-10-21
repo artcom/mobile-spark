@@ -105,5 +105,10 @@ namespace android {
         myfile.write(&theData[0],theData.size());
         myfile.close();
     }
+    
+    std::string AndroidAssetProvider::getDownloadPath() const {
+        return getAssetPath() + "/downloads/";
+    }
+    
 }
 

@@ -16,6 +16,9 @@ public:
     virtual void addIncludePath(const std::string & thePath)  { includePaths_.push_back(_myAssetFolderPath + "/"+thePath); };
     virtual void storeInFile(const std::string & theFileName, const std::string & theData);
     virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData);
+    
+    virtual std::string getDownloadPath() const;
+
 private:
     const std::string _myAssetFolderPath;
 };

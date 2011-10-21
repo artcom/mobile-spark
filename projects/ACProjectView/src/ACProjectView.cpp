@@ -393,7 +393,7 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/", idleFiles_, ".png");
+        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getDownloadPath(), idleFiles_, ".png");
         onIdle();
     }
 
