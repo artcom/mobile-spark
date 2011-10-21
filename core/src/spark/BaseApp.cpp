@@ -74,7 +74,7 @@ namespace spark {
 #endif
     }
 
-    void BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
+    void BaseApp::loadLayoutAndRegisterEvents(int theScreenWidth, int theScreenHeight, const std::string & theBaseName) {
         bool dummy;
         std::string myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight, dummy);
         //load layout
@@ -149,7 +149,7 @@ namespace spark {
     std::string
     findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
         AC_PRINT << "......... findBestMatchedLayout for baseName: " << theBaseName << " with screen resolution: " << theScreenWidth << "/" << theScreenHeight;
-        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath(theBaseName);
+        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath("/layouts/", theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
         std::string myBestMatch = "";
@@ -164,7 +164,7 @@ namespace spark {
         std::string myLayoutName = "";
         for (unsigned int i = 0; i < myFiles.size(); i++) {
             if (getExtension(myFiles[i]) == "spark") {
-                std::string myChoice = getDirectoryPart(theBaseName) + getFilenamePart(myFiles[i]);
+                std::string myChoice = "/"+ getFilenamePart(myFiles[i]);
                 std::string myLayout = masl::AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);
                 XMLNodePtr myNode(new XMLNode(myLayout));
                 if (myNode->nodeName == "Window") {

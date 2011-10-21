@@ -35,7 +35,7 @@ namespace templateapp {
     void TemplateApp::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         TemplateAppComponentMapInitializer::init();
-        loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
+        loadLayoutAndRegisterEvents(theScreenWidth, theScreenHeight);
     }
 
 }
