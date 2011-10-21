@@ -42,7 +42,6 @@ namespace spark {
     class OnResumeComponentVisitor : public ComponentVisitor {
     public:
         virtual bool visit(ComponentPtr theComponent);
-        virtual bool preCheck(ComponentPtr theComponent);
     };
 
     class ReparentComponentVisitor : public ComponentVisitor {
