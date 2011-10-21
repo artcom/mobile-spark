@@ -97,7 +97,7 @@ namespace android {
     bool searchFile(zip* theAPKArchive, const string & theFileName, zip_file* file, const bool theForce) {
         if (!theAPKArchive) {
             AC_ERROR << "apk broken";
-            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
+            throw APKLoadingException("apk broken ", PLUS_FILE_LINE);
         }
         file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
         if (!file) {
@@ -108,6 +108,21 @@ namespace android {
             return false;
         }
         return true;
+    }
+
+    void getDirectoryEntries(zip* theAPKArchive, const std::string & thePath, std::vector<std::string> & theDirEntries, const std::string & theFilter) {
+        if (!theAPKArchive) {
+            AC_ERROR << "apk broken";
+            throw APKLoadingException("apk broken ", PLUS_FILE_LINE);
+        }
+        int numfilesInZip = zip_get_num_files(theAPKArchive);
+        for (int i = 0; i < numfilesInZip; ++i) {
+            std::string s = zip_get_name(theAPKArchive, i, ZIP_FL_UNCHANGED);
+            AC_DEBUG << s;
+            if (s.find("assets/"+thePath) == 0) {
+                theDirEntries.push_back(s);
+            }
+        }
     }
 }
 

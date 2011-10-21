@@ -55,7 +55,7 @@ namespace acprojectview {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         ACProjectViewComponentMapInitializer::init();        
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
+        loadLayoutAndRegisterEvents(theScreenWidth, theScreenHeight);
 
         spark::TextPtr myGermanButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("deutsch", true));
         spark::TextPtr myEnglishButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("english", true));
@@ -393,7 +393,7 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getDownloadPath(), idleFiles_, ".png");
+        idleFiles_ = masl::AssetProviderSingleton::get().ap()->getFilesFromPath(masl::AssetProviderSingleton::get().ap()->getDownloadsFolder(), ".png");
         onIdle();
     }
 

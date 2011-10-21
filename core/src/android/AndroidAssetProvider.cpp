@@ -106,9 +106,27 @@ namespace android {
         myfile.close();
     }
     
-    std::string AndroidAssetProvider::getDownloadPath() const {
-        return getAssetPath() + "/downloads/";
+    std::string AndroidAssetProvider::getDownloadsPath() const {
+        return getAssetPath() + getDownloadsFolder();
+    }
+
+    std::string AndroidAssetProvider::getDownloadsFolder() const {
+        return "/downloads/";
     }
     
+    //if theForceOnlyInBundle_APK: get only files from apk
+    //if !theForceOnlyInBundle_APK: get files form sdcard. If there are none, get files from apk.
+    std::vector<std::string>
+    AndroidAssetProvider::getFilesFromPath(const std::string & thePath, const std::string & thePattern, const bool theForceOnlyInBundle_APK) const {
+        std::vector<std::string> myFiles;
+        if (!theForceOnlyInBundle_APK) {
+            myFiles = AssetProvider::getFilesFromPath(thePath, thePattern);
+        }
+        if (myFiles.size() == 0) {
+            android::getDirectoryEntries(_myApkArchive, thePath, myFiles, thePattern);
+        }
+        return myFiles;
+    }
+
 }
 

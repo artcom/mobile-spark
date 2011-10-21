@@ -18,10 +18,11 @@ namespace masl {
         virtual void storeInFile(const std::string & theFileName, const std::string & theData) = 0;
         virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData) = 0;
 
-        virtual std::vector<std::string> getFilesFromPath(const std::string & theBasePath) const;
+        virtual std::vector<std::string> getFilesFromPath(const std::string & thePath, const std::string & thePattern = "", const bool theForceOnlyInBundle_APK = false) const;
         virtual std::string findFile(const std::string & theFilename) const;
         virtual std::string getAssetPath() const { return assetPath_; };
-        virtual std::string getDownloadPath() const = 0;
+        virtual std::string getDownloadsPath() const = 0;
+        virtual std::string getDownloadsFolder() const = 0;
 
     protected:
         std::vector<std::string> includePaths_;

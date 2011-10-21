@@ -22,7 +22,7 @@ namespace spark {
 
             virtual void setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight);
             bool isSetup() const {return _mySetupFlag;}
-            void loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight);
+            void loadLayoutAndRegisterEvents(int theScreenWidth, int theScreenHeight, const std::string & theBaseName = "main");
             virtual void onFrame(EventPtr theEvent);
             virtual void onPause();
             virtual void onResume();

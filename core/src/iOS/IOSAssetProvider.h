@@ -17,7 +17,8 @@ public:
     virtual void storeInFile(const std::string & theFileName, const std::string & theData);
     virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData);
     
-    virtual std::string getDownloadPath() const;
+    virtual std::string getDownloadsPath() const;
+    virtual std::string getDownloadsFolder() const;
 
 private:
     const std::string _myAssetFolderPath;
