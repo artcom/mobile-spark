@@ -159,11 +159,11 @@ namespace acprojectview {
         _imageTransform0->setVisible(false);
         _imageTransform1->setVisible(false);
         _imageTransform2->setVisible(false);
-        if (_myCurrentImage == 0) {
+        if (_myCurrentSlot == 0) {
             _imageTransform0->setVisible(true);
-        } else if (_myCurrentImage == 1) {
+        } else if (_myCurrentSlot == 1) {
             _imageTransform1->setVisible(true);
-        } else if (_myCurrentImage == 2) {
+        } else if (_myCurrentSlot == 2) {
             _imageTransform2->setVisible(true);
         }
     }
