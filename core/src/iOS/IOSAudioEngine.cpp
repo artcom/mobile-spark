@@ -1,10 +1,10 @@
 #include "IOSAudioEngine.h"
-
+#include <masl/AssetProvider.h>
 
 namespace ios
 {
     IOSAudioEngine::IOSAudioEngine()
-    : AssetProvider()
+    : AudioEngine()
     {
     }
 
@@ -46,7 +46,7 @@ namespace ios
 	bool 
     IOSAudioEngine::isBackgroundMusicPlaying() const {
         AC_DEBUG << "isBackgroundMusicPlaying";
-		jboolean ret = false;
+		bool ret = false;
         //TODO
 		return ret;
 	}
@@ -54,7 +54,7 @@ namespace ios
 	float 
     IOSAudioEngine::getBackgroundMusicVolume() const {
         AC_DEBUG << "getBackgroundMusicVolume";
-		jfloat ret = 0.0;
+		float ret = 0.0;
         //TODO
 		return ret;
 	}
@@ -86,7 +86,7 @@ namespace ios
 	float 
     IOSAudioEngine::getEffectsVolume() const {
         AC_DEBUG << "getEffectsVolume";
-		jfloat ret = -1.0;
+		float ret = -1.0;
         //TODO
 		return ret;
 	}
