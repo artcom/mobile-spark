@@ -83,7 +83,7 @@ bool
 loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
     archive = theAPKArchive;
     mar::pngData myData;
-    return loadTextureFromPNGSkeleton(filename, outTextureId, outWidth, outHeight, outRgb, myData,
+    return loadTextureFromPNGSkeleton("assets/" + filename, outTextureId, outWidth, outHeight, outRgb, myData,
                                close, initFileReading, prePNGReading, postPNGReading);
 }
 

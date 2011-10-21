@@ -74,7 +74,7 @@ namespace spark {
 
     void BaseApp::loadLayoutAndRegisterEvents(const std::string & theBaseName, int theScreenWidth, int theScreenHeight) {
         bool dummy;
-        std::string myLayoutFile = findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight, dummy);
+        std::string myLayoutFile = theBaseName;//findBestMatchedLayout(theBaseName, theScreenWidth, theScreenHeight, dummy);
         //load layout
         _mySparkWindow = boost::static_pointer_cast<spark::Window>(SparkComponentFactory::get().loadSparkComponentsFromFile(shared_from_this(), myLayoutFile));
         _mySparkWindow->realize();

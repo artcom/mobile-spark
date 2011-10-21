@@ -33,12 +33,12 @@ namespace android {
 
     std::string readFromPackage(zip* theAPKArchive, const string &  theFileName) {
         std::string content = "";
-        const size_t MAX_LENGTH = 5000;
+        const size_t MAX_LENGTH = 50000;
         if (!theAPKArchive) {
             AC_ERROR << "apk broken";
             throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
         }
-        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
+        zip_file* file = zip_fopen(theAPKArchive, string("assets/" + theFileName).c_str(), 0);
         if (!file) {
             AC_ERROR << "Error opening " << theFileName << " from APK";
             throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
@@ -53,12 +53,12 @@ namespace android {
 
     std::vector<char> readBinaryFromPackage(zip* theAPKArchive, const string &  theFileName) {
         std::vector<char> content;
-        const size_t MAX_LENGTH = 5000;
+        const size_t MAX_LENGTH = 50000;
         if (!theAPKArchive) {
             AC_ERROR << "apk broken";
             throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
         }
-        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
+        zip_file* file = zip_fopen(theAPKArchive, string("assets/" + theFileName).c_str(), 0);
         if (!file) {
             AC_ERROR << "Error opening " << theFileName << " from APK";
             throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
@@ -81,7 +81,7 @@ namespace android {
             AC_ERROR << "apk broken";
             throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
         }
-        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
+        zip_file* file = zip_fopen(theAPKArchive, string("assets/" + theFileName).c_str(), 0);
         if (!file) {
             AC_ERROR << "Error opening " << theFileName << " from APK";
             throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
