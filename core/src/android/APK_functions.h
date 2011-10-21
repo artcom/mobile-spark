@@ -17,6 +17,7 @@ namespace android {
     std::string readFromPackage(zip* theAPKArchive, const std::string & theFileName);
     std::vector<char> readBinaryFromPackage(zip* theAPKArchive, const std::string & theFileName);
     std::vector<std::string> readLineByLineFromPackage(zip* theAPKArchive, const std::string & theFileName);
+    bool searchFile(zip* theAPKArchive, const std::string & theFileName, zip_file* file, const bool theForce = false);
 };
 
 #endif

@@ -34,14 +34,9 @@ namespace android {
     std::string readFromPackage(zip* theAPKArchive, const string &  theFileName) {
         std::string content = "";
         const size_t MAX_LENGTH = 5000;
-        if (!theAPKArchive) {
-            AC_ERROR << "apk broken";
-            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
-        }
-        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
-        if (!file) {
-            AC_ERROR << "Error opening " << theFileName << " from APK";
-            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+        zip_file* file = NULL;
+        bool foundFile = searchFile(theAPKArchive, theFileName, file, true);
+        if (!foundFile) {
             return NULL;
         }
         char buffer[MAX_LENGTH];
@@ -54,14 +49,9 @@ namespace android {
     std::vector<char> readBinaryFromPackage(zip* theAPKArchive, const string &  theFileName) {
         std::vector<char> content;
         const size_t MAX_LENGTH = 5000;
-        if (!theAPKArchive) {
-            AC_ERROR << "apk broken";
-            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
-        }
-        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
-        if (!file) {
-            AC_ERROR << "Error opening " << theFileName << " from APK";
-            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+        zip_file* file = NULL;
+        bool foundFile = searchFile(theAPKArchive, theFileName, file, true);
+        if (!foundFile) {
             return content;
         }
         char buffer[MAX_LENGTH];
@@ -76,15 +66,9 @@ namespace android {
         const size_t MAX_LENGTH = 1000;
         char buffer[MAX_LENGTH];
         std::string newPart;
-
-        if (!theAPKArchive) {
-            AC_ERROR << "apk broken";
-            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
-        }
-        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
-        if (!file) {
-            AC_ERROR << "Error opening " << theFileName << " from APK";
-            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+        zip_file* file = NULL;
+        bool foundFile = searchFile(theAPKArchive, theFileName, file, true);
+        if (!foundFile) {
             return content;
         }
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
@@ -107,6 +91,23 @@ namespace android {
         }
         zip_fclose(file);
         return content;
+    }
+
+    //if file exists, returns reference to zip_file which has to be zip_fclosed by caller
+    bool searchFile(zip* theAPKArchive, const string & theFileName, zip_file* file, const bool theForce) {
+        if (!theAPKArchive) {
+            AC_ERROR << "apk broken";
+            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
+        }
+        file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
+        if (!file) {
+            if (theForce) {
+                AC_ERROR << "Error opening " << theFileName << " from APK";
+                throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+            }
+            return false;
+        }
+        return true;
     }
 }
 
