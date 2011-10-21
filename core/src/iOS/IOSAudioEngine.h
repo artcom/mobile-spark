@@ -29,7 +29,7 @@ namespace ios {
 
     private:
     };
-    typedef masl::Ptr<IOSAudioEngine> IOSAudioEngine;
+    typedef masl::Ptr<IOSAudioEngine> IOSAudioEnginePtr;
 };
 
 #endif
