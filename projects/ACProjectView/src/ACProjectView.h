@@ -94,6 +94,7 @@ namespace acprojectview {
             void onAssetReady(masl::RequestPtr theRequest);
             void onErrorRequest(masl::RequestPtr theRequest);
             void onLoadComplete();
+            bool _myOnlineMode;
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;

@@ -45,7 +45,7 @@ namespace acprojectview {
 
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
-        loadCount_(0), isRealized_(false) {
+        loadCount_(0), isRealized_(false), _myOnlineMode(false) {
     } 
 
     ACProjectView::~ACProjectView() {
@@ -53,9 +53,14 @@ namespace acprojectview {
 
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
+
         ACProjectViewComponentMapInitializer::init();        
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
+        if (_myOnlineMode) {
+            loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
+        } else {
+            loadLayoutAndRegisterEvents("layouts/main.spark", theScreenWidth, theScreenHeight);
+        }
 
         spark::TextPtr myGermanButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("deutsch", true));
         spark::TextPtr myEnglishButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("english", true));
@@ -81,14 +86,29 @@ namespace acprojectview {
         myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
 
         //start to load content from server
-        std::vector<std::string> myOnSetupNeededAssets;
-        myOnSetupNeededAssets.push_back("i18n.spark");
-        myOnSetupNeededAssets.push_back("inner_menu.spark");
-        _myRequestManager.setOnErrorCallback(
-            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onErrorRequest)));
-        _myRequestManager.getAllRequest(ACProjectView::BASE_URL + "/layouts/", myOnSetupNeededAssets, 
-            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
-            masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
+        if (_myOnlineMode) {
+            std::vector<std::string> myOnSetupNeededAssets;
+            myOnSetupNeededAssets.push_back("i18n.spark");
+            myOnSetupNeededAssets.push_back("inner_menu.spark");
+            _myRequestManager.setOnErrorCallback(
+                masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onErrorRequest)));
+            _myRequestManager.getAllRequest(ACProjectView::BASE_URL + "/layouts/", myOnSetupNeededAssets, 
+                masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
+                masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
+        } else {
+            // load global i18n 
+            std::string myNewSpark = "downloads/i18n.spark";
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, myNewSpark);
+            spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
+            for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
+                myTransform->addChild(*it);
+            }
+            // load global widgets
+            myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
+            myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "downloads/inner_menu.spark", myTransform);
+            onLoadComplete();
+                   
+        }
     }
 
     void ACProjectView::onErrorRequest(masl::RequestPtr theRequest) {
@@ -349,10 +369,11 @@ namespace acprojectview {
     }
 
     void ACProjectView::onWorldRealized(EventPtr theEvent) {
+        AC_PRINT << "onWorldRealized";
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
         if (myEvent->worldname_ == "2dworld") {
             isRealized_ = true;
-            if (loadCount_ == 3) {
+            if (loadCount_ == 3 || !_myOnlineMode) {
                 onAllReady();
             }
         }
