@@ -58,7 +58,8 @@ namespace spark {
 
         ComponentPtr myCurrent = theEvent->getTarget();
         AC_TRACE << " dispatchEvent " << *theEvent;
-        // collect dispatchers to capture on
+
+        // collect dispatchers to capture & bubble on
         std::deque<ComponentPtr> myTopToBottomList;
         myTopToBottomList.push_front(myCurrent);
         while (myCurrent->getParent().lock()) {
