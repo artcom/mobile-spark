@@ -21,6 +21,8 @@ namespace masl {
         virtual std::vector<std::string> getFilesFromPath(const std::string & theBasePath) const;
         virtual std::string findFile(const std::string & theFilename) const;
         virtual std::string getAssetPath() const { return assetPath_; };
+        virtual std::string getDownloadPath() const = 0;
+
     protected:
         std::vector<std::string> includePaths_;
         std::string assetPath_;
