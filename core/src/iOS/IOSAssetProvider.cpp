@@ -98,8 +98,11 @@ namespace ios
         myfile.close();
     }
     
-    std::string IOSAssetProvider::getDownloadPath() const {
-        return getAssetPath()+"/../../Documents/downloads/";
+    std::string IOSAssetProvider::getDownloadsPath() const {
+        return getAssetPath()+getDownloadsFolder();
     }
     
+    std::string IOSAssetProvider::getDownloadsFolder() const {
+        return "/../../Documents/downloads/";
+    }
 }

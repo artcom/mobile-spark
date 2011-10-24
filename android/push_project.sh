@@ -3,11 +3,6 @@
 FOLDERS="models layouts shaders textures fonts sounds" 
 if [ "$#" != "0" ]; then
     FOLDERS=$*
-else
-    echo "push core"
-    cd ../../android
-    ./push.sh
-    cd -
 fi
 
 echo "push folders $FOLDERS"
@@ -25,4 +20,12 @@ do
     done
 done
 
-
+cd ../../core
+PUSHPATH="shaders"
+for dir in $PUSHPATH
+do
+    echo "push core/$dir"
+    ls $dir
+    adb push $dir /sdcard/$PROJECT_NAME/$dir
+done
+cd -

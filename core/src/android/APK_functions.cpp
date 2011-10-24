@@ -1,6 +1,7 @@
 #include "APK_functions.h"
 
 #include <masl/Logger.h>
+#include <masl/AssetProvider.h>
 
 #define DB(x) //x
 
@@ -31,15 +32,16 @@ namespace android {
         )
     }
 
-    std::string readFromPackage(const std::vector<std::string> & theIncludeList, 
-                                zip* theAPKArchive, const string &  theFileName) {
+    std::string readFromPackage(zip* theAPKArchive, const string &  theFileName) {
         std::string content = "";
         const size_t MAX_LENGTH = 50000;
-        zip_file* file = NULL;
-        bool foundFile = searchFile(theIncludeList, theAPKArchive, theFileName, file, true);
+        std::string myFoundFilePath;
+        bool foundFile = searchFile(theAPKArchive, theFileName, myFoundFilePath, true);
         if (!foundFile) {
             return NULL;
         }
+        zip_file* file = zip_fopen(theAPKArchive, myFoundFilePath.c_str(), 0);
+        
         char buffer[MAX_LENGTH];
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
         content = std::string(buffer, size);
@@ -47,15 +49,16 @@ namespace android {
         return content;
     }
 
-    std::vector<char> readBinaryFromPackage(const std::vector<std::string> & theIncludeList,
-                                            zip* theAPKArchive, const string &  theFileName) {
+    std::vector<char> readBinaryFromPackage(zip* theAPKArchive, const string &  theFileName) {
         std::vector<char> content;
         const size_t MAX_LENGTH = 5000;
-        zip_file* file = NULL;
-        bool foundFile = searchFile(theIncludeList, theAPKArchive, theFileName, file, true);
+        std::string myFoundFilePath;
+        bool foundFile = searchFile(theAPKArchive, theFileName, myFoundFilePath, true);
         if (!foundFile) {
             return content;
         }
+        zip_file* file = zip_fopen(theAPKArchive, myFoundFilePath.c_str(), 0);
+        
         char buffer[MAX_LENGTH];
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
         copy(buffer, buffer + size, back_inserter(content));
@@ -63,17 +66,17 @@ namespace android {
         return content;
     }
 
-    std::vector<std::string> readLineByLineFromPackage(const std::vector<std::string> & theIncludeList,
-                                                       zip* theAPKArchive, const string & theFileName) {
+    std::vector<std::string> readLineByLineFromPackage(zip* theAPKArchive, const string & theFileName) {
         std::vector<std::string> content;
         const size_t MAX_LENGTH = 1000;
         char buffer[MAX_LENGTH];
         std::string newPart;
-        zip_file* file = NULL;
-        bool foundFile = searchFile(theIncludeList, theAPKArchive, theFileName, file, true);
+        std::string myFoundFilePath;
+        bool foundFile = searchFile( theAPKArchive, theFileName, myFoundFilePath, true);
         if (!foundFile) {
             return content;
         }
+        zip_file* file = zip_fopen(theAPKArchive, myFoundFilePath.c_str(), 0);
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
         bool endedWithNewLine = false;
         while (size > 0) {
@@ -96,32 +99,50 @@ namespace android {
         return content;
     }
  
-    bool searchFile(const std::vector<std::string> & theIncludeList, zip* theAPKArchive, 
-                    const string & theFileName, zip_file* & file, const bool theForce) {
-        for (std::vector<std::string>::const_iterator it = theIncludeList.begin(); it != theIncludeList.end(); ++it) {
-            if (searchFile(theAPKArchive, (*it) + theFileName, file, false)) {                
+    bool searchFile(zip* theAPKArchive, const string & theFileName, std::string & retPath, const bool theForce) {
+        const std::vector<std::string> & myIncludeList = masl::AssetProviderSingleton::get().ap()->getIncludePaths();
+        for (std::vector<std::string>::const_iterator it = myIncludeList.begin(); it != myIncludeList.end(); ++it) {
+            if (fileExist(theAPKArchive, (*it) + theFileName)) {   
+                retPath = (*it) + theFileName;
                 return true;
             }
         }
+        if (theForce) {
+            AC_ERROR << "Error opening " << theFileName << " from APK";
+            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+        }        
         return false;
     }
     
     //if file exists, returns reference to zip_file which has to be zip_fclosed by caller
-    bool searchFile(zip* theAPKArchive, const string & theFileName, zip_file* & file, const bool theForce) {
-        string myFilename = theFileName;
+    bool fileExist(zip* theAPKArchive, const string & theFileName) {
         if (!theAPKArchive) {
             AC_ERROR << "apk broken";
-            throw APKLoadingException("apk broken " + myFilename, PLUS_FILE_LINE);
+            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
         }
-        file = zip_fopen(theAPKArchive, myFilename.c_str(), 0);
+        zip_file* file = zip_fopen(theAPKArchive, theFileName.c_str(), 0);
         if (!file) {
-            if (theForce) {
-                AC_ERROR << "Error opening " << myFilename << " from APK";
-                throw APKLoadingException("Error opening APK " + myFilename, PLUS_FILE_LINE);
-            }
             return false;
         }
+        zip_fclose(file);
         return true;
     }
+
+    void getDirectoryEntries(zip* theAPKArchive, const std::string & thePath, std::vector<std::string> & theDirEntries, const std::string & theFilter) {
+        if (!theAPKArchive) {
+            AC_ERROR << "apk broken";
+            throw APKLoadingException("apk broken ", PLUS_FILE_LINE);
+        }
+        int numfilesInZip = zip_get_num_files(theAPKArchive);
+        for (int i = 0; i < numfilesInZip; ++i) {
+            std::string s = zip_get_name(theAPKArchive, i, ZIP_FL_UNCHANGED);
+            AC_DEBUG << s;
+            if (s.find("assets/"+thePath) == 0) {
+                theDirEntries.push_back(s);
+            }
+        }
+    }
+
+    
 }
 

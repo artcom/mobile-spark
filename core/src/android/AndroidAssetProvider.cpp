@@ -18,6 +18,7 @@ namespace android {
     {
         android::loadAPK(&_myApkArchive, theApkPath);
         assetPath_ =  "/sdcard/" + theAppPath;
+        includePaths_.push_back(""); 
     }
 
     AndroidAssetProvider::~AndroidAssetProvider() {
@@ -27,8 +28,8 @@ namespace android {
     }
     
     void 
-    AndroidAssetProvider::addIncludePath(const std::string & thePath, const std::string & theAppPath) {    
-        includePaths_.push_back("sdcard/"+ theAppPath + "/" + thePath); 
+    AndroidAssetProvider::addIncludePath(const std::string & thePath) {    
+        includePaths_.push_back(assetPath_ + "/" + thePath); 
         includePaths_.push_back("assets/" + thePath); 
     }
     
@@ -38,12 +39,12 @@ namespace android {
             //unzipped, read from sdcard
             std::string myContent;
             std::string filePath;
-            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+            if (masl::searchFile(theFileName, filePath)) {
                 masl::readFile(filePath, myContent);
                 return myContent;
             }
         }
-        return readFromPackage(includePaths_, _myApkArchive, theFileName);
+        return readFromPackage(_myApkArchive, theFileName);
     }
 
     std::vector<char>
@@ -52,12 +53,12 @@ namespace android {
             //unzipped, read from sdcard
             std::vector<char> myContent;
             std::string filePath;
-            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+            if (masl::searchFile(theFileName, filePath)) {
                 masl::readBinaryFile(filePath, myContent);
                 return myContent;
             }
         }
-        return readBinaryFromPackage(includePaths_, _myApkArchive, theFileName);
+        return readBinaryFromPackage(_myApkArchive, theFileName);
     }
 
     std::vector<std::string>
@@ -66,12 +67,12 @@ namespace android {
             //unzipped, read from sdcard
             std::vector<std::string> myContent;
             std::string filePath;
-            if (masl::searchFile(includePaths_, theFileName, filePath)) {
+            if (masl::searchFile(theFileName, filePath)) {
                 masl::readFileLineByLine(filePath, myContent);
                 return myContent;
             }
         }
-        return readLineByLineFromPackage(includePaths_, _myApkArchive, theFileName);
+        return readLineByLineFromPackage( _myApkArchive, theFileName);
     }
 
     bool
@@ -80,7 +81,7 @@ namespace android {
         if (myFilename.size() > 0) {
             //unzipped, read from sdcard
             std::string filePath;
-            if (masl::searchFile(includePaths_, myFilename, filePath)) {
+            if (masl::searchFile(myFilename, filePath)) {
                 return mar::loadTextureFromPNG(filePath, textureId, width, height, rgb);
             }
         }
@@ -101,9 +102,27 @@ namespace android {
         myfile.close();
     }
     
-    std::string AndroidAssetProvider::getDownloadPath() const {
-        return getAssetPath() + "/downloads/";
+    std::string AndroidAssetProvider::getDownloadsPath() const {
+        return getAssetPath() + getDownloadsFolder();
+    }
+
+    std::string AndroidAssetProvider::getDownloadsFolder() const {
+        return "/downloads/";
     }
     
+    //if theForceOnlyInBundle_APK: get only files from apk
+    //if !theForceOnlyInBundle_APK: get files form sdcard. If there are none, get files from apk.
+    std::vector<std::string>
+    AndroidAssetProvider::getFilesFromPath(const std::string & thePath, const std::string & thePattern, const bool theForceOnlyInBundle_APK) const {
+        std::vector<std::string> myFiles;
+        if (!theForceOnlyInBundle_APK) {
+            myFiles = AssetProvider::getFilesFromPath(thePath, thePattern);
+        }
+        if (myFiles.size() == 0) {
+            android::getDirectoryEntries(_myApkArchive, thePath, myFiles, thePattern);
+        }
+        return myFiles;
+    }
+
 }
 

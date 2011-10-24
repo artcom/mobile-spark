@@ -12,21 +12,18 @@ namespace masl {
     std::string
     AssetProvider::findFile(const std::string & theFilename) const{
         std::string filePath;
-        if (masl::searchFile(includePaths_, theFilename, filePath)) {
+        if (masl::searchFile(theFilename, filePath)) {
             return filePath;
         } else {
             return "";
         }
     }
 
+    //takes relative Path
     std::vector<std::string>
-    AssetProvider::getFilesFromPath(const std::string & theBasename) const {
+    AssetProvider::getFilesFromPath(const std::string & thePath, const std::string & thePattern, const bool theForceOnlyInBundle_APK) const {
         std::vector<std::string> myFiles;
-        if (theBasename.size() > 0 && theBasename[0] == '/') {
-            for (std::vector<std::string>::const_iterator it = includePaths_.begin(); it != includePaths_.end(); ++it) {
-                masl::getDirectoryEntries((*it), myFiles, theBasename.substr(1, theBasename.size()));
-            }
-        }
+        masl::getDirectoryEntries(getAssetPath() + "/" + thePath, myFiles, thePattern);
         return myFiles;
     }
 };

@@ -64,10 +64,14 @@ namespace demoapp {
 
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         DemoAppComponentMapInitializer::init();
-
-        loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
-        
+        loadLayoutAndRegisterEvents(theScreenWidth, theScreenHeight);
         AC_PRINT<<"AC_LOG_VERBOSITY env: "<<getenv("AC_LOG_VERBOSITY");
+
+        AC_PRINT << "....................................... find files in path " << masl::AssetProviderSingleton::get().ap()->getAssetPath()+"/textures/";
+        std::vector<std::string> testFiles = masl::AssetProviderSingleton::get().ap()->getFilesFromPath("textures", ".png");
+        AC_PRINT << " -> num textures in sdcard: " << testFiles.size();
+        testFiles = masl::AssetProviderSingleton::get().ap()->getFilesFromPath("textures",".png", true);
+        AC_PRINT << " -> num textures in apk: " << testFiles.size();
 
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onSizeChanged));
