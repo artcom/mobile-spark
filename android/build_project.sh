@@ -5,11 +5,16 @@ APPFOLDER=`pwd`/..
 VERBOSITY="-quiet"
 NUMCORES=
 DEPLOY=0
+BUILD_TYPE="debug"
+
 for i in $*
 do
     case $i in
         deploy)
             DEPLOY=1
+            ;;
+        release)
+            BUILD_TYPE="release"
             ;;
         verbose)
             VERBOSITY=""
@@ -87,25 +92,23 @@ fi
 
 if [ $BUILD_OK == "0" ] 
 then
-    
-    # build java
-    ant "$VERBOSITY" compile
-    BUILD_OK=$?
-fi
-    
-if [ $BUILD_OK == "0" ] 
-then
     # build apk && upload
-    ant "$VERBOSITY" install
+    if [ $BUILD_TYPE == "release" ]; then
+        ant "$VERBOSITY" release 
+    else
+        ant "$VERBOSITY" debug install
+    fi
     BUILD_OK=$?
 fi
     
 cd -
 
-
 if [ $BUILD_OK == "0" ] 
 then
     echo "build done :-)"
+    if [ $BUILD_TYPE == "release" ]; then
+        echo "final release package can be found in bin/$PROJECT_NAME-release.apk"
+    fi
 else
     echo ":-( BUILD FAILED :-("
     exit 1

@@ -8,6 +8,7 @@ if [ "`uname -o`" == "Cygwin" ]; then
 fi
 
 
+mkdir -p ../_build
 cd ../_build
 cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchains/android.toolchain.cmake ..
 $MAKE_TOOL $1
