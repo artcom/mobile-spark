@@ -51,18 +51,16 @@ namespace android {
             }
 
             void perform_APK_functionsTest() {
-                std::vector<std::string> includePaths;
-                
                 jboolean isCopy;
                 const char* str = env->GetStringUTFChars(apkPath, &isCopy);
                 ENSURE_MSG(str, "apkPath given form java should not be null");
                 zip* myAPKArchive = NULL;
                 loadAPK(&myAPKArchive, str);
                 ENSURE_MSG(myAPKArchive, "apkArchive should not be null");
-                std::string myTextFromFile = readFromPackage(includePaths, myAPKArchive, "assets/test.txt");
+                std::string myTextFromFile = readFromPackage(myAPKArchive, "assets/test.txt");
                 ENSURE_MSG(!myTextFromFile.empty(), "there should be text in file");
                 ENSURE_MSG(myTextFromFile.find("foo bar") == 0, "text in file should start with 'foo bar'");
-                std::vector<std::string> myLinesInFile = readLineByLineFromPackage(includePaths, myAPKArchive, "assets/test.txt");
+                std::vector<std::string> myLinesInFile = readLineByLineFromPackage(myAPKArchive, "assets/test.txt");
                 ENSURE_MSG(myLinesInFile.size() == 2, "there should be two lines in file");
                 ENSURE_MSG(myLinesInFile[1].find("baz") == 0, "second line should start with 'baz'");
             }

@@ -45,7 +45,7 @@ namespace acprojectview {
 
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
-        loadCount_(0), isRealized_(false), _myOnlineMode(false) {
+        loadCount_(0), isRealized_(false), _myOnlineMode(true) {
     } 
 
     ACProjectView::~ACProjectView() {
@@ -56,11 +56,7 @@ namespace acprojectview {
 
         ACProjectViewComponentMapInitializer::init();        
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
-        if (_myOnlineMode) {
-            loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
-        } else {
-            loadLayoutAndRegisterEvents("main.spark", theScreenWidth, theScreenHeight);
-        }
+        loadLayoutAndRegisterEvents(theScreenWidth, theScreenHeight);
 
         spark::TextPtr myGermanButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("deutsch", true));
         spark::TextPtr myEnglishButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("english", true));
@@ -97,7 +93,7 @@ namespace acprojectview {
                 masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
         } else {
             // load global i18n 
-            std::string myNewSpark = "downloads/i18n.spark";
+            std::string myNewSpark = "i18n.spark";
             ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, myNewSpark);
             spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
             for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
@@ -105,7 +101,7 @@ namespace acprojectview {
             }
             // load global widgets
             myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
-            myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "downloads/inner_menu.spark", myTransform);
+            myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "inner_menu.spark", myTransform);
             onLoadComplete();
                    
         }
@@ -414,7 +410,7 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getDownloadPath(), idleFiles_, ".png");
+        idleFiles_ = masl::AssetProviderSingleton::get().ap()->getFilesFromPath(masl::AssetProviderSingleton::get().ap()->getDownloadsFolder(), ".png");
         onIdle();
     }
 
@@ -447,7 +443,9 @@ namespace acprojectview {
 
     void ACProjectView::onKenBurnsImageFadeStart() {
         AC_TRACE << "_____________________________________ fade start, load to " << (firstIdleImageVisible_?1:0);
-        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/downloads/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        if (idleFiles_.size() >0) {
+            _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/downloads/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        }
         fitToWindowSize(_myIdleScreenImagePtrs[0]);
         fitToWindowSize(_myIdleScreenImagePtrs[1]);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(true);
