@@ -10,7 +10,7 @@ namespace spark {
 
     DECLARE_EXCEPTION(EventDispatcherException, masl::Exception);
 
-    typedef std::pair<const std::string, const bool> EventListenerKey;
+    typedef std::pair<const std::string, const Event::EventPhase> EventListenerKey;
     typedef std::multimap<EventListenerKey, const EventCallbackPtr > EventListenerMap;
 
     class EventDispatcher {
@@ -19,9 +19,9 @@ namespace spark {
             EventDispatcher();
             ~EventDispatcher();
 
-            bool hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false) const;
-            void addEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
-            void removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture = false);
+            bool hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const Event::EventPhase thePhase = Event::TARGET) const;
+            void addEventListener(const std::string & theType, const EventCallbackPtr theListener, const Event::EventPhase thePhase = Event::TARGET);
+            void removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const Event::EventPhase thePhase = Event::TARGET);
             void dispatchEvent(const EventPtr theEvent) const;
             const EventListenerMap & getEventListeners() const {return _myListenersMap;};
         private:

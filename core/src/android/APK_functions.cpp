@@ -31,17 +31,13 @@ namespace android {
         )
     }
 
-    std::string readFromPackage(zip* theAPKArchive, const string &  theFileName) {
+    std::string readFromPackage(const std::vector<std::string> & theIncludeList, 
+                                zip* theAPKArchive, const string &  theFileName) {
         std::string content = "";
         const size_t MAX_LENGTH = 50000;
-        if (!theAPKArchive) {
-            AC_ERROR << "apk broken";
-            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
-        }
-        zip_file* file = zip_fopen(theAPKArchive, string("assets/" + theFileName).c_str(), 0);
-        if (!file) {
-            AC_ERROR << "Error opening " << theFileName << " from APK";
-            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+        zip_file* file = NULL;
+        bool foundFile = searchFile(theIncludeList, theAPKArchive, theFileName, file, true);
+        if (!foundFile) {
             return NULL;
         }
         char buffer[MAX_LENGTH];
@@ -51,17 +47,13 @@ namespace android {
         return content;
     }
 
-    std::vector<char> readBinaryFromPackage(zip* theAPKArchive, const string &  theFileName) {
+    std::vector<char> readBinaryFromPackage(const std::vector<std::string> & theIncludeList,
+                                            zip* theAPKArchive, const string &  theFileName) {
         std::vector<char> content;
-        const size_t MAX_LENGTH = 50000;
-        if (!theAPKArchive) {
-            AC_ERROR << "apk broken";
-            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
-        }
-        zip_file* file = zip_fopen(theAPKArchive, string("assets/" + theFileName).c_str(), 0);
-        if (!file) {
-            AC_ERROR << "Error opening " << theFileName << " from APK";
-            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+        const size_t MAX_LENGTH = 5000;
+        zip_file* file = NULL;
+        bool foundFile = searchFile(theIncludeList, theAPKArchive, theFileName, file, true);
+        if (!foundFile) {
             return content;
         }
         char buffer[MAX_LENGTH];
@@ -71,20 +63,15 @@ namespace android {
         return content;
     }
 
-    std::vector<std::string> readLineByLineFromPackage(zip* theAPKArchive, const string & theFileName) {
+    std::vector<std::string> readLineByLineFromPackage(const std::vector<std::string> & theIncludeList,
+                                                       zip* theAPKArchive, const string & theFileName) {
         std::vector<std::string> content;
         const size_t MAX_LENGTH = 1000;
         char buffer[MAX_LENGTH];
         std::string newPart;
-
-        if (!theAPKArchive) {
-            AC_ERROR << "apk broken";
-            throw APKLoadingException("apk broken " + theFileName, PLUS_FILE_LINE);
-        }
-        zip_file* file = zip_fopen(theAPKArchive, string("assets/" + theFileName).c_str(), 0);
-        if (!file) {
-            AC_ERROR << "Error opening " << theFileName << " from APK";
-            throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
+        zip_file* file = NULL;
+        bool foundFile = searchFile(theIncludeList, theAPKArchive, theFileName, file, true);
+        if (!foundFile) {
             return content;
         }
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
@@ -107,6 +94,34 @@ namespace android {
         }
         zip_fclose(file);
         return content;
+    }
+ 
+    bool searchFile(const std::vector<std::string> & theIncludeList, zip* theAPKArchive, 
+                    const string & theFileName, zip_file* & file, const bool theForce) {
+        for (std::vector<std::string>::const_iterator it = theIncludeList.begin(); it != theIncludeList.end(); ++it) {
+            if (searchFile(theAPKArchive, (*it) + theFileName, file, false)) {                
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    //if file exists, returns reference to zip_file which has to be zip_fclosed by caller
+    bool searchFile(zip* theAPKArchive, const string & theFileName, zip_file* & file, const bool theForce) {
+        string myFilename = theFileName;
+        if (!theAPKArchive) {
+            AC_ERROR << "apk broken";
+            throw APKLoadingException("apk broken " + myFilename, PLUS_FILE_LINE);
+        }
+        file = zip_fopen(theAPKArchive, myFilename.c_str(), 0);
+        if (!file) {
+            if (theForce) {
+                AC_ERROR << "Error opening " << myFilename << " from APK";
+                throw APKLoadingException("Error opening APK " + myFilename, PLUS_FILE_LINE);
+            }
+            return false;
+        }
+        return true;
     }
 }
 

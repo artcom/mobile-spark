@@ -14,13 +14,15 @@ namespace masl {
         virtual std::vector<char> getBlockFromFile(const std::string & theFileName) const = 0;
         virtual std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const = 0;
         virtual bool loadTextureFromPNG(const std::string & filename, unsigned int & textureId, int & width, int & height, bool & rgb) = 0;
-        virtual void addIncludePath(const std::string & thePath) = 0;
+        virtual void addIncludePath(const std::string & thePath, const std::string & theAppPath) = 0;
         virtual void storeInFile(const std::string & theFileName, const std::string & theData) = 0;
         virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData) = 0;
 
         virtual std::vector<std::string> getFilesFromPath(const std::string & theBasePath) const;
         virtual std::string findFile(const std::string & theFilename) const;
         virtual std::string getAssetPath() const { return assetPath_; };
+        virtual std::string getDownloadPath() const = 0;
+
     protected:
         std::vector<std::string> includePaths_;
         std::string assetPath_;

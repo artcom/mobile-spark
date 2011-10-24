@@ -30,7 +30,8 @@ namespace spark {
             enum EventPhase {
                 IDLE,
                 CAPTURING,
-                TARGET
+                TARGET,
+                BUBBLING
             };
 
             virtual const char * const &  classname_() const = 0;
