@@ -216,7 +216,14 @@ namespace spark {
 #elif ANDROID
         masl::AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
         masl::AudioEngineSingleton::get().setAudioEngine(android::AndroidAudioEnginePtr(new android::AndroidAudioEngine("com/artcom/mobile/Base/SparkViewerActivity")));
+        mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath()).c_str(), 755);
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
+#endif
+#ifdef iOS
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/downloads/");
+#elif ANDROID
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("downloads/");
 #endif
         masl::AssetProviderSingleton::get().ap()->addIncludePath("");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("textures/");            
@@ -226,12 +233,6 @@ namespace spark {
         masl::AssetProviderSingleton::get().ap()->addIncludePath("fonts/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("sounds/");
 
-#ifdef iOS
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/downloads/");
-#elif ANDROID
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("downloads/");
-#endif
 
     }
     
