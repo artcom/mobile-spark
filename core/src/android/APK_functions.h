@@ -14,9 +14,12 @@ namespace android {
     DECLARE_EXCEPTION(APKLoadingException, masl::Exception)
 
     void loadAPK (zip** theAPKArchive, const std::string & apkPath);
-    std::string readFromPackage(zip* theAPKArchive, const std::string & theFileName);
-    std::vector<char> readBinaryFromPackage(zip* theAPKArchive, const std::string & theFileName);
-    std::vector<std::string> readLineByLineFromPackage(zip* theAPKArchive, const std::string & theFileName);
+    std::string readFromPackage(const std::vector<std::string> & theIncludeList, zip* theAPKArchive, const std::string & theFileName);
+    std::vector<char> readBinaryFromPackage(const std::vector<std::string> & theIncludeList, zip* theAPKArchive, const std::string & theFileName);
+    std::vector<std::string> readLineByLineFromPackage(const std::vector<std::string> & theIncludeList, zip* theAPKArchive, const std::string & theFileName);
+
+    bool searchFile(zip* theAPKArchive, const std::string & theFileName, zip_file* & file, const bool theForce = false);
+    bool searchFile(const std::vector<std::string> & theIncludeList, zip* theAPKArchive, const std::string & theFileName, zip_file* & file, const bool theForce);
 };
 
 #endif

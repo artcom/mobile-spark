@@ -18,9 +18,11 @@ namespace android {
         virtual std::vector<char> getBlockFromFile(const std::string & theFileName) const;
         virtual std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const;
         virtual bool loadTextureFromPNG(const std::string & filename, unsigned int & textureId, int & width, int & height, bool & rgb);
-        virtual void addIncludePath(const std::string & thePath)  { includePaths_.push_back("sdcard/"+thePath); };
+        virtual void addIncludePath(const std::string & thePath, const std::string & theAppPath);
         virtual void storeInFile(const std::string & theFileName, const std::string & theData);
         virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData);
+        virtual std::string getDownloadPath() const;
+
     private:
         zip * _myApkArchive;
     };

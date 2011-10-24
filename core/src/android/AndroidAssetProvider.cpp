@@ -25,7 +25,13 @@ namespace android {
             zip_close(_myApkArchive);
         }
     }
-
+    
+    void 
+    AndroidAssetProvider::addIncludePath(const std::string & thePath, const std::string & theAppPath) {    
+        includePaths_.push_back("sdcard/"+ theAppPath + "/" + thePath); 
+        includePaths_.push_back("assets/" + thePath); 
+    }
+    
     std::string
     AndroidAssetProvider::getStringFromFile(const std::string & theFileName) const {
         if (theFileName.size() > 0 ) {
@@ -37,7 +43,7 @@ namespace android {
                 return myContent;
             }
         }
-        return readFromPackage(_myApkArchive, theFileName);
+        return readFromPackage(includePaths_, _myApkArchive, theFileName);
     }
 
     std::vector<char>
@@ -51,7 +57,7 @@ namespace android {
                 return myContent;
             }
         }
-        return readBinaryFromPackage(_myApkArchive, theFileName);
+        return readBinaryFromPackage(includePaths_, _myApkArchive, theFileName);
     }
 
     std::vector<std::string>
@@ -65,7 +71,7 @@ namespace android {
                 return myContent;
             }
         }
-        return readLineByLineFromPackage(_myApkArchive, theFileName);
+        return readLineByLineFromPackage(includePaths_, _myApkArchive, theFileName);
     }
 
     bool
@@ -94,5 +100,10 @@ namespace android {
         myfile.write(&theData[0],theData.size());
         myfile.close();
     }
+    
+    std::string AndroidAssetProvider::getDownloadPath() const {
+        return getAssetPath() + "/downloads/";
+    }
+    
 }
 

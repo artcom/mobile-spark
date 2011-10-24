@@ -59,7 +59,7 @@ namespace acprojectview {
         if (_myOnlineMode) {
             loadLayoutAndRegisterEvents("/main", theScreenWidth, theScreenHeight);
         } else {
-            loadLayoutAndRegisterEvents("layouts/main.spark", theScreenWidth, theScreenHeight);
+            loadLayoutAndRegisterEvents("main.spark", theScreenWidth, theScreenHeight);
         }
 
         spark::TextPtr myGermanButton = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("deutsch", true));
@@ -164,14 +164,14 @@ namespace acprojectview {
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onProjectItem));
         spark::EventCallbackPtr myBackCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onBack));
         
-        _myProjectViewer->addEventListener(TouchEvent::PICKED, myBackCB,true);
+        _myProjectViewer->addEventListener(TouchEvent::PICKED, myBackCB,Event::BUBBLING);
         
         _myProjectItems = boost::static_pointer_cast<spark::Container>(_myProjectMenu);
         const VectorOfComponentPtr & myChildren = _myProjectItems->getChildrenByType(ProjectImpl::SPARK_TYPE);
         for (size_t i = 0; i < myChildren.size(); i++) {
             ProjectImplPtr myProject = boost::static_pointer_cast<ProjectImpl>(myChildren[i]);
             if (myProject) {
-                myProject->addEventListener(TouchEvent::PICKED, myPickedCB,true);
+                myProject->addEventListener(TouchEvent::PICKED, myPickedCB,Event::CAPTURING);
             }
         }
 
@@ -414,7 +414,7 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/", idleFiles_, ".png");
+        masl::getDirectoryEntries(masl::AssetProviderSingleton::get().ap()->getDownloadPath(), idleFiles_, ".png");
         onIdle();
     }
 

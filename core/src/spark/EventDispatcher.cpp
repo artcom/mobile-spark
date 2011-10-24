@@ -4,7 +4,7 @@
 
 #include "Component.h"
 
-#include <list>
+#include <deque>
 
 using namespace masl;
 
@@ -19,8 +19,8 @@ namespace spark {
     }
 
     bool 
-    EventDispatcher::hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) const {
-        std::pair<std::string, bool> myKey(theType, theUseCapture);
+    EventDispatcher::hasEventListener(const std::string & theType, const EventCallbackPtr theListener, const Event::EventPhase thePhase) const {
+        std::pair<std::string, Event::EventPhase> myKey(theType, thePhase);
         std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = _myListenersMap.equal_range(myKey);
         for (EventListenerMap::const_iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
             if ((*mapIt).second == theListener) {
@@ -31,16 +31,16 @@ namespace spark {
     }
     
     void
-    EventDispatcher::addEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
-        AC_INFO << "addEventListener for type " << theType << " capturing: " << theUseCapture;
-        std::pair<std::string, bool> myKey(theType, theUseCapture);
-        _myListenersMap.insert(std::pair<std::pair<std::string, bool>, EventCallbackPtr > (myKey, theListener));
+    EventDispatcher::addEventListener(const std::string & theType, const EventCallbackPtr theListener, const Event::EventPhase thePhase) {
+        AC_INFO << "addEventListener for type " << theType << " capturing: " << (thePhase == Event::CAPTURING) << " bubbling: " << (thePhase == Event::BUBBLING);
+        std::pair<std::string, Event::EventPhase> myKey(theType, thePhase);
+        _myListenersMap.insert(std::pair<std::pair<std::string, Event::EventPhase>, EventCallbackPtr > (myKey, theListener));
     };
 
     void
-    EventDispatcher::removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const bool theUseCapture) {
-        AC_INFO << "removeEventListener for type " << theType << " capturing: " << theUseCapture;
-        std::pair<std::string, bool> myKey(theType, theUseCapture);
+    EventDispatcher::removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const Event::EventPhase thePhase) {
+        AC_INFO << "removeEventListener for type " << theType << " capturing: " << (thePhase == Event::CAPTURING) << " bubbling: " << (thePhase == Event::BUBBLING);
+        std::pair<std::string, Event::EventPhase> myKey(theType, thePhase);
         std::pair<EventListenerMap::iterator, EventListenerMap::iterator> itp = _myListenersMap.equal_range(myKey);
         for (EventListenerMap::iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
             if ((*mapIt).second == theListener) {
@@ -49,7 +49,7 @@ namespace spark {
                 return;
             }
         }
-        throw EventDispatcherException(std::string("removeEventListener: no eventlistener found for " + theType + " capturing " + ((theUseCapture) ? "true" : "false")), PLUS_FILE_LINE);
+        throw EventDispatcherException(std::string("removeEventListener: no eventlistener found for " + theType + " capturing: " + masl::as_string(thePhase == Event::CAPTURING) + " bubbling: " + masl::as_string(thePhase == Event::BUBBLING)), PLUS_FILE_LINE);
     }
 
     void
@@ -58,16 +58,18 @@ namespace spark {
 
         ComponentPtr myCurrent = theEvent->getTarget();
         AC_TRACE << " dispatchEvent " << *theEvent;
-        // collect dispatchers to capture on
-        std::list<ComponentPtr> myCaptureList;
-        myCaptureList.push_back(myCurrent);
+
+        // collect dispatchers to capture & bubble on
+        std::deque<ComponentPtr> myTopToBottomList;
+        myTopToBottomList.push_front(myCurrent);
         while (myCurrent->getParent().lock()) {
             myCurrent = myCurrent->getParent().lock();
-            myCaptureList.push_back(myCurrent);
+            myTopToBottomList.push_front(myCurrent);
         }
+        
         // capture phase
-        EventListenerKey myCaptureKey(theEvent->getType(), true);
-        for (std::list<ComponentPtr>::const_iterator it = myCaptureList.begin(); it != myCaptureList.end(); ++it) {
+        EventListenerKey myCaptureKey(theEvent->getType(), Event::CAPTURING);
+        for (std::deque<ComponentPtr>::const_iterator it = myTopToBottomList.begin(); it != myTopToBottomList.end(); ++it) {
             if ((*it)->hasEventListenersForType(myCaptureKey)) {
                 theEvent->dispatchTo(*it, Event::CAPTURING);
                 EventListenerMap myListeners = (*it)->getEventListeners();
@@ -85,7 +87,7 @@ namespace spark {
         // target phase
         theEvent->dispatch();
 
-        EventListenerKey myKey(theEvent->getType(), false);
+        EventListenerKey myKey(theEvent->getType(), Event::TARGET);
 
         std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = _myListenersMap.equal_range(myKey);
         for (EventListenerMap::const_iterator it = itp.first; it != itp.second; ++it) {
@@ -95,6 +97,24 @@ namespace spark {
                 return;
             }
         }
+        
+        // bubble phase
+        EventListenerKey myBubbleKey(theEvent->getType(), Event::BUBBLING);
+        for (std::deque<ComponentPtr>::const_reverse_iterator it = myTopToBottomList.rbegin(); it != myTopToBottomList.rend(); ++it) {
+            if ((*it)->hasEventListenersForType(myBubbleKey)) {
+                theEvent->dispatchTo(*it, Event::BUBBLING);
+                EventListenerMap myListeners = (*it)->getEventListeners();
+                std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = myListeners.equal_range(myBubbleKey);
+                for (EventListenerMap::const_iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
+                    AC_TRACE << "BUBBLE_PHASE: calling listener: "<<(*mapIt).second;
+                    (*(*mapIt).second)(theEvent);
+                    if (!theEvent->isDispatching()) {
+                        return;
+                    }
+                }
+            }
+        }
+
         theEvent->finishDispatch();
     }
 

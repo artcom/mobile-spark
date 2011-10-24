@@ -74,11 +74,6 @@ namespace spark {
         return true;
     }
 
-    bool
-    OnResumeComponentVisitor::preCheck(ComponentPtr theComponent) {
-        return true;
-    }
-
     CollectAABBComponentVisitor::CollectAABBComponentVisitor(std::vector<std::pair<ComponentPtr, float> > & theList,
                              const float x, const float y,
                              const matrix theProjectionMatrix) :

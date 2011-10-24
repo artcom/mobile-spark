@@ -66,7 +66,9 @@ namespace spark {
         //init animationManager with setup-time
         //(needed for animations created on setup)
         animation::AnimationManager::get().init(theCurrentMillis);
+#ifdef ANDROID
         assetProviderSetup(theAssetPath, appPath_);
+#endif
 #ifdef iOS
         MobileSDK_Singleton::get().setMobileSDK(ios::IOSMobileSDKPtr(new ios::IOSMobileSDK()));
 #endif
@@ -216,19 +218,19 @@ namespace spark {
         masl::AudioEngineSingleton::get().setAudioEngine(android::AndroidAudioEnginePtr(new android::AndroidAudioEngine("com/artcom/mobile/Base/SparkViewerActivity")));
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
 #endif
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/textures/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/layouts/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/sounds/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("", theAppPath);
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("textures/", theAppPath);            
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("layouts/", theAppPath);
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("shaders/", theAppPath);
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("models/", theAppPath);
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("fonts/", theAppPath);
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("sounds/", theAppPath);
+
 #ifdef iOS
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/downloads/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/", theAppPath);
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/downloads/", theAppPath);
 #elif ANDROID
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/downloads/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("downloads/", theAppPath);
 #endif
 
     }
