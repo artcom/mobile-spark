@@ -51,6 +51,7 @@ namespace acprojectview {
             void onLoadInitialSet3();
             void onLoadInitialSet4();
             void onAllReady();
+            void loadOfflineVersion();
             
             //idle
             void fitToWindowSize(const spark::ImagePtr theImage);

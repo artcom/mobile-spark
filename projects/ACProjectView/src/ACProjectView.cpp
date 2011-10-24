@@ -45,7 +45,7 @@ namespace acprojectview {
 
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
-        loadCount_(0), isRealized_(false), _myOnlineMode(true) {
+        loadCount_(0), isRealized_(false), _myOnlineMode(false) {
     } 
 
     ACProjectView::~ACProjectView() {
@@ -92,29 +92,36 @@ namespace acprojectview {
                 masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
                 masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
         } else {
-            // load global i18n 
-            std::string myNewSpark = "i18n.spark";
-            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, myNewSpark);
-            spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
-            for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
-                myTransform->addChild(*it);
-            }
-            // load global widgets
-            myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
-            myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "inner_menu.spark", myTransform);
-            onLoadComplete();
-                   
+            loadOfflineVersion();                   
         }
     }
-
+    
+    void ACProjectView::loadOfflineVersion() {
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        
+        // load global i18n 
+        std::string myNewSpark = "i18n.spark";
+        ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, myNewSpark);
+        spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
+        for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
+            myTransform->addChild(*it);
+        }
+        // load global widgets
+        myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
+        myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "inner_menu.spark", myTransform);            
+        onLoadComplete();
+        loadCount_ = 3;        
+    }
+    
     void ACProjectView::onErrorRequest(masl::RequestPtr theRequest) {
         AC_ERROR << "............ACProjectView onError for URL " << theRequest->getURL();
         //display error message if data has not been persisted
-        if (masl::AssetProviderSingleton::get().ap()->findFile("/downloads/i18n.spark").empty()) {
+        /*if (masl::AssetProviderSingleton::get().ap()->findFile("/downloads/i18n.spark").empty()) {
             TextPtr myErrorText = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("error"));
             myErrorText->setVisible(true);
-            myErrorText->setText("error: internet connection required for initial setup");
-        }
+            myErrorText->setText("network error: internet connection required for initial setup");
+        }*/
+        loadOfflineVersion();
     }
 
     void ACProjectView::onAssetReady(masl::RequestPtr theRequest) {
@@ -139,7 +146,7 @@ namespace acprojectview {
         } else if (loadCount_ == 3) {
             AC_DEBUG << ".............................onAssetsReady";
             spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
-            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/inner_menu.spark", myTransform);
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "inner_menu.spark", myTransform);
             onLoadComplete();
         }
     }
