@@ -21,7 +21,7 @@ namespace masl {
     std::string
     AssetProvider::findFile(const std::string & theFilename) const{
         std::string filePath;
-        if (masl::searchFile(includePaths_, theFilename, filePath)) {
+        if (masl::searchFile(theFilename, filePath)) {
             return filePath;
         } else {
             return "";

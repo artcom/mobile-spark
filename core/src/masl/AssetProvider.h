@@ -33,6 +33,7 @@ namespace masl {
         virtual std::string getDownloadsPath() const = 0;
         virtual std::string getDownloadsFolder() const = 0;
 
+        const std::vector<std::string> & getIncludePaths() { return includePaths_;}
     protected:
         std::vector<std::string> includePaths_;
         std::string assetPath_;

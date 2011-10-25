@@ -53,6 +53,9 @@ namespace spark {
         std::string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
         if (myFontName != "") {
             _myFontPath = masl::AssetProviderSingleton::get().ap()->findFile(myFontName);
+            if (_myFontPath == "") {
+                _myFontPath = myFontName;
+            }
         }
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
         myMaterial->getTextureUnit()->getTexture()->transparency_ = true;
