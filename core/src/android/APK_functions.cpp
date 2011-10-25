@@ -146,7 +146,7 @@ namespace android {
         for (int i = 0; i < numfilesInZip; ++i) {
             std::string s = zip_get_name(theAPKArchive, i, ZIP_FL_UNCHANGED);
             AC_DEBUG << s;
-            if (s.find("assets/"+thePath) == 0) {
+            if (s.find("assets/"+thePath) == 0 && (theFilter.empty() || s.find(theFilter) != std::string::npos)) {
                 theDirEntries.push_back(s);
             }
         }

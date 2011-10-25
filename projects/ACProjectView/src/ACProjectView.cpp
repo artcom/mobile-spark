@@ -54,7 +54,7 @@ namespace acprojectview {
 
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
-        loadCount_(0), isRealized_(false), _myOnlineMode(false) {
+        loadCount_(0), isRealized_(false), _myOnlineMode(true) {
     } 
 
     ACProjectView::~ACProjectView() {
@@ -117,7 +117,13 @@ namespace acprojectview {
         }
         // load global widgets
         myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
-        myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "inner_menu.spark", myTransform);            
+        myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "inner_menu.spark", myTransform); 
+        std::string myInnerMenu = masl::AssetProviderSingleton::get().ap()->getStringFromFile("inner_menu.spark");
+        idleFiles_ = spark::SparkComponentFactory::get().createSrcListFromSpark(myInnerMenu);
+        AC_DEBUG << ".................... idle files size " << idleFiles_.size();
+        //for (std::vector<std::string>::iterator it = idleFiles_.begin(); it != idleFiles_.end(); ++it) {
+        //    AC_PRINT << *it;
+        //}
         onLoadComplete();
         loadCount_ = 3;        
     }
@@ -148,6 +154,8 @@ namespace acprojectview {
             AC_DEBUG << ".............................onMenuRequestReady " << theRequest;
             std::string myNewSpark = theRequest->getResponseString();
             std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
+            idleFiles_ = assetList;
+            AC_DEBUG << "...........................num idle files online version " << idleFiles_.size();
             _myRequestManager.getAllRequest(BASE_URL+"/textures/", assetList,
                 masl::RequestCallbackPtr(),
                 masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
@@ -381,7 +389,7 @@ namespace acprojectview {
     }
 
     void ACProjectView::onWorldRealized(EventPtr theEvent) {
-        AC_PRINT << "onWorldRealized";
+        AC_DEBUG << "onWorldRealized";
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
         if (myEvent->worldname_ == "2dworld") {
             isRealized_ = true;
@@ -426,7 +434,6 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        idleFiles_ = masl::AssetProviderSingleton::get().ap()->getFilesFromPath(masl::AssetProviderSingleton::get().ap()->getDownloadsFolder(), ".png");
         onIdle();
     }
 
