@@ -54,7 +54,7 @@ namespace acprojectview {
 
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
-        loadCount_(0), isRealized_(false), _myOnlineMode(true) {
+        loadCount_(0), isRealized_(false), _myOnlineMode(false) {
     } 
 
     ACProjectView::~ACProjectView() {
