@@ -90,6 +90,13 @@ then
     BUILD_OK=$?
 fi
 
+# in case of deployment, remove test libs
+if [ $DEPLOY == "1" ]
+then
+    pwd
+    rm ../../../../_build/lib/armeabi-v7a/*test*.*
+fi
+
 if [ $BUILD_OK == "0" ] 
 then
     # build apk && upload

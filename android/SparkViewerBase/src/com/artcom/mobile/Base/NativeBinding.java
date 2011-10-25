@@ -83,7 +83,7 @@ public class NativeBinding {
         }catch (Exception e) {
             AC_Log.info(String.format("Font: %s on sdcard not found", theFontpath));
 	        try{
-				myTypeFace = Typeface.createFromAsset (ourActivity.getAssets(), theFontpath);
+				myTypeFace = Typeface.createFromAsset (ourActivity.getAssets(), "fonts/" + theFontpath);
 	        }catch (Exception e2) {			
 		        myTypeFace = Typeface.defaultFromStyle(Typeface.NORMAL);
 	            AC_Log.info(String.format("Font: %s not found in apk", theFontpath));
