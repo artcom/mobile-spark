@@ -129,22 +129,5 @@
             <en>
             <![CDATA[The authors Joachim Sauter, Dr. Susanne Jaschko and Jussi Ängeslevä will introduce “ART+COM: Media Spaces and Installations“ at the Gestalten Space in Berlin on September, 12th at 7 pm. They will present some of the key projects outlined in the book and explore the history and future of new media from an ART+COM perspective. The event is public.\nThe monograph published by Gestalten Verlag presents a selection of projects from the 23 year history of ART+COM. Created at the intersection of design, art and technology, these works highlight the milestones in the journey, which provided influential design impulses to the field of communication with new media. Additionally to comprehensive photo spreads, texts characterize the interdisciplinary working methods of the ART+COM-team and give insight into both the past and the future of new media in space.\n“ART+COM – Media Spaces and Installations“ is released in both German and  English.]]>
             </en>
-        </I18nItem>        
-        
-        <I18nItem name="spark_mobile_title">
-            <de>Spark geht Mobile</de>
-            <en>Spark goes Mobile</en>
-        </I18nItem>
-        <I18nItem name="spark_mobile_subtitle">
-            <de>Mobile Application Framework</de>
-            <en>Mobile Application Framework</en>
-        </I18nItem>        
-        <I18nItem name="spark_mobile_text">
-            <de>
-            <![CDATA[]]>
-            </de>
-            <en>
-            <![CDATA[]]>
-            </en>
-        </I18nItem>    
+        </I18nItem>                
 </Transform>
