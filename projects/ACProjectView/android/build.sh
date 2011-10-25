@@ -14,7 +14,6 @@ done
 
 if [ $DEPLOY == "1" ]
 then
-pwd
     cp -ra ../assets/* $PROJECT_NAME/assets
 fi
 PROJECT_NAME="ACProjectView" ../../../android/build_project.sh $*

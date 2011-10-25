@@ -1,0 +1,20 @@
+android
+----------
+cd android
+
+a) development version
+./build.sh  
+./push.sh
+
+b) deploy version
+./build.sh deploy
+
+both versions:
+./start.sh
+
+
+ios
+--------
+cd ios
+xcode_ios.sh
+start the generated xcode-project
