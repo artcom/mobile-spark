@@ -155,8 +155,17 @@ namespace acprojectview {
             std::string myNewSpark = theRequest->getResponseString();
             std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
             idleFiles_ = assetList;
+            std::vector<std::string> assetFilteredList;
+            std::string dummyString;
+            for(int i=0; i<assetList.size();++i) {
+                if (!searchFile(assetList[i], dummyString, false)) {
+                    assetFilteredList.push_back(assetList[i]);
+                } else {
+                    AC_DEBUG << " found Asset: " << assetList[i];  
+                }
+            }
             AC_DEBUG << "...........................num idle files online version " << idleFiles_.size();
-            _myRequestManager.getAllRequest(BASE_URL+"/textures/", assetList,
+            _myRequestManager.getAllRequest(BASE_URL+"/textures/", assetFilteredList,
                 masl::RequestCallbackPtr(),
                 masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
                 "/downloads/", true, masl::REQUEST_IF_NOT_AVAILABLE);
@@ -467,7 +476,7 @@ namespace acprojectview {
     void ACProjectView::onKenBurnsImageFadeStart() {
         AC_TRACE << "_____________________________________ fade start, load to " << (firstIdleImageVisible_?1:0);
         if (idleFiles_.size() >0) {
-            _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/downloads/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+            _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc(idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
         }
         fitToWindowSize(_myIdleScreenImagePtrs[0]);
         fitToWindowSize(_myIdleScreenImagePtrs[1]);
