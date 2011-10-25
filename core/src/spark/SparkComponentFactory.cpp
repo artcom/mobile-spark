@@ -1,5 +1,15 @@
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+//
+// Copyright (C) 1993-2011, ART+COM AG Berlin, Germany <www.artcom.de>
+//
+// It is distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+
 #include "SparkComponentFactory.h"
 
+#include <set>
 
 #include <masl/Logger.h>
 #include <masl/XMLUtils.h>
@@ -131,6 +141,7 @@ namespace spark {
         //TODO: this should be done with xpath as soon as libxml2 is compiled with xpath support
         //assumptions: file names should not contain escaped quotes
         std::vector<std::string> result;
+        std::set<std::string> set;
         size_t startPos = 0;
         size_t foundPos;
         while (std::string::npos != (foundPos = theSparkString.find("src=\"",startPos))) {
@@ -139,9 +150,10 @@ namespace spark {
             if (foundPos == std::string::npos) {
                 return result;
             }
-            result.push_back(theSparkString.substr(startPos, foundPos - startPos));
+            set.insert(theSparkString.substr(startPos, foundPos - startPos));
             startPos = foundPos + 1;
         }
+        result = std::vector<std::string>(set.begin(), set.end());
         return result;
     }
 }

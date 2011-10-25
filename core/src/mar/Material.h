@@ -1,3 +1,12 @@
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+//
+// Copyright (C) 1993-2011, ART+COM AG Berlin, Germany <www.artcom.de>
+//
+// It is distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+
 #ifndef _ac_mobile_masl_Material_h_included_
 #define _ac_mobile_masl_Material_h_included_
 
@@ -13,10 +22,10 @@
 #include "TextureUnit.h"
 
 namespace mar {
-    const std::string DEFAULT_VERTEX_SHADER = "/default_vertex.glsl";
-    const std::string DEFAULT_TEXTURED_VERTEX_SHADER = "/default_textured_vertex.glsl";
-    const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "/default_colored_fragment.glsl";
-    const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "/default_textured_fragment.glsl";
+    const std::string DEFAULT_VERTEX_SHADER = "default_vertex.glsl";
+    const std::string DEFAULT_TEXTURED_VERTEX_SHADER = "default_textured_vertex.glsl";
+    const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "default_colored_fragment.glsl";
+    const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "default_textured_fragment.glsl";
     const unsigned int MAX_NUM_HANDLES = 23;
 
     DECLARE_EXCEPTION(ProblemWithHandleException, masl::Exception)

@@ -1,15 +1,27 @@
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+//
+// Copyright (C) 1993-2011, ART+COM AG Berlin, Germany <www.artcom.de>
+//
+// It is distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+
 package com.artcom.mobile.Base;
 
 //Wrapper for native library
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Canvas;
@@ -20,6 +32,7 @@ import android.opengl.GLES20;
 import android.opengl.GLES10;
 import android.opengl.GLUtils;
 import android.os.Vibrator;
+import android.util.Log;
 
 import com.artcom.mobile.Base.AC_Log;
 import com.artcom.mobile.Base.Severity;
@@ -64,9 +77,18 @@ public class NativeBinding {
     textPaint.setAntiAlias(true);
     textPaint.setTextAlign(Paint.Align.LEFT);
     Typeface myTypeFace;
-    //myTypeFace = Typeface.defaultFromStyle(Typeface.NORMAL);
     if (theFontpath .compareTo("") != 0) {
-        myTypeFace = Typeface.createFromFile(theFontpath);
+        try{
+    		myTypeFace = Typeface.createFromFile(theFontpath);
+        }catch (Exception e) {
+            AC_Log.info(String.format("Font: %s on sdcard not found", theFontpath));
+	        try{
+				myTypeFace = Typeface.createFromAsset (ourActivity.getAssets(), theFontpath);
+	        }catch (Exception e2) {			
+		        myTypeFace = Typeface.defaultFromStyle(Typeface.NORMAL);
+	            AC_Log.info(String.format("Font: %s not found in apk", theFontpath));
+	        }
+        }	        
     } else {
         myTypeFace = Typeface.defaultFromStyle(Typeface.NORMAL);
     }

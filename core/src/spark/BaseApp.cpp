@@ -1,3 +1,12 @@
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+//
+// Copyright (C) 1993-2011, ART+COM AG Berlin, Germany <www.artcom.de>
+//
+// It is distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+
 
 #include "BaseApp.h"
 
@@ -149,7 +158,7 @@ namespace spark {
     std::string
     findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
         AC_PRINT << "......... findBestMatchedLayout for baseName: " << theBaseName << " with screen resolution: " << theScreenWidth << "/" << theScreenHeight;
-        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath("/layouts/", theBaseName);
+        std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath("layouts/", theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
         std::string myBestMatch = "";
@@ -164,7 +173,7 @@ namespace spark {
         std::string myLayoutName = "";
         for (unsigned int i = 0; i < myFiles.size(); i++) {
             if (getExtension(myFiles[i]) == "spark") {
-                std::string myChoice = "/"+ getFilenamePart(myFiles[i]);
+                std::string myChoice = getFilenamePart(myFiles[i]);
                 std::string myLayout = masl::AssetProviderSingleton::get().ap()->getStringFromFile(myChoice);
                 XMLNodePtr myNode(new XMLNode(myLayout));
                 if (myNode->nodeName == "Window") {
@@ -216,22 +225,23 @@ namespace spark {
 #elif ANDROID
         masl::AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
         masl::AudioEngineSingleton::get().setAudioEngine(android::AndroidAudioEnginePtr(new android::AndroidAudioEngine("com/artcom/mobile/Base/SparkViewerActivity")));
+        mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath()).c_str(), 755);
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
 #endif
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("core/shaders/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/textures/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/layouts/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/shaders/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/models/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/fonts/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/sounds/");
 #ifdef iOS
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("/../Documents/downloads/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/downloads/");
 #elif ANDROID
-        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAppPath + "/downloads/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("downloads/");
 #endif
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("textures/");            
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("layouts/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("shaders/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("models/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("fonts/");
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("sounds/");
+
 
     }
     
