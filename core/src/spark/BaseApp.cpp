@@ -229,6 +229,7 @@ namespace spark {
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
 #endif
 #ifdef iOS
+        masl::AssetProviderSingleton::get().ap()->addIncludePath(theAssetPath+"/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("../Documents/downloads/");
 #elif ANDROID

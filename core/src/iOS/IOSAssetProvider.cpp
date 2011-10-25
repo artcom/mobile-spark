@@ -23,6 +23,8 @@ namespace ios
     : AssetProvider(), _myAssetFolderPath(theAssetFolderPath)
     {
         assetPath_ = theAssetFolderPath + "/" + theAppPath;
+        includePaths_.push_back(""); 
+
     }
 
     IOSAssetProvider::~IOSAssetProvider()
@@ -31,23 +33,25 @@ namespace ios
 
     bool IOSAssetProvider::loadTextureFromPNG(const std::string & theFile, unsigned int & textureId, int & outWidth, int & outHeight, bool & rgb)
     {
-        if (theFile.size() > 0 && theFile[0] == '/') {
+        if (theFile.size() > 0 ) {
             std::string filePath;
-            if (masl::searchFile(includePaths_, theFile, filePath)) {
+            if (masl::searchFile(theFile, filePath)) {
                 return mar::loadTextureFromPNG(filePath, textureId, outWidth, outHeight, rgb);
             }
             AC_ERROR << "texture " << theFile << " was not found in search paths";
             throw masl::FileNotFoundException("texture " + theFile + " was not found in search paths", PLUS_FILE_LINE);
         }
-        return mar::loadTextureFromPNG(_myAssetFolderPath + "/" + theFile, textureId, outWidth, outHeight, rgb);
+        throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
+        return false;
     }
 
     std::string
     IOSAssetProvider::getStringFromFile(const std::string & theFile) const {
         std::string content = "";
-        if (theFile.size() > 0 && theFile[0] == '/') {
+        if (theFile.size() > 0) {
+            AC_PRINT << "--- AssetProvider: " << theFile;
             std::string filePath;
-            if (masl::searchFile(includePaths_, theFile, filePath)) {
+            if (masl::searchFile(theFile, filePath)) {
                 masl::readFile(filePath, content);
             } else {
                 AC_ERROR << "file " << theFile << " was not found in search paths";
@@ -55,16 +59,16 @@ namespace ios
             }
             return content;
         }
-        masl::readFile(_myAssetFolderPath + "/" + theFile, content);
+        throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
         return content;
     }
 
     std::vector<char>
     IOSAssetProvider::getBlockFromFile(const std::string & theFile) const {
         std::vector<char> content;
-        if (theFile.size() > 0 && theFile[0] == '/') {
+        if (theFile.size() > 0 ) {
             std::string filePath;
-            if (masl::searchFile(includePaths_, theFile, filePath)) {
+            if (masl::searchFile(theFile, filePath)) {
                 masl::readBinaryFile(filePath, content);
             } else {
                 AC_ERROR << "file " << theFile << " was not found in search paths";
@@ -72,16 +76,16 @@ namespace ios
             }
             return content;
         }
-        masl::readBinaryFile(_myAssetFolderPath + "/" + theFile, content);
+        throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
         return content;
     }
 
     std::vector<std::string>
     IOSAssetProvider::getLineByLineFromFile(const std::string & theFile) const {
         std::vector<std::string> content;
-        if (theFile.size() > 0 && theFile[0] == '/') {
+        if (theFile.size() > 0 ) {
             std::string filePath;
-            if (masl::searchFile(includePaths_, theFile, filePath)) {
+            if (masl::searchFile(theFile, filePath)) {
                 masl::readFileLineByLine(filePath, content);
             } else {
                 AC_ERROR << "file " << theFile << " was not found in search paths";
@@ -89,7 +93,7 @@ namespace ios
             }
             return content;
         }
-        masl::readFileLineByLine(_myAssetFolderPath + "/" + theFile, content);
+        throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
         return content;
     }
 
