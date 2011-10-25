@@ -1,3 +1,12 @@
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+//
+// Copyright (C) 1993-2011, ART+COM AG Berlin, Germany <www.artcom.de>
+//
+// It is distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
+// __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+
 #include "png_functions.h"
 
 #include <masl/AssetProvider.h>
@@ -13,7 +22,7 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     int width, height;
     bool rgb;
     if (masl::AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb)) {
-        theTexture->textureId_ = textureId;//setTextureId(textureId);
+        theTexture->textureId_ = textureId;
         theTexture->transparency_ = !rgb;
         theTexture->width_ = width;
         theTexture->height_ = height;

@@ -4,10 +4,18 @@ APPFOLDER=`pwd`/..
 
 VERBOSITY="-quiet"
 NUMCORES=
+DEPLOY=0
+BUILD_TYPE="debug"
 
 for i in $*
 do
     case $i in
+        deploy)
+            DEPLOY=1
+            ;;
+        release)
+            BUILD_TYPE="release"
+            ;;
         verbose)
             VERBOSITY=""
             ;;
@@ -48,7 +56,24 @@ then
     cp _build/lib/armeabi-v7a/lib$PROJECT_NAME.so ../../_build/lib/armeabi-v7a/
 fi
 
+# copy assets
+echo "copy assets"
+if [ $DEPLOY == "1" ]
+then
+    FOLDERS="models layouts shaders textures fonts sounds" 
+    for folder in $FOLDERS
+    do
+        echo "copy folder $folder"
+        cp -ra $folder android/$PROJECT_NAME/assets
+    done
 
+    CORE_FOLDERS="shaders"
+    for core_folder in $CORE_FOLDERS
+    do
+        echo "push core/$core_folder"
+        cp -ra ../../core/$core_folder android/$PROJECT_NAME/assets
+    done            
+fi
 
 # package java
 cd android
@@ -67,26 +92,28 @@ fi
 
 if [ $BUILD_OK == "0" ] 
 then
-    
-    # build java
-    ant "$VERBOSITY" compile
-    BUILD_OK=$?
-fi
-    
-if [ $BUILD_OK == "0" ] 
-then
     # build apk && upload
-    ant "$VERBOSITY" install
+    if [ $BUILD_TYPE == "release" ]; then
+        ant "$VERBOSITY" release 
+    else
+        ant "$VERBOSITY" debug install
+    fi
     BUILD_OK=$?
 fi
     
 cd -
 
-
 if [ $BUILD_OK == "0" ] 
 then
     echo "build done :-)"
+    if [ $BUILD_TYPE == "release" ]; then
+        echo "final release package can be found in bin/$PROJECT_NAME-release.apk"
+    fi
 else
     echo ":-( BUILD FAILED :-("
     exit 1
 fi
+
+# removed copied assets from javas assets dir
+rm -rf $PROJECT_NAME/assets/*
+

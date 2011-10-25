@@ -1,3 +1,12 @@
+# __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+#
+# Copyright (C) 1993-2011, ART+COM AG Berlin, Germany <www.artcom.de>
+#
+# It is distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+#  http://www.boost.org/LICENSE_1_0.txt)
+# __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
+
 
 find_library(spark_LIBRARY_DIRS NAMES libspark.so libspark.a PATHS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} NO_CMAKE_FIND_ROOT_PATH NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH NO_DEFAULT_PATH )
 find_library(masl_LIBRARY_DIRS NAMES libmasl.so libmasl.a PATHS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} NO_CMAKE_FIND_ROOT_PATH NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH NO_DEFAULT_PATH )
