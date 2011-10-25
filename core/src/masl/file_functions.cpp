@@ -9,8 +9,9 @@
 
 // own header
 #include "file_functions.h"
-
 #include "Exception.h"
+#include "AssetProvider.h"
+
 
 #include <string>
 #include <stdio.h>
@@ -44,8 +45,9 @@ namespace masl {
     bool
     readFile(const std::string & theUTF8Filename, std::string & theContent) {
          FILE * pFile;
-         std::string filepath;
+         std::string filepath;            
          searchFile(theUTF8Filename, filepath, true);
+         
          char *myCharBuffer;
          pFile = fopen (filepath.c_str(),"r");
          if (pFile == NULL) {
@@ -163,25 +165,15 @@ namespace masl {
 
     bool
     searchFile(const std::string & theFileName, std::string & retPath, bool theForce) {
-        FILE * pFile;
-        pFile = fopen(theFileName.c_str(),"r");
-        if (pFile == NULL && theForce) {
-            throw OpenFileFailed("Error opening file " + theFileName, PLUS_FILE_LINE);
-        }
-        if (pFile) {
-            fclose(pFile);
-            retPath = theFileName;
-            return true;
-        }
-        return false;
-    }
-
-    bool
-    searchFile(const std::vector<std::string> & theIncludeList, const std::string & theFileName, std::string & retPath) {
-        for (std::vector<std::string>::const_iterator it = theIncludeList.begin(); it != theIncludeList.end(); ++it) {
-            if (searchFile((*it) + theFileName, retPath)) {
+        const std::vector<std::string> & myIncludeList = masl::AssetProviderSingleton::get().ap()->getIncludePaths();
+        for (std::vector<std::string>::const_iterator it = myIncludeList.begin(); it != myIncludeList.end(); ++it) {
+            if (fileExists((*it) + theFileName)) {
+                retPath = (*it) + theFileName;
                 return true;
             }
+        }
+        if (theForce) {
+            throw OpenFileFailed("Error opening file " + theFileName, PLUS_FILE_LINE);            
         }
         return false;
     }

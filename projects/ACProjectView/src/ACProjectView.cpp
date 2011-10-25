@@ -54,7 +54,7 @@ namespace acprojectview {
 
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
-        loadCount_(0), isRealized_(false) {
+        loadCount_(0), isRealized_(false), _myOnlineMode(false) {
     } 
 
     ACProjectView::~ACProjectView() {
@@ -62,6 +62,7 @@ namespace acprojectview {
 
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
+
         ACProjectViewComponentMapInitializer::init();        
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         loadLayoutAndRegisterEvents(theScreenWidth, theScreenHeight);
@@ -90,24 +91,52 @@ namespace acprojectview {
         myLoadAnim->setY(_mySparkWindow->getSize()[1]/2.0);
 
         //start to load content from server
-        std::vector<std::string> myOnSetupNeededAssets;
-        myOnSetupNeededAssets.push_back("i18n.spark");
-        myOnSetupNeededAssets.push_back("inner_menu.spark");
-        _myRequestManager.setOnErrorCallback(
-            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onErrorRequest)));
-        _myRequestManager.getAllRequest(ACProjectView::BASE_URL + "/layouts/", myOnSetupNeededAssets, 
-            masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
-            masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
+        if (_myOnlineMode) {
+            std::vector<std::string> myOnSetupNeededAssets;
+            myOnSetupNeededAssets.push_back("i18n.spark");
+            myOnSetupNeededAssets.push_back("inner_menu.spark");
+            _myRequestManager.setOnErrorCallback(
+                masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onErrorRequest)));
+            _myRequestManager.getAllRequest(ACProjectView::BASE_URL + "/layouts/", myOnSetupNeededAssets, 
+                masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
+                masl::RequestCallbackPtr(), "/downloads/", true, masl::REQUEST_IF_NEWER);
+        } else {
+            loadOfflineVersion();                   
+        }
     }
-
+    
+    void ACProjectView::loadOfflineVersion() {
+        ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
+        
+        // load global i18n 
+        std::string myNewSpark = "i18n.spark";
+        ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, myNewSpark);
+        spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
+        for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
+            myTransform->addChild(*it);
+        }
+        // load global widgets
+        myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
+        myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "inner_menu.spark", myTransform); 
+        std::string myInnerMenu = masl::AssetProviderSingleton::get().ap()->getStringFromFile("inner_menu.spark");
+        idleFiles_ = spark::SparkComponentFactory::get().createSrcListFromSpark(myInnerMenu);
+        AC_DEBUG << ".................... idle files size " << idleFiles_.size();
+        //for (std::vector<std::string>::iterator it = idleFiles_.begin(); it != idleFiles_.end(); ++it) {
+        //    AC_PRINT << *it;
+        //}
+        onLoadComplete();
+        loadCount_ = 3;        
+    }
+    
     void ACProjectView::onErrorRequest(masl::RequestPtr theRequest) {
         AC_ERROR << "............ACProjectView onError for URL " << theRequest->getURL();
         //display error message if data has not been persisted
-        if (masl::AssetProviderSingleton::get().ap()->findFile("/downloads/i18n.spark").empty()) {
+        /*if (masl::AssetProviderSingleton::get().ap()->findFile("/downloads/i18n.spark").empty()) {
             TextPtr myErrorText = boost::static_pointer_cast<Text>(_mySparkWindow->getChildByName("loaderworld")->getChildByName("error"));
             myErrorText->setVisible(true);
-            myErrorText->setText("error: internet connection required for initial setup");
-        }
+            myErrorText->setText("network error: internet connection required for initial setup");
+        }*/
+        loadOfflineVersion();
     }
 
     void ACProjectView::onAssetReady(masl::RequestPtr theRequest) {
@@ -125,6 +154,8 @@ namespace acprojectview {
             AC_DEBUG << ".............................onMenuRequestReady " << theRequest;
             std::string myNewSpark = theRequest->getResponseString();
             std::vector<std::string> assetList = spark::SparkComponentFactory::get().createSrcListFromSpark(myNewSpark);
+            idleFiles_ = assetList;
+            AC_DEBUG << "...........................num idle files online version " << idleFiles_.size();
             _myRequestManager.getAllRequest(BASE_URL+"/textures/", assetList,
                 masl::RequestCallbackPtr(),
                 masl::RequestCallbackPtr(new ACProjectViewRequestCB(ptr, &ACProjectView::onAssetReady)),
@@ -132,7 +163,7 @@ namespace acprojectview {
         } else if (loadCount_ == 3) {
             AC_DEBUG << ".............................onAssetsReady";
             spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("2dworld"));
-            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "/downloads/inner_menu.spark", myTransform);
+            ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, "inner_menu.spark", myTransform);
             onLoadComplete();
         }
     }
@@ -358,10 +389,11 @@ namespace acprojectview {
     }
 
     void ACProjectView::onWorldRealized(EventPtr theEvent) {
+        AC_DEBUG << "onWorldRealized";
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
         if (myEvent->worldname_ == "2dworld") {
             isRealized_ = true;
-            if (loadCount_ == 3) {
+            if (loadCount_ == 3 || !_myOnlineMode) {
                 onAllReady();
             }
         }
@@ -402,7 +434,6 @@ namespace acprojectview {
         _mySparkWindow->addEventListener(TouchEvent::TAP, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_LEFT, myTouchCB);
         _mySparkWindow->addEventListener(GestureEvent::SWIPE_RIGHT, myTouchCB);
-        idleFiles_ = masl::AssetProviderSingleton::get().ap()->getFilesFromPath(masl::AssetProviderSingleton::get().ap()->getDownloadsFolder(), ".png");
         onIdle();
     }
 
@@ -435,7 +466,9 @@ namespace acprojectview {
 
     void ACProjectView::onKenBurnsImageFadeStart() {
         AC_TRACE << "_____________________________________ fade start, load to " << (firstIdleImageVisible_?1:0);
-        _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/downloads/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        if (idleFiles_.size() >0) {
+            _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setSrc("/downloads/"+idleFiles_[masl::random((size_t)0,idleFiles_.size()-1)]);
+        }
         fitToWindowSize(_myIdleScreenImagePtrs[0]);
         fitToWindowSize(_myIdleScreenImagePtrs[1]);
         _myIdleScreenImagePtrs[firstIdleImageVisible_?1:0]->setVisible(true);

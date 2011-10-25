@@ -22,7 +22,7 @@ void loadTextureFromPNG(const std::string & filename, TexturePtr theTexture) {
     int width, height;
     bool rgb;
     if (masl::AssetProviderSingleton::get().ap()->loadTextureFromPNG(filename, textureId, width, height, rgb)) {
-        theTexture->textureId_ = textureId;//setTextureId(textureId);
+        theTexture->textureId_ = textureId;
         theTexture->transparency_ = !rgb;
         theTexture->width_ = width;
         theTexture->height_ = height;

@@ -19,8 +19,11 @@ extern "C" {
 #include <masl/Logger.h>
 #include <mar/png_functions.h>
 
+#include "APK_functions.h"
 
 namespace android {
+
+DEFINE_EXCEPTION(PngAndroidLoadingException, masl::Exception)
 
 zip* archive;
 zip_file* file;
@@ -92,8 +95,14 @@ bool
 loadTextureFromPNG(zip* theAPKArchive, const std::string & filename, GLuint & outTextureId, int & outWidth, int & outHeight, bool & outRgb) {
     archive = theAPKArchive;
     mar::pngData myData;
-    return loadTextureFromPNGSkeleton(filename, outTextureId, outWidth, outHeight, outRgb, myData,
-                               close, initFileReading, prePNGReading, postPNGReading);
+    std::string myFoundFilePath;
+    if (searchFile(theAPKArchive, filename, myFoundFilePath, true)) {
+        return loadTextureFromPNGSkeleton(myFoundFilePath, outTextureId, outWidth, outHeight, outRgb, myData,
+                                   close, initFileReading, prePNGReading, postPNGReading);
+    } else {
+        throw PngAndroidLoadingException("Error opening APK " + filename, PLUS_FILE_LINE);
+        return false;
+    }    
 }
 
 } //namespace android

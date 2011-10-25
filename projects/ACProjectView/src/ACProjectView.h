@@ -60,6 +60,7 @@ namespace acprojectview {
             void onLoadInitialSet3();
             void onLoadInitialSet4();
             void onAllReady();
+            void loadOfflineVersion();
             
             //idle
             void fitToWindowSize(const spark::ImagePtr theImage);
@@ -103,6 +104,7 @@ namespace acprojectview {
             void onAssetReady(masl::RequestPtr theRequest);
             void onErrorRequest(masl::RequestPtr theRequest);
             void onLoadComplete();
+            bool _myOnlineMode;
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;
