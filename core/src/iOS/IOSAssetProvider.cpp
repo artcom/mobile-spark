@@ -49,7 +49,6 @@ namespace ios
     IOSAssetProvider::getStringFromFile(const std::string & theFile) const {
         std::string content = "";
         if (theFile.size() > 0) {
-            AC_PRINT << "--- AssetProvider: " << theFile;
             std::string filePath;
             if (masl::searchFile(theFile, filePath)) {
                 masl::readFile(filePath, content);
