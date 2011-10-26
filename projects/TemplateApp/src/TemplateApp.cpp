@@ -8,13 +8,7 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 #include "TemplateApp.h"
-#include <cstdlib>
 
-#include <masl/Logger.h>
-#include <masl/MobileSDK.h>
-
-#include <spark/Event.h>
-#include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
 #include "TemplateAppComponentMapInitializer.h"
