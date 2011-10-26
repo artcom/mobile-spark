@@ -76,8 +76,8 @@ namespace acprojectview {
         _myPopUpSubTitle->setMaxWidth(_myWidth - (2*_myPopUpTitle->getX()));
         
         _myPopupBG->setSize(_myWidth, 0);
-
-        ProjectMenuPtr myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(getRoot()->getChildByName("2dworld", true)->getChildByName("main",true));
+        ContainerPtr myRoot = boost::static_pointer_cast<Container>(getRoot());
+        ProjectMenuPtr myProjectMenu =  boost::static_pointer_cast<ProjectMenu>(myRoot->getChildByName("2dworld", true)->getChildByName("main",true));
         spark::ContainerPtr myProjectItems = boost::static_pointer_cast<spark::Container>(myProjectMenu);
                         
     }

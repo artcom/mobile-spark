@@ -38,9 +38,9 @@ namespace spark {
         }
 
         virtual void reparent() {AC_INFO << "reparent " << *this;};
-        virtual void realize() {AC_INFO << "realize " << *this;};
-        void realizeASync();
-        const bool isAllRealized() const { return _myRealizedAllChildrenFlag;}
+        virtual void realize() {AC_INFO << "realize " << *this; _myRealizedFlag = true;};
+        virtual void realizeASync();
+        const bool isAllRealized() const { return _myRealizedFlag;}
 
         //currently only used in ANDROID, to handle the loss of the GL context when going in background
         virtual void onPause() {};
@@ -52,7 +52,8 @@ namespace spark {
         const std::string & getName() const { return _myName; };
         virtual std::string getAttributesAsString() const;
         virtual const char * const & getType() const = 0;
-        virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
+        // for convenience
+        virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const { return ComponentPtr();};
         ComponentPtr getRoot();
         const masl::XMLNodePtr getNode() const { return _myXMLNode; }
         const ComponentWeakPtr & getParent() const { return _myParent; };
@@ -62,10 +63,9 @@ namespace spark {
     protected:
         const masl::XMLNodePtr _myXMLNode;
         std::string _myName;
-        VectorOfComponentPtr _myChildren;
+        bool _myRealizedFlag;
     private:
         ComponentWeakPtr _myParent;
-        bool _myRealizedAllChildrenFlag;
     };
 };
 #endif
