@@ -42,7 +42,9 @@
 #define _ac_mobile_asl_test_APK_functions_h_included_
 
 #include <masl/UnitTest.h>
+#include <masl/AssetProvider.h>
 
+#include "../AndroidAssetProvider.h"
 #include "../APK_functions.h"
 
 
@@ -50,7 +52,11 @@ namespace android {
     class APK_functions_UnitTest : public UnitTest {
         public:
             APK_functions_UnitTest(JNIEnv* env, jstring apkPath) :
-                UnitTest("APK_functions_UnitTest"), env(env), apkPath(apkPath) {  }
+                UnitTest("APK_functions_UnitTest"), env(env), apkPath(apkPath) {  
+
+                const char *apkString = env->GetStringUTFChars(apkPath, NULL);
+                masl::AssetProviderSingleton::get().setAssetProvider(AndroidAssetProviderPtr(new AndroidAssetProvider(apkString,"")));
+            }
 
             JNIEnv* env;
             jstring apkPath;
