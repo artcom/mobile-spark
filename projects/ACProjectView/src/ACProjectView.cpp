@@ -157,7 +157,7 @@ namespace acprojectview {
             idleFiles_ = assetList;
             std::vector<std::string> assetFilteredList;
             std::string dummyString;
-            for(int i=0; i<assetList.size();++i) {
+            for (size_t i=0; i<assetList.size();++i) {
                 if (!searchFile(assetList[i], dummyString, false)) {
                     assetFilteredList.push_back(assetList[i]);
                 } else {
