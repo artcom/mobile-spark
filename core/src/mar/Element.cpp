@@ -89,7 +89,7 @@ namespace mar {
 
         glGenBuffers(1, &indexBuffer_);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer_);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices_ * sizeof(GLushort)), indexDataVBO_.get(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (numIndices_ * sizeof(GLushort)), indexData_.get(), GL_STATIC_DRAW);
 
 #ifdef iOS
         glBindVertexArrayOES(0);
@@ -154,6 +154,7 @@ namespace mar {
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             ASSERT_GL("Element::updateCompleteVertexBuffersContent", PLUS_FILE_LINE);
         }
+        //XXX: update indexbuffer too?!
     }
 
     std::string
