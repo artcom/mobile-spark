@@ -44,21 +44,25 @@ namespace mar {
         virtual ~Element();
 
         void resetGL();
-        void draw() const;
+        void draw();
         void loadData(const matrix & theMatrix);
         void unloadData() const;
         void createVertexBuffers();
-        void updateCompleteVertexBuffersContent();
         std::string getAttributesAsString() const;
+        boost::shared_array<float> & getVertexData() { dirtyFlag_ = true; return vertexData_; };
+        void setVertexData(const boost::shared_array<float> & theData) { vertexData_ = theData; };
 
         MaterialPtr material_;
         unsigned int numVertices_;
         unsigned int numIndices_;
 
-        boost::shared_array<float> vertexData_;    //interleaved
         boost::shared_array<GLushort> indexDataVBO_;
 
     protected:
+        void updateCompleteVertexBuffersContent();
+
+        bool dirtyFlag_;
+        boost::shared_array<float> vertexData_;    //interleaved
         void deleteVertexBuffers();
         std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
         #ifdef iOS

@@ -15,6 +15,7 @@
 namespace mar {
     /////////////////////////////////////////////////////////////Element
     Element::Element():
+        dirtyFlag_(true),
         #ifdef iOS
         vertexArrayObject_(0),
         #endif
@@ -131,7 +132,10 @@ namespace mar {
     }
 
     void
-    Element::draw() const {
+    Element::draw() {
+        if (dirtyFlag_) {
+            updateCompleteVertexBuffersContent();
+        }
 #ifdef iOS
         glBindVertexArrayOES(vertexArrayObject_);
         glDrawElements(GL_TRIANGLES, numIndices_, GL_UNSIGNED_SHORT, (void*)0);
@@ -142,8 +146,8 @@ namespace mar {
         ASSERT_GL("Element::draw", PLUS_FILE_LINE);
     }
 
-    //XXX: this should not be called from outside, if vertexdata is outdated they should automatically updated
     void Element::updateCompleteVertexBuffersContent() {
+        dirtyFlag_ = false;
         if (vertexBuffer_) {
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
             glBufferSubData(GL_ARRAY_BUFFER,0,(numVertices_ * stride_), vertexData_.get());

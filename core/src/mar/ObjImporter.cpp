@@ -93,7 +93,7 @@ namespace mar {
                     materialMap_[myMaterialId] = myMaterial;
                 }
                 myMaterialId = data;
-                myMaterial = MaterialPtr(new UnlitColoredMaterial()); //XXX: here we do not know if we need textures
+                myMaterial = MaterialPtr(new UnlitColoredMaterial()); //here we do not know if we need textures, use default material, exchange later if necessary
             } else if (type == "Ka") {
                 //TODO: not supported yet
                 //vector4 myColor = getColor(data);
@@ -117,7 +117,7 @@ namespace mar {
                 //not supported yet
                 //boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel_ = masl::as<int>(data);
             } else if (type == "map_Kd") {
-                //XXX: here we know that we need textures
+                //here we know that we need textures -> exchange default material with textured material
                 myMaterial = MaterialPtr(new UnlitTexturedMaterial("/textures/" + data));
             }
         }
@@ -167,10 +167,10 @@ namespace mar {
             }
         }
         element->numVertices_ = myIndex;
-        element->vertexData_ = boost::shared_array<float>(new float[(element->numVertices_) * dataPerVertex]);
+        element->setVertexData(boost::shared_array<float>(new float[(element->numVertices_) * dataPerVertex]));
         int vertexDataIndex = 0;
         for (std::vector<float>::const_iterator it = temporaryVertexData.begin(); it != temporaryVertexData.end(); ++it) {
-            element->vertexData_[vertexDataIndex++] = *it;
+            element->getVertexData()[vertexDataIndex++] = *it;
         }
         theShape->elementList_.push_back(element);
         AC_INFO << "num parts " << theShape->elementList_.size();
