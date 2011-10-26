@@ -40,6 +40,21 @@ namespace spark {
             (*it)->setParent(shared_from_this());
         }
     }
+
+    void
+    Container::realizeASync() {
+        _myRealizedFlag = true;
+        for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
+            if (!(*it)->isAllRealized()) {
+                (*it)->realizeASync();
+                _myRealizedFlag = false;
+                break;
+            }
+        }
+        if (_myRealizedFlag) {
+            realize();
+        }
+    }
     
     VectorOfComponentPtr
     Container::getChildrenByType(const std::string & theType) const {

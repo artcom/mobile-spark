@@ -92,7 +92,7 @@ namespace spark {
     parentFirstVisitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {
         bool myContinueTraversal = theVisitor.visit(theComponent);
         if (!myContinueTraversal) { return; }
-        ContainerPtr myContainer = boost::static_pointer_cast<Container>(theComponent);
+        ContainerPtr myContainer = boost::dynamic_pointer_cast<Container>(theComponent);
         if (!myContainer) { return; }
         VectorOfComponentPtr myChildren = myContainer->getChildren();
         for (std::vector<ComponentPtr>::const_iterator it = myChildren.begin();
@@ -104,7 +104,7 @@ namespace spark {
     template<class VISITOR> void
     childFirstVisitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {
         if (theVisitor.preCheck(theComponent)) {
-            ContainerPtr myContainer = boost::static_pointer_cast<Container>(theComponent);
+            ContainerPtr myContainer = boost::dynamic_pointer_cast<Container>(theComponent);
             if (myContainer) {
                 VectorOfComponentPtr myChildren = myContainer->getChildren();
                 for (std::vector<ComponentPtr>::const_iterator it = myChildren.begin();

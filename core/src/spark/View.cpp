@@ -45,7 +45,8 @@ namespace spark {
         }
         string myCameraName = _myXMLNode->getAttributeAs<std::string>("cameraName", "");
         // find camera
-        _myCamera = boost::static_pointer_cast<spark::RenderCamera>(getRoot()->getChildByName(myCameraName, true));
+        ContainerPtr myRoot = boost::static_pointer_cast<Container>(getRoot());
+        _myCamera = boost::static_pointer_cast<spark::RenderCamera>(myRoot->getChildByName(myCameraName, true));
     }
 
     void

@@ -25,16 +25,18 @@ namespace spark {
         virtual ~Container() = 0;
         
         virtual void reparent();
-        virtual VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
+        virtual void realizeASync();
+        VectorOfComponentPtr getChildrenByType(const std::string & theType) const; 
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const; 
         const VectorOfComponentPtr & getChildren() const { return _myChildren; }; 
         virtual void addChild(const ComponentPtr theChild);
-
         void removeChild(ComponentPtr theChild);
+
         const BaseAppPtr getApp() { return _myApp;}
 
     protected:
         const BaseAppPtr _myApp;
+        VectorOfComponentPtr _myChildren;
 
 
     };
