@@ -52,7 +52,6 @@ namespace spark {
         const std::string & getName() const { return _myName; };
         virtual std::string getAttributesAsString() const;
         virtual const char * const & getType() const = 0;
-        const VectorOfComponentPtr & getChildren() const { return _myChildren; }; //XXX: should be in Container
         virtual ComponentPtr getChildByName(const std::string & theName, bool theDeepFlag = false) const;
         ComponentPtr getRoot();
         const masl::XMLNodePtr getNode() const { return _myXMLNode; }

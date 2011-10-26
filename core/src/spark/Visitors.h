@@ -91,9 +91,12 @@ namespace spark {
     template<class VISITOR> void
     parentFirstVisitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {
         bool myContinueTraversal = theVisitor.visit(theComponent);
-        if (!myContinueTraversal || theComponent->getChildren().size() == 0) { return; }
-        for (std::vector<ComponentPtr>::const_iterator it = theComponent->getChildren().begin();
-                                                       it != theComponent->getChildren().end(); ++it) {
+        if (!myContinueTraversal) { return; }
+        ContainerPtr myContainer = boost::static_pointer_cast<Container>(theComponent);
+        if (!myContainer) { return; }
+        VectorOfComponentPtr myChildren = myContainer->getChildren();
+        for (std::vector<ComponentPtr>::const_iterator it = myChildren.begin();
+                                                       it != myChildren.end(); ++it) {
             parentFirstVisitComponents(theVisitor, *it);
         }
     };
@@ -101,9 +104,13 @@ namespace spark {
     template<class VISITOR> void
     childFirstVisitComponents(VISITOR & theVisitor, ComponentPtr theComponent) {
         if (theVisitor.preCheck(theComponent)) {
-            for (std::vector<ComponentPtr>::const_iterator it = theComponent->getChildren().begin();
-                                                           it != theComponent->getChildren().end(); ++it) {
-                childFirstVisitComponents(theVisitor, *it);
+            ContainerPtr myContainer = boost::static_pointer_cast<Container>(theComponent);
+            if (myContainer) {
+                VectorOfComponentPtr myChildren = myContainer->getChildren();
+                for (std::vector<ComponentPtr>::const_iterator it = myChildren.begin();
+                                                               it != myChildren.end(); ++it) {
+                    childFirstVisitComponents(theVisitor, *it);
+                }
             }
             theVisitor.visit(theComponent);
         }
