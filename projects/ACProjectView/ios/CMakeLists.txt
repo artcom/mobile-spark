@@ -11,9 +11,9 @@ file(GLOB SOURCES *.m *.mm)
 file(GLOB HEADERS *.h *.pch)
 
 IF(${TARGET_PLATFORM} STREQUAL iPhoneOS)
-    set(CMAKE_EXE_LINKER_FLAGS "-arch armv7 --isysroot=${SDKROOT} -miphoneos-version-min=${SDKVER}")
+    set(CMAKE_EXE_LINKER_FLAGS "-arch armv7 -miphoneos-version-min=${SDKVER}")
 ELSEIF(${TARGET_PLATFORM} STREQUAL iPhoneSimulator)
-    set(CMAKE_EXE_LINKER_FLAGS "-arch i386 --isysroot=${SDKROOT} -miphoneos-version-min=${SDKVER}")
+    set(CMAKE_EXE_LINKER_FLAGS "-arch i386 -miphoneos-version-min=${SDKVER}")
 ENDIF()
 
 # Set the OS X Bundle specific CMake variables which will be used to populate the plist for
