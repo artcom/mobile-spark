@@ -10,7 +10,13 @@
 #include "AppProvider.h"
 
 namespace spark {
+    AppProvider::AppProvider() {
+        
+    }
+    
+    
     AppProvider::~AppProvider() {
+
     }
 
     void
