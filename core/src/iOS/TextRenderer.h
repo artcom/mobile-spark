@@ -26,8 +26,7 @@ namespace ios {
         TextRenderer();
         virtual ~TextRenderer();
         void renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, 
-                        vector4 theColor, float theMaxWidth, float theMaxHeight, const std::string & theAlign, const std::string &theFontPath,
-                        int theLineHeight);
+                        vector4 theColor, float theMaxWidth, float theMaxHeight, const std::string & theAlign, const std::string &theFontPath, int theLineHeight, int theStartIndex);
         int getTextureID();
         int getTextureWidth();
         int getTextureHeight();
@@ -40,6 +39,7 @@ namespace ios {
         int textureHeight;
         int renderedGlyphIndex;
         CGSize suggestedSize;
+        
     };
     typedef masl::Ptr<TextRenderer> TextRendererPtr;
 };
