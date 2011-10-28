@@ -18,7 +18,7 @@ namespace ios {
     }
     
     void TextRenderer::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, 
-                                  vector4 theColor, float theMaxWidth, float theMaxHeight, const std::string & theAlign, const std::string &theFontPath, int theLineHeight) {
+                                  vector4 theColor, float theMaxWidth, float theMaxHeight, const std::string & theAlign, const std::string &theFontPath, int theLineHeight, int theStartIndex) {
         // Initialize an attributed string.
         NSString *string = [NSString stringWithCString:theMessage.c_str() encoding:NSUTF8StringEncoding];
         //The linebreaks are not encoded by the XML-Parser.
@@ -148,6 +148,10 @@ namespace ios {
             }
         }
         renderedGlyphIndex = calcRenderedGlyphIndex(theMessage, string, fitRange);
+        
+        if(renderedGlyphIndex>0 && theMessage[renderedGlyphIndex-1] == '\\') renderedGlyphIndex++;
+        if (renderedGlyphIndex!=-1) renderedGlyphIndex += theStartIndex; 
+        
     }
     
     int TextRenderer::getTextureID() {
@@ -173,7 +177,9 @@ namespace ios {
             if (found < theFitRange.length+foundSpecials) foundSpecials++;
             found=theMessage.find("\\n",found+2);
         }
-        if(myString.size()+foundSpecials +1 >= theMessage.size()) return -1;
+        if(myString.size()+foundSpecials +1 >= theMessage.size()) {
+            return -1;   
+        }
         return myString.size() + foundSpecials;        
     }
     
