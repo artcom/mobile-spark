@@ -87,7 +87,7 @@ int backtrace(const void** addrs, size_t ignore, size_t size)
     state.count = size;
     state.ignore = ignore;
     state.addrs = addrs;
-    _Unwind_Backtrace(trace_function, (void*)&state);
+   // _Unwind_Backtrace(trace_function, (void*)&state);
     return size - state.count;
 }
 

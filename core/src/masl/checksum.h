@@ -15,7 +15,8 @@
 #include <string.h>
 
 namespace masl {
-    unsigned long initiateCRC32() { return crc32(0L, Z_NULL, 0);}
+    
+    inline unsigned long initiateCRC32() { return crc32(0L, Z_NULL, 0);}
     
     template<class T>
     void
