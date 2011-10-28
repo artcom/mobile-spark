@@ -27,10 +27,6 @@ endforeach()
 
 add_subdirectory(core)
 
-#add_library(LIBCURL STATIC IMPORTED)
-#set_property(TARGET LIBCURL PROPERTY
-#            IMPORTED_LOCATION ${libCurl_LIBRARY_DIRS})
-
 if(ANDROID)
     # add imported target
     add_library(LIBXML2 STATIC IMPORTED)

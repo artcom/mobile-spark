@@ -11,7 +11,6 @@
 #include "Logger.h"
 #include "string_functions.h"
 #include "SingletonManager.h"
-#include "MobileSDK.h"
 
 #include "XMLUtils.h"
 #include <dlfcn.h>

@@ -1,0 +1,20 @@
+android
+----------
+cd android
+
+a) development version
+./build.sh  
+./push.sh       : pushs assets to sdcard, it's also possible to push single folders with e.g. /push.sh shaders layouts
+
+b) deploy version
+./build.sh deploy
+
+both versions:
+./start.sh
+
+
+ios
+--------
+cd ios
+xcode_ios.sh
+start the generated xcode-project

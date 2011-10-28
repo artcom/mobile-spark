@@ -156,7 +156,7 @@ namespace demoapp {
         _myErrorMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("curl_error", true));
         _myRequestManager.setOnErrorCallback(
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onErrorRequestCB)));
-        _myRequestManager.getRequest(BASE_URL + "/string.txt",
+        _myRequestManager.getRequest(BASE_URL + "string.txt",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onTextRequestReady)));
         _myRequestManager.getRequest(BASE_URL,
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onGetRequestReady)));
@@ -274,7 +274,7 @@ namespace demoapp {
     }
     void DemoApp::onRepeatingDateRequest() {
         DemoAppPtr ptr = boost::static_pointer_cast<DemoApp>(shared_from_this());    	
-        _myRequestManager.getRequest(BASE_URL + "/currentDate.php",
+        _myRequestManager.getRequest(BASE_URL + "currentDate.php",
             masl::RequestCallbackPtr(new DemoRequestCB(ptr, &DemoApp::onDateRequestReady)));
     }
     void DemoApp::onTextRequestReady(RequestPtr theRequest) {

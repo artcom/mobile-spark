@@ -47,7 +47,9 @@ namespace android {
         std::string myFoundFilePath;
         bool foundFile = searchFile(theAPKArchive, theFileName, myFoundFilePath, true);
         if (!foundFile) {
-            return NULL;
+            AC_ERROR << "file " << theFileName << " not found in apk";
+            throw masl::FileNotFoundException("file " + theFileName + " not found in apk", PLUS_FILE_LINE);
+            return "";
         }
         zip_file* file = zip_fopen(theAPKArchive, myFoundFilePath.c_str(), 0);
         
@@ -64,6 +66,8 @@ namespace android {
         std::string myFoundFilePath;
         bool foundFile = searchFile(theAPKArchive, theFileName, myFoundFilePath, true);
         if (!foundFile) {
+            AC_ERROR << "file " << theFileName << " not found in apk";
+            throw masl::FileNotFoundException("file " + theFileName + " not found in apk", PLUS_FILE_LINE);
             return content;
         }
         zip_file* file = zip_fopen(theAPKArchive, myFoundFilePath.c_str(), 0);
@@ -83,6 +87,8 @@ namespace android {
         std::string myFoundFilePath;
         bool foundFile = searchFile( theAPKArchive, theFileName, myFoundFilePath, true);
         if (!foundFile) {
+            AC_ERROR << "file " << theFileName << " not found in apk";
+            throw masl::FileNotFoundException("file " + theFileName + " not found in apk", PLUS_FILE_LINE);
             return content;
         }
         zip_file* file = zip_fopen(theAPKArchive, myFoundFilePath.c_str(), 0);

@@ -93,27 +93,31 @@ namespace mar {
                     materialMap_[myMaterialId] = myMaterial;
                 }
                 myMaterialId = data;
-                myMaterial = MaterialPtr(new UnlitColoredMaterial()); //XXX: here we do not know if we need textures
+                myMaterial = MaterialPtr(new UnlitColoredMaterial()); //here we do not know if we need textures, use default material, exchange later if necessary
             } else if (type == "Ka") {
-                vector4 myColor = getColor(data);
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->ambient_ = myColor;
+                //TODO: not supported yet
+                //vector4 myColor = getColor(data);
+                //boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->ambient_ = myColor;
             } else if (type == "Kd") {
                 vector4 myColor = getColor(data);
                 boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->setDiffuseColor(myColor);
             } else if (type == "Ks") {
-                vector4 myColor = getColor(data);
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->specular_ = myColor;
+                //TODO: not supported yet
+                //vector4 myColor = getColor(data);
+                //boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->specular_ = myColor;
             } else if (type == "d" || type == "Tr") {
                 UnlitColoredMaterialPtr myUnlitColoredMaterial = boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial);
                 vector4 myDiffuseColor = myUnlitColoredMaterial->getDiffuseColor();
                 myDiffuseColor[3] = masl::as<float>(data);
                 myUnlitColoredMaterial->setDiffuseColor(myDiffuseColor);
             } else if (type == "Ns") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->shininess_ = masl::as<float>(data);
+                //not supported yet
+                //boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->shininess_ = masl::as<float>(data);
             } else if (type == "illum") {
-                boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel_ = masl::as<int>(data);
+                //not supported yet
+                //boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel_ = masl::as<int>(data);
             } else if (type == "map_Kd") {
-                //XXX: here we know that we need textures
+                //here we know that we need textures -> exchange default material with textured material
                 myMaterial = MaterialPtr(new UnlitTexturedMaterial("/textures/" + data));
             }
         }
@@ -127,24 +131,24 @@ namespace mar {
                                          size_t startFaceIndex) {
         size_t dataPerVertex = 3 + 3 + 2;
         element->numIndices_ = (faces_.size() - startFaceIndex) * 3;
-        element->indexDataVBO_ = boost::shared_array<GLushort>(new GLushort[element->numIndices_]);
+        IndexData myIndexData = IndexData(new IndexData::element_type[element->numIndices_]);
         std::vector<float> temporaryVertexData;
         std::map<boost::tuple<int, int, int>, int> indexMap;
         int myIndex = 0;
         int indexDataPosition = 0;
         std::vector<std::vector<int> >::iterator it = faces_.begin();
-        advance(it,startFaceIndex);
+        std::advance(it,startFaceIndex);
         for (; it != faces_.end(); ++it) {
             for (size_t i = 0; i < 3; i++) {
 
                 boost::tuple<int, int, int> key = boost::make_tuple((*it)[i * 3 + 0], (*it)[i * 3 + 1], (*it)[i * 3 + 2]);
                 if (indexMap.find(key) != indexMap.end()) {
-                    element->indexDataVBO_[indexDataPosition] = indexMap.at(key);
+                    myIndexData[indexDataPosition] = indexMap.at(key);
                     indexDataPosition++;
                 }
                 else {
                     indexMap[key] = myIndex;
-                    element->indexDataVBO_[indexDataPosition] = myIndex;
+                    myIndexData[indexDataPosition] = myIndex;
                     myIndex++;
                     indexDataPosition++;
 
@@ -162,11 +166,12 @@ namespace mar {
                 }
             }
         }
+        element->setIndexData(myIndexData);
         element->numVertices_ = myIndex;
-        element->vertexData_ = boost::shared_array<float>(new float[(element->numVertices_) * dataPerVertex]);
+        element->setVertexData(VertexData(new VertexData::element_type[element->numVertices_ * dataPerVertex]));
         int vertexDataIndex = 0;
         for (std::vector<float>::const_iterator it = temporaryVertexData.begin(); it != temporaryVertexData.end(); ++it) {
-            element->vertexData_[vertexDataIndex++] = *it;
+            element->getVertexData()[vertexDataIndex++] = *it;
         }
         theShape->elementList_.push_back(element);
         AC_INFO << "num parts " << theShape->elementList_.size();

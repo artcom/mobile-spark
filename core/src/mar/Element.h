@@ -38,28 +38,37 @@ namespace mar {
     const unsigned int TEXTURED_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
     const unsigned int TEXTURED_NORMAL_VERTEX_SIZE = ((VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE + VERTEX_TEXCOORD0_SIZE) * (sizeof(float)));
 
+    typedef boost::shared_array<float> VertexData;
+    typedef boost::shared_array<GLushort> IndexData;
+
     class Element {
     public:
         Element();
         virtual ~Element();
 
         void resetGL();
-        void draw() const;
+        void draw();
         void loadData(const matrix & theMatrix);
         void unloadData() const;
         void createVertexBuffers();
-        void updateCompleteVertexBuffersContent();
         std::string getAttributesAsString() const;
+        VertexData & getVertexData() { dirtyFlag_ = true; return vertexData_; };
+        IndexData & getIndexData() { dirtyFlag_ = true; return indexData_; };
+        void setVertexData(const VertexData & theData) { vertexData_ = theData; dirtyFlag_ = true;};
+        void setIndexData(const IndexData & theData) { indexData_ = theData; dirtyFlag_ = true;};
 
         MaterialPtr material_;
         unsigned int numVertices_;
         unsigned int numIndices_;
 
-        boost::shared_array<float> vertexData_;    //interleaved
-        boost::shared_array<GLushort> indexDataVBO_;
 
     protected:
+        void updateCompleteVertexBuffersContent();
         void deleteVertexBuffers();
+
+        bool dirtyFlag_;
+        VertexData vertexData_;    //interleaved
+        IndexData indexData_;
         std::vector<boost::tuple<unsigned int, unsigned int, unsigned int> > _myConfig;
         #ifdef iOS
         GLuint vertexArrayObject_;
