@@ -30,7 +30,7 @@ namespace ios
         masl::TextInfo textInfo;        
         
         TextRendererPtr textRenderer = TextRendererPtr(new TextRenderer());
-        textRenderer.get()->renderText(theMessage.substr(theStartIndex), theTextureId, theFontSize, theColor, (float) theMaxWidth, (float) theMaxHeight, theAlign, theFontPath,theLineHeight);
+        textRenderer.get()->renderText(theMessage.substr(theStartIndex), theTextureId, theFontSize, theColor, (float) theMaxWidth, (float) theMaxHeight, theAlign, theFontPath,theLineHeight, theStartIndex);
         
         textInfo.textureID = textRenderer.get()->getTextureID();
         textInfo.height = textRenderer.get()->getTextureHeight();
