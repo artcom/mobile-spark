@@ -8,7 +8,9 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 #import "EventManager.h"
+#ifdef __cplusplus
 #include <spark/AppProvider.h>
+#endif
 
 @implementation EventManager
 
@@ -97,6 +99,7 @@
 - (void)handlePanGesture:(UIPanGestureRecognizer *)theRecognizer {
     CGPoint translation = [theRecognizer translationInView:_myView];
     CGPoint location = [theRecognizer locationInView:_myView];
+    if(location.x != location.x || location.y != location.y) return;
     NSLog(@"Pan-Translation  :   started at: %f, %f   translation:  %f, %f", location.x, location.y, translation.x, translation.y);
     [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pan' x='%f' y='%f' dx='%f' dy='%f'/>", location.x, _myHeight-location.y, translation.x, _myHeight-translation.y]];
 }
