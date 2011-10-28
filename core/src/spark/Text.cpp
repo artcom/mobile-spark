@@ -57,6 +57,7 @@ namespace spark {
                 _myFontPath = myFontName;
             }
         }
+        AC_INFO << "Text ctor: " << _myFontPath;
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
         myMaterial->getTextureUnit()->getTexture()->transparency_ = true;
         myMaterial->setCustomHandles(customShaderValues_);

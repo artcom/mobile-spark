@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Window name="Samsung Galaxy S" fullscreen="true" i18nContext="global-i18n" clearColor="[0.2, 0.4, 0.1, 1]" orientation="landscape" width="1024" height="768">
 
-    <Template name="Controls" src="/controls.spark"/>
-    <Template name="Slide" src="/slide.spark"/>
+    <Template name="Controls" src="controls.spark"/>
+    <Template name="Slide" src="slide.spark"/>
 
     <I18nContext name="global-i18n" defaultLanguage="en">
         <I18nItem name="lang_text">
@@ -34,16 +34,16 @@
         <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
 
         <Controls x="20" y="20" z="20">
-            <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="/deco.png"/>
+            <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="deco.png"/>
         </Controls>
 
         <Slide name="TextSlide" alpha="1" title="Text-Examples">
-	    <Text name="textblock2" y="610" x="500" text="Fontsize 24 - acswissmed.ttf" color="[1,1,1,1]" fontsize="22" font="/acswissmed.ttf"/>
-            <Text name="textblock2" y="570" x="500" text="Fontsize 22 - acswissmed.ttf" color="[1,1,1,1]" fontsize="20" font="/acswissmed.ttf"/>
-            <Text name="textblock2" y="520" x="500" text="Fontsize 18 - acswissmed.ttf" color="[1,1,1,1]" fontsize="18" font="/acswissmed.ttf"/>
-            <Text name="textblock2" y="500" x="500" text="Fontsize 16 - acswissmed.ttf" color="[1,1,1,1]" fontsize="16" font="/acswissmed.ttf"/>
-            <Text name="textblock2" y="480" x="500" text="Fontsize 14 - acswissmed.ttf" color="[1,1,1,1]" fontsize="14" font="/acswissmed.ttf"/>
-            <Text name="textblock2" y="380" x="500" text="Fontsize 12 - acswissmed.ttf" color="[1,1,1,1]" fontsize="12" font="/acswissmed.ttf"/>
+	    <Text name="textblock2" y="610" x="500" text="Fontsize 24 - acswissmed.ttf" color="[1,1,1,1]" fontsize="22" font="acswissmed.ttf"/>
+            <Text name="textblock2" y="570" x="500" text="Fontsize 22 - acswissmed.ttf" color="[1,1,1,1]" fontsize="20" font="acswissmed.ttf"/>
+            <Text name="textblock2" y="520" x="500" text="Fontsize 18 - acswissmed.ttf" color="[1,1,1,1]" fontsize="18" font="acswissmed.ttf"/>
+            <Text name="textblock2" y="500" x="500" text="Fontsize 16 - acswissmed.ttf" color="[1,1,1,1]" fontsize="16" font="acswissmed.ttf"/>
+            <Text name="textblock2" y="480" x="500" text="Fontsize 14 - acswissmed.ttf" color="[1,1,1,1]" fontsize="14" font="acswissmed.ttf"/>
+            <Text name="textblock2" y="380" x="500" text="Fontsize 12 - acswissmed.ttf" color="[1,1,1,1]" fontsize="12" font="acswissmed.ttf"/>
 
             <Text name="textblock2" y="310" x="500" text="Fontsize 24 - default font helvetica" color="[1,1,1,1]" fontsize="22" />
             <Text name="textblock2" y="270" x="500" text="Fontsize 22 - default font helvetica" color="[1,1,1,1]" fontsize="20" />
@@ -52,7 +52,7 @@
             <Text name="textblock2" y="180" x="500" text="Fontsize 14 - default font helvetica" color="[1,1,1,1]" fontsize="14" />
             <Text name="textblock2" y="80"  x="500" text="Fontsize 12 - default font helvetica" color="[1,1,1,1]" fontsize="12" />
             
-            <Text name="testtextgreen" y="610" x="10" z="13" text="Fontsize 32 - acswissmed.ttf" color="[0,1,0,1]" fontsize="32" font="/acswissmed.ttf"/>
+            <Text name="testtextgreen" y="610" x="10" z="13" text="Fontsize 32 - acswissmed.ttf" color="[0,1,0,1]" fontsize="32" font="acswissmed.ttf"/>
             <Text name="testtextgreen" y="570" x="10" z="13" text="Fontsize 32 - defaultfont" color="[0,1,0,1]" fontsize="32"/>
             <Text name="textblock" y="520" x="10" text="left aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="left"/>
             <Text name="textblock" y="500" x="10" text="center aligned" maxWidth="150" color="[1,0,0,1]" fontsize="16" align="center"/>
@@ -71,9 +71,9 @@
         </Slide>
 
         <Slide name="ImagesSlide" title="Images">
-            <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="/bluetexture.png"/>
-            <Image name="transparent_image" x="250" y="250" z="1" src="/transparenttexture.png"/>
-            <Image name="image_from_apk_package" alpha="0.5" x="250" y="50" z="2" src="assets/textures/sparks.png"/>
+            <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="bluetexture.png"/>
+            <Image name="transparent_image" x="250" y="250" z="1" src="transparenttexture.png"/>
+            <Image name="image_from_apk_package" alpha="0.5" x="250" y="50" z="2" src="sparks.png"/>
         </Slide>
 
         <Slide name="AnimatedRectangleSlide" title="Animation" subtitle="touch screen to animate">
@@ -87,21 +87,21 @@
         <Slide name="3DSlide" title="3D">
             <Transform alpha="0.5" name="transform" x="100" y="10" >
                 <Transform name="rotatetransform" x="200" y="250" z="-50" scaleX="40" scaleY="40" scaleZ="40">
-                    <Shape3D name="funnyShape" src="/model"/>
+                    <Shape3D name="funnyShape" src="model"/>
                 </Transform>
             </Transform>
         </Slide>
 
         <Slide name="NinePatchSlide" title="NinePatch">
-            <NinePatch x="40" y="100" z="20" height="80" width="125" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
-            <NinePatch x="40" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_roll.png"/>
-            <NinePatch x="40" y="300" z="20" height="80" width="75" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_visited.png"/>
-            <NinePatch x="40" y="400" z="20" alpha="0.4" height="80" width="175" edgeTop="5" edgeRight="10" edgeBottom="15" edgeLeft="20" src="/ninepatchtest.png"/>
+            <NinePatch x="40" y="100" z="20" height="80" width="125" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_normal.png"/>
+            <NinePatch x="40" y="200" z="20" height="80" width="175" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_roll.png"/>
+            <NinePatch x="40" y="300" z="20" height="80" width="75" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_visited.png"/>
+            <NinePatch x="40" y="400" z="20" alpha="0.4" height="80" width="175" edgeTop="5" edgeRight="10" edgeBottom="15" edgeLeft="20" src="ninepatchtest.png"/>
         </Slide>
 
         <Slide alpha="0.7" name="CameraSlide" title="Camera">
             <Camera name="camera" x="0" y="0" scaleX="1" scaleY="1" cpu_color_conversion="false">
-                <Image name="border2" visible="false" width="640" height="480" src="/rahmen_schwarz.png" z="1"/>
+                <Image name="border2" visible="false" width="640" height="480" src="rahmen_schwarz.png" z="1"/>
             </Camera>
         </Slide>
         
@@ -126,11 +126,11 @@
         </Slide>
 
         <Slide name="ObjectCreationSlide" title="Component Creation" subtitle="press button to create component from code">
-            <NinePatch name="creationbutton" x="20" y="400" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+            <NinePatch name="creationbutton" x="20" y="400" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_normal.png"/>
         </Slide>
 
         <Slide name="I18nSlide" title="Internationalization" subtitle="click button to toggle language\nand exchange text and images">
-            <NinePatch name="languagebutton" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+            <NinePatch name="languagebutton" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_normal.png"/>
             <Text name="i18ntext" x="10" y="350" z="13" i18nId="test_text" color="[1,1,0,1]" fontsize="32"/>
             <Text name="i18ntext2" x="10" y="300" z="13" i18nId="lang_text" color="[1,1,0,1]" fontsize="32"/>
             <Image name="i18nimage" x="10" y="250" z="13" i18nId="lang_image"/>
@@ -138,7 +138,7 @@
         </Slide>
 
 	<Slide name="InternetSlide" title="Internet" subtitle="data from www - press button to load scene/remove transform again">
-            <NinePatch name="load_button" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+            <NinePatch name="load_button" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_normal.png"/>
             <Text name="textfromserver" x="10" y="400" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="datefromserver" x="10" y="350" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="getrequest" x="10" y="300" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
@@ -151,9 +151,9 @@
             <HttpTransform name="transform_from_web" url="http://www.einsfeld.de/mobile-spark/DemoApp/remote.spark" loadDelay="5000" requestMode="GET_REPEATING" refreshInterval="10000"/>
         </Slide>
         <Slide name="SoundSlide" title="Sound" subtitle="">
-            <NinePatch name="sound1_button" x="220" y="500" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
-            <NinePatch name="sound2_button" x="220" y="300" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
-            <NinePatch name="sound3_button" x="220" y="100" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="/button_normal.png"/>
+            <NinePatch name="sound1_button" x="220" y="500" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_normal.png"/>
+            <NinePatch name="sound2_button" x="220" y="300" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_normal.png"/>
+            <NinePatch name="sound3_button" x="220" y="100" z="20" height="130" width="280" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_normal.png"/>
         </Slide>
 
     </World>        
@@ -161,7 +161,7 @@
     <World name="3dworld">    
         <RenderCamera name="3dcamera" z="120" y="-20" x="10" frustum="perspective[60,20,10000]"/>    
         <Transform sensible="false" name="transform" x="0" y="-50" z="0" scaleX="0.15" scaleY="0.15" scaleZ="0.15" alpha="0.5">
-            <Shape3D name="theAmazone" src="/amazone"/>
+            <Shape3D name="theAmazone" src="amazone"/>
         </Transform>
     </World>            
 </Window>

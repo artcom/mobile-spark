@@ -243,7 +243,7 @@ namespace masl {
                     } 
                     continue;
                 }
-            //Not supported
+            //Not supported yet
             //} else if (theGetType == REQUEST_IF_NEWER) {
             //    AC_PRINT << "..............request if newer ...............";
             //    std::string fileToFind = thePersistenceFolder + masl::getFilenamePart(myUrl);
@@ -254,7 +254,6 @@ namespace masl {
             //        time_t time = s.st_mtime;
             //        AC_PRINT << "time of current " << time;
             //        AC_PRINT << "time converted " << ctime(&time);
-            //        //XXX                    
             //        continue;
             //    }
             }

@@ -58,10 +58,5 @@
             <Project name="project6" title_I18n="terravision_title" subtitle_I18n="terravision_subtitle" description_I18n="terravision_text" src="terravision_main_01.png">
 	            <ContentImage src="terravision_main_01.png"/>
 	            <ContentImage src="terravision_main_02.png"/>
-            </Project>
-
-            <Project name="spark_mobile" title_I18n="spark_mobile_title" subtitle_I18n="spark_mobile_subtitle" description_I18n="spark_mobile_text" src="Spark_Schichten.png">
-                <ContentImage src="Spark_Schichten.png"/>
-            </Project>                      
-                              
+            </Project>                              
         </ProjectMenu>	

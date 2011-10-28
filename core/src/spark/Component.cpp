@@ -20,8 +20,7 @@ namespace spark {
         EventDispatcher(),
         _myXMLNode(theXMLNode),
         _myName(theXMLNode->name),
-        _myParent(),
-        _myRealizedAllChildrenFlag(false)
+        _myRealizedFlag(false)
     {}
 
     Component::~Component() {
@@ -40,11 +39,6 @@ namespace spark {
     }
 
     ComponentPtr
-    Component::getChildByName(const std::string & theName, bool theDeepFlag) const {
-        return ComponentPtr();
-    }
-
-    ComponentPtr
     Component::getRoot() {
         if (_myParent.lock()) {
             return _myParent.lock()->getRoot();
@@ -55,16 +49,6 @@ namespace spark {
     
     void
     Component::realizeASync() {
-        _myRealizedAllChildrenFlag = true;
-        for (std::vector<ComponentPtr>::iterator it = _myChildren.begin(); it != _myChildren.end(); ++it) {
-            if (!(*it)->isAllRealized()) {
-                (*it)->realizeASync();
-                _myRealizedAllChildrenFlag = false;
-                break;
-            }
-        }
-        if (_myRealizedAllChildrenFlag) {
-            realize();
-        }
+        realize();
     }
 }

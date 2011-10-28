@@ -80,13 +80,6 @@ namespace mar {
         }
     
         virtual bool isTransparent() const {return Material::isTransparent() || diffuse_[3] != 1.0;};
-
-        //XXX: mixed property visibility
-        //are these 4 actually supported?
-        vector4 ambient_;
-        vector4 specular_;
-        float shininess_;
-        int illuminationModel_;
     private:
         vector4 diffuse_;
         GLuint colorHandle_;

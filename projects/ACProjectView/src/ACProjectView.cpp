@@ -112,7 +112,8 @@ namespace acprojectview {
         std::string myNewSpark = "i18n.spark";
         ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromFile(ptr, myNewSpark);
         spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
-        for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
+        spark::ContainerPtr myNewSparkContainer = boost::static_pointer_cast<spark::Container>(myNewSparkComponent);
+        for (VectorOfComponentPtr::const_iterator it = myNewSparkContainer->getChildren().begin(); it != myNewSparkContainer->getChildren().end(); ++it) {
             myTransform->addChild(*it);
         }
         // load global widgets
@@ -147,7 +148,8 @@ namespace acprojectview {
             std::string myNewSpark = theRequest->getResponseString();
             ComponentPtr myNewSparkComponent = spark::SparkComponentFactory::get().loadSparkComponentsFromString(ptr, myNewSpark);
             spark::TransformPtr myTransform = boost::static_pointer_cast<spark::Transform>(_mySparkWindow->getChildByName("global-i18n"));
-            for (VectorOfComponentPtr::const_iterator it = myNewSparkComponent->getChildren().begin(); it != myNewSparkComponent->getChildren().end(); ++it) {
+            spark::ContainerPtr myNewSparkContainer = boost::static_pointer_cast<spark::Container>(myNewSparkComponent);
+            for (VectorOfComponentPtr::const_iterator it = myNewSparkContainer->getChildren().begin(); it != myNewSparkContainer->getChildren().end(); ++it) {
                 myTransform->addChild(*it);
             }
         } else if (loadCount_ == 2) {
@@ -157,7 +159,7 @@ namespace acprojectview {
             idleFiles_ = assetList;
             std::vector<std::string> assetFilteredList;
             std::string dummyString;
-            for(int i=0; i<assetList.size();++i) {
+            for (size_t i=0; i<assetList.size();++i) {
                 if (!searchFile(assetList[i], dummyString, false)) {
                     assetFilteredList.push_back(assetList[i]);
                 } else {
