@@ -14,6 +14,7 @@ done
 
 if [ $DEPLOY == "1" ]
 then
+    mkdir $PROJECT_NAME/assets
     cp -ra ../models/textures/* $PROJECT_NAME/assets
 fi
 pwd
