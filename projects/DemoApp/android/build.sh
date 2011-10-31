@@ -17,6 +17,4 @@ then
     mkdir $PROJECT_NAME/assets
     cp -ra ../models/textures/* $PROJECT_NAME/assets
 fi
-pwd
-ls $PROJECT_NAME/assets/models/textures -l 
 PROJECT_NAME="DemoApp"  ../../../android/build_project.sh $*
