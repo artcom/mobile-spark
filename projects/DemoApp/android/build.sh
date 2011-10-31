@@ -1,3 +1,21 @@
 #! /bin/bash
 
+PROJECT_NAME="DemoApp"
+
+DEPLOY=0
+for i in $*
+do
+    case $i in
+        deploy)
+            DEPLOY=1
+            ;;
+   esac
+done
+
+if [ $DEPLOY == "1" ]
+then
+    cp -ra ../models/textures/* $PROJECT_NAME/assets
+fi
+pwd
+ls $PROJECT_NAME/assets/models/textures -l 
 PROJECT_NAME="DemoApp"  ../../../android/build_project.sh $*

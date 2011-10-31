@@ -50,7 +50,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
 /////////////////// Application code, this should be in java or script language later...
 namespace acprojectview {
    
-    const std::string ACProjectView::BASE_URL = "http://www.einsfeld.de/mobile-spark/ACProjectView/";
+    const std::string ACProjectView::BASE_URL = "http://apps.intern.artcom.de/assets/";
 
     ACProjectView::ACProjectView():BaseApp("ACProjectView"), 
         firstIdleImageVisible_(true), swappedIdleImages_(true), _myAnimatingFlag(false),
@@ -62,7 +62,7 @@ namespace acprojectview {
 
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
-
+        AC_PRINT << "---------------------------------" << (_myOnlineMode ? " online" : " offline") <<  " version ------------------";
         ACProjectViewComponentMapInitializer::init();        
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
         loadLayoutAndRegisterEvents(theScreenWidth, theScreenHeight);

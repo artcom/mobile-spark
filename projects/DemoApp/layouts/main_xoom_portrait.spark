@@ -14,12 +14,12 @@
             <en><![CDATA[oaei]]> </en>
         </I18nItem>
         <I18nItem name="lang_image">
-            <de>/en.png</de>
-            <en>/de.png</en>
+            <de>en.png</de>
+            <en>de.png</en>
         </I18nItem>
         <I18nItem name="lang_ninepatch">
-            <de>/button_normal.png</de>
-            <en>/button_roll.png</en>
+            <de>button_normal.png</de>
+            <en>button_roll.png</en>
         </I18nItem>
     </I18nContext>
 

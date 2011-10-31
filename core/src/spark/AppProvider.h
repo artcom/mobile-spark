@@ -17,7 +17,7 @@
 namespace spark {
     class AppProvider : public masl::Singleton<AppProvider> {
     public:
-        AppProvider() { };
+        AppProvider();
         virtual ~AppProvider();
         void setApp(BaseAppPtr theApp);
         BaseAppPtr getApp() const { return app_; };
