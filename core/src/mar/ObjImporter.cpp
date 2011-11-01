@@ -118,7 +118,7 @@ namespace mar {
                 //boost::static_pointer_cast<UnlitColoredMaterial>(myMaterial)->illuminationModel_ = masl::as<int>(data);
             } else if (type == "map_Kd") {
                 //here we know that we need textures -> exchange default material with textured material
-                myMaterial = MaterialPtr(new UnlitTexturedMaterial("/textures/" + data));
+                myMaterial = MaterialPtr(new UnlitTexturedMaterial("textures/" + data));
             }
         }
         if (myMaterial) {
