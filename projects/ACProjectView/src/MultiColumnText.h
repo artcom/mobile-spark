@@ -41,6 +41,8 @@ namespace acprojectview {
             std::vector<spark::TextPtr> _myTextPtrs;
             int _myColumnSpace;
             int _myInitalXPos;
+            int _myFontSize;
+            int _myLineHeight;
             std::vector<spark::TextPtr>::size_type _myVisibleColumnIndex;
             std::vector<spark::TextPtr>::size_type _myColumnCount;
             bool _myAnimatingFlag;

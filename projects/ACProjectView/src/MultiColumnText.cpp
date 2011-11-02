@@ -27,9 +27,10 @@ namespace acprojectview {
         : Transform(theApp, theXMLNode),
           _myColumnSpace(_myXMLNode->getAttributeAs<int>("columnSpace", 10)),
           _myInitalXPos(_myXMLNode->getAttributeAs<int>("x", 0)),
-          _myVisibleColumnIndex(0), _myColumnCount(0), _myAnimatingFlag(false) {
-
-
+          _myFontSize(_myXMLNode->getAttributeAs<int>("fontsize", 27)),
+          _myLineHeight(_myXMLNode->getAttributeAs<int>("lineheight", 30)),
+          _myVisibleColumnIndex(0),_myColumnCount(0), _myAnimatingFlag(false)
+    {
     }
 
     MultiColumnText::~MultiColumnText() {}
@@ -118,8 +119,10 @@ namespace acprojectview {
     
     TextPtr 
     MultiColumnText::createNewColumn() {
+        std::string myFontSize = masl::as_string(_myFontSize);
+        std::string myLineHeight = masl::as_string(_myLineHeight);
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(getApp(), 
-                "<Text name=\"text_" + masl::as_string(_myTextPtrs.size()) + "\" maxHeight=\"250\" fontsize=\"13\" lineHeight=\"18\"  cache=\"true\" font=\"acswissmed.ttf\" sensible=\"false\" color=\"[1.0,1.0,1.0,1.0]\"/>"); 
+                "<Text name=\"text_" + masl::as_string(_myTextPtrs.size()) + "\" maxHeight=\"250\" fontsize=\"" + myFontSize + "\" lineHeight=\""+myLineHeight+"\"  cache=\"true\" font=\"acswissmed.ttf\" sensible=\"false\" color=\"[1.0,1.0,1.0,1.0]\"/>"); 
         addChild(myCreated);
         TextPtr myTextPtr = boost::static_pointer_cast<Text>(myCreated);        
         return myTextPtr;
