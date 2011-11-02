@@ -24,7 +24,10 @@
     return self;
 }
 
-
+- (void)onTouchDown:(UITouch*) event {
+    CGPoint location = [event  locationInView:[event view]];
+    NSLog(@"touch down at %f, %f", location.x, location.y);
+}
 
 - (void)createTouchRecognizers {
     UIGestureRecognizer *recognizer;
@@ -93,7 +96,12 @@
 - (void)handleLongPressed:(UIGestureRecognizer *)theRecognizer {
     CGPoint location = [theRecognizer locationInView:_myView];
     NSLog(@"long Pressed  :   %f, %f", location.x, location.y);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='longpress' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
+    if (theRecognizer.state != UIGestureRecognizerStateEnded) {
+        [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='longpress' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
+    } else {
+        [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='up' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
+        NSLog(@"Touch up");
+    }
 }
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)theRecognizer {
@@ -101,21 +109,32 @@
     CGPoint location = [theRecognizer locationInView:_myView];
     if(location.x != location.x || location.y != location.y) return;
     NSLog(@"Pan-Translation  :   started at: %f, %f   translation:  %f, %f", location.x, location.y, translation.x, translation.y);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pan' x='%f' y='%f' dx='%f' dy='%f'/>", location.x, _myHeight-location.y, translation.x, _myHeight-translation.y]];
+    if (theRecognizer.state != UIGestureRecognizerStateEnded) {
+        [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pan' x='%f' y='%f' dx='%f' dy='%f'/>", location.x, _myHeight-location.y, translation.x, _myHeight-translation.y]];
+    } else {
+        [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='up' x='%f' y='%f'/>", location.x, _myHeight-location.y]];
+        NSLog(@"Touch up");
+    }
 }
 
 
 - (void)handlePinchGesture:(UIGestureRecognizer *)theRecognizer {
     CGFloat factor = [(UIPinchGestureRecognizer *)theRecognizer scale];
     NSLog(@"Pinch-Zoom-Scale :   %f", factor);
-    [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pinch' factor='%f'/>", factor]];
+    if (theRecognizer.state != UIGestureRecognizerStateEnded) {
+        [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pinch' factor='%f'/>", factor]];
+    } else {
+        [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='up' x='0' y='0'/>"]];
+        NSLog(@"Touch up");
+    }
+
 }
 
 - (void)handleRotationGesture:(UIRotationGestureRecognizer *)theRecognizer {
     CGFloat rotation = [theRecognizer rotation] *-1;
     NSLog(@"Rotation   :  %f", rotation);
     [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='rotation' factor='%f'/>", rotation]];
-}
+    }
 
 
 - (void)handleSwipeGesture:(UISwipeGestureRecognizer *)theRecognizer {

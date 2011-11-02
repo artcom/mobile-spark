@@ -110,6 +110,11 @@
     return self;
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent*)event {
+    [eventManager onTouchDown:[touches anyObject]];
+}
+
+
 - (void)render:(id)sender 
 {
     [EAGLContext setCurrentContext:glContext];
