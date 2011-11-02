@@ -19,7 +19,8 @@
 
 - (id) initWithSourceView:(UIView*)view;
 - (void) createTouchRecognizers;
-- (void)throwEventToSpark:(NSString*) eventString;
+- (void) throwEventToSpark:(NSString*) eventString;
+- (void) onTouchDown:(UITouch*)event;
 
 
 
