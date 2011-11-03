@@ -248,20 +248,21 @@ namespace acprojectview {
 
     
     void ACProjectView::onBack(EventPtr theEvent) {
-        if (_myAnimatingFlag) {
-            if (_mySeqAnimation) {
-                _mySeqAnimation->cancel();
-            }
-        }
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
         if (myEvent->getY() > ProjectViewerImpl::POPUP_HEIGHT * 2 && !_myProjectViewer->isPopUpOpen()) { 
+            if (_myAnimatingFlag) {
+                if (_mySeqAnimation) {
+                    _mySeqAnimation->cancel();
+                }
+            }
+            TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
             MobileSDK_Singleton::get().getNative()->vibrate(10);                
             projectViewAnimation(false);
             _myProjectViewer->setSensible(false);
         }
     }
     
-    void ACProjectView::onInitiateProjectView() {   
+    void ACProjectView::onInitiateProjectView() {
         _myProjectViewer->showProject(_myCurrentProject);        
     }
 
@@ -278,13 +279,13 @@ namespace acprojectview {
         _myAnimatingFlag = false;        
     }
 
-    void ACProjectView::closeProjectView() {        
+    void ACProjectView::closeProjectView() {
         _myProjectViewer->setVisible(false);
         _myProjectMenu->setVisible(true);
         _myProjectMenu->setSensible(true);                
         _myAnimatingFlag = false;        
     }
-    void ACProjectView::onReturn2ProjectView() {        
+    void ACProjectView::onReturn2ProjectView() {  
         _myProjectViewer->initiateClose();        
         _myProjectViewer->showPopup(false);
         _myProjectMenu->setVisible(true);

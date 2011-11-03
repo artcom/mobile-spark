@@ -53,7 +53,7 @@
 
 using namespace mar;
 using namespace masl;
-using namespace std;
+//using namespace std;
 
 namespace spark {
 
@@ -137,8 +137,8 @@ namespace spark {
         // -------------------------------------------------------------------------------------------------------
         AutoLocker<ThreadLock> myLocker(_myLock); 
         EventPtrList myDelayedEvents;       
-        map<string, bool> myDelayEventFilter;
-        map<string, bool> myIgnoreEventFilter;
+        std::map<std::string, bool> myDelayEventFilter;
+        std::map<std::string, bool> myIgnoreEventFilter;
         int myHandledEventCounter = 0;
         boost::timer::timer myTimer;
         AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
