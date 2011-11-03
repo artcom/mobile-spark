@@ -61,8 +61,8 @@ namespace spark {
             const ComponentPtr & getTarget() const {return target_;};
             const ComponentPtr & getCurrentTarget() const {return currentTarget_;};
             bool isDispatching() const {return dispatching_;};
+            bool isSystemRelevant() const {return systemrelevant_;};
             void connect(ComponentPtr theComponent) {target_ = theComponent;};
-
         private:
             std::string type_;
             ComponentPtr target_;
@@ -70,6 +70,8 @@ namespace spark {
             EventPhase currentPhase_;
             bool dispatching_;
             bool cancelable_;
+        protected:
+            bool systemrelevant_; // systemrelevant events cannot be discarded or delayed by any event filtering
     };
 
 
@@ -83,7 +85,6 @@ namespace spark {
             static const char * const CLASSNAME;
             virtual const char * const &  classname_() const {return StageEvent::CLASSNAME;};
             static const char * const FRAME;
-            static const char * const PAUSE;
             masl::UInt64 getCurrentTime() const { return currenttime_;};
             masl::UInt64 currenttime_;
     };

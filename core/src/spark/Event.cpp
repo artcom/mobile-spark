@@ -24,7 +24,6 @@ namespace spark {
     const char * const I18nEvent::CLASSNAME = "I18nEvent";
 
     const char * const StageEvent::FRAME = "frame";
-    const char * const StageEvent::PAUSE = "pause";
     const char * const WindowEvent::ON_RESIZE = "on_resize";
     const char * const WindowEvent::WORLD_REALIZED = "world_realized";
         
@@ -57,10 +56,10 @@ namespace spark {
 	const char * const SensorEvent::TEMPERATURE = "TEMPERATURE";
 
 
-    Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget) {
+    Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget), systemrelevant_(true) {
     }
     Event::Event(const masl::XMLNodePtr theXMLNode)
-         : type_(theXMLNode->getAttributeAs<std::string>("type", theXMLNode->nodeName)) {
+         : type_(theXMLNode->getAttributeAs<std::string>("type", theXMLNode->nodeName)), systemrelevant_(true) {
 
     }
 
@@ -116,11 +115,19 @@ namespace spark {
 
     StageEvent::StageEvent(const std::string & theType, ComponentPtr theTarget, const UInt64 theCurrentTime) :
         Event(theType, theTarget), currenttime_(theCurrentTime)
-    {}
+    {
+        if (theType == FRAME) {
+            systemrelevant_ = false;
+        }
+    }
     StageEvent::StageEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
         currenttime_(theXMLNode->getAttributeAs<UInt64>("time", 0))
-    {}
+    {
+        if (getType() == FRAME) {
+            systemrelevant_ = false;
+        }        
+    }
     StageEvent::~StageEvent() {}
 
     WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget,
@@ -147,12 +154,15 @@ namespace spark {
 
     TouchEvent::TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY) :
         Event(theType, theTarget), x_(theX), y_(theY)
-    {}
+    {
+        systemrelevant_ = false;
+    }
     TouchEvent::TouchEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
         x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)),
         y_(theXMLNode->getAttributeAs<unsigned int>("y", 0))
     {
+        systemrelevant_ = false;
     }
     
 
@@ -163,13 +173,19 @@ namespace spark {
 
     GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY, const int dx, const int dy)
          : Event(theType, theTarget), x_(theX), y_(theY), dx_(dx), dy_(dy)
-    {}
+    {
+        systemrelevant_ = false;
+    }
     GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theFactor)
          : Event(theType, theTarget), factor_(theFactor)
-    { }
+    { 
+        systemrelevant_ = false;
+    }
     GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection)
          : Event(theType, theTarget), direction_(theDirection)
-    { }
+    { 
+        systemrelevant_ = false;
+    }
     GestureEvent::GestureEvent(const masl::XMLNodePtr theXMLNode)
          : Event(theXMLNode),
            x_(theXMLNode->getAttributeAs<unsigned int>("x", 0)),
@@ -178,20 +194,26 @@ namespace spark {
            dy_(theXMLNode->getAttributeAs<int>("dy", 0)),
            factor_(theXMLNode->getAttributeAs<float>("factor", 0.0)),
            direction_(theXMLNode->getAttributeAs<std::string>("direction", ""))
-    {}
+    {
+        systemrelevant_ = false; 
+    }
 
     GestureEvent::~GestureEvent() {}
 
 
     SensorEvent::SensorEvent(const std::string & theType, ComponentPtr theTarget, const float theValue0, const float theValue1, const float theValue2)
          : Event(theType, theTarget), value0_(theValue0), value1_(theValue1), value2_(theValue2)
-    {}
+    {
+        systemrelevant_ = false; 
+    }
     SensorEvent::SensorEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
         value0_(theXMLNode->getAttributeAs<float>("value0", 0.0)),
         value1_(theXMLNode->getAttributeAs<float>("value1", 0.0)),
         value2_(theXMLNode->getAttributeAs<float>("value2", 0.0))
-    {}
+    {
+        systemrelevant_ = false; 
+    }
     SensorEvent::~SensorEvent() {}
 
 

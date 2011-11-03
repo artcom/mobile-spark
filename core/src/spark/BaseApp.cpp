@@ -53,12 +53,13 @@
 
 using namespace mar;
 using namespace masl;
+using namespace std;
 
 namespace spark {
 
 
     BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
-        _mySetupFlag(false) {
+        _mySetupFlag(false){
         masl::initSignalHandling();
     }
 
@@ -125,21 +126,56 @@ namespace spark {
             childFirstVisitComponents(myVisitor, _mySparkWindow);
         }
     }
-    
     void BaseApp::handleEvents() {
-        AutoLocker<ThreadLock> myLocker(_myLock);        
+        // ------------------------------ handle event strategy -------------------------------------------------
+        // do not delay or ignore systemrelevant events
+        // handle the first incoming type of classtype and type events
+        // delay second incoming events of same classtype 
+        // (i.e. events:['down', 'tap'] are class type 'GestureEvent' but different type, delay 'tap'
+        // ignore second incoming event of same classtype and type
+        // (i.e. events:['orientation', 'frame', 'orientation', 'frame'], ignore second 'frame' and 'orientation'
+        // -------------------------------------------------------------------------------------------------------
+        AutoLocker<ThreadLock> myLocker(_myLock); 
+        EventPtrList myDelayedEvents;       
+        map<string, bool> myDelayEventFilter;
+        map<string, bool> myIgnoreEventFilter;
+        int myHandledEventCounter = 0;
         boost::timer::timer myTimer;
         AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
         int i = 0;
         for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
             AC_TRACE << "EVENT# " << i;
-            (*it)->connect(_mySparkWindow);
-            AC_TRACE << "handle event: " << (*(*it));
-            (*(*it))();
+            bool myIgnoreEventFlag = false;
+            bool myDelayEventFlag = false;
+            if (!(*it)->isSystemRelevant()) {
+                // allow only one type per frame and therefore do not delay it
+                if (myIgnoreEventFilter.find( (*it)->getType()) != myIgnoreEventFilter.end() ) {
+                    myIgnoreEventFlag = true;
+                }                    
+                if (myDelayEventFilter.find( (*it)->classname_()) != myDelayEventFilter.end() ) {
+                    myDelayEventFlag = true;
+                }    
+            }
+            if (!myIgnoreEventFlag && !myDelayEventFlag) {
+                myIgnoreEventFilter[(*it)->getType()] = true;
+                myDelayEventFilter[(*it)->classname_()] = true;
+                (*it)->connect(_mySparkWindow);
+                AC_TRACE << "handle event: " << (*(*it));
+                (*(*it))();
+                myHandledEventCounter++;
+            } else {
+                if (myDelayEventFlag && !myIgnoreEventFlag) {
+                    AC_TRACE << "delay event: " << (*it)->getType(); 
+                    myDelayedEvents.push_back((*it));               
+                } else {
+                    AC_TRACE << "ignore event: " << (*it)->getType(); 
+                }
+            }
             ++i;
         }            
-        _myEvents.clear();        
-        AC_TRACE << "################ handle events finished " << _myEvents.size();
+        //_myEvents.clear();        
+        _myEvents = myDelayedEvents;
+        AC_TRACE << "################ handle events finished " << myHandledEventCounter;
         AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " s";
     }
     
