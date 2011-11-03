@@ -9,7 +9,7 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-set(APP_NAME TemplateApp)
+set(APP_NAME Template)
 project(${APP_NAME})
 
 list(INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR})
@@ -22,7 +22,7 @@ find_package(AcMake)
 set(spark_DIR ../../core/src/spark)
 find_package(spark)
 
-set(REQUIRED_PACKAGES Boost Cml libXML2)
+set(REQUIRED_PACKAGES Boost Cml libXML2 libCurl)
 foreach(PACKAGE ${REQUIRED_PACKAGES})
     find_package(${PACKAGE})
 endforeach()
