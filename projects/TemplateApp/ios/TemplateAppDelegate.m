@@ -15,7 +15,7 @@
 - (void)createGLView
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];    
-    [self initialize:@"TemplateApp"];
+    [self initialize:@"Template"];
     myGLView = [[TemplateAppGLView alloc]initWithFrame: [self getWindowBoundsWithBaseLayout:@"/main"]];}
 
 - (void)dealloc
