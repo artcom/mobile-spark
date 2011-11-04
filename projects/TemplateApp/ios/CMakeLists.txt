@@ -35,7 +35,7 @@ include_directories(${Cml_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/core/src)  
 include_directories(../src)
 
-set(EXECUTABLE_NAME TemplateApp)
+set(EXECUTABLE_NAME ${APP_NAME}App)
 #Builds the *.app
 set(APP_TYPE MACOSX_BUNDLE)
 add_executable(${EXECUTABLE_NAME}
@@ -70,7 +70,7 @@ ADD_FRAMEWORK(${EXECUTABLE_NAME} OpenAL)
 ADD_FRAMEWORK(${EXECUTABLE_NAME} AudioToolbox)
 
 #Link libraries
-target_link_libraries(${EXECUTABLE_NAME} Template)
+target_link_libraries(${EXECUTABLE_NAME} ${APP_NAME})
 target_link_libraries(${EXECUTABLE_NAME} ${masl_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${mar_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${animation_LIBRARY_DIRS})
