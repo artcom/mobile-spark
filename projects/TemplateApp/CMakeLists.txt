@@ -9,11 +9,7 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-if(IOS)
-    set(APP_NAME Template)
-else(IOS)
-    set(APP_NAME TemplateApp)
-endif(IOS)	
+set(APP_NAME TemplateApp)
 project(${APP_NAME})
 
 list(INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR})
