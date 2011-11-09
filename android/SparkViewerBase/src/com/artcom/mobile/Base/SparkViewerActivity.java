@@ -80,7 +80,7 @@ public class SparkViewerActivity extends Activity {
         super.onRestart();
     }
     @Override protected void onStart() {
-        AC_Log.print("----------------------SparkViewer started foo");//TODO change back
+        AC_Log.print("----------------------SparkViewer started");
         super.onStart();
     }
 
@@ -108,13 +108,13 @@ public class SparkViewerActivity extends Activity {
 		
     	if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
     		AC_Log.print("------------------------Backbutton pressed: "+keyCode);
-    		//TODO: Replace functionality here
-    		eventManager.backButtonHandler();
+
+    		eventManager.dumbBackButtonEvent();
     		
     		return true;
     	}
-    	else
-    		return super.onKeyDown(keyCode, event);
+    	
+   		return super.onKeyDown(keyCode, event);
 	}
 
 	///////////////////////////////static audio functions called from c++  
