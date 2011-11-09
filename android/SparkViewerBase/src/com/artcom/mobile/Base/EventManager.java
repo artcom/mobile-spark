@@ -91,7 +91,7 @@ public class EventManager {
                         rotationHandler();
                         break;
                     }
-                    if(dx*dx + dy*dy < 10) break;
+                    if(dx*dx + dy*dy < 200) break;
                     mode=1;
                     panHandler();
                     break;
@@ -120,7 +120,7 @@ public class EventManager {
         }
         //-------------------------------------------------------------------------
         private void downHandler() {
-            AC_Log.debug(" ########### down: " + startX + ", " + startY);
+        	AC_Log.debug(" ########### down: " + startX + ", " + startY);
             String myEvent = "<TouchEvent type='down' x='" + startX + "' y='" + startY + "'/>";
             NativeBinding.onEvent(myEvent);
         }
