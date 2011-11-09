@@ -38,6 +38,7 @@ public class SparkViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	NativeBinding.ourActivity = this;
+        AC_Log.setTopLevelTag(LOG_TAG);
         AC_Log.print("----------------------------------------------------------------------");
         AC_Log.print("-*************************SparkViewer********************************-");
         AC_Log.print("----------------------------------------------------------------------");
@@ -52,7 +53,6 @@ public class SparkViewerActivity extends Activity {
         sensors.enable(Sensors.ORIENTATION);
         sensors.enable(Sensors.LIGHT);
         sensors.enable(Sensors.GYROSCOPE);
-        AC_Log.setTopLevelTag(LOG_TAG);
         Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
         AC_Log.setSeverity(mySeverity);
         AC_Log.print("severity: " + mySeverity);

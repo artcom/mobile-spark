@@ -195,7 +195,7 @@ public class NativeBinding {
      if (theOrientation.compareTo("portrait") == 0) {
     	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
      } else if (theOrientation.compareTo("landscape") == 0) {
-    	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
+    	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE );
      }
   }
 

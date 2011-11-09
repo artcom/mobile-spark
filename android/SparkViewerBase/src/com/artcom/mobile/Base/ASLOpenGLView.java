@@ -47,7 +47,7 @@ public class ASLOpenGLView extends GLSurfaceView {
          * is interpreted as any 32-bit surface with alpha by SurfaceFlinger.
          */
         //this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-        setEGLConfigChooser(new AndroidEGLConfigChooser(AndroidEGLConfigChooser.ConfigType.BEST, false));
+        setEGLConfigChooser(new AndroidEGLConfigChooser(AndroidEGLConfigChooser.ConfigType.LEGACY, false));
         setEGLContextFactory(new ContextFactory());
         setRenderer(myRenderer);
     }
