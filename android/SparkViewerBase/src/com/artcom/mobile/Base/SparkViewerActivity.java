@@ -16,6 +16,7 @@ import android.content.pm.ActivityInfo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import com.artcom.mobile.Base.Sound;
 import com.artcom.mobile.Base.Music;
@@ -79,7 +80,7 @@ public class SparkViewerActivity extends Activity {
         super.onRestart();
     }
     @Override protected void onStart() {
-        AC_Log.print("----------------------SparkViewer started");
+        AC_Log.print("----------------------SparkViewer started foo");//TODO change back
         super.onStart();
     }
 
@@ -102,9 +103,21 @@ public class SparkViewerActivity extends Activity {
         mView.onResume();
     }
     
-    
-    
-    ///////////////////////////////static audio functions called from c++  
+    @Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+    	if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+    		AC_Log.print("------------------------Backbutton pressed: "+keyCode);
+    		//TODO: Replace functionality here
+    		eventManager.backButtonHandler();
+    		
+    		return true;
+    	}
+    	else
+    		return super.onKeyDown(keyCode, event);
+	}
+
+	///////////////////////////////static audio functions called from c++  
     public static void playBackgroundMusic(String path, boolean isLoop){
         backgroundMusicPlayer.playBackgroundMusic(path, isLoop);
     }

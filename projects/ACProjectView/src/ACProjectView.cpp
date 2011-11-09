@@ -195,6 +195,10 @@ namespace acprojectview {
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onProjectItem));
         spark::EventCallbackPtr myBackCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onBack));
         
+        //Android Back Button
+        _mySparkWindow->addEventListener(TouchEvent::BUTTON_BACK, myBackCB,Event::BUBBLING);
+        
+        //Touch
         _myProjectViewer->addEventListener(TouchEvent::PICKED, myBackCB,Event::BUBBLING);
         
         _myProjectItems = boost::static_pointer_cast<spark::Container>(_myProjectMenu);
