@@ -149,6 +149,13 @@ public class EventManager {
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
+        public void backButtonHandler() {
+            AC_Log.debug(" ########### backButton: " + startX + ", " + startY);
+            String myEvent = "<TouchEvent type='backbutton' x='" + startX + "' y='" + startY + "'/>";
+            NativeBinding.onEvent(myEvent);
+        }
+        
+        //-------------------------------------------------------------------------
         private void panHandler() {
             AC_Log.debug(" ########### pan: " + startX + ", " + startY + " translate: " + dx + ", " + dy);
             String myEvent = "<GestureEvent type='pan' x='" + startX + "' y='" + startY + "' dx='" + dx + "' dy='"+ dy + "'/>";

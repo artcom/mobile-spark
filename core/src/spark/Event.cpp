@@ -35,6 +35,7 @@ namespace spark {
     const char * const TouchEvent::PICKED = "picked";
     const char * const TouchEvent::DOWN = "down";
     const char * const TouchEvent::UP = "up";
+    const char * const TouchEvent::BUTTON_BACK = "backbutton";
 
     const char * const GestureEvent::PAN = "pan";
     const char * const GestureEvent::PINCH = "pinch";
