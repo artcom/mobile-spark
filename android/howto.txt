@@ -27,7 +27,7 @@ Mac:
 
 0. export ANDROID_NDK=<absolute path to your ndk-home> (e.g. add line to ~/.profile) 
 1. build android toolchain
-    export NDK_TMPDIR=$(cygpath "$ANDROID_NDK/")../ndk-tmp
+
     call $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-9 --install-dir=$ANDROID_NDK/android-toolchain --system=darwin-x86    
     
 2. export ANDROID_NDK_TOOLCHAIN_ROOT=$ANDROID_NDK/android-toolchain
