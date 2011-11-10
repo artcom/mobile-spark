@@ -41,12 +41,12 @@ namespace spark {
 
         ContainerPtr myContainer = boost::static_pointer_cast<spark::Container>(shared_from_this());
         ComponentPtr myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myContainer->getApp(),
-                "<Text name=\"fps\" y=\"-10\" maxWidth=\"0\" text=\"fps:\" height=\"-16\" color=\"[1.0,0.0,0.0, 1.0]\" fontsize=\"16\"/>");
+                "<Text name=\"fps\" y=\"-10\" maxWidth=\"0\" z=\"100\" text=\"fps:\" height=\"-16\" color=\"[1.0,0.0,0.0, 1.0]\" fontsize=\"16\"/>");
         myContainer->addChild(myCreated);
         _myFPSText = boost::static_pointer_cast<spark::Text>(myCreated);
 
         myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myContainer->getApp(),
-                "<Text name=\"memory_usage\" y=\"-30\" z=\"1\" maxWidth=\"0\" text=\"memory:\" height=\"-16\" color=\"[1.0,0.0,0.0, 1.0]\" fontsize=\"16\"/>");
+                "<Text name=\"memory_usage\" y=\"-30\" z=\"100\" maxWidth=\"0\" text=\"memory:\" height=\"-16\" color=\"[1.0,0.0,0.0, 1.0]\" fontsize=\"16\"/>");
         myContainer->addChild(myCreated);
         _myMemoryText = boost::static_pointer_cast<spark::Text>(myCreated);
 

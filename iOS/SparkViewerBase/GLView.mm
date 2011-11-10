@@ -29,7 +29,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
         [self createApp];
         _myApp = spark::AppProvider::get().getApp();
         // Initialization code
@@ -37,6 +36,8 @@
         // We have to render into a framebuffer, which is displayed to the user
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         eaglLayer.opaque = TRUE;
+        //eaglLayer.contentsScale=2;
+        self.contentScaleFactor = [[UIScreen mainScreen] scale];
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
         

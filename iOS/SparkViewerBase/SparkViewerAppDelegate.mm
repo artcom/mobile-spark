@@ -32,7 +32,7 @@
 -(CGRect)getWindowBoundsWithBaseLayout:(NSString*) baseLayout {
     isPortrait = NO; 
     CGRect windowBounds = [[UIScreen mainScreen] bounds];
-    std::string filename = spark::findBestMatchedLayout("/main",windowBounds.size.width, windowBounds.size.height, isPortrait);
+    std::string filename = spark::findBestMatchedLayout("/main",windowBounds.size.width*[[UIScreen mainScreen] scale], windowBounds.size.height*[[UIScreen mainScreen] scale], isPortrait);
     CGRect translate = [window bounds]; 
     if (!isPortrait) {
         float oldwidth = windowBounds.size.width ;
