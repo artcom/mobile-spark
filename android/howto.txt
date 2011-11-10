@@ -24,8 +24,21 @@ Windows:
     cd android/
     ./build.sh
 
+Linux:
+-1. download current android sdk, call android, click obsolete versions, install version 9
+    add YOUR_ANDROID_SDK/platform-tools to your path
+0. set "ANDROID_NDK" to your ndk-home
+1. if boost is located in /usr/include/boost create a symlink in mobile-spark/core/netsrc to boost to avoid including the complete /usr/include via cmake
+2. call $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-9 --install-dir=$ANDROID_NDK/android-toolchain --system=linux-x86    
+   set "ANDROID_NDK_TOOLCHAIN_ROOT" to "$ANDROID_NDK/android-toolchain"
+3. build libs
+    mkdir "mobile-spark/_build"
+    cd android/
+    ./build.sh
+
 Mac:
 
+-1. download current android sdk, call android, click obsolete versions, install version 9
 0. export ANDROID_NDK=<absolute path to your ndk-home> (e.g. add line to ~/.profile) 
 1. build android toolchain
 
