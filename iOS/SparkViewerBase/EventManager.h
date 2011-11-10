@@ -13,6 +13,7 @@
     @private
         UIView *_myView;
         float _myHeight;
+        float _myRetinaScale;
         UIGestureRecognizer *recognizerPan;
         UIGestureRecognizer *recognizerSwipe;
 }

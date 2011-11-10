@@ -2,13 +2,13 @@
 <ProjectViewerImpl>
 
     <Rectangle name="background" x="0" y="0" width="2000" height="2000" color="[0.0,0.0,0.0]"/>
-    <Transform name="image_0_transform">
+    <Transform name="image_0_transform" z="2">
         <Image name="image" cache="true"/>
     </Transform>        
-    <Transform name="image_1_transform">
+    <Transform name="image_1_transform" z="2">
         <Image name="image" cache="true"/>
     </Transform>        
-    <Transform name="image_2_transform">
+    <Transform name="image_2_transform" z="2">
         <Image name="image" cache="true"/>
     </Transform>        
     
