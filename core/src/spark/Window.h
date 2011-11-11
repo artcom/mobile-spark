@@ -42,6 +42,7 @@ namespace spark {
         virtual void realize();        
         std::string getOrientation() const { return _myOrientation;};
         vector4 getClearColor() const { return _myClearColor;};
+        void setClearColor(vector4 theColor) { _myClearColor = theColor;};
         vector2 getSize() const;
         void setSize(int theWidth, int theHeight) {_myWidth=theWidth; _myHeight=theHeight;};
         void dumpScene();
