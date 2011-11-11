@@ -1,6 +1,5 @@
 #! /bin/bash
 
-
 ./c++build.sh $*
 BUILD_OK=$?
 
@@ -22,7 +21,6 @@ do
             ;;
         *)
         #unknown
-        echo $i
        ;;
    esac
 done

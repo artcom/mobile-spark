@@ -22,6 +22,7 @@ rm -rf _build
 
 cd android
 sed -i s/$TEMPLATE_NAME/$PROJECT_NAME/g build.sh
+sed -i s/$TEMPLATE_NAME/$PROJECT_NAME/g c++build.sh
 sed -i s/$TEMPLATE_NAME/$PROJECT_NAME/g push.sh
 sed -i s/$TEMPLATE_NAME/$PROJECT_NAME/g start.sh
 mv $TEMPLATE_NAME $PROJECT_NAME
