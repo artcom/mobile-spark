@@ -38,7 +38,7 @@ import com.artcom.mobile.Base.AC_Log;
 import com.artcom.mobile.Base.Severity;
 import com.artcom.mobile.Base.NativeException;
 public class NativeBinding {
-    public static SparkViewerActivity ourActivity;
+    public static Activity ourActivity;
 
 
   public static void loadLibraries() {
