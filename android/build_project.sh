@@ -1,9 +1,10 @@
 #! /bin/bash
 
-APPFOLDER=`pwd`/..
+
+./c++build.sh $*
+BUILD_OK=$?
 
 VERBOSITY="-quiet"
-NUMCORES=
 DEPLOY=0
 BUILD_TYPE="debug"
 
@@ -19,9 +20,6 @@ do
         verbose)
             VERBOSITY=""
             ;;
-        -j*)
-            NUMCORES=$i
-            ;;
         *)
         #unknown
         echo $i
@@ -29,37 +27,18 @@ do
    esac
 done
 
-cd ../../../android
-./build.sh $NUMCORES 
-BUILD_OK=$?
-echo "core build exited with $BUILD_OK"
-
-cd $APPFOLDER
-
 ANDROID_TOOL="android"
-MAKE_TOOL="make"
 if [ "`uname -o`" == "Cygwin" ]; then
     ANDROID_TOOL="android.bat"
-    MAKE_TOOL="nmake"
 fi
 
-if [ $BUILD_OK == "0" ]
-then
-    mkdir -p _build
-    cd _build
-    cmake -DCMAKE_TOOLCHAIN_FILE=../../acmake/toolchains/android.toolchain.cmake ..
-    $MAKE_TOOL $NUMCORES
-    BUILD_OK=$?
-
-    #copy projectname.so to core _build
-    cd -
-    cp _build/lib/armeabi-v7a/lib$PROJECT_NAME.so ../../_build/lib/armeabi-v7a/
-fi
+APPFOLDER=`pwd`/..
+cd $APPFOLDER
 
 # copy assets
-echo "copy assets"
 if [ $DEPLOY == "1" ]
 then
+    echo "copy assets"
     FOLDERS="models layouts shaders textures fonts sounds" 
     for folder in $FOLDERS
     do
