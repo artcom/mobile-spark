@@ -23,7 +23,7 @@ public class TemplateApp extends SparkViewerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         LOG_TAG = "TemplateApp";
-        _myPackageExtension = ".templateapp";
+        _myPackageName = "com.artcom.mobile.templateapp";
         super.onCreate(savedInstanceState);
     }
 

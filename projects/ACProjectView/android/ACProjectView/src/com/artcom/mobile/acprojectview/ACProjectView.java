@@ -23,7 +23,7 @@ public class ACProjectView extends SparkViewerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         LOG_TAG = "ACProjectView";
-        _myPackageExtension = ".acprojectview";
+        _myPackageName = "com.artcom.mobile.acprojectview";
         super.onCreate(savedInstanceState);
     }
 
