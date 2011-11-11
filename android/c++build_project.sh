@@ -11,7 +11,6 @@ do
             ;;
         *)
         #unknown
-        echo $i
        ;;
    esac
 done

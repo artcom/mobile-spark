@@ -1,3 +1,3 @@
 #! /bin/bash
 
-PROJECT_NAME="TemplateApp" ../../../android/c++build_project.sh $*
+PROJECT_NAME="ACProjectView" ../../../android/c++build_project.sh $*
