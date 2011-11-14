@@ -1,10 +1,10 @@
 #!/bin/bash
 
-cd ..
+OLD_DIR=`pwd`
 
-PROJECT_NAME="ACProjectView" ../../android/push_project.sh $*
+./push.sh
 
-cd -
+cd $OLD_DIR
 cd ../assets
 
 PROJECT_NAME="ACProjectView"

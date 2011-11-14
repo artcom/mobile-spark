@@ -17,6 +17,10 @@ then
     mkdir $PROJECT_NAME/assets
     cp -ra ../assets/* $PROJECT_NAME/assets
 fi
-PROJECT_NAME="ACProjectView" ../../../android/build_project.sh $*
 
 
+SPARK_COMPONENT_DIR=`pwd`/..
+#cd to mobile spark dir
+cd ../../..
+SPARK_COMPONENT_NAME="ACProjectView" SPARK_COMPONENT_DIR=$SPARK_COMPONENT_DIR android/build_project.sh $*
+cd $SPARK_COMPONENT_DIR/android

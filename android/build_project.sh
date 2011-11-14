@@ -1,6 +1,56 @@
 #! /bin/bash
 
-./c++build.sh $*
+
+function get_relative_path {
+    if [[ "$1" == "$2" ]]
+    then
+        echo "."
+        exit
+    fi
+
+    IFS="/"
+
+    current=($1)
+    absolute=($2)
+
+    abssize=${#absolute[@]}
+    cursize=${#current[@]}
+
+    while [[ ${absolute[level]} == ${current[level]} ]]
+    do
+        (( level++ ))
+        if (( level > abssize || level > cursize ))
+        then
+            break
+        fi
+    done
+
+    for ((i = level; i < cursize; i++))
+    do
+        if ((i > level))
+        then
+            newpath=$newpath"/"
+        fi
+        newpath=$newpath".."
+    done
+
+    for ((i = level; i < abssize; i++))
+    do
+        if [[ -n $newpath ]]
+        then
+            newpath=$newpath"/"
+        fi
+        newpath=$newpath${absolute[i]}
+    done
+
+    echo "$newpath"
+}
+
+
+
+MOBILE_SPARK_DIR=`pwd`
+
+./android/c++build_project.sh $*
 BUILD_OK=$?
 
 VERBOSITY="-quiet"
@@ -30,8 +80,7 @@ if [ "`uname -o`" == "Cygwin" ]; then
     ANDROID_TOOL="android.bat"
 fi
 
-APPFOLDER=`pwd`/..
-cd $APPFOLDER
+cd $SPARK_COMPONENT_DIR
 
 # copy assets
 if [ $DEPLOY == "1" ]
@@ -41,14 +90,14 @@ then
     for folder in $FOLDERS
     do
         echo "copy folder $folder"
-        cp -ra $folder android/$PROJECT_NAME/assets
+        cp -ra $folder android/$SPARK_COMPONENT_NAME/assets
     done
 
     CORE_FOLDERS="shaders"
     for core_folder in $CORE_FOLDERS
     do
         echo "push core/$core_folder"
-        cp -ra ../../core/$core_folder android/$PROJECT_NAME/assets
+        cp -ra $MOBILE_SPARK_DIR/core/$core_folder android/$SPARK_COMPONENT_NAME/assets
     done            
 fi
 
@@ -56,14 +105,15 @@ fi
 cd android
 if [ $BUILD_OK == "0" ] 
 then
-    cd $PROJECT_NAME
-    
-    # update Base project
-    $ANDROID_TOOL update lib-project --target android-9 --path ../../../../android/SparkViewerBase 
+    cd $SPARK_COMPONENT_NAME
+    ## update Base project
+    $ANDROID_TOOL update lib-project --target android-9 --path $MOBILE_SPARK_DIR/android/SparkViewerBase 
 
     # update android project
-    $ANDROID_TOOL update project --target android-9 --name $PROJECT_NAME --path . 
-    $ANDROID_TOOL update project --library ../../../../android/SparkViewerBase --target android-9 --name $PROJECT_NAME --path . 
+    HELP=$MOBILE_SPARK_DIR/android/SparkViewerBase
+    # android bug: --library fails on absolute paths
+    REL_DIR=$(get_relative_path `pwd` $HELP)
+    $ANDROID_TOOL update project --library $REL_DIR --target android-9 --name $SPARK_COMPONENT_NAME --path . 
     BUILD_OK=$?
 fi
 
@@ -71,7 +121,7 @@ fi
 if [ $DEPLOY == "1" ]
 then
     pwd
-    rm ../../../../_build/lib/armeabi-v7a/*test*.*
+    rm $MOBILE_SPARK_DIR/_build/lib/armeabi-v7a/*test*.*
 fi
 
 if [ $BUILD_OK == "0" ] 
@@ -85,19 +135,22 @@ then
     BUILD_OK=$?
 fi
     
-cd -
+cd $MOBILE_SPARK_DIR
 
 if [ $BUILD_OK == "0" ] 
 then
     echo "build done :-)"
     if [ $BUILD_TYPE == "release" ]; then
-        echo "final release package can be found in bin/$PROJECT_NAME-release.apk"
+        echo "final release package can be found in bin/$SPARK_COMPONENT_NAME-release.apk"
     fi
 else
     echo ":-( BUILD FAILED :-("
     exit 1
 fi
 
-# removed copied assets from javas assets dir
-rm -rf $PROJECT_NAME/assets/*
+if [ $DEPLOY == "1" ]
+then
+  # removed copied assets from javas assets dir
+  rm -rf $SPARK_COMPONENT_DIR/android/$SPARK_COMPONENT_NAME/assets/*
+fi
 

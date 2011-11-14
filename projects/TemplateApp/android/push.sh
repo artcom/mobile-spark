@@ -1,8 +1,9 @@
 #!/bin/bash
 
-cd ..
+SPARK_COMPONENT_DIR=`pwd`/..
+#cd to mobile spark dir
+cd ../../..
+SPARK_COMPONENT_NAME="TemplateApp" SPARK_COMPONENT_DIR=$SPARK_COMPONENT_DIR android/push_project.sh $*
+cd $SPARK_COMPONENT_DIR/android
 
-PROJECT_NAME="TemplateApp" ../../android/push_project.sh $*
-
-cd -
 
