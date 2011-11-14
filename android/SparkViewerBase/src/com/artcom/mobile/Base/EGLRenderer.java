@@ -49,7 +49,6 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
         CameraTexture.initWithContext(glContext);
         AC_Log.print("_________________________________- on surface created of " + _myPackageName);
         NativeBinding.initBinding();
-        NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(_myPackageName, context), _myScreenWidth,  _myScreenHeight);
         AC_Log.print(String.format("Spark Loaded %b " , _myViewDelegate.sparkWorldIsLoaded));
         if (!_myViewDelegate.sparkWorldIsLoaded) {
             NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(_myPackageName, context), _myScreenWidth,  _myScreenHeight);
