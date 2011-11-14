@@ -46,7 +46,7 @@ SET( CMAKE_CXX_FLAGS "-arch armv7 -mthumb ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ 
 # Flags
 ADD_DEFINITIONS("-no-cpp-precomp")
 ADD_DEFINITIONS("--sysroot=${SDKROOT}")
-ADD_DEFINITIONS("-miphoneos-version-min=${SDKVER}")
+ADD_DEFINITIONS("-miphoneos-version-min=3.0")
 
 # Header
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
