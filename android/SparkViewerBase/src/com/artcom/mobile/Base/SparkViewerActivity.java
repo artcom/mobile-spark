@@ -30,7 +30,7 @@ public class SparkViewerActivity extends Activity {
     protected String LOG_TAG = "SparkViewerActivity";
     protected String _myPackageName; //should be set by child classes
     
-    ASLOpenGLView mView;
+    SparkOpenGLView mView;
     private EventManager eventManager;
     private Sensors sensors;
     private static Sound soundPlayer;
@@ -65,7 +65,7 @@ public class SparkViewerActivity extends Activity {
         int myScreenWidth = dm.widthPixels;
         int myScreenHeight = dm.heightPixels;
 
-        mView = new ASLOpenGLView(getApplication(), mViewDelegate, _myPackageName, myScreenWidth, myScreenHeight);
+        mView = new SparkOpenGLView(getApplication(), mViewDelegate, _myPackageName, myScreenWidth, myScreenHeight);
         setContentView(mView);
         
         //init audio
