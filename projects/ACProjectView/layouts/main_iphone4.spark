@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<Window name="ProjectView" fullscreen="true" i18nContext="global-i18n" width="800" height="480" orientation="landscape" clearColor="[0,0,0,1]">
+<Window name="ProjectView" fullscreen="true" i18nContext="global-i18n" width="960" height="640" orientation="landscape" clearColor="[0,0,0,1]">
 
-    <Template name="Project" src="project.spark"/>
-    <Template name="ProjectViewer" src="projectViewer.spark"/>
+    <Template name="Project" src="project_iphone4.spark"/>
+    <Template name="ProjectViewer" src="projectViewer_iphone4.spark"/>
     
     <I18nContext name="global-i18n" defaultLanguage="de">
     </I18nContext>
@@ -16,7 +16,7 @@
         <Rectangle name="background" x="0" y="0" z="-1" width="2000" height="2000" color="[1,1,1]"/>
         <Transform name="startscreen">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]"/>
-            <Image name="logo" x="12" y="30" z="6" src="ac_logo_140px.png"/> 
+            <Image name="logo" x="12" y="14" z="6" src="ac_logo_140px.png" scaleX="1.1" scaleY="1.1"/> 
             <AppLoaderAnim name="apploaderanim" x="200" y="200" z="20">
                 <Image name="anim_01" x="0" y="0" src="acapp_loader01.png" visible="false"/> 
                 <Image name="anim_02" x="0" y="0" src="acapp_loader02.png" visible="true"/> 
@@ -45,5 +45,6 @@
         </Transform>        
         <ProjectViewer name="projectViewer" visible="false" sensible="false" z="100">
         </ProjectViewer>
-    </World> 
+    </World>        
+
 </Window>
