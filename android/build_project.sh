@@ -81,24 +81,10 @@ if [ "`uname -o`" == "Cygwin" ]; then
 fi
 
 cd $SPARK_COMPONENT_DIR
-
 # copy assets
 if [ $DEPLOY == "1" ]
 then
-    echo "copy assets"
-    FOLDERS="models layouts shaders textures fonts sounds" 
-    for folder in $FOLDERS
-    do
-        echo "copy folder $folder"
-        cp -ra $folder android/$SPARK_COMPONENT_NAME/assets
-    done
-
-    CORE_FOLDERS="shaders"
-    for core_folder in $CORE_FOLDERS
-    do
-        echo "push core/$core_folder"
-        cp -ra $MOBILE_SPARK_DIR/core/$core_folder android/$SPARK_COMPONENT_NAME/assets
-    done            
+    JAVA_PROJECT_DIR=android/$SPARK_COMPONENT_NAME MOBILE_SPARK_DIR=$MOBILE_SPARK_DIR $MOBILE_SPARK_DIR/android/deploy_prepare.sh
 fi
 
 # package java
@@ -115,13 +101,6 @@ then
     REL_DIR=$(get_relative_path `pwd` $HELP)
     $ANDROID_TOOL update project --library $REL_DIR --target android-9 --name $SPARK_COMPONENT_NAME --path . 
     BUILD_OK=$?
-fi
-
-# in case of deployment, remove test libs
-if [ $DEPLOY == "1" ]
-then
-    pwd
-    rm $MOBILE_SPARK_DIR/_build/lib/armeabi-v7a/*test*.*
 fi
 
 if [ $BUILD_OK == "0" ] 
@@ -150,7 +129,6 @@ fi
 
 if [ $DEPLOY == "1" ]
 then
-  # removed copied assets from javas assets dir
-  rm -rf $SPARK_COMPONENT_DIR/android/$SPARK_COMPONENT_NAME/assets/*
+  JAVA_PROJECT_DIR=$SPARK_COMPONENT_DIR/android/$SPARK_COMPONENT_NAME $MOBILE_SPARK_DIR/android/deploy_cleanup.sh
 fi
 
