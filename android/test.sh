@@ -30,6 +30,8 @@ $ANDROID_TOOL --silent update test-project --main ../SparkViewerBase --path .
 adb push assets/test.spark /sdcard/test.spark
 
 # build test apk && upload && run test
+ant debug
+ant installt
 ant test
 
 cd -

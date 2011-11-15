@@ -10,6 +10,7 @@
 // own header
 #include "UnitTest.h"
 #include "string_functions.h"
+#include "signal_functions.h"
 
 using namespace std;
 using namespace masl;
@@ -218,9 +219,7 @@ UnitTestSuite::run() {
     try {
         try {
 
-#ifndef _WIN32
-//            masl::initSignalHandling();
-#endif
+            masl::initSignalHandling();
             setup();
         } catch (std::exception & e) {
             std::cerr /*<< TTYRED*/ << "## A std::exception occured during setup of test suite '"
