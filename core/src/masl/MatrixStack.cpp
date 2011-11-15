@@ -22,7 +22,7 @@ int MatrixStack::getSize() const {
 
 // Clears the stack and pops all matrices.
 void MatrixStack::clear() {
-    stack.empty();
+    while(!stack.empty()) stack.pop();
     matrix startMatrix;
     startMatrix = startMatrix.identity();
     stack.push(startMatrix);
