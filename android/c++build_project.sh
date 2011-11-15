@@ -3,6 +3,9 @@
 MOBILE_SPARK_DIR=`pwd`
 NUMCORES=
 
+#remove existing *.so files from common build-dir to avoid multiple project *.so-files there
+rm $MOBILE_SPARK_DIR/_build/lib/armeabi-v7a/*
+
 for i in $*
 do
     case $i in
