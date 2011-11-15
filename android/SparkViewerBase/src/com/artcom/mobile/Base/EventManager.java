@@ -12,9 +12,16 @@ package com.artcom.mobile.Base;
 import android.view.MotionEvent;
 
 public class EventManager {
+    
+    private final int RECENT_ACTION_WAS_DOWN = 0;
+    private final int RECENT_ACTION_WAS_PANING = 1;
+    private final int A_SECOND_FINGER_TOUCHED = 2;
+    private final int PINCH_ZOOM_STARTED = 3;
+    private final int ROTATION_STARTED = 4;
+
 
     private static EventManager INSTANCE;
-    private int mode=0; // 0 - none; 1-pan; 2-TwofingerTap; 3-pinch; 4-rotate
+    private int mode = 0; // 0 - none; 1-pan; 2-TwofingerTap; 3-pinch; 4-rotate
     private int height;
     private long startTime, lastTapTime;
     private int startX, startY, dx, dy, fingerDistance, fingerDistanceStart;
@@ -40,66 +47,69 @@ public class EventManager {
             switch(event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                     startTime = System.currentTimeMillis();
-                    mode=0;
+                    mode = RECENT_ACTION_WAS_DOWN;
                     startX = (int)event.getX();
                     startY = height - (int)event.getY();
                     downHandler();
                     break;
                 case MotionEvent.ACTION_UP:
-                    upHandler();
                     if (timeNow - startTime < 400) {
                         if (timeNow - lastTapTime<400) {
                             doubleTapHandler();
+                            upHandler();
                             break;
                         }
-                        if (mode == 0) {
+                        if (mode == RECENT_ACTION_WAS_DOWN) {
                             singleTapHandler();
+                            upHandler();
                             lastTapTime = timeNow;
                             break;
                         }
-                        if (mode == 1) {
-                            if (dx < -100f) swipeLeftHandler();
-                            if (dx > 100f) swipeRightHandler();
-                            if (dy < -100f) swipeDownHandler();
-                            if (dy > 100f) swipeUpHandler();
+                        if (mode == RECENT_ACTION_WAS_PANING) {
+                            if (dx < -50f) swipeLeftHandler();
+                            if (dx > 50f) swipeRightHandler();
+                            if (dy < -50f) swipeDownHandler();
+                            if (dy > 50f) swipeUpHandler();
+                            upHandler();
                             break;
                         }
-                    } else if (mode == 0) {
+                    } else if (mode == RECENT_ACTION_WAS_DOWN) {
                         longPressedHandler();
-                        break;
                     }
+                    upHandler();
                 case MotionEvent.ACTION_MOVE:
-                    if (mode == 2) {
+                    if (mode == A_SECOND_FINGER_TOUCHED) {
                         fingerDistance = getFingerDistance(event);
                         if (fingerDistance>1 && Math.abs(fingerDistance-fingerDistanceStart)>20) {
-                            mode = 3;
+                            mode = PINCH_ZOOM_STARTED;
                             break;
                         }
                         if (fingerDistance>1 && getRotation(event)>5f) {
-                            mode = 4;
+                            mode = ROTATION_STARTED;
                             break;
                         }
                         break;
                     }
-                    if (mode == 3) {
+                    if (mode == PINCH_ZOOM_STARTED) {
                         fingerDistance = getFingerDistance(event);
                         if(fingerDistance>1) pinchHandler();
                         break;
                     }
-                    if (mode == 4) {
+                    if (mode == ROTATION_STARTED) {
                         // todo
                         rotationHandler();
                         break;
                     }
-                    if(dx*dx + dy*dy < 200) break;
-                    mode=1;
+                    // only one finger is moving:
+                    if(dx*dx + dy*dy < 150) break;
+                    mode = RECENT_ACTION_WAS_PANING;
                     panHandler();
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
-                    if (mode==2) break;
+                    if (mode==A_SECOND_FINGER_TOUCHED) break;
                     fingerDistance = getFingerDistance(event);
                     if ( fingerDistance > 5f) {
-                        mode = 2;
+                        mode = A_SECOND_FINGER_TOUCHED;
                         fingerDistanceStart = fingerDistance;
                     }
                     break;
