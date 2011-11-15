@@ -21,12 +21,12 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
 
-public class ASLOpenGLView extends GLSurfaceView {
+public class SparkOpenGLView extends GLSurfaceView {
 
 
     private EGLRenderer myRenderer;
 
-    public ASLOpenGLView(Context context, SparkOpenGLViewDelegate theViewDelegate, String thePackageName, int theScreenWidth, int theScreenHeight) {
+    public SparkOpenGLView(Context context, SparkOpenGLViewDelegate theViewDelegate, String thePackageName, int theScreenWidth, int theScreenHeight) {
         super(context);
         myRenderer = new EGLRenderer(context, theViewDelegate, thePackageName, theScreenWidth, theScreenHeight);
         init();
