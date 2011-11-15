@@ -10,17 +10,21 @@
 cmake_minimum_required(VERSION 2.8)
 
 set(APP_NAME TemplateApp)
+set(MOBILE_SPARK_DIR ../..)
 project(${APP_NAME})
 
 list(INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR})
 
-set(core_SOURCE_DIR ../../core)
+set(core_SOURCE_DIR "${MOBILE_SPARK_DIR}/core")
 
-add_subdirectory(../../acmake "${CMAKE_CURRENT_BINARY_DIR}/acmake")
+add_subdirectory("${MOBILE_SPARK_DIR}/acmake" "${CMAKE_CURRENT_BINARY_DIR}/acmake")
 find_package(AcMake)
 
-set(spark_DIR ../../core/src/spark)
+set(spark_DIR "${MOBILE_SPARK_DIR}/core/src/spark")
 find_package(spark)
+
+#when spark is found library output directory should be set from core output dir to project output dir
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "../lib/${ARMEABI_NDK_NAME}")
 
 set(REQUIRED_PACKAGES Boost Cml libXML2 libCurl)
 foreach(PACKAGE ${REQUIRED_PACKAGES})
@@ -28,7 +32,7 @@ foreach(PACKAGE ${REQUIRED_PACKAGES})
 endforeach()
 
 
-include_directories(../../core/src)
+include_directories("${MOBILE_SPARK_DIR}/core/src")
 add_subdirectory(src)
 if(IOS)
     add_subdirectory(ios)

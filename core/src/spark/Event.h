@@ -126,6 +126,7 @@ namespace spark {
             static const char * const PICKED;
             static const char * const DOWN;
             static const char * const UP;
+            static const char * const BUTTON_BACK;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};

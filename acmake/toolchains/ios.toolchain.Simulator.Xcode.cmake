@@ -11,13 +11,24 @@ SET(TARGET_PLATFORM iPhoneSimulator)
 SET(IOS True)
 
 # SDK Info
-SET(SDKVER "4.3")
 SET(DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
-SET(SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATFORM}${SDKVER}.sdk")
+
+#Gather all available SDK-paths and select latest
+FILE(GLOB SDK_PATHS ${DEVROOT}/SDKs/*)
+LIST(LENGTH SDK_PATHS length)
+
+FOREACH(path ${SDK_PATHS})
+	#MESSAGE ("Found SDK ${path}")
+	SET(latest_SDK ${path})
+ENDFOREACH(path)
+
+#MESSAGE("Found ${length} SDKs -- latest is ${latest_SDK}")
+
+#Make sure SDK is valid
+find_path(SDKROOT "usr/include/stdlib.h" PATHS ${latest_SDK} NO_CMAKE_FIND_ROOT_PATH)
+
 SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
 SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "")
-
-
 
 #set target device: "1" -> iPhone, "2" -> iPad, "1,2 " -> both (remember the <whitespace> after the '2' !!!)
 SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2")
@@ -36,7 +47,7 @@ SET( CMAKE_CXX_FLAGS "-m32 ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
 ADD_DEFINITIONS("-arch i386")
 ADD_DEFINITIONS("-no-cpp-precomp")
 ADD_DEFINITIONS("--sysroot=${SDKROOT}")
-ADD_DEFINITIONS("-miphoneos-version-min=${SDKVER}")
+#ADD_DEFINITIONS("-miphoneos-version-min=3.0")
 
 # Header
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")

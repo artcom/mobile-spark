@@ -18,16 +18,18 @@ import android.util.DisplayMetrics;
 
 
 public class EGLRenderer  implements GLSurfaceView.Renderer{
-    public static int numFrames = 0;
-    public static final String PACKAGE_NAME = "com.artcom.mobile";
-    public static int _myScreenWidth;
-    public static int _myScreenHeight;
-    public static String _myPackageExtension;
+    //public static int numFrames = 0;
+    private static int _myScreenWidth;
+    private static int _myScreenHeight;
+    private static String _myPackageName;
+    private SparkOpenGLViewDelegate _myViewDelegate; 
     private Context context;
-    public EGLRenderer (Context context, String thePackageExtension, int theScreenWidth, int theScreenHeight) {
+    
+    public EGLRenderer (Context context, SparkOpenGLViewDelegate theViewDelegate, String thePackageName, int theScreenWidth, int theScreenHeight) {
         _myScreenWidth = theScreenWidth;
         _myScreenHeight = theScreenHeight;
-        _myPackageExtension = thePackageExtension;
+        _myPackageName = thePackageName;
+        _myViewDelegate = theViewDelegate;
         this.context = context;
 
     }
@@ -45,12 +47,12 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
 
     public void onSurfaceCreated(GL10 glContext, EGLConfig config) {
         CameraTexture.initWithContext(glContext);
-        AC_Log.print("_________________________________- on surface created of " + PACKAGE_NAME + _myPackageExtension);
-        AC_Log.print(String.format("Spark Loaded %b " , NativeBinding.ourActivity._mySparkWorldIsLoaded));
+        AC_Log.print("_________________________________- on surface created of " + _myPackageName);
         NativeBinding.initBinding();
-        if (!NativeBinding.ourActivity._mySparkWorldIsLoaded) {
-            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(PACKAGE_NAME + _myPackageExtension, context), _myScreenWidth,  _myScreenHeight);
-            NativeBinding.ourActivity._mySparkWorldIsLoaded = true;
+        AC_Log.print(String.format("Spark Loaded %b " , _myViewDelegate.sparkWorldIsLoaded));
+        if (!_myViewDelegate.sparkWorldIsLoaded) {
+            NativeBinding.setup(System.currentTimeMillis(), APK.getApkFilePath(_myPackageName, context), _myScreenWidth,  _myScreenHeight);
+            _myViewDelegate.sparkWorldIsLoaded = true;
         } else {
             NativeBinding.onResume();
         }
