@@ -26,9 +26,9 @@ public class ASLOpenGLView extends GLSurfaceView {
 
     private EGLRenderer myRenderer;
 
-    public ASLOpenGLView(Context context, String thePackageExtension, int theScreenWidth, int theScreenHeight) {
+    public ASLOpenGLView(Context context, SparkOpenGLViewDelegate theViewDelegate, String thePackageName, int theScreenWidth, int theScreenHeight) {
         super(context);
-        myRenderer = new EGLRenderer(context, thePackageExtension, theScreenWidth, theScreenHeight);
+        myRenderer = new EGLRenderer(context, theViewDelegate, thePackageName, theScreenWidth, theScreenHeight);
         init();
         setKeepScreenOn(true);
     }

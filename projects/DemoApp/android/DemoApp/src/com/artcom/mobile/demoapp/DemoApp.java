@@ -22,7 +22,7 @@ public class DemoApp extends SparkViewerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         LOG_TAG = "DemoApp";
-        _myPackageExtension = ".demoapp";
+        _myPackageName = "com.artcom.mobile.demoapp";
         super.onCreate(savedInstanceState);
     }
 }

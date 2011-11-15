@@ -37,7 +37,6 @@
 #ifdef ANDROID
     #include <android/AndroidAssetProvider.h>
     #include <android/AndroidAudioEngine.h>
-    #include <android/AndroidMobileSDK.h>
 #endif
 #ifdef iOS
     #include <ios/IOSAssetProvider.h>

@@ -16,18 +16,20 @@ import android.content.pm.ActivityInfo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import com.artcom.mobile.Base.Sound;
 import com.artcom.mobile.Base.Music;
 
 public class SparkViewerActivity extends Activity {
 
-    private Bundle extras_;
+    private SparkOpenGLViewDelegate mViewDelegate;
+	private Bundle extras_;
     private EnvMap envMap_;
     private static String GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
     protected String LOG_TAG = "SparkViewerActivity";
-    protected String _myPackageExtension; //should be set by child classes
-    public boolean _mySparkWorldIsLoaded = false;
+    protected String _myPackageName; //should be set by child classes
+    
     ASLOpenGLView mView;
     private EventManager eventManager;
     private Sensors sensors;
@@ -37,6 +39,7 @@ public class SparkViewerActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	mViewDelegate = new SparkOpenGLViewDelegate();
     	NativeBinding.ourActivity = this;
         AC_Log.setTopLevelTag(LOG_TAG);
         AC_Log.print("----------------------------------------------------------------------");
@@ -62,7 +65,7 @@ public class SparkViewerActivity extends Activity {
         int myScreenWidth = dm.widthPixels;
         int myScreenHeight = dm.heightPixels;
 
-        mView = new ASLOpenGLView(getApplication(), _myPackageExtension, myScreenWidth, myScreenHeight);
+        mView = new ASLOpenGLView(getApplication(), mViewDelegate, _myPackageName, myScreenWidth, myScreenHeight);
         setContentView(mView);
         
         //init audio
@@ -102,9 +105,21 @@ public class SparkViewerActivity extends Activity {
         mView.onResume();
     }
     
-    
-    
-    ///////////////////////////////static audio functions called from c++  
+    @Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+    	if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+    		AC_Log.print("------------------------Backbutton pressed: "+keyCode);
+
+    		eventManager.dumbBackButtonEvent();
+    		
+    		return true;
+    	}
+    	
+   		return super.onKeyDown(keyCode, event);
+	}
+
+	///////////////////////////////static audio functions called from c++  
     public static void playBackgroundMusic(String path, boolean isLoop){
         backgroundMusicPlayer.playBackgroundMusic(path, isLoop);
     }

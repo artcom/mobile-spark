@@ -19,7 +19,6 @@ public class EventManager {
     private final int PINCH_ZOOM_STARTED = 3;
     private final int ROTATION_STARTED = 4;
 
-
     private static EventManager INSTANCE;
     private int mode = 0; // 0 - none; 1-pan; 2-TwofingerTap; 3-pinch; 4-rotate
     private int height;
@@ -128,6 +127,13 @@ public class EventManager {
             // todo
             return  0;
         }
+        // -------------------------------------------------------------------------
+	    public void dumbBackButtonEvent() {
+		    AC_Log.debug(" ########### backbutton: " + startX + ", " + startY);
+		    String myEvent = "<TouchEvent type='backbutton' x='" + startX + "' y='"
+				+ startY + "'/>";
+		    NativeBinding.onEvent(myEvent);
+	    }
         //-------------------------------------------------------------------------
         private void downHandler() {
         	AC_Log.debug(" ########### down: " + startX + ", " + startY);

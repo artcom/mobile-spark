@@ -1,9 +1,59 @@
 #! /bin/bash
 
-APPFOLDER=`pwd`/..
+
+function get_relative_path {
+    if [[ "$1" == "$2" ]]
+    then
+        echo "."
+        exit
+    fi
+
+    IFS="/"
+
+    current=($1)
+    absolute=($2)
+
+    abssize=${#absolute[@]}
+    cursize=${#current[@]}
+
+    while [[ ${absolute[level]} == ${current[level]} ]]
+    do
+        (( level++ ))
+        if (( level > abssize || level > cursize ))
+        then
+            break
+        fi
+    done
+
+    for ((i = level; i < cursize; i++))
+    do
+        if ((i > level))
+        then
+            newpath=$newpath"/"
+        fi
+        newpath=$newpath".."
+    done
+
+    for ((i = level; i < abssize; i++))
+    do
+        if [[ -n $newpath ]]
+        then
+            newpath=$newpath"/"
+        fi
+        newpath=$newpath${absolute[i]}
+    done
+
+    echo "$newpath"
+}
+
+
+
+MOBILE_SPARK_DIR=`pwd`
+
+./android/c++build_project.sh $*
+BUILD_OK=$?
 
 VERBOSITY="-quiet"
-NUMCORES=
 DEPLOY=0
 BUILD_TYPE="debug"
 
@@ -19,82 +69,38 @@ do
         verbose)
             VERBOSITY=""
             ;;
-        -j*)
-            NUMCORES=$i
-            ;;
         *)
         #unknown
-        echo $i
        ;;
    esac
 done
 
-cd ../../../android
-./build.sh $NUMCORES 
-BUILD_OK=$?
-echo "core build exited with $BUILD_OK"
-
-cd $APPFOLDER
-
 ANDROID_TOOL="android"
-MAKE_TOOL="make"
 if [ "`uname -o`" == "Cygwin" ]; then
     ANDROID_TOOL="android.bat"
-    MAKE_TOOL="nmake"
 fi
 
-if [ $BUILD_OK == "0" ]
-then
-    mkdir -p _build
-    cd _build
-    cmake -DCMAKE_TOOLCHAIN_FILE=../../acmake/toolchains/android.toolchain.cmake ..
-    $MAKE_TOOL $NUMCORES
-    BUILD_OK=$?
-
-    #copy projectname.so to core _build
-    cd -
-    cp _build/lib/armeabi-v7a/lib$PROJECT_NAME.so ../../_build/lib/armeabi-v7a/
-fi
-
+cd $SPARK_COMPONENT_DIR
 # copy assets
-echo "copy assets"
 if [ $DEPLOY == "1" ]
 then
-    FOLDERS="models layouts shaders textures fonts sounds" 
-    for folder in $FOLDERS
-    do
-        echo "copy folder $folder"
-        cp -ra $folder android/$PROJECT_NAME/assets
-    done
-
-    CORE_FOLDERS="shaders"
-    for core_folder in $CORE_FOLDERS
-    do
-        echo "push core/$core_folder"
-        cp -ra ../../core/$core_folder android/$PROJECT_NAME/assets
-    done            
+    JAVA_PROJECT_DIR=android/$SPARK_COMPONENT_NAME MOBILE_SPARK_DIR=$MOBILE_SPARK_DIR $MOBILE_SPARK_DIR/android/deploy_prepare.sh
 fi
 
 # package java
 cd android
 if [ $BUILD_OK == "0" ] 
 then
-    cd $PROJECT_NAME
-    
-    # update Base project
-    $ANDROID_TOOL update lib-project --target android-9 --path ../../../../android/SparkViewerBase 
+    cd $SPARK_COMPONENT_NAME
+    ## update Base project
+    $ANDROID_TOOL update lib-project --target android-9 --path $MOBILE_SPARK_DIR/android/SparkViewerBase 
 
     # update android project
-    $ANDROID_TOOL update project --target android-9 --name $PROJECT_NAME --path . 
-    $ANDROID_TOOL update project --library ../../../../android/SparkViewerBase --target android-9 --name $PROJECT_NAME --path . 
+    HELP=$MOBILE_SPARK_DIR/android/SparkViewerBase
+    # android bug: --library fails on absolute paths
+    REL_DIR=$(get_relative_path `pwd` $HELP)
+    $ANDROID_TOOL update project --library $REL_DIR --target android-9 --name $SPARK_COMPONENT_NAME --path . 
     BUILD_OK=$?
-fi
-
-# in case of deployment, remove test libs
-if [ $DEPLOY == "1" ]
-then
-    pwd
-    rm ../../../../_build/lib/armeabi-v7a/*test*.*
 fi
 
 if [ $BUILD_OK == "0" ] 
@@ -108,19 +114,21 @@ then
     BUILD_OK=$?
 fi
     
-cd -
+cd $MOBILE_SPARK_DIR
 
 if [ $BUILD_OK == "0" ] 
 then
     echo "build done :-)"
     if [ $BUILD_TYPE == "release" ]; then
-        echo "final release package can be found in bin/$PROJECT_NAME-release.apk"
+        echo "final release package can be found in bin/$SPARK_COMPONENT_NAME-release.apk"
     fi
 else
     echo ":-( BUILD FAILED :-("
     exit 1
 fi
 
-# removed copied assets from javas assets dir
-rm -rf $PROJECT_NAME/assets/*
+if [ $DEPLOY == "1" ]
+then
+  JAVA_PROJECT_DIR=$SPARK_COMPONENT_DIR/android/$SPARK_COMPONENT_NAME $MOBILE_SPARK_DIR/android/deploy_cleanup.sh
+fi
 
