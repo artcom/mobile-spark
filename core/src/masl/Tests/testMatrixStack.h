@@ -115,7 +115,7 @@ namespace masl {
                 myStack.push();
                 ENSURE_EQUAL(myStack.getSize(), 2);
                 myStack.clear();
-                ENSURE_EQUAL(myStack.getSize(), 1);
+                ENSURE_EQUAL(1, myStack.getSize());
             }
     };
 
