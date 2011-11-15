@@ -13,6 +13,7 @@
 #include <spark/Transform.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/Window.h>
+#include <spark/Rectangle.h>
 #include "ProjectImpl.h"
 
 
@@ -39,9 +40,13 @@ namespace acprojectview {
             void onSwipeRightCB(spark::EventPtr theEvent);
             void changeSlide(int dir);
             void onDelayFinished();
-
+            void onAnimationFinished();       
+            void onDrag(spark::EventPtr theEvent);
+            void onStopDrag(spark::EventPtr theEvent);
 
             spark::WindowPtr _myWindowPtr;
+            spark::RectanglePtr _myLeftBlackRectPtr;
+            spark::RectanglePtr _myRightBlackRectPtr;
             int _myVerticalTiling;
             int _myHorizontalTiling;
             int _myIconWidth;
@@ -52,9 +57,13 @@ namespace acprojectview {
             int _myHeight;
             int _myNumberOfSlides;
             int _myCurrentSlide;
-            bool _myIsAnimating;      
+            int _myXBeforeDrag;
+            bool _myIsAnimating; 
+            bool _myDragStarted;
+            bool _myFingerIsStillDown;
+            bool _myBlockSwiping;
 
-           
+
             
     };
     typedef masl::Ptr<ProjectMenu> ProjectMenuPtr;
