@@ -60,7 +60,11 @@ namespace acprojectview {
         spark::EventCallbackPtr mySwipeCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onSwipe));
         getRoot()->addEventListener(GestureEvent::SWIPE_LEFT, mySwipeCB);
         getRoot()->addEventListener(GestureEvent::SWIPE_RIGHT, mySwipeCB);
-
+        
+        spark::EventCallbackPtr myDragCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onDrag));
+        getRoot()->addEventListener(GestureEvent::PAN, myDragCB);
+        spark::EventCallbackPtr myStopDragCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onStopDrag));
+        getRoot()->addEventListener(TouchEvent::UP, myStopDragCB);
     
         spark::EventCallbackPtr mySwipeUpDownCB = EventCallbackPtr(new ProjectViewerImplEventCB(ptr, &ProjectViewerImpl::onOpenClosePopup));
         _myPopupBG->addEventListener(TouchEvent::PICKED, mySwipeUpDownCB, Event::BUBBLING);
@@ -92,7 +96,8 @@ namespace acprojectview {
         //boost::timer::timer myTimer;
          int myTextHeight = POPUP_SIZE;        
          _myPopup->setY(-myTextHeight);
-                      
+        _myDragStarted = false;
+        _myFingerIsStillDown = false;
         showPopup(false);            
         _myCurrentProject = currentProject;
          _myPopUpTitle->setVisible(false);
@@ -112,6 +117,11 @@ namespace acprojectview {
          _imageTransform0->setX(0);
          _imageTransform1->setX(_myWidth);
          _imageTransform2->setX(-_myWidth);
+        
+         _myTransform0BeforeDragX = _imageTransform0->getX();
+         _myTransform1BeforeDragX = _imageTransform1->getX();
+         _myTransform2BeforeDragX = _imageTransform2->getX();
+        
          _myCurrentImage = 0;
          _myDisplayedImage = 0;
          _myCurrentSlot=0;
@@ -121,7 +131,7 @@ namespace acprojectview {
          _image0->setSrc(myProjectEntry->getSrc());            
          autoScaleImage(_image0);
 
-         _imageTransform1->setVisible(false);
+         _imageTransform1->setVisible(false);  
          _imageTransform2->setVisible(false);
          
          setVisible(false);
@@ -222,7 +232,7 @@ namespace acprojectview {
              _image1->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[1%_myNumberOfImages])->getSrc());
              autoScaleImage(_image1);
             }
-
+        _imageTransform1->setVisible(true);  
          //AC_PRINT << "******************ProjectViewerImpl::loadInitialSet3***************************** " << myTimer.elapsed();
     }
     void ProjectViewerImpl::loadInitialSet4() {    
@@ -231,6 +241,7 @@ namespace acprojectview {
              _image2->setSrc(boost::static_pointer_cast<ContentImage>(_myContentImages[_myNumberOfImages-1])->getSrc());
              autoScaleImage(_image2);
         }        
+        _imageTransform2->setVisible(true);
         //AC_PRINT << "ProjectViewerImpl::loadInitialSet4 done";
          //AC_PRINT << "******************ProjectViewerImpl::loadInitialSet4***************************** " << myTimer.elapsed();
     }
@@ -282,30 +293,30 @@ namespace acprojectview {
 	    }
     }
     void ProjectViewerImpl::onSwipe(EventPtr theEvent) {
-        if (isRendered()) {
+        if (isRendered() && !_myBlockSwiping && isSensible()) {
             if (isPopUpOpen()) {
     	        _myDescription->swipe((theEvent->getType() == "swipe-right" ? -1 :  +1));
 	        } else {
+                _myFingerIsStillDown = true;
     	        changeImage(theEvent->getType() == "swipe-right" ? -1 :  +1);
 	        }
         }
     }
     
     void ProjectViewerImpl::changeImage(int dir) {
-        if(_myIsAnimating) return;
-        _myIsAnimating = true;      
-        _imageTransform1->setVisible(true);
-        _imageTransform2->setVisible(true);
+        if(_myIsAnimating || !isRendered()) return;
+        setSensible(false);
+        _myIsAnimating = true;
         _myDirection =dir;
-        _myCurrentSlot = (_myCurrentSlot + dir+3) %3;
+        if(dir != 0) _myCurrentSlot = (_myCurrentSlot + dir+3) %3;
         WidgetPropertyAnimationPtr changeAnimation0 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform0)), &Widget::setX, _imageTransform0->getX(), _imageTransform0->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform0)), &Widget::setX, _imageTransform0->getX(), _myTransform0BeforeDragX-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr changeAnimation1 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform1)), &Widget::setX, _imageTransform1->getX(), _imageTransform1->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform1)), &Widget::setX, _imageTransform1->getX(), _myTransform1BeforeDragX-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         WidgetPropertyAnimationPtr changeAnimation2 = WidgetPropertyAnimationPtr(
-                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform2)), &Widget::setX, _imageTransform2->getX(), _imageTransform2->getX()-_myWidth*dir, 300,
+                new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(_imageTransform2)), &Widget::setX, _imageTransform2->getX(), _myTransform2BeforeDragX-_myWidth*dir, 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
@@ -340,13 +351,45 @@ namespace acprojectview {
         
     }
     void ProjectViewerImpl::onAnimationFinished() {
-        if (_imageTransform0->getX() > _myWidth+1) _imageTransform0->setX(-_myWidth);
-        if (_imageTransform1->getX() > _myWidth+1) _imageTransform1->setX(-_myWidth);
-        if (_imageTransform2->getX() > _myWidth+1) _imageTransform2->setX(-_myWidth);
-        if (_imageTransform0->getX() < -_myWidth-1) _imageTransform0->setX(_myWidth);
-        if (_imageTransform1->getX() < -_myWidth-1) _imageTransform1->setX(_myWidth);
-        if (_imageTransform2->getX() < -_myWidth-1) _imageTransform2->setX(_myWidth);
+        if(_myDirection!=0) {
+            if (_imageTransform0->getX() > _myWidth+1) _imageTransform0->setX(-_myWidth);
+            if (_imageTransform1->getX() > _myWidth+1) _imageTransform1->setX(-_myWidth);
+            if (_imageTransform2->getX() > _myWidth+1) _imageTransform2->setX(-_myWidth);
+            if (_imageTransform0->getX() < -_myWidth-1) _imageTransform0->setX(_myWidth);
+            if (_imageTransform1->getX() < -_myWidth-1) _imageTransform1->setX(_myWidth);
+            if (_imageTransform2->getX() < -_myWidth-1) _imageTransform2->setX(_myWidth);
+        }
+        _myTransform0BeforeDragX = _imageTransform0->getX();
+        _myTransform1BeforeDragX = _imageTransform1->getX();
+        _myTransform2BeforeDragX = _imageTransform2->getX();
+        setSensible(true);
     }
-
+    
+    void ProjectViewerImpl::onDrag(spark::EventPtr theEvent) {
+        if(_myIsAnimating || _myFingerIsStillDown || isPopUpOpen() || !isSensible()) return;
+        if (_myDragStarted) _myBlockSwiping=true;
+        _myDragStarted=true;
+        GestureEventPtr myEvent = boost::static_pointer_cast<GestureEvent>(theEvent);
+        int dx = myEvent->getTranslateX();
+        _imageTransform0->setX(_myTransform0BeforeDragX+dx);
+        _imageTransform1->setX(_myTransform1BeforeDragX+dx);
+        _imageTransform2->setX(_myTransform2BeforeDragX+dx);
+    }
+    
+    void ProjectViewerImpl::onStopDrag(spark::EventPtr theEvent) {
+        _myDragStarted = false;
+        _myFingerIsStillDown = false;
+        _myBlockSwiping=false;
+        if(_imageTransform0->getX() - _myTransform0BeforeDragX > _myWidth/4) {
+            _myDragStarted = false;
+            changeImage(-1);
+            return;
+        } else if (_imageTransform0->getX() - _myTransform0BeforeDragX < -_myWidth/4){
+            _myDragStarted = false;
+            changeImage(1);
+            return;
+        }        
+        changeImage(0);
+    }
         
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ProjectViewerImpl>
+
+    <Rectangle name="background" x="0" y="0" width="2000" height="2000" color="[0.0,0.0,0.0]"/>
+    <Transform name="image_0_transform" z="2">
+        <Image name="image" cache="true"/>
+    </Transform>        
+    <Transform name="image_1_transform" z="2">
+        <Image name="image" cache="true"/>
+    </Transform>        
+    <Transform name="image_2_transform" z="2">
+        <Image name="image" cache="true"/>
+    </Transform>        
+    
+    <Transform name="popup" x="0" y="0" z="10">
+        <Rectangle name="popup_bg" width="600" height="80" color="[0.0,0.0,0.0]" alpha="0.5" sensible="true"/>
+        <Text name="title" x="20" y="0" z="2" color="[0.333,0.77,0.91,1]" fontsize="20" font="acswissmed.ttf" sensible="false" cache="false"/>
+        <Text name="subtitle" x="20" y="0" z="3" color="[1,1,1,1]" fontsize="18" font="acswissmed.ttf" sensible="false" cache="false"/>        
+        <MultiColumnText name="description" x="0" y="0" z="4" columnSpace="20" fontsize="17" lineheight="22" sensible="false"/>
+        <Image name="pfeil" x="0" y="0" z="5" src="pfeil.png" origin="center" sensible="true">
+            <Rectangle name="pfeil_bg" x="0" y="0" z="1" width="250" height="250" color="[0.0,0.0,0.0]" alpha="0.0" sensible="true" origin="center"/>
+        </Image>
+    </Transform>        
+</ProjectViewerImpl>

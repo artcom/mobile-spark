@@ -7,7 +7,7 @@
     <I18nContext name="global-i18n" defaultLanguage="de">
     </I18nContext>
 
-    <View name="loaderView" world="loaderworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
+<View name="loaderView" world="loaderworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
     <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera" visible="false"/>
 
     <World name="loaderworld" sensible="false">    
@@ -32,12 +32,12 @@
         <!--Statistic name="stats" z="300"/-->
         <Transform name="startscreen" z="211">
             <Rectangle name="background" x="0" y="0" z="5" width="2000" height="2000" color="[1,1,1]" alpha="1.0"/>
-            <Rectangle name="left_bar" x="0" y="0" z="12" width="180" height="75" color="[1,1,1]" alpha="1.0"/>
-            <Rectangle name="right_bar" x="0" y="0" z="12" width="260" height="75" color="[1,1,1]" alpha="1.0"/>
-            <Image name="logo" x="12" y="30" z="13" src="ac_logo_140px.png"/> 
-            <Text name="deutsch" text="DEUTSCH" x="10" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="acswissmed.ttf"/>
-            <Rectangle name="lang_sep" x="0" y="30" z="15" width="2" height="20" color="[0,0,0]"/>
-            <Text name="english" text="ENGLISH" x="100" y="30" color="[0,0,0,1]" z="14" fontsize="22" font="acswissmed.ttf"/>
+            <!--Rectangle name="left_bar" x="0" y="0" z="12" width="180" height="75" color="[1,1,1]" alpha="1.0"/-->
+            <Rectangle name="right_bar" x="0" y="0" z="12" width="2000" height="50" color="[1,1,1]" alpha="1.0"/>
+            <Image name="logo" x="12" y="14" z="13" src="ac_logo_140px.png" scaleX="1.1" scaleY="1.1"/> 
+            <Text name="deutsch" text="DEUTSCH" x="10" y="12" color="[0.6,0.5,0.4,1]" z="14" fontsize="22" font="acswissmed.ttf"/>
+            <Rectangle name="lang_sep" x="0" y="12" z="15" width="2" height="20" color="[0.6,0.5,0.4]"/>
+            <Text name="english" text="ENGLISH" x="100" y="12" color="[0.6,0.5,0.4,1]" z="14" fontsize="22" font="acswissmed.ttf"/>
             <Transform name="idlescreen" z="10">
                 <Image name="idleimage_1" z="0" alpha="1.0" src="kinetische_skulptur_03.png" vertex_shader="kenburnseffect.glsl" custom_shader_handles="u_time u_mode"/>
                 <Image name="idleimage_2" z="1" alpha="0.0" visible="false" src="kinetische_skulptur_03.png" vertex_shader="kenburnseffect.glsl" custom_shader_handles="u_time u_mode"/>
@@ -45,6 +45,7 @@
         </Transform>        
         <ProjectViewer name="projectViewer" visible="false" sensible="false" z="100">
         </ProjectViewer>
-    </World>        
+    </World>       
 
 </Window>
+
