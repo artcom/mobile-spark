@@ -22,12 +22,13 @@ namespace spark {
     const char * const GestureEvent::CLASSNAME = "GestureEvent";
     const char * const SensorEvent::CLASSNAME = "SensorEvent";
     const char * const I18nEvent::CLASSNAME = "I18nEvent";
+    const char * const ApplicationEvent::CLASSNAME = "ApplicationEvent";
 
     const char * const StageEvent::FRAME = "frame";
     const char * const WindowEvent::ON_RESIZE = "on_resize";
     const char * const WindowEvent::WORLD_REALIZED = "world_realized";
-        
     const char * const I18nEvent::ON_LANGUAGE_SWITCH = "on_language_switch";
+    const char * const ApplicationEvent::GENERIC = "generic";
         
     const char * const TouchEvent::TAP = "tap";
     const char * const TouchEvent::DOUBLETAP = "doubletap";
@@ -225,4 +226,19 @@ namespace spark {
         : Event(theType, theTarget) {
     }
     I18nEvent::~I18nEvent() {}
+
+    ApplicationEvent::ApplicationEvent(const masl::XMLNodePtr theXMLNode) :
+        Event(theXMLNode) {
+        data_ = theXMLNode->attributes; 
+    }
+
+    ApplicationEvent::~ApplicationEvent() {}
+
+    std::string 
+    ApplicationEvent::getAttribute(const std::string & theKey) { 
+        if (data_.find(theKey) != data_.end()) {
+            return data_[theKey]; 
+        }
+        return "";
+    }
 }
