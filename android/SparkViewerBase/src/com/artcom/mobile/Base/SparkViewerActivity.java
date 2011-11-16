@@ -27,7 +27,6 @@ public class SparkViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	mViewDelegate = new SparkOpenGLViewDelegate(this);
-    	AudioDelegate audioDelegate = new AudioDelegate(this);
     	
         AC_Log.setTopLevelTag(LOG_TAG);
         AC_Log.print("----------------------------------------------------------------------");
