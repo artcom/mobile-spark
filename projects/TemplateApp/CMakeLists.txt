@@ -10,17 +10,16 @@
 cmake_minimum_required(VERSION 2.8)
 
 set(APP_NAME TemplateApp)
-set(MOBILE_SPARK_DIR ../..)
 project(${APP_NAME})
 
 list(INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR})
 
-set(core_SOURCE_DIR "${MOBILE_SPARK_DIR}/core")
+set(core_SOURCE_DIR "$ENV{MOBILE_SPARK}/core")
 
-add_subdirectory("${MOBILE_SPARK_DIR}/acmake" "${CMAKE_CURRENT_BINARY_DIR}/acmake")
+add_subdirectory("$ENV{MOBILE_SPARK}/acmake" "${CMAKE_CURRENT_BINARY_DIR}/acmake")
 find_package(AcMake)
 
-set(spark_DIR "${MOBILE_SPARK_DIR}/core/src/spark")
+set(spark_DIR "$ENV{MOBILE_SPARK}/core/src/spark")
 find_package(spark)
 
 #when spark is found library output directory should be set from core output dir to project output dir
@@ -32,8 +31,9 @@ foreach(PACKAGE ${REQUIRED_PACKAGES})
 endforeach()
 
 
-include_directories("${MOBILE_SPARK_DIR}/core/src")
+include_directories("$ENV{MOBILE_SPARK}/core/src")
 add_subdirectory(src)
 if(IOS)
     add_subdirectory(ios)
 endif()
+

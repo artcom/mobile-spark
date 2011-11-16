@@ -1,6 +1,5 @@
 #!/bin/bash
 
-MOBILE_SPARK_DIR=`pwd`
 cd $SPARK_COMPONENT_DIR
 
 FOLDERS="models layouts shaders textures fonts sounds" 
@@ -23,7 +22,7 @@ do
     done
 done
 
-cd $MOBILE_SPARK_DIR/core
+cd $MOBILE_SPARK/core
 PUSHPATH="shaders"
 for dir in $PUSHPATH
 do
