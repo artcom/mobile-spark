@@ -31,7 +31,8 @@ namespace templateapp {
     };
 
     typedef masl::Ptr<TemplateApp> TemplateAppPtr;
-    typedef spark::MemberFunctionEventCallback<TemplateApp, TemplateAppPtr> TemplateAppEventCB;
+    typedef masl::WeakPtr<TemplateApp> TemplateAppWeakPtr;
+    typedef spark::MemberFunctionEventCallback<TemplateApp, TemplateAppWeakPtr> TemplateAppEventCB;
 
 };
 

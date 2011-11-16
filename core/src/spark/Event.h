@@ -222,6 +222,18 @@ namespace spark {
     };
     typedef masl::Ptr<I18nEvent> I18nEventPtr;
 
+    class ApplicationEvent : public Event {
+        public:
+            ApplicationEvent(const masl::XMLNodePtr theXMLNode);
+            virtual ~ApplicationEvent();
+            static const char * const CLASSNAME;
+            virtual const char * const &  classname_() const {return ApplicationEvent::CLASSNAME;};
+            static const char * const GENERIC;
+            std::string getAttribute(const std::string & theKey);
+        private:
+            std::map<std::string, std::string> data_;
+    };
+    typedef masl::Ptr<ApplicationEvent> ApplicationEventPtr;
 
 
     ////////////////////////////////////////////////////////////////////////
