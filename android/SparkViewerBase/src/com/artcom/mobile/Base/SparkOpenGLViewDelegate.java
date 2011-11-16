@@ -17,6 +17,7 @@ public class SparkOpenGLViewDelegate {
     private EnvMap envMap_;
    
     private static String GLOBAL_VERBOSITY_ENV = "AC_LOG_VERBOSITY";
+
     
     public SparkOpenGLViewDelegate(Activity theActivity) {
     	NativeBinding.ourActivity = theActivity;
@@ -31,6 +32,7 @@ public class SparkOpenGLViewDelegate {
     	envMap_ = new EnvMap();
         envMap_.init(extras_);
         CameraTexture.init(theActivity);
+        AudioDelegate audioDelegate = new AudioDelegate(theActivity);
 
         Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
         AC_Log.setSeverity(mySeverity);
