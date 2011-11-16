@@ -24,6 +24,11 @@ namespace spark {
     Shape3D::~Shape3D() {
     }
 
+    void 
+    Shape3D::setSrc(const std::string & theSrc) { 
+        _mySrc = theSrc; _myDirtyFlag = true;
+    } 
+
     void
     Shape3D::onResume() {
         ShapeWidget::onResume();
