@@ -47,9 +47,6 @@ function get_relative_path {
 }
 
 
-
-MOBILE_SPARK_DIR=`pwd`
-
 ./android/c++build_project.sh $*
 BUILD_OK=$?
 
@@ -84,7 +81,7 @@ cd $SPARK_COMPONENT_DIR
 # copy assets
 if [ $DEPLOY == "1" ]
 then
-    JAVA_PROJECT_DIR=android/$SPARK_COMPONENT_NAME MOBILE_SPARK_DIR=$MOBILE_SPARK_DIR $MOBILE_SPARK_DIR/android/deploy_prepare.sh
+    JAVA_PROJECT_DIR=android/$SPARK_COMPONENT_NAME $MOBILE_SPARK/android/deploy_prepare.sh
 fi
 
 # package java
@@ -93,10 +90,10 @@ if [ $BUILD_OK == "0" ]
 then
     cd $SPARK_COMPONENT_NAME
     ## update Base project
-    $ANDROID_TOOL update lib-project --target android-9 --path $MOBILE_SPARK_DIR/android/SparkViewerBase 
+    $ANDROID_TOOL update lib-project --target android-9 --path $MOBILE_SPARK/android/SparkViewerBase 
 
     # update android project
-    HELP=$MOBILE_SPARK_DIR/android/SparkViewerBase
+    HELP=$MOBILE_SPARK/android/SparkViewerBase
     # android bug: --library fails on absolute paths
     REL_DIR=$(get_relative_path `pwd` $HELP)
     $ANDROID_TOOL update project --library $REL_DIR --target android-9 --name $SPARK_COMPONENT_NAME --path . 
@@ -114,7 +111,7 @@ then
     BUILD_OK=$?
 fi
     
-cd $MOBILE_SPARK_DIR
+cd $MOBILE_SPARK
 
 if [ $BUILD_OK == "0" ] 
 then
@@ -129,6 +126,6 @@ fi
 
 if [ $DEPLOY == "1" ]
 then
-  JAVA_PROJECT_DIR=$SPARK_COMPONENT_DIR/android/$SPARK_COMPONENT_NAME $MOBILE_SPARK_DIR/android/deploy_cleanup.sh
+  JAVA_PROJECT_DIR=$SPARK_COMPONENT_DIR/android/$SPARK_COMPONENT_NAME $MOBILE_SPARK/android/deploy_cleanup.sh
 fi
 
