@@ -106,7 +106,10 @@
 - (void)handlePanGesture:(UIPanGestureRecognizer *)theRecognizer {
     CGPoint translation = [theRecognizer translationInView:_myView];
     CGPoint location = [theRecognizer locationInView:_myView];
-    if(location.x != location.x || location.y != location.y) return;
+    if(location.x != location.x || location.y != location.y) { // check if locations are NaN
+        location.x=0; 
+        location.y=0;
+    }
     if (theRecognizer.state != UIGestureRecognizerStateEnded) {
         [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pan' x='%f' y='%f' dx='%f' dy='%f'/>", location.x*_myRetinaScale, _myHeight-location.y*_myRetinaScale, translation.x*_myRetinaScale, _myHeight-translation.y*_myRetinaScale]];
     } else {
