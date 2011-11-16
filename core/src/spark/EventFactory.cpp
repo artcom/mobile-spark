@@ -28,6 +28,7 @@ namespace spark {
         registered = registerEvent(GestureEvent::CLASSNAME, spark::createEvent<GestureEvent>);
         registered = registerEvent(SensorEvent::CLASSNAME, spark::createEvent<SensorEvent>);
         registered = registerEvent(I18nEvent::CLASSNAME, spark::createEvent<I18nEvent>);
+        registered = registerEvent(ApplicationEvent::CLASSNAME, spark::createEvent<ApplicationEvent>);
     };
 
     EventFactory::EventFactory() {
