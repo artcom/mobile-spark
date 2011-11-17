@@ -1,7 +1,7 @@
 #!/bin/bash
 CURRENT_PATH=`pwd`
 echo $CURRENT_PATH
-if [ "`uname -o`" == "Cygwin" ]; then
+if [[ "`uname -s`" == *CYGWIN* ]]; then
     cd $(cygpath "$MOBILE_SPARK/")
 else
     cd $MOBILE_SPARK
@@ -31,7 +31,7 @@ rm -rf _build
 
 cd android
 
-if [ "`uname -o`" == "Cygwin" ]; then
+if [[ "`uname -s`" == *CYGWIN* ]]; then
     HELP=$(cygpath "$MOBILE_SPARK/_build/lib")
 else    
     HELP=$MOBILE_SPARK/_build/lib
