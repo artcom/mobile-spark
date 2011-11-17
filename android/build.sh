@@ -1,7 +1,7 @@
 #! /bin/bash
 
 MAKE_TOOL="make"
-if [ "`uname -o`" == "Cygwin" ]; then
+if [[ "`uname -s`" == *CYGWIN* ]]; then
     MAKE_TOOL="nmake"
 fi
 

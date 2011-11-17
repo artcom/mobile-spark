@@ -2,7 +2,7 @@
 
 ANDROID_TOOL="android"
 MAKE_TOOL="make"
-if [ "`uname -o`" == "Cygwin" ]; then
+if [[ "`uname -s`" == *CYGWIN* ]]; then
     ANDROID_TOOL="android.bat"
     MAKE_TOOL="nmake"
 fi
