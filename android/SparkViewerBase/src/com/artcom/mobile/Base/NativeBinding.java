@@ -39,15 +39,16 @@ import com.artcom.mobile.Base.Severity;
 import com.artcom.mobile.Base.NativeException;
 public class NativeBinding {
     public static Activity ourActivity;
+    public static boolean ourAllowOrientationChange = true;
 
 
-  public static void loadLibraries() {
-      System.loadLibrary("masl");
-      System.loadLibrary("animation");
-      System.loadLibrary("mar");
-      System.loadLibrary("android");
-      System.loadLibrary("spark");
-  }
+    public static void loadLibraries() {
+        System.loadLibrary("masl");
+        System.loadLibrary("animation");
+        System.loadLibrary("mar");
+        System.loadLibrary("android");
+        System.loadLibrary("spark");
+    }
 
   public static native void setup(long currentMillis, String apkFilePath, int theScreenWidth, int theScreenHeight);
   public static native void putEnv(String theEnvVar);
@@ -187,11 +188,14 @@ public class NativeBinding {
   }
 
   public static void freezeOrientation(String theOrientation) {
-     if (theOrientation.compareTo("portrait") == 0) {
-    	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
-     } else if (theOrientation.compareTo("landscape") == 0) {
-    	 ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE );
-     }
+      if (!ourAllowOrientationChange) {
+          return;
+      }
+      if (theOrientation.compareTo("portrait") == 0) {
+          ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
+      } else if (theOrientation.compareTo("landscape") == 0) {
+          ourActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE );
+      }
   }
 
   public static void vibrate(int theDurationMillisec) {
