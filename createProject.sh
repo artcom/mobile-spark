@@ -43,6 +43,7 @@ fi
 REL_DIR=../$(get_relative_path `pwd` $HELP)
 BUILD_LIB_CONSTANT="MOBILE_SPARK_BUILD_LIB"
 sed -i $OSX_SED_ADDON "s|$BUILD_LIB_CONSTANT|$REL_DIR|g" $TEMPLATE_NAME/build.properties
+sed -i $OSX_SED_ADDON "s|$BUILD_LIB_CONSTANT|$REL_DIR|g" $TEMPLATE_NAME/ant.properties
 sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g build.sh
 sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g c++build.sh
 sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g push.sh
