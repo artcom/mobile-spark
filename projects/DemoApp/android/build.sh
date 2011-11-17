@@ -1,7 +1,7 @@
 #! /bin/bash
 
 SPARK_COMPONENT_DIR=`pwd`/..
-if [ "`uname -o`" == "Cygwin" ]; then
+if [[ "`uname -s`" == *CYGWIN* ]]; then
     cd $(cygpath "$MOBILE_SPARK/")
 else
     cd $MOBILE_SPARK
