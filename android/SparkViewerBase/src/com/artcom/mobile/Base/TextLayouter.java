@@ -18,15 +18,13 @@ import android.graphics.Rect;
 
 public class TextLayouter {
     private String _myText;
-    private int _myFontSize;
     private int _myMaxWidth;
     private int _myMaxHeight;
     private int _myCanvasWidth;
     private int _myCanvasHeight;
     private int _myRendereredGlyphIndex;
-    public TextLayouter(String theText, int theFontSize, int maxWidth, int maxHeight) {
+    public TextLayouter(String theText, int maxWidth, int maxHeight) {
         _myText = theText;
-        _myFontSize = theFontSize;
         _myMaxWidth = maxWidth;
         _myMaxHeight = maxHeight;
         _myCanvasHeight = 1;
@@ -38,15 +36,12 @@ public class TextLayouter {
     int getCanvasWidth()  { return _myCanvasWidth;  }
 
     List<TextLine> createLines(Paint myTextPaint, int theLineHeight) {
-    	//long myStart = System.currentTimeMillis();    	
         List<TextLine> myResult = new ArrayList<TextLine>();
 
         int myCharacterOnLine = 0;
         Paint.FontMetrics myMetrics = new Paint.FontMetrics();
         myTextPaint.getFontMetrics(myMetrics);
 
-        //AC_Log.print(String.format("Java:createLines %d '%s'", _myText.length(), _myText));
-        //AC_Log.print(String.format("Java:createLines max width %d", _myMaxWidth));
         int myXPos = 0;
         int myLineWidth = 0;
         int myLineHeight = (int)(myMetrics.bottom - myMetrics.top);
@@ -72,10 +67,8 @@ public class TextLayouter {
         } while(myNewLinePos != -1);
         myBlocks.add(_myText.length());
 
-        //AC_Log.print(String.format("Java:createLines blocks #%d ", myBlocks.size()));
         int myBlockStartPos = 0;
         for (int i = 0; i <  myBlocks.size(); i++) {
-        	//long myBlockStart = System.currentTimeMillis();    	
         	
             String myBlock = _myText.substring(myBlockStartPos, myBlocks.get(i));
             myNewLinePos = myBlock.indexOf("\\n");
@@ -83,11 +76,9 @@ public class TextLayouter {
                 myBlock = myBlock.substring(myNewLinePos + 2, myBlock.length()).trim();
                 _myRendereredGlyphIndex+=2;
             }
-            //AC_Log.print(String.format("render block : %d-%d->%s", myBlockStartPos, (int)(myBlocks.get(i)), myBlock));
             myBlockStartPos = myBlocks.get(i);
             Rect myRect = new Rect();
             while (myBlock.length() > 0 && (_myMaxHeight == 0 || myBaseLine < _myCanvasHeight)) {
-                //AC_Log.print(String.format("while blocks : %d %d %d %d", myBlock.length(), (int)_myMaxHeight, myBaseLine, _myCanvasHeight));
                 myLineWidth = 0;
                 if (_myMaxWidth == 0)  {
                     myCharacterOnLine = myBlock.length();
@@ -97,9 +88,7 @@ public class TextLayouter {
                 } else {
                     myCharacterOnLine = myTextPaint.breakText(myBlock, 0, myBlock.length(), true, _myMaxWidth, null);//myWidths);
                 }
-                //AC_Log.print(String.format("myCharacterOnLine : %d canvasWidth: %d" ,myCharacterOnLine, _myCanvasWidth));
                 // if we are not done yet, find last space on and left of pos myCharacterOnLine
-                //AC_Log.print(String.format("%d, %d %s:" ,(myCharacterOnLine), myBlock.length()-1, myBlock.substring(0, myCharacterOnLine)));
                 if ( myCharacterOnLine <= myBlock.length()-1) {
                     int myWhitespacePos = myBlock.substring(0, myCharacterOnLine).lastIndexOf(" ");
                     if (myWhitespacePos != -1) {
@@ -108,7 +97,6 @@ public class TextLayouter {
                 }
                 String myCurrentString = myBlock.substring(0, myCharacterOnLine).trim();
                 myBlock = myBlock.substring(myCharacterOnLine, myBlock.length());//.trim();
-                //AC_Log.print(String.format("Java:createLines '%s' line #%d, has character #%d '%s' ", myBlock, myResult.size(), myCharacterOnLine, myCurrentString));
                 // do we have the width already?
                 if (myLineWidth == 0 || _myMaxHeight == 0) {
                     myTextPaint.getTextBounds(myCurrentString, 0, myCurrentString.length(), myRect);
@@ -119,14 +107,11 @@ public class TextLayouter {
                 }
                 myResult.add(new TextLine(myCurrentString, myXPos, myBaseLine, myLineWidth));
                 _myRendereredGlyphIndex += myCharacterOnLine;//.length();
-                //AC_Log.print(String.format("add result %d %d %s globaltextindex: %d", myXPos, myBaseLine, myCurrentString, _myRendereredGlyphIndex));
 
                 if (_myMaxHeight == 0) {
                     _myCanvasHeight = myBaseLine + (int)myMetrics.bottom;
                 }
                 myBaseLine += myLineHeight;
-                //AC_Log.print(String.format("_myCanvasHeight %d %d", _myCanvasHeight, _myMaxHeight));
-                //AC_Log.print(String.format("createLines block %d", (System.currentTimeMillis() - myBlockStart)));
                 
             }
             if (_myMaxHeight != 0 && myBaseLine > _myCanvasHeight) {
@@ -137,7 +122,6 @@ public class TextLayouter {
                 }
             }
         }
-        //AC_Log.print(String.format("createLines duration %d", (System.currentTimeMillis() - myStart)));
         return myResult;
     }
 }

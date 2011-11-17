@@ -66,8 +66,7 @@ public class NativeBinding {
 		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight, int theStartIndex) {
     List<Integer> myResult = new ArrayList<Integer>();
     String myMessage = theMessage.substring(theStartIndex, theMessage.length());
-    //AC_Log.print(String.format("Message length: %s", myMessage));
-    TextLayouter myLayouter = new TextLayouter(myMessage, theFontSize, maxWidth, maxHeight);
+    TextLayouter myLayouter = new TextLayouter(myMessage, maxWidth, maxHeight);
     // Draw the text
     Paint textPaint = new Paint();
     textPaint.setTextSize(theFontSize);
@@ -95,7 +94,6 @@ public class NativeBinding {
     textPaint.setTypeface(myTypeFace);
 
     List<TextLine> myLines = myLayouter.createLines(textPaint, theLineHeight);
-    //AC_Log.print(String.format("CanvasHeight: %d, %d", myLayouter.getCanvasWidth(), myLayouter.getCanvasHeight()));
     Bitmap myBitmap = Bitmap.createBitmap(Math.max(1, myLayouter.getCanvasWidth()), Math.max(1, myLayouter.getCanvasHeight()), Bitmap.Config.ARGB_8888);
     Canvas myCanvas = new Canvas(myBitmap);
     myBitmap.eraseColor(Color.TRANSPARENT);
@@ -109,9 +107,7 @@ public class NativeBinding {
             myXOffset = (int) (myBitmap.getWidth() - myLines.get(i)._myWidth);
         }
         myCanvas.drawText(myLines.get(i)._myLineOfText, myLines.get(i)._myXPos + myXOffset, myLines.get(i)._myYPos, textPaint);
-        //AC_Log.print(String.format("Line %d '%s' at (%d,%d)" , i, myLines.get(i)._myLineOfText, myLines.get(i)._myXPos, myLines.get(i)._myYPos));
     }
-	//long myTextureStart = System.currentTimeMillis();    	
     int[] textures = new int[1];
     if (theTextureId == 0) {
         GLES20.glGenTextures(1, textures,0);
@@ -134,7 +130,6 @@ public class NativeBinding {
       } catch (Exception theEx) {
           AC_Log.print(String.format("exception %s", theEx.getMessage()));
       }
-      //AC_Log.print(String.format("rendertext glzeugs %d", (System.currentTimeMillis() - myTextureStart)));
       
     //Clean up
     myBitmap.recycle();
