@@ -28,7 +28,7 @@ set(MACOSX_BUNDLE_GUI_IDENTIFIER "artcom.${APP_NAME}")
 #set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010. All Rights Reserved.")
 
 #set include paths
-include_directories(../../../iOS)
+include_directories($ENV{MOBILE_SPARK}/iOS)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${libXML2_INCLUDE_DIRS})
 include_directories(${Cml_INCLUDE_DIRS})
@@ -176,7 +176,7 @@ add_custom_command(
 )
 
 #copy core/shaders folder
-set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/../../core/shaders)
+set(ASSETS_DIR $ENV{MOBILE_SPARK}/core/shaders)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
@@ -187,5 +187,5 @@ add_custom_command(
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp ${PROJECT_SOURCE_DIR}/../../iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp $ENV{MOBILE_SPARK}/iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
 )
