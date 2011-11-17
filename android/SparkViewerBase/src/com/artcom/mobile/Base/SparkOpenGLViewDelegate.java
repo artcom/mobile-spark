@@ -29,16 +29,16 @@ public class SparkOpenGLViewDelegate {
 	}
 
     public void init(Activity theActivity, String thePackageName) {
+        extras_ = theActivity.getIntent().getExtras();
     	envMap_ = new EnvMap();
         envMap_.init(extras_);
-        CameraTexture.init(theActivity);
-        AudioDelegate audioDelegate = new AudioDelegate(theActivity);
-
         Severity mySeverity = envMap_.hasEnv(GLOBAL_VERBOSITY_ENV) ? Severity.fromString(envMap_.getEnv(GLOBAL_VERBOSITY_ENV)) : Severity.SEV_WARNING;
         AC_Log.setSeverity(mySeverity);
         AC_Log.print("severity: " + mySeverity);
-        extras_ = theActivity.getIntent().getExtras();
        
+        CameraTexture.init(theActivity);
+        AudioDelegate audioDelegate = new AudioDelegate(theActivity);
+
         DisplayMetrics dm = new DisplayMetrics();
         theActivity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         int myScreenWidth = dm.widthPixels;
