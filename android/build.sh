@@ -1,9 +1,7 @@
 #! /bin/bash
 
-ANDROID_TOOL="android"
 MAKE_TOOL="make"
 if [ "`uname -o`" == "Cygwin" ]; then
-    ANDROID_TOOL="android.bat"
     MAKE_TOOL="nmake"
 fi
 
