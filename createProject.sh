@@ -1,4 +1,13 @@
 #!/bin/bash
+CURRENT_PATH=`pwd`
+echo $CURRENT_PATH
+if [ "`uname -o`" == "Cygwin" ]; then
+    cd $(cygpath "$MOBILE_SPARK/")
+else
+    cd $MOBILE_SPARK
+fi    
+
+source ./android/utils.sh
 
 if [ "$#" = "0" ]; then
     echo "we need project name as first and only parameter"
@@ -13,14 +22,23 @@ PROJECT_NAME=$1
 PROJECT_NAME_SMALL=$(echo $PROJECT_NAME | awk '{print tolower($1)}')
 echo "create new project $PROJECT_NAME in namespace $PROJECT_NAME_SMALL" 
 
-rm -rf projects/$PROJECT_NAME
-cp -rf projects/TemplateApp projects/$PROJECT_NAME
+rm -rf $CURRENT_PATH/$PROJECT_NAME
+cp -rf projects/TemplateApp $CURRENT_PATH/$PROJECT_NAME
 
-cd projects/$PROJECT_NAME
+cd $CURRENT_PATH/$PROJECT_NAME
 
 rm -rf _build
 
 cd android
+
+if [ "`uname -o`" == "Cygwin" ]; then
+    HELP=$(cygpath "$MOBILE_SPARK/_build/lib")
+else    
+    HELP=$MOBILE_SPARK/_build/lib
+fi    
+REL_DIR=../$(get_relative_path `pwd` $HELP)
+BUILD_LIB_CONSTANT="MOBILE_SPARK_BUILD_LIB"
+sed -i "s|$BUILD_LIB_CONSTANT|$REL_DIR|g" $TEMPLATE_NAME/build.properties
 sed -i s/$TEMPLATE_NAME/$PROJECT_NAME/g build.sh
 sed -i s/$TEMPLATE_NAME/$PROJECT_NAME/g c++build.sh
 sed -i s/$TEMPLATE_NAME/$PROJECT_NAME/g push.sh
