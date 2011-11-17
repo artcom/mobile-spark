@@ -29,7 +29,7 @@ do
 done
 
 ANDROID_TOOL="android"
-if [ "`uname -o`" == "Cygwin" ]; then
+if [[ "`uname -s`" == *CYGWIN* ]]; then
     ANDROID_TOOL="android.bat"
 fi
 
@@ -47,7 +47,7 @@ then
     ## update Base project
     $ANDROID_TOOL update lib-project --target android-9 --path $MOBILE_SPARK/android/SparkViewerBase 
     # update android project
-if [ "`uname -o`" == "Cygwin" ]; then
+if [[ "`uname -s`" == *CYGWIN* ]]; then
     HELP=$(cygpath "$MOBILE_SPARK/android/SparkViewerBase")
 else    
     HELP=$MOBILE_SPARK/android/SparkViewerBase
