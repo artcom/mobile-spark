@@ -39,6 +39,7 @@ namespace spark {
             float getWorldZ() const;
             void setSize(const float theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
             void setSize(const vector2 & theSize);
+            const vector2 getSize();
 
             std::map<std::string, float> customShaderValues_;
             virtual std::string getAttributesAsString() const;
