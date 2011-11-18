@@ -58,8 +58,10 @@ namespace acprojectview {
     } 
 
     ACProjectView::~ACProjectView() {
+        outFile.close();
+        std::cout.rdbuf(sbuf);
     }
-
+    
     void ACProjectView::setup(const masl::UInt64 theCurrentMillis, const std::string & theAssetPath, int theScreenWidth, int theScreenHeight) {
         BaseApp::setup(theCurrentMillis, theAssetPath, theScreenWidth, theScreenHeight);
         AC_PRINT << "---------------------------------" << (_myOnlineMode ? " online" : " offline") <<  " version ------------------";
@@ -103,7 +105,35 @@ namespace acprojectview {
         } else {
             loadOfflineVersion();                   
         }
+        
+        
+        // ########### START TEST LOGGER ################
+//        spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new ACProjectViewEventCB(ptr, &ACProjectView::onStageEvent));
+//        _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
+//        lastSec = -1;
+//        masl::Logger::get().setSeverity(masl::SEV_DEBUG);
+//        
+//        std::string filename = AssetProviderSingleton::get().ap()->getAssetPath() + "/../../Documents/" + "log.txt";
+//        outFile.open(filename.c_str());
+//        sbuf = std::cout.rdbuf();
+//        std::cout.rdbuf(outFile.rdbuf());
     }
+
+    void ACProjectView::onStageEvent(EventPtr theEvent){
+//        time_t rawtime = time(0);
+//        nun = localtime(&rawtime);
+//        if (((nun->tm_sec) % 10 == 0) && (lastSec != nun->tm_sec )) {
+//            std::string mem = "memory: "+masl::as_string(masl::getUsedMemory())+"/"+masl::as_string(masl::getTotalMemory());
+//            //          appendToLogFile(mem);
+//            lastSec=nun->tm_sec;
+//            AC_PRINT << "\n" << nun->tm_hour << ":" << nun->tm_min << ":" << nun->tm_sec;
+//            AC_PRINT << mem;
+//        }
+//        
+    }
+
+    // ########### END TEST LOGGER ################
+
     
     void ACProjectView::loadOfflineVersion() {
         ACProjectViewPtr ptr = boost::static_pointer_cast<ACProjectView>(shared_from_this());
@@ -253,7 +283,7 @@ namespace acprojectview {
     
     void ACProjectView::onBack(EventPtr theEvent) {
         TouchEventPtr myEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
-        if (myEvent->getY() > ProjectViewerImpl::POPUP_HEIGHT * 2 && !_myProjectViewer->isPopUpOpen()) { 
+        if (myEvent->getY() > _myProjectViewer->getPopUpHeight() * 2 && !_myProjectViewer->isPopUpOpen()) { 
             if (_myAnimatingFlag) {
                 if (_mySeqAnimation) {
                     _mySeqAnimation->cancel();

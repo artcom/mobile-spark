@@ -24,6 +24,12 @@
 
 #include <boost/progress.hpp>
 
+#include <iostream> // Logger
+#include <fstream> // Logger
+#include <masl/Logger.h> // Logger
+#include <masl/proc_functions.h> // Logger
+
+
 #ifdef ANDROID
 extern "C" {
     JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved);
@@ -105,6 +111,17 @@ namespace acprojectview {
             void onErrorRequest(masl::RequestPtr theRequest);
             void onLoadComplete();
             bool _myOnlineMode;
+
+        // TEST LOGGER >>>
+
+        void onStageEvent(spark::EventPtr theEvent); // TEST LOGGER
+            int lastSec;
+            tm *nun;
+            std::ofstream outFile;
+            std::streambuf* sbuf;
+        // <<< TEST LOGGER
+
+
     };
 
     typedef masl::Ptr<ACProjectView> ACProjectViewPtr;

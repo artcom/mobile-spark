@@ -84,7 +84,8 @@ namespace acprojectview {
         titleComponent_->setMaxWidth(iconWidth-titleComponent_->getX()*2);
         subtitleComponent_->setMaxWidth(iconWidth-subtitleComponent_->getX()*2);
         
-        boost::static_pointer_cast<Rectangle>(getChildByName("textplane"))->setSize(vector2(iconWidth, 50));
+        RectanglePtr _myProjectPtr = boost::static_pointer_cast<Rectangle>(getChildByName("textplane"));
+        _myProjectPtr->setSize(vector2(iconWidth, _myProjectPtr->getSize()[1]));
         imageComponent_->setY( 0);//(textSpace + iconHeight - scale * imageComponent_->getTextureSize()[1])/2.0);
 
         vector2 myTextureSize = imageComponent_->getTextureSize();
