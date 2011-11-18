@@ -82,12 +82,11 @@ namespace acprojectview {
             TextPtr titlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("title"));
             TextPtr subtitlePtr = boost::static_pointer_cast<spark::Text>(myProject->getChildByName("subtitle"));
             // set Position:
-            int xnr=i/_myVerticalTiling;
-            myProject->setX((xnr*_myIconWidth) + _myGapX*(xnr-xnr/_myHorizontalTiling)); 
+            myProject->setX((i/_myVerticalTiling)*(_myGapX + _myIconWidth)); 
             myProject->setY((i % _myVerticalTiling)*(_myGapY + _myIconHeight));
         }
         _myLeftBlackRectPtr->setX(-_myWidth);
-        _myRightBlackRectPtr->setX((_myNumberOfSlides+1) * _myWidth);
+        _myRightBlackRectPtr->setX((_myNumberOfSlides+1) * (_myWidth+1));
     }
     
     
@@ -115,7 +114,7 @@ namespace acprojectview {
         _myCurrentSlide += dir;
         WidgetPropertyAnimationPtr changeAnimation = WidgetPropertyAnimationPtr(
                 new WidgetPropertyAnimation(WidgetWeakPtr(WidgetPtr(myPtr)), &Widget::setX, myPtr->getX(), 
-                    -_myCurrentSlide*_myWidth, 300,
+                    -_myCurrentSlide*(_myWidth+_myGapX), 300,
                     animation::EasingFnc(animation::easeInOutQuad)));
         animation::SequenceAnimationPtr mySeqAnimation = animation::SequenceAnimationPtr(new animation::SequenceAnimation());
         animation::ParallelAnimationPtr myAnimation = animation::ParallelAnimationPtr(new animation::ParallelAnimation());
