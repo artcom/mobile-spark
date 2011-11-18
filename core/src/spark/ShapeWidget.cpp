@@ -196,6 +196,12 @@ namespace spark {
             getShape()->setDimensions(myLowerLeftCorner, myUpperRightCorner);
         }
     }
+    
+    const vector2
+    ShapeWidget::getSize() {
+        return vector2(getShape()->getWidth(), getShape()->getHeight());
+    }
+
 
     float 
     ShapeWidget::getWorldZ() const {
