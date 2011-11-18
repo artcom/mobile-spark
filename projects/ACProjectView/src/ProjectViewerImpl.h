@@ -34,9 +34,8 @@ namespace acprojectview {
             virtual void onResume();
             
             static const char * const SPARK_TYPE;             
-            const static int POPUP_HEIGHT = 55;
             const static int POPUP_SIZE = 250;
-            
+
             virtual const char * const & getType() const { return ProjectViewerImpl::SPARK_TYPE;};
 
             void draw();
@@ -52,6 +51,7 @@ namespace acprojectview {
             void initiateClose();
             bool isPopUpOpen();
             void showPopup(bool theFlag);
+            int getPopUpHeight() {return _myPopUpHeight;};
        private:
             unsigned int _myCurrentImage;
             unsigned int _myCurrentSlot;
@@ -61,6 +61,8 @@ namespace acprojectview {
             int _myDisplayedImage;
             bool _myIsAnimating;
             int _myDirection;
+            int _myPopUpHeight;
+
             spark::VectorOfComponentPtr _myContentImages;
             ProjectImplPtr _myCurrentProject;
             spark::TransformPtr _imageTransform0;
