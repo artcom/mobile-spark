@@ -42,12 +42,12 @@ if [[ "`uname -s`" == *Darwin* ]]; then
 fi
 REL_DIR=../$(get_relative_path `pwd` $HELP)
 BUILD_LIB_CONSTANT="MOBILE_SPARK_BUILD_LIB"
-sed -i $OSX_SED_ADDON "s|$BUILD_LIB_CONSTANT|$REL_DIR|g" $TEMPLATE_NAME/build.properties
-sed -i $OSX_SED_ADDON "s|$BUILD_LIB_CONSTANT|$REL_DIR|g" $TEMPLATE_NAME/ant.properties
-sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g build.sh
-sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g c++build.sh
-sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g push.sh
-sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g start.sh
+sed -i $OSX_SED_ADDON 's|$BUILD_LIB_CONSTANT|$REL_DIR|g' $TEMPLATE_NAME/build.properties
+sed -i $OSX_SED_ADDON 's|$BUILD_LIB_CONSTANT|$REL_DIR|g' $TEMPLATE_NAME/ant.properties
+sed -i $OSX_SED_ADDON 's/$TEMPLATE_NAME/{$PROJECT_NAME/g' build.sh
+sed -i $OSX_SED_ADDON 's/$TEMPLATE_NAME/$PROJECT_NAME/g' c++build.sh
+sed -i $OSX_SED_ADDON 's/$TEMPLATE_NAME/$PROJECT_NAME/g' push.sh
+sed -i $OSX_SED_ADDON 's/$TEMPLATE_NAME/$PROJECT_NAME/g' start.sh
 mv $TEMPLATE_NAME $PROJECT_NAME
 cd $PROJECT_NAME
 rm -rf bin
@@ -96,4 +96,20 @@ sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g $PROJECT_NAME".h"
 mv $TEMPLATE_NAME".cpp" $PROJECT_NAME".cpp"
 sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME_SMALL/$PROJECT_NAME_SMALL/g $PROJECT_NAME".cpp"
 sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g $PROJECT_NAME".cpp"
+
+
+
+# xxx: dirty "sed -i" fix for mac:
+export OSX_SED_ADDON=""
+if [[ "`uname -s`" == *Darwin* ]]; then
+    rm -rf ../*"\"\""    
+    rm -rf ../android/*"\"\""
+    rm -rf ../android/$PROJECT_NAME/*"\"\""
+    rm -rf ../android/$PROJECT_NAME/res/values/*"\"\""
+    rm -rf ../android/$PROJECT_NAME/src/com/artcom/mobile/$PROJECT_NAME_SMALL/*"\"\""
+    rm -rf ../ios/*"\"\""
+    rm -rf ../layouts/*"\"\""
+    rm -rf ../src/*"\"\""
+fi
+
 
