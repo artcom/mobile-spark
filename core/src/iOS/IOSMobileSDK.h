@@ -30,6 +30,8 @@ namespace ios {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
+        virtual void exit();
+
         
     };
 

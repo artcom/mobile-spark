@@ -68,4 +68,8 @@ namespace ios
     bool IOSMobileSDK::isCameraCapturing() {
         return [[Camera instance] isCameraCapturing];
     }
+    
+    void IOSMobileSDK::exit() {
+        AC_PRINT << "iOS apps, can't be quit";
+    }
 }
