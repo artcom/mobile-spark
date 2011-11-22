@@ -187,4 +187,19 @@ namespace android {
         }
         return myResult;
     }
+    
+    void AndroidMobileSDK::exit() {
+        if (env) {
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "exit", "()V");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
+                AC_INFO << "exit program";
+            } else {
+                AC_WARNING  << "Sorry, java-exit not found";
+            }
+        }
+    }
+
 }
