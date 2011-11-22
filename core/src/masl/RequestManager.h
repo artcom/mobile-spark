@@ -13,13 +13,18 @@
 #include "Request.h"
 
 #include <vector>
+#include <utility>
 
 namespace masl {
 
     enum GetType { REQUEST_ALWAYS, REQUEST_IF_NEWER, REQUEST_IF_NOT_AVAILABLE };
-
+        
     class RequestManager {
         public:
+            typedef std::pair<std::string, std::string> HttpHeaderEntry;
+            typedef std::vector<HttpHeaderEntry> HttpHeaderEntries;
+            typedef  masl::Ptr<HttpHeaderEntries> HttpHeaderEntriesPtr;
+                
             RequestManager();
             virtual ~RequestManager();
             void performRequest(RequestPtr theRequest);
@@ -34,6 +39,8 @@ namespace masl {
                             const bool thePersistFlag = false, const GetType theGetType = REQUEST_ALWAYS);
             void headRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
             void postRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
+            void putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB, 
+                            HttpHeaderEntries & theHttpHeader);
             void putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB);
             void deleteRequest(const std::string & theUrl, const RequestCallbackPtr theCB);
             void getAllRequest(const std::string & theBaseURL, const std::vector<std::string> & theURLLastPartList,
