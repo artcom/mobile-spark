@@ -29,7 +29,9 @@ namespace android {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
+        virtual void exit();
 
+    
         JNIEnv * env;
         jobject obj;
 

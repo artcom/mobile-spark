@@ -210,5 +210,8 @@ public class NativeBinding {
 	  
   }
 
+  public static void exit() {
+      ourActivity.finish();    
+  }
 }
 

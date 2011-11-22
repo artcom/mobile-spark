@@ -39,6 +39,8 @@ namespace masl {
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
         virtual bool isCameraCapturing() = 0;
+        virtual void exit() = 0;
+
 
     };
 
