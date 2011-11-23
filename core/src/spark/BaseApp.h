@@ -37,15 +37,17 @@ namespace spark {
             virtual void onResume();
             virtual void onEvent(const std::string & theEventString);
             virtual void handleEvents();
-
+            void exit();
+            
             spark::WindowPtr _mySparkWindow;
-
+            
         protected:
             std::string appPath_;
             bool _mySetupFlag;       
         private:
             EventPtrList _myEvents;    
             masl::ThreadLock _myLock;
+
             
     };
     std::string findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait);

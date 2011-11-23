@@ -125,6 +125,11 @@ namespace spark {
             childFirstVisitComponents(myVisitor, _mySparkWindow);
         }
     }
+    
+    void BaseApp::exit() {
+        masl::MobileSDK_Singleton::get().getNative()->exit();
+    }
+    
     void BaseApp::handleEvents() {
         // ------------------------------ handle event strategy -------------------------------------------------
         // do not delay or ignore systemrelevant events

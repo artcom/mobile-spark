@@ -86,6 +86,8 @@ namespace demoapp {
         EventCallbackPtr mySizeChangedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onSizeChanged));
         _mySparkWindow->addEventListener(WindowEvent::ON_RESIZE, mySizeChangedCB);
 
+        
+        
         ComponentPtr my2DWorld = _mySparkWindow->getChildByName("2dworld");
 
         //test free function on touch
@@ -107,6 +109,10 @@ namespace demoapp {
         spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("languagebutton", true);
         myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
 
+        spark::EventCallbackPtr myExitAppCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onExitApp));
+        _mySparkWindow->addEventListener(TouchEvent::BUTTON_BACK, myExitAppCB);
+
+        
         spark::EventCallbackPtr myLoadSceneCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLoadScene));
         spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
         myLoadButton->addEventListener(TouchEvent::PICKED, myLoadSceneCB);
@@ -251,6 +257,11 @@ namespace demoapp {
         if (!masl::AudioEngineSingleton::get().ae()->isBackgroundMusicPlaying()) {
             masl::AudioEngineSingleton::get().ae()->resumeBackgroundMusic();
         }
+    }
+    
+     void DemoApp::onExitApp(EventPtr theEvent) {
+         AC_PRINT << "__________________quit DemoApp - caused by back button";
+         exit();
     }
 
     void DemoApp::onErrorRequestCB(masl::RequestPtr theRequest) {

@@ -33,6 +33,7 @@ namespace demoapp {
             virtual void onPause();
             virtual void onResume();
 
+
         private:
         	void onSwipeGesture(spark::EventPtr theEvent);
         	void onPinchGesture(spark::EventPtr theEvent);
@@ -56,6 +57,8 @@ namespace demoapp {
             void onStartSlideSwipe();
             void onFinishSlideSwipe();
             void changeSlide(int theDirection);
+            void onExitApp(spark::EventPtr theEvent);
+
             
             std::vector<SlideImplPtr> _mySlides;
             unsigned _myCurrentSlide;
