@@ -22,3 +22,6 @@ projects/DemoApp/Xcode_Ipad
 projects/ACProjectView/xcode
 projects/DemoApp/ios/Xcode
 projects/DemoApp/Xcode_Simulator
+projects/DemoApp/android/DemoApp/ant.properties
+projects/DemoApp/android/DemoApp/build.properties
+.gitignore
