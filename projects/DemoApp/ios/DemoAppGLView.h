@@ -10,7 +10,7 @@
 #import <SparkViewerBase/GLView.h>
 
 
-@interface DemoGLView : GLView {
+@interface DemoAppGLView : GLView {
 
 }
 

@@ -8,7 +8,7 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 #import "DemoAppDelegate.h"
-#import "DemoGLView.h"
+#import "DemoAppGLView.h"
 
 @implementation DemoAppDelegate
 
@@ -16,8 +16,7 @@
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];    
     [self initialize:@"DemoApp"];
-    
-    myGLView = [[DemoGLView alloc]initWithFrame: [self getWindowBoundsWithBaseLayout:@"/main"]];}
+    myGLView = [[DemoAppGLView alloc]initWithFrame: [self getWindowBoundsWithBaseLayout:@"/main"]];}
 
 - (void)dealloc
 {

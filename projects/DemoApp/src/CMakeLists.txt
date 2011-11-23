@@ -10,7 +10,7 @@
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
 
-set(EXTERNS Boost libCurl libXML2  Cml masl mar animation spark)
+set(EXTERNS Boost libXML2 libCurl Cml masl mar animation spark)
 if (ANDROID) 
     list(APPEND EXTERNS android)
 else (ANDROID)
@@ -18,7 +18,7 @@ else (ANDROID)
 endif(ANDROID)
 
 ac_add_library(
-    ${APP_NAME} ${APP_NAME} 
+    ${APP_NAME} ${APP_NAME}
     SOURCES ${SOURCES}
     HEADERS ${HEADERS}
     DEPENDS ${DEPENDS}

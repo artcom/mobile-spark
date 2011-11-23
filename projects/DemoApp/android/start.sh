@@ -1,6 +1,7 @@
 #/bin/bash
 
 PROJECT_NAME="DemoApp"
+PROJECT_NAME_SMALL=$(echo $PROJECT_NAME | awk '{print tolower($1)}')
 
 cd ..
 SEVERITY=""
@@ -15,7 +16,7 @@ if [ -n "$AC_LOG_MODULE_VERBOSITY" ]; then
     MODULE_SEVERITY=$AC_LOG_MODULE_VERBOSITY
 fi
 
-adb shell am start -a android.intent.action.MAIN -n com.artcom.mobile.demoapp/com.artcom.mobile.demoapp.$PROJECT_NAME --es env_0 AC_LOG_VERBOSITY="$SEVERITY" --es env_1 AC_LOG_MODULE_VERBOSITY="$MODULE_SEVERITY"
+adb shell am start -a android.intent.action.MAIN -n com.artcom.mobile.$PROJECT_NAME_SMALL/com.artcom.mobile.$PROJECT_NAME_SMALL.$PROJECT_NAME --es env_0 AC_LOG_VERBOSITY="$SEVERITY" --es env_1 AC_LOG_MODULE_VERBOSITY="$MODULE_SEVERITY"
 
 cd -
 

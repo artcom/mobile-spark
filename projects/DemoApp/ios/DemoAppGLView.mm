@@ -7,19 +7,17 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
-#import "DemoGLView.h"
+#import "DemoAppGLView.h"
 
 #include <spark/AppProvider.h>
-
 #include <DemoApp.h>
 
 
-@implementation DemoGLView
+@implementation DemoAppGLView
 
 - (void) createApp
 {
     spark::AppProvider::get().setApp(spark::BaseAppPtr(new demoapp::DemoApp()));
-    
     //activate Multisample anti aliasing with useMSAA2x, useMSAA4x, useMSAA8x
     MSAAQuality = useNoneMSAA;
     
