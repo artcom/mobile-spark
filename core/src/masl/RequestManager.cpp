@@ -202,7 +202,17 @@ namespace masl {
     
     void 
     RequestManager::putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB) {
+        HttpHeaderEntries myHttpHeaderEntries;
+        putRequest(theUrl, theData, theCB, myHttpHeaderEntries);
+    }
+    
+    void 
+    RequestManager::putRequest(const std::string & theUrl, const std::string & theData, const RequestCallbackPtr theCB,
+                               HttpHeaderEntries & theHttpHeader) {
         RequestPtr myRequest = RequestPtr(new Request(theUrl));
+        for (unsigned i = 0; i < theHttpHeader.size(); i++) {
+            myRequest->addHttpHeader(theHttpHeader[i].first, theHttpHeader[i].second);
+        }
         myRequest->setOnDoneCallback(theCB);
         if (_myDefaultErrorCallback) {
             myRequest->setOnErrorCallback(_myDefaultErrorCallback);

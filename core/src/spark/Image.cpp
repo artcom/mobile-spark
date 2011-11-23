@@ -21,8 +21,10 @@ namespace spark {
     const char * const Image::SPARK_TYPE = "Image";
 
     Image::Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        I18nShapeWidget(theApp, theXMLNode) 
+        I18nShapeWidget(theApp, theXMLNode)
     {
+        _myForcedSize[0] = getNode()->getAttributeAs<float>("width", -1);
+        _myForcedSize[1] = getNode()->getAttributeAs<float>("height", -1);
         setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
     }
 
@@ -65,8 +67,8 @@ namespace spark {
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->width_, myMaterial->getTextureUnit()->getTexture()->height_);
-        float myWidth = getNode()->getAttributeAs<float>("width", _myTextureSize[0]);
-        float myHeight = getNode()->getAttributeAs<float>("height", _myTextureSize[1]);
+        float myWidth = _myForcedSize[0] == -1 ? _myTextureSize[0] : _myForcedSize[0];
+        float myHeight = _myForcedSize[1] == -1 ? _myTextureSize[1] : _myForcedSize[1];
         setSize(myWidth, myHeight);
     }
 }

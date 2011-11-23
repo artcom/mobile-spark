@@ -20,6 +20,8 @@ namespace spark {
         const std::string & getSrc() const {return data_;};
         void setSrc(const std::string & theSrc);
         const vector2 & getTextureSize();
+        void setWidth(unsigned theWidth) {_myForcedSize[0] = theWidth;}
+        void setHeight(unsigned theHeight) {_myForcedSize[1] = theHeight;}
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Image::SPARK_TYPE;};
@@ -27,6 +29,7 @@ namespace spark {
         virtual void build();
     private:
         vector2 _myTextureSize;
+        vector2 _myForcedSize;
     };
 
     typedef masl::Ptr<Image> ImagePtr;
