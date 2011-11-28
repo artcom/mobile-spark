@@ -37,8 +37,9 @@ namespace spark {
             virtual void onResume();
             virtual void onEvent(const std::string & theEventString);
             virtual void handleEvents();
-            void exit();
+            virtual void onBackButton(EventPtr theEvent);
             
+            void exit();
             spark::WindowPtr _mySparkWindow;
             
         protected:

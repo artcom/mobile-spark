@@ -107,11 +107,7 @@ namespace demoapp {
 
         spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLanguageSwitch));
         spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("languagebutton", true);
-        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
-
-        spark::EventCallbackPtr myExitAppCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onExitApp));
-        _mySparkWindow->addEventListener(TouchEvent::BUTTON_BACK, myExitAppCB);
-
+        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB)
         
         spark::EventCallbackPtr myLoadSceneCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLoadScene));
         spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
@@ -259,11 +255,6 @@ namespace demoapp {
         }
     }
     
-     void DemoApp::onExitApp(EventPtr theEvent) {
-         AC_PRINT << "__________________quit DemoApp - caused by back button";
-         exit();
-    }
-
     void DemoApp::onErrorRequestCB(masl::RequestPtr theRequest) {
         if (!_myLoadingMessage) {
             _myLoadingMessage = boost::static_pointer_cast<spark::Text>(_mySparkWindow->getChildByName("loading", true));

@@ -92,11 +92,14 @@ namespace spark {
         _mySparkWindow->setSize(theScreenWidth,theScreenHeight);
         //register for events
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppWeakPtr > ( BaseAppWeakPtr(BaseAppPtr(shared_from_this())), &BaseApp::onFrame));
+        spark::EventCallbackPtr myBackButtonCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppWeakPtr > ( BaseAppWeakPtr(BaseAppPtr(shared_from_this())), &BaseApp::onBackButton));
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
             
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowWeakPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
         _mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
+        _mySparkWindow->addEventListener(TouchEvent::BUTTON_BACK, myBackButtonCB);
+
             
     }
 
@@ -124,6 +127,10 @@ namespace spark {
             OnResumeComponentVisitor myVisitor;
             childFirstVisitComponents(myVisitor, _mySparkWindow);
         }
+    }
+    
+    void BaseApp::onBackButton(EventPtr theEvent) {
+        exit();
     }
     
     void BaseApp::exit() {

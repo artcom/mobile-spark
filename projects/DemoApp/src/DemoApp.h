@@ -57,7 +57,6 @@ namespace demoapp {
             void onStartSlideSwipe();
             void onFinishSlideSwipe();
             void changeSlide(int theDirection);
-            void onExitApp(spark::EventPtr theEvent);
 
             
             std::vector<SlideImplPtr> _mySlides;
