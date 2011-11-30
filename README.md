@@ -271,7 +271,7 @@ Folgendes Programm zeigt den Umgang mit Spark-Komponenten, EventListenern und ei
 * passe _build.properties_ an 
 
 * öffne Layout-Datei: _HelloWorld/layouts/main.spark_
-```html
+``` html
 <?xml version="1.0"?>
 <Window name="ProjectView" fullscreen="true" i18nContext="global-i18n" width="800" height="480" orientation="landscape" clearColor="[0,0,0.5,1]">
     <!-- userinterface is located in 2dworld -->
