@@ -115,17 +115,14 @@ ___
 
 ### iOS
 
-erstelle \_build Ordner
-
-    $ cd $MOBILE_SPARK/iOS/
-    $ mkdir _build
-
-erzeuge und öffne XCode-Projekt
-
-    $ cd _build/
-    $ rm -rf *
-    $ ../xcode_ios.sh
-    $ open mobile-spark.xcodeproj
+create and open XCode project:
+<pre>
+$ cd $MOBILE_SPARK/iOS/
+$ rm -rf _build/
+$ mkdir _build
+$ ./xcode_ios.sh
+$ open mobile-spark.xcodeproj
+</pre>
 
 Einstellungen in XCode IDE:
 
@@ -185,7 +182,8 @@ $ ../xcode_ios.sh
 $ open DemoApp.xcodeproj
 </pre>
 
-Einstellungen in XCode IDE
+Einstellungen in XCode IDE:
+
 * TARGET-Scheme: DemoAppApp > yourDevice
 * Build Settings: _TARGETS -> DemoAppApp -> Target Device Family -> iPhone_ oder _iPad_
 * Build Settings: _TARGETS -> DemoAppApp -> iOS Deployment Target -> iOS 4.1_
@@ -239,17 +237,19 @@ einfachen Animationen.
 * passe _build.properties_ an 
 * öffne Layout-Datei: _HelloWorld/layouts/main.spark_  
 
-    <Window name="ProjectView" fullscreen="true" i18nContext="global-i18n" width="800" height="480" orientation="landscape" clearColor="[0,0,0.5,1]">
-        <!-- userinterface is located in 2dworld -->
-        <View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/>
-        <World name="2dworld">    
-            <RenderCamera name="2dcamera" frustum="orthonormal[auto]"/>    
+<pre>
+&lt;Window name="ProjectView" fullscreen="true" i18nContext="global-i18n" width="800" height="480" orientation="landscape" clearColor="[0,0,0.5,1]"&gt;
+    &lt;!-- userinterface is located in 2dworld --&gt;
+    &lt;View name="mainView" world="2dworld" pos="[0,0]" size="[1.0,1.0]" cameraName="2dcamera"/&gt;
+    &lt;World name="2dworld"&gt;    
+        &lt;RenderCamera name="2dcamera" frustum="orthonormal[auto]"/&gt;    
 
-            <Transform name="transform">
-                <Text name="testtextgreen" y="50" x="10" z="13" text="Hello World" color="[0,1,0,1]" fontsize="32"/>
-            </Transform>    
-        </World>        
-    </Window>
+        &lt;Transform name="transform"&gt;
+            &lt;Text name="testtextgreen" y="50" x="10" z="13" text="Hello World" color="[0,1,0,1]" fontsize="32"/&gt;
+        &lt;/Transform&gt;    
+    &lt;/World&gt;        
+&lt;/Window&gt;
+</pre>
 
 ändere Text Komponente und füge Rechteck hinzu  
 
