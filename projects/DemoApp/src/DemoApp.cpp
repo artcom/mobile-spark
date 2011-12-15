@@ -107,7 +107,7 @@ namespace demoapp {
 
         spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLanguageSwitch));
         spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("languagebutton", true);
-        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB)
+        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
         
         spark::EventCallbackPtr myLoadSceneCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLoadScene));
         spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
