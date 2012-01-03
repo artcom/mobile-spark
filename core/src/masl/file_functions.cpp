@@ -31,6 +31,8 @@
 #define STAT64 stat
 #endif
 
+#define BOOST_FILESYSTEM_VERSION 2
+#include <boost/filesystem.hpp>
 
 
 using namespace std;
@@ -40,6 +42,12 @@ namespace masl {
     DEFINE_EXCEPTION(OpenDirectoryFailed, Exception)
     DEFINE_EXCEPTION(OpenFileFailed, Exception)
     DEFINE_EXCEPTION(FileNotFoundException, Exception)
+
+    // boosted
+    int 
+    getFileSize(const std::string & theFilename) {
+        return boost::filesystem::file_size(theFilename.c_str());
+    }
 
     /// read a complete file into a string
     bool

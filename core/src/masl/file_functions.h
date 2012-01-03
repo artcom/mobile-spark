@@ -22,6 +22,7 @@ namespace masl {
     DECLARE_EXCEPTION(FileNotFoundException, Exception)
 
     /// read a complete file into a string
+    int getFileSize(const std::string & theFilename); // boosted
     bool fileExists(const std::string & theFilename);
     bool readFile(const std::string & thePath, std::string & theContent);
     bool readBinaryFile(const std::string & theUTF8Filename, std::vector<char> & theContent);

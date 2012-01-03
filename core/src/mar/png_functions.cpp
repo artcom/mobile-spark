@@ -39,6 +39,7 @@ close() {
 bool
 initFileReading(pngData & thePngData) {
     AC_DEBUG << "--init file reading for " << thePngData.filename;
+    //AC_PRINT << "png reader filesize: " << masl::getFileSize(thePngData.filename);
     if ((file = fopen(thePngData.filename.c_str(), "rb")) == NULL) {
         AC_ERROR << " Error opening file " << thePngData.filename;
         throw PngLoadingException("Error opening file " +thePngData.filename, PLUS_FILE_LINE);
