@@ -62,11 +62,11 @@ fi
 if [ $BUILD_OK == "0" ] 
 then
     # build apk && upload
-    if [ $BUILD_TYPE == "release" ]; then
-        ant "$VERBOSITY" release 
-    else
-        ant "$VERBOSITY" debug install
-    fi
+    #if [ $BUILD_TYPE == "release" ]; then
+    #    ant "$VERBOSITY" release 
+    #else
+    #    ant "$VERBOSITY" debug install
+    #fi
     BUILD_OK=$?
 fi
     
