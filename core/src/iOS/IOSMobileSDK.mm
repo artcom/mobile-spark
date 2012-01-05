@@ -40,8 +40,94 @@ namespace ios
     }
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
-                                           unsigned int & width, unsigned int & height, bool & hasAlpha) {
-       return true;
+                                           unsigned int & width, unsigned int & height, bool & hasAlpha) 
+    {
+        NSString *filepathString = [NSString stringWithUTF8String:filename.c_str()];
+        UIImage* imageClass = [[UIImage alloc] initWithContentsOfFile:filepathString];
+        
+        CGImageRef cgImage = imageClass.CGImage;
+        if (!cgImage)
+        {
+            [imageClass release];
+            return false;
+        }
+        
+        width = CGImageGetWidth(cgImage);
+        height = CGImageGetHeight(cgImage);
+        
+        unsigned int rowByteSize = width * 4;
+        
+        char *data = new char[height * width];
+        
+        CGContextRef context = CGBitmapContextCreate(data,
+                                                     width,
+                                                     height,
+                                                     8, // bits/component
+                                                     rowByteSize,
+                                                     CGImageGetColorSpace(cgImage),
+                                                     kCGImageAlphaNoneSkipLast);
+        
+        CGContextSetBlendMode(context, kCGBlendModeCopy);
+        
+        // convert to OpenGL coordinate system
+        bool flipVertical = true;
+        
+        if(flipVertical)
+        {
+            CGContextTranslateCTM(context, 0.0, height);
+            CGContextScaleCTM(context, 1.0, -1.0);
+        }
+        CGContextDrawImage(context, CGRectMake(0.0, 0.0, width, height), cgImage);
+        CGContextRelease(context);
+        
+        // create our OpenGL texture object
+        glGenTextures(1, &textureId);
+        
+        if(!(textureId && data))
+        {
+            AC_DEBUG << "texture generation failed";
+            [imageClass release];
+            delete [] data;
+            return false;
+        }
+        
+        // bind the texture object
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        
+        AC_DEBUG << "w x h : " << width << ", " << height;
+        
+        // determine alpha info
+        CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(cgImage);
+        
+        if (alphaInfo == kCGImageAlphaLast) {
+            AC_DEBUG << "alpha";
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, (GLvoid*) data);
+            hasAlpha = true;
+        } else if (alphaInfo == kCGImageAlphaNone) {
+            AC_DEBUG << "no alpha";
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+                         GL_UNSIGNED_BYTE, (GLvoid*) data);
+            hasAlpha = false;
+        } else {
+            AC_DEBUG << "unknown color type " << alphaInfo;
+        }
+        
+        // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        
+        // unbind the texture object again
+        glBindTexture(GL_TEXTURE_2D, 0);
+        
+        AC_DEBUG << "generated texture with id " << textureId;
+        
+        // clean up data
+        [imageClass release];
+        delete [] data;
+        
+        return true;
     }
 
     void IOSMobileSDK::freezeMobileOrientation(const std::string & theOrientation) {
