@@ -33,6 +33,7 @@ namespace masl {
         virtual TextInfo renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                     vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
                                     const std::string & theFontPath, int theLineHeight, int theStartIndex) = 0;
+        virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) = 0;                                                    
         virtual void updateCameraTexture() = 0;
         virtual void freezeMobileOrientation(const std::string & theOrientation) = 0;
         virtual CameraInfo getCameraSpec() = 0;

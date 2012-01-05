@@ -15,6 +15,7 @@
 #include <masl/Logger.h>
 #include <masl/file_functions.h>
 #include <mar/png_functions.h>
+#include <masl/MobileSDK.h>
 
 #include "APK_functions.h"
 #include "png_functions.h"
@@ -82,6 +83,11 @@ namespace android {
             }
         }
         return readLineByLineFromPackage( _myApkArchive, theFileName);
+    }
+    
+    bool 
+    AndroidAssetProvider::loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) {
+        return masl::MobileSDK_Singleton::get().getNative()->loadTextureFromFile(filename, textureId, width, height, hasAlpha);
     }
 
     bool

@@ -62,6 +62,16 @@ public class NativeBinding {
   public static native void setLoggerTopLevelTag(String theTagString);
   public static native void setSeverity(Severity theSeverity);
 
+  public static List<Integer> loadTextureFromFile(String theFilename) {
+    List<Integer> myResult = new ArrayList<Integer>();	
+    myResult.add(100);
+    myResult.add(200);
+    myResult.add(400);
+    myResult.add(1);
+    //AC_Log.print(String.format("loadTextureFromFile: load %s from file and create texture", theFilename));
+    
+    return myResult;
+  }
 
   public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, 
 		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight, int theStartIndex) {

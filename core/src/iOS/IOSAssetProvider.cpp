@@ -44,6 +44,10 @@ namespace ios
         throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
         return false;
     }
+    
+    bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) {
+        return masl::MobileSDK_Singleton::get().getNative()->loadTextureFromFile(filename, textureId, width, height, hasAlpha);
+    }
 
     std::string
     IOSAssetProvider::getStringFromFile(const std::string & theFile) const {

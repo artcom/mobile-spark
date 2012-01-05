@@ -38,6 +38,11 @@ namespace ios
         textInfo.renderedGlyphIndex = textRenderer.get()->getRenderedGlyphIndex();
         return textInfo;
     }
+    
+    bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
+                                           unsigned int & width, unsigned int & height, bool & hasAlpha) {
+       return true;
+    }
 
     void IOSMobileSDK::freezeMobileOrientation(const std::string & theOrientation) {
         
