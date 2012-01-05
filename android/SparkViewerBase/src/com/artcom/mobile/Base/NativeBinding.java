@@ -11,6 +11,7 @@ package com.artcom.mobile.Base;
 
 //Wrapper for native library
 import java.io.File;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
@@ -23,6 +24,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -62,16 +64,50 @@ public class NativeBinding {
   public static native void setLoggerTopLevelTag(String theTagString);
   public static native void setSeverity(Severity theSeverity);
 
-  public static List<Integer> loadTextureFromFile(String theFilename) {
+  public static List<Integer> loadTextureFromFile(String theFilename, boolean theSDCardFlag) {
     List<Integer> myResult = new ArrayList<Integer>();	
-    myResult.add(100);
-    myResult.add(200);
-    myResult.add(400);
-    myResult.add(1);
-    //AC_Log.print(String.format("loadTextureFromFile: load %s from file and create texture", theFilename));
+    try{    
+        Bitmap myBitmap;
+        if (theSDCardFlag) {
+            myBitmap = BitmapFactory.decodeFile(theFilename);
+        } else {
+            InputStream is = ourActivity.getClassLoader().getResourceAsStream(theFilename);
+            myBitmap = BitmapFactory.decodeStream(is);            
+        }
+        int[] textures = new int[1];
+        GLES20.glGenTextures(1, textures,0);
+        
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
+
+        //Create Nearest Filtered Texture
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
     
+        //Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+          try {
+              ByteBuffer bb = extract(myBitmap);
+              GLES20.glTexImage2D ( GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, myBitmap.getWidth(), myBitmap.getHeight(), 0,
+                                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, bb );
+          } catch (Exception theEx) {
+              AC_Log.print(String.format("exception %s", theEx.getMessage()));
+          }
+          
+        //Clean up
+        myBitmap.recycle();        
+        AC_Log.print(String.format("loaded bitmap from %s glid:%d size: %dx%d", theFilename, textures[0], myBitmap.getWidth(), myBitmap.getHeight()));
+        myResult.add(textures[0]);
+        myResult.add(myBitmap.getWidth());
+        myResult.add(myBitmap.getHeight());
+        myResult.add(myBitmap.hasAlpha() ? 1:0);
+    }catch (Exception e) {
+        myResult.add(-1);
+        AC_Log.info(String.format("Image: %s on not found", theFilename));
+    }
+        
     return myResult;
   }
+  
 
   public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, 
 		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight, int theStartIndex) {
