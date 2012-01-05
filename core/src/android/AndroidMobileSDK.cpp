@@ -33,6 +33,43 @@ namespace android {
             }
         }       
     }
+    bool AndroidMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
+                                               unsigned int & width, unsigned int & height, bool & hasAlpha) {
+        if (env) {
+            env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "loadTextureFromFile", "(Ljava/lang/String;)Ljava/util/List;");
+            if(myMethodId != 0) {
+                env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)                
+                jvalue myArgs[1];
+                myArgs[0].l =  env->NewStringUTF(filename.c_str());
+                jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);
+                jclass listClass = env->GetObjectClass(myList);
+                jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
+
+                jobject myInt = (jobject)env->CallObjectMethod(myList, getMethod, 0);
+                jclass myIntegerClass = env->GetObjectClass(myInt);
+
+                jmethodID intValueMethod = env->GetMethodID(myIntegerClass, "intValue", "()I");
+                textureId = env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 1);
+                width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);
+                height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+                
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);
+                hasAlpha = (jint)env->CallIntMethod(myInt, intValueMethod, 0) == 1;    
+                
+            } else {
+                AC_WARNING  << "Sorry, java-loadTextureFromFile not found";                
+            }
+            env->PopLocalFrame(NULL);            
+        }
+        return true;   
+    }
+    
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
                                                 const std::string & theFontPath, int theLineHeight, int theStartIndex) {
