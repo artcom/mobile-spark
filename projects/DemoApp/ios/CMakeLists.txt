@@ -27,6 +27,7 @@ set(MACOSX_BUNDLE_GUI_IDENTIFIER "artcom.${APP_NAME}")
 #set(MACOSX_BUNDLE_BUNDLE_VERSION ${VTK_VERSION})
 #set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010. All Rights Reserved.")
 
+
 #set include paths
 include_directories($ENV{MOBILE_SPARK}/iOS)
 include_directories(${Boost_INCLUDE_DIRS})

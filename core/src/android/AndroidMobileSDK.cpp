@@ -25,7 +25,7 @@ namespace android {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "vibrate", "(I)V");
             if(myMethodId != 0) {
-                jvalue myArgs[1];
+                jvalue myArgs[2];
                 myArgs[0].i =theDurationMillisec ;
                 env->CallStaticVoidMethodA (cls, myMethodId, myArgs);
             } else {
@@ -36,13 +36,17 @@ namespace android {
     bool AndroidMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                                unsigned int & width, unsigned int & height, bool & hasAlpha) {
         if (env) {
+            std::string myFullPath = filename;
+            bool myFileIsonSDCardFlag = masl::searchFile(filename, myFullPath);
+            //AC_PRINT << "load from sdcard: " << myFileIsonSDCardFlag << " full path: " << myFullPath;
             env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
-            jmethodID myMethodId = env->GetStaticMethodID(cls, "loadTextureFromFile", "(Ljava/lang/String;)Ljava/util/List;");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "loadTextureFromFile", "(Ljava/lang/String;Z)Ljava/util/List;");
             if(myMethodId != 0) {
                 env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)                
-                jvalue myArgs[1];
+                jvalue myArgs[2];
                 myArgs[0].l =  env->NewStringUTF(filename.c_str());
+                myArgs[1].b =  myFileIsonSDCardFlag;
                 jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
@@ -63,11 +67,11 @@ namespace android {
                 hasAlpha = (jint)env->CallIntMethod(myInt, intValueMethod, 0) == 1;    
                 
             } else {
-                AC_WARNING  << "Sorry, java-loadTextureFromFile not found";                
+                AC_WARNING  << "Sorry, java-loadTextureFromXXX not found";                
             }
             env->PopLocalFrame(NULL);            
         }
-        return true;   
+        return textureId != -1;   
     }
     
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,

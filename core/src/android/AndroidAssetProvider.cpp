@@ -87,7 +87,12 @@ namespace android {
     
     bool 
     AndroidAssetProvider::loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) {
-        return masl::MobileSDK_Singleton::get().getNative()->loadTextureFromFile(filename, textureId, width, height, hasAlpha);
+        std::string myFullPath = filename;
+        bool myFileIsonSDCardFlag = masl::searchFile(filename, myFullPath);
+        if (!myFileIsonSDCardFlag) {
+            searchFile(_myApkArchive, filename, myFullPath, true);
+        }
+        return masl::MobileSDK_Singleton::get().getNative()->loadTextureFromFile(myFullPath, textureId, width, height, hasAlpha);
     }
 
     bool
