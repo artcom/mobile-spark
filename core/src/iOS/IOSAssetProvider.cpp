@@ -8,6 +8,7 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 #include "IOSAssetProvider.h"
+#include "masl/MobileSDK.h"
 
 #include <iostream>
 #include <fstream>
