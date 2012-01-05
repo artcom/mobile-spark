@@ -46,7 +46,8 @@ namespace ios
         return false;
     }
     
-    bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) {
+    bool IOSAssetProvider::loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) 
+    {
         return masl::MobileSDK_Singleton::get().getNative()->loadTextureFromFile(filename, textureId, width, height, hasAlpha);
     }
 

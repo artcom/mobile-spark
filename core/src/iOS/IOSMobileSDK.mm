@@ -42,30 +42,46 @@ namespace ios
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                            unsigned int & width, unsigned int & height, bool & hasAlpha) 
     {
-        NSString *filepathString = [NSString stringWithUTF8String:filename.c_str()];
-        UIImage* imageClass = [[UIImage alloc] initWithContentsOfFile:filepathString];
+        std::string filePath;
+        
+        if (filename.size() > 0 ) {
+            if (!masl::searchFile(filename, filePath)) 
+                return false;
+        }
+        
+        NSString *filepathString = [NSString stringWithUTF8String:filePath.c_str()];
+        UIImage* imageClass = [UIImage imageWithContentsOfFile:filepathString];
         
         CGImageRef cgImage = imageClass.CGImage;
         if (!cgImage)
         {
-            [imageClass release];
+            //[imageClass release];
             return false;
         }
         
         width = CGImageGetWidth(cgImage);
         height = CGImageGetHeight(cgImage);
         
+        // determine alpha info
+        CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(cgImage);
+        
+        //TODO: remove
+        printf("IMAGE (%d,%d) %d\n",width,height,(unsigned int)alphaInfo);
+        
+        // we always have 4 components (no alpha with kCGImageAlphaNoneSkipLast)
         unsigned int rowByteSize = width * 4;
         
-        char *data = new char[height * width];
+        char *data = new char[height * rowByteSize];
         
+        // see http://developer.apple.com/library/mac/#qa/qa1037/_index.html
+        // for a list of supported combinations
         CGContextRef context = CGBitmapContextCreate(data,
                                                      width,
                                                      height,
                                                      8, // bits/component
                                                      rowByteSize,
                                                      CGImageGetColorSpace(cgImage),
-                                                     kCGImageAlphaNoneSkipLast);
+                                                     alphaInfo);
         
         CGContextSetBlendMode(context, kCGBlendModeCopy);
         
@@ -86,7 +102,6 @@ namespace ios
         if(!(textureId && data))
         {
             AC_DEBUG << "texture generation failed";
-            [imageClass release];
             delete [] data;
             return false;
         }
@@ -96,17 +111,14 @@ namespace ios
         
         AC_DEBUG << "w x h : " << width << ", " << height;
         
-        // determine alpha info
-        CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(cgImage);
-        
-        if (alphaInfo == kCGImageAlphaLast) {
+        if (alphaInfo == kCGImageAlphaPremultipliedLast) {
             AC_DEBUG << "alpha";
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                          GL_UNSIGNED_BYTE, (GLvoid*) data);
             hasAlpha = true;
-        } else if (alphaInfo == kCGImageAlphaNone) {
+        } else if (alphaInfo == kCGImageAlphaNoneSkipLast) {
             AC_DEBUG << "no alpha";
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB,
                          GL_UNSIGNED_BYTE, (GLvoid*) data);
             hasAlpha = false;
         } else {
@@ -114,17 +126,16 @@ namespace ios
         }
         
         // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         
         // unbind the texture object again
         glBindTexture(GL_TEXTURE_2D, 0);
         
-        AC_DEBUG << "generated texture with id " << textureId;
+        AC_DEBUG << "generated texture with id" << textureId;
         
         // clean up data
-        [imageClass release];
         delete [] data;
         
         return true;
