@@ -118,7 +118,9 @@ namespace ios
             hasAlpha = true;
         } else if (alphaInfo == kCGImageAlphaNoneSkipLast) {
             AC_DEBUG << "no alpha";
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB,
+            // RGBX format, where we want to skip X
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                          GL_UNSIGNED_BYTE, (GLvoid*) data);
             hasAlpha = false;
         } else {

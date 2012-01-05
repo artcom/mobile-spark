@@ -10,6 +10,7 @@
 #include "Texture.h"
 #include <masl/Logger.h>
 #include <masl/numeric_functions.h>
+#include <masl/AssetProvider.h>
 
 namespace mar {
 
@@ -31,7 +32,11 @@ namespace mar {
         src_ = theSrc;
         unbind();
         if (!src_.empty()) {
-            loadTextureFromPNG(src_, shared_from_this());
+            //loadTextureFromPNG(src_, shared_from_this());
+            masl::AssetProviderSingleton::get().ap()->loadTextureFromFile(theSrc, textureId_, 
+                                                                          width_, height_,  
+                                                                          transparency_);
+            
         } else {
             width_ = 0;
             height_ = 0;
