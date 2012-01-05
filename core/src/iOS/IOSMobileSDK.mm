@@ -50,12 +50,12 @@ namespace ios
         }
         
         NSString *filepathString = [NSString stringWithUTF8String:filePath.c_str()];
-        UIImage* imageClass = [UIImage imageWithContentsOfFile:filepathString];
+        UIImage* imageClass = [[UIImage alloc] initWithContentsOfFile:filepathString];
         
         CGImageRef cgImage = imageClass.CGImage;
         if (!cgImage)
         {
-            //[imageClass release];
+            [imageClass release];
             return false;
         }
         
@@ -66,7 +66,7 @@ namespace ios
         CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(cgImage);
         
         //TODO: remove
-        printf("IMAGE (%d,%d) %d\n",width,height,(unsigned int)alphaInfo);
+        //printf("IMAGE (%d,%d) %d\n",width,height,(unsigned int)alphaInfo);
         
         // we always have 4 components (no alpha with kCGImageAlphaNoneSkipLast)
         unsigned int rowByteSize = width * 4;
@@ -95,6 +95,9 @@ namespace ios
         }
         CGContextDrawImage(context, CGRectMake(0.0, 0.0, width, height), cgImage);
         CGContextRelease(context);
+        
+        // free UIImage
+        [imageClass release];
         
         // create our OpenGL texture object
         glGenTextures(1, &textureId);
@@ -129,6 +132,7 @@ namespace ios
         
         // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         
