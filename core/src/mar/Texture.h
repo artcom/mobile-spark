@@ -13,7 +13,6 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <masl/Ptr.h>
 #include "openGL_functions.h"
-#include "png_functions.h"
 
 namespace mar {
     class Texture : public boost::enable_shared_from_this<Texture> {
