@@ -14,14 +14,41 @@
 
 namespace mar {
 
-    TextureUnit::TextureUnit() :matrix_(cml::identity_4x4()), _myTexture(TexturePtr(new Texture())) {
+    TextureUnit::TextureUnit() : matrix_(cml::identity_4x4()), _myTextureScaleCorrection(cml::identity_4x4()), _myTexture(TexturePtr(new Texture())) {
     }
-    TextureUnit::TextureUnit(const TexturePtr theTexture) :
-        matrix_(cml::identity_4x4()), _myTexture(theTexture)
-    {}
+    
+    TextureUnit::TextureUnit(const TexturePtr theTexture){
+        setTexture(theTexture);
+    }
 
     TextureUnit::~TextureUnit() {
     }
+    
+    void 
+    TextureUnit::setTexture(TexturePtr theTexture) {
+        matrix_ = cml::identity_4x4();
+        _myTextureScaleCorrection = cml::identity_4x4();
+        _myTexture = theTexture;
+        if (_myTexture->mirrorflag_) {
+            matrix scalematrix;        
+            cml::matrix_scale(scalematrix, 1.0f, -1.0f, 1.0f);
+    
+            matrix translatematrix;        
+            cml::matrix_translation(translatematrix, 0.0f, 1.0f);
+    
+            _myTextureScaleCorrection = translatematrix * scalematrix;
+        }
+    }
+    
+    matrix & 
+    TextureUnit::getMatrix() {
+        return matrix_;
+     }
+
+    matrix
+    TextureUnit::getRenderMatrix() {
+        return matrix_ * _myTextureScaleCorrection;
+     }
 
     std::string
     TextureUnit::getAttributesAsString() const {

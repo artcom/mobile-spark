@@ -16,7 +16,7 @@ namespace mar {
 
     Texture::Texture() :
         width_(0), height_(0), transparency_(false),
-        textureId_(0) 
+        textureId_(0), mirrorflag_(false)
     {
         AC_DEBUG << "create Texture " << (void*)this;
     }
@@ -35,7 +35,8 @@ namespace mar {
             //loadTextureFromPNG(src_, shared_from_this());
             masl::AssetProviderSingleton::get().ap()->loadTextureFromFile(theSrc, textureId_, 
                                                                           width_, height_,  
-                                                                          transparency_);
+                                                                          transparency_,
+                                                                          mirrorflag_);
             
         } else {
             width_ = 0;

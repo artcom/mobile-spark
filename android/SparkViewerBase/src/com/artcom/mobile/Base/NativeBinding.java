@@ -80,15 +80,18 @@ public class NativeBinding {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
 
         //Create Nearest Filtered Texture
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-    
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
         //Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
           try {
-              ByteBuffer bb = extract(myBitmap);
-              GLES20.glTexImage2D ( GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, myBitmap.getWidth(), myBitmap.getHeight(), 0,
-                                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, bb );
+              GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, myBitmap, 0);                                
+            
+              //ByteBuffer bb = extract(myBitmap);
+              //GLES20.glTexImage2D ( GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, myBitmap.getWidth(), myBitmap.getHeight(), 0,
+              //                      GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, bb );
           } catch (Exception theEx) {
               AC_Log.print(String.format("exception %s", theEx.getMessage()));
           }
@@ -171,9 +174,11 @@ public class NativeBinding {
     GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
       try {
-          ByteBuffer bb = extract(myBitmap);
-          GLES20.glTexImage2D ( GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, myBitmap.getWidth(), myBitmap.getHeight(), 0,
-                                GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, bb );
+          GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, myBitmap, 0);                                
+        
+          //ByteBuffer bb = extract(myBitmap);
+          //GLES20.glTexImage2D ( GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, myBitmap.getWidth(), myBitmap.getHeight(), 0,
+          //                      GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, bb );
       } catch (Exception theEx) {
           AC_Log.print(String.format("exception %s", theEx.getMessage()));
       }

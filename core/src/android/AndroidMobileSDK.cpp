@@ -76,7 +76,9 @@ namespace android {
     
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
-                                                const std::string & theFontPath, int theLineHeight, int theStartIndex) {
+                                                const std::string & theFontPath, int theLineHeight, int theStartIndex,
+                                                bool & mirrorFlag) {
+        mirrorFlag = true;
         masl::TextInfo myTextInfo;
         if (env) {
             env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)

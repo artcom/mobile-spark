@@ -23,7 +23,8 @@ namespace masl {
         virtual std::vector<char> getBlockFromFile(const std::string & theFileName) const = 0;
         virtual std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const = 0;
         virtual bool loadTextureFromPNG(const std::string & filename, unsigned int & textureId, int & width, int & height, bool & rgb) = 0;
-        virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) = 0;
+        virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, 
+                                         bool & hasAlpha, bool & mirrorFlag) = 0;
         virtual void addIncludePath(const std::string & thePath) = 0;
         virtual void storeInFile(const std::string & theFileName, const std::string & theData) = 0;
         virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData) = 0;

@@ -19,7 +19,8 @@ varying vec4 v_texCoord;
 void main() {
     // Pass the texture coordinate attribute to a varying.
     v_texCoord = a_texCoord0 * u_textureMatrix;
- 
+    v_texCoord += u_textureMatrix[3];
+    
     // Here we set the final position to this vertex.
     gl_Position = u_mvpMatrix * a_position;
 

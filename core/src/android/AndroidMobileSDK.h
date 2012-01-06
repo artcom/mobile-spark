@@ -22,7 +22,7 @@ namespace android {
         virtual void vibrate(long theDurationMillisec);                
         virtual masl::TextInfo renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 
                                           int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
-                                          int theLineHeight, int theStartIndex);
+                                          int theLineHeight, int theStartIndex, bool & mirrorFlag);
         virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha);                                           
         virtual void updateCameraTexture();
         virtual void freezeMobileOrientation(const std::string & theOrientation);

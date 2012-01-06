@@ -23,10 +23,13 @@ namespace mar {
             ~TextureUnit();
 
             std::string getAttributesAsString() const;
-            void setTexture(TexturePtr theTexture) {_myTexture = theTexture;};
-            TexturePtr getTexture() const { return _myTexture;}
-            matrix matrix_;
+            void setTexture(TexturePtr theTexture);
+            const TexturePtr getTexture() const { return _myTexture;}
+            matrix getRenderMatrix();
+            matrix & getMatrix();
         private:
+            matrix matrix_;
+            matrix _myTextureScaleCorrection;
             TexturePtr _myTexture;
     };
     typedef masl::Ptr<TextureUnit> TextureUnitPtr;

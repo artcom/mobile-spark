@@ -26,7 +26,8 @@ namespace ios
 
     masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 
                                             int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
-                                            int theLineHeight, int theStartIndex) {
+                                            int theLineHeight, int theStartIndex, bool & mirrorFlag) {
+        mirrorFlag = false;                                            
         masl::TextInfo textInfo;        
         
         TextRendererPtr textRenderer = TextRendererPtr(new TextRenderer());

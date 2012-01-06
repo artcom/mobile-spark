@@ -86,7 +86,9 @@ namespace android {
     }
     
     bool 
-    AndroidAssetProvider::loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) {
+    AndroidAssetProvider::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
+                                              unsigned int & width, unsigned int & height, bool & hasAlpha, bool & mirrorFlag) {
+        mirrorFlag = true;
         std::string myFullPath = filename;
         bool myFileIsonSDCardFlag = masl::searchFile(filename, myFullPath);
         if (!myFileIsonSDCardFlag) {
