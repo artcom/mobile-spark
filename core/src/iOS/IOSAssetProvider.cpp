@@ -14,9 +14,6 @@
 #include <fstream>
 
 #include <masl/file_functions.h>
-#include <mar/png_functions.h>
-
-
 
 namespace ios
 {
@@ -30,20 +27,6 @@ namespace ios
 
     IOSAssetProvider::~IOSAssetProvider()
     {
-    }
-
-    bool IOSAssetProvider::loadTextureFromPNG(const std::string & theFile, unsigned int & textureId, int & outWidth, int & outHeight, bool & rgb)
-    {
-        if (theFile.size() > 0 ) {
-            std::string filePath;
-            if (masl::searchFile(theFile, filePath)) {
-                return mar::loadTextureFromPNG(filePath, textureId, outWidth, outHeight, rgb);
-            }
-            AC_ERROR << "texture " << theFile << " was not found in search paths";
-            throw masl::FileNotFoundException("texture " + theFile + " was not found in search paths", PLUS_FILE_LINE);
-        }
-        throw masl::FileNotFoundException("file " + theFile + " was not found in search paths", PLUS_FILE_LINE);
-        return false;
     }
     
     bool IOSAssetProvider::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 

@@ -13,8 +13,6 @@
 #include <masl/checksum.h>
 #include <masl/AssetProvider.h>
 
-#include "png_functions.h"
-
 namespace mar {
     
     TextureLoader::TextureLoader() {

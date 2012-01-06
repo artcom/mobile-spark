@@ -14,8 +14,6 @@
 #include <masl/Logger.h>
 #include <masl/string_functions.h>
 
-#include "png_functions.h"
-
 #define DB(x) // x
 
 using namespace masl;
