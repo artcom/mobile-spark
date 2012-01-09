@@ -11,6 +11,7 @@
 
 #include <masl/Logger.h>
 #include <masl/AssetProvider.h>
+#include <stdio.h>
 
 #define DB(x) //x
 

@@ -34,7 +34,6 @@ namespace mar {
             return _myTextureMap[myKey];
         } else {
             TexturePtr myTexture = TexturePtr(new Texture());       
-            AC_PRINT << "load texture:" << theSrc;            
             masl::AssetProviderSingleton::get().ap()->loadTextureFromFile(theSrc, myTexture->textureId_, 
                                                                           myTexture->width_, myTexture->height_,  
                                                                           myTexture->transparency_, myTexture->mirrorflag_);                        

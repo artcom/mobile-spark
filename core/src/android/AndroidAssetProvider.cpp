@@ -14,11 +14,9 @@
 
 #include <masl/Logger.h>
 #include <masl/file_functions.h>
-#include <mar/png_functions.h>
 #include <masl/MobileSDK.h>
 
 #include "APK_functions.h"
-#include "png_functions.h"
 
 using namespace std;
 namespace android {
@@ -97,18 +95,6 @@ namespace android {
         return masl::MobileSDK_Singleton::get().getNative()->loadTextureFromFile(myFullPath, textureId, width, height, hasAlpha);
     }
 
-    bool
-    AndroidAssetProvider::loadTextureFromPNG(const std::string & theFileName, unsigned int & textureId, int & width, int & height, bool & rgb) {
-        std::string myFilename = masl::trimall(theFileName);
-        if (myFilename.size() > 0) {
-            //unzipped, read from sdcard
-            std::string filePath;
-            if (masl::searchFile(myFilename, filePath)) {
-                return mar::loadTextureFromPNG(filePath, textureId, width, height, rgb);
-            }
-        }
-        return android::loadTextureFromPNG(_myApkArchive, myFilename, textureId, width, height, rgb);
-    }
 
     void 
     AndroidAssetProvider::storeInFile(const std::string & theFileName, const std::string & theData) {
