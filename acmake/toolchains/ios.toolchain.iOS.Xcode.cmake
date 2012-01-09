@@ -8,6 +8,9 @@
 # __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 SET(TARGET_PLATFORM iPhoneOS)
+
+SET(IOS_DEPLOY_TGT "3.2")
+
 SET(IOS True)
 
 # SDK Info
@@ -40,13 +43,39 @@ SET(CMAKE_OSX_ARCHITECTURES armv7)
 SET(CMAKE_CXX_COMPILER_WORKS TRUE)
 SET(CMAKE_C_COMPILER_WORKS TRUE)
 
-SET( CMAKE_C_FLAGS "-arch armv7 -mthumb ${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
-SET( CMAKE_CXX_FLAGS "-arch armv7 -mthumb ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
+#SET( CMAKE_C_FLAGS "-arch armv7 -mthumb ${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
+#SET( CMAKE_CXX_FLAGS "-arch armv7 -mthumb ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
+
+SET (CMAKE_C_COMPILER             "${DEVROOT}/usr/bin/clang")
+#SET (CMAKE_C_FLAGS                "-std=c99 ${CMAKE_C_FLAGS}" CACHE STRING "c flags")
+SET (CMAKE_C_FLAGS_DEBUG          "-g")
+SET (CMAKE_C_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELEASE        "-O4 -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+SET (CMAKE_CXX_COMPILER             "${DEVROOT}/usr/bin/clang++")
+#SET (CMAKE_CXX_FLAGS                "-stdlib=libc++ ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags")
+SET (CMAKE_CXX_FLAGS_DEBUG          "-g")
+SET (CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELEASE        "-O4 -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+SET (CMAKE_AR      "${DEVROOT}/usr/bin/ar")
+SET (CMAKE_AS      "${DEVROOT}/usr/bin/as")
+SET (CMAKE_LINKER  "${DEVROOT}/usr/bin/ld")
+SET (CMAKE_NM      "${DEVROOT}/usr/bin/nm")
+SET (CMAKE_RANLIB  "${DEVROOT}/usr/bin/ranlib")
 
 # Flags
-ADD_DEFINITIONS("-no-cpp-precomp")
-ADD_DEFINITIONS("--sysroot=${SDKROOT}")
-ADD_DEFINITIONS("-miphoneos-version-min=3.0")
+#ADD_DEFINITIONS("-no-cpp-precomp")
+#ADD_DEFINITIONS("--sysroot=${SDKROOT}")
+#ADD_DEFINITIONS("-miphoneos-version-min=3.0")
+
+SET(OUR_FLAGS="-arch armv7 -mthumb -Wall -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT -I$SDKROOT/usr/include/")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OUR_FLAGS}" )
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OUR_FLAGS}" )
+
+#SET(LDFLAGS "-L$SDKROOT/usr/lib/")
 
 # Header
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
