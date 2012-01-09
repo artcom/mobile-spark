@@ -77,7 +77,6 @@ target_link_libraries(${EXECUTABLE_NAME} ${animation_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${ios_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${spark_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${SparkViewerBase_LIBRARY_DIRS})
-target_link_libraries(${EXECUTABLE_NAME} ${png_LIBRARY_DIRS})
 find_library(ZLIB_LIBRARY_DIRS
    NAMES z zlib
 )
