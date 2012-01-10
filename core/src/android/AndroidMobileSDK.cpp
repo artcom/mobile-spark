@@ -20,6 +20,11 @@ namespace android {
     AndroidMobileSDK::~AndroidMobileSDK() {
 
     }
+    bool AndroidMobileSDK::playMovie(const std::string & theURL) {}
+    void AndroidMobileSDK::stopMovie() {}
+    void AndroidMobileSDK::pauseMovie() {}
+    void AndroidMobileSDK::resetMovie() {}
+    
     void AndroidMobileSDK::vibrate(long theDurationMillisec) {
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");

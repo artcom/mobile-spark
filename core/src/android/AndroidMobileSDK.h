@@ -30,6 +30,11 @@ namespace android {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
+        virtual bool playMovie(const std::string & theURL);
+        virtual void stopMovie();
+        virtual void pauseMovie();
+        virtual void resetMovie();
+        
         virtual void exit();
 
     

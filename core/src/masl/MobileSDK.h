@@ -40,6 +40,10 @@ namespace masl {
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
         virtual bool isCameraCapturing() = 0;
+        virtual bool playMovie(const std::string & theURL) = 0;
+        virtual void stopMovie() = 0;
+        virtual void pauseMovie() = 0;
+        virtual void resetMovie() = 0;
         virtual void exit() = 0;
 
 

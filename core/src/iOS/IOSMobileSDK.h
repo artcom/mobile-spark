@@ -32,6 +32,11 @@ namespace ios {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
+        bool playMovie(const std::string & theURL);
+        void stopMovie();
+        void pauseMovie();
+        void resetMovie();
+        
         virtual void exit();
 
         
