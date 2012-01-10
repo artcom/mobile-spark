@@ -207,7 +207,7 @@ namespace mar {
     void
     UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
-        glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, textureUnit_->matrix_.data());
+        glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, textureUnit_->getRenderMatrix().data());
         glBindTexture(GL_TEXTURE_2D, textureUnit_->getTexture()->textureId_);
         ASSERT_GL("UnlitTexturedMaterial::loadShader", PLUS_FILE_LINE);
     }

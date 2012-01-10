@@ -166,7 +166,7 @@ if( NOT DEFINED BUILD_WITH_ANDROID_NDK AND NOT DEFINED BUILD_WITH_ANDROID_NDK_TO
         set( ANDROID_NDK_TOOLCHAIN_ROOT "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/${NDKSYSTEM}" )
         set( ANDROID_NDK_SYSROOT "${ANDROID_NDK}/platforms/android-${ANDROID_LEVEL}/arch-arm/" )
 
-        message( STATUS "Using android NDK from ${ANDROID_NDK}" )
+        message( STATUS "Using android NDK from ${ANDROID_NDK} with api level ${ANDROID_LEVEL}" )
         set( BUILD_WITH_ANDROID_NDK True )
     else()
         message( FATAL_ERROR "neither ${ANDROID_NDK} nor ${ANDROID_NDK_TOOLCHAIN_ROOT} does not exist!

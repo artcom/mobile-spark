@@ -13,16 +13,18 @@ file(GLOB HEADERS *.h)
 set(EXTERNS Boost Cml libXML2)
 if(ANDROID)
     find_library(GLES20_LIBRARY_DIRS GLESv2)
+    find_library(ZLIB_LIBRARY_DIRS NAMES z)
+        
     list(APPEND DEPENDS android)
     list(APPEND EXTERNS GLES20)
+    list(APPEND EXTERNS ZLIB)
 endif(ANDROID)
-
 ac_add_library(
     mar mar
     SOURCES ${SOURCES}
     HEADERS ${HEADERS}
     EXTERNS ${EXTERNS}
-    DEPENDS masl png
+    DEPENDS masl
 )
 if(IOS)
     ADD_FRAMEWORK(mar OpenGLES)

@@ -33,10 +33,10 @@ namespace mar {
             AC_INFO << "TextureLoader::load found texture: '" << theSrc << "' in map -> do not reload, glid -> "<< _myTextureMap[myKey]->textureId_;
             return _myTextureMap[myKey];
         } else {
-            TexturePtr myTexture = TexturePtr(new Texture());                    
+            TexturePtr myTexture = TexturePtr(new Texture());       
             masl::AssetProviderSingleton::get().ap()->loadTextureFromFile(theSrc, myTexture->textureId_, 
                                                                           myTexture->width_, myTexture->height_,  
-                                                                          myTexture->transparency_);                        
+                                                                          myTexture->transparency_, myTexture->mirrorflag_);                        
             if (theCacheFlag) {    
                 AC_INFO << "TextureLoader::load texture: '" << theSrc << "' generated store in map, glid -> "<< myTexture->textureId_;
                 storeTexture(myKey, myTexture);

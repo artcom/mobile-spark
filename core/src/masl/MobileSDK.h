@@ -32,7 +32,7 @@ namespace masl {
         virtual void vibrate(long theDurationMillisec) = 0;                                
         virtual TextInfo renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                     vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
-                                    const std::string & theFontPath, int theLineHeight, int theStartIndex) = 0;
+                                    const std::string & theFontPath, int theLineHeight, int theStartIndex, bool & mirrorFlag) = 0;
         virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height, bool & hasAlpha) = 0;                                                    
         virtual void updateCameraTexture() = 0;
         virtual void freezeMobileOrientation(const std::string & theOrientation) = 0;
@@ -40,6 +40,10 @@ namespace masl {
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
         virtual bool isCameraCapturing() = 0;
+        virtual bool playMovie(const std::string & theURL) = 0;
+        virtual void stopMovie() = 0;
+        virtual void pauseMovie() = 0;
+        virtual void resetMovie() = 0;
         virtual void exit() = 0;
 
 

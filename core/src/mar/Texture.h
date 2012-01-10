@@ -27,7 +27,8 @@ namespace mar {
             GLuint width_;
             GLuint height_;
             bool transparency_;
-            GLuint textureId_;        
+            GLuint textureId_;     
+            bool mirrorflag_;   
         private:
             std::string src_;
         

@@ -18,7 +18,7 @@ ac_add_library(
     SOURCES ${SOURCES}
     HEADERS ${HEADERS}
     EXTERNS ${EXTERNS}
-    DEPENDS masl mar zip png
+    DEPENDS masl mar zip
 )
 
 add_subdirectory(Tests)

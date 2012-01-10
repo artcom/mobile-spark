@@ -3,9 +3,7 @@ set (HEADERS
 zip.h
 )
 
-find_library(ZLIB_LIBRARY_DIRS
-   NAMES z zlib
-)
+find_library(ZLIB_LIBRARY_DIRS NAMES z)
 
 ac_add_library(zip zip 
     SOURCES ${SOURCES} 

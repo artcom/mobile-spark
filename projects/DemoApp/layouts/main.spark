@@ -37,6 +37,9 @@
             <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="deco.png"/>
         </Controls>
 
+        <Slide name="MovieSlide" alpha="1" title="Movie-Examples">
+            <Movie src="movie_preview.png" moviesrc="foo.3gp" x="200" y="200" z="0" width="100" height="100"/>
+        </Slide>
         <Slide name="TextSlide" alpha="1" title="Text-Examples">
    	    
 	    <Text name="textblock2" y="630" x="500" text="Fontsize 24 - acswissmed.ttf" color="[1,1,1,1]" fontsize="24" font="acswissmed.ttf"/>

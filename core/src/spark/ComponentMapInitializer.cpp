@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "HttpTransform.h"
 #include "Image.h"
+#include "Movie.h"
 #include "I18nContext.h"
 #include "NinePatch.h"
 #include "Rectangle.h"
@@ -30,6 +31,7 @@ namespace spark {
         SparkComponentFactory::get().registerComponent(Camera::SPARK_TYPE, spark::create<Camera>);
         SparkComponentFactory::get().registerComponent(HttpTransform::SPARK_TYPE, spark::create<HttpTransform>);
         SparkComponentFactory::get().registerComponent(Image::SPARK_TYPE, spark::create<Image>);
+        SparkComponentFactory::get().registerComponent(Movie::SPARK_TYPE, spark::create<Movie>);
         SparkComponentFactory::get().registerComponent(I18nContext::SPARK_TYPE, spark::create<I18nContext>);
         SparkComponentFactory::get().registerComponent(I18nItem::SPARK_TYPE, spark::create<I18nItem>);
         SparkComponentFactory::get().registerComponent(NinePatch::SPARK_TYPE, spark::create<NinePatch>);

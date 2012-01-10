@@ -18,10 +18,10 @@ namespace spark {
         Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Image();
         const std::string & getSrc() const {return data_;};
-        void setSrc(const std::string & theSrc);
+        virtual void setSrc(const std::string & theSrc);
         const vector2 & getTextureSize();
-        void setWidth(unsigned theWidth) {_myForcedSize[0] = theWidth;}
-        void setHeight(unsigned theHeight) {_myForcedSize[1] = theHeight;}
+        virtual void setWidth(unsigned theWidth) {_myForcedSize[0] = theWidth;}
+        virtual void setHeight(unsigned theHeight) {_myForcedSize[1] = theHeight;}
 
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Image::SPARK_TYPE;};
