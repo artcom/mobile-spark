@@ -8,6 +8,8 @@
 # __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 SET(TARGET_PLATFORM iPhoneSimulator)
+SET(IOS_DEPLOY_TGT "3.2")
+
 SET(IOS True)
 
 # SDK Info
@@ -31,32 +33,48 @@ SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
 SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "")
 
 #set target device: "1" -> iPhone, "2" -> iPad, "1,2 " -> both (remember the <whitespace> after the '2' !!!)
-SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2")
+SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1")
 
-SET(CMAKE_SYSTEM_PROCESSOR i386)
-SET(CMAKE_OSX_ARCHITECTURES i386)
+SET(CMAKE_SYSTEM_PROCESSOR arm)
+SET(CMAKE_OSX_ARCHITECTURES armv7)
 
 # Skip the platform compiler checks for cross compiling
 SET(CMAKE_CXX_COMPILER_WORKS TRUE)
 SET(CMAKE_C_COMPILER_WORKS TRUE)
 
-SET( CMAKE_C_FLAGS "-m32 ${CMAKE_C_FLAGS}" CACHE STRING "c flags" )
-SET( CMAKE_CXX_FLAGS "-m32 ${CMAKE_CXX_FLAGS}" CACHE STRING "c++ flags" )
+SET (CMAKE_C_COMPILER             "${DEVROOT}/usr/bin/clang")
+SET (CMAKE_C_FLAGS_DEBUG          "-g")
+SET (CMAKE_C_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELEASE        "-O4 -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+SET (CMAKE_CXX_COMPILER             "${DEVROOT}/usr/bin/clang++")
+SET (CMAKE_CXX_FLAGS_DEBUG          "-g")
+SET (CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELEASE        "-O4 -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+SET (CMAKE_AR      "${DEVROOT}/usr/bin/ar")
+SET (CMAKE_AS      "${DEVROOT}/usr/bin/as")
+SET (CMAKE_LINKER  "${DEVROOT}/usr/bin/ld")
+SET (CMAKE_NM      "${DEVROOT}/usr/bin/nm")
+SET (CMAKE_RANLIB  "${DEVROOT}/usr/bin/ranlib")
 
 # Flags
-ADD_DEFINITIONS("-arch i386")
-ADD_DEFINITIONS("-no-cpp-precomp")
-ADD_DEFINITIONS("--sysroot=${SDKROOT}")
-#ADD_DEFINITIONS("-miphoneos-version-min=3.0")
+SET(OUR_FLAGS="-arch i386 -mthumb -Wall -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT -I$SDKROOT/usr/include/")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OUR_FLAGS}" CACHE STRING "c flags")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OUR_FLAGS}" CACHE STRING "c++ flags")
 
 # Header
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
+INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1")
+INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1/armv7-apple-darwin10")
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/System/Library/Frameworks")
 
 # System Libraries
 LINK_DIRECTORIES("${SDKROOT}/usr/lib")
 LINK_DIRECTORIES("${SDKROOT}/System/Library/Frameworks")
-LINK_DIRECTORIES("${DEVROOT}/usr/lib/gcc/i686-apple-darwin10/4.2.1")
+LINK_DIRECTORIES("${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1")
 
 SET (CMAKE_FIND_ROOT_PATH "${SDKROOT}")
 SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
