@@ -111,7 +111,7 @@
         location.y=0;
     }
     if (theRecognizer.state != UIGestureRecognizerStateEnded) {
-        [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pan' x='%f' y='%f' dx='%f' dy='%f'/>", location.x*_myRetinaScale, _myHeight-location.y*_myRetinaScale, translation.x*_myRetinaScale, _myHeight-translation.y*_myRetinaScale]];
+        [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pan' x='%f' y='%f' dx='%f' dy='%f'/>", location.x*_myRetinaScale, _myHeight-location.y*_myRetinaScale, translation.x*_myRetinaScale, -translation.y*_myRetinaScale]];
     } else {
         [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='up' x='%f' y='%f'/>", location.x*_myRetinaScale, _myHeight-location.y*_myRetinaScale]];
     }
