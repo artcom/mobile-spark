@@ -145,6 +145,7 @@ namespace spark {
         // (i.e. events:['down', 'tap'] are class type 'GestureEvent' but different type, delay 'tap'
         // ignore second incoming event of same classtype and type
         // (i.e. events:['orientation', 'frame', 'orientation', 'frame'], ignore second 'frame' and 'orientation'
+        // delay touch up events until we have no more touch or gesture events in our queue 
         // -------------------------------------------------------------------------------------------------------
         AutoLocker<ThreadLock> myLocker(_myLock); 
         EventPtrList myDelayedEvents;       
@@ -154,6 +155,14 @@ namespace spark {
         boost::timer::timer myTimer;
         AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
         int i = 0;
+        bool myGestureOrTouchEvents = false;
+        for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
+            bool myCurrentEventisTouchUp = (*it)->classname_()== TouchEvent::CLASSNAME  && (*it)->getType() == TouchEvent::UP; 
+            if ( ((*it)->classname_()== TouchEvent::CLASSNAME ||  (*it)->classname_()== GestureEvent::CLASSNAME) && !myCurrentEventisTouchUp) {
+                myGestureOrTouchEvents = true;
+                break;
+            }    
+        }            
         for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
             AC_TRACE << "EVENT# " << i;
             bool myIgnoreEventFlag = false;
@@ -162,10 +171,14 @@ namespace spark {
                 // allow only one type per frame and therefore do not delay it
                 if (myIgnoreEventFilter.find( (*it)->getType()) != myIgnoreEventFilter.end() ) {
                     myIgnoreEventFlag = true;
-                }                    
+                }                
                 if (myDelayEventFilter.find( (*it)->classname_()) != myDelayEventFilter.end() ) {
                     myDelayEventFlag = true;
                 }    
+                bool myCurrentEventisTouchUp = (*it)->classname_()== TouchEvent::CLASSNAME  && (*it)->getType() == TouchEvent::UP; 
+                if (myCurrentEventisTouchUp && myGestureOrTouchEvents){
+                    myDelayEventFlag = true;                    
+                }
             }
             if (!myIgnoreEventFlag && !myDelayEventFlag) {
                 myIgnoreEventFilter[(*it)->getType()] = true;

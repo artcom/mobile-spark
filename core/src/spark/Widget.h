@@ -46,6 +46,8 @@ namespace spark {
         float getY() const { return _y;};
         float getZ() const { return _z;};
         float getScaleX() { return _scaleX;};
+        float getScaleY() { return _scaleY;};
+        float getScaleZ() { return _scaleZ;};
         float getRotationX() const {return _rotationX;};
         float getRotationY() const {return _rotationY;};
         float getRotationZ() const {return _rotationZ;};

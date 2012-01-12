@@ -67,19 +67,19 @@ namespace animation {
 
     template <class O, class T>
     void PropertyAnimation<O, T>::play(const masl::UInt64 theTime, const bool theComeToAnEndFlag) {
-        Animation::play(theTime, theComeToAnEndFlag);
         AC_DEBUG << "property animation set value to start value " << _myStartValue;
         if (_myObjectPtr.lock()) {
             (_myObjectPtr.lock().get()->*_myPropertyCallback)(_myStartValue);
         }
+        Animation::play(theTime, theComeToAnEndFlag);
     }
 
     template <class O, class T>
     void PropertyAnimation<O, T>::finish(const masl::UInt64 theTime) {
-        Animation::finish(theTime);
         if (_myObjectPtr.lock()) {
             (_myObjectPtr.lock().get()->*_myPropertyCallback)(_myEndValue);
         }
+        Animation::finish(theTime);
     }
 };
 
