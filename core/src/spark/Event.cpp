@@ -177,16 +177,25 @@ namespace spark {
          : Event(theType, theTarget), x_(theX), y_(theY), dx_(dx), dy_(dy)
     {
         systemrelevant_ = false;
+        if (theType == SWIPE_LEFT || theType == SWIPE_RIGHT || theType == SWIPE_UP || theType == SWIPE_DOWN) {
+        	systemrelevant_ = true;
+        }
     }
     GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theFactor)
          : Event(theType, theTarget), factor_(theFactor)
     { 
         systemrelevant_ = false;
+        if (theType == SWIPE_LEFT || theType == SWIPE_RIGHT || theType == SWIPE_UP || theType == SWIPE_DOWN) {
+        	systemrelevant_ = true;
+        }
     }
     GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection)
          : Event(theType, theTarget), direction_(theDirection)
     { 
         systemrelevant_ = false;
+        if (theType == SWIPE_LEFT || theType == SWIPE_RIGHT || theType == SWIPE_UP || theType == SWIPE_DOWN) {
+        	systemrelevant_ = true;
+        }
     }
     GestureEvent::GestureEvent(const masl::XMLNodePtr theXMLNode)
          : Event(theXMLNode),
