@@ -162,6 +162,7 @@ namespace spark {
             int getTranslateX() const { return dx_;};
             int getTranslateY() const { return dy_;};
             float getFactor() const { return factor_;};
+            float getDirection() const { return direction_;};
 
 
         private:
