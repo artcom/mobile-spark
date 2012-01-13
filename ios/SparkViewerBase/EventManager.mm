@@ -120,8 +120,10 @@
 
 - (void)handlePinchGesture:(UIGestureRecognizer *)theRecognizer {
     CGFloat factor = [(UIPinchGestureRecognizer *)theRecognizer scale];
+    CGPoint location = [theRecognizer locationInView:_myView];
+
     if (theRecognizer.state != UIGestureRecognizerStateEnded) {
-        [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pinch' factor='%f'/>", factor]];
+        [self throwEventToSpark:[NSString stringWithFormat:@"<GestureEvent type='pinch' factor='%f' x='%f' y='%f'/>", factor, location.x*_myRetinaScale, _myHeight-location.y*_myRetinaScale]];
     } else {
         [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='up' x='0' y='0'/>"]];
     }
