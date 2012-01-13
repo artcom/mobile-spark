@@ -40,6 +40,13 @@ T abs(T theNumber) {
     return (theNumber < (T)(0) ? -theNumber : theNumber);
 }
 
+template <class Number>
+Number clamp(Number x, Number min, Number max) {
+    if (x < min) x = min;
+    if (x > max) x = max;
+    return x;
+}
+
 template<class T>
 inline
 int round(T theNumber) {
