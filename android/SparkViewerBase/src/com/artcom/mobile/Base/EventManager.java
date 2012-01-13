@@ -23,7 +23,7 @@ public class EventManager {
     private int mode = 0; // 0 - none; 1-pan; 2-TwofingerTap; 3-pinch; 4-rotate
     private int height;
     private long startTime, lastTapTime;
-    private int startX, startY, dx, dy, fingerDistance, fingerDistanceStart;
+    private int startX, startY, dx, dy, fingerDistance, fingerDistanceStart, zoomCenterX, zoomCenterY;
     //-------------------------------------------------------------------------
     public static boolean dumpEvent(MotionEvent event) {
         if (INSTANCE != null) return INSTANCE.dumpTouchEvent(event);
@@ -120,6 +120,8 @@ public class EventManager {
             if (event.getPointerCount() <2 ) return 0;
             float dx2 = event.getX(0) - event.getX(1);
             float dy2 = event.getY(0) - event.getY(1);
+            zoomCenterX = (int)((event.getX(0) + event.getX(1)) / 2.0); 
+            zoomCenterY = height - (int)((event.getY(0) + event.getY(1)) / 2.0); 
             return  (int) Math.sqrt(dx2*dx2 + dy2*dy2);
         }
         //-------------------------------------------------------------------------
@@ -172,8 +174,8 @@ public class EventManager {
         }
         //-------------------------------------------------------------------------
         private void pinchHandler() {
-            AC_Log.debug(" ########### pinch: factor: " + (float)fingerDistance/fingerDistanceStart);
-            String myEvent = "<GestureEvent type='pinch' factor='" + (float)(fingerDistance)/fingerDistanceStart + "'/>";
+            AC_Log.debug (" ########### pinch: factor: " + (float)fingerDistance/fingerDistanceStart + " center : " + zoomCenterX + "/" + zoomCenterY);
+            String myEvent = "<GestureEvent type='pinch' factor='" + (float)(fingerDistance)/fingerDistanceStart +  "' x='" + zoomCenterX + "' y='"+ zoomCenterY +"'/>";
             NativeBinding.onEvent(myEvent);
         }
         //-------------------------------------------------------------------------
