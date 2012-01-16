@@ -249,5 +249,9 @@ namespace android {
             }
         }
     }
+    
+    std::string AndroidMobileSDK::getOrientation(){
+    	return "";	
+    }
 
 }

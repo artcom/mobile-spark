@@ -10,13 +10,16 @@
 #include "SparkViewerViewController.h"
 #import "GLView.h"
 
+#include "iOS/IOSMobileSDK.h"
+#include <spark/Window.h>
 
 @implementation SparkViewerViewController
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nil bundle:nil];
-    self.view.contentMode =UIViewContentModeLeft;
+    self.view.contentMode = UIViewContentModeLeft;
+    
     return self;
 }
 
@@ -27,14 +30,21 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {   
-    if(isPortrait) return NO;
-    return ((interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-            || (interfaceOrientation == UIInterfaceOrientationLandscapeLeft));
-}
-
--(void)setPortrait:(bool)thePortrait {
-    isPortrait = thePortrait;
+    std::string orientationString = masl::MobileSDK_Singleton::get().getNative()->getOrientation();
     
+    bool ret = interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+    
+    if(orientationString == spark::Orientation::PORTRAIT)
+    {
+        ret = interfaceOrientation == UIInterfaceOrientationPortrait;
+    }
+    else if (orientationString == spark::Orientation::LANDSCAPE)
+    {
+        ret =   interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+                interfaceOrientation == UIInterfaceOrientationLandscapeRight;
+    }
+    
+    return ret;
 }
 
 -(void)dealloc {
