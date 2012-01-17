@@ -14,10 +14,13 @@
 
 #import "Camera.h"
 
+
 namespace ios 
 {
-    IOSMobileSDK::IOSMobileSDK(){
-            }
+    IOSMobileSDK::IOSMobileSDK()
+    {
+    
+    }
 
     IOSMobileSDK::~IOSMobileSDK() {}
 
@@ -154,9 +157,11 @@ namespace ios
         return true;
     }
 
-    void IOSMobileSDK::freezeMobileOrientation(const std::string & theOrientation) {
-        
+    void IOSMobileSDK::freezeMobileOrientation(const std::string & theOrientation) 
+    {
+        m_orientationString = theOrientation;
     }
+    
     masl::CameraInfo IOSMobileSDK::getCameraSpec() {
         Camera * myCamera = [Camera instance];
         masl::CameraInfo cameraInfo;
@@ -186,5 +191,10 @@ namespace ios
     
     void IOSMobileSDK::exit() {
         AC_PRINT << "iOS apps, can't be quit";
+    }
+    
+    std::string IOSMobileSDK::getOrientation()
+    {
+        return m_orientationString;
     }
 }

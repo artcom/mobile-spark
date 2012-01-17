@@ -48,6 +48,8 @@ namespace masl {
         virtual void pauseMovie() = 0;
         virtual void resetMovie() = 0;
         virtual void exit() = 0;
+        
+        virtual std::string getOrientation() = 0;
 
 
     };

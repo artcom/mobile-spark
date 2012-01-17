@@ -41,10 +41,14 @@ namespace ios {
         
         virtual void exit();
 
+        std::string getOrientation();
         
+    private:
+        std::string m_orientationString;
     };
 
     typedef masl::Ptr<IOSMobileSDK> IOSMobileSDKPtr;
+    
 };
 
 #endif

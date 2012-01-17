@@ -32,7 +32,6 @@ namespace mar {
         src_ = theSrc;
         unbind();
         if (!src_.empty()) {
-            //loadTextureFromPNG(src_, shared_from_this());
             masl::AssetProviderSingleton::get().ap()->loadTextureFromFile(theSrc, textureId_, 
                                                                           width_, height_,  
                                                                           real_width_, real_height_,
