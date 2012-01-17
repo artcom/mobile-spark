@@ -36,6 +36,7 @@ namespace mar {
             TexturePtr myTexture = TexturePtr(new Texture());       
             masl::AssetProviderSingleton::get().ap()->loadTextureFromFile(theSrc, myTexture->textureId_, 
                                                                           myTexture->width_, myTexture->height_,  
+                                                                          myTexture->real_width_, myTexture->real_height_,  
                                                                           myTexture->transparency_, myTexture->mirrorflag_);                        
             if (theCacheFlag) {    
                 AC_INFO << "TextureLoader::load texture: '" << theSrc << "' generated store in map, glid -> "<< myTexture->textureId_;

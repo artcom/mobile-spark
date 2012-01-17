@@ -12,6 +12,7 @@ package com.artcom.mobile.Base;
 //Wrapper for native library
 import java.io.File;
 import java.io.InputStream;
+import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
@@ -67,13 +68,42 @@ public class NativeBinding {
   public static List<Integer> loadTextureFromFile(String theFilename, boolean theSDCardFlag) {
     List<Integer> myResult = new ArrayList<Integer>();	
     try{    
+        int[] maxTextureSize = new int[1];
+        GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_SIZE, maxTextureSize, 0);
+        AC_Log.info(String.format("Max texture size = %d", maxTextureSize[0]));
+        int myImageRealWidth;
+        int myImageRealHeight;
         Bitmap myBitmap;
-        if (theSDCardFlag) {
-            myBitmap = BitmapFactory.decodeFile(theFilename);
-        } else {
-            InputStream is = ourActivity.getClassLoader().getResourceAsStream(theFilename);
-            myBitmap = BitmapFactory.decodeStream(is);            
-        }
+        AC_Log.print(String.format("File is on sdcard: %s", (theSDCardFlag ? "true":"false")));
+        //if (theSDCardFlag) {
+        //    myBitmap = BitmapFactory.decodeFile(theFilename);
+            //FileInputStream is = ourActivity.getClassLoader().getResourceAsStream(theFilename);
+        //} else {
+            //InputStream is = ourActivity.getClassLoader().getResourceAsStream(theFilename);
+
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            InputStream is = ourActivity.getClassLoader().getResourceAsStream(theFilename);            
+            BitmapFactory.decodeStream(is,null,o);
+            //Find the correct scale value. It should be the power of 2.
+            int width_tmp=o.outWidth, height_tmp=o.outHeight;
+            myImageRealWidth = o.outWidth;
+            myImageRealHeight = o.outHeight;
+            int scale=1;
+            while(true){
+                if(width_tmp<=maxTextureSize[0] && height_tmp<=maxTextureSize[0]) {
+                    break;
+                }
+                width_tmp/=2;
+                height_tmp/=2;
+                scale*=2;
+            }
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize=scale;
+            InputStream is2 = ourActivity.getClassLoader().getResourceAsStream(theFilename);            
+            myBitmap = BitmapFactory.decodeStream(is2, null, o2);
+
+        //}
         int[] textures = new int[1];
         GLES20.glGenTextures(1, textures,0);
         
@@ -94,11 +124,13 @@ public class NativeBinding {
           
         //Clean up
         myBitmap.recycle();        
-        AC_Log.info(String.format("loaded bitmap from %s glid:%d size: %dx%d", theFilename, textures[0], myBitmap.getWidth(), myBitmap.getHeight()));
         myResult.add(textures[0]);
         myResult.add(myBitmap.getWidth());
         myResult.add(myBitmap.getHeight());
+        myResult.add(myImageRealWidth);
+        myResult.add(myImageRealHeight);
         myResult.add(myBitmap.hasAlpha() ? 1:0);
+        AC_Log.print(String.format("loaded bitmap from %s realsize: %dx%d glid:%d size: %dx%d", theFilename, myImageRealWidth, myImageRealHeight, textures[0], myBitmap.getWidth(), myBitmap.getHeight()));
     }catch (Exception e) {
         myResult.add(-1);
         AC_Log.info(String.format("Image: %s on not found", theFilename));
@@ -107,6 +139,37 @@ public class NativeBinding {
     return myResult;
   }
   
+ /*   private static Bitmap decodeFile(String theFilename, int theMaxSize){
+        try {
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            InputStream is = ourActivity.getClassLoader().getResourceAsStream(theFilename);            
+            BitmapFactory.decodeStream(is,null,o);
+    
+AC_Log.print(String.format("adaptive bitmaper from size: %dx%d", o.outWidth, o.outHeight));
+
+            //Find the correct scale value. It should be the power of 2.
+            int width_tmp=o.outWidth, height_tmp=o.outHeight;
+            int scale=1;
+            while(true){
+                AC_Log.print(String.format("scalefactor %d", scale));    
+                if(width_tmp<=theMaxSize && height_tmp<=theMaxSize) {
+                    break;
+                }
+                width_tmp/=2;
+                height_tmp/=2;
+                scale*=2;
+            }
+            //Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize=scale;
+AC_Log.print(String.format("scalefactor %d", scale));    
+            InputStream is2 = ourActivity.getClassLoader().getResourceAsStream(theFilename);            
+            return BitmapFactory.decodeStream(is2, null, o2);
+        } catch (Exception e) {}
+        return null;
+    }*/
 
   public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, 
 		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight, int theStartIndex) {

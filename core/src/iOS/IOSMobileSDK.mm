@@ -45,7 +45,8 @@ namespace ios
     }
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
-                                           unsigned int & width, unsigned int & height, bool & hasAlpha) 
+                                           unsigned int & width, unsigned int & height, 
+                                           unsigned int & real_width, unsigned int & real_height, bool & hasAlpha) 
     {
         std::string filePath;
         
@@ -145,10 +146,11 @@ namespace ios
         glBindTexture(GL_TEXTURE_2D, 0);
         
         AC_DEBUG << "generated texture with id" << textureId;
-        
         // clean up data
         delete [] data;
         
+        real_width = width;  // max gl texture size or imageloader boundary checks nyi
+        real_height = height;
         return true;
     }
 

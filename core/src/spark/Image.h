@@ -19,7 +19,7 @@ namespace spark {
         virtual ~Image();
         const std::string & getSrc() const {return data_;};
         virtual void setSrc(const std::string & theSrc);
-        const vector2 & getTextureSize();
+        const vector2 & getRealImageSize();
         virtual void setWidth(unsigned theWidth) {_myForcedSize[0] = theWidth;}
         virtual void setHeight(unsigned theHeight) {_myForcedSize[1] = theHeight;}
 
@@ -28,8 +28,9 @@ namespace spark {
     protected:
         virtual void build();
     private:
-        vector2 _myTextureSize;
-        vector2 _myForcedSize;
+        vector2 _myTextureSize;     // this is the size of the gl texture
+        vector2 _myRealImageSize;   // this is the size of the asset image
+        vector2 _myForcedSize;      // this the gl quad size
     };
 
     typedef masl::Ptr<Image> ImagePtr;

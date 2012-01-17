@@ -39,11 +39,12 @@ namespace android {
         }       
     }
     bool AndroidMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
-                                               unsigned int & width, unsigned int & height, bool & hasAlpha) {
+                                               unsigned int & width, unsigned int & height, 
+                                               unsigned int & real_width, unsigned int & real_height, 
+                                               bool & hasAlpha) {
         if (env) {
             std::string myFullPath = filename;
             bool myFileIsonSDCardFlag = masl::searchFile(filename, myFullPath);
-            //AC_PRINT << "load from sdcard: " << myFileIsonSDCardFlag << " full path: " << myFullPath;
             env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "loadTextureFromFile", "(Ljava/lang/String;Z)Ljava/util/List;");
@@ -69,6 +70,12 @@ namespace android {
                 height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
                 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);
+                real_width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 4);
+                real_height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
+                myInt = (jobject)env->CallObjectMethod(myList, getMethod, 5);
                 hasAlpha = (jint)env->CallIntMethod(myInt, intValueMethod, 0) == 1;    
                 
             } else {

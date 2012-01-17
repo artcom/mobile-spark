@@ -24,8 +24,10 @@ namespace mar {
             void setSrc(const std::string & theSrc = "");
             std::string getAttributesAsString() const;
 
-            GLuint width_;
+            GLuint width_; 
             GLuint height_;
+            GLuint real_width_;  // in some cases images must be downscaled to be loaded from android/ios 
+            GLuint real_height_; // imageloader or fit max gl texture size, this is the real size
             bool transparency_;
             GLuint textureId_;     
             bool mirrorflag_;   

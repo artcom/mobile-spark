@@ -199,6 +199,9 @@ namespace spark {
     
     const vector2
     ShapeWidget::getSize() {
+        if (_myDirtyFlag) {
+            build();
+        }        
         return vector2(getShape()->getWidth(), getShape()->getHeight());
     }
 

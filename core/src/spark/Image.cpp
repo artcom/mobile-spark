@@ -32,13 +32,12 @@ namespace spark {
         AC_INFO << "....destructor image " << getName();
     }
 
-    //TODO maybe remove textureSize member
     const vector2 &
-    Image::getTextureSize() {
+    Image::getRealImageSize() {
         if (_myDirtyFlag) {
             build();
         }
-        return _myTextureSize;
+        return _myRealImageSize;
     }
     
     void 
@@ -68,8 +67,9 @@ namespace spark {
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->width_, myMaterial->getTextureUnit()->getTexture()->height_);
-        float myWidth = _myForcedSize[0] == -1 ? _myTextureSize[0] : _myForcedSize[0];
-        float myHeight = _myForcedSize[1] == -1 ? _myTextureSize[1] : _myForcedSize[1];
+        _myRealImageSize = vector2(myMaterial->getTextureUnit()->getTexture()->real_width_, myMaterial->getTextureUnit()->getTexture()->real_height_);
+        float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
+        float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
         setSize(myWidth, myHeight);
     }
 }

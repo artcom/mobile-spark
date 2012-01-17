@@ -40,20 +40,20 @@ public class EventManager {
     }
     //-------------------------------------------------------------------------
     public boolean dumpTouchEvent(MotionEvent event) {
-            dx = (int)event.getX()-startX;
-            dy = height - (int)event.getY()-startY;
+            dx = (int)event.getX(0)-startX;
+            dy = height - (int)event.getY(0)-startY;
             long timeNow  = System.currentTimeMillis();
             switch(event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                     startTime = System.currentTimeMillis();
                     mode = RECENT_ACTION_WAS_DOWN;
-                    startX = (int)event.getX();
-                    startY = height - (int)event.getY();
+                    startX = (int)event.getX(0);
+                    startY = height - (int)event.getY(0);
                     downHandler();
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (timeNow - startTime < 400) {
-                        if (timeNow - lastTapTime<400) {
+                    if (timeNow - startTime < 300) {
+                        if (timeNow - lastTapTime<300) {
                             doubleTapHandler();
                             upHandler();
                             break;
@@ -78,6 +78,8 @@ public class EventManager {
                     upHandler();
                 case MotionEvent.ACTION_MOVE:
                     if (mode == A_SECOND_FINGER_TOUCHED) {
+                        startX = (int)event.getX(0);
+                        startY = height - (int)event.getY(0);                        
                         fingerDistance = getFingerDistance(event);
                         if (fingerDistance>1 && Math.abs(fingerDistance-fingerDistanceStart)>20) {
                             mode = PINCH_ZOOM_STARTED;
@@ -92,6 +94,9 @@ public class EventManager {
                     if (mode == PINCH_ZOOM_STARTED) {
                         fingerDistance = getFingerDistance(event);
                         if(fingerDistance>1) pinchHandler();
+                        if(dx*dx + dy*dy > 150) {
+                            panHandler();
+                        }
                         break;
                     }
                     if (mode == ROTATION_STARTED) {
@@ -101,7 +106,7 @@ public class EventManager {
                     }
                     // only one finger is moving:
                     if(dx*dx + dy*dy < 150) break;
-                    mode = RECENT_ACTION_WAS_PANING;
+                    mode = RECENT_ACTION_WAS_PANING;                    
                     panHandler();
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:

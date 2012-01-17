@@ -21,8 +21,10 @@ public:
     virtual std::string getStringFromFile(const std::string & theFile) const;
     virtual std::vector<char> getBlockFromFile(const std::string & theFileName) const;
     virtual std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const;
-    virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, 
-                                     unsigned int & height, bool & hasAlpha, bool & mirrorFlag);                    
+    virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
+                                     unsigned int & width, unsigned int & height, 
+                                     unsigned int & realwidth, unsigned int & realheight, 
+                                     bool & hasAlpha, bool & mirrorFlag);                    
     virtual void addIncludePath(const std::string & thePath)  { includePaths_.push_back(assetPath_ + "/" + thePath); };
     virtual void storeInFile(const std::string & theFileName, const std::string & theData);
     virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData);
