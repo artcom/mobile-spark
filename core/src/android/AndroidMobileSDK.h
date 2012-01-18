@@ -38,7 +38,7 @@ namespace android {
         
         virtual void exit();
 
-    	virtual void getOrientation();
+    	virtual std::string getOrientation();
     	
         JNIEnv * env;
         jobject obj;
