@@ -67,6 +67,8 @@ public class EventManager {
                             if (dx > 50f) swipeRightHandler();
                             if (dy < -50f) swipeDownHandler();
                             if (dy > 50f) swipeUpHandler();
+                            startX = (int)event.getX(0);
+                            startY = height - (int)event.getY(0);
                             upHandler();
                             break;
                         }

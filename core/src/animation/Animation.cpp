@@ -54,7 +54,7 @@ namespace animation {
     void Animation::cancel() {
         AC_DEBUG << _myId << "...............cancel animtion";
         _myRunning = false;
-        _myFinished = false;
+        _myFinished = true;
         if (_myOnCancel) { _myOnCancel->execute(); }
     }
 
