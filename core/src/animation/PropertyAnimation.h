@@ -57,12 +57,12 @@ namespace animation {
 
     template <class O,class T>
     void PropertyAnimation<O, T>::doFrame(const masl::UInt64 theCurrentMillis) {
-        Animation::doFrame(theCurrentMillis);
         float value = _myStartValue + (_myEndValue - _myStartValue) * _myProgress;
         AC_TRACE << "progress " << _myProgress << " value: " << value;
         if (_myObjectPtr.lock()) {
             (_myObjectPtr.lock().get()->*_myPropertyCallback)(value);
         }
+        Animation::doFrame(theCurrentMillis);
     }
 
     template <class O, class T>
