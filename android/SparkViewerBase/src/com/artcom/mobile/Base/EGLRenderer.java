@@ -40,7 +40,7 @@ public class EGLRenderer  implements GLSurfaceView.Renderer{
     }
 
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-        AC_Log.print("_________________________________- onSurfaceChanged");
+        //AC_Log.print("_________________________________- onSurfaceChanged");
         String myEvent = "<WindowEvent type='on_resize' newsize='[" + width + "," + height + "]' oldsize='[-1, -1]'/>";
         NativeBinding.onEvent(myEvent);
     }
