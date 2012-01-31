@@ -60,6 +60,8 @@ typedef enum {
 
 }
 
+- (BOOL) setupGL;
+- (void) onResize: (CGRect) newFrame;
 
 - (void) createApp;
 - (void) render:(id)sender;

@@ -9,7 +9,7 @@
 
 SET(TARGET_PLATFORM iPhoneOS)
 
-SET(IOS_DEPLOY_TGT "3.2")
+SET(IOS_DEPLOY_TGT "4.2")
 
 SET(IOS True)
 
@@ -31,13 +31,18 @@ ENDFOREACH(path)
 find_path(SDKROOT "usr/include/stdlib.h" PATHS ${latest_SDK} NO_CMAKE_FIND_ROOT_PATH)
 
 SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
-SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "")
+SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET ${IOS_DEPLOY_TGT})
 
 #set target device: "1" -> iPhone, "2" -> iPad, "1,2 " -> both (remember the <whitespace> after the '2' !!!)
 SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1")
 
 SET(CMAKE_SYSTEM_PROCESSOR arm)
 SET(CMAKE_OSX_ARCHITECTURES armv7)
+
+#SET(TARGETSDK "iPhoneOS5.0.sdk")
+#SET(CMAKE_OSX_SYSROOT
+#/Developer/Platform/iPhoneSimulator.platform/Developer/SDKs/${TARGETSDK})
+#SET(CMAKE_OSX_ARCHITECTURES ${ARCH_STANDARD_32_BIT})
 
 # Skip the platform compiler checks for cross compiling
 SET(CMAKE_CXX_COMPILER_WORKS TRUE)
@@ -55,7 +60,7 @@ SET (CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
 SET (CMAKE_CXX_FLAGS_RELEASE        "-O4 -DNDEBUG")
 SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
-SET (CMAKE_AR      "${DEVROOT}/usr/bin/ar")
+#SET (CMAKE_AR      "${DEVROOT}/usr/bin/ar")
 SET (CMAKE_AS      "${DEVROOT}/usr/bin/as")
 SET (CMAKE_LINKER  "${DEVROOT}/usr/bin/ld")
 SET (CMAKE_NM      "${DEVROOT}/usr/bin/nm")

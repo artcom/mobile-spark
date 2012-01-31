@@ -11,7 +11,7 @@
 
 
 @interface SparkViewerViewController : UIViewController <UITextFieldDelegate>{
-
+    UIInterfaceOrientation m_orientation;
 }
 
 @end

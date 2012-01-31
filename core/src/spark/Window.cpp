@@ -105,6 +105,8 @@ namespace spark {
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
         _myWidth = myEvent->size_[0];
         _myHeight= myEvent->size_[1];
+        
+        AC_PRINT<<"WINDOW SIZE:"<< _myWidth <<", "<< _myHeight ;
     }
     void
     Window::render(){

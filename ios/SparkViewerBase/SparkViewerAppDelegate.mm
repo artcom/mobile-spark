@@ -24,36 +24,38 @@
 
 - (void)createGLView
 {
-    myGLView = [[GLView alloc]initWithFrame:[window bounds]];
+    //myGLView = [[GLView alloc]initWithFrame:[window bounds]];
+    
+    //subclass needs to override this 
 }
 
 
--(CGRect)getWindowBoundsWithBaseLayout:(NSString*) baseLayout {
-    
-    bool dummyForPortrait = false; 
-    
-    CGRect windowBounds = [[UIScreen mainScreen] bounds];
-    std::string filename = spark::findBestMatchedLayout("/main",windowBounds.size.width*[[UIScreen mainScreen] scale], windowBounds.size.height*[[UIScreen mainScreen] scale], dummyForPortrait);
-    
-    //[self.sparkViewerViewController setPortrait:isPortrait];
-    
-    CGRect translate = [window bounds];
-    
-    if (!dummyForPortrait) {
-        float oldwidth = windowBounds.size.width ;
-        windowBounds.size.width = windowBounds.size.height;
-        windowBounds.size.height = oldwidth;
-        
-        translate.origin.y=20;  //XXX:  don't ask TODO: ASK!!!
-    } else {
-        translate.origin.y=40;  //XXX:  don't ask TODO: ASK!!!
-        
-    }
-    
-    window.bounds=translate;
-     
-    return windowBounds;
-}
+//-(CGRect)getWindowBoundsWithBaseLayout:(NSString*) baseLayout {
+//    
+//    bool dummyForPortrait = false; 
+//    
+//    CGRect windowBounds = [[UIScreen mainScreen] bounds];
+//    std::string filename = spark::findBestMatchedLayout("/main",windowBounds.size.width*[[UIScreen mainScreen] scale], windowBounds.size.height*[[UIScreen mainScreen] scale], dummyForPortrait);
+//    
+//    //[self.sparkViewerViewController setPortrait:isPortrait];
+//    
+//    CGRect translate = [window bounds];
+//    
+//    if (!dummyForPortrait) {
+//        float oldwidth = windowBounds.size.width ;
+//        windowBounds.size.width = windowBounds.size.height;
+//        windowBounds.size.height = oldwidth;
+//        
+//        translate.origin.y=20;  // -> statusBar issues
+//    } else {
+//        translate.origin.y=40;  // -> statusBar issues
+//        
+//    }
+//    
+//    window.bounds=translate;
+//     
+//    return windowBounds;
+//}
 
 -(void) initialize:(NSString*) projectName 
 {
@@ -97,16 +99,20 @@
     masl::Logger::get().setSeverity();
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
     
-    
-    
+    // test this
+    CGRect translate = [window bounds];
+    float oldwidth = translate.size.width ;
+    translate.size.width = translate.size.height;
+    translate.size.height = oldwidth;
+    window.bounds = translate;
     
     [self createGLView];
-    self.window.rootViewController = self.sparkViewerViewController;
     
-    //[self.sparkViewerViewController setPortrait:self.isPortrait];
-
-    [self.window addSubview:self.sparkViewerViewController.view];
+    //self.sparkViewerViewController.view = myGLView;
     [self.sparkViewerViewController.view addSubview:myGLView];
+    
+    [self.window addSubview:self.sparkViewerViewController.view];
+    
     [self.window makeKeyAndVisible];
     
     [myGLView startAnimation];
