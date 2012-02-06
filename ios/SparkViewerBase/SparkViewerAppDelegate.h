@@ -19,9 +19,7 @@
 }
 
 -(void)createGLView;
--(CGRect)getWindowBoundsWithBaseLayout:(NSString*) baseLayout ;
 -(void)initialize:(NSString *) projectName ;
-
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 

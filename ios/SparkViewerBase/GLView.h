@@ -60,6 +60,10 @@ typedef enum {
 
 }
 
+- (BOOL) setupFramebuffer;
+- (void) tearDownFramebuffer;
+
+- (void) resizeView: (CGRect) newBounds;
 
 - (void) createApp;
 - (void) render:(id)sender;

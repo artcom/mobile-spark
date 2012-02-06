@@ -12,6 +12,9 @@
 #import "SparkViewerViewController.h"
 #include <masl/Logger.h>
 
+#include "iOS/IOSMobileSDK.h"
+#include <spark/Window.h>
+
 #include <spark/BaseApp.h>
 
 
@@ -24,35 +27,8 @@
 
 - (void)createGLView
 {
-    myGLView = [[GLView alloc]initWithFrame:[window bounds]];
-}
-
-
--(CGRect)getWindowBoundsWithBaseLayout:(NSString*) baseLayout {
-    
-    bool dummyForPortrait = false; 
-    
-    CGRect windowBounds = [[UIScreen mainScreen] bounds];
-    std::string filename = spark::findBestMatchedLayout("/main",windowBounds.size.width*[[UIScreen mainScreen] scale], windowBounds.size.height*[[UIScreen mainScreen] scale], dummyForPortrait);
-    
-    //[self.sparkViewerViewController setPortrait:isPortrait];
-    
-    CGRect translate = [window bounds];
-    
-    if (!dummyForPortrait) {
-        float oldwidth = windowBounds.size.width ;
-        windowBounds.size.width = windowBounds.size.height;
-        windowBounds.size.height = oldwidth;
-        
-        translate.origin.y=20;  //XXX:  don't ask TODO: ASK!!!
-    } else {
-        translate.origin.y=40;  //XXX:  don't ask TODO: ASK!!!
-        
-    }
-    
-    window.bounds=translate;
-     
-    return windowBounds;
+    //myGLView = [[GLView alloc]initWithFrame:[window bounds]];
+    //subclass needs to override this 
 }
 
 -(void) initialize:(NSString*) projectName 
@@ -97,16 +73,15 @@
     masl::Logger::get().setSeverity();
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
     
+    //self.sparkViewerViewController.window = self.window;
     
-    
-    
+    // GLView will be created with current window dimension
     [self createGLView];
-    self.window.rootViewController = self.sparkViewerViewController;
     
-    //[self.sparkViewerViewController setPortrait:self.isPortrait];
-
+    self.sparkViewerViewController.view = myGLView;
+    
     [self.window addSubview:self.sparkViewerViewController.view];
-    [self.sparkViewerViewController.view addSubview:myGLView];
+    
     [self.window makeKeyAndVisible];
     
     [myGLView startAnimation];
