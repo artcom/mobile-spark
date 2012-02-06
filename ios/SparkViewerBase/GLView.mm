@@ -56,7 +56,7 @@
             }
         }
 
-        if (![self setupGL]) return nil;
+        if (![self setupFramebuffer]) return nil;
         
         //setup DemoApp
         NSString *path = [[NSBundle mainBundle] resourcePath];
@@ -69,7 +69,7 @@
     return self;
 }
 
-- (BOOL) setupGL
+- (BOOL) setupFramebuffer
 {
     [EAGLContext setCurrentContext:glContext];
     
@@ -80,7 +80,9 @@
     //create color renderbuffer
     glGenRenderbuffers(1, &renderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    
     [glContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
+    
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
     
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
@@ -122,9 +124,67 @@
     return YES;
 }
 
-- (void) onResize: (CGRect) newFrame
+- (void) tearDownFramebuffer
 {
-    [eventManager onResize:newFrame];
+    [EAGLContext setCurrentContext:glContext];
+    
+    //delete framebuffer
+    if(framebuffer)
+    {
+        glDeleteFramebuffers(1, &framebuffer);
+        framebuffer = 0;
+    }
+    
+    if(renderbuffer)
+    {
+        //delete color renderbuffer
+        glDeleteRenderbuffers(1, &renderbuffer);
+        renderbuffer = 0;
+    }
+    
+    if (MSAAQuality > 0) 
+    {
+        //delete Multisampling Buffer
+        if(multisamplingFramebuffer)
+        {
+            glDeleteFramebuffers(1, &multisamplingFramebuffer);
+            multisamplingFramebuffer = 0;
+        }
+        if(multisamplingRenderbuffer)
+        {
+            glDeleteRenderbuffers(1, &multisamplingRenderbuffer);
+            multisamplingRenderbuffer = 0;
+        }
+        
+        //delete depthbuffer
+        if(depthRenderbuffer)
+        {
+            glDeleteRenderbuffers(1, &depthRenderbuffer);
+            depthRenderbuffer = 0;
+        }
+    } 
+    else 
+    {
+        //delete depthbuffer
+        if(depthRenderbuffer)
+        {
+            glDeleteRenderbuffers(1, &depthRenderbuffer);
+            depthRenderbuffer = 0;
+        }
+    }
+}
+
+- (void) resizeView: (CGRect) newBounds
+{
+    self.bounds = newBounds;
+    
+    // following code will re-init our RenderBuffer with
+    // the new dimensions
+    [self tearDownFramebuffer];
+    [self setupFramebuffer];
+    
+    // now pass event to application
+    [eventManager onResize:newBounds];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent*)event {
@@ -209,36 +269,8 @@
 
 - (void)dealloc
 {
-    
-    if (framebuffer)   
-    {
-        glDeleteFramebuffers(1, &framebuffer);
-        framebuffer = 0;
-    }
-    
-    if (renderbuffer)
-    {
-        glDeleteRenderbuffers(1, &renderbuffer);
-        renderbuffer = 0;
-    }
-    
-    if (multisamplingFramebuffer)
-    {
-        glDeleteRenderbuffers(1, &multisamplingFramebuffer);
-        multisamplingFramebuffer = 0;
-    }
-    
-    if (multisamplingRenderbuffer)
-    {
-        glDeleteRenderbuffers(1, &multisamplingRenderbuffer);
-        multisamplingRenderbuffer = 0;
-    }
-    
-    if (depthRenderbuffer)
-    {
-        glDeleteRenderbuffers(1, &depthRenderbuffer);
-        depthRenderbuffer = 0;
-    }
+    // delete all framebuffer related stuff
+    [self tearDownFramebuffer];
     
     [glContext release];
     glContext = nil;

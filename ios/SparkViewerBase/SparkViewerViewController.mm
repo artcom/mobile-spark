@@ -26,18 +26,38 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
 {
     m_orientation = toInterfaceOrientation;
+    
+    CGRect newBounds = self.view.bounds;
+    
+    float smallerSide = std::min(newBounds.size.width, newBounds.size.height);
+    float largerSide = std::max(newBounds.size.width, newBounds.size.height);
+    
+    bool isLandscape = UIInterfaceOrientationIsLandscape(toInterfaceOrientation);
+    
+    newBounds.size.width = isLandscape ? largerSide : smallerSide;
+    newBounds.size.height = isLandscape ? smallerSide : largerSide;
+    
+    [(GLView*)self.view resizeView:newBounds];
 }
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation 
 {
+    //AC_PRINT<<"w: "<<self.view.bounds.size.width<<" -- h: "<<self.view.bounds.size.height;
+    //AC_PRINT<<[[UIScreen mainScreen] scale];
     //[(GLView*)self.view onResize:self.view.bounds];
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {   
     std::string orientationString = masl::MobileSDK_Singleton::get().getNative()->getOrientation();
     
-    bool ret = interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+    bool ret = true;
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) 
+    {
+        ret =  (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    } 
     
     if(orientationString == spark::Orientation::PORTRAIT)
     {

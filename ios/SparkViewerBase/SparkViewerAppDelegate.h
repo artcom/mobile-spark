@@ -21,7 +21,6 @@
 -(void)createGLView;
 -(void)initialize:(NSString *) projectName ;
 
-
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
 @property (nonatomic, retain) SparkViewerViewController *sparkViewerViewController;
