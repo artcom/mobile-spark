@@ -80,9 +80,12 @@
 - (void) onResize: (CGRect) newFrame
 {
     float scale = [[UIScreen mainScreen] scale];
+    
+    _myHeight = scale * scale * newFrame.size.height;
+    
     [self throwEventToSpark: [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%f,%f]'/>",
                               scale * newFrame.size.width,
-                              scale * newFrame.size.height]];
+                              scale * newFrame.size.height]];    
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)recognizerPan shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)recognizerSwipe {

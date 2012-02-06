@@ -56,7 +56,8 @@
             }
         }
 
-        if (![self setupFramebuffer]) return nil;
+        // will create our framebuffer
+        [self resizeView:self.bounds];
         
         //setup DemoApp
         NSString *path = [[NSBundle mainBundle] resourcePath];
