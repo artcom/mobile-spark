@@ -44,7 +44,8 @@
 {
     //AC_PRINT<<"w: "<<self.view.bounds.size.width<<" -- h: "<<self.view.bounds.size.height;
     //AC_PRINT<<[[UIScreen mainScreen] scale];
-    //[(GLView*)self.view onResize:self.view.bounds];
+    
+    //[(GLView*)self.view resizeView:self.view.bounds];
     
 }
 

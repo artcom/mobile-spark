@@ -73,10 +73,11 @@
     masl::Logger::get().setSeverity();
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
     
-    //self.sparkViewerViewController.window = self.window;
-    
     // GLView will be created with current window dimension
     [self createGLView];
+    
+    // assure correct size for application
+    [myGLView resizeView:myGLView.bounds];
     
     self.sparkViewerViewController.view = myGLView;
     

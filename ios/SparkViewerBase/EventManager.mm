@@ -81,7 +81,7 @@
 {
     float scale = [[UIScreen mainScreen] scale];
     
-    _myHeight = scale * scale * newFrame.size.height;
+    _myHeight = scale * newFrame.size.height;
     
     [self throwEventToSpark: [NSString stringWithFormat:@"<WindowEvent type='on_resize' newsize='[%f,%f]'/>",
                               scale * newFrame.size.width,
