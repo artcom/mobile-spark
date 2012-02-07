@@ -27,8 +27,7 @@
 
 - (void)createGLView
 {
-    //myGLView = [[GLView alloc]initWithFrame:[window bounds]];
-    //subclass needs to override this 
+    //has to be implemened in child class 
 }
 
 -(void) initialize:(NSString*) projectName 

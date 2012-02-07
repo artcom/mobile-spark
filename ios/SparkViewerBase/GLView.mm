@@ -88,8 +88,9 @@
     
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
-    NSLog(@"width=%d, height=%d",width,height);
-    if (MSAAQuality > 0) {
+    
+    if (MSAAQuality > 0) 
+    {
         //Create Multisampling Buffer
         glGenFramebuffers(1, &multisamplingFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, multisamplingFramebuffer);
@@ -101,12 +102,14 @@
         glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, MSAAQuality, GL_RGBA8_OES, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, multisamplingRenderbuffer);
         
-        //create depthbuffer
+        //create depthbuffer with MSAA
         glGenRenderbuffers(1, &depthRenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
         glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, MSAAQuality, GL_DEPTH_COMPONENT16, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
-    } else {
+    } 
+    else 
+    {
         //create depthbuffer
         glGenRenderbuffers(1, &depthRenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
@@ -115,7 +118,8 @@
     }
     //Test Frame Buffer
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER) ;
-    if(status != GL_FRAMEBUFFER_COMPLETE) {
+    if(status != GL_FRAMEBUFFER_COMPLETE) 
+    {
         
         NSLog(@"failed to make complete framebuffer object %x", status);
         return NO;
@@ -143,6 +147,13 @@
         renderbuffer = 0;
     }
     
+    //delete depthbuffer
+    if(depthRenderbuffer)
+    {
+        glDeleteRenderbuffers(1, &depthRenderbuffer);
+        depthRenderbuffer = 0;
+    }
+    
     if (MSAAQuality > 0) 
     {
         //delete Multisampling Buffer
@@ -156,23 +167,7 @@
             glDeleteRenderbuffers(1, &multisamplingRenderbuffer);
             multisamplingRenderbuffer = 0;
         }
-        
-        //delete depthbuffer
-        if(depthRenderbuffer)
-        {
-            glDeleteRenderbuffers(1, &depthRenderbuffer);
-            depthRenderbuffer = 0;
-        }
     } 
-    else 
-    {
-        //delete depthbuffer
-        if(depthRenderbuffer)
-        {
-            glDeleteRenderbuffers(1, &depthRenderbuffer);
-            depthRenderbuffer = 0;
-        }
-    }
 }
 
 - (void) resizeView: (CGRect) newBounds
