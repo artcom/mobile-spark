@@ -118,8 +118,7 @@ namespace ios {
             for(int y = 0; y < textureHeight; y++) {
                 for(int x = 0; x < textureWidth; x++) {
                     
-                    bool isOpaque = bitmapData[y * textureWidth + x];
-                    float preMultAlpha = (isOpaque? theColor[3] : 0);
+                    float preMultAlpha = bitmapData[y * textureWidth + x] / 255.f;
                     
                     buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+0] = (Byte) (theColor[0]*255.0f * preMultAlpha);
                     buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+1] = (Byte) (theColor[1]*255.0f * preMultAlpha);
