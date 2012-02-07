@@ -16,18 +16,6 @@ ELSEIF(${TARGET_PLATFORM} STREQUAL iPhoneSimulator)
     set(CMAKE_EXE_LINKER_FLAGS "-arch i386 -miphoneos-version-min=${SDKVER}")
 ENDIF()
 
-# Set the OS X Bundle specific CMake variables which will be used to populate the plist for
-# the application bundle
-#set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME}")
-set(MACOSX_BUNDLE_GUI_IDENTIFIER "artcom.${APP_NAME}")
-#set(MACOSX_BUNDLE_ICON_FILE "DemoApp/textures/ios_icon.png")
-#set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME} Version ${VTK_VERSION}")
-#set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
-#set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${VTK_VERSION})
-#set(MACOSX_BUNDLE_BUNDLE_VERSION ${VTK_VERSION})
-#set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010. All Rights Reserved.")
-
-
 #set include paths
 include_directories($ENV{MOBILE_SPARK}/iOS)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -49,8 +37,20 @@ add_executable(${EXECUTABLE_NAME}
 SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin/")
 SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/bin/")
   
-# Set a custom plist file for the app bundle
-#SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST Info.plist)
+# Set the OS X Bundle specific variables which will be used to populate the .plist template
+# Set a custom plist file for the App-Bundle
+SET(BUNDLE_IDENTIFIER "artcom.${APP_NAME}")
+SET(STATUSBAR_HIDDEN "true")
+
+configure_file (
+  "Info.plist.in"
+  ${PROJECT_BINARY_DIR}/Info.plist)
+
+# add the binary tree to the search path for include files
+# so that we will find Info.plist
+include_directories("${PROJECT_BINARY_DIR}")
+  
+SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST Info.plist)
 #SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer: xxx")
 
 LINK_DIRECTORIES("${SDKROOT}/usr/lib")
@@ -78,6 +78,7 @@ target_link_libraries(${EXECUTABLE_NAME} ${animation_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${ios_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${spark_LIBRARY_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${SparkViewerBase_LIBRARY_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${png_LIBRARY_DIRS})
 find_library(ZLIB_LIBRARY_DIRS
    NAMES z zlib
 )
@@ -106,7 +107,7 @@ add_custom_command(
 #add_custom_command( 
 #    TARGET ${EXECUTABLE_NAME} 
 #    POST_BUILD 
-#    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/#${EXECUTABLE_NAME}.app/ 
+#    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/#${EXECUTABLE_NAME}.app/
 #)
 
 #copy layouts folder
