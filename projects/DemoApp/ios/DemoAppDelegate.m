@@ -16,7 +16,10 @@
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];    
     [self initialize:@"DemoApp"];
-    myGLView = [[DemoAppGLView alloc]initWithFrame: [self getWindowBoundsWithBaseLayout:@"/main"]];}
+
+    // this call will also create the Spark-Application ...
+    myGLView = [[DemoAppGLView alloc]initWithFrame:[[UIScreen mainScreen] bounds]] ;
+}
 
 - (void)dealloc
 {
