@@ -117,9 +117,13 @@ namespace ios {
             GLubyte *buffer2 = (GLubyte *) malloc(textureWidth * textureHeight * 4);
             for(int y = 0; y < textureHeight; y++) {
                 for(int x = 0; x < textureWidth; x++) {
-                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+0] = (Byte) (theColor[0]*255.0f);
-                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+1] = (Byte) (theColor[1]*255.0f);
-                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+2] = (Byte) (theColor[2]*255.0f);
+                    
+                    bool isOpaque = bitmapData[y * textureWidth + x];
+                    float preMultAlpha = (isOpaque? theColor[3] : 0);
+                    
+                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+0] = (Byte) (theColor[0]*255.0f * preMultAlpha);
+                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+1] = (Byte) (theColor[1]*255.0f * preMultAlpha);
+                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+2] = (Byte) (theColor[2]*255.0f * preMultAlpha);
                     buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+3] = bitmapData[y * textureWidth + x];
                 }
             }
