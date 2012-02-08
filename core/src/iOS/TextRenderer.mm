@@ -118,12 +118,12 @@ namespace ios {
             for(int y = 0; y < textureHeight; y++) {
                 for(int x = 0; x < textureWidth; x++) {
                     
-                    float preMultAlpha = bitmapData[y * textureWidth + x] / 255.f;
+                    Byte alpha = bitmapData[y * textureWidth + x] ;
                     
-                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+0] = (Byte) (theColor[0]*255.0f * preMultAlpha);
-                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+1] = (Byte) (theColor[1]*255.0f * preMultAlpha);
-                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+2] = (Byte) (theColor[2]*255.0f * preMultAlpha);
-                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+3] = bitmapData[y * textureWidth + x];
+                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+0] = (Byte) (theColor[0] * alpha);
+                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+1] = (Byte) (theColor[1] * alpha);
+                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+2] = (Byte) (theColor[2] * alpha);
+                    buffer2[(textureHeight-1 - y) * textureWidth * 4 + x*4+3] = alpha;
                 }
             }
             //create Opengl Texture
