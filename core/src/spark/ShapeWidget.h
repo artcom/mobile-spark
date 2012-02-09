@@ -12,10 +12,9 @@
 
 #include "Widget.h"
 #include <masl/Callback.h>
+#include <mar/Shape.h>
 
 namespace mar {
-    class Shape;
-    typedef masl::Ptr<Shape> ShapePtr;
     class Material;
     typedef masl::Ptr<Material> MaterialPtr;
 }
@@ -34,7 +33,8 @@ namespace spark {
 
             virtual bool AABB2Dcontains(const float x, const float y,
                                         const matrix & theProjectionMatrix) const;
-
+            bool touches2DScreenCoords( mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
+    
             inline mar::ShapePtr getShape() const {return _myShape;};
             float getWorldZ() const;
             void setSize(const float theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
@@ -46,6 +46,7 @@ namespace spark {
 
         protected:
             virtual mar::ShapePtr createCustomShape(const mar::MaterialPtr theMaterial);
+            void makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
             mar::ShapePtr _myShape;
             virtual void propagateAlpha();
             std::string vertexShader_;

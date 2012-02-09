@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <iterator>
 
-#include <mar/Shape.h>
 #include <mar/Material.h>
 #include <animation/AnimationManager.h>
 
@@ -77,10 +76,9 @@ namespace spark {
             getShape()->setAlpha(getActualAlpha());
         }
     }
-    
-    bool
-    ShapeWidget::AABB2Dcontains(const float x, const float y,
-                                     const matrix & theProjectionMatrix) const {
+    void 
+    ShapeWidget::makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const{
+                                    
         mar::BoundingBox myBB = _myShape->getBoundingBox();
         //use 8 corner points
         vector4 corners[8];
@@ -124,40 +122,58 @@ namespace spark {
         DB(AC_DEBUG << " bounding box " << myBB.min << ", " << myBB.max;)
         DB(AC_DEBUG << "mv " << _myWorldMVMatrix << "p " << theProjectionMatrix << " final " << mvp;)
 
-        mar::BoundingBox myMVPBB;
-        myMVPBB.min = corners[0];
-        myMVPBB.max = corners[0];
+        theBB.min = corners[0];
+        theBB.max = corners[0];
         for (size_t i = 1; i < 8; ++i) {
-            if (corners[i][0] < myMVPBB.min[0]) {
-                myMVPBB.min[0] = corners[i][0];
+            if (corners[i][0] < theBB.min[0]) {
+                theBB.min[0] = corners[i][0];
             }
-            if (corners[i][1] < myMVPBB.min[1]) {
-                myMVPBB.min[1] = corners[i][1];
+            if (corners[i][1] < theBB.min[1]) {
+                theBB.min[1] = corners[i][1];
             }
-            if (corners[i][0] > myMVPBB.max[0]) {
-                myMVPBB.max[0] = corners[i][0];
+            if (corners[i][0] > theBB.max[0]) {
+                theBB.max[0] = corners[i][0];
             }
-            if (corners[i][1] > myMVPBB.max[1]) {
-                myMVPBB.max[1] = corners[i][1];
+            if (corners[i][1] > theBB.max[1]) {
+                theBB.max[1] = corners[i][1];
             }
         }
-        DB(AC_DEBUG << " projected bounding box " << myMVPBB.min << ", " << myMVPBB.max;)
+        DB(AC_DEBUG << " projected bounding box " << theBB.min << ", " << theBB.max;)
 
         //divide by w -> TODO: find cml method
-        myMVPBB.min[0] /= myMVPBB.min[3];
-        myMVPBB.min[1] /= myMVPBB.min[3];
-        myMVPBB.min[2] /= myMVPBB.min[3];
-        myMVPBB.min[3] /= myMVPBB.min[3];
-        myMVPBB.max[0] /= myMVPBB.min[3];
-        myMVPBB.max[1] /= myMVPBB.min[3];
-        myMVPBB.max[2] /= myMVPBB.min[3];
-        myMVPBB.max[3] /= myMVPBB.min[3];
+        theBB.min[0] /= theBB.min[3];
+        theBB.min[1] /= theBB.min[3];
+        theBB.min[2] /= theBB.min[3];
+        theBB.min[3] /= theBB.min[3];
+        theBB.max[0] /= theBB.min[3];
+        theBB.max[1] /= theBB.min[3];
+        theBB.max[2] /= theBB.min[3];
+        theBB.max[3] /= theBB.min[3];
 
         //+1/2
-        myMVPBB.min[0] = (myMVPBB.min[0] + 1) / 2;
-        myMVPBB.min[1] = (myMVPBB.min[1] + 1) / 2;
-        myMVPBB.max[0] = (myMVPBB.max[0] + 1) / 2;
-        myMVPBB.max[1] = (myMVPBB.max[1] + 1) / 2;
+        theBB.min[0] = (theBB.min[0] + 1) / 2;
+        theBB.min[1] = (theBB.min[1] + 1) / 2;
+        theBB.max[0] = (theBB.max[0] + 1) / 2;
+        theBB.max[1] = (theBB.max[1] + 1) / 2;
+        
+    }
+    
+    /** Returns TRUE if at least one point exists that is contained by both boxes;
+    */    
+    bool
+    ShapeWidget::touches2DScreenCoords( mar::BoundingBox & theBB,
+                                const matrix & theProjectionMatrix) const {
+        mar::BoundingBox myMVPBB;
+        makeMVPBB(myMVPBB, theProjectionMatrix);
+        bool myTouch = myMVPBB.touches2D(theBB);
+        return myTouch;
+    }
+    
+    bool
+    ShapeWidget::AABB2Dcontains(const float x, const float y,
+                                const matrix & theProjectionMatrix) const {
+        mar::BoundingBox myMVPBB;
+        makeMVPBB(myMVPBB, theProjectionMatrix);
         DB(AC_DEBUG << " projected bounding box " << myMVPBB.min << ", " << myMVPBB.max;)
         DB(AC_DEBUG << "pick at " << x << ", " << y;)
 

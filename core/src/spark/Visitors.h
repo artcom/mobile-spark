@@ -81,10 +81,12 @@ namespace spark {
 
     class CollectVisibleNodesVisitor : public ComponentVisitor {
     public:
-        CollectVisibleNodesVisitor(RenderList & theList);
+        CollectVisibleNodesVisitor(RenderList & theList, mar::BoundingBox & theScreenBB, const matrix theProjectionMatrix);
         virtual bool visit(ComponentPtr theComponent);
     private:
         RenderList & list_;
+        mar::BoundingBox & _myScreenBB;
+        matrix projectionMatrix_;
     };
 
 

@@ -45,6 +45,8 @@ namespace spark {
         RenderCameraPtr _myCamera;
         mar::ViewportPtr _myGLViewport;
         std::string _myWorldName;
+        float _myCanvasWidth;
+        float _myCanvasHeight;
     };
 
     typedef masl::Ptr<View> ViewPtr;

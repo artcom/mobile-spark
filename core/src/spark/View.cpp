@@ -55,8 +55,13 @@ namespace spark {
         AC_TRACE << " View::renderWorld ------------------ ";
         WidgetPtr myWorld = boost::static_pointer_cast<spark::Widget>(theWorld);
         myWorld->prerender(matrixStack);
+        mar::BoundingBox myVisibleBB;
+        myVisibleBB.min[0] = _myGLViewport->getPos()[0];
+        myVisibleBB.min[1] = _myGLViewport->getPos()[1];
+        myVisibleBB.max[0] = (_myGLViewport->getPos()[0] + _myGLViewport->getSize()[0]);
+        myVisibleBB.max[1] = (_myGLViewport->getPos()[1] + _myGLViewport->getSize()[1]);        
         RenderList myRenderList;
-        CollectVisibleNodesVisitor myVisitor(myRenderList);
+        CollectVisibleNodesVisitor myVisitor(myRenderList, myVisibleBB, _myCamera->getProjectionMatrix());
         parentFirstVisitComponents(myVisitor, myWorld);
         stable_sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
 
@@ -73,6 +78,8 @@ namespace spark {
         vector2 mySize = _myGLViewport->getSize();
         _myCamera->activate(mySize[0] * theCanvasWidth, mySize[1] * theCanvasHeight);
         _myGLViewport->activate(theCanvasWidth, theCanvasHeight);
+        _myCanvasWidth = theCanvasWidth;
+        _myCanvasHeight = theCanvasHeight;
     }
 
     std::string 

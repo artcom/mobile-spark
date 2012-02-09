@@ -25,6 +25,14 @@ namespace mar {
     struct BoundingBox {
         vector4 min;
         vector4 max;
+        bool touches2D(const BoundingBox & theOtherBox) const {
+           return
+                (masl::maximum(theOtherBox.min[0], min[0]) <=
+                 masl::minimum(theOtherBox.max[0], max[0])) &&
+                (masl::maximum(theOtherBox.min[1], min[1]) <=
+                 masl::minimum(theOtherBox.max[1], max[1]));
+        }
+        
     };
 
     class Shape {

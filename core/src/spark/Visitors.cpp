@@ -12,6 +12,9 @@
 #include <mar/Shape.h>
 #include "World.h"
 #include "Window.h"
+#include <vector>
+
+using namespace std;
 
 namespace spark {
 
@@ -101,7 +104,7 @@ namespace spark {
                 return false;
             } else {
                 ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(theComponent);
-                if (myShapeWidget && myShapeWidget->getShape() &&
+                if (myShapeWidget && myShapeWidget->getShape() &&                    
                     myShapeWidget->AABB2Dcontains(x_,y_,projectionMatrix_)) {
                     list_.push_back(std::make_pair(myShapeWidget, myShapeWidget->getWorldZ()));
                     AC_TRACE << "CollectAABBComponentVisitor collected: " << *myShapeWidget << ", z: " 
@@ -113,9 +116,10 @@ namespace spark {
     }
 
     CollectVisibleNodesVisitor::CollectVisibleNodesVisitor(
-            RenderList & theList) :
+            RenderList & theList, mar::BoundingBox & theScreenBB, const matrix theProjectionMatrix) :
                              ComponentVisitor(),
-                             list_(theList) {
+                             list_(theList), _myScreenBB(theScreenBB),
+                             projectionMatrix_(theProjectionMatrix) {
     }
 
     bool
@@ -128,7 +132,8 @@ namespace spark {
                 return false;
             } else {
                 ShapeWidgetPtr myShapeWidget = boost::dynamic_pointer_cast<ShapeWidget>(theComponent);
-                if (myShapeWidget && myShapeWidget->getShape()) {
+                if (myShapeWidget && myShapeWidget->getShape() && 
+                    myShapeWidget->touches2DScreenCoords(_myScreenBB, projectionMatrix_)) {
                     RenderKey myKey(myShapeWidget->getWorldZ(), myShapeWidget->getShape()->isTransparent());
                     list_.push_back(std::make_pair(myShapeWidget, myKey));
                     AC_TRACE << "CollectVisibleNodesVisitor collected: " << *myShapeWidget << ", worldZ: " 
