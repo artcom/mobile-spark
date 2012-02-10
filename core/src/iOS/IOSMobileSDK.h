@@ -34,10 +34,11 @@ namespace ios {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
-        bool playMovie(const std::string & theURL);
-        void stopMovie();
-        void pauseMovie();
-        void resetMovie();
+        
+        bool playMovie(spark::MoviePtr theMovieWidget);
+        void stopMovie(spark::MoviePtr theMovieWidget);
+        void pauseMovie(spark::MoviePtr theMovieWidget);
+        void resetMovie(spark::MoviePtr theMovieWidget);
         
         virtual void exit();
 

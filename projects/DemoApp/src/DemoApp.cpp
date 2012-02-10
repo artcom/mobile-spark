@@ -238,7 +238,16 @@ namespace demoapp {
         _mySlides[_myCurrentSlide]->setVisible(true);
         _mySlides[_myCurrentSlide]->setSensible(true);
 
-        AC_DEBUG << "found #" << _mySlides.size() << " slides";        
+        AC_DEBUG << "found #" << _mySlides.size() << " slides";  
+        
+        ComponentPtr mvSlidePtr = my2DWorld->getChildByName("MovieSlide");
+        
+        if(!mvSlidePtr)
+            AC_PRINT<<"BOOOOO";
+        
+        MoviePtr movie = boost::static_pointer_cast<Movie>(mvSlidePtr->getChildByName("testMovie") );
+        
+        movie->play();
     }
 
     void DemoApp::onPause() {

@@ -20,22 +20,49 @@ namespace spark {
         Image(theApp, theXMLNode)
     {
         moviesrc_ = _myXMLNode->getAttributeAs<std::string>("moviesrc", "");
+        
+        //play();
     }
 
     Movie::~Movie() {
         AC_INFO << "....destructor Movie " << getName();
     }
     
-    void Movie::play() {
-         masl::MobileSDK_Singleton::get().getNative()->playMovie(moviesrc_);
+    void Movie::prerender(MatrixStack& theCurrentMatrixStack)
+    {
+        ShapeWidget::prerender(theCurrentMatrixStack);
+        
+        if (isRendered()) 
+        {
+            // update texture here 
+            
+            // ( callback for new movie frames would be a better place to put this )
+
+        }
     }
-    void Movie::stop(){
-         masl::MobileSDK_Singleton::get().getNative()->stopMovie();
+    
+    void Movie::play() 
+    {
+        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
+        
+        masl::MobileSDK_Singleton::get().getNative()->playMovie(thisPtr);
     }
-    void Movie::pause(){
-         masl::MobileSDK_Singleton::get().getNative()->pauseMovie();
+    void Movie::stop()
+    {
+        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
+        
+        masl::MobileSDK_Singleton::get().getNative()->stopMovie(thisPtr);
     }
-    void Movie::reset(){
-         masl::MobileSDK_Singleton::get().getNative()->resetMovie();
+    void Movie::pause()
+    {
+        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
+        
+        masl::MobileSDK_Singleton::get().getNative()->pauseMovie(thisPtr);
+    }
+    void Movie::reset()
+    {
+        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
+        
+        masl::MobileSDK_Singleton::get().getNative()->resetMovie(thisPtr);
     }    
 }

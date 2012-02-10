@@ -35,8 +35,8 @@ SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "")
 #set target device: "1" -> iPhone, "2" -> iPad, "1,2 " -> both (remember the <whitespace> after the '2' !!!)
 SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1")
 
-SET(CMAKE_SYSTEM_PROCESSOR arm)
-SET(CMAKE_OSX_ARCHITECTURES armv7)
+#SET(CMAKE_SYSTEM_PROCESSOR i386)
+#SET(CMAKE_OSX_ARCHITECTURES i386)
 
 # Skip the platform compiler checks for cross compiling
 SET(CMAKE_CXX_COMPILER_WORKS TRUE)

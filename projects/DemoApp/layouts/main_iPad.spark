@@ -36,7 +36,11 @@
         <Controls x="20" y="20" z="20">
             <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="deco.png"/>
         </Controls>
-
+        
+		<Slide name="MovieSlide" alpha="1" title="Movie-Examples">
+            <Movie name="testMovie" src="vanessa.mp4" moviesrc="vanessa.mp4" x="0" y="0" z="0" width="480" height="320"/>
+        </Slide>
+        
         <Slide name="TextSlide" alpha="1" title="Text-Examples">
 	    <Text name="textblock2" y="610" x="500" text="Fontsize 24 - acswissmed.ttf" color="[1,1,1,1]" fontsize="22" font="acswissmed.ttf"/>
             <Text name="textblock2" y="570" x="500" text="Fontsize 22 - acswissmed.ttf" color="[1,1,1,1]" fontsize="20" font="acswissmed.ttf"/>

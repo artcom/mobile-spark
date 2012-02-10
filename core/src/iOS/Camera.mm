@@ -47,6 +47,9 @@
 	// Create the capture session
 	captureSession = [[AVCaptureSession alloc] init];
 	
+    // fill configuration queue
+    [captureSession beginConfiguration];
+    
 	// Add the video input	
 	NSError *error = nil;
 	videoInput = [[[AVCaptureDeviceInput alloc] initWithDevice:backFacingCamera error:&error] autorelease];
@@ -55,10 +58,14 @@
 		[captureSession addInput:videoInput];
 	}
 	
+    #pragma mark - videoPreviewLayer needed here ?
+    // TODO: videoPreviewLayer needed here ?
 	[self videoPreviewLayer];
+    
 	// Add the video frame output	
 	videoOutput = [[AVCaptureVideoDataOutput alloc] init];
 	[videoOutput setAlwaysDiscardsLateVideoFrames:YES];
+    
 	// Use RGB frames instead of YUV to ease color processing
 	[videoOutput setVideoSettings:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA] forKey:(id)kCVPixelBufferPixelFormatTypeKey]];
     
@@ -71,6 +78,9 @@
 	}
     [captureSession setSessionPreset:AVCaptureSessionPresetHigh];
 	//[captureSession setSessionPreset:AVCaptureSessionPreset640x480];
+    
+    // apply all settings as batch
+    [captureSession commitConfiguration];
 	
     return self;
 }

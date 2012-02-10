@@ -11,6 +11,7 @@
 #define _ac_mobile_masl_MobileSDK_h_included_
 
 #include "Singleton.h"
+#include "spark/Movie.h"
 
 namespace masl {
     struct CameraInfo{
@@ -43,10 +44,13 @@ namespace masl {
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
         virtual bool isCameraCapturing() = 0;
-        virtual bool playMovie(const std::string & theURL) = 0;
-        virtual void stopMovie() = 0;
-        virtual void pauseMovie() = 0;
-        virtual void resetMovie() = 0;
+        
+        // Movie Controls
+        virtual bool playMovie(spark::MoviePtr theMovieWidget) = 0;
+        virtual void stopMovie(spark::MoviePtr theMovieWidget) = 0;
+        virtual void pauseMovie(spark::MoviePtr theMovieWidget) = 0;
+        virtual void resetMovie(spark::MoviePtr theMovieWidget) = 0;
+        
         virtual void exit() = 0;
         
         virtual std::string getOrientation() = 0;

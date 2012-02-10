@@ -17,6 +17,10 @@ namespace spark {
     public:
         Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Movie();
+        
+        // overwrite from ShapeWidget
+        virtual void prerender(MatrixStack& theCurrentMatrixStack);
+        
         void play();   // start playback at playcursor
         void stop();   // stop videoplayback
         void pause();  // pause video and do not touch playcursor

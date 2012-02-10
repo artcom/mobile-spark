@@ -14,6 +14,8 @@
 
 #import "Camera.h"
 
+#import <AVFoundation/AVFoundation.h>
+#include "MovieBackend.h"
 
 namespace ios 
 {
@@ -24,12 +26,30 @@ namespace ios
 
     IOSMobileSDK::~IOSMobileSDK() {}
 
-    void IOSMobileSDK::vibrate(long theDurationMillisec) {
+    void IOSMobileSDK::vibrate(long theDurationMillisec) 
+    {
+        
     }
-    bool IOSMobileSDK::playMovie(const std::string & theURL) { return true;}
-    void IOSMobileSDK::stopMovie() {}
-    void IOSMobileSDK::pauseMovie() {}
-    void IOSMobileSDK::resetMovie() {}
+    
+    bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
+    {
+        MovieBackendPtr movieBackend = MovieBackendPtr(new MovieBackend);
+        
+        std::string filePath;
+        
+        if (theMovieWidget->getSrc().size() > 0 ) {
+            if (!masl::searchFile(theMovieWidget->getSrc(), filePath)) 
+                return false;
+        }
+        
+        movieBackend->playMovie(filePath);
+        
+        return true;
+    }
+    
+    void IOSMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) {}
+    void IOSMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget) {}
+    void IOSMobileSDK::resetMovie(spark::MoviePtr theMovieWidget) {}
 
     masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 
                                             int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
@@ -38,7 +58,7 @@ namespace ios
         masl::TextInfo textInfo;        
         
         TextRendererPtr textRenderer = TextRendererPtr(new TextRenderer());
-        textRenderer.get()->renderText(theMessage.substr(theStartIndex), theTextureId, theFontSize, theColor, (float) theMaxWidth, (float) theMaxHeight, theAlign, theFontPath,theLineHeight, theStartIndex);
+        textRenderer->renderText(theMessage.substr(theStartIndex), theTextureId, theFontSize, theColor, (float) theMaxWidth, (float) theMaxHeight, theAlign, theFontPath,theLineHeight, theStartIndex);
         
         textInfo.textureID = textRenderer.get()->getTextureID();
         textInfo.height = textRenderer.get()->getTextureHeight();
@@ -123,19 +143,29 @@ namespace ios
         
         AC_DEBUG << "w x h : " << width << ", " << height;
         
-        if (alphaInfo == kCGImageAlphaPremultipliedLast) {
+        if (alphaInfo == kCGImageAlphaPremultipliedLast) 
+        {
             AC_DEBUG << "alpha";
+            
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                          GL_UNSIGNED_BYTE, (GLvoid*) data);
+            
             hasAlpha = true;
-        } else if (alphaInfo == kCGImageAlphaNoneSkipLast) {
+        } 
+        else if (alphaInfo == kCGImageAlphaNoneSkipLast) 
+        {
             AC_DEBUG << "no alpha";
+            
             // RGBX format, where we want to skip X
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                          GL_UNSIGNED_BYTE, (GLvoid*) data);
+            
             hasAlpha = false;
-        } else {
+        } 
+        else 
+        {
             AC_DEBUG << "unknown color type " << alphaInfo;
         }
         
