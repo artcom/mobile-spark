@@ -58,7 +58,7 @@ namespace spark {
 
 
     BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
-        _mySetupFlag(false){
+        _mySetupFlag(false), _myOneBaseAppOnFrameCallPerRenderloopFlag(false){
         masl::initSignalHandling();
     }
 
@@ -139,6 +139,7 @@ namespace spark {
     
     void BaseApp::handleEvents() {
         AC_PRINT << "-----------------------------------------------";
+        _myOneBaseAppOnFrameCallPerRenderloopFlag = false;
         // ------------------------------ handle event strategy -------------------------------------------------
         // do not delay or ignore systemrelevant events
         // handle the first incoming type of classtype and type events
@@ -185,7 +186,7 @@ namespace spark {
                 myIgnoreEventFilter[(*it)->getType()] = true;
                 myDelayEventFilter[(*it)->classname_()] = true;
                 (*it)->connect(_mySparkWindow);
-                AC_TRACE << "handle event: " << (*(*it));
+                AC_PRINT << "handle event: " << (*(*it));
                 (*(*it))();
                 myHandledEventCounter++;
             } else {
@@ -193,7 +194,7 @@ namespace spark {
                     AC_TRACE << "delay event: " << (*it)->getType(); 
                     myDelayedEvents.push_back((*it));               
                 } else {
-                    AC_TRACE << "ignore event: " << (*it)->getType(); 
+                    AC_PRINT << "ignore event: " << (*it)->getType(); 
                 }
             }
             ++i;
@@ -206,13 +207,17 @@ namespace spark {
     
 
     void BaseApp::onFrame(EventPtr theEvent) {
-        boost::timer::timer myTimer;
-        AC_TRACE << "onFrame";
-        StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
-        animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
-        _mySparkWindow->render();
-        AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
-        AC_PRINT << "OnFrame duration " << myTimer.elapsed() << " s";
+        if (!_myOneBaseAppOnFrameCallPerRenderloopFlag) {
+            AC_PRINT << "################## onFrame";
+            boost::timer::timer myTimer;
+            AC_TRACE << "onFrame";
+            StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
+            animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
+            _mySparkWindow->render();
+            AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
+            AC_PRINT << "OnFrame duration " << myTimer.elapsed() << " s";
+        }
+        _myOneBaseAppOnFrameCallPerRenderloopFlag = true;
     }
     
    
