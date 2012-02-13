@@ -208,14 +208,13 @@ namespace spark {
 
     void BaseApp::onFrame(EventPtr theEvent) {
         if (!_myOneBaseAppOnFrameCallPerRenderloopFlag) {
-            AC_PRINT << "################## onFrame";
             boost::timer::timer myTimer;
             AC_TRACE << "onFrame";
             StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
             animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
             _mySparkWindow->render();
             AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
-            AC_PRINT << "OnFrame duration " << myTimer.elapsed() << " s";
+            AC_TRACE << "OnFrame duration " << myTimer.elapsed() << " s";
         }
         _myOneBaseAppOnFrameCallPerRenderloopFlag = true;
     }
