@@ -66,14 +66,14 @@ namespace spark {
         CollectVisibleNodesVisitor myVisitor(myRenderList, myVisibleBB, _myCamera->getProjectionMatrix());
         parentFirstVisitComponents(myVisitor, myWorld);
         stable_sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
-        AC_PRINT << "View::renderWord create renderlist: " << myTimer.elapsed() << " s";
+        //AC_PRINT << "View::renderWord create renderlist: " << myTimer.elapsed() << " s";
 
         boost::timer::timer myTimer2;
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
             AC_TRACE << " View::renderWorld render component: " << it->first->getName();
             it->first->render(_myCamera->getProjectionMatrix());
         }
-        AC_PRINT << "View::renderWord render renderlist: " << myTimer2.elapsed() << " s";
+        //AC_PRINT << "View::renderWord render renderlist: " << myTimer2.elapsed() << " s";
     }
 
     void
