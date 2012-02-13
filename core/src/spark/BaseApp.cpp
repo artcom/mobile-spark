@@ -138,6 +138,7 @@ namespace spark {
     }
     
     void BaseApp::handleEvents() {
+        AC_PRINT << "-----------------------------------------------";
         // ------------------------------ handle event strategy -------------------------------------------------
         // do not delay or ignore systemrelevant events
         // handle the first incoming type of classtype and type events
@@ -200,7 +201,7 @@ namespace spark {
         //_myEvents.clear();        
         _myEvents = myDelayedEvents;
         AC_TRACE << "################ handle events finished " << myHandledEventCounter;
-        AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " s";
+        AC_PRINT << "handleEvents duration " << myTimer.elapsed() << " s";
     }
     
 
@@ -211,7 +212,7 @@ namespace spark {
         animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
         _mySparkWindow->render();
         AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
-        AC_TRACE << "OnFrame duration " << myTimer.elapsed() << " s";
+        AC_PRINT << "OnFrame duration " << myTimer.elapsed() << " s";
     }
     
    
