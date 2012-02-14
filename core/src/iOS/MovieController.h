@@ -34,6 +34,10 @@ namespace ios {
         void copyNextFrameToTexture();
         
         GLuint getTextureID(){return textureID;};
+        
+        int getWidth(){return width;};
+        int getHeight(){return height;};
+        
     };
     
     typedef masl::Ptr<MovieController> MovieControllerPtr;

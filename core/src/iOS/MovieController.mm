@@ -102,7 +102,7 @@ namespace ios {
             
             CVPixelBufferLockBaseAddress(pixelBuffer, 0);
             
-            //AC_TRACE<<"captureOutput width: "<<width <<" height: "<<height;
+            //std::cout<<"captureOutput width: "<<width <<" height: "<<height;
             
             
             glBindTexture(GL_TEXTURE_2D, textureID);

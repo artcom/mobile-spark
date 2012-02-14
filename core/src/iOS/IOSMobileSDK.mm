@@ -52,6 +52,8 @@ namespace ios
     
     void IOSMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget)
     {
+        // TODO: choose corresponding movieController for the widget
+        
         m_movieControl->copyNextFrameToTexture();
     }
     
@@ -61,6 +63,10 @@ namespace ios
         masl::MovieInfo movieInfo;
         
         movieInfo.textureID = m_movieControl->getTextureID();
+        
+        movieInfo.width = m_movieControl->getWidth();
+        
+        movieInfo.height = m_movieControl->getHeight();
         
         return movieInfo;
     }

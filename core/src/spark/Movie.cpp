@@ -17,7 +17,7 @@ namespace spark {
     const char * const Movie::SPARK_TYPE = "Movie";
 
     Movie::Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        ShapeWidget(theApp, theXMLNode)
+        Image(theApp, theXMLNode)
     {
         _moviesrc = _myXMLNode->getAttributeAs<std::string>("moviesrc", "");
         
@@ -49,6 +49,13 @@ namespace spark {
             
             // inject texture name 
             myMaterial->getTextureUnit()->getTexture()->textureId_ = myMovieInfo.textureID;
+            
+            _myTextureSize = vector2(myMovieInfo.width, myMovieInfo.height);
+            _myRealImageSize = _myTextureSize;
+            
+            float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
+            float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
+            setSize(myWidth, myHeight);
             
         } 
         else 

@@ -27,7 +27,7 @@ namespace spark {
         virtual const char * const & getType() const { return Image::SPARK_TYPE;};
     protected:
         virtual void build();
-    private:
+    
         vector2 _myTextureSize;     // this is the size of the gl texture
         vector2 _myRealImageSize;   // this is the size of the asset image
         vector2 _myForcedSize;      // this is the gl quad size

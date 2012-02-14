@@ -13,7 +13,7 @@
 #include "Image.h"
 
 namespace spark {
-    class Movie : public ShapeWidget {
+    class Movie : public Image {
     public:
         Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Movie();
@@ -30,7 +30,7 @@ namespace spark {
         
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Movie::SPARK_TYPE;};
-    protected:
+
     private:
         std::string _moviesrc;
     };
