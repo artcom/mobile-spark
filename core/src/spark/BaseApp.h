@@ -48,6 +48,7 @@ namespace spark {
         private:
             EventPtrList _myEvents;    
             masl::ThreadLock _myLock;
+            bool _myOneBaseAppOnFrameCallPerRenderloopFlag;
 
             
     };

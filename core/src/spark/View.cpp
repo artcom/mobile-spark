@@ -10,6 +10,7 @@
 #include "View.h"
 
 #include <string>
+#include <boost/progress.hpp>
 
 #include <masl/XMLNode.h>
 #include <mar/openGL_functions.h>
@@ -60,15 +61,19 @@ namespace spark {
         myVisibleBB.min[1] = _myGLViewport->getPos()[1];
         myVisibleBB.max[0] = (_myGLViewport->getPos()[0] + _myGLViewport->getSize()[0]);
         myVisibleBB.max[1] = (_myGLViewport->getPos()[1] + _myGLViewport->getSize()[1]);        
+        boost::timer::timer myTimer;
         RenderList myRenderList;
         CollectVisibleNodesVisitor myVisitor(myRenderList, myVisibleBB, _myCamera->getProjectionMatrix());
         parentFirstVisitComponents(myVisitor, myWorld);
         stable_sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
+        //AC_PRINT << "View::renderWord create renderlist: " << myTimer.elapsed() << " s";
 
+        boost::timer::timer myTimer2;
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
             AC_TRACE << " View::renderWorld render component: " << it->first->getName();
             it->first->render(_myCamera->getProjectionMatrix());
         }
+        //AC_PRINT << "View::renderWord render renderlist: " << myTimer2.elapsed() << " s";
     }
 
     void
