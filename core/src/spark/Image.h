@@ -30,7 +30,7 @@ namespace spark {
     private:
         vector2 _myTextureSize;     // this is the size of the gl texture
         vector2 _myRealImageSize;   // this is the size of the asset image
-        vector2 _myForcedSize;      // this the gl quad size
+        vector2 _myForcedSize;      // this is the gl quad size
     };
 
     typedef masl::Ptr<Image> ImagePtr;

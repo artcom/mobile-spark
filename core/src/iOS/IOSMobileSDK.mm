@@ -14,9 +14,6 @@
 
 #import "Camera.h"
 
-#import <AVFoundation/AVFoundation.h>
-#include "MovieBackend.h"
-
 namespace ios 
 {
     IOSMobileSDK::IOSMobileSDK()
@@ -33,7 +30,9 @@ namespace ios
     
     bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
     {
-        MovieBackendPtr movieBackend = MovieBackendPtr(new MovieBackend);
+        //m_movieControl = MovieBackendPtr(new MovieController);
+
+        m_movieControl = MovieControllerPtr(new MovieController);
         
         std::string filePath;
         
@@ -42,7 +41,7 @@ namespace ios
                 return false;
         }
         
-        movieBackend->playMovie(filePath);
+        m_movieControl->playMovie(filePath);
         
         return true;
     }
@@ -50,7 +49,22 @@ namespace ios
     void IOSMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) {}
     void IOSMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget) {}
     void IOSMobileSDK::resetMovie(spark::MoviePtr theMovieWidget) {}
-
+    
+    void IOSMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget)
+    {
+        m_movieControl->copyNextFrameToTexture();
+    }
+    
+    masl::MovieInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget)
+    {
+        //Camera * myCamera = [Camera instance];
+        masl::MovieInfo movieInfo;
+        
+        movieInfo.textureID = m_movieControl->getTextureID();
+        
+        return movieInfo;
+    }
+    
     masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 
                                             int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
                                             int theLineHeight, int theStartIndex, bool & mirrorFlag) {

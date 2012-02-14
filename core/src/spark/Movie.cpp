@@ -17,11 +17,12 @@ namespace spark {
     const char * const Movie::SPARK_TYPE = "Movie";
 
     Movie::Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        Image(theApp, theXMLNode)
+        ShapeWidget(theApp, theXMLNode)
     {
-        moviesrc_ = _myXMLNode->getAttributeAs<std::string>("moviesrc", "");
+        _moviesrc = _myXMLNode->getAttributeAs<std::string>("moviesrc", "");
         
-        //play();
+        mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
+        _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
     Movie::~Movie() {
@@ -34,10 +35,25 @@ namespace spark {
         
         if (isRendered()) 
         {
-            // update texture here 
+            // Construct a shared ptr to this
+            MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
             
-            // ( callback for new movie frames would be a better place to put this )
-
+            // retrieve MovieInfo
+            masl::MovieInfo myMovieInfo = masl::MobileSDK_Singleton::get().getNative()->getMovieInfo(thisPtr);
+            
+            // load Material
+            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+            
+            // trigger update for OpenGL texture
+            masl::MobileSDK_Singleton::get().getNative()->updateMovieTexture(thisPtr);
+            
+            // inject texture name 
+            myMaterial->getTextureUnit()->getTexture()->textureId_ = myMovieInfo.textureID;
+            
+        } 
+        else 
+        {
+            // stop movie if playing
         }
     }
     

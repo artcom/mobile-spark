@@ -13,7 +13,7 @@
 #include "Image.h"
 
 namespace spark {
-    class Movie : public Image {
+    class Movie : public ShapeWidget {
     public:
         Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Movie();
@@ -26,11 +26,13 @@ namespace spark {
         void pause();  // pause video and do not touch playcursor
         void reset();  // set playcursor to video start 
         
+        const std::string & getSrc() const {return _moviesrc;};
+        
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Movie::SPARK_TYPE;};
     protected:
     private:
-        std::string moviesrc_;
+        std::string _moviesrc;
     };
 
     typedef masl::Ptr<Movie> MoviePtr;

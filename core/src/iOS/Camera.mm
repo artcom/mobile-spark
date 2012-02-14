@@ -76,8 +76,11 @@
 	} else {
 		AC_ERROR << "Couldn't add video output";
 	}
-    [captureSession setSessionPreset:AVCaptureSessionPresetHigh];
-	//[captureSession setSessionPreset:AVCaptureSessionPreset640x480];
+    
+    // too much workload e.g. on Iphone 4s (larger cam-resolution)
+    //[captureSession setSessionPreset:AVCaptureSessionPresetHigh];
+    
+	[captureSession setSessionPreset:AVCaptureSessionPreset640x480];
     
     // apply all settings as batch
     [captureSession commitConfiguration];

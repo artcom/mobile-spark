@@ -13,6 +13,7 @@
 #include <masl/MobileSDK.h>
 #include <masl/numeric_functions.h>
 
+#include "MovieController.h"
 
 namespace ios {
     
@@ -39,6 +40,8 @@ namespace ios {
         void stopMovie(spark::MoviePtr theMovieWidget);
         void pauseMovie(spark::MoviePtr theMovieWidget);
         void resetMovie(spark::MoviePtr theMovieWidget);
+        void updateMovieTexture(spark::MoviePtr theMovieWidget);
+        masl::MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget);
         
         virtual void exit();
 
@@ -46,6 +49,9 @@ namespace ios {
         
     private:
         std::string m_orientationString;
+        
+        // only tmp
+        MovieControllerPtr m_movieControl;
     };
 
     typedef masl::Ptr<IOSMobileSDK> IOSMobileSDKPtr;

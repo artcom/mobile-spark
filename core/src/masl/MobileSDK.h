@@ -21,6 +21,10 @@ namespace masl {
         int texturewidth;
         int textureheight;
     };
+    
+    // alias for Movies
+    typedef CameraInfo MovieInfo;
+    
     struct TextInfo{
         unsigned int textureID;
         int width;
@@ -37,9 +41,12 @@ namespace masl {
         virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                          unsigned int & width, unsigned int & height, 
                                          unsigned int & real_width, unsigned int & real_height,
-                                         bool & hasAlpha) = 0;                                                    
-        virtual void updateCameraTexture() = 0;
+                                         bool & hasAlpha) = 0; 
+        
         virtual void freezeMobileOrientation(const std::string & theOrientation) = 0;
+        
+        // Camera
+        virtual void updateCameraTexture() = 0;
         virtual CameraInfo getCameraSpec() = 0;
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
@@ -50,6 +57,8 @@ namespace masl {
         virtual void stopMovie(spark::MoviePtr theMovieWidget) = 0;
         virtual void pauseMovie(spark::MoviePtr theMovieWidget) = 0;
         virtual void resetMovie(spark::MoviePtr theMovieWidget) = 0;
+        virtual void updateMovieTexture(spark::MoviePtr theMovieWidget) = 0;
+        virtual MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) = 0;
         
         virtual void exit() = 0;
         
