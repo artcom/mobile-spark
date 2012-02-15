@@ -27,7 +27,8 @@
     int width;
     int height;
 
-        
+    CVOpenGLESTextureRef _bgraTexture;
+    CVOpenGLESTextureCacheRef _videoTextureCache;
 
 }
 + (Camera *) instance;

@@ -33,6 +33,18 @@
     if (!(self = [super init]))
 		return nil;
 	
+    _bgraTexture = NULL;
+    
+    //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
+    CVReturn err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault,
+                                                NULL,
+                                                (__bridge void *)[EAGLContext currentContext],
+                                                NULL, &_videoTextureCache);
+    if (err) 
+    {
+        AC_ERROR<<"Error at CVOpenGLESTextureCacheCreate: "<<err;
+    }
+    
 	// Grab the back-facing camera
 	AVCaptureDevice *backFacingCamera = nil;
 	NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -43,7 +55,7 @@
 			backFacingCamera = device;
 		}
 	}
-	
+
 	// Create the capture session
 	captureSession = [[AVCaptureSession alloc] init];
 	
@@ -58,8 +70,7 @@
 		[captureSession addInput:videoInput];
 	}
 	
-    #pragma mark - videoPreviewLayer needed here ?
-    // TODO: videoPreviewLayer needed here ?
+    // TODO: videoPreviewLayer needed here?
 	[self videoPreviewLayer];
     
 	// Add the video frame output	
@@ -67,6 +78,7 @@
 	[videoOutput setAlwaysDiscardsLateVideoFrames:YES];
     
 	// Use RGB frames instead of YUV to ease color processing
+    // TODO: do YUV colour conversion in shader
 	[videoOutput setVideoSettings:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA] forKey:(id)kCVPixelBufferPixelFormatTypeKey]];
     
     [videoOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
@@ -110,23 +122,59 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    
 	height = CVPixelBufferGetHeight(pixelBuffer);
 	width = CVPixelBufferGetWidth(pixelBuffer);
 	AC_TRACE<<"captureOutput width: "<<width <<" height: "<<height;
     
+    if (_bgraTexture)
+    {
+        CFRelease(_bgraTexture);
+        _bgraTexture = NULL;
+    }
     
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// This is necessary for non-power-of-two textures
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	
-	// Using BGRA extension to pull in video frame data directly
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(pixelBuffer));
+    // Periodic texture cache flush every frame
+    CVOpenGLESTextureCacheFlush(_videoTextureCache, 0);
     
-	CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    if (!_videoTextureCache)
+    {
+        printf("No video texture cache\n");
+        return;
+    }
+    CVReturn err;
+
+    
+    err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault, 
+                                                       _videoTextureCache,
+                                                       pixelBuffer,
+                                                       NULL,
+                                                       GL_TEXTURE_2D,
+                                                       GL_RGBA,
+                                                       width,
+                                                       height,
+                                                       GL_BGRA,
+                                                       GL_UNSIGNED_BYTE,
+                                                       0,
+                                                       &_bgraTexture);
+    
+    textureID = CVOpenGLESTextureGetName(_bgraTexture);
+    
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+//  CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+//	glBindTexture(GL_TEXTURE_2D, textureID);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//	// This is necessary for non-power-of-two textures
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+//	
+//	// Using BGRA extension to pull in video frame data directly
+//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(pixelBuffer));
+//    
+//	CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
 
 }
 

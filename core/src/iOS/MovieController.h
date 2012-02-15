@@ -12,6 +12,8 @@
 
 #import <OpenGLES/ES2/gl.h>
 
+#import <CoreVideo/CVOpenGLESTextureCache.h>
+
 #include "masl/Ptr.h"
 
 
@@ -25,6 +27,9 @@ namespace ios {
         GLuint textureID;
         int width;
         int height;
+        
+        CVOpenGLESTextureRef _bgraTexture;
+        CVOpenGLESTextureCacheRef _videoTextureCache;   
         
     public:
         MovieController();
