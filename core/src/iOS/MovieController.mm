@@ -30,8 +30,6 @@ namespace ios {
     MovieController::MovieController():_bgraTexture(NULL),
     _avStruct(AVStructPtr(new AVStruct))
     {
-        //glGenTextures(1, &textureID);
-        
         //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
         CVReturn err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault,
                                                     NULL,
@@ -70,7 +68,6 @@ namespace ios {
              NSArray *tracksArray = [asset tracksWithMediaType:AVMediaTypeVideo];
              
              printf("ALL TRACK # : %d\n",[[asset tracks] count]);
-             
              printf("VIDEO TRACK # : %d\n",[tracksArray count]);
              
              
@@ -101,13 +98,25 @@ namespace ios {
                  {
                      NSLog(@"Error: AssetReader could not be initialized ...");
                  }
-                 
-                 NSLog(@"WE GOT IT LOADED");
-                 
              }
              
              
          }];
+    }
+    
+    void MovieController::stop()
+    {
+    
+    }
+    
+    void MovieController::pause()
+    {
+    
+    }
+    
+    void MovieController::reset()
+    {
+    
     }
     
     void MovieController::copyNextFrameToTexture()

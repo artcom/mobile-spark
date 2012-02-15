@@ -38,6 +38,10 @@ namespace ios {
         virtual ~MovieController();
         
         void playMovie(const std::string &filePath);
+        void stop();
+        void pause();
+        void reset();
+        
         void copyNextFrameToTexture();
         
         GLuint getTextureID(){return textureID;};

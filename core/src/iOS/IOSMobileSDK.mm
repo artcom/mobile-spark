@@ -30,9 +30,7 @@ namespace ios
     
     bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
     {
-        //m_movieControl = MovieBackendPtr(new MovieController);
-
-        m_movieControl = MovieControllerPtr(new MovieController);
+        //m_movieControl = MovieControllerPtr(new MovieController);
         
         std::string filePath;
         
@@ -41,20 +39,35 @@ namespace ios
                 return false;
         }
         
-        m_movieControl->playMovie(filePath);
+        _movieMap[theMovieWidget] = MovieControllerPtr(new MovieController);
+        
+        _movieMap[theMovieWidget]->playMovie(filePath);
         
         return true;
     }
     
-    void IOSMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) {}
-    void IOSMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget) {}
-    void IOSMobileSDK::resetMovie(spark::MoviePtr theMovieWidget) {}
+    void IOSMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) 
+    {
+        _movieMap[theMovieWidget]->stop();
+        
+        _movieMap.erase(theMovieWidget);
+    }
+    
+    void IOSMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget) 
+    {
+        _movieMap[theMovieWidget]->pause();
+    }
+    
+    void IOSMobileSDK::resetMovie(spark::MoviePtr theMovieWidget) 
+    {
+        _movieMap[theMovieWidget]->reset();
+    }
     
     void IOSMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget)
     {
         // TODO: choose corresponding movieController for the widget
         
-        m_movieControl->copyNextFrameToTexture();
+        _movieMap[theMovieWidget]->copyNextFrameToTexture();
     }
     
     masl::MovieInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget)
@@ -62,11 +75,11 @@ namespace ios
         //Camera * myCamera = [Camera instance];
         masl::MovieInfo movieInfo;
         
-        movieInfo.textureID = m_movieControl->getTextureID();
+        movieInfo.textureID = _movieMap[theMovieWidget]->getTextureID();
         
-        movieInfo.width = m_movieControl->getWidth();
+        movieInfo.width = _movieMap[theMovieWidget]->getWidth();
         
-        movieInfo.height = m_movieControl->getHeight();
+        movieInfo.height = _movieMap[theMovieWidget]->getHeight();
         
         return movieInfo;
     }
