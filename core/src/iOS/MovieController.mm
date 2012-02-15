@@ -12,17 +12,22 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 
+#include "masl/Logger.h"
+
 namespace ios {
     
     struct AVStruct
     {
-        AVAssetReaderTrackOutput *trackOut;
+        AVAssetReaderTrackOutput *videoOut, *audioOut;
         AVAssetReader *assetReader;
         
-        AVStruct():trackOut(NULL),assetReader(NULL){};
+        AVStruct(): videoOut(NULL),
+                    audioOut(NULL),
+                    assetReader(NULL){};
         ~AVStruct()
         {
-            if(trackOut) [trackOut release];
+            if(videoOut) [videoOut release];
+            if(audioOut) [audioOut release];
             if(assetReader) [assetReader release];
         };
     };
@@ -37,7 +42,7 @@ namespace ios {
                                                     NULL, &_videoTextureCache);
         if (err) 
         {
-            NSLog(@"Error at CVOpenGLESTextureCacheCreate %d", err);
+            AC_ERROR<<"Error at CVOpenGLESTextureCacheCreate :"<< err;
             return;
         }
     }
@@ -61,43 +66,64 @@ namespace ios {
                              completionHandler:
          ^{
              // completion code
+             NSError *error = nil;
              
              printf("Asset loading complete for: %s\n",[[asset.URL absoluteString] UTF8String]);
              
              //NSArray *tracksArray = [asset tracksWithMediaCharacteristic:AVMediaCharacteristicVisual];
-             NSArray *tracksArray = [asset tracksWithMediaType:AVMediaTypeVideo];
              
-             printf("ALL TRACK # : %d\n",[[asset tracks] count]);
-             printf("VIDEO TRACK # : %d\n",[tracksArray count]);
+             NSArray *videoTrackArray = [asset tracksWithMediaType:AVMediaTypeVideo];
+             NSArray *audioTrackArray = [asset tracksWithMediaType:AVMediaTypeAudio];
              
+             printf("ALL TRACKS # : %d\n",[[asset tracks] count]);
+             printf("VIDEO TRACKS # : %d\n",[videoTrackArray count]);
              
-             if([tracksArray count])
+             _avStruct->assetReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
+             
+             if([videoTrackArray count])
              {
-                 NSError *error = nil;
-                 
-                 AVAssetTrack *videoTrack = [tracksArray objectAtIndex:0];
+
+                 AVAssetTrack *videoTrack = [videoTrackArray objectAtIndex:0];
                  
                  NSMutableDictionary* outSettings = [NSMutableDictionary 
                                                      dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA] 
                                                      forKey:(NSString*)kCVPixelBufferPixelFormatTypeKey];
                  
-//                 m_trackOutput = 
-                 _avStruct->trackOut = [[AVAssetReaderTrackOutput alloc] initWithTrack:videoTrack outputSettings:outSettings];
-                 
-                 _avStruct->assetReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
+                 _avStruct->videoOut = [[AVAssetReaderTrackOutput alloc] initWithTrack:videoTrack outputSettings:outSettings];
                  
                  if(!error)
                  {
-                     [_avStruct->assetReader addOutput:_avStruct->trackOut];
-                     if (![_avStruct->assetReader startReading]) 
-                     {
-                         NSLog(@"Error: AssetReader could not start reading ...");
-                     }
+                     [_avStruct->assetReader addOutput:_avStruct->videoOut];
                  }
                  else
                  {
-                     NSLog(@"Error: AssetReader could not be initialized ...");
+                     NSLog(@"Error: AssetReader could not add video-track ...");
                  }
+             }
+             
+             if([audioTrackArray count])
+             {
+                 
+                 AVAssetTrack *audioTrack = [audioTrackArray objectAtIndex:0];
+                 
+                 NSMutableDictionary* outSettings = nil;
+                 
+                 _avStruct->audioOut = [[AVAssetReaderTrackOutput alloc] initWithTrack:audioTrack outputSettings:outSettings];
+                 
+                 if(!error)
+                 {
+                     [_avStruct->assetReader addOutput:_avStruct->audioOut];
+                 }
+                 else
+                 {
+                     NSLog(@"Error: AssetReader could not add audio-track ...");
+                 }
+             }
+
+             
+             if (![_avStruct->assetReader startReading]) 
+             {
+                 NSLog(@"Error: AssetReader could not start reading ...");
              }
              
              
@@ -124,7 +150,7 @@ namespace ios {
         CMSampleBufferRef sampleBuffer = NULL;
 
         if([_avStruct->assetReader status] == AVAssetReaderStatusReading)
-            sampleBuffer = [_avStruct->trackOut copyNextSampleBuffer];
+            sampleBuffer = [_avStruct->videoOut copyNextSampleBuffer];
         
         if(sampleBuffer)
         {

@@ -46,7 +46,7 @@ namespace masl {
         virtual void freezeMobileOrientation(const std::string & theOrientation) = 0;
         
         // Camera
-        virtual void updateCameraTexture() = 0;
+        //virtual void updateCameraTexture() = 0;
         virtual CameraInfo getCameraSpec() = 0;
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;

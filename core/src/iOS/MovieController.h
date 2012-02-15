@@ -21,7 +21,6 @@ namespace ios {
     class MovieController 
     {
     private:
-        //AVAssetReaderTrackOutput *m_trackOutput;
         
         GLuint textureID;
         int width;
