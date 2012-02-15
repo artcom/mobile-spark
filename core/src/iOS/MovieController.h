@@ -11,7 +11,6 @@
 #define _included_mobile_ios_MovieController_
 
 #import <OpenGLES/ES2/gl.h>
-
 #import <CoreVideo/CVOpenGLESTextureCache.h>
 
 #include "masl/Ptr.h"
@@ -29,7 +28,10 @@ namespace ios {
         int height;
         
         CVOpenGLESTextureRef _bgraTexture;
-        CVOpenGLESTextureCacheRef _videoTextureCache;   
+        CVOpenGLESTextureCacheRef _videoTextureCache;
+        
+        typedef masl::Ptr<struct AVStruct> AVStructPtr;
+        AVStructPtr _avStruct;
         
     public:
         MovieController();

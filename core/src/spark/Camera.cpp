@@ -56,7 +56,7 @@ namespace spark {
             if (myShapeWidth != 0 && myShapeWidth != getShape()->getWidth()) {
                 setGeometry();
             }
-            masl::MobileSDK_Singleton::get().getNative()->updateCameraTexture();
+          
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             if (myCameraInfo.textureID != 0 && myCameraInfo.textureID != myMaterial->getTextureUnit()->getTexture()->textureId_) {
                 myMaterial->getTextureUnit()->getTexture()->textureId_ = myCameraInfo.textureID;

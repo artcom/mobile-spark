@@ -22,10 +22,11 @@
 	AVCaptureSession *captureSession;
 	AVCaptureDeviceInput *videoInput;
 	AVCaptureVideoDataOutput *videoOutput;
-    CVImageBufferRef pixelBuffer;
+    
+    CVImageBufferRef _pixelBuffer;
     GLuint textureID;
-    int width;
-    int height;
+    int _width;
+    int _height;
 
     CVOpenGLESTextureRef _bgraTexture;
     CVOpenGLESTextureCacheRef _videoTextureCache;
@@ -40,8 +41,10 @@
 - (int)getWidth;
 - (int)getHeight;
 - (GLuint)getTextureID;
+
+- (void) cleanUpTextures;
+
 - (void)startCameraCapture;
-- (void)updateCameraTexture;
 - (void)stopCameraCapture;
 - (bool)isCameraCapturing;
 

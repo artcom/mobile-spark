@@ -29,7 +29,7 @@ namespace ios {
                                          unsigned int & width, unsigned int & height, 
                                          unsigned int & real_width, unsigned int & real_height,
                                          bool & hasAlpha);                                                      
-        virtual void updateCameraTexture();
+
         virtual void freezeMobileOrientation(const std::string & theOrientation);
         virtual masl::CameraInfo getCameraSpec();
         virtual void startCameraCapture(bool theColorConversionFlag);

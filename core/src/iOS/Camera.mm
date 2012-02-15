@@ -34,16 +34,7 @@
 		return nil;
 	
     _bgraTexture = NULL;
-    
-    //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
-    CVReturn err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault,
-                                                NULL,
-                                                (__bridge void *)[EAGLContext currentContext],
-                                                NULL, &_videoTextureCache);
-    if (err) 
-    {
-        AC_ERROR<<"Error at CVOpenGLESTextureCacheCreate: "<<err;
-    }
+    _pixelBuffer = NULL;
     
 	// Grab the back-facing camera
 	AVCaptureDevice *backFacingCamera = nil;
@@ -90,9 +81,9 @@
 	}
     
     // too much workload e.g. on Iphone 4s (larger cam-resolution)
-    //[captureSession setSessionPreset:AVCaptureSessionPresetHigh];
+    [captureSession setSessionPreset:AVCaptureSessionPresetHigh];
     
-	[captureSession setSessionPreset:AVCaptureSessionPreset640x480];
+	//[captureSession setSessionPreset:AVCaptureSessionPreset640x480];
     
     // apply all settings as batch
     [captureSession commitConfiguration];
@@ -104,29 +95,42 @@
     return [captureSession isRunning];
 }
 
-- (void)startCameraCapture {
+- (void)startCameraCapture 
+{
     AC_DEBUG << "startCameraCapture";
     if (![captureSession isRunning])
 	{
 		[captureSession startRunning];
-        glGenTextures(1, &textureID);
+        //glGenTextures(1, &textureID);
+        
+        //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
+        CVReturn err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault,
+                                                    NULL,
+                                                    (__bridge void *)[EAGLContext currentContext],
+                                                    NULL, &_videoTextureCache);
+        if (err) 
+        {
+            AC_ERROR<<"Error at CVOpenGLESTextureCacheCreate: "<<err;
+        }
 
 	};        
 }
 
-- (void)updateCameraTexture {
-    // maybe move gl binding from capture output here
+- (void)stopCameraCapture
+{
+    AC_DEBUG<<"stopCameraCapture";
+    
+   [self cleanUpTextures];
+    
+    _pixelBuffer = NULL;
+    
+    CFRelease(_videoTextureCache);
+    
+    [captureSession stopRunning];
 }
 
-
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+- (void) cleanUpTextures
 {
-    pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    
-	height = CVPixelBufferGetHeight(pixelBuffer);
-	width = CVPixelBufferGetWidth(pixelBuffer);
-	AC_TRACE<<"captureOutput width: "<<width <<" height: "<<height;
-    
     if (_bgraTexture)
     {
         CFRelease(_bgraTexture);
@@ -138,24 +142,37 @@
     
     if (!_videoTextureCache)
     {
-        printf("No video texture cache\n");
-        return;
+        AC_ERROR<<"No video texture cache";
     }
-    CVReturn err;
-
     
-    err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault, 
-                                                       _videoTextureCache,
-                                                       pixelBuffer,
-                                                       NULL,
-                                                       GL_TEXTURE_2D,
-                                                       GL_RGBA,
-                                                       width,
-                                                       height,
-                                                       GL_BGRA,
-                                                       GL_UNSIGNED_BYTE,
-                                                       0,
-                                                       &_bgraTexture);
+    textureID = 0;
+}
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+{
+    [self cleanUpTextures];
+    
+    _pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+
+	_height = CVPixelBufferGetHeight(_pixelBuffer);
+	_width = CVPixelBufferGetWidth(_pixelBuffer);
+    
+    CVReturn err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault, 
+                                                                _videoTextureCache,
+                                                                _pixelBuffer,
+                                                                NULL,
+                                                                GL_TEXTURE_2D,
+                                                                GL_RGBA,
+                                                                _width,
+                                                                _height,
+                                                                GL_BGRA,
+                                                                GL_UNSIGNED_BYTE,
+                                                                0,
+                                                                &_bgraTexture);
+    if(err)
+    {
+        AC_ERROR<<"could not update camera texture";
+    }
     
     textureID = CVOpenGLESTextureGetName(_bgraTexture);
     
@@ -163,41 +180,16 @@
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
-//  CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-//	glBindTexture(GL_TEXTURE_2D, textureID);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//	// This is necessary for non-power-of-two textures
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//	
-//	// Using BGRA extension to pull in video frame data directly
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(pixelBuffer));
-//    
-//	CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-
+	//AC_TRACE<<"captureOutput width: "<<_width <<" height: "<<_height;
 }
-
-
-- (void)stopCameraCapture
-{
-    AC_DEBUG<<"stopCameraCapture";
-    
-    glDeleteTextures(1, &textureID);
-    textureID = 0;
-    [captureSession stopRunning];
-    
-}
-
-
 
 - (int)getWidth
 {
-    return width;
+    return _width;
 }
 - (int)getHeight
 {
-    return height;
+    return _height;
 }
 - (GLuint)getTextureID
 {

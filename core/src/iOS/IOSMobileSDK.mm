@@ -227,10 +227,6 @@ namespace ios
         [[Camera instance] startCameraCapture];
     }
 
-    void IOSMobileSDK::updateCameraTexture() {
-        [[Camera instance] updateCameraTexture];
-    }
-    
     void IOSMobileSDK::stopCameraCapture() {
         [[Camera instance] stopCameraCapture];
     }

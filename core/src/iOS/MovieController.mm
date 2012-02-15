@@ -12,12 +12,23 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 
-AVAssetReaderTrackOutput* trackOut;
-AVAssetReader *assetReader;
-
 namespace ios {
     
-    MovieController::MovieController():_bgraTexture(NULL)
+    struct AVStruct
+    {
+        AVAssetReaderTrackOutput *trackOut;
+        AVAssetReader *assetReader;
+        
+        AVStruct():trackOut(NULL),assetReader(NULL){};
+        ~AVStruct()
+        {
+            if(trackOut) [trackOut release];
+            if(assetReader) [assetReader release];
+        };
+    };
+    
+    MovieController::MovieController():_bgraTexture(NULL),
+    _avStruct(AVStructPtr(new AVStruct))
     {
         //glGenTextures(1, &textureID);
         
@@ -74,14 +85,14 @@ namespace ios {
                                                      forKey:(NSString*)kCVPixelBufferPixelFormatTypeKey];
                  
 //                 m_trackOutput = 
-                 trackOut = [[AVAssetReaderTrackOutput alloc] initWithTrack:videoTrack outputSettings:outSettings];
+                 _avStruct->trackOut = [[AVAssetReaderTrackOutput alloc] initWithTrack:videoTrack outputSettings:outSettings];
                  
-                 assetReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
+                 _avStruct->assetReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
                  
                  if(!error)
                  {
-                     [assetReader addOutput:trackOut];
-                     if (![assetReader startReading]) 
+                     [_avStruct->assetReader addOutput:_avStruct->trackOut];
+                     if (![_avStruct->assetReader startReading]) 
                      {
                          NSLog(@"Error: AssetReader could not start reading ...");
                      }
@@ -103,8 +114,8 @@ namespace ios {
     {
         CMSampleBufferRef sampleBuffer = NULL;
 
-        if([assetReader status] == AVAssetReaderStatusReading)
-            sampleBuffer = [trackOut copyNextSampleBuffer];
+        if([_avStruct->assetReader status] == AVAssetReaderStatusReading)
+            sampleBuffer = [_avStruct->trackOut copyNextSampleBuffer];
         
         if(sampleBuffer)
         {
@@ -126,6 +137,8 @@ namespace ios {
             
             CMTime timestamp = CMSampleBufferGetPresentationTimeStamp( sampleBuffer );
             CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+            
+            printf("time: %lld\n",timestamp.value);
             
             width = CVPixelBufferGetWidth(pixelBuffer); 
             height = CVPixelBufferGetHeight(pixelBuffer);
