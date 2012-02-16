@@ -16,7 +16,7 @@
 #include <masl/XMLNode.h>
 
 namespace spark {
-
+        
     class Event;
     typedef masl::Ptr<Event> EventPtr;
     typedef std::vector<EventPtr> EventPtrList;
@@ -86,7 +86,10 @@ namespace spark {
             virtual const char * const &  classname_() const {return StageEvent::CLASSNAME;};
             static const char * const FRAME;
             masl::UInt64 getCurrentTime() const { return currenttime_;};
+            masl::UInt64 getDeltaTime() const { return deltaT_;};
             masl::UInt64 currenttime_;
+        private:
+            masl::UInt64 deltaT_;
     };
 
     typedef masl::Ptr<StageEvent> StageEventPtr;

@@ -16,6 +16,8 @@
 using namespace masl;
 
 namespace spark {
+    static masl::UInt64 ourLastTime = 0;
+    
     const char * const TouchEvent::CLASSNAME = "TouchEvent";
     const char * const StageEvent::CLASSNAME = "StageEvent";
     const char * const WindowEvent::CLASSNAME = "WindowEvent";
@@ -121,6 +123,12 @@ namespace spark {
         if (theType == FRAME) {
             systemrelevant_ = false;
         }
+        if (ourLastTime == 0){
+            ourLastTime = currenttime_;
+        }
+        deltaT_ = (currenttime_ - ourLastTime);
+        ourLastTime = currenttime_;
+        
     }
     StageEvent::StageEvent(const masl::XMLNodePtr theXMLNode) :
         Event(theXMLNode),
@@ -129,6 +137,11 @@ namespace spark {
         if (getType() == FRAME) {
             systemrelevant_ = false;
         }        
+        if (ourLastTime == 0){
+            ourLastTime = currenttime_;
+        }
+        deltaT_ = (currenttime_ - ourLastTime);
+        ourLastTime = currenttime_;
     }
     StageEvent::~StageEvent() {}
 
