@@ -41,8 +41,8 @@ namespace spark {
             
             void exit();
             spark::WindowPtr _mySparkWindow;
-            
         protected:
+            bool getSingleOnFrameFlag() { return _myOneBaseAppOnFrameCallPerRenderloopFlag; };
             std::string appPath_;
             bool _mySetupFlag;       
         private:

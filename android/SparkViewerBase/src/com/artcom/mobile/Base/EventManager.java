@@ -56,7 +56,7 @@ public class EventManager {
                         if (timeNow - lastTapTime<300) {
                             doubleTapHandler();
                             break;
-                        }
+                        }                        
                         if (mode == RECENT_ACTION_WAS_DOWN) {
                             singleTapHandler();
                             lastTapTime = timeNow;
