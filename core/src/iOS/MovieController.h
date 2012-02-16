@@ -11,7 +11,8 @@
 #define _included_mobile_ios_MovieController_
 
 #import <OpenGLES/ES2/gl.h>
-#import <CoreVideo/CVOpenGLESTextureCache.h>
+//#import <CoreVideo/CVOpenGLESTextureCache.h>
+#import <CoreVideo/CoreVideo.h>
 
 #include "masl/Ptr.h"
 
@@ -22,15 +23,18 @@ namespace ios {
     {
     private:
         
-        GLuint textureID;
-        int width;
-        int height;
+        GLuint _textureID;
+        int _width;
+        int _height;
         
         CVOpenGLESTextureRef _bgraTexture;
         CVOpenGLESTextureCacheRef _videoTextureCache;
         
         typedef masl::Ptr<struct AVStruct> AVStructPtr;
         AVStructPtr _avStruct;
+        
+        void pixelBufferToGLTexture(const CVPixelBufferRef pixelBuf,
+                                    GLuint &textureName);
         
     public:
         MovieController();
@@ -42,11 +46,12 @@ namespace ios {
         void reset();
         
         void copyNextFrameToTexture();
+        void copyNextFrameToTexture2();
         
-        GLuint getTextureID(){return textureID;};
+        GLuint getTextureID(){return _textureID;};
         
-        int getWidth(){return width;};
-        int getHeight(){return height;};
+        int getWidth(){return _width;};
+        int getHeight(){return _height;};
         
     };
     

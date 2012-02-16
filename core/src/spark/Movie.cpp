@@ -23,6 +23,9 @@ namespace spark {
         
         mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
+        
+        _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
+                                 vector2(0, 0), vector2(1, 0));
     }
 
     Movie::~Movie() {
@@ -56,7 +59,6 @@ namespace spark {
             float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
             float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
             setSize(myWidth, myHeight);
-            
         } 
         else 
         {
