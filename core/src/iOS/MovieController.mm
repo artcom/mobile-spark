@@ -47,6 +47,8 @@ namespace ios {
     MovieController::MovieController():_bgraTexture(NULL),
     _avStruct(AVStructPtr(new AVStruct))
     {
+        glGenTextures(1, &_textureID);
+        
         //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
         CVReturn err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault,
                                                     NULL,
@@ -61,7 +63,7 @@ namespace ios {
     
     MovieController::~MovieController()
     {
-        //glDeleteTextures(1, &textureID);
+        glDeleteTextures(1, &_textureID);
         
         CFRelease(_videoTextureCache);
     }
@@ -209,6 +211,31 @@ namespace ios {
     
     }
     
+    void MovieController::pixelBufferToGLTexture_oldschool(const CVPixelBufferRef pixelBuf,GLuint &textureName)
+    {
+        uint width = CVPixelBufferGetWidth(pixelBuf); 
+        uint height = CVPixelBufferGetHeight(pixelBuf);
+        
+        CVPixelBufferLockBaseAddress(pixelBuf, 0);
+        
+        //std::cout<<"captureOutput width: "<<width <<" height: "<<height;
+        
+        
+        glBindTexture(GL_TEXTURE_2D, textureName);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // This is necessary for non-power-of-two textures
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        
+        // Using BGRA extension to pull in video frame data directly
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(pixelBuf));
+        
+        CVPixelBufferUnlockBaseAddress(pixelBuf, 0);
+    }
+    
+    
+    
     void MovieController::copyNextFrameToTexture()
     {
         CALayer *presLayer = [_avStruct->m_playerLayer presentationLayer];
@@ -282,7 +309,7 @@ namespace ios {
             _width = CVPixelBufferGetWidth(pixelBuffer); 
             _height = CVPixelBufferGetHeight(pixelBuffer);
 
-            pixelBufferToGLTexture(pixelBuffer, _textureID);
+            pixelBufferToGLTexture_oldschool(pixelBuffer, _textureID);
             
             // do not forget to release the buffer
             CFRelease(sampleBuffer);

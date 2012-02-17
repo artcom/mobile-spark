@@ -36,6 +36,9 @@ namespace ios {
         void pixelBufferToGLTexture(const CVPixelBufferRef pixelBuf,
                                     GLuint &textureName);
         
+        void pixelBufferToGLTexture_oldschool(const CVPixelBufferRef pixelBuf,
+                                    GLuint &textureName);
+        
     public:
         MovieController();
         virtual ~MovieController();
