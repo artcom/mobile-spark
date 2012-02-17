@@ -275,7 +275,13 @@ set( STL_LIBRARIES_PATH "${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ARM
 
 #Also, this is *required* to use the following linker flags that routes around
 #a CPU bug in some Cortex-A8 implementations:
-set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++ " )
+if( ANDROID_NDK MATCHES "ndk-r[0-6]" )
+    message("-- using NDK 6 or older")
+    set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++" )
+else()
+    message("--using NDK 7 or newer, link against stl lib")
+    set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++ -lgnustl_shared" )
+endif()
 
 set( NO_UNDEFINED ON CACHE BOOL "Don't all undefined symbols" )
 if( NO_UNDEFINED )

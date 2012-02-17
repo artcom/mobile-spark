@@ -20,6 +20,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import android.util.Log;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,13 +46,19 @@ public class NativeBinding {
     public static Activity ourActivity;
     public static boolean ourAllowOrientationChange = true;
 
-
+    private static final String TAG = "NativeBinding";
+    
     public static void loadLibraries() {
+        // with android ndk 7 and up, we get shared stl libs, we need to load them by hand
+        try{            
+            System.loadLibrary("gnustl_shared");
+        }catch (UnsatisfiedLinkError t) {
+        }
         System.loadLibrary("masl");
         System.loadLibrary("animation");
         System.loadLibrary("mar");
         System.loadLibrary("android");
-        System.loadLibrary("spark");
+        System.loadLibrary("spark");        
     }
 
   public static native void setup(long currentMillis, String apkFilePath, int theScreenWidth, int theScreenHeight);
