@@ -67,7 +67,7 @@ namespace ios
     {
         // TODO: choose corresponding movieController for the widget
         
-        _movieMap[theMovieWidget]->copyNextFrameToTexture();
+        _movieMap[theMovieWidget]->copyNextFrameToTexture2();
     }
     
     masl::MovieInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget)

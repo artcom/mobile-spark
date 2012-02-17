@@ -26,11 +26,14 @@ namespace ios {
         AVPlayer *m_player;
         AVPlayerLayer *m_playerLayer;
         
+        CMTime m_lastTimestamp;
+        
         AVStruct(): m_videoOut(NULL),
                     m_audioOut(NULL),
                     m_assetReader(NULL),
                     m_player(NULL),
-                    m_playerLayer(NULL){};
+                    m_playerLayer(NULL),
+                    m_lastTimestamp(CMTimeMake(0,1)){};
         ~AVStruct()
         {
             if(m_videoOut) [m_videoOut release];
@@ -134,10 +137,10 @@ namespace ios {
              }
 
              
-//             if (![_avStruct->m_assetReader startReading]) 
-//             {
-//                 AC_ERROR<<"Error: AssetReader could not start reading ...";
-//             }
+             if (![_avStruct->m_assetReader startReading]) 
+             {
+                 AC_ERROR<<"Error: AssetReader could not start reading ...";
+             }
              [_avStruct->m_player play];
 
          }];
@@ -210,8 +213,8 @@ namespace ios {
     {
         CALayer *presLayer = [_avStruct->m_playerLayer presentationLayer];
         
-        int _width = _avStruct->m_playerLayer.bounds.size.width; 
-        int _height = _avStruct->m_playerLayer.bounds.size.height;
+        _width = _avStruct->m_playerLayer.bounds.size.width;
+        _height = _avStruct->m_playerLayer.bounds.size.height;
         
         printf("w:%d -- h:%d\n", _width, _height);
 
@@ -258,17 +261,23 @@ namespace ios {
     void MovieController::copyNextFrameToTexture2()
     {
         CMSampleBufferRef sampleBuffer = NULL;
+        
+        CMTime currentTime = _avStruct->m_player.currentTime;
 
         if([_avStruct->m_assetReader status] == AVAssetReaderStatusReading)
-            sampleBuffer = [_avStruct->m_videoOut copyNextSampleBuffer];
-        
+        {
+            while (CMTimeCompare(currentTime, _avStruct->m_lastTimestamp) > 0) 
+            {
+                sampleBuffer = [_avStruct->m_videoOut copyNextSampleBuffer];
+                _avStruct->m_lastTimestamp = CMSampleBufferGetPresentationTimeStamp( sampleBuffer );
+            }
+        }
+
         if(sampleBuffer)
         {
-            
-            CMTime timestamp = CMSampleBufferGetPresentationTimeStamp( sampleBuffer );
             CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
             
-            printf("time: %lld\n",timestamp.value);
+            //printf("time: %lld\n",_avStruct->m_lastTimestamp.value);
             
             _width = CVPixelBufferGetWidth(pixelBuffer); 
             _height = CVPixelBufferGetHeight(pixelBuffer);
