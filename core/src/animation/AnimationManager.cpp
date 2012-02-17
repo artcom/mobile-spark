@@ -45,15 +45,21 @@ namespace animation {
     }
 
     void AnimationManager::removeFinished() {
-        std::vector<std::vector<AnimationPtr>::iterator> myToErase;
+        std::vector<int> myIdsToErase;
         for (std::vector<AnimationPtr>::iterator it = _myAnimations.begin(); it != _myAnimations.end(); ++it) {
             AnimationPtr myAnimation = (*it);
             if (!myAnimation->isRunning()) {
-                myToErase.push_back(it);
+                myIdsToErase.push_back(myAnimation->getId());
             }
         }
-        for (std::vector<std::vector<AnimationPtr>::iterator>::iterator it = myToErase.begin(); it != myToErase.end(); ++it) {
-            _myAnimations.erase(*it);
+        for (std::vector<int>::iterator it = myIdsToErase.begin(); it != myIdsToErase.end(); ++it) {         
+            unsigned int myId2Erase = (*it);
+            for (std::vector<AnimationPtr>::iterator it2 = _myAnimations.begin(); it2 != _myAnimations.end(); ++it2) {
+                if ((*it2)->getId() == myId2Erase) {
+                    _myAnimations.erase(it2);
+                    break;                                
+                }
+            }
         }
     }
 }
