@@ -65,21 +65,24 @@ namespace ios
     
     void IOSMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget)
     {
-        // TODO: choose corresponding movieController for the widget
+        MovieMap::iterator it = _movieMap.find(theMovieWidget);
         
-        _movieMap[theMovieWidget]->copyNextFrameToTexture2();
+        if(it != _movieMap.end())
+            it->second->copyNextFrameToTexture2();
     }
     
     masl::MovieInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget)
     {
-        //Camera * myCamera = [Camera instance];
         masl::MovieInfo movieInfo;
         
-        movieInfo.textureID = _movieMap[theMovieWidget]->getTextureID();
+        MovieMap::iterator it = _movieMap.find(theMovieWidget);
         
-        movieInfo.width = _movieMap[theMovieWidget]->getWidth();
-        
-        movieInfo.height = _movieMap[theMovieWidget]->getHeight();
+        if(it != _movieMap.end())
+        {
+            movieInfo.textureID = it->second->getTextureID();
+            movieInfo.width = it->second->getWidth();
+            movieInfo.height = it->second->getHeight();
+        }
         
         return movieInfo;
     }

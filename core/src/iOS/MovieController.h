@@ -33,6 +33,8 @@ namespace ios {
         typedef masl::Ptr<struct AVStruct> AVStructPtr;
         AVStructPtr _avStruct;
         
+        bool _playing;
+        
         void pixelBufferToGLTexture(const CVPixelBufferRef pixelBuf,
                                     GLuint &textureName);
         
@@ -47,6 +49,8 @@ namespace ios {
         void stop();
         void pause();
         void reset();
+        
+        bool isPlaying();
         
         void copyNextFrameToTexture();
         void copyNextFrameToTexture2();

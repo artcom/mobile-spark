@@ -45,7 +45,8 @@ namespace ios {
     };
     
     MovieController::MovieController():_bgraTexture(NULL),
-    _avStruct(AVStructPtr(new AVStruct))
+    _avStruct(AVStructPtr(new AVStruct)),
+    _playing(false)
     {
         glGenTextures(1, &_textureID);
         
@@ -68,11 +69,17 @@ namespace ios {
         CFRelease(_videoTextureCache);
     }
     
+    bool MovieController::isPlaying()
+    {
+        return _playing;//[_avStruct->m_player status] == AVPlayer
+    }
+    
     void MovieController::playMovie(const std::string &filePath)
     {
         NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filePath.c_str()]];
         
         _avStruct->m_player = [[AVPlayer alloc] initWithURL:url];
+        
         _avStruct->m_playerLayer = [[AVPlayerLayer playerLayerWithPlayer:_avStruct->m_player] retain];
         _avStruct->m_playerLayer.bounds = CGRectMake(0, 0, 480, 320);
         
@@ -119,7 +126,7 @@ namespace ios {
                  }
              }
              
-             if([audioTrackArray count])
+             if(false)//[audioTrackArray count])
              {
                  
                  AVAssetTrack *audioTrack = [audioTrackArray objectAtIndex:0];
@@ -144,18 +151,23 @@ namespace ios {
                  AC_ERROR<<"Error: AssetReader could not start reading ...";
              }
              [_avStruct->m_player play];
+             
+             _playing = true;
 
          }];
     }
     
     void MovieController::stop()
     {
-    
+        [_avStruct->m_player pause];
+        _playing = false;
+        
     }
     
     void MovieController::pause()
     {
-    
+        [_avStruct->m_player pause];
+        _playing = false;
     }
     
     void MovieController::reset()
@@ -295,6 +307,8 @@ namespace ios {
         {
             while (CMTimeCompare(currentTime, _avStruct->m_lastTimestamp) > 0) 
             {
+                if(sampleBuffer) CFRelease(sampleBuffer);
+                
                 sampleBuffer = [_avStruct->m_videoOut copyNextSampleBuffer];
                 _avStruct->m_lastTimestamp = CMSampleBufferGetPresentationTimeStamp( sampleBuffer );
             }
