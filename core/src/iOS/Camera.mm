@@ -197,7 +197,6 @@
 }
 
 
-
 - (AVCaptureVideoPreviewLayer *)videoPreviewLayer;
 {
 	if (videoPreviewLayer == nil)
@@ -208,7 +207,5 @@
 	
 	return videoPreviewLayer;
 }
-
-
 
 @end

@@ -30,8 +30,6 @@ namespace ios
     
     bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
     {
-        //m_movieControl = MovieControllerPtr(new MovieController);
-        
         std::string filePath;
         
         if (theMovieWidget->getSrc().size() > 0 ) {
@@ -71,11 +69,11 @@ namespace ios
             it->second->copyNextFrameToTexture2();
     }
     
-    masl::MovieInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget)
+    const masl::MovieInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const
     {
         masl::MovieInfo movieInfo;
         
-        MovieMap::iterator it = _movieMap.find(theMovieWidget);
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
         
         if(it != _movieMap.end())
         {
@@ -85,6 +83,11 @@ namespace ios
         }
         
         return movieInfo;
+    }
+    
+    void IOSMobileSDK::updateCameraTexture()
+    {
+        // not needed currently (@see Camera.h)
     }
     
     masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 

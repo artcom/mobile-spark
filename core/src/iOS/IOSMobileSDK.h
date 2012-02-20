@@ -35,13 +35,14 @@ namespace ios {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
+        virtual void updateCameraTexture();
         
         bool playMovie(spark::MoviePtr theMovieWidget);
         void stopMovie(spark::MoviePtr theMovieWidget);
         void pauseMovie(spark::MoviePtr theMovieWidget);
         void resetMovie(spark::MoviePtr theMovieWidget);
         void updateMovieTexture(spark::MoviePtr theMovieWidget);
-        masl::MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget);
+        const masl::MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
         
         virtual void exit();
 

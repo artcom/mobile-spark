@@ -180,10 +180,15 @@ namespace ios {
     
     void MovieController::pause()
     {
-        [_avStruct->m_player pause];
-        [_avStruct->m_audioPlayer pause];
+        //[_avStruct->m_player pause];
         
-        _playing = false;
+        if(_playing)
+            [_avStruct->m_audioPlayer pause];
+        else
+            [_avStruct->m_audioPlayer play];
+        
+        
+        _playing = !_playing;
     }
     
     void MovieController::reset()
@@ -210,6 +215,8 @@ namespace ios {
             AC_ERROR<<"No video texture cache\n";
             return;
         }
+        
+        textureName = 0;
         
         CVReturn err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault, 
                                                            _videoTextureCache,
@@ -336,13 +343,11 @@ namespace ios {
         {
             CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
             
-            //printf("time: %lld\n",_avStruct->m_lastTimestamp.value);
-            
             _width = CVPixelBufferGetWidth(pixelBuffer); 
             _height = CVPixelBufferGetHeight(pixelBuffer);
 
-            pixelBufferToGLTexture_oldschool(pixelBuffer, _textureID);
-//            pixelBufferToGLTexture(pixelBuffer, _textureID);
+            //pixelBufferToGLTexture_oldschool(pixelBuffer, _textureID);
+            pixelBufferToGLTexture(pixelBuffer, _textureID);
             
             // do not forget to release the buffer
             CFRelease(sampleBuffer);

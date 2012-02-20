@@ -22,7 +22,7 @@ namespace masl {
         int textureheight;
     };
     
-    // alias for Movies
+    // alias for Movies (tmp)
     typedef CameraInfo MovieInfo;
     
     struct TextInfo{
@@ -46,7 +46,7 @@ namespace masl {
         virtual void freezeMobileOrientation(const std::string & theOrientation) = 0;
         
         // Camera
-        //virtual void updateCameraTexture() = 0;
+        virtual void updateCameraTexture() = 0;
         virtual CameraInfo getCameraSpec() = 0;
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
@@ -58,7 +58,7 @@ namespace masl {
         virtual void pauseMovie(spark::MoviePtr theMovieWidget) = 0;
         virtual void resetMovie(spark::MoviePtr theMovieWidget) = 0;
         virtual void updateMovieTexture(spark::MoviePtr theMovieWidget) = 0;
-        virtual MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) = 0;
+        virtual const MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) const = 0;
         
         virtual void exit() = 0;
         
