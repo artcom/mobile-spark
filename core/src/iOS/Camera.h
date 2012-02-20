@@ -24,7 +24,7 @@
 	AVCaptureVideoDataOutput *videoOutput;
     
     CVImageBufferRef _pixelBuffer;
-    GLuint textureID;
+    GLuint _textureID;
     int _width;
     int _height;
 

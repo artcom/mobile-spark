@@ -26,14 +26,19 @@ namespace ios {
         AVPlayer *m_player;
         AVPlayerLayer *m_playerLayer;
         
+        AVAudioPlayer *m_audioPlayer;
+        
         CMTime m_lastTimestamp;
+        double m_timeStamp;
         
         AVStruct(): m_videoOut(NULL),
                     m_audioOut(NULL),
                     m_assetReader(NULL),
                     m_player(NULL),
                     m_playerLayer(NULL),
-                    m_lastTimestamp(CMTimeMake(0,1)){};
+                    m_audioPlayer(NULL),
+                    m_lastTimestamp(CMTimeMake(0,1)),
+                    m_timeStamp(0.0){};
         ~AVStruct()
         {
             if(m_videoOut) [m_videoOut release];
@@ -41,6 +46,7 @@ namespace ios {
             if(m_assetReader) [m_assetReader release];
             if(m_player) [m_player release];
             if(m_playerLayer) [m_playerLayer release];
+            if(m_audioPlayer) [m_audioPlayer release];
         };
     };
     
@@ -76,12 +82,16 @@ namespace ios {
     
     void MovieController::playMovie(const std::string &filePath)
     {
+        if (_playing) return;
+        
         NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filePath.c_str()]];
         
         _avStruct->m_player = [[AVPlayer alloc] initWithURL:url];
         
-        _avStruct->m_playerLayer = [[AVPlayerLayer playerLayerWithPlayer:_avStruct->m_player] retain];
-        _avStruct->m_playerLayer.bounds = CGRectMake(0, 0, 480, 320);
+        _avStruct->m_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+        
+//        _avStruct->m_playerLayer = [[AVPlayerLayer playerLayerWithPlayer:_avStruct->m_player] retain];
+//        _avStruct->m_playerLayer.bounds = CGRectMake(0, 0, 480, 320);
         
         AVURLAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
         
@@ -100,8 +110,8 @@ namespace ios {
              NSArray *videoTrackArray = [asset tracksWithMediaType:AVMediaTypeVideo];
              NSArray *audioTrackArray = [asset tracksWithMediaType:AVMediaTypeAudio];
              
-             printf("ALL TRACKS # : %d\n",[[asset tracks] count]);
-             printf("VIDEO TRACKS # : %d\n",[videoTrackArray count]);
+//             printf("ALL TRACKS # : %d\n",[[asset tracks] count]);
+//             printf("VIDEO TRACKS # : %d\n",[videoTrackArray count]);
              
              _avStruct->m_assetReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
              
@@ -150,7 +160,9 @@ namespace ios {
              {
                  AC_ERROR<<"Error: AssetReader could not start reading ...";
              }
-             [_avStruct->m_player play];
+             //[_avStruct->m_player play];
+             
+             [_avStruct->m_audioPlayer play];
              
              _playing = true;
 
@@ -159,7 +171,9 @@ namespace ios {
     
     void MovieController::stop()
     {
-        [_avStruct->m_player pause];
+        // reset all AV related stuff
+        _avStruct = AVStructPtr(new AVStruct);
+        
         _playing = false;
         
     }
@@ -167,6 +181,8 @@ namespace ios {
     void MovieController::pause()
     {
         [_avStruct->m_player pause];
+        [_avStruct->m_audioPlayer pause];
+        
         _playing = false;
     }
     
@@ -194,7 +210,7 @@ namespace ios {
             AC_ERROR<<"No video texture cache\n";
             return;
         }
-
+        
         CVReturn err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault, 
                                                            _videoTextureCache,
                                                            pixelBuf,
@@ -220,7 +236,7 @@ namespace ios {
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         }
-    
+        
     }
     
     void MovieController::pixelBufferToGLTexture_oldschool(const CVPixelBufferRef pixelBuf,GLuint &textureName)
@@ -301,7 +317,9 @@ namespace ios {
     {
         CMSampleBufferRef sampleBuffer = NULL;
         
-        CMTime currentTime = _avStruct->m_player.currentTime;
+        //CMTime currentTime = _avStruct->m_player.currentTime;
+        
+        CMTime currentTime = CMTimeMake(_avStruct->m_audioPlayer.currentTime * 1000, 1000) ;
 
         if([_avStruct->m_assetReader status] == AVAssetReaderStatusReading)
         {
@@ -324,6 +342,7 @@ namespace ios {
             _height = CVPixelBufferGetHeight(pixelBuffer);
 
             pixelBufferToGLTexture_oldschool(pixelBuffer, _textureID);
+//            pixelBufferToGLTexture(pixelBuffer, _textureID);
             
             // do not forget to release the buffer
             CFRelease(sampleBuffer);

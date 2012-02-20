@@ -145,7 +145,7 @@
         AC_ERROR<<"No video texture cache";
     }
     
-    textureID = 0;
+    _textureID = 0;
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
@@ -174,9 +174,9 @@
         AC_ERROR<<"could not update camera texture";
     }
     
-    textureID = CVOpenGLESTextureGetName(_bgraTexture);
+    _textureID = CVOpenGLESTextureGetName(_bgraTexture);
     
-    glBindTexture(GL_TEXTURE_2D, textureID);
+    glBindTexture(GL_TEXTURE_2D, _textureID);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
@@ -193,7 +193,7 @@
 }
 - (GLuint)getTextureID
 {
-    return textureID;
+    return _textureID;
 }
 
 

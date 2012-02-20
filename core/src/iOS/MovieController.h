@@ -33,6 +33,7 @@ namespace ios {
         typedef masl::Ptr<struct AVStruct> AVStructPtr;
         AVStructPtr _avStruct;
         
+        std::string _srcPath;
         bool _playing;
         
         void pixelBufferToGLTexture(const CVPixelBufferRef pixelBuf,
