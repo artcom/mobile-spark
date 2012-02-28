@@ -242,12 +242,15 @@ namespace demoapp {
         
         ComponentPtr mvSlidePtr = my2DWorld->getChildByName("MovieSlide");
         
-        if(!mvSlidePtr)
-            AC_PRINT<<"BOOOOO";
+        if(mvSlidePtr)
+        {
+            spark::EventCallbackPtr myMovieCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onTapMovie));
+            MoviePtr movie = boost::static_pointer_cast<Movie>(mvSlidePtr->getChildByName("testMovie") );
+            
+            movie->addEventListener(TouchEvent::PICKED, myMovieCB);
         
-        MoviePtr movie = boost::static_pointer_cast<Movie>(mvSlidePtr->getChildByName("testMovie") );
+        }
         
-        movie->play();
     }
 
     void DemoApp::onPause() {
@@ -551,6 +554,13 @@ namespace demoapp {
     void DemoApp::onSizeChanged(EventPtr theEvent) {
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);            
         centerSlideTitlesToNewCanvasSize(myEvent->size_[0], myEvent->size_[1]);
+    }
+    
+    void DemoApp::onTapMovie(EventPtr theEvent)
+    {
+        MoviePtr movie = boost::static_pointer_cast<Movie>(theEvent->getTarget());
+    
+        movie->play();
     }
 }
 
