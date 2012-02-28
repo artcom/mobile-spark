@@ -49,7 +49,7 @@ namespace ios
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                            unsigned int & width, unsigned int & height, 
-                                           unsigned int & real_width, unsigned int & real_height, bool & hasAlpha) 
+                                           unsigned int & real_width, unsigned int & real_height, bool & hasAlpha, bool theMipmapFlag) 
     {
         std::string filePath;
         

@@ -25,7 +25,7 @@ namespace mar {
         _myTextureMap.clear();
     }
         
-    TexturePtr TextureLoader::load(const std::string & theSrc, const bool theCacheFlag) {
+    TexturePtr TextureLoader::load(const std::string & theSrc, const bool theCacheFlag, bool theMipmapFlag) {
         unsigned long myKey = masl::initiateCRC32();
         masl::appendCRC32(myKey, theSrc);     
         
@@ -34,10 +34,12 @@ namespace mar {
             return _myTextureMap[myKey];
         } else {
             TexturePtr myTexture = TexturePtr(new Texture());       
+            myTexture->mipmapFlag_ = theMipmapFlag;
             masl::AssetProviderSingleton::get().ap()->loadTextureFromFile(theSrc, myTexture->textureId_, 
                                                                           myTexture->width_, myTexture->height_,  
                                                                           myTexture->real_width_, myTexture->real_height_,  
-                                                                          myTexture->transparency_, myTexture->mirrorflag_);                        
+                                                                          myTexture->transparency_, myTexture->mirrorflag_,
+                                                                          myTexture->mipmapFlag_);                        
             if (theCacheFlag) {    
                 AC_INFO << "TextureLoader::load texture: '" << theSrc << "' generated store in map, glid -> "<< myTexture->textureId_;
                 storeTexture(myKey, myTexture);

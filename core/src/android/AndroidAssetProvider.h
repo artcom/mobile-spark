@@ -29,7 +29,7 @@ namespace android {
         virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                          unsigned int & width, unsigned int & height, 
                                          unsigned int & realwidth, unsigned int & realheight,
-                                         bool & hasAlpha, bool & mirrorFlag);            
+                                         bool & hasAlpha, bool & mirrorFlag, bool & theMipFlag);            
         virtual void addIncludePath(const std::string & thePath);
         virtual void storeInFile(const std::string & theFileName, const std::string & theData);
         virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData);

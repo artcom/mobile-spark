@@ -27,7 +27,7 @@ namespace ios {
         virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                          unsigned int & width, unsigned int & height, 
                                          unsigned int & real_width, unsigned int & real_height,
-                                         bool & hasAlpha);                                                      
+                                         bool & hasAlpha, bool & theMipmapFlag);                                                      
         virtual void updateCameraTexture();
         virtual void freezeMobileOrientation(const std::string & theOrientation);
         virtual masl::CameraInfo getCameraSpec();

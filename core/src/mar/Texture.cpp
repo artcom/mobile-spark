@@ -16,7 +16,7 @@ namespace mar {
 
     Texture::Texture() :
         width_(0), height_(0), transparency_(false),
-        textureId_(0), mirrorflag_(false)
+        textureId_(0), mirrorflag_(false), mipmapFlag_(false)
     {
         AC_DEBUG << "create Texture " << (void*)this;
     }
@@ -36,7 +36,8 @@ namespace mar {
                                                                           width_, height_,  
                                                                           real_width_, real_height_,
                                                                           transparency_,
-                                                                          mirrorflag_);
+                                                                          mirrorflag_,
+                                                                          mipmapFlag_);
             
         } else {
             width_ = 0;
