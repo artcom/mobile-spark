@@ -142,9 +142,7 @@ public class NativeBinding {
           }
 
         if (theMipMapFlag) {
-            AC_Log.print(String.format("pre generate mipmap :%s ", theFilename));        
             GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-            AC_Log.print("post generate mipmap");
         }
                   
         //Clean up
