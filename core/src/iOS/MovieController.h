@@ -11,11 +11,18 @@
 #define _included_mobile_ios_MovieController_
 
 #import <OpenGLES/ES2/gl.h>
-//#import <CoreVideo/CVOpenGLESTextureCache.h>
 #import <CoreVideo/CoreVideo.h>
 
 #include "masl/Ptr.h"
 
+/*
+* This class controls playback of Movie-widgets and manages their assets.
+* There is 1:1 correlation between spark::Movie object and MovieControllers,
+* each controller beeing responsible for exactly one widget.
+* Objective-C classes are wrapped in a forward declared C-struct (AVStruct) for compatibility reasons.
+*
+* Due to planned experiments this class is still a little messy :(
+*/
 
 namespace ios {
     
@@ -39,7 +46,7 @@ namespace ios {
         void pixelBufferToGLTexture(const CVPixelBufferRef pixelBuf,
                                     GLuint &textureName);
         
-        void pixelBufferToGLTexture_oldschool(const CVPixelBufferRef pixelBuf,
+        void pixelBufferToGLTexture_compatibility(const CVPixelBufferRef pixelBuf,
                                     GLuint &textureName);
         
     public:
@@ -51,10 +58,12 @@ namespace ios {
         void pause();
         void reset();
         
-        bool isPlaying();
+        float getVolume() const;
+        void setVolume(float newVolume);
+        
+        bool isPlaying() const;
         
         void copyNextFrameToTexture();
-        void copyNextFrameToTexture2();
         
         GLuint getTextureID(){return _textureID;};
         

@@ -24,15 +24,23 @@ namespace spark {
         void play();   // start playback at playcursor
         void stop();   // stop videoplayback
         void pause();  // pause video and do not touch playcursor
-        void reset();  // set playcursor to video start 
+        void reset();  // set playcursor to video start
+        
+        bool isPlaying();
+        
+        void setVolume(float newVolume);
+        float getVolume();
         
         const std::string & getSrc() const {return _moviesrc;};
         
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Movie::SPARK_TYPE;};
+        
 
     private:
         std::string _moviesrc;
+        
+        float _volume;
     };
 
     typedef masl::Ptr<Movie> MoviePtr;

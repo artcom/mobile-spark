@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Window name="Samsung Galaxy S" fullscreen="true" i18nContext="global-i18n" clearColor="[0, 0.2, 0.1, 1]" orientation="portrait" width="800" height="480">
+<Window name="Samsung Galaxy S" fullscreen="true" i18nContext="global-i18n" clearColor="[0, 0.2, 0.1, 1]" orientation="landscape" width="800" height="480">
 
     <Template name="Controls" src="controls.spark"/>
     <Template name="Slide" src="slide.spark"/>
@@ -38,8 +38,9 @@
         </Controls>
 
         <Slide name="MovieSlide" alpha="1" title="Movie-Examples">
-            <Movie src="movie_preview.png" moviesrc="foo.3gp" x="200" y="200" z="0" width="100" height="100"/>
+            <Movie name="testMovie" src="testMovie_still.jpg" moviesrc="testmovie.mp4" x="0" y="0" z="0" width="480" height="360"/>
         </Slide>
+        
         <Slide name="TextSlide" alpha="1" title="Text-Examples">
    	    
 	    <Text name="textblock2" y="630" x="500" text="Fontsize 24 - acswissmed.ttf" color="[1,1,1,1]" fontsize="24" font="acswissmed.ttf"/>

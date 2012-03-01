@@ -75,19 +75,29 @@ namespace ios {
         CFRelease(_videoTextureCache);
     }
     
-    bool MovieController::isPlaying()
+    bool MovieController::isPlaying() const
     {
-        return _playing;//[_avStruct->m_player status] == AVPlayer
+        return [_avStruct->m_audioPlayer isPlaying];
     }
     
     void MovieController::playMovie(const std::string &filePath)
     {
-        if (_playing) return;
+        // already plaing. nothing to do
+        if (_playing) 
+            return;
+        
+        // resume paused playback
+        else if(_avStruct->m_audioPlayer)
+        {
+            [_avStruct->m_audioPlayer play];
+            _playing = true;
+        }
         
         NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filePath.c_str()]];
         
-        _avStruct->m_player = [[AVPlayer alloc] initWithURL:url];
+        //_avStruct->m_player = [[AVPlayer alloc] initWithURL:url];
         
+        // create new audio-player instance
         _avStruct->m_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
         
 //        _avStruct->m_playerLayer = [[AVPlayerLayer playerLayerWithPlayer:_avStruct->m_player] retain];
@@ -103,15 +113,12 @@ namespace ios {
              // completion code
              NSError *error = nil;
              
-             printf("Asset loading complete for: %s\n",[[asset.URL absoluteString] UTF8String]);
+             //printf("Asset loading complete for: %s\n",[[asset.URL absoluteString] UTF8String]);
              
              //NSArray *tracksArray = [asset tracksWithMediaCharacteristic:AVMediaCharacteristicVisual];
              
              NSArray *videoTrackArray = [asset tracksWithMediaType:AVMediaTypeVideo];
-             NSArray *audioTrackArray = [asset tracksWithMediaType:AVMediaTypeAudio];
-             
-//             printf("ALL TRACKS # : %d\n",[[asset tracks] count]);
-//             printf("VIDEO TRACKS # : %d\n",[videoTrackArray count]);
+             //NSArray *audioTrackArray = [asset tracksWithMediaType:AVMediaTypeAudio];
              
              _avStruct->m_assetReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
              
@@ -136,32 +143,32 @@ namespace ios {
                  }
              }
              
-             if(false)//[audioTrackArray count])
-             {
-                 
-                 AVAssetTrack *audioTrack = [audioTrackArray objectAtIndex:0];
-                 
-                 NSMutableDictionary* outSettings = nil;
-                 
-                 _avStruct->m_audioOut = [[AVAssetReaderTrackOutput alloc] initWithTrack:audioTrack outputSettings:outSettings];
-                 
-                 if(!error)
-                 {
-                     [_avStruct->m_assetReader addOutput:_avStruct->m_audioOut];
-                 }
-                 else
-                 {
-                     AC_ERROR<<"Error: AssetReader could not add audio-track ...";
-                 }
-             }
+//             if(false)//[audioTrackArray count])
+//             {
+//                 
+//                 AVAssetTrack *audioTrack = [audioTrackArray objectAtIndex:0];
+//                 
+//                 NSMutableDictionary* outSettings = nil;
+//                 
+//                 _avStruct->m_audioOut = [[AVAssetReaderTrackOutput alloc] initWithTrack:audioTrack outputSettings:outSettings];
+//                 
+//                 if(!error)
+//                 {
+//                     [_avStruct->m_assetReader addOutput:_avStruct->m_audioOut];
+//                 }
+//                 else
+//                 {
+//                     AC_ERROR<<"Error: AssetReader could not add audio-track ...";
+//                 }
+//             }
 
              
              if (![_avStruct->m_assetReader startReading]) 
              {
                  AC_ERROR<<"Error: AssetReader could not start reading ...";
              }
-             //[_avStruct->m_player play];
              
+             //[_avStruct->m_player play];
              [_avStruct->m_audioPlayer play];
              
              _playing = true;
@@ -193,7 +200,26 @@ namespace ios {
     
     void MovieController::reset()
     {
+        // reset all AV related stuff
+        _avStruct = AVStructPtr(new AVStruct);
+        
+        _playing = false;
+    }
     
+    float MovieController::getVolume() const
+    {
+        return _avStruct->m_audioPlayer.volume;
+    }
+    
+    void MovieController::setVolume(float newVolume)
+    {
+        float val = newVolume;
+        if(val < 0.f) val = 0.f;
+        if(val > 1.f) val = 1.f;
+        
+        _avStruct->m_audioPlayer.volume = val;
+        
+        printf("VOLUME: %.2f\n",val);
     }
     
     void MovieController::pixelBufferToGLTexture(const CVPixelBufferRef pixelBuf,GLuint &textureName)
@@ -246,7 +272,7 @@ namespace ios {
         
     }
     
-    void MovieController::pixelBufferToGLTexture_oldschool(const CVPixelBufferRef pixelBuf,GLuint &textureName)
+    void MovieController::pixelBufferToGLTexture_compatibility(const CVPixelBufferRef pixelBuf,GLuint &textureName)
     {
         uint width = CVPixelBufferGetWidth(pixelBuf); 
         uint height = CVPixelBufferGetHeight(pixelBuf);
@@ -271,56 +297,56 @@ namespace ios {
     
     
     
-    void MovieController::copyNextFrameToTexture()
-    {
-        CALayer *presLayer = [_avStruct->m_playerLayer presentationLayer];
-        
-        _width = _avStruct->m_playerLayer.bounds.size.width;
-        _height = _avStruct->m_playerLayer.bounds.size.height;
-        
-        printf("w:%d -- h:%d\n", _width, _height);
-
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        
-        uint bytesPerPixel = 4;
-        
-
-        CVPixelBufferRef pixelBuffer = NULL;
-        CVPixelBufferCreate(kCFAllocatorDefault, _width, _height, kCVPixelFormatType_32BGRA, nil, &pixelBuffer);
-        
-        CVPixelBufferLockBaseAddress(pixelBuffer,0);
-        
-        void *pxdata = CVPixelBufferGetBaseAddress(pixelBuffer);
-        
-        CGContextRef context = CGBitmapContextCreate(pxdata,
-                                                     _width,
-                                                     _height,
-                                                     8,
-                                                     _width * bytesPerPixel,
-                                                     colorSpace,
-                                                     kCGImageAlphaPremultipliedLast);
-        
-        CGColorSpaceRelease(colorSpace);
-        
-        if (!context) 
-        {
-            AC_ERROR<<"copyNextFrameToTexture: failed to create context ";
-            return;
-        }
-        
-        [presLayer renderInContext:context];
-        
-        CGContextRelease(context);
-          
-        CVPixelBufferUnlockBaseAddress(pixelBuffer,0);
-        
-        pixelBufferToGLTexture(pixelBuffer, _textureID);
-        
-        //CVPixelBufferRelease(pixelBuffer);
-        CFRelease(pixelBuffer);
-    }
+//    void MovieController::copyNextFrameToTexture()
+//    {
+//        CALayer *presLayer = [_avStruct->m_playerLayer presentationLayer];
+//        
+//        _width = _avStruct->m_playerLayer.bounds.size.width;
+//        _height = _avStruct->m_playerLayer.bounds.size.height;
+//        
+//        printf("w:%d -- h:%d\n", _width, _height);
+//
+//        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+//        
+//        uint bytesPerPixel = 4;
+//        
+//
+//        CVPixelBufferRef pixelBuffer = NULL;
+//        CVPixelBufferCreate(kCFAllocatorDefault, _width, _height, kCVPixelFormatType_32BGRA, nil, &pixelBuffer);
+//        
+//        CVPixelBufferLockBaseAddress(pixelBuffer,0);
+//        
+//        void *pxdata = CVPixelBufferGetBaseAddress(pixelBuffer);
+//        
+//        CGContextRef context = CGBitmapContextCreate(pxdata,
+//                                                     _width,
+//                                                     _height,
+//                                                     8,
+//                                                     _width * bytesPerPixel,
+//                                                     colorSpace,
+//                                                     kCGImageAlphaPremultipliedLast);
+//        
+//        CGColorSpaceRelease(colorSpace);
+//        
+//        if (!context) 
+//        {
+//            AC_ERROR<<"copyNextFrameToTexture: failed to create context ";
+//            return;
+//        }
+//        
+//        [presLayer renderInContext:context];
+//        
+//        CGContextRelease(context);
+//          
+//        CVPixelBufferUnlockBaseAddress(pixelBuffer,0);
+//        
+//        pixelBufferToGLTexture(pixelBuffer, _textureID);
+//        
+//        //CVPixelBufferRelease(pixelBuffer);
+//        CFRelease(pixelBuffer);
+//    }
     
-    void MovieController::copyNextFrameToTexture2()
+    void MovieController::copyNextFrameToTexture()
     {
         CMSampleBufferRef sampleBuffer = NULL;
         
@@ -346,12 +372,12 @@ namespace ios {
             _width = CVPixelBufferGetWidth(pixelBuffer); 
             _height = CVPixelBufferGetHeight(pixelBuffer);
 
-            //pixelBufferToGLTexture_oldschool(pixelBuffer, _textureID);
-            pixelBufferToGLTexture(pixelBuffer, _textureID);
+            pixelBufferToGLTexture_compatibility(pixelBuffer, _textureID);
+            //pixelBufferToGLTexture(pixelBuffer, _textureID);
             
             // do not forget to release the buffer
             CFRelease(sampleBuffer);
         }
     }
-    
+  
 }

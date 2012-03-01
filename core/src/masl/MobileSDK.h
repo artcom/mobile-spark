@@ -20,6 +20,7 @@ namespace masl {
         int height;
         int texturewidth;
         int textureheight;
+        
     };
     
     // alias for Movies (tmp)
@@ -59,6 +60,8 @@ namespace masl {
         virtual void resetMovie(spark::MoviePtr theMovieWidget) = 0;
         virtual void updateMovieTexture(spark::MoviePtr theMovieWidget) = 0;
         virtual const MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) const = 0;
+        virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const = 0;
+        virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) = 0;
         
         virtual void exit() = 0;
         

@@ -21,11 +21,11 @@ namespace spark {
     {
         _moviesrc = _myXMLNode->getAttributeAs<std::string>("moviesrc", "");
         
+        _volume = _myXMLNode->getAttributeAs<float>("volume", 1.f);
+        
         mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
         
-        _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
-                                 vector2(0, 0), vector2(1, 0));
     }
 
     Movie::~Movie() {
@@ -36,7 +36,7 @@ namespace spark {
     {
         ShapeWidget::prerender(theCurrentMatrixStack);
         
-        if (isRendered()) 
+        if (isPlaying() && isRendered()) 
         {
             // Construct a shared ptr to this
             MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
@@ -56,13 +56,17 @@ namespace spark {
             _myTextureSize = vector2(myMovieInfo.width, myMovieInfo.height);
             _myRealImageSize = _myTextureSize;
             
+            //printf("playing movie: %s  (%.2f x %.2f)\n",data_.c_str(),_myRealImageSize[0],_myRealImageSize[1]);
+            
             float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
             float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
+
+            // adjust widget´s size
             setSize(myWidth, myHeight);
         } 
         else 
         {
-            // stop movie if playing
+            // TODO: stop movie if playing here !?
         }
     }
     
@@ -71,6 +75,17 @@ namespace spark {
         MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
         
         masl::MobileSDK_Singleton::get().getNative()->playMovie(thisPtr);
+        setVolume(_volume);
+        
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+        myMaterial->getTextureUnit()->getTexture()->textureId_ = 0;
+        
+        // flip texcoords just now to have correct coords for movie-textures
+        _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
+                               vector2(0, 0), vector2(1, 0));
+        
+        AC_PRINT<<"playing movie:"<< _moviesrc<<" (volume: "<<_volume<<")";
+        
     }
     void Movie::stop()
     {
@@ -89,5 +104,31 @@ namespace spark {
         MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
         
         masl::MobileSDK_Singleton::get().getNative()->resetMovie(thisPtr);
-    }    
+    }
+    
+    bool Movie::isPlaying()
+    {
+        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
+        return  masl::MobileSDK_Singleton::get().getNative()->isMoviePlaying(thisPtr);
+    }
+    
+    void Movie::setVolume(float newVolume)
+    {
+        float val = newVolume;
+        if(val < 0.f) val = 0.f;
+        if(val > 1.f) val = 1.f;
+        
+        _volume = val;
+        
+        //if(isPlaying())
+        {
+            MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
+            masl::MobileSDK_Singleton::get().getNative()->setMovieVolume(thisPtr, _volume);
+        }
+    }
+    
+    float Movie::getVolume()
+    {
+        return _volume;
+    }
 }

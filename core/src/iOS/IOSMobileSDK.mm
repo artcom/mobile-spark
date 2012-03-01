@@ -66,7 +66,7 @@ namespace ios
         MovieMap::iterator it = _movieMap.find(theMovieWidget);
         
         if(it != _movieMap.end())
-            it->second->copyNextFrameToTexture2();
+            it->second->copyNextFrameToTexture();
     }
     
     const masl::MovieInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const
@@ -83,6 +83,20 @@ namespace ios
         }
         
         return movieInfo;
+    }
+    
+    bool IOSMobileSDK::isMoviePlaying(spark::MoviePtr theMovieWidget) const
+    {
+        bool ret = false;
+        
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        
+        if(it != _movieMap.end())
+        {
+            ret = it->second->isPlaying();
+        }
+
+        return ret;
     }
     
     void IOSMobileSDK::updateCameraTexture()
@@ -104,6 +118,16 @@ namespace ios
         textInfo.width = textRenderer.get()->getTextureWidth();
         textInfo.renderedGlyphIndex = textRenderer.get()->getRenderedGlyphIndex();
         return textInfo;
+    }
+    
+    void IOSMobileSDK::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume)
+    {
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        
+        if(it != _movieMap.end())
+        {
+            it->second->setVolume(newVolume);
+        }
     }
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 

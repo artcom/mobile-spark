@@ -43,6 +43,8 @@ namespace ios {
         void resetMovie(spark::MoviePtr theMovieWidget);
         void updateMovieTexture(spark::MoviePtr theMovieWidget);
         const masl::MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
+        bool isMoviePlaying(spark::MoviePtr theMovieWidget) const;
+        void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) ;
         
         virtual void exit();
 
