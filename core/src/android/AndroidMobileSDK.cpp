@@ -20,10 +20,15 @@ namespace android {
     AndroidMobileSDK::~AndroidMobileSDK() {
 
     }
-    bool AndroidMobileSDK::playMovie(const std::string & theURL) {}
-    void AndroidMobileSDK::stopMovie() {}
-    void AndroidMobileSDK::pauseMovie() {}
-    void AndroidMobileSDK::resetMovie() {}
+   
+    bool AndroidMobileSDK::playMovie(spark::MoviePtr theMovieWidget) {return false;}
+    void AndroidMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) {}
+    void AndroidMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget){}
+    void AndroidMobileSDK::resetMovie(spark::MoviePtr theMovieWidget){}
+    void AndroidMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget) {}
+    const masl::MovieInfo AndroidMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const {return masl::MovieInfo();}
+    bool AndroidMobileSDK::isMoviePlaying(spark::MoviePtr theMovieWidget) const {return false;}
+    void AndroidMobileSDK::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) {}
     
     void AndroidMobileSDK::vibrate(long theDurationMillisec) {
         if (env) {

@@ -31,10 +31,16 @@ namespace android {
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
-        virtual bool playMovie(const std::string & theURL);
-        virtual void stopMovie();
-        virtual void pauseMovie();
-        virtual void resetMovie();
+        
+        
+        virtual bool playMovie(spark::MoviePtr theMovieWidget);
+        virtual void stopMovie(spark::MoviePtr theMovieWidget);
+        virtual void pauseMovie(spark::MoviePtr theMovieWidget);
+        virtual void resetMovie(spark::MoviePtr theMovieWidget);
+        virtual void updateMovieTexture(spark::MoviePtr theMovieWidget);
+        virtual const MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
+        virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const;
+        virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume);
         
         virtual void exit();
 
