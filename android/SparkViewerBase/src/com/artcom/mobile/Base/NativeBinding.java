@@ -20,6 +20,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import android.util.Log;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,13 +46,19 @@ public class NativeBinding {
     public static Activity ourActivity;
     public static boolean ourAllowOrientationChange = true;
 
-
+    private static final String TAG = "NativeBinding";
+    
     public static void loadLibraries() {
+        // with android ndk 7 and up, we get shared stl libs, we need to load them by hand
+        try{            
+            System.loadLibrary("gnustl_shared");
+        }catch (UnsatisfiedLinkError t) {
+        }
         System.loadLibrary("masl");
         System.loadLibrary("animation");
         System.loadLibrary("mar");
         System.loadLibrary("android");
-        System.loadLibrary("spark");
+        System.loadLibrary("spark");        
     }
 
   public static native void setup(long currentMillis, String apkFilePath, int theScreenWidth, int theScreenHeight);
@@ -66,7 +73,7 @@ public class NativeBinding {
   public static native void setLoggerTopLevelTag(String theTagString);
   public static native void setSeverity(Severity theSeverity);
 
-  public static List<Integer> loadTextureFromFile(String theFilename, boolean theSDCardFlag) {
+  public static List<Integer> loadTextureFromFile(String theFilename, boolean theSDCardFlag, boolean theMipMapFlag) {
     List<Integer> myResult = new ArrayList<Integer>();	
     try{    
         int[] maxTextureSize = new int[1];
@@ -116,9 +123,13 @@ public class NativeBinding {
         GLES20.glGenTextures(1, textures,0);
         
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
-
+        
         //Create Nearest Filtered Texture
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        if (theMipMapFlag) {
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_NEAREST);//GLES20.GL_LINEAR);
+        } else {
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        }
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 
         //Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
@@ -129,7 +140,11 @@ public class NativeBinding {
           } catch (Exception theEx) {
               AC_Log.print(String.format("exception %s", theEx.getMessage()));
           }
-          
+
+        if (theMipMapFlag) {
+            GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
+        }
+                  
         //Clean up
         myBitmap.recycle();        
         myResult.add(textures[0]);

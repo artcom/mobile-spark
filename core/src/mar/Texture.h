@@ -30,7 +30,8 @@ namespace mar {
             GLuint real_height_; // imageloader or fit max gl texture size, this is the real size
             bool transparency_;
             GLuint textureId_;     
-            bool mirrorflag_;   
+            bool mirrorflag_;  
+            bool mipmapFlag_; 
         private:
             std::string src_;
         

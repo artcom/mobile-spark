@@ -42,7 +42,8 @@ namespace masl {
         virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                          unsigned int & width, unsigned int & height, 
                                          unsigned int & real_width, unsigned int & real_height,
-                                         bool & hasAlpha) = 0; 
+
+                                         bool & hasAlpha, bool & theMipmapFlag) = 0;
         
         virtual void freezeMobileOrientation(const std::string & theOrientation) = 0;
         

@@ -134,7 +134,7 @@ namespace ios
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                            unsigned int & width, unsigned int & height, 
-                                           unsigned int & real_width, unsigned int & real_height, bool & hasAlpha) 
+                                           unsigned int & real_width, unsigned int & real_height, bool & hasAlpha, bool & theMipmapFlag) 
     {
         std::string filePath;
         
@@ -235,10 +235,20 @@ namespace ios
         }
         
         // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        theMipmapFlag = false;
+        // ios can only build mipmap tree for pot textures, by now this cannot be guaranteed
+        if (theMipmapFlag) {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+        } else {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        }        
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        if (theMipmapFlag) {
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
         
         // unbind the texture object again
         glBindTexture(GL_TEXTURE_2D, 0);

@@ -24,7 +24,7 @@ namespace android {
                                           int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
                                           int theLineHeight, int theStartIndex, bool & mirrorFlag);
         virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height,
-                                         unsigned int & real_width, unsigned int & real_height,  bool & hasAlpha);                                           
+                                         unsigned int & real_width, unsigned int & real_height,  bool & hasAlpha, bool & theMipmapFlag);                                           
         virtual void updateCameraTexture();
         virtual void freezeMobileOrientation(const std::string & theOrientation);
         virtual masl::CameraInfo getCameraSpec();
