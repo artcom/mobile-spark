@@ -56,8 +56,6 @@ namespace spark {
             _myTextureSize = vector2(myMovieInfo.width, myMovieInfo.height);
             _myRealImageSize = _myTextureSize;
             
-            //printf("playing movie: %s  (%.2f x %.2f)\n",data_.c_str(),_myRealImageSize[0],_myRealImageSize[1]);
-            
             float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
             float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
 
@@ -130,5 +128,14 @@ namespace spark {
     float Movie::getVolume()
     {
         return _volume;
+    }
+    
+    void Movie::togglePlayPause()
+    {
+        if(isPlaying())
+            pause();
+        else
+            play();
+
     }
 }

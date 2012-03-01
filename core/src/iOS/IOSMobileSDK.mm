@@ -37,7 +37,9 @@ namespace ios
                 return false;
         }
         
-        _movieMap[theMovieWidget] = MovieControllerPtr(new MovieController);
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        if(it == _movieMap.end())
+            _movieMap[theMovieWidget] = MovieControllerPtr(new MovieController);
         
         _movieMap[theMovieWidget]->playMovie(filePath);
         

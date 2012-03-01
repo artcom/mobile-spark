@@ -60,6 +60,7 @@ namespace demoapp {
             
             // tapped on testMovie
             void onTouchMovie(spark::EventPtr theEvent);
+            void onDoubleTapMovie(spark::EventPtr theEvent);
             
             std::vector<SlideImplPtr> _mySlides;
             unsigned _myCurrentSlide;

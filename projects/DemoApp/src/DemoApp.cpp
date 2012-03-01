@@ -247,11 +247,16 @@ namespace demoapp {
         
         if(mvSlidePtr)
         {
-            spark::EventCallbackPtr myMovieCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onTouchMovie));
+            spark::EventCallbackPtr myMovieToggleCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onTouchMovie));
+            spark::EventCallbackPtr myMovieResetCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onDoubleTapMovie));
+            
             MoviePtr movie = boost::static_pointer_cast<Movie>(mvSlidePtr->getChildByName("testMovie") );
             
-            if(movie) 
-                movie->addEventListener(TouchEvent::PICKED, myMovieCB);
+            if(movie)
+            {
+                movie->addEventListener(TouchEvent::PICKED, myMovieToggleCB);
+                movie->addEventListener(TouchEvent::DOUBLETAP, myMovieResetCB);
+            }
             else
                 AC_PRINT<<"Invalid Movie-src ...";
         
@@ -566,8 +571,19 @@ namespace demoapp {
     {
         MoviePtr movie = boost::static_pointer_cast<Movie>(theEvent->getTarget());
     
-        movie->play();
+        //movie->play();
+        
+        movie->togglePlayPause();
     }
+    
+    void DemoApp::onDoubleTapMovie(EventPtr theEvent)
+    {
+        MoviePtr movie = boost::static_pointer_cast<Movie>(theEvent->getTarget());
+        
+        movie->play();
+        
+    }
+    
 }
 
 

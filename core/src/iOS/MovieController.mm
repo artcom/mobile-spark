@@ -9,8 +9,6 @@
 
 #include "MovieController.h"
 
-//#import <UIKit/UIKit.h>
-
 #import <AVFoundation/AVFoundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 
@@ -41,6 +39,8 @@ namespace ios {
                     m_timeStamp(0.0){};
         ~AVStruct()
         {
+            printf("DESTRUCTOR AVStruct\n");
+            
             if(m_videoOut) [m_videoOut release];
             if(m_audioOut) [m_audioOut release];
             if(m_assetReader) [m_assetReader release];
@@ -82,15 +82,19 @@ namespace ios {
     
     void MovieController::playMovie(const std::string &filePath)
     {
-        // already plaing. nothing to do
+        printf("playing: %d -- audioPlayer: %ld\n",_playing,(long)_avStruct->m_audioPlayer);
+        
+        // already playing. nothing to do
         if (_playing) 
             return;
         
         // resume paused playback
         else if(_avStruct->m_audioPlayer)
         {
+            printf("RESUME\n");
             [_avStruct->m_audioPlayer play];
             _playing = true;
+            return;
         }
         
         NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filePath.c_str()]];
@@ -219,7 +223,6 @@ namespace ios {
         
         _avStruct->m_audioPlayer.volume = val;
         
-        printf("VOLUME: %.2f\n",val);
     }
     
     void MovieController::pixelBufferToGLTexture(const CVPixelBufferRef pixelBuf,GLuint &textureName)

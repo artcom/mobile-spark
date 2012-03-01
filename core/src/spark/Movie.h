@@ -31,6 +31,8 @@ namespace spark {
         void setVolume(float newVolume);
         float getVolume();
         
+        void togglePlayPause();
+        
         const std::string & getSrc() const {return _moviesrc;};
         
         static const char * const SPARK_TYPE;
