@@ -97,7 +97,8 @@ namespace spark {
             
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowWeakPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
-        _mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
+        // removed because of bugs in aPadapp
+        //_mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
         _mySparkWindow->addEventListener(TouchEvent::BUTTON_BACK, myBackButtonCB);
 
             
