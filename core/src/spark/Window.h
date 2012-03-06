@@ -10,6 +10,8 @@
 #ifndef _included_mobile_spark_Window_
 #define _included_mobile_spark_Window_
 
+#include <boost/progress.hpp>
+
 #include "Widget.h"
 #include "Event.h"
 
@@ -53,10 +55,12 @@ namespace spark {
     private:
         int _myWidth;
         int _myHeight;
+        int _myTargetFPS;
         bool _myFullScreenFlag;
         vector4 _myClearColor;
         mar::CanvasPtr _myGLCanvas;
         std::string _myOrientation;
+        masl::Ptr<boost::timer::timer> _myFPSTimerPtr;                  
         //picking -> move to other compilation unit?
         ComponentPtr pick2DAABBStyle(const unsigned int x, const unsigned int y) ;
         std::vector<ComponentPtr> _myUnrealizedWorlds;

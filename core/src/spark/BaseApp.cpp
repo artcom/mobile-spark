@@ -139,7 +139,7 @@ namespace spark {
     }
     
     void BaseApp::handleEvents() {
-        //AC_PRINT << "-----------------------------------------------";
+        AC_PRINT << "-----------------------------------------------";
         _myOneBaseAppOnFrameCallPerRenderloopFlag = false;
         // ------------------------------ handle event strategy -------------------------------------------------
         // do not delay or ignore systemrelevant events
@@ -203,7 +203,7 @@ namespace spark {
         //_myEvents.clear();        
         _myEvents = myDelayedEvents;
         AC_TRACE << "################ handle events finished " << myHandledEventCounter;
-        AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " s";
+        AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " ms";
     }
     
 
