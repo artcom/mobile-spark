@@ -32,6 +32,7 @@ namespace animation {
 
     void Animation::doFrame(const masl::UInt64 theCurrentMillis) {
         _myProgressTime = theCurrentMillis - _myStartTime;
+        //_myProgressTime += 33;//theCurrentMillis - _myStartTime;
         _myProgress = _myEasingFunction(_myProgressTime/(float)_myDuration);
         if (_myProgressTime >= _myDuration) {
             AC_DEBUG << _myId << "..................... stop animation";

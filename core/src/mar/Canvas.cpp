@@ -36,6 +36,7 @@ namespace mar {
         //glEnable(GL_CULL_FACE);
         //glCullFace(GL_FRONT);
         glDepthRangef(0, 1);
+        //eglSwapInterval(eglGetCurrentDisplay(), 2);
     }
 
     void

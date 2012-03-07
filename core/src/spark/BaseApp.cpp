@@ -97,7 +97,8 @@ namespace spark {
             
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowWeakPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
-        _mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
+        // removed because of bugs in aPadapp
+        //_mySparkWindow->addEventListener(TouchEvent::LONGPRESS, myCB);
         _mySparkWindow->addEventListener(TouchEvent::BUTTON_BACK, myBackButtonCB);
 
             
@@ -202,7 +203,7 @@ namespace spark {
         //_myEvents.clear();        
         _myEvents = myDelayedEvents;
         AC_TRACE << "################ handle events finished " << myHandledEventCounter;
-        AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " s";
+        AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " ms";
     }
     
 

@@ -36,6 +36,7 @@ namespace spark {
         _myHeight(_myXMLNode->getAttributeAs<float>("height",100)),
         _myFullScreenFlag(_myXMLNode->getAttributeAs<bool>("fullscreen", false)),
         _myClearColor(_myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1))),
+        _myTargetFPS(_myXMLNode->getAttributeAs<int>("fps", 0)),
         _myOrientation(_myXMLNode->getAttributeAs<string>("orientation",""))
     {
         _myGLCanvas = CanvasPtr( new Canvas());
@@ -61,7 +62,8 @@ namespace spark {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             _myUnrealizedWorlds.push_back(getChildByName(myView->getWorldName()));
         }
-        AC_INFO << "worlds realize _myUnrealizedWorlds : "<< _myUnrealizedWorlds.size();        
+        AC_INFO << "worlds realize _myUnrealizedWorlds : "<< _myUnrealizedWorlds.size();   
+        _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);             
     }
 
     vector2
@@ -110,6 +112,7 @@ namespace spark {
     }
     void
     Window::render(){
+          
         _myGLCanvas->preRender(getClearColor());
         // get all views
         VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
@@ -134,6 +137,22 @@ namespace spark {
                 }
             }
         }
+        if (_myTargetFPS != 0) {
+            static const unsigned SecondsToMilli = 1000;
+            double mySleepTimeInMillis = ((1.0/_myTargetFPS)  - _myFPSTimerPtr->elapsed()) * SecondsToMilli;
+            if (mySleepTimeInMillis > 0.0) {
+                double myRemainingTime = mySleepTimeInMillis;
+                boost::timer::timer mySleepTimer;            
+                while ( myRemainingTime > 1) {
+                    usleep(1000);
+                    myRemainingTime = mySleepTimeInMillis - (mySleepTimer.elapsed() * SecondsToMilli);
+                }
+                usleep(myRemainingTime);
+            }
+            //AC_PRINT << " sleep to reach " << _myTargetFPS << "fps: " << mySleepTimeInMillis << "ms";
+        }
+        //AC_PRINT << "render duration " << _myFPSTimerPtr->elapsed();
+        _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);
     }
 
 
