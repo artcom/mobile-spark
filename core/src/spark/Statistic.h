@@ -10,6 +10,7 @@
 #ifndef _included_mobile_spark_Statistic_
 #define _included_mobile_spark_Statistic_
 
+#include <boost/progress.hpp>
 #include "Transform.h"
 
 namespace spark {
@@ -30,6 +31,7 @@ namespace spark {
         masl::UInt64 lasttime_;
         TextPtr _myFPSText;
         TextPtr _myMemoryText;
+        masl::Ptr<boost::timer::timer> _myFPSTimerPtr;                          
     };
 
     typedef masl::Ptr<Statistic> StatisticPtr;

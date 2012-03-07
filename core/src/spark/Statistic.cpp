@@ -24,7 +24,9 @@ namespace spark {
     Statistic::Statistic(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         Transform(theApp, theXMLNode),
         lasttime_(0)
-    {}
+    {
+        _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);                     
+    }
 
     Statistic::~Statistic() {
     }
@@ -59,7 +61,7 @@ namespace spark {
     Statistic::onFrame(EventPtr theEvent) {
         StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
         if (_myFPSText) {
-            int myFPS = 1000.0/(myEvent->getCurrentTime() - lasttime_);
+            int myFPS = 1000.0/(_myFPSTimerPtr->elapsed() * 1000);
             _myFPSText->setText("fps: " + masl::as_string(myFPS));
         }
         if (_myMemoryText) {
@@ -68,6 +70,7 @@ namespace spark {
             _myMemoryText->setText("memory: " + masl::as_string(myMemoryUsage) + "/" + masl::as_string(myTotalMemory));
         }
         lasttime_ = myEvent->getCurrentTime();
+        _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);        
     }
 
 }
