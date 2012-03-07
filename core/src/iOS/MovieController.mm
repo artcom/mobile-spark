@@ -81,9 +81,7 @@ namespace ios {
     }
     
     void MovieController::playMovie(const std::string &filePath)
-    {
-        printf("playing: %d -- audioPlayer: %ld\n",_playing,(long)_avStruct->m_audioPlayer);
-        
+    {        
         // already playing. nothing to do
         if (_playing) 
             return;
@@ -367,7 +365,7 @@ namespace ios {
                 _avStruct->m_lastTimestamp = CMSampleBufferGetPresentationTimeStamp( sampleBuffer );
             }
         }
-
+        
         if(sampleBuffer)
         {
             CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
@@ -380,6 +378,13 @@ namespace ios {
             
             // do not forget to release the buffer
             CFRelease(sampleBuffer);
+        }
+        
+        else if(! [_avStruct->m_audioPlayer isPlaying])
+        {
+            AC_PRINT<<"MOVIE FINISHED";
+            stop();
+            return;
         }
     }
   

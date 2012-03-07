@@ -25,7 +25,7 @@ namespace spark {
     {
         _myForcedSize[0] = getNode()->getAttributeAs<float>("width", -1);
         _myForcedSize[1] = getNode()->getAttributeAs<float>("height", -1);
-        mipmap_ = getNode()->getAttributeAs<bool>("mipmap", false);
+        _mipmap = getNode()->getAttributeAs<bool>("mipmap", false);
         setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
     }
 
@@ -57,7 +57,7 @@ namespace spark {
         bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         
         if (!getShape()) {
-            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag, mipmap_);
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag, _mipmap);
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
             myMaterial->setCustomHandles(customShaderValues_);
             myMaterial->setShader(vertexShader_, fragmentShader_); 
@@ -65,7 +65,7 @@ namespace spark {
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             //XXX:not caching always generates a new Texture, setSrc would be enough
-            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag, mipmap_);
+            TexturePtr myTexture = TextureLoader::get().load(data_, myCacheFlag, _mipmap);
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->width_, myMaterial->getTextureUnit()->getTexture()->height_);
