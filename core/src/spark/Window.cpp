@@ -149,9 +149,9 @@ namespace spark {
                 }
                 usleep(myRemainingTime);
             }
-            AC_PRINT << " sleep to reach " << _myTargetFPS << "fps: " << mySleepTimeInMillis << "ms";
+            //AC_PRINT << " sleep to reach " << _myTargetFPS << "fps: " << mySleepTimeInMillis << "ms";
         }
-        AC_PRINT << "render duration " << _myFPSTimerPtr->elapsed();
+        //AC_PRINT << "render duration " << _myFPSTimerPtr->elapsed();
         _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);
     }
 

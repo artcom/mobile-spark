@@ -139,7 +139,7 @@ namespace spark {
     }
     
     void BaseApp::handleEvents() {
-        AC_PRINT << "-----------------------------------------------";
+        //AC_PRINT << "-----------------------------------------------";
         _myOneBaseAppOnFrameCallPerRenderloopFlag = false;
         // ------------------------------ handle event strategy -------------------------------------------------
         // do not delay or ignore systemrelevant events
