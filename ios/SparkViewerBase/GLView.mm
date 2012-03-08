@@ -192,8 +192,7 @@
 {
     [EAGLContext setCurrentContext:glContext];
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    
-   
+      
     //render
     NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
     _myApp->onEvent([frameEvent UTF8String]);    
@@ -207,7 +206,7 @@
 {
     [EAGLContext setCurrentContext:glContext];
     glBindFramebuffer(GL_FRAMEBUFFER, multisamplingFramebuffer);
-    
+     
     //render
     NSString *frameEvent = [NSString stringWithFormat:@"<StageEvent type='frame' time='%f'/>", displayLink.timestamp * 1000.0];
     _myApp->onEvent([frameEvent UTF8String]);  
