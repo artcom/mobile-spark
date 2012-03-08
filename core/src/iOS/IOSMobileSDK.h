@@ -32,7 +32,7 @@ namespace ios {
         
 
         virtual void freezeMobileOrientation(const std::string & theOrientation);
-        virtual masl::CameraInfo getCameraSpec();
+        virtual masl::VideoInfo getCameraSpec();
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
@@ -43,7 +43,7 @@ namespace ios {
         void pauseMovie(spark::MoviePtr theMovieWidget);
         void resetMovie(spark::MoviePtr theMovieWidget);
         void updateMovieTexture(spark::MoviePtr theMovieWidget);
-        const masl::MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
+        const masl::VideoInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
         bool isMoviePlaying(spark::MoviePtr theMovieWidget) const;
         void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) ;
         

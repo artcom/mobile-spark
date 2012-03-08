@@ -26,7 +26,7 @@ namespace android {
     void AndroidMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget){}
     void AndroidMobileSDK::resetMovie(spark::MoviePtr theMovieWidget){}
     void AndroidMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget) {}
-    const masl::MovieInfo AndroidMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const {return masl::MovieInfo();}
+    const masl::VideoInfo AndroidMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const {return masl::VideoInfo();}
     bool AndroidMobileSDK::isMoviePlaying(spark::MoviePtr theMovieWidget) const {return false;}
     void AndroidMobileSDK::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) {}
     
@@ -164,8 +164,8 @@ namespace android {
         }
     }
 
-    masl::CameraInfo AndroidMobileSDK::getCameraSpec() {
-        masl::CameraInfo myCameraInfo;
+    masl::VideoInfo AndroidMobileSDK::getCameraSpec() {
+        masl::VideoInfo myCameraInfo;
         myCameraInfo.textureID=0;
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");

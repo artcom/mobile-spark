@@ -14,7 +14,7 @@
 #include "spark/Movie.h"
 
 namespace masl {
-    struct CameraInfo{
+    struct VideoInfo{
         unsigned int textureID;
         int width;
         int height;
@@ -24,7 +24,7 @@ namespace masl {
     };
     
     // alias for Movies (tmp)
-    typedef CameraInfo MovieInfo;
+    //typedef VideoInfo VideoInfo;
     
     struct TextInfo{
         unsigned int textureID;
@@ -49,7 +49,7 @@ namespace masl {
         
         // Camera
         virtual void updateCameraTexture() = 0;
-        virtual CameraInfo getCameraSpec() = 0;
+        virtual VideoInfo getCameraSpec() = 0;
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
         virtual bool isCameraCapturing() = 0;
@@ -60,7 +60,7 @@ namespace masl {
         virtual void pauseMovie(spark::MoviePtr theMovieWidget) = 0;
         virtual void resetMovie(spark::MoviePtr theMovieWidget) = 0;
         virtual void updateMovieTexture(spark::MoviePtr theMovieWidget) = 0;
-        virtual const MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) const = 0;
+        virtual const VideoInfo getMovieInfo(spark::MoviePtr theMovieWidget) const = 0;
         virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const = 0;
         virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) = 0;
         

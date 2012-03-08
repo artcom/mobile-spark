@@ -42,7 +42,7 @@ namespace spark {
             MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
             
             // retrieve MovieInfo
-            masl::MovieInfo myMovieInfo = masl::MobileSDK_Singleton::get().getNative()->getMovieInfo(thisPtr);
+            masl::VideoInfo myMovieInfo = masl::MobileSDK_Singleton::get().getNative()->getMovieInfo(thisPtr);
             
             // load Material
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);

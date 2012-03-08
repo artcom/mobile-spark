@@ -49,7 +49,7 @@ namespace spark {
                 masl::MobileSDK_Singleton::get().getNative()->startCameraCapture(_myColorConversionFlag);
             }
             WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
-            masl::CameraInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
+            masl::VideoInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
             float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
             float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
             float myShapeWidth = (myWindow->getOrientation() == Orientation::PORTRAIT) ? height : width;
@@ -72,7 +72,7 @@ namespace spark {
     void
     Camera::setGeometry() {
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
-    	masl::CameraInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
+    	masl::VideoInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
         float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
 		float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
 		if (myWindow->getOrientation() == Orientation::PORTRAIT) {

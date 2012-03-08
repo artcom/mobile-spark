@@ -27,7 +27,7 @@ namespace android {
                                          unsigned int & real_width, unsigned int & real_height,  bool & hasAlpha, bool & theMipmapFlag);                                           
         virtual void updateCameraTexture();
         virtual void freezeMobileOrientation(const std::string & theOrientation);
-        virtual masl::CameraInfo getCameraSpec();
+        virtual masl::VideoInfo getCameraSpec();
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
@@ -38,7 +38,7 @@ namespace android {
         virtual void pauseMovie(spark::MoviePtr theMovieWidget);
         virtual void resetMovie(spark::MoviePtr theMovieWidget);
         virtual void updateMovieTexture(spark::MoviePtr theMovieWidget);
-        virtual const MovieInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
+        virtual const masl::VideoInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
         virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const;
         virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume);
         

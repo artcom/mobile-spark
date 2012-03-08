@@ -71,9 +71,9 @@ namespace ios
             it->second->copyNextFrameToTexture();
     }
     
-    const masl::MovieInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const
+    const masl::VideoInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const
     {
-        masl::MovieInfo movieInfo;
+        masl::VideoInfo movieInfo;
         
         MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
         
@@ -267,9 +267,9 @@ namespace ios
         m_orientationString = theOrientation;
     }
     
-    masl::CameraInfo IOSMobileSDK::getCameraSpec() {
+    masl::VideoInfo IOSMobileSDK::getCameraSpec() {
         Camera * myCamera = [Camera instance];
-        masl::CameraInfo cameraInfo;
+        masl::VideoInfo cameraInfo;
         cameraInfo.width = [myCamera getWidth];
         cameraInfo.height = [myCamera getHeight];
         cameraInfo.texturewidth = [myCamera getWidth];
