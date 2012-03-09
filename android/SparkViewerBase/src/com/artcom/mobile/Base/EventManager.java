@@ -49,17 +49,20 @@ public class EventManager {
                     mode = RECENT_ACTION_WAS_DOWN;
                     startX = (int)event.getX(0);
                     startY = height - (int)event.getY(0);
-                    downHandler();
+                    //AC_Log.print("downphandler startX: " + startX +  " startY: " +startY);                            
+                    downHandler();        
                     break;
                 case MotionEvent.ACTION_UP:
                     if (timeNow - startTime < 300) {
                         if (timeNow - lastTapTime<300) {
                             doubleTapHandler();
+                            //AC_Log.print("doubleTapHandler startX: " + startX +  " startY: " + startY);                            
                             break;
                         }                        
                         if (mode == RECENT_ACTION_WAS_DOWN) {
                             singleTapHandler();
                             lastTapTime = timeNow;
+                            //AC_Log.print("singleTapHandler startX: " + startX +  " startY: " + startY);                            
                             break;
                         }
                         if (mode == RECENT_ACTION_WAS_PANING) {
@@ -69,12 +72,15 @@ public class EventManager {
                             if (dy > 50f) swipeUpHandler();
                             startX = (int)event.getX(0);
                             startY = height - (int)event.getY(0);
+                            //AC_Log.print("uphandler startX: " + startX +  " startY: " + startY);                            
                             upHandler();
                             break;
                         }
                     } else if (mode == RECENT_ACTION_WAS_DOWN) {
+                        //AC_Log.print("longPressedHandler startX: " + startX +  " startY: " + startY);                            
                         longPressedHandler();
                     }
+                    //AC_Log.print("+++++++ uphandler startX: " + startX +  " startY: " + startY);                            
                     upHandler();
                 case MotionEvent.ACTION_MOVE:
                     if (mode == A_SECOND_FINGER_TOUCHED) {
@@ -105,8 +111,11 @@ public class EventManager {
                         break;
                     }
                     // only one finger is moving:
-                    if(dx*dx + dy*dy < 150) break;
+                    if(dx*dx + dy*dy < 50) { 
+                        break;
+                    }
                     mode = RECENT_ACTION_WAS_PANING;                    
+                    //AC_Log.print("panHandler startX: " + startX +  " startY: " + startY);                            
                     panHandler();
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
