@@ -23,9 +23,6 @@ namespace masl {
         
     };
     
-    // alias for Movies (tmp)
-    //typedef VideoInfo VideoInfo;
-    
     struct TextInfo{
         unsigned int textureID;
         int width;
@@ -67,7 +64,7 @@ namespace masl {
         virtual void exit() = 0;
         
         virtual std::string getOrientation() = 0;
-
+        
 
     };
 

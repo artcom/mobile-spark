@@ -153,14 +153,13 @@ namespace ios
             return false;
         }
         
-        width = CGImageGetWidth(cgImage);
-        height = CGImageGetHeight(cgImage);
+        // max gl texture size or imageloader boundary checks nyi
+        
+        real_width = width = CGImageGetWidth(cgImage);
+        real_height = height = CGImageGetHeight(cgImage);
         
         // determine alpha info
         CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(cgImage);
-        
-        //TODO: remove
-        //printf("IMAGE (%d,%d) %d\n",width,height,(unsigned int)alphaInfo);
         
         // we always have 4 components (no alpha with kCGImageAlphaNoneSkipLast)
         unsigned int rowByteSize = width * 4;
@@ -212,9 +211,6 @@ namespace ios
         {
             AC_DEBUG << "alpha";
             
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                         GL_UNSIGNED_BYTE, (GLvoid*) data);
-            
             hasAlpha = true;
         } 
         else if (alphaInfo == kCGImageAlphaNoneSkipLast) 
@@ -224,9 +220,6 @@ namespace ios
             // RGBX format, where we want to skip X
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                         GL_UNSIGNED_BYTE, (GLvoid*) data);
-            
             hasAlpha = false;
         } 
         else 
@@ -234,31 +227,59 @@ namespace ios
             AC_DEBUG << "unknown color type " << alphaInfo;
         }
         
-        // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
        
         // ios can only build mipmap tree for pot textures, by now this cannot be guaranteed
-        if (theMipmapFlag) {
+        // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
+        
+        if (theMipmapFlag) 
+        {
+            
+            // get next power of two for width and height
+            uint potWidth = mar::Texture::nextPowerOfTwo(real_width);
+            uint potHeight = mar::Texture::nextPowerOfTwo(real_height);
+            
+            width = potWidth;
+            height = potHeight;
+
+            //TODO: remove
+//            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
+//                   real_width, real_height, potWidth, potHeight);
+            
+            // create empty texture object with pot-dimensions
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, NULL);
+            
+            // upload with glTexSubImage
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, real_width, real_height,
+                            GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) data);
+            
+            // set filtering to mipmap/linear
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        } else {
+            
+            // generate mipmap pyramid
+            glGenerateMipmap(GL_TEXTURE_2D);
+            
+        } 
+        else 
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, real_width, real_height, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, (GLvoid*) data);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        }        
+        }
+        
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        if (theMipmapFlag) {
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
         
         // unbind the texture object again
         glBindTexture(GL_TEXTURE_2D, 0);
         
         AC_DEBUG << "generated texture with id" << textureId;
+
         // clean up data
         delete [] data;
         
-        real_width = width;  // max gl texture size or imageloader boundary checks nyi
-        real_height = height;
         return true;
     }
 

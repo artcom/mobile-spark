@@ -23,9 +23,6 @@ namespace spark {
         
         _volume = _myXMLNode->getAttributeAs<float>("volume", 1.f);
         
-        mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
-        _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
-        
     }
 
     Movie::~Movie() {
@@ -51,7 +48,7 @@ namespace spark {
             masl::MobileSDK_Singleton::get().getNative()->updateMovieTexture(thisPtr);
             
             // inject texture name 
-            myMaterial->getTextureUnit()->getTexture()->textureId_ = myMovieInfo.textureID;
+            myMaterial->getTextureUnit()->getTexture()->_textureId = myMovieInfo.textureID;
             
             _myTextureSize = vector2(myMovieInfo.width, myMovieInfo.height);
             _myRealImageSize = _myTextureSize;
@@ -76,7 +73,7 @@ namespace spark {
         setVolume(_volume);
         
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-        myMaterial->getTextureUnit()->getTexture()->textureId_ = 0;
+        myMaterial->getTextureUnit()->getTexture()->_textureId = 0;
         
         // flip texcoords just now to have correct coords for movie-textures
         _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
