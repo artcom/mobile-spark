@@ -17,7 +17,7 @@ namespace spark {
     public:
         Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Image();
-        const std::string & getSrc() const {return data_;};
+        const std::string & getSrc() const {return _data;};
         virtual void setSrc(const std::string & theSrc);
         const vector2 & getRealImageSize();
         virtual void setWidth(unsigned theWidth) {_myForcedSize[0] = theWidth;}
