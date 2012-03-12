@@ -34,9 +34,9 @@ namespace spark {
         // if we are running fullscreen, wait for the first onSize to setup viewport, otherwise use spark values
         _myWidth(_myXMLNode->getAttributeAs<float>("width",100)),
         _myHeight(_myXMLNode->getAttributeAs<float>("height",100)),
+        _myTargetFPS(_myXMLNode->getAttributeAs<int>("fps", 0)),
         _myFullScreenFlag(_myXMLNode->getAttributeAs<bool>("fullscreen", false)),
         _myClearColor(_myXMLNode->getAttributeAs<vector4>("clearColor", vector4(1,1,1,1))),
-        _myTargetFPS(_myXMLNode->getAttributeAs<int>("fps", 0)),
         _myOrientation(_myXMLNode->getAttributeAs<string>("orientation",""))
     {
         _myGLCanvas = CanvasPtr( new Canvas());

@@ -24,9 +24,7 @@ namespace spark {
         virtual void setHeight(unsigned theHeight) {_myForcedSize[1] = theHeight;}
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Image::SPARK_TYPE;};
-        void setMipMap(bool theMipMapFlag) {
-            _mipmap = theMipMapFlag;
-        }
+        void setMipMap(bool theMipMapFlag);
     protected:
         virtual void build();
     

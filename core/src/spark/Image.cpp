@@ -41,8 +41,18 @@ namespace spark {
         return _myRealImageSize;
     }
     
-    void 
-    Image::setSrc(const std::string & theSrc) { 
+    void Image::setMipMap(bool theMipMapFlag) {
+        AC_PRINT << "Image::setMipMap : " << theMipMapFlag;
+        
+        if(_mipmap != theMipMapFlag)
+        {
+            _mipmap = theMipMapFlag;
+            _myDirtyFlag = true;
+        }
+    }
+
+    
+    void Image::setSrc(const std::string & theSrc) { 
         AC_PRINT << "Image::setSrc : " << theSrc;
         
         _data = theSrc; 
@@ -58,38 +68,39 @@ namespace spark {
         UnlitTexturedMaterialPtr myMaterial;
         bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         
+        TexturePtr myTexture = TextureLoader::get().load(_data, myCacheFlag, _mipmap);
+        
         if (!getShape()) {
-            TexturePtr myTexture = TextureLoader::get().load(_data, myCacheFlag, _mipmap);
+            
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
             myMaterial->setCustomHandles(customShaderValues_);
-            myMaterial->setShader(vertexShader_, fragmentShader_); 
+            myMaterial->setShader(_vertexShader, _fragmentShader); 
             _myShape = createCustomShape(myMaterial);
             
-            if(_mipmap)
-            {
-//                uint potWidth = Texture::nextPowerOfTwo(myTexture->_width);
-//                uint potHeight = Texture::nextPowerOfTwo(myTexture->_height);
-                
-                float factorW = myTexture->_real_width / (float) myTexture->_width;
-                float factorH = myTexture->_real_height / (float) myTexture->_height;
-                
-                printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
-                       myTexture->_real_width, myTexture->_real_height,
-                       myTexture->_width, myTexture->_height);
-                
-                printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
-                
-                
-                _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
-                                       vector2(0, factorH), vector2(factorW, factorH));
-            }
-            
-        } else {
+        } 
+        else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             //XXX:not caching always generates a new Texture, setSrc would be enough
             TexturePtr myTexture = TextureLoader::get().load(_data, myCacheFlag, _mipmap);
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
+        
+        if(_mipmap)
+        {
+            float factorW = myTexture->_real_width / (float) myTexture->_width;
+            float factorH = myTexture->_real_height / (float) myTexture->_height;
+            
+            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
+                   myTexture->_real_width, myTexture->_real_height,
+                   myTexture->_width, myTexture->_height);
+            
+            printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
+            
+            
+            _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
+                                   vector2(0, factorH), vector2(factorW, factorH));
+        }
+        
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->_width, myMaterial->getTextureUnit()->getTexture()->_height);
         _myRealImageSize = vector2(myMaterial->getTextureUnit()->getTexture()->_real_width, myMaterial->getTextureUnit()->getTexture()->_real_height);
         float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];

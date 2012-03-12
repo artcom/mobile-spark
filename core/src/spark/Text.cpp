@@ -61,7 +61,7 @@ namespace spark {
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
         myMaterial->getTextureUnit()->getTexture()->_transparency = true;
         myMaterial->setCustomHandles(customShaderValues_);
-        myMaterial->setShader(vertexShader_, fragmentShader_); 
+        myMaterial->setShader(_vertexShader, _fragmentShader); 
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
