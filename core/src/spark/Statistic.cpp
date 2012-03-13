@@ -11,6 +11,7 @@
 
 #include <masl/proc_functions.h>
 #include <masl/string_functions.h>
+#include <masl/MobileSDK.h>
 
 #include "BaseApp.h"
 #include "Window.h"
@@ -53,6 +54,14 @@ namespace spark {
         _myMemoryText = boost::static_pointer_cast<spark::Text>(myCreated);
 
         myStatisticHeight += _myFPSText->getTextSize()[1];
+
+        myCreated = SparkComponentFactory::get().loadSparkComponentsFromString(myContainer->getApp(),
+                                                                               "<Text name=\"battery_level\" y=\"-50\" z=\"100\" maxWidth=\"0\" text=\"memory:\" height=\"-16\" color=\"[1.0,0.0,0.0, 1.0]\" fontsize=\"16\"/>");
+        myContainer->addChild(myCreated);
+        _myBatteryLevelText = boost::static_pointer_cast<spark::Text>(myCreated);
+        
+        myStatisticHeight += _myFPSText->getTextSize()[1];
+        
         setY(myWindow->getSize()[1] - myStatisticHeight);
         setX(10);
     }
@@ -69,6 +78,12 @@ namespace spark {
             unsigned int myTotalMemory = masl::getTotalMemory();
             _myMemoryText->setText("memory: " + masl::as_string(myMemoryUsage) + "/" + masl::as_string(myTotalMemory));
         }
+        if (_myBatteryLevelText) {
+            float myBatteryLevel = 100.f * masl::MobileSDK_Singleton::get().getNative()->getDeviceBatteryLevel();
+            _myBatteryLevelText->setText("battery %: " + masl::as_string(myBatteryLevel) + "/" + masl::as_string(100));
+        }
+        
+        
         lasttime_ = myEvent->getCurrentTime();
         _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);        
     }

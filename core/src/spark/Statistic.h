@@ -31,6 +31,7 @@ namespace spark {
         masl::UInt64 lasttime_;
         TextPtr _myFPSText;
         TextPtr _myMemoryText;
+        TextPtr _myBatteryLevelText;
         masl::Ptr<boost::timer::timer> _myFPSTimerPtr;                          
     };
 
