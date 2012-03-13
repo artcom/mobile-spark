@@ -273,4 +273,10 @@ namespace android {
     	return "";	
     }
 
+    float AndroidMobileSDK::getDeviceBatteryLevel()
+    {
+        return 0.f;
+    }
+    
+
 }

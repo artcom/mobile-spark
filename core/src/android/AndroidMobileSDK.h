@@ -45,6 +45,8 @@ namespace android {
         virtual void exit();
 
     	virtual std::string getOrientation();
+
+        float getDeviceBatteryLevel();
     	
         JNIEnv * env;
         jobject obj;

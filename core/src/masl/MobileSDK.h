@@ -65,6 +65,8 @@ namespace masl {
         
         virtual std::string getOrientation() = 0;
         
+        virtual float getDeviceBatteryLevel() = 0;
+        
 
     };
 
