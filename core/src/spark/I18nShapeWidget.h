@@ -25,7 +25,7 @@ namespace spark {
             void setI18nData(const std::string & theData);
             virtual std::string getAttributesAsString() const;
         protected:
-            std::string data_;
+            std::string _data;
         private:            
             void attachToI18nItem();
             std::string i18nId_;

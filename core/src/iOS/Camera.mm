@@ -33,6 +33,9 @@
     if (!(self = [super init]))
 		return nil;
 	
+    _bgraTexture = NULL;
+    _pixelBuffer = NULL;
+    
 	// Grab the back-facing camera
 	AVCaptureDevice *backFacingCamera = nil;
 	NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -43,10 +46,13 @@
 			backFacingCamera = device;
 		}
 	}
-	
+
 	// Create the capture session
 	captureSession = [[AVCaptureSession alloc] init];
 	
+    // fill configuration queue
+    [captureSession beginConfiguration];
+    
 	// Add the video input	
 	NSError *error = nil;
 	videoInput = [[[AVCaptureDeviceInput alloc] initWithDevice:backFacingCamera error:&error] autorelease];
@@ -55,11 +61,15 @@
 		[captureSession addInput:videoInput];
 	}
 	
+    // TODO: videoPreviewLayer needed here?
 	[self videoPreviewLayer];
+    
 	// Add the video frame output	
 	videoOutput = [[AVCaptureVideoDataOutput alloc] init];
 	[videoOutput setAlwaysDiscardsLateVideoFrames:YES];
+    
 	// Use RGB frames instead of YUV to ease color processing
+    // TODO: do YUV colour conversion in shader
 	[videoOutput setVideoSettings:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA] forKey:(id)kCVPixelBufferPixelFormatTypeKey]];
     
     [videoOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
@@ -69,8 +79,14 @@
 	} else {
 		AC_ERROR << "Couldn't add video output";
 	}
+    
+    // too much workload e.g. on Iphone 4s (larger cam-resolution)
     [captureSession setSessionPreset:AVCaptureSessionPresetHigh];
+    
 	//[captureSession setSessionPreset:AVCaptureSessionPreset640x480];
+    
+    // apply all settings as batch
+    [captureSession commitConfiguration];
 	
     return self;
 }
@@ -79,70 +95,106 @@
     return [captureSession isRunning];
 }
 
-- (void)startCameraCapture {
+- (void)startCameraCapture 
+{
     AC_DEBUG << "startCameraCapture";
     if (![captureSession isRunning])
 	{
 		[captureSession startRunning];
-        glGenTextures(1, &textureID);
+        //glGenTextures(1, &textureID);
+        
+        //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
+        CVReturn err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault,
+                                                    NULL,
+                                                    (__bridge void *)[EAGLContext currentContext],
+                                                    NULL, &_videoTextureCache);
+        if (err) 
+        {
+            AC_ERROR<<"Error at CVOpenGLESTextureCacheCreate: "<<err;
+        }
 
 	};        
 }
-
-- (void)updateCameraTexture {
-    // maybe move gl binding from capture output here
-}
-
-
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{
-    pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-	height = CVPixelBufferGetHeight(pixelBuffer);
-	width = CVPixelBufferGetWidth(pixelBuffer);
-	AC_TRACE<<"captureOutput width: "<<width <<" height: "<<height;
-    
-    
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// This is necessary for non-power-of-two textures
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	
-	// Using BGRA extension to pull in video frame data directly
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(pixelBuffer));
-    
-	CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-
-}
-
 
 - (void)stopCameraCapture
 {
     AC_DEBUG<<"stopCameraCapture";
     
-    glDeleteTextures(1, &textureID);
-    textureID = 0;
-    [captureSession stopRunning];
+   [self cleanUpTextures];
     
+    _pixelBuffer = NULL;
+    
+    CFRelease(_videoTextureCache);
+    
+    [captureSession stopRunning];
 }
 
+- (void) cleanUpTextures
+{
+    if (_bgraTexture)
+    {
+        CFRelease(_bgraTexture);
+        _bgraTexture = NULL;
+    }
+    
+    // Periodic texture cache flush every frame
+    CVOpenGLESTextureCacheFlush(_videoTextureCache, 0);
+    
+    if (!_videoTextureCache)
+    {
+        AC_ERROR<<"No video texture cache";
+    }
+    
+    _textureID = 0;
+}
 
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+{
+    [self cleanUpTextures];
+    
+    _pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+
+	_height = CVPixelBufferGetHeight(_pixelBuffer);
+	_width = CVPixelBufferGetWidth(_pixelBuffer);
+    
+    CVReturn err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault, 
+                                                                _videoTextureCache,
+                                                                _pixelBuffer,
+                                                                NULL,
+                                                                GL_TEXTURE_2D,
+                                                                GL_RGBA,
+                                                                _width,
+                                                                _height,
+                                                                GL_BGRA,
+                                                                GL_UNSIGNED_BYTE,
+                                                                0,
+                                                                &_bgraTexture);
+    if(err)
+    {
+        AC_ERROR<<"could not update camera texture";
+    }
+    
+    _textureID = CVOpenGLESTextureGetName(_bgraTexture);
+    
+    glBindTexture(GL_TEXTURE_2D, _textureID);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+	//AC_TRACE<<"captureOutput width: "<<_width <<" height: "<<_height;
+}
 
 - (int)getWidth
 {
-    return width;
+    return _width;
 }
 - (int)getHeight
 {
-    return height;
+    return _height;
 }
 - (GLuint)getTextureID
 {
-    return textureID;
+    return _textureID;
 }
-
 
 
 - (AVCaptureVideoPreviewLayer *)videoPreviewLayer;
@@ -155,7 +207,5 @@
 	
 	return videoPreviewLayer;
 }
-
-
 
 @end

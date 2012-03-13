@@ -20,20 +20,23 @@ namespace mar {
             Texture();
             ~Texture();
             void unbind();
-            std::string getSrc() const {return src_;};
+            std::string getSrc() const {return _src;};
             void setSrc(const std::string & theSrc = "");
             std::string getAttributesAsString() const;
 
-            GLuint width_; 
-            GLuint height_;
-            GLuint real_width_;  // in some cases images must be downscaled to be loaded from android/ios 
-            GLuint real_height_; // imageloader or fit max gl texture size, this is the real size
-            bool transparency_;
-            GLuint textureId_;     
-            bool mirrorflag_;  
-            bool mipmapFlag_; 
+            GLuint _width; 
+            GLuint _height;
+            GLuint _real_width;  // in some cases images must be downscaled to be loaded from android/ios 
+            GLuint _real_height; // imageloader or fit max gl texture size, this is the real size
+            bool _transparency;
+            GLuint _textureId;     
+            bool _mirrorflag;  
+            bool _mipmapFlag;
+        
+            static uint nextPowerOfTwo(uint size);
+        
         private:
-            std::string src_;
+            std::string _src;
         
     };
     typedef masl::Ptr<Texture> TexturePtr;

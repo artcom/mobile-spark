@@ -14,7 +14,6 @@
 
 #import "Camera.h"
 
-
 namespace ios 
 {
     IOSMobileSDK::IOSMobileSDK()
@@ -24,13 +23,89 @@ namespace ios
 
     IOSMobileSDK::~IOSMobileSDK() {}
 
-    void IOSMobileSDK::vibrate(long theDurationMillisec) {
+    void IOSMobileSDK::vibrate(long theDurationMillisec) 
+    {
+        
     }
-    bool IOSMobileSDK::playMovie(const std::string & theURL) { return true;}
-    void IOSMobileSDK::stopMovie() {}
-    void IOSMobileSDK::pauseMovie() {}
-    void IOSMobileSDK::resetMovie() {}
+    
+    bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
+    {
+        std::string filePath;
+        
+        if (theMovieWidget->getSrc().size() > 0 ) {
+            if (!masl::searchFile(theMovieWidget->getSrc(), filePath)) 
+                return false;
+        }
+        
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        if(it == _movieMap.end())
+            _movieMap[theMovieWidget] = MovieControllerPtr(new MovieController);
+        
+        _movieMap[theMovieWidget]->playMovie(filePath);
+        
+        return true;
+    }
+    
+    void IOSMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) 
+    {
+        _movieMap[theMovieWidget]->stop();
+        
+        _movieMap.erase(theMovieWidget);
+    }
+    
+    void IOSMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget) 
+    {
+        _movieMap[theMovieWidget]->pause();
+    }
+    
+    void IOSMobileSDK::resetMovie(spark::MoviePtr theMovieWidget) 
+    {
+        _movieMap[theMovieWidget]->reset();
+    }
+    
+    void IOSMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget)
+    {
+        MovieMap::iterator it = _movieMap.find(theMovieWidget);
+        
+        if(it != _movieMap.end())
+            it->second->copyNextFrameToTexture();
+    }
+    
+    const masl::VideoInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const
+    {
+        masl::VideoInfo movieInfo;
+        
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        
+        if(it != _movieMap.end())
+        {
+            movieInfo.textureID = it->second->getTextureID();
+            movieInfo.width = it->second->getWidth();
+            movieInfo.height = it->second->getHeight();
+        }
+        
+        return movieInfo;
+    }
+    
+    bool IOSMobileSDK::isMoviePlaying(spark::MoviePtr theMovieWidget) const
+    {
+        bool ret = false;
+        
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        
+        if(it != _movieMap.end())
+        {
+            ret = it->second->isPlaying();
+        }
 
+        return ret;
+    }
+    
+    void IOSMobileSDK::updateCameraTexture()
+    {
+        // not needed currently (@see Camera.h)
+    }
+    
     masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 
                                             int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
                                             int theLineHeight, int theStartIndex, bool & mirrorFlag) {
@@ -38,13 +113,23 @@ namespace ios
         masl::TextInfo textInfo;        
         
         TextRendererPtr textRenderer = TextRendererPtr(new TextRenderer());
-        textRenderer.get()->renderText(theMessage.substr(theStartIndex), theTextureId, theFontSize, theColor, (float) theMaxWidth, (float) theMaxHeight, theAlign, theFontPath,theLineHeight, theStartIndex);
+        textRenderer->renderText(theMessage.substr(theStartIndex), theTextureId, theFontSize, theColor, (float) theMaxWidth, (float) theMaxHeight, theAlign, theFontPath,theLineHeight, theStartIndex);
         
         textInfo.textureID = textRenderer.get()->getTextureID();
         textInfo.height = textRenderer.get()->getTextureHeight();
         textInfo.width = textRenderer.get()->getTextureWidth();
         textInfo.renderedGlyphIndex = textRenderer.get()->getRenderedGlyphIndex();
         return textInfo;
+    }
+    
+    void IOSMobileSDK::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume)
+    {
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        
+        if(it != _movieMap.end())
+        {
+            it->second->setVolume(newVolume);
+        }
     }
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
@@ -68,14 +153,13 @@ namespace ios
             return false;
         }
         
-        width = CGImageGetWidth(cgImage);
-        height = CGImageGetHeight(cgImage);
+        // max gl texture size or imageloader boundary checks nyi
+        
+        real_width = width = CGImageGetWidth(cgImage);
+        real_height = height = CGImageGetHeight(cgImage);
         
         // determine alpha info
         CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(cgImage);
-        
-        //TODO: remove
-        //printf("IMAGE (%d,%d) %d\n",width,height,(unsigned int)alphaInfo);
         
         // we always have 4 components (no alpha with kCGImageAlphaNoneSkipLast)
         unsigned int rowByteSize = width * 4;
@@ -123,47 +207,79 @@ namespace ios
         
         AC_DEBUG << "w x h : " << width << ", " << height;
         
-        if (alphaInfo == kCGImageAlphaPremultipliedLast) {
+        if (alphaInfo == kCGImageAlphaPremultipliedLast) 
+        {
             AC_DEBUG << "alpha";
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                         GL_UNSIGNED_BYTE, (GLvoid*) data);
+            
             hasAlpha = true;
-        } else if (alphaInfo == kCGImageAlphaNoneSkipLast) {
+        } 
+        else if (alphaInfo == kCGImageAlphaNoneSkipLast) 
+        {
             AC_DEBUG << "no alpha";
+            
             // RGBX format, where we want to skip X
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                         GL_UNSIGNED_BYTE, (GLvoid*) data);
+            
             hasAlpha = false;
-        } else {
+        } 
+        else 
+        {
             AC_DEBUG << "unknown color type " << alphaInfo;
         }
         
-        // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
        
         // ios can only build mipmap tree for pot textures, by now this cannot be guaranteed
-        if (theMipmapFlag) {
+        // http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
+        
+        if (theMipmapFlag) 
+        {
+            
+            // get next power of two for width and height
+            uint potWidth = mar::Texture::nextPowerOfTwo(real_width);
+            uint potHeight = mar::Texture::nextPowerOfTwo(real_height);
+            
+            width = potWidth;
+            height = potHeight;
+
+            //TODO: remove
+//            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
+//                   real_width, real_height, potWidth, potHeight);
+            
+            // create empty texture object with pot-dimensions
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, NULL);
+            
+            // upload with glTexSubImage
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, real_width, real_height,
+                            GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) data);
+            
+            // set filtering to mipmap/linear
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        } else {
+            
+            // generate mipmap pyramid
+            glGenerateMipmap(GL_TEXTURE_2D);
+            
+        } 
+        else 
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, real_width, real_height, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, (GLvoid*) data);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        }        
+        }
+        
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        if (theMipmapFlag) {
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
         
         // unbind the texture object again
         glBindTexture(GL_TEXTURE_2D, 0);
         
         AC_DEBUG << "generated texture with id" << textureId;
+
         // clean up data
         delete [] data;
         
-        real_width = width;  // max gl texture size or imageloader boundary checks nyi
-        real_height = height;
         return true;
     }
 
@@ -172,9 +288,18 @@ namespace ios
         m_orientationString = theOrientation;
     }
     
-    masl::CameraInfo IOSMobileSDK::getCameraSpec() {
+    float IOSMobileSDK::getDeviceBatteryLevel()
+    {
+        [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
+        
+        //[[UIDevice currentDevice] batteryState];
+        
+        return [[UIDevice currentDevice] batteryLevel];
+    }
+    
+    masl::VideoInfo IOSMobileSDK::getCameraSpec() {
         Camera * myCamera = [Camera instance];
-        masl::CameraInfo cameraInfo;
+        masl::VideoInfo cameraInfo;
         cameraInfo.width = [myCamera getWidth];
         cameraInfo.height = [myCamera getHeight];
         cameraInfo.texturewidth = [myCamera getWidth];
@@ -187,10 +312,6 @@ namespace ios
         [[Camera instance] startCameraCapture];
     }
 
-    void IOSMobileSDK::updateCameraTexture() {
-        [[Camera instance] updateCameraTexture];
-    }
-    
     void IOSMobileSDK::stopCameraCapture() {
         [[Camera instance] stopCameraCapture];
     }

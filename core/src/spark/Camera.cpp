@@ -49,17 +49,17 @@ namespace spark {
                 masl::MobileSDK_Singleton::get().getNative()->startCameraCapture(_myColorConversionFlag);
             }
             WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
-            masl::CameraInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
+            masl::VideoInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
             float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
             float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
             float myShapeWidth = (myWindow->getOrientation() == Orientation::PORTRAIT) ? height : width;
             if (myShapeWidth != 0 && myShapeWidth != getShape()->getWidth()) {
                 setGeometry();
             }
-            masl::MobileSDK_Singleton::get().getNative()->updateCameraTexture();
+          
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            if (myCameraInfo.textureID != 0 && myCameraInfo.textureID != myMaterial->getTextureUnit()->getTexture()->textureId_) {
-                myMaterial->getTextureUnit()->getTexture()->textureId_ = myCameraInfo.textureID;
+            if (myCameraInfo.textureID != 0 && myCameraInfo.textureID != myMaterial->getTextureUnit()->getTexture()->_textureId) {
+                myMaterial->getTextureUnit()->getTexture()->_textureId = myCameraInfo.textureID;
             }
         } else {
             if (masl::MobileSDK_Singleton::get().getNative()->isCameraCapturing()) {
@@ -72,7 +72,7 @@ namespace spark {
     void
     Camera::setGeometry() {
         WindowPtr myWindow = boost::static_pointer_cast<spark::Window>(getRoot());
-    	masl::CameraInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
+    	masl::VideoInfo myCameraInfo = masl::MobileSDK_Singleton::get().getNative()->getCameraSpec();
         float width = _myXMLNode->getAttributeAs<float>("width", myCameraInfo.width);
 		float height = _myXMLNode->getAttributeAs<float>("height", myCameraInfo.height);
 		if (myWindow->getOrientation() == Orientation::PORTRAIT) {

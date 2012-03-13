@@ -11,15 +11,18 @@
 #define _ac_mobile_masl_MobileSDK_h_included_
 
 #include "Singleton.h"
+#include "spark/Movie.h"
 
 namespace masl {
-    struct CameraInfo{
+    struct VideoInfo{
         unsigned int textureID;
         int width;
         int height;
         int texturewidth;
         int textureheight;
+        
     };
+    
     struct TextInfo{
         unsigned int textureID;
         int width;
@@ -36,21 +39,34 @@ namespace masl {
         virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                          unsigned int & width, unsigned int & height, 
                                          unsigned int & real_width, unsigned int & real_height,
-                                         bool & hasAlpha, bool & theMipmapFlag) = 0;                                                    
-        virtual void updateCameraTexture() = 0;
+
+                                         bool & hasAlpha, bool & theMipmapFlag) = 0;
+        
         virtual void freezeMobileOrientation(const std::string & theOrientation) = 0;
-        virtual CameraInfo getCameraSpec() = 0;
+        
+        // Camera
+        virtual void updateCameraTexture() = 0;
+        virtual VideoInfo getCameraSpec() = 0;
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
         virtual bool isCameraCapturing() = 0;
-        virtual bool playMovie(const std::string & theURL) = 0;
-        virtual void stopMovie() = 0;
-        virtual void pauseMovie() = 0;
-        virtual void resetMovie() = 0;
+        
+        // Movie Controls
+        virtual bool playMovie(spark::MoviePtr theMovieWidget) = 0;
+        virtual void stopMovie(spark::MoviePtr theMovieWidget) = 0;
+        virtual void pauseMovie(spark::MoviePtr theMovieWidget) = 0;
+        virtual void resetMovie(spark::MoviePtr theMovieWidget) = 0;
+        virtual void updateMovieTexture(spark::MoviePtr theMovieWidget) = 0;
+        virtual const VideoInfo getMovieInfo(spark::MoviePtr theMovieWidget) const = 0;
+        virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const = 0;
+        virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) = 0;
+        
         virtual void exit() = 0;
         
         virtual std::string getOrientation() = 0;
-
+        
+        virtual float getDeviceBatteryLevel() = 0;
+        
 
     };
 

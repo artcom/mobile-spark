@@ -59,9 +59,9 @@ namespace spark {
         }
         AC_INFO << "Text ctor: " << _myFontPath;
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
-        myMaterial->getTextureUnit()->getTexture()->transparency_ = true;
+        myMaterial->getTextureUnit()->getTexture()->_transparency = true;
         myMaterial->setCustomHandles(customShaderValues_);
-        myMaterial->setShader(vertexShader_, fragmentShader_); 
+        myMaterial->setShader(_vertexShader, _fragmentShader); 
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
@@ -87,26 +87,26 @@ namespace spark {
         
     void
     Text::setStartIndex(unsigned int theIndex) {
-        _myTextStartPos = (theIndex<=data_.size() ? theIndex:0);
+        _myTextStartPos = (theIndex<=_data.size() ? theIndex:0);
         AC_DEBUG << "incoming index : " << theIndex << "->" << _myTextStartPos;
     }    
     void
     Text::build() {
         I18nShapeWidget::build();
         AC_DEBUG << "build "<<*this << " caching: " << _myCacheFlag;
-        AC_TRACE << "data: " << data_.substr(_myTextStartPos, data_.size());
+        AC_TRACE << "data: " << _data.substr(_myTextStartPos, _data.size());
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         bool myCreateTextureFlag = true;            
         unsigned long myKey =  masl::initiateCRC32();
         if (_myCacheFlag) {
-            appendCRC32(myKey, data_.substr(_myTextStartPos, data_.size()));
+            appendCRC32(myKey, _data.substr(_myTextStartPos, _data.size()));
             appendCRC32(myKey, as_string(_myFontSize));
             appendCRC32(myKey, _myFontPath);
             appendCRC32(myKey, as_string(_myTextColor));
             TexturePtr myTexturePtr = TextureLoader::get().getTexture(myKey);
             if (myTexturePtr) {
-                _myTextSize[0] = myTexturePtr->width_;
-                _myTextSize[1] = myTexturePtr->height_;
+                _myTextSize[0] = myTexturePtr->_width;
+                _myTextSize[1] = myTexturePtr->_height;
                 _myRenderedGlyphIndex = TextGlyphIndexMap::get().getIndex(myKey);
                 setSize(_myTextSize[0], _myTextSize[1]);
                 myMaterial->getTextureUnit()->setTexture(myTexturePtr);
@@ -121,18 +121,18 @@ namespace spark {
             } else {
                 myTexture = TexturePtr(new Texture());
             }
-            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(data_, myTexture->textureId_, _myFontSize,
+            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(_data, myTexture->_textureId, _myFontSize,
                                              _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos,
-                                             myTexture->mirrorflag_);                                             
+                                             myTexture->_mirrorflag);                                             
             myMaterial->getTextureUnit()->setTexture(myTexture);
             _myTextSize[0] = myTextInfo.width;
             _myTextSize[1] = myTextInfo.height;
             _myRenderedGlyphIndex = myTextInfo.renderedGlyphIndex;
             setSize(_myTextSize[0], _myTextSize[1]);
-            myTexture->width_ =  myTextInfo.width;
-            myTexture->height_ = myTextInfo.height;
-            myTexture->textureId_ = myTextInfo.textureID;
-            myTexture->transparency_ = true;
+            myTexture->_width =  myTextInfo.width;
+            myTexture->_height = myTextInfo.height;
+            myTexture->_textureId = myTextInfo.textureID;
+            myTexture->_transparency = true;
             if (_myCacheFlag) {
                 TextGlyphIndexMap::get().store(myKey, _myRenderedGlyphIndex);
                 TextureLoader::get().storeTexture(myKey, myTexture);

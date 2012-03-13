@@ -17,16 +17,32 @@ namespace spark {
     public:
         Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Movie();
+        
+        // overwrite from ShapeWidget
+        virtual void prerender(MatrixStack& theCurrentMatrixStack);
+        
         void play();   // start playback at playcursor
         void stop();   // stop videoplayback
         void pause();  // pause video and do not touch playcursor
-        void reset();  // set playcursor to video start 
+        void reset();  // set playcursor to video start
+        
+        bool isPlaying();
+        
+        void setVolume(float newVolume);
+        float getVolume();
+        
+        void togglePlayPause();
+        
+        const std::string & getSrc() const {return _moviesrc;};
         
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Movie::SPARK_TYPE;};
-    protected:
+        
+
     private:
-        std::string moviesrc_;
+        std::string _moviesrc;
+        
+        float _volume;
     };
 
     typedef masl::Ptr<Movie> MoviePtr;
