@@ -288,6 +288,15 @@ namespace ios
         m_orientationString = theOrientation;
     }
     
+    float IOSMobileSDK::getDeviceBatteryLevel()
+    {
+        [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
+        
+        //[[UIDevice currentDevice] batteryState];
+        
+        return [[UIDevice currentDevice] batteryLevel];
+    }
+    
     masl::VideoInfo IOSMobileSDK::getCameraSpec() {
         Camera * myCamera = [Camera instance];
         masl::VideoInfo cameraInfo;

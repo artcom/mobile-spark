@@ -51,6 +51,8 @@ namespace ios {
 
         std::string getOrientation();
         
+        float getDeviceBatteryLevel();
+        
     private:
         std::string m_orientationString;
         
