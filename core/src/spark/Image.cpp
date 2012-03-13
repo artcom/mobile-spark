@@ -66,11 +66,13 @@ namespace spark {
         
         AC_DEBUG<<"build image " << *this << " with src: "<<_data;
         UnlitTexturedMaterialPtr myMaterial;
-        bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         
+        //XXX:not caching always generates a new Texture, setSrc would be enough
+        bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         TexturePtr myTexture = TextureLoader::get().load(_data, myCacheFlag, _mipmap);
         
-        if (!getShape()) {
+        if (!getShape()) 
+        {
             
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
             myMaterial->setCustomHandles(customShaderValues_);
@@ -78,10 +80,11 @@ namespace spark {
             _myShape = createCustomShape(myMaterial);
             
         } 
-        else {
+        else 
+        {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            //XXX:not caching always generates a new Texture, setSrc would be enough
-            TexturePtr myTexture = TextureLoader::get().load(_data, myCacheFlag, _mipmap);
+    
+            
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
         
@@ -90,11 +93,11 @@ namespace spark {
             float factorW = myTexture->_real_width / (float) myTexture->_width;
             float factorH = myTexture->_real_height / (float) myTexture->_height;
             
-            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
-                   myTexture->_real_width, myTexture->_real_height,
-                   myTexture->_width, myTexture->_height);
-            
-            printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
+//            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
+//                   myTexture->_real_width, myTexture->_real_height,
+//                   myTexture->_width, myTexture->_height);
+//            
+//            printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
             
             
             _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
