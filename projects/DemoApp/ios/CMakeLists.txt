@@ -106,7 +106,7 @@ add_custom_command(
 #add_custom_command( 
 #    TARGET ${EXECUTABLE_NAME} 
 #    POST_BUILD 
-#    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/#${EXECUTABLE_NAME}.app/
+#    COMMAND /Applications/Xcode.app/Contents/OtherFrameworks/DevToolsCore.framework/Versions/A/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/#${EXECUTABLE_NAME}.app/
 #)
 
 #copy layouts folder
