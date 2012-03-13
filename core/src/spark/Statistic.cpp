@@ -68,6 +68,7 @@ namespace spark {
             unsigned int myMemoryUsage = masl::getUsedMemory();
             unsigned int myTotalMemory = masl::getTotalMemory();
             _myMemoryText->setText("memory: " + masl::as_string(myMemoryUsage) + "/" + masl::as_string(myTotalMemory));
+            AC_PRINT << "memory: " << masl::as_string(myMemoryUsage) << "/" << masl::as_string(myTotalMemory);
         }
         lasttime_ = myEvent->getCurrentTime();
         _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);        
