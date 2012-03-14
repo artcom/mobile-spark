@@ -111,7 +111,7 @@ namespace spark {
         //AC_PRINT<<"WINDOW SIZE:"<< _myWidth <<", "<< _myHeight ;
     }
     void
-    Window::render(){
+    Window::renderWindow(){
           
         _myGLCanvas->preRender(getClearColor());
         // get all views

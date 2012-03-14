@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SparkViewerViewController : UIViewController <UITextFieldDelegate>{
+@interface SparkViewController : UIViewController <UITextFieldDelegate>{
     UIInterfaceOrientation m_orientation;
 }
 

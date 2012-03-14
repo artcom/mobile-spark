@@ -7,13 +7,13 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
-#include "SparkViewerViewController.h"
+#include "SparkViewController.h"
 #import "GLView.h"
 
 #include "iOS/IOSMobileSDK.h"
 #include <spark/Window.h>
 
-@implementation SparkViewerViewController
+@implementation SparkViewController
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {

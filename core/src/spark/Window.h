@@ -38,7 +38,7 @@ namespace spark {
         virtual ~Window();
 
         void onTouch(EventPtr theEvent);
-        void render();
+        void renderWindow();
         virtual void onSizeChanged(EventPtr theEvent);
         virtual void onResume();
         virtual void realize();        

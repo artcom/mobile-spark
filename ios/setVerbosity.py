@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+# e.g. call "AC_LOG_VERBOSITY=DEBUG ./setVerbosity.py"
+# or AC_LOG_MODULE_VERBOSITY=DEBUG/Window.cpp/102/202:TRACE/Shape.cpp ./setVerbosity.py
+
 import os
 import xml.dom.minidom 
 
