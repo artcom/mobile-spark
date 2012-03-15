@@ -14,23 +14,27 @@ SET(IOS_DEPLOY_TGT "4.2")
 SET(IOS True)
 
 # SDK Info
-SET(DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
+#SET(DEVROOT_PREFIXES "/" "/Applications/Xcode.app/Contents/")
+
+SET(DEVROOT "/Applications/Xcode.app/Contents/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
+SET(DEVROOT_OLD "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
 
 #Gather all available SDK-paths and select latest
-FILE(GLOB SDK_PATHS ${DEVROOT}/SDKs/*)
+FILE(GLOB SDK_PATHS ${DEVROOT_OLD}/SDKs/*)
+FILE(GLOB SDK_PATHS ${SDK_PATHS} ${DEVROOT}/SDKs/*)
 LIST(LENGTH SDK_PATHS length)
 
 FOREACH(path ${SDK_PATHS})
-	#MESSAGE ("Found SDK ${path}")
-	SET(latest_SDK ${path})
+    #MESSAGE ("Found SDK ${path}")
+    SET(latest_SDK ${path})
 ENDFOREACH(path)
-
-#MESSAGE("Found ${length} SDKs -- latest is ${latest_SDK}")
 
 #Make sure SDK is valid
 find_path(SDKROOT "usr/include/stdlib.h" PATHS ${latest_SDK} NO_CMAKE_FIND_ROOT_PATH)
 
+MESSAGE("Found ${length} SDKs -- latest is ${SDKROOT}")
 SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
+
 SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET ${IOS_DEPLOY_TGT})
 
 #set target device: "1" -> iPhone, "2" -> iPad, "1,2 " -> both (remember the <whitespace> after the '2' !!!)
