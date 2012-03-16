@@ -37,7 +37,7 @@ namespace spark {
         virtual void render(const matrix & theProjectionMatrix) const;
         virtual void realize();
 
-        inline void setVisible(bool theFlag) { AC_DEBUG << "setvisible of " << *this << " to " << theFlag; _visible = theFlag;};
+        inline void setVisible(bool theFlag) {_visible = theFlag;};
         inline void setSensible(bool theFlag) { _sensible = theFlag;};
         inline bool isVisible() const { return _visible;};
         inline bool isSensible() const { return _sensible;};
