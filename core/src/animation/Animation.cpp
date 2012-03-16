@@ -11,6 +11,8 @@
 
 #include <masl/Logger.h>
 
+#define DB(x)  // x
+
 namespace animation {
 
     DEFINE_EXCEPTION(AnimationException, masl::Exception);
@@ -27,18 +29,21 @@ namespace animation {
     }
 
     Animation::~Animation() {
+        DB(AC_DEBUG << "destruct animation " << _myId);
     }
 
     void Animation::doFrame(const masl::UInt64 theCurrentMillis) {
         _myProgressTime = theCurrentMillis - _myStartTime;
         _myProgress = _myEasingFunction(_myProgressTime/(float)_myDuration);
+        DB(AC_TRACE << _myId << " progress is now " << _myProgress);
         if (_myProgressTime >= _myDuration) {
-            AC_DEBUG << _myId << "..................... stop animation";
+            DB(AC_DEBUG << _myId << "..................... stop animation");
             finish(theCurrentMillis);
         }
     }
 
     void Animation::play(const masl::UInt64 theStartTime, const bool theComeToAnEndFlag) {
+        DB(AC_DEBUG << _myId << "..........play animation");
         _myStartTime = theStartTime;
         _myProgressTime = 0.0;
         _myProgress = _myEasingFunction(_myProgressTime);
@@ -49,12 +54,14 @@ namespace animation {
     }
 
     void Animation::cancel() {
+        DB(AC_DEBUG << _myId << "...............cancel animtion";)
         _myRunning = false;
         _myFinished = true;
         if (_myOnCancel) { _myOnCancel->execute(); }
     }
 
     void Animation::finish(const masl::UInt64 theTime) {
+        DB(AC_DEBUG << _myId << "..........finish animtion");
         if (_myFinished) {
             return;
         }
@@ -67,12 +74,12 @@ namespace animation {
     }
 
     void Animation::finishAnimation(const masl::UInt64 theTime) {
-        AC_DEBUG << _myId << "..........finish animation";
+        DB(AC_DEBUG << _myId << "..........finish animation");
         _myProgressTime = _myDuration;
         _myProgress = _myEasingFunction(1.0);
         if (_myOnFinish) { _myOnFinish->execute(); }
         if (_myLoop) {
-            AC_DEBUG << _myId << "..........loop: restart animation";
+            DB(AC_DEBUG << _myId << "..........loop: restart animation");
             play(theTime);
         } else {
             _myRunning = false;
