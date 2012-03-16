@@ -189,7 +189,7 @@ namespace mar {
 
     bool
     UnlitTexturedMaterial::isTransparent() const {
-        return Material::isTransparent() || ((textureUnit_->getTexture()) ? textureUnit_->getTexture()->transparency_ : false);
+        return Material::isTransparent() || ((textureUnit_->getTexture()) ? textureUnit_->getTexture()->_transparency : false);
     }
     //ANDROID ONLY: gl context is lost, so reset textures
     void
@@ -208,7 +208,7 @@ namespace mar {
     UnlitTexturedMaterial::loadShader(const matrix & theMatrix) {
         Material::loadShader(theMatrix);
         glUniformMatrix4fv(textureMatrixHandle_, 1, GL_FALSE, textureUnit_->getRenderMatrix().data());
-        glBindTexture(GL_TEXTURE_2D, textureUnit_->getTexture()->textureId_);
+        glBindTexture(GL_TEXTURE_2D, textureUnit_->getTexture()->_textureId);
         ASSERT_GL("UnlitTexturedMaterial::loadShader", PLUS_FILE_LINE);
     }
 

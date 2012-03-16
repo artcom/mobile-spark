@@ -27,18 +27,26 @@ namespace android {
                                          unsigned int & real_width, unsigned int & real_height,  bool & hasAlpha, bool & theMipmapFlag);                                           
         virtual void updateCameraTexture();
         virtual void freezeMobileOrientation(const std::string & theOrientation);
-        virtual masl::CameraInfo getCameraSpec();
+        virtual masl::VideoInfo getCameraSpec();
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
-        virtual bool playMovie(const std::string & theURL);
-        virtual void stopMovie();
-        virtual void pauseMovie();
-        virtual void resetMovie();
+        
+        
+        virtual bool playMovie(spark::MoviePtr theMovieWidget);
+        virtual void stopMovie(spark::MoviePtr theMovieWidget);
+        virtual void pauseMovie(spark::MoviePtr theMovieWidget);
+        virtual void resetMovie(spark::MoviePtr theMovieWidget);
+        virtual void updateMovieTexture(spark::MoviePtr theMovieWidget);
+        virtual const masl::VideoInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
+        virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const;
+        virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume);
         
         virtual void exit();
 
     	virtual std::string getOrientation();
+
+        float getDeviceBatteryLevel();
     	
         JNIEnv * env;
         jobject obj;

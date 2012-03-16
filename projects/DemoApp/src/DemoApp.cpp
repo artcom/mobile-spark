@@ -116,12 +116,15 @@ namespace demoapp {
         masl::AudioEngineSingleton::get().ae()->preloadEffect("test.wav");
         masl::AudioEngineSingleton::get().ae()->preloadEffect("test2.mp3");
         masl::AudioEngineSingleton::get().ae()->preloadEffect("test3.mp3");
+        
         AC_PRINT << "initial effects volume " << masl::AudioEngineSingleton::get().ae()->getEffectsVolume();
         AC_PRINT << "initial background volume " << masl::AudioEngineSingleton::get().ae()->getBackgroundMusicVolume();
         masl::AudioEngineSingleton::get().ae()->setEffectsVolume(1.0f);
         AC_PRINT << "after setup effects volume " << masl::AudioEngineSingleton::get().ae()->getEffectsVolume();
+        
         masl::AudioEngineSingleton::get().ae()->playBackgroundMusic("background.mp3",true);
-        masl::AudioEngineSingleton::get().ae()->setBackgroundMusicVolume(0.9f); //should be set after play
+        masl::AudioEngineSingleton::get().ae()->setBackgroundMusicVolume(0.2f); //should be set after play
+        
         AC_PRINT << "after setup background volume " << masl::AudioEngineSingleton::get().ae()->getBackgroundMusicVolume();
         spark::EventCallbackPtr mySound1CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound1));
         spark::EventCallbackPtr mySound2CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound2));
@@ -238,7 +241,27 @@ namespace demoapp {
         _mySlides[_myCurrentSlide]->setVisible(true);
         _mySlides[_myCurrentSlide]->setSensible(true);
 
-        AC_DEBUG << "found #" << _mySlides.size() << " slides";        
+        AC_DEBUG << "found #" << _mySlides.size() << " slides";  
+        
+        ComponentPtr mvSlidePtr = my2DWorld->getChildByName("MovieSlide");
+        
+        if(mvSlidePtr)
+        {
+            spark::EventCallbackPtr myMovieToggleCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onTouchMovie));
+            spark::EventCallbackPtr myMovieResetCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onDoubleTapMovie));
+            
+            MoviePtr movie = boost::static_pointer_cast<Movie>(mvSlidePtr->getChildByName("testMovie") );
+            
+            if(movie)
+            {
+                movie->addEventListener(TouchEvent::PICKED, myMovieToggleCB);
+                movie->addEventListener(TouchEvent::DOUBLETAP, myMovieResetCB);
+            }
+            else
+                AC_PRINT<<"Invalid Movie-src ...";
+        
+        }
+        
     }
 
     void DemoApp::onPause() {
@@ -543,6 +566,24 @@ namespace demoapp {
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);            
         centerSlideTitlesToNewCanvasSize(myEvent->size_[0], myEvent->size_[1]);
     }
+    
+    void DemoApp::onTouchMovie(EventPtr theEvent)
+    {
+        MoviePtr movie = boost::static_pointer_cast<Movie>(theEvent->getTarget());
+    
+        //movie->play();
+        
+        movie->togglePlayPause();
+    }
+    
+    void DemoApp::onDoubleTapMovie(EventPtr theEvent)
+    {
+        MoviePtr movie = boost::static_pointer_cast<Movie>(theEvent->getTarget());
+        
+        movie->play();
+        
+    }
+    
 }
 
 

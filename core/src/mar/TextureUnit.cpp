@@ -29,7 +29,7 @@ namespace mar {
         matrix_ = cml::identity_4x4();
         _myTextureScaleCorrection = cml::identity_4x4();
         _myTexture = theTexture;
-        if (_myTexture->mirrorflag_) {
+        if (_myTexture->_mirrorflag) {
             matrix scalematrix;        
             cml::matrix_scale(scalematrix, 1.0f, -1.0f, 1.0f);
     

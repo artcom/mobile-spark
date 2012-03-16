@@ -49,8 +49,8 @@ namespace spark {
             void makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
             mar::ShapePtr _myShape;
             virtual void propagateAlpha();
-            std::string vertexShader_;
-            std::string fragmentShader_;
+            std::string _vertexShader;
+            std::string _fragmentShader;
         private:
             enum ORIGIN_MODE {
                 NO_ORIGIN,

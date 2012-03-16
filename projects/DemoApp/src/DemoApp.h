@@ -57,7 +57,10 @@ namespace demoapp {
             void onStartSlideSwipe();
             void onFinishSlideSwipe();
             void changeSlide(int theDirection);
-
+            
+            // tapped on testMovie
+            void onTouchMovie(spark::EventPtr theEvent);
+            void onDoubleTapMovie(spark::EventPtr theEvent);
             
             std::vector<SlideImplPtr> _mySlides;
             unsigned _myCurrentSlide;
@@ -83,6 +86,7 @@ namespace demoapp {
             void onPutRequestReady(masl::RequestPtr theRequest);
             void onDeleteRequestReady(masl::RequestPtr theRequest);
             void onErrorRequestCB(masl::RequestPtr theRequest);
+        
     };
 
     typedef masl::Ptr<DemoApp> DemoAppPtr;

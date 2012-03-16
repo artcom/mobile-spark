@@ -17,23 +17,22 @@ namespace spark {
     public:
         Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Image();
-        const std::string & getSrc() const {return data_;};
+        const std::string & getSrc() const {return _data;};
         virtual void setSrc(const std::string & theSrc);
         const vector2 & getRealImageSize();
         virtual void setWidth(unsigned theWidth) {_myForcedSize[0] = theWidth;}
         virtual void setHeight(unsigned theHeight) {_myForcedSize[1] = theHeight;}
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Image::SPARK_TYPE;};
-        void setMipMap(bool theMipMapFlag) {
-            mipmap_ = theMipMapFlag;
-        }
+        void setMipMap(bool theMipMapFlag);
     protected:
         virtual void build();
-    private:
+    
         vector2 _myTextureSize;     // this is the size of the gl texture
         vector2 _myRealImageSize;   // this is the size of the asset image
+
         vector2 _myForcedSize;      // this the gl quad size
-        bool mipmap_;
+        bool _mipmap;
     };
 
     typedef masl::Ptr<Image> ImagePtr;

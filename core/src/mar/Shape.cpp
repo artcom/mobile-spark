@@ -202,9 +202,9 @@ namespace mar {
         elementList_.push_back(myElement);
         boundingBox_.max[0] = theWidth;
         boundingBox_.max[1] = theHeight;
-        imageWidth_ = myMaterial->getTextureUnit()->getTexture()->width_;
+        imageWidth_ = myMaterial->getTextureUnit()->getTexture()->_width;
         imageWidth_ = imageWidth_ > 0 ? imageWidth_ : 1;
-        imageHeight_ = myMaterial->getTextureUnit()->getTexture()->height_;
+        imageHeight_ = myMaterial->getTextureUnit()->getTexture()->_height;
         imageHeight_ = imageHeight_ > 0 ? imageHeight_ : 1;
         setVertexData();
     }
