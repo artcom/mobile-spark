@@ -23,8 +23,7 @@ namespace animation {
         _myId(idCounter++),
         _myRunning(false),
         _myFinished(false),
-        _myLoop(false),
-        _myVerboseFlag(false) {
+        _myLoop(false) {
     }
 
     Animation::~Animation() {
