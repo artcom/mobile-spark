@@ -45,7 +45,7 @@ if [ $BUILD_OK == "0" ]
 then
     cd $SPARK_COMPONENT_NAME
     ## update Base project
-    $ANDROID_TOOL update lib-project --target android-9 --path $MOBILE_SPARK/android/SparkViewerBase 
+    $ANDROID_TOOL update lib-project --target android-$ANDROID_LEVEL --path $MOBILE_SPARK/android/SparkViewerBase 
     # update android project
 if [[ "`uname -s`" == *CYGWIN* ]]; then
     HELP=$(cygpath "$MOBILE_SPARK/android/SparkViewerBase")
@@ -54,8 +54,8 @@ else
 fi    
     # android bug: --library fails on absolute paths
     REL_DIR=$(get_relative_path `pwd` $HELP)
-    $ANDROID_TOOL update project --target android-9 --name $SPARK_COMPONENT_NAME --path . 
-    $ANDROID_TOOL update project --library $REL_DIR --target android-9 --name $SPARK_COMPONENT_NAME --path . 
+    $ANDROID_TOOL update project --target android-$ANDROID_LEVEL --name $SPARK_COMPONENT_NAME --path . 
+    $ANDROID_TOOL update project --library $REL_DIR --target android-$ANDROID_LEVEL --name $SPARK_COMPONENT_NAME --path . 
     BUILD_OK=$?
 fi
 
@@ -63,9 +63,9 @@ if [ $BUILD_OK == "0" ]
 then
     # build apk && upload
     if [ $BUILD_TYPE == "release" ]; then
-        ant "$VERBOSITY" release 
+        ant -Dnative.libs.absolute.dir="$MOBILE_SPARK/_build/lib" "$VERBOSITY" release 
     else
-        ant "$VERBOSITY" debug install
+        ant -Dnative.libs.absolute.dir="$MOBILE_SPARK/_build/lib" "$VERBOSITY" debug install
     fi
     BUILD_OK=$?
 fi
