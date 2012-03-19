@@ -42,7 +42,7 @@ namespace spark {
     }
     
     void Image::setMipMap(bool theMipMapFlag) {
-        AC_PRINT << "Image::setMipMap : " << theMipMapFlag;
+        AC_TRACE << "Image::setMipMap : " << theMipMapFlag;
         
         if(_mipmap != theMipMapFlag)
         {
@@ -53,7 +53,7 @@ namespace spark {
 
     
     void Image::setSrc(const std::string & theSrc) { 
-        AC_PRINT << "Image::setSrc : " << theSrc;
+        AC_TRACE << "Image::setSrc : " << theSrc;
         
         _data = theSrc; 
         _myDirtyFlag = true;
