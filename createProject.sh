@@ -31,19 +31,10 @@ rm -rf _build
 
 cd android
 
-if [[ "`uname -s`" == *CYGWIN* ]]; then
-    HELP=$(cygpath "$MOBILE_SPARK/_build/lib")
-else    
-    HELP=$MOBILE_SPARK/_build/lib
-fi    
 OSX_SED_ADDON=""
 if [[ "`uname -s`" == *Darwin* ]]; then
     OSX_SED_ADDON="\"\""
 fi
-REL_DIR=../$(get_relative_path `pwd` $HELP)
-BUILD_LIB_CONSTANT="MOBILE_SPARK_BUILD_LIB"
-sed -i $OSX_SED_ADDON "s|$BUILD_LIB_CONSTANT|$REL_DIR|g" $TEMPLATE_NAME/build.properties
-sed -i $OSX_SED_ADDON "s|$BUILD_LIB_CONSTANT|$REL_DIR|g" $TEMPLATE_NAME/ant.properties
 sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g build.sh
 sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g c++build.sh
 sed -i $OSX_SED_ADDON s/$TEMPLATE_NAME/$PROJECT_NAME/g push.sh

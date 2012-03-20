@@ -3,7 +3,7 @@
 NUMCORES=
 
 #remove existing *.so files from common build-dir to avoid multiple project *.so-files there
-rm -f $MOBILE_SPARK/_build/lib/armeabi-v7a/*
+rm -f $MOBILE_SPARK/_build/lib/$ARM_TARGET/*
 
 for i in $*
 do
@@ -39,7 +39,7 @@ then
 
     #copy projectname.so to core _build
     cd -
-    cp _build/lib/armeabi-v7a/lib$SPARK_COMPONENT_NAME.so $MOBILE_SPARK/_build/lib/armeabi-v7a/
+    cp _build/lib/$ARM_TARGET/lib$SPARK_COMPONENT_NAME.so $MOBILE_SPARK/_build/lib/$ARM_TARGET/
 fi
 
 exit $BUILD_OK

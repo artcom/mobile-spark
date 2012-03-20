@@ -36,9 +36,6 @@ namespace animation {
         virtual void finish(const masl::UInt64 theTime);
         virtual void cancel();
         
-        bool getVerboseFlag() { return _myVerboseFlag; }
-        void setVerboseFlag(bool theFlag) {_myVerboseFlag = theFlag; }
-
         bool isRunning() const { return _myRunning; };
         bool isFinished()  const { return _myFinished; };
 
@@ -56,7 +53,6 @@ namespace animation {
         masl::UInt64 _myStartTime;
         float _myProgress;
         EasingFunctionPtr _myEasingFunction;
-        bool _myVerboseFlag;
 
     private:
         float _myProgressTime;

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?><!DOCTYPE plist  PUBLIC '-//Apple//DTD PLIST 1.0//EN'  'http://www.apple.com/DTDs/PropertyList-1.0.dtd'><plist version="1.0">
 <dict>
 	<key>AC_LOG_VERBOSITY</key>
-	<string></string>
+	<string>WARNING</string>
 	<key>AC_LOG_MODULE_VERBOSITY</key>
 	<string/>
 </dict>
