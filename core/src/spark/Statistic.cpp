@@ -77,7 +77,6 @@ namespace spark {
             unsigned int myMemoryUsage = masl::getUsedMemory();
             unsigned int myTotalMemory = masl::getTotalMemory();
             _myMemoryText->setText("memory: " + masl::as_string(myMemoryUsage) + "/" + masl::as_string(myTotalMemory));
-            AC_PRINT << "memory: " << masl::as_string(myMemoryUsage) << "/" << masl::as_string(myTotalMemory);
         }
         if (_myBatteryLevelText) {
             float myBatteryLevel = 100.f * masl::MobileSDK_Singleton::get().getNative()->getDeviceBatteryLevel();

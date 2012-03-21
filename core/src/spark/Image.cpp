@@ -93,18 +93,9 @@ namespace spark {
         
         if(_mipmap)
         {
-<<<<<<< HEAD
-            float factorW = 1.0;
-            float factorH = 1.0;
-#ifdef iOS
-            factorW = myTexture->_real_width / (float) myTexture->_width;
-            factorH = myTexture->_real_height / (float) myTexture->_height;
-#endif            
-=======
             // I really do not like preprocessor conditions
             // TODO: resolve this temporary solution (adapt mipmapping implementations for ios/android)
             #ifdef iOS
->>>>>>> 9fa17a8ead2c772b1a51f6400a5cc296ac43e238
             
                 float factorW = myTexture->_real_width / (float) myTexture->_width;
                 float factorH = myTexture->_real_height / (float) myTexture->_height;

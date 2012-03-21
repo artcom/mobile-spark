@@ -90,6 +90,17 @@ namespace masl {
     #define PLUS_FILE_LINE masl::location_string(__FILE__,__LINE__)
     #define JUST_FILE_LINE masl::line_string(__LINE__),masl::file_string(__FILE__)
 
+    inline std::string removeMultipleWhiteSpaces( std::string theString ) { 
+        std::string search = "  "; // this is 2 spaces
+        std::size_t index;
+    
+        while((index = theString.find(search)) != std::string::npos ) { 
+            // remove 1 character from the string at index
+            theString.erase(index,1);
+        }
+    
+        return theString;
+    }
 
     inline std::string trimLeft (const std::string & theString, const std::string & theTrimChars = " " ) {
         std::string myString(theString);
