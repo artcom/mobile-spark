@@ -7,9 +7,9 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
-#import <SparkViewerBase/SparkViewerAppDelegate.h>
+#import <SparkViewerBase/SparkAppDelegate.h>
 
-@interface TemplateAppDelegate : SparkViewerAppDelegate {
+@interface TemplateAppDelegate : SparkAppDelegate {
 
 }
 

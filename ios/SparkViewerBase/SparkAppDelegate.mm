@@ -7,9 +7,9 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
-#import "SparkViewerAppDelegate.h"
+#import "SparkAppDelegate.h"
 #import "GLView.h"
-#import "SparkViewerViewController.h"
+#import "SparkViewController.h"
 #include <masl/Logger.h>
 
 #include "iOS/IOSMobileSDK.h"
@@ -18,11 +18,11 @@
 #include <spark/BaseApp.h>
 
 
-@implementation SparkViewerAppDelegate
+@implementation SparkAppDelegate
 
 @synthesize window;
 
-@synthesize sparkViewerViewController;
+@synthesize sparkViewController;
 
 
 - (void)createGLView
@@ -54,8 +54,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    SparkViewerViewController *aViewController = [[SparkViewerViewController alloc] initWithNibName:nil bundle:nil];
-    [self setSparkViewerViewController:aViewController];
+    SparkViewController *aViewController = [[SparkViewController alloc] initWithNibName:nil bundle:nil];
+    [self setSparkViewController:aViewController];
     [aViewController release];
     
     // create a pointer to a dictionary
@@ -78,9 +78,9 @@
     // assure correct size for application
     [myGLView resizeView:myGLView.bounds];
     
-    self.sparkViewerViewController.view = myGLView;
+    self.sparkViewController.view = myGLView;
     
-    [self.window addSubview:self.sparkViewerViewController.view];
+    [self.window addSubview:self.sparkViewController.view];
     
     [self.window makeKeyAndVisible];
     
@@ -124,6 +124,11 @@
     [myGLView startAnimation];
 }
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    // try to clean up as much memory as possible. next step is to terminate app
+}
+
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     /*
@@ -139,7 +144,7 @@
     
     [myGLView release];
     
-    [self.sparkViewerViewController release];
+    [self.sparkViewController release];
     
     [super dealloc];
 }

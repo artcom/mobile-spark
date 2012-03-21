@@ -201,6 +201,9 @@ namespace spark {
 
     void
     ShapeWidget::setSize(const vector2 & theSize) {
+        if (_myDirtyFlag) {
+            build();
+        }        
         if (getShape()) {
             if (_myOriginMode == NO_ORIGIN) {
                 _myOrigin = vector2(0,0);

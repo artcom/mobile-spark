@@ -8,12 +8,12 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 #import <UIKit/UIKit.h>
-#import "SparkViewerViewController.h"
+#import "SparkViewController.h"
 @class GLView;
-@class SparkViewerViewController;
+@class SparkViewController;
 
 
-@interface SparkViewerAppDelegate : NSObject <UIApplicationDelegate> {
+@interface SparkAppDelegate : NSObject <UIApplicationDelegate> {
     GLView *myGLView;
         
 }
@@ -23,7 +23,7 @@
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
-@property (nonatomic, retain) SparkViewerViewController *sparkViewerViewController;
+@property (nonatomic, retain) SparkViewController *sparkViewController;
  
 
 @end

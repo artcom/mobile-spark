@@ -42,7 +42,7 @@ namespace spark {
     }
     
     void Image::setMipMap(bool theMipMapFlag) {
-        AC_PRINT << "Image::setMipMap : " << theMipMapFlag;
+        AC_TRACE << "Image::setMipMap : " << theMipMapFlag;
         
         if(_mipmap != theMipMapFlag)
         {
@@ -57,6 +57,7 @@ namespace spark {
     }
     
     void Image::setSrc(const std::string & theSrc) { 
+        AC_TRACE << "Image::setSrc : " << theSrc;
         _data = theSrc; 
         _myDirtyFlag = true;
     } 
@@ -92,22 +93,32 @@ namespace spark {
         
         if(_mipmap)
         {
+<<<<<<< HEAD
             float factorW = 1.0;
             float factorH = 1.0;
 #ifdef iOS
             factorW = myTexture->_real_width / (float) myTexture->_width;
             factorH = myTexture->_real_height / (float) myTexture->_height;
 #endif            
+=======
+            // I really do not like preprocessor conditions
+            // TODO: resolve this temporary solution (adapt mipmapping implementations for ios/android)
+            #ifdef iOS
+>>>>>>> 9fa17a8ead2c772b1a51f6400a5cc296ac43e238
             
-//            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
-//                   myTexture->_real_width, myTexture->_real_height,
-//                   myTexture->_width, myTexture->_height);
-//            
-//            printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
+                float factorW = myTexture->_real_width / (float) myTexture->_width;
+                float factorH = myTexture->_real_height / (float) myTexture->_height;
+
+                _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
+                                       vector2(0, factorH), vector2(factorW, factorH));
             
+                //            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
+                //                   myTexture->_real_width, myTexture->_real_height,
+                //                   myTexture->_width, myTexture->_height);
+                //            
+                //            printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
             
-            _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
-                                   vector2(0, factorH), vector2(factorW, factorH));
+            #endif
         }
         
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->_width, myMaterial->getTextureUnit()->getTexture()->_height);

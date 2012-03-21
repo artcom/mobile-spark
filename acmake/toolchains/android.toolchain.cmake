@@ -141,6 +141,20 @@ endif()
 
 # setup environment
 if( NOT DEFINED BUILD_WITH_ANDROID_NDK AND NOT DEFINED BUILD_WITH_ANDROID_NDK_TOOLCHAIN )
+    # figure out ANDROID_LEVEL
+    set( ANDROID_LEVEL $ENV{ANDROID_LEVEL} )
+    string( REGEX REPLACE "android-([0-9]+)" "\\1" ANDROID_LEVEL "${ANDROID_LEVEL}" )
+    set( PossibleAndroidLevels "3;4;5;8;9;14" )
+    set( ANDROID_LEVEL ${ANDROID_LEVEL} CACHE STRING "android API level" )
+    set_property( CACHE ANDROID_LEVEL PROPERTY STRINGS ${PossibleAndroidLevels} )
+
+    if( NOT ANDROID_LEVEL GREATER 2 )
+        set( ANDROID_LEVEL 9 CACHE STRING "android API level" FORCE )
+        set(ENV{ANDROID_LEVEL} ${ANDROID_LEVEL})
+        message( STATUS "Using default android API level android-${ANDROID_LEVEL}" )
+        message( STATUS "If you prefer to use a different API level, please define the environment variable: ANDROID_LEVEL" )
+    endif()
+    message( STATUS "Using android API level android-${ANDROID_LEVEL}" )
     if( EXISTS ${ANDROID_NDK_TOOLCHAIN_ROOT} )
         message( STATUS "Using android NDK standalone toolchain from ${ANDROID_NDK_TOOLCHAIN_ROOT}" )
         set( ANDROID_NDK_TOOLCHAIN_ROOT ${ANDROID_NDK_TOOLCHAIN_ROOT} CACHE PATH "root of the Android NDK standalone toolchain" FORCE )
@@ -149,19 +163,6 @@ if( NOT DEFINED BUILD_WITH_ANDROID_NDK AND NOT DEFINED BUILD_WITH_ANDROID_NDK_TO
     elseif( EXISTS ${ANDROID_NDK} )
         set( ANDROID_NDK ${ANDROID_NDK} CACHE PATH "root of the android ndk" FORCE )
 
-        # figure out ANDROID_LEVEL
-        set( ANDROID_LEVEL $ENV{ANDROID_LEVEL} )
-        string( REGEX REPLACE "android-([0-9]+)" "\\1" ANDROID_LEVEL "${ANDROID_LEVEL}" )
-
-        set( PossibleAndroidLevels "3;4;5;8;9" )
-        set( ANDROID_LEVEL ${ANDROID_LEVEL} CACHE STRING "android API level" )
-        set_property( CACHE ANDROID_LEVEL PROPERTY STRINGS ${PossibleAndroidLevels} )
-
-        if( NOT ANDROID_LEVEL GREATER 2 )
-            set( ANDROID_LEVEL 9 CACHE STRING "android API level" FORCE )
-            message( STATUS "Using default android API level android-${ANDROID_LEVEL}" )
-            message( STATUS "If you prefer to use a different API level, please define the environment variable: ANDROID_LEVEL" )
-        endif()
 
         set( ANDROID_NDK_TOOLCHAIN_ROOT "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/${NDKSYSTEM}" )
         set( ANDROID_NDK_SYSROOT "${ANDROID_NDK}/platforms/android-${ANDROID_LEVEL}/arch-arm/" )
@@ -197,6 +198,7 @@ set( ARM_TARGET $ENV{ARM_TARGET} )
 set( PossibleArmTargets "armeabi;armeabi-v7a;armeabi-v7a with NEON;armeabi-v7a with VFPV3" )
 if( NOT DEFINED ARM_TARGET )
     set( ARM_TARGET "armeabi-v7a")
+    set(ENV{ARM_TARGET} "armeabi-v7a")
 endif()
 set( ARM_TARGET ${ARM_TARGET} CACHE STRING "the arm target for android, recommend armeabi-v7a for floating point support and NEON." )
 set_property( CACHE ARM_TARGET PROPERTY STRINGS ${PossibleArmTargets} )
@@ -280,7 +282,8 @@ if( ANDROID_NDK MATCHES "ndk-r[0-6]" )
     set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++" )
 else()
     message("--using NDK 7 or newer, link against stl lib")
-    set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++ -lgnustl_shared" )
+    #set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++ -lgnustl_shared" )
+    set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -lstdc++ -lgnustl_shared" )
 endif()
 
 set( NO_UNDEFINED ON CACHE BOOL "Don't all undefined symbols" )

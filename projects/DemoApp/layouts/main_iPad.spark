@@ -37,8 +37,10 @@
             <Image name="special_non_template_deco" sensible="false" x="60" y="10" src="deco.png"/>
         </Controls>
         
-		<Slide name="MovieSlide" alpha="1" title="Movie-Examples">
-            <Movie name="testMovie" src="testmovie_still.png" moviesrc="testmovie.mp4" volume = "0.8" x="0" y="0" z="0" width="960" height="540"/>
+	<Slide name="MovieSlide" alpha="1" title="Movie-Examples">
+            <Movie name="testMovie" src="testmovie_still.png" mipmap="true" moviesrc="testmovie.mp4" volume = "0.8" x="0" y="0" z="0" width="960" height="540"/>
+            <Image name="mipMapTest1" mipmap="true" src="testImg.jpg"  x="0" y="300" z="0" />
+            <Image name="mipMapTest2" mipmap="true" src="rainbow.jpg"  x="700" y="100" z="0" />
         </Slide>
         
         <Slide name="TextSlide" alpha="1" title="Text-Examples">
