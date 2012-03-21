@@ -20,8 +20,8 @@ namespace spark {
         const std::string & getSrc() const {return _data;};
         virtual void setSrc(const std::string & theSrc);
         const vector2 & getRealImageSize();
-        virtual void setWidth(unsigned theWidth) {_myForcedSize[0] = theWidth;}
-        virtual void setHeight(unsigned theHeight) {_myForcedSize[1] = theHeight;}
+        virtual void setSize(const float & theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
+        virtual void setSize(const vector2 & theSize);        
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Image::SPARK_TYPE;};
         void setMipMap(bool theMipMapFlag);
@@ -31,7 +31,7 @@ namespace spark {
         vector2 _myTextureSize;     // this is the size of the gl texture
         vector2 _myRealImageSize;   // this is the size of the asset image
 
-        vector2 _myForcedSize;      // this the gl quad size
+        vector2 _myForcedSize;      // this is the gl quad size
         bool _mipmap;
     };
 

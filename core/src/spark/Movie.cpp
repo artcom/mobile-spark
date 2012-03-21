@@ -57,7 +57,7 @@ namespace spark {
             float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
 
             // adjust widget´s size
-            setSize(myWidth, myHeight);
+            I18nShapeWidget::setSize(vector2(myWidth, myHeight));
         } 
         else 
         {
