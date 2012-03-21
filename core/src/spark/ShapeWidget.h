@@ -37,8 +37,8 @@ namespace spark {
     
             inline mar::ShapePtr getShape() const {return _myShape;};
             float getWorldZ() const;
-            void setSize(const float theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
-            void setSize(const vector2 & theSize);
+            virtual void setSize(const float & theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
+            virtual void setSize(const vector2 & theSize);
             virtual const vector2 getSize();
 
             std::map<std::string, float> customShaderValues_;

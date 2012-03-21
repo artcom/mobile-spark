@@ -51,10 +51,12 @@ namespace spark {
         }
     }
 
+    void Image::setSize(const vector2 & theSize) {
+        I18nShapeWidget::setSize(theSize);
+        _myForcedSize = theSize;
+    }
     
     void Image::setSrc(const std::string & theSrc) { 
-        AC_PRINT << "Image::setSrc : " << theSrc;
-        
         _data = theSrc; 
         _myDirtyFlag = true;
     } 
@@ -90,8 +92,12 @@ namespace spark {
         
         if(_mipmap)
         {
-            float factorW = myTexture->_real_width / (float) myTexture->_width;
-            float factorH = myTexture->_real_height / (float) myTexture->_height;
+            float factorW = 1.0;
+            float factorH = 1.0;
+#ifdef iOS
+            factorW = myTexture->_real_width / (float) myTexture->_width;
+            factorH = myTexture->_real_height / (float) myTexture->_height;
+#endif            
             
 //            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
 //                   myTexture->_real_width, myTexture->_real_height,
@@ -105,9 +111,9 @@ namespace spark {
         }
         
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->_width, myMaterial->getTextureUnit()->getTexture()->_height);
-        _myRealImageSize = vector2(myMaterial->getTextureUnit()->getTexture()->_real_width, myMaterial->getTextureUnit()->getTexture()->_real_height);
+        _myRealImageSize = vector2(myTexture->_real_width, myTexture->_real_height);
         float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
         float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
-        setSize(myWidth, myHeight);
+        I18nShapeWidget::setSize(vector2(myWidth, myHeight));//setSize(myWidth, myHeight);
     }
 }
