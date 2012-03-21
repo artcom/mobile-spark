@@ -31,7 +31,9 @@ namespace spark {
         virtual ~Text();
         
         void setText(const std::string & theText) { _data = theText; _myDirtyFlag = true;};
-        std::string getText() const { return _data;};        
+        const std::string& getText() const { return _data;};
+        
+        void setColor(const vector4 &theColor);
         
         void setMaxWidth(int theMaxWidth) {_myMaxWidth = theMaxWidth; _myDirtyFlag = true;};
         void setMaxHeight(int theMaxHeight) {_myMaxHeight = theMaxHeight; _myDirtyFlag = true;};

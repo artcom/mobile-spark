@@ -148,5 +148,9 @@ namespace spark {
             " maxWidth=\""+masl::as_string(_myMaxWidth)+"\" maxHeight=\""+masl::as_string(_myMaxHeight)+"\""
             " lineHeight=\""+masl::as_string(_myLineHeight)+"\"";
     }
-
+    
+    void Text::setColor(const vector4 &theColor){
+        _myDirtyFlag = true;
+        _myTextColor = theColor;
+    }
 }
