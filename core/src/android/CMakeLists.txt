@@ -19,6 +19,7 @@ ac_add_library(
     HEADERS ${HEADERS}
     EXTERNS ${EXTERNS}
     DEPENDS masl mar zip
+    STATIC
 )
 
 add_subdirectory(Tests)

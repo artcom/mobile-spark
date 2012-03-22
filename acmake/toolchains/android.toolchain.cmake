@@ -283,7 +283,7 @@ if( ANDROID_NDK MATCHES "ndk-r[0-6]" )
 else()
     message("--using NDK 7 or newer, link against stl lib")
     #set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lsupc++ -lgnustl_shared" )
-    set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -lstdc++ -lgnustl_shared" )
+    set( LINKER_FLAGS "-Wl,--fix-cortex-a8 -L${STL_LIBRARIES_PATH} -lstdc++ -lgnustl_shared" )
 endif()
 
 set( NO_UNDEFINED ON CACHE BOOL "Don't all undefined symbols" )
