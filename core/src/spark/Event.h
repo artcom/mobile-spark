@@ -126,10 +126,8 @@ namespace spark {
             static const char * const TAP;
             static const char * const DOUBLETAP;
             static const char * const LONGPRESS;
-            static const char * const PICKED;
             static const char * const DOWN;
             static const char * const UP;
-            static const char * const BUTTON_BACK;
 
             unsigned int getX() const { return x_;};
             unsigned int getY() const { return y_;};
@@ -232,6 +230,7 @@ namespace spark {
             static const char * const CLASSNAME;
             virtual const char * const &  classname_() const {return ApplicationEvent::CLASSNAME;};
             static const char * const GENERIC;
+            static const char * const BUTTON_BACK;
             std::string getAttribute(const std::string & theKey);
         private:
             std::map<std::string, std::string> data_;
