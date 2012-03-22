@@ -35,6 +35,8 @@ namespace spark {
         
         void setColor(const vector4 &theColor);
         
+        void setFont(const std::string &theFont);
+        
         void setMaxWidth(int theMaxWidth) {_myMaxWidth = theMaxWidth; _myDirtyFlag = true;};
         void setMaxHeight(int theMaxHeight) {_myMaxHeight = theMaxHeight; _myDirtyFlag = true;};
         void setStartIndex(unsigned int theIndex);
