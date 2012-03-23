@@ -11,7 +11,6 @@
 #define _ac_mobile_masl_MobileSDK_h_included_
 
 #include "Singleton.h"
-#include "spark/Movie.h"
 
 namespace masl {
     struct VideoInfo{
@@ -22,7 +21,6 @@ namespace masl {
         int textureheight;
         
     };
-    
     struct TextInfo{
         unsigned int textureID;
         int width;
@@ -50,16 +48,6 @@ namespace masl {
         virtual void startCameraCapture(bool theColorConversionFlag) = 0;
         virtual void stopCameraCapture() = 0;
         virtual bool isCameraCapturing() = 0;
-        
-        // Movie Controls
-        /*virtual bool playMovie(spark::MoviePtr theMovieWidget) = 0;
-        virtual void stopMovie(spark::MoviePtr theMovieWidget) = 0;
-        virtual void pauseMovie(spark::MoviePtr theMovieWidget) = 0;
-        virtual void resetMovie(spark::MoviePtr theMovieWidget) = 0;
-        virtual void updateMovieTexture(spark::MoviePtr theMovieWidget) = 0;
-        virtual const VideoInfo getMovieInfo(spark::MoviePtr theMovieWidget) const = 0;
-        virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const = 0;
-        virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) = 0;*/
         
         virtual void exit() = 0;
         

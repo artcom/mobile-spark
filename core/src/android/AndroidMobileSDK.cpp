@@ -21,15 +21,6 @@ namespace android {
 
     }
    
-    bool AndroidMobileSDK::playMovie(spark::MoviePtr theMovieWidget) {return false;}
-    void AndroidMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) {}
-    void AndroidMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget){}
-    void AndroidMobileSDK::resetMovie(spark::MoviePtr theMovieWidget){}
-    void AndroidMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget) {}
-    const masl::VideoInfo AndroidMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const {return masl::VideoInfo();}
-    bool AndroidMobileSDK::isMoviePlaying(spark::MoviePtr theMovieWidget) const {return false;}
-    void AndroidMobileSDK::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) {}
-    
     void AndroidMobileSDK::vibrate(long theDurationMillisec) {
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");

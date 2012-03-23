@@ -17,19 +17,18 @@
 #include "Ptr.h"
 #include "MobileSDK.h"
 
-#include <spark/Movie.h>
-
 namespace masl {
+    
     class MovieEngine {
     public:
-        virtual bool playMovie(spark::MoviePtr theMovieWidget) = 0;
-        virtual void stopMovie(spark::MoviePtr theMovieWidget) = 0;
-        virtual void pauseMovie(spark::MoviePtr theMovieWidget) = 0;
-        virtual void resetMovie(spark::MoviePtr theMovieWidget) = 0;
-        virtual void updateMovieTexture(spark::MoviePtr theMovieWidget) = 0;
-        virtual const VideoInfo getMovieInfo(spark::MoviePtr theMovieWidget) const = 0;
-        virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const = 0;
-        virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) = 0;
+        virtual void playMovie(void* theMovieWidget, const std::string & theSrc) = 0;
+        virtual void stopMovie(void* theMovieWidget) = 0;
+        virtual void pauseMovie(void* theMovieWidget) = 0;
+        virtual void resetMovie(void* theMovieWidget) = 0;
+        virtual void updateMovieTexture(void* theMovieWidget) = 0;
+        virtual const VideoInfo getMovieInfo(void* theMovieWidget) const = 0;
+        virtual bool isMoviePlaying(void* theMovieWidget) const = 0;
+        virtual void setMovieVolume(void* theMovieWidget, float newVolume) = 0;
 
     };
     typedef masl::Ptr<MovieEngine> MovieEnginePtr;
@@ -38,7 +37,7 @@ namespace masl {
     public:
         // we want a real singleton -> we need a non purevirtual out-of-line method other than dtor
         virtual void setMovieEngine(MovieEnginePtr theMovieEngine);
-        const MovieEnginePtr & ae() const { return _myMovieEngine; };
+        const MovieEnginePtr & getNative() const { return _myMovieEngine; };
     private:
         MovieEnginePtr _myMovieEngine;
     };

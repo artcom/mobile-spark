@@ -7,43 +7,17 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
-//Copyright (c) 2010-2011 cocos2d-x.org
-//Copyright (c) 2009      On-Core
-// 
-//http://www.cocos2d-x.org
-//
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
-//
-//The above copyright notice and this permission notice shall be included in
-//all copies or substantial portions of the Software.
-//
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//THE SOFTWARE.
-
-
 #include "IOSMovieEngine.h"
-//#include <masl/AssetProvider.h>
-//#include <masl/CallStack.h>
+#include "MovieController.h"
 
 namespace ios
 {
-    bool IOSMovieEngine::playMovie(spark::MoviePtr theMovieWidget) 
+    void IOSMovieEngine::playMovie(void* theMovieWidget, const std::string & theSrc) 
     {
         std::string filePath;
         
-        if (theMovieWidget->getSrc().size() > 0 ) {
-            if (!masl::searchFile(theMovieWidget->getSrc(), filePath)) 
-                return false;
+        if (theSrc.empty() || !masl::searchFile(theSrc, filePath)) { 
+             throw masl::Exception("Movie " + theSrc + " not found", PLUS_FILE_LINE);
         }
         
         MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
@@ -51,28 +25,26 @@ namespace ios
             _movieMap[theMovieWidget] = MovieControllerPtr(new MovieController);
         
         _movieMap[theMovieWidget]->playMovie(filePath);
-        
-        return true;
     }
     
-    void IOSMovieEngine::stopMovie(spark::MoviePtr theMovieWidget) 
+    void IOSMovieEngine::stopMovie(void* theMovieWidget) 
     {
         _movieMap[theMovieWidget]->stop();
         
         _movieMap.erase(theMovieWidget);
     }
     
-    void IOSMovieEngine::pauseMovie(spark::MoviePtr theMovieWidget) 
+    void IOSMovieEngine::pauseMovie(void* theMovieWidget) 
     {
         _movieMap[theMovieWidget]->pause();
     }
     
-    void IOSMovieEngine::resetMovie(spark::MoviePtr theMovieWidget) 
+    void IOSMovieEngine::resetMovie(void* theMovieWidget) 
     {
         _movieMap[theMovieWidget]->reset();
     }
     
-    void IOSMovieEngine::updateMovieTexture(spark::MoviePtr theMovieWidget)
+    void IOSMovieEngine::updateMovieTexture(void* theMovieWidget)
     {
         MovieMap::iterator it = _movieMap.find(theMovieWidget);
         
@@ -80,7 +52,7 @@ namespace ios
             it->second->copyNextFrameToTexture();
     }
     
-    const masl::VideoInfo IOSMovieEngine::getMovieInfo(spark::MoviePtr theMovieWidget) const
+    const masl::VideoInfo IOSMovieEngine::getMovieInfo(void* theMovieWidget) const
     {
         masl::VideoInfo movieInfo;
         
@@ -96,7 +68,7 @@ namespace ios
         return movieInfo;
     }
     
-    bool IOSMovieEngine::isMoviePlaying(spark::MoviePtr theMovieWidget) const
+    bool IOSMovieEngine::isMoviePlaying(void* theMovieWidget) const
     {
         bool ret = false;
         

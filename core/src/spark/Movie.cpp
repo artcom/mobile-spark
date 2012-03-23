@@ -21,32 +21,26 @@ namespace spark {
         Image(theApp, theXMLNode)
     {
         _moviesrc = _myXMLNode->getAttributeAs<std::string>("moviesrc", "");
-        
         _volume = _myXMLNode->getAttributeAs<float>("volume", 1.f);
-        
     }
 
     Movie::~Movie() {
         AC_INFO << "....destructor Movie " << getName();
     }
     
-    void Movie::prerender(MatrixStack& theCurrentMatrixStack)
-    {
+    void
+    Movie::prerender(MatrixStack& theCurrentMatrixStack) {
         ShapeWidget::prerender(theCurrentMatrixStack);
         
-        if (isPlaying() && isRendered()) 
-        {
-            // Construct a shared ptr to this
-            MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-            
+        if (isPlaying() && isRendered()) {
             // retrieve MovieInfo
-            masl::VideoInfo myMovieInfo = masl::MovieEngineSingleton::get().ae()->getMovieInfo(thisPtr);
+            masl::VideoInfo myMovieInfo = masl::MovieEngineSingleton::get().getNative()->getMovieInfo(this);
             
             // load Material
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             
             // trigger update for OpenGL texture
-            masl::MovieEngineSingleton::get().ae()->updateMovieTexture(thisPtr);
+            masl::MovieEngineSingleton::get().getNative()->updateMovieTexture(this);
             
             // inject texture name 
             myMaterial->getTextureUnit()->getTexture()->_textureId = myMovieInfo.textureID;
@@ -59,18 +53,14 @@ namespace spark {
 
             // adjust widget´s size
             I18nShapeWidget::setSize(vector2(myWidth, myHeight));
-        } 
-        else 
-        {
+        } else {
             // TODO: stop movie if playing here !?
         }
     }
     
-    void Movie::play() 
-    {
-        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-        
-        masl::MovieEngineSingleton::get().ae()->playMovie(thisPtr);
+    void
+    Movie::play() {
+        masl::MovieEngineSingleton::get().getNative()->playMovie(this, getSrc());
         setVolume(_volume);
         
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
@@ -80,60 +70,49 @@ namespace spark {
         _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
                                vector2(0, 0), vector2(1, 0));
         
-        AC_PRINT<<"playing movie:"<< _moviesrc<<" (volume: "<<_volume<<")";
-        
+        AC_INFO<<"playing movie:"<< _moviesrc<<" (volume: "<<_volume<<")";
     }
-    void Movie::stop()
-    {
-        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-        
-        masl::MovieEngineSingleton::get().ae()->stopMovie(thisPtr);
+
+    void
+    Movie::stop() {
+        masl::MovieEngineSingleton::get().getNative()->stopMovie(this);
     }
-    void Movie::pause()
-    {
-        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-        
-        masl::MovieEngineSingleton::get().ae()->pauseMovie(thisPtr);
+
+    void
+    Movie::pause() {
+        masl::MovieEngineSingleton::get().getNative()->pauseMovie(this);
     }
-    void Movie::reset()
-    {
-        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-        
-        masl::MovieEngineSingleton::get().ae()->resetMovie(thisPtr);
+
+    void
+    Movie::reset() {
+        masl::MovieEngineSingleton::get().getNative()->resetMovie(this);
     }
     
-    bool Movie::isPlaying()
-    {
-        MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-        return  masl::MovieEngineSingleton::get().ae()->isMoviePlaying(thisPtr);
+    bool
+    Movie::isPlaying() {
+        return  masl::MovieEngineSingleton::get().getNative()->isMoviePlaying(this);
     }
     
-    void Movie::setVolume(float newVolume)
-    {
-        float val = newVolume;
-        if(val < 0.f) val = 0.f;
-        if(val > 1.f) val = 1.f;
-        
-        _volume = val;
-        
+    void
+    Movie::setVolume(float newVolume) {
+        _volume = cml::clamp(newVolume, 0.f, 1.f);
         //if(isPlaying())
         {
-            MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-            masl::MovieEngineSingleton::get().ae()->setMovieVolume(thisPtr, _volume);
+            masl::MovieEngineSingleton::get().getNative()->setMovieVolume(this, _volume);
         }
     }
     
-    float Movie::getVolume()
-    {
+    float
+    Movie::getVolume() {
         return _volume;
     }
     
-    void Movie::togglePlayPause()
-    {
-        if(isPlaying())
+    void
+    Movie::togglePlayPause() {
+        if(isPlaying()) {
             pause();
-        else
+        } else {
             play();
-
+        }
     }
 }

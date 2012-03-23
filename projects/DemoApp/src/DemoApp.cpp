@@ -30,6 +30,7 @@
 #include <spark/Transform.h>
 #include <spark/Shape3D.h>
 #include <spark/Text.h>
+#include <spark/Movie.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
