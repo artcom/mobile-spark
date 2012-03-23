@@ -56,8 +56,8 @@ namespace ios {
     private:
         std::string m_orientationString;
         
-        typedef std::map<spark::MoviePtr,MovieControllerPtr> MovieMap;
-        MovieMap _movieMap;
+        //typedef std::map<spark::MoviePtr,MovieControllerPtr> MovieMap;
+        //MovieMap _movieMap;
     };
 
     typedef masl::Ptr<IOSMobileSDK> IOSMobileSDKPtr;

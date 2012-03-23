@@ -15,6 +15,9 @@
 #include "Singleton.h"
 #include "Logger.h"
 #include "Ptr.h"
+#include "MobileSDK.h"
+
+#include <spark/Movie.h>
 
 namespace masl {
     class MovieEngine {

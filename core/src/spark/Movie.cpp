@@ -9,6 +9,7 @@
 
 #include "Movie.h"
 
+#include <masl/MovieEngine.h>
 #include <masl/MobileSDK.h>
 
 using namespace mar;
@@ -39,13 +40,13 @@ namespace spark {
             MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
             
             // retrieve MovieInfo
-            masl::VideoInfo myMovieInfo = masl::MobileSDK_Singleton::get().getNative()->getMovieInfo(thisPtr);
+            masl::VideoInfo myMovieInfo = masl::MovieEngineSingleton::get().ae()->getMovieInfo(thisPtr);
             
             // load Material
             mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             
             // trigger update for OpenGL texture
-            masl::MobileSDK_Singleton::get().getNative()->updateMovieTexture(thisPtr);
+            masl::MovieEngineSingleton::get().ae()->updateMovieTexture(thisPtr);
             
             // inject texture name 
             myMaterial->getTextureUnit()->getTexture()->_textureId = myMovieInfo.textureID;
@@ -69,7 +70,7 @@ namespace spark {
     {
         MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
         
-        masl::MobileSDK_Singleton::get().getNative()->playMovie(thisPtr);
+        masl::MovieEngineSingleton::get().ae()->playMovie(thisPtr);
         setVolume(_volume);
         
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
@@ -86,25 +87,25 @@ namespace spark {
     {
         MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
         
-        masl::MobileSDK_Singleton::get().getNative()->stopMovie(thisPtr);
+        masl::MovieEngineSingleton::get().ae()->stopMovie(thisPtr);
     }
     void Movie::pause()
     {
         MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
         
-        masl::MobileSDK_Singleton::get().getNative()->pauseMovie(thisPtr);
+        masl::MovieEngineSingleton::get().ae()->pauseMovie(thisPtr);
     }
     void Movie::reset()
     {
         MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
         
-        masl::MobileSDK_Singleton::get().getNative()->resetMovie(thisPtr);
+        masl::MovieEngineSingleton::get().ae()->resetMovie(thisPtr);
     }
     
     bool Movie::isPlaying()
     {
         MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-        return  masl::MobileSDK_Singleton::get().getNative()->isMoviePlaying(thisPtr);
+        return  masl::MovieEngineSingleton::get().ae()->isMoviePlaying(thisPtr);
     }
     
     void Movie::setVolume(float newVolume)
@@ -118,7 +119,7 @@ namespace spark {
         //if(isPlaying())
         {
             MoviePtr thisPtr = boost::static_pointer_cast<Movie>(shared_from_this());
-            masl::MobileSDK_Singleton::get().getNative()->setMovieVolume(thisPtr, _volume);
+            masl::MovieEngineSingleton::get().ae()->setMovieVolume(thisPtr, _volume);
         }
     }
     
