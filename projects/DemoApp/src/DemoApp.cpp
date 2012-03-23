@@ -247,13 +247,13 @@ namespace demoapp {
         
         if(mvSlidePtr)
         {
-            spark::EventCallbackPtr myMovieToggleCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onTouchMovie));
-            spark::EventCallbackPtr myMovieResetCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onDoubleTapMovie));
             
             MoviePtr movie = boost::static_pointer_cast<Movie>(mvSlidePtr->getChildByName("testMovie") );
             
             if(movie)
             {
+                spark::EventCallbackPtr myMovieToggleCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onTouchMovie));
+                spark::EventCallbackPtr myMovieResetCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onDoubleTapMovie));
                 movie->addEventListener(TouchEvent::PICKED, myMovieToggleCB);
                 movie->addEventListener(TouchEvent::DOUBLETAP, myMovieResetCB);
             }
