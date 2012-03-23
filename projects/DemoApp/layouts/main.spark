@@ -39,7 +39,6 @@
 
         <Slide name="MovieSlide" alpha="1" title="Movie-Examples">
             <Movie name="testMovie" src="testmovie_still.png" moviesrc="testmovie.mp4" x="0" y="0" z="0" width="480" height="270"/>
-            <Image name="mipMapTest" src="testImg.jpg"  x="0" y="300" z="0" />
         </Slide>
         
         <Slide name="TextSlide" alpha="1" title="Text-Examples">
@@ -82,7 +81,7 @@
         <Slide name="ImagesSlide" title="Images">
             <Image name="bluetexture" x="200" y="200" z="0" width="100" height="100" src="bluetexture.jpg"/>
             <Image name="transparent_image" x="250" y="250" z="1" src="transparenttexture.png"/>
-            <Image name="image_from_apk_package" alpha="0.5" x="250" y="50" z="2" src="sparks.png"/>
+            <Image name="image_from_apk_package" alpha="0.5" x="250" y="50" z="2" src="sparks.png" mipmap="true"/>
         </Slide>
 
         <Slide name="AnimatedRectangleSlide" title="Animation" subtitle="touch screen to animate">

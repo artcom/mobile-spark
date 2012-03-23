@@ -7,13 +7,13 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
-#include "AudioEngine.h"
+#include "MovieEngine.h"
 
 
 namespace masl {
     void
-    AudioEngineSingleton::setAudioEngine(AudioEnginePtr theAudioEngine) {
-        _myAudioEngine = theAudioEngine;
+    MovieEngineSingleton::setMovieEngine(MovieEnginePtr theMovieEngine) {
+        _myMovieEngine = theMovieEngine;
     };
 }
 
