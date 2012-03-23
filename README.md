@@ -44,6 +44,10 @@ ___
 
 ___
 
+
+missing:
+unzip boost in netsrc
+
 ## Installation
 
 ### Linux / Mac

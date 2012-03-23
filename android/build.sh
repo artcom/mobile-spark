@@ -24,12 +24,12 @@ $MAKE_TOOL $1
 BUILD_OK=$?
 
 # copy shared std libraries to libs
-if [[ "`uname -s`" == *CYGWIN* ]]; then
-    ANDROID_NDK_WIN=`cygpath -u "$ANDROID_NDK"`
-    cp $ANDROID_NDK_WIN/sources/cxx-stl/gnu-libstdc++/libs/$ARM_TARGET/*.so lib/$ARM_TARGET/
-else
-    cp $ANDROID_NDK/sources/cxx-stl/gnu-libstdc++/libs/$ARM_TARGET/*.so lib/$ARM_TARGET/
-fi
+#if [[ "`uname -s`" == *CYGWIN* ]]; then
+#    ANDROID_NDK_WIN=`cygpath -u "$ANDROID_NDK"`
+#    cp $ANDROID_NDK_WIN/sources/cxx-stl/gnu-libstdc++/libs/$ARM_TARGET/*.so lib/$ARM_TARGET/
+#else
+#    cp $ANDROID_NDK/sources/cxx-stl/gnu-libstdc++/libs/$ARM_TARGET/*.so lib/$ARM_TARGET/
+#fi
 
 cd -
 
