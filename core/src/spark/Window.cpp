@@ -87,7 +87,7 @@ namespace spark {
         ComponentPtr myPicked = pick2DAABBStyle(myPickEvent->getX(), myPickEvent->getY());
         if (myPicked) {
             AC_INFO << "____________picked " << *myPicked;
-            EventPtr myEvent = EventPtr(new TouchEvent(TouchEvent::PICKED, myPicked, myPickEvent->getX(), myPickEvent->getY()));
+            EventPtr myEvent = EventPtr(new TouchEvent(theEvent->getType(), myPicked, myPickEvent->getX(), myPickEvent->getY()));
             (*myEvent)();
         } else {
             AC_DEBUG << "nothing picked";

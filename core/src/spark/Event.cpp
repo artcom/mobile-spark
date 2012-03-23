@@ -31,14 +31,13 @@ namespace spark {
     const char * const WindowEvent::WORLD_REALIZED = "world_realized";
     const char * const I18nEvent::ON_LANGUAGE_SWITCH = "on_language_switch";
     const char * const ApplicationEvent::GENERIC = "generic";
+    const char * const ApplicationEvent::BUTTON_BACK = "backbutton";
         
     const char * const TouchEvent::TAP = "tap";
     const char * const TouchEvent::DOUBLETAP = "doubletap";
     const char * const TouchEvent::LONGPRESS = "longpress";
-    const char * const TouchEvent::PICKED = "picked";
     const char * const TouchEvent::DOWN = "down";
     const char * const TouchEvent::UP = "up";
-    const char * const TouchEvent::BUTTON_BACK = "backbutton";
 
     const char * const GestureEvent::PAN = "pan";
     const char * const GestureEvent::PINCH = "pinch";

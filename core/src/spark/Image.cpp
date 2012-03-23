@@ -95,21 +95,21 @@ namespace spark {
         {
             // I really do not like preprocessor conditions
             // TODO: resolve this temporary solution (adapt mipmapping implementations for ios/android)
-            #ifdef iOS
-            
-                float factorW = myTexture->_real_width / (float) myTexture->_width;
-                float factorH = myTexture->_real_height / (float) myTexture->_height;
+#ifdef iOS
+        
+            float factorW = myTexture->_real_width / (float) myTexture->_width;
+            float factorH = myTexture->_real_height / (float) myTexture->_height;
 
-                _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
-                                       vector2(0, factorH), vector2(factorW, factorH));
-            
-                //            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
-                //                   myTexture->_real_width, myTexture->_real_height,
-                //                   myTexture->_width, myTexture->_height);
-                //            
-                //            printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
-            
-            #endif
+            _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
+                                   vector2(0, factorH), vector2(factorW, factorH));
+        
+            //            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
+            //                   myTexture->_real_width, myTexture->_real_height,
+            //                   myTexture->_width, myTexture->_height);
+            //            
+            //            printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
+        
+#endif
         }
         
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->_width, myMaterial->getTextureUnit()->getTexture()->_height);

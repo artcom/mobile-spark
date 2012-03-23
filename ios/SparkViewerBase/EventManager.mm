@@ -94,7 +94,8 @@
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)theRecognizer {
     CGPoint location = [theRecognizer locationInView:_myView];
-    NSLog(@"Touched on  :   %f, %f", location.x*_myRetinaScale, location.y*_myRetinaScale);
+    AC_DEBUG<<"Touched on :   "<<location.x * _myRetinaScale<<", "<<location.y * _myRetinaScale;
+    
     [self throwEventToSpark:[NSString stringWithFormat:@"<TouchEvent type='tap' x='%f' y='%f'/>", location.x*_myRetinaScale, _myHeight-location.y*_myRetinaScale]];
 }
 

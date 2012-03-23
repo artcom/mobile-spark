@@ -40,7 +40,8 @@ namespace spark {
             virtual void setSize(const float & theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
             virtual void setSize(const vector2 & theSize);
             virtual const vector2 getSize();
-
+            
+            //TODO: get rid of this public member
             std::map<std::string, float> customShaderValues_;
             virtual std::string getAttributesAsString() const;
 

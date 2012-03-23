@@ -24,6 +24,7 @@
 
 using namespace mar;
 using namespace masl;
+using namespace std;
 
 namespace spark {
     
@@ -51,12 +52,8 @@ namespace spark {
         setI18nData(getNode()->getAttributeAs<std::string>("text", ""));
         
         std::string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
-        if (myFontName != "") {
-            _myFontPath = masl::AssetProviderSingleton::get().ap()->findFile(myFontName);
-            if (_myFontPath == "") {
-                _myFontPath = myFontName;
-            }
-        }
+        setFont(myFontName);
+        
         AC_INFO << "Text ctor: " << _myFontPath;
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
         myMaterial->getTextureUnit()->getTexture()->_transparency = true;
@@ -147,6 +144,21 @@ namespace spark {
             " cacheFlag=\""+masl::as_string(_myCacheFlag)+"\" textColor=\""+masl::as_string(_myTextColor)+"\""
             " maxWidth=\""+masl::as_string(_myMaxWidth)+"\" maxHeight=\""+masl::as_string(_myMaxHeight)+"\""
             " lineHeight=\""+masl::as_string(_myLineHeight)+"\"";
+    }
+    
+    void Text::setColor(const vector4 &theColor){
+        _myDirtyFlag = true;
+        _myTextColor = theColor;
+    }
+    
+    void Text::setFont(const string &theFont){
+        
+        _myDirtyFlag = true;
+        
+        string fontPath = masl::AssetProviderSingleton::get().ap()->findFile(theFont);
+        if (fontPath != "") {
+            _myFontPath = fontPath;
+        }
     }
 
 }
