@@ -41,6 +41,7 @@
 #ifdef iOS
     #include <ios/IOSAssetProvider.h>
     #include <ios/IOSAudioEngine.h>
+    #include <ios/IOSMovieEngine.h>
     #include <ios/IOSMobileSDK.h>
 #endif
 
@@ -288,6 +289,7 @@ namespace spark {
 #ifdef iOS
         masl::AssetProviderSingleton::get().setAssetProvider(ios::IOSAssetProviderPtr(new ios::IOSAssetProvider(theAssetPath, theAppPath)));
         masl::AudioEngineSingleton::get().setAudioEngine(ios::IOSAudioEnginePtr(new ios::IOSAudioEngine()));
+        masl::MovieEngineSingleton::get().setMovieEngine(ios::IOSMovieEnginePtr(new ios::IOSMovieEngine()));
 #elif ANDROID
         masl::AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
         masl::AudioEngineSingleton::get().setAudioEngine(android::AndroidAudioEnginePtr(new android::AndroidAudioEngine("com/artcom/mobile/Base/AudioDelegate")));

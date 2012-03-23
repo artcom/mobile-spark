@@ -28,7 +28,7 @@ namespace ios
         
     }
     
-    bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
+    /*bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
     {
         std::string filePath;
         
@@ -130,7 +130,7 @@ namespace ios
         {
             it->second->setVolume(newVolume);
         }
-    }
+    }*/
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                            unsigned int & width, unsigned int & height, 

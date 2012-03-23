@@ -98,20 +98,20 @@ namespace demoapp {
         spark::EventCallbackPtr myPickedCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onControlButton));
         ComponentPtr myBackButton = my2DWorld->getChildByName("backbutton", true);
         ComponentPtr myNextButton = my2DWorld->getChildByName("nextbutton", true);
-        myBackButton->addEventListener(TouchEvent::PICKED, myPickedCB);
-        myNextButton->addEventListener(TouchEvent::PICKED, myPickedCB);
+        myBackButton->addEventListener(TouchEvent::TAP, myPickedCB);
+        myNextButton->addEventListener(TouchEvent::TAP, myPickedCB);
         
         spark::EventCallbackPtr myCreationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onCreationButton));
         ComponentPtr myCreationButton = my2DWorld->getChildByName("creationbutton", true);
-        myCreationButton->addEventListener(TouchEvent::PICKED, myCreationCB);
+        myCreationButton->addEventListener(TouchEvent::TAP, myCreationCB);
 
         spark::EventCallbackPtr mySwitchLanguageCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLanguageSwitch));
         spark::ComponentPtr myLanguageButton = _mySparkWindow->getChildByName("languagebutton", true);
-        myLanguageButton->addEventListener(TouchEvent::PICKED, mySwitchLanguageCB);
+        myLanguageButton->addEventListener(TouchEvent::TAP, mySwitchLanguageCB);
         
         spark::EventCallbackPtr myLoadSceneCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onLoadScene));
         spark::ComponentPtr myLoadButton = _mySparkWindow->getChildByName("load_button", true);
-        myLoadButton->addEventListener(TouchEvent::PICKED, myLoadSceneCB);
+        myLoadButton->addEventListener(TouchEvent::TAP, myLoadSceneCB);
 
         masl::AudioEngineSingleton::get().ae()->preloadEffect("test.wav");
         masl::AudioEngineSingleton::get().ae()->preloadEffect("test2.mp3");
@@ -130,11 +130,11 @@ namespace demoapp {
         spark::EventCallbackPtr mySound2CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound2));
         spark::EventCallbackPtr mySound3CB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onPlaySound3));
         spark::ComponentPtr mySoundButton = _mySparkWindow->getChildByName("sound1_button", true);
-        mySoundButton->addEventListener(TouchEvent::PICKED, mySound1CB);
+        mySoundButton->addEventListener(TouchEvent::TAP, mySound1CB);
         mySoundButton = _mySparkWindow->getChildByName("sound2_button", true);
-        mySoundButton->addEventListener(TouchEvent::PICKED, mySound2CB);
+        mySoundButton->addEventListener(TouchEvent::TAP, mySound2CB);
         mySoundButton = _mySparkWindow->getChildByName("sound3_button", true);
-        mySoundButton->addEventListener(TouchEvent::PICKED, mySound3CB);
+        mySoundButton->addEventListener(TouchEvent::TAP, mySound3CB);
 
 		//touch gestures
         spark::EventCallbackPtr myAnimationCB = EventCallbackPtr(new DemoEventCB(ptr, &DemoApp::onTouch));
@@ -254,7 +254,7 @@ namespace demoapp {
             {
                 spark::EventCallbackPtr myMovieToggleCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onTouchMovie));
                 spark::EventCallbackPtr myMovieResetCB = EventCallbackPtr(new DemoEventCB(ptr,&DemoApp::onDoubleTapMovie));
-                movie->addEventListener(TouchEvent::PICKED, myMovieToggleCB);
+                movie->addEventListener(TouchEvent::TAP, myMovieToggleCB);
                 movie->addEventListener(TouchEvent::DOUBLETAP, myMovieResetCB);
             }
             else
