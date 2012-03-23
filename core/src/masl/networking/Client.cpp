@@ -32,7 +32,7 @@ namespace networking {
 
         CURLcode myStatus;
         myStatus = curl_easy_setopt(_curlHandle, CURLOPT_ERRORBUFFER, 
-                std::string(_myErrorBuffer.begin(), _myErrorBuffer.end()));
+                std::string(_myErrorBuffer.begin(), _myErrorBuffer.end()).c_str());
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         myStatus = curl_easy_setopt(_curlHandle, CURLOPT_PRIVATE, this);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
@@ -47,20 +47,21 @@ namespace networking {
         myStatus = curl_easy_setopt(_curlHandle, CURLOPT_OPENSOCKETDATA, this);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
 
-        myStatus = curl_easy_setopt(_curlHandle, CURLOPT_CLOSESOCKETFUNCTION, &Client::_closeSocket);
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
-        myStatus = curl_easy_setopt(_curlHandle, CURLOPT_CLOSESOCKETDATA, this);
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
+        //TODO: needs newer curl version
+        //myStatus = curl_easy_setopt(_curlHandle, CURLOPT_CLOSESOCKETFUNCTION, &Client::_closeSocket);
+        //checkCurlStatus(myStatus, PLUS_FILE_LINE);
+        //myStatus = curl_easy_setopt(_curlHandle, CURLOPT_CLOSESOCKETDATA, this);
+        //checkCurlStatus(myStatus, PLUS_FILE_LINE);
 
-        CURLcode myStatus = curl_easy_setopt(_curlHandle, CURLOPT_URL, url);
-        checkCurlStatus(myStatus, PLUS_FILE_LINE);
+        //CURLcode myStatus = curl_easy_setopt(_curlHandle, CURLOPT_URL, url);
+        //checkCurlStatus(myStatus, PLUS_FILE_LINE);
 
         if (verbose) {
-            CURLcode myStatus = curl_easy_setopt(_curlHandle, CURLOPT_VERBOSE, 1);
+            myStatus = curl_easy_setopt(_curlHandle, CURLOPT_VERBOSE, 1);
             checkCurlStatus(myStatus, PLUS_FILE_LINE);
         }
 
-        CURLcode myStatus = curl_easy_setopt(_curlHandle, CURLOPT_CONNECTTIMEOUT, connecttimeout);
+        myStatus = curl_easy_setopt(_curlHandle, CURLOPT_CONNECTTIMEOUT, connecttimeout);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
     }
 
@@ -73,7 +74,7 @@ namespace networking {
     void
     Client::performAsync() {
         AC_DEBUG << "starting request " << this;
-        NetAsyncSingleton::get()->getMultiAdapter()->addClient(shared_from_this());
+        NetAsyncSingleton::get().na()->getMultiAdapter()->addClient(shared_from_this());
     }
 
     Client::~Client()

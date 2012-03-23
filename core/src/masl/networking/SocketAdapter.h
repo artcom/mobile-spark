@@ -23,11 +23,12 @@ namespace masl {
 namespace networking {
 
 class MultiAdapter; 
+typedef masl::Ptr<MultiAdapter> MultiAdapterPtr; 
 
 class SocketAdapter : public boost::noncopyable, public boost::enable_shared_from_this<SocketAdapter> {
     public:
         typedef masl::Ptr<SocketAdapter> Ptr;
-        SocketAdapter(MultiAdapter * pParent, CURLM * theCurlMultihandle);
+        SocketAdapter(CURLM * theCurlMultihandle);
         ~SocketAdapter();
         curl_socket_t native() { return boost_socket.native(); };
         boost::asio::ip::tcp::socket boost_socket;
@@ -71,7 +72,7 @@ class SocketAdapter : public boost::noncopyable, public boost::enable_shared_fro
         };
     private:
         SocketAdapter();
-        MultiAdapter * _parent;
+        MultiAdapterPtr _multiAdapter;
         static std::map<curl_socket_t, Ptr> _allSockets;
 };
 

@@ -25,14 +25,14 @@ NetAsyncSingleton::setNetAsync(NetAsyncPtr theNetAsync) {
 
 NetAsync::NetAsync() : 
                 keep_busy(new boost::asio::io_service::work(io)),
-                _multiAdapter(io)
+                _multiAdapter(networking::MultiAdapterPtr(new MultiAdapter(io)))
 {
     _myAsioThread = AsioThreadPtr(new boost::thread( boost::bind( &NetAsync::run, this, 10) ) );
 };
 
 NetAsync::~NetAsync() {
     AC_TRACE << "~NetAsync - canceling all sockets";
-    _multiAdapter.shutdown();
+    _multiAdapter->shutdown();
     AC_TRACE << "~NetAsync - removing keep_busy";
     keep_busy.reset();
     AC_TRACE << "~NetAsync - waiting for ASIO thread";
@@ -72,7 +72,7 @@ NetAsync::onFrame() {
     for (it = _onFrameHandlers.begin(); it != _onFrameHandlers.end(); ++it) {
         (it->second)();
     }
-    _multiAdapter.processCallbacks();
-    _multiAdapter.processCompleted();    
+    _multiAdapter->processCallbacks();
+    _multiAdapter->processCompleted();    
 };
 }

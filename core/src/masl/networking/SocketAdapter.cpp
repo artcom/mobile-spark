@@ -10,26 +10,26 @@
 
 #include "SocketAdapter.h"
 //#include "MultiAdapter.h"
-
-//#include "../NetAsync.h"
+#include "../NetAsync.h"
 
 namespace masl {
 namespace networking {
     
 std::map<curl_socket_t, SocketAdapterPtr> SocketAdapter::_allSockets;
 
-SocketAdapter::SocketAdapter(MultiAdapter * pParent, CURLM * theCurlMultihandle) :
-    boost_socket(pParent->io),
+SocketAdapter::SocketAdapter(CURLM * theCurlMultihandle) :
     readyState(0),
     read_in_progress(false),
-    write_in_progress(false),
-    _parent(pParent)
+    write_in_progress(false)
 { 
     AC_DEBUG << "creating socket " << this;
     boost_socket.open(boost::asio::ip::tcp::v4());
     boost::asio::ip::tcp::socket::non_blocking_io non_blocking_io(true);
     boost_socket.io_control(non_blocking_io);
     AC_TRACE << "         socket is " << native();
+    
+    _multiAdapter = NetAsyncSingleton::get().na()->getMultiAdapter();
+    boost_socket = _multiAdapter->io;
 };
 
 SocketAdapter::~SocketAdapter() {
@@ -50,7 +50,7 @@ SocketAdapter::handleOperations(SocketAdapterPtr s, curl_socket_t theCurlSocket)
                 AC_TRACE << "queuing write " << s->native();
                 s->boost_socket.async_write_some(
                         boost::asio::null_buffers(),
-                        s->_parent->_strand.wrap(
+                        s->_multiAdapter->_strand.wrap(
                         boost::bind(&SocketAdapter::handleWrite, s,
                             boost::asio::placeholders::error)));
             }
@@ -61,7 +61,7 @@ SocketAdapter::handleOperations(SocketAdapterPtr s, curl_socket_t theCurlSocket)
                 AC_TRACE << "queuing read " << s->native();
                 s->boost_socket.async_read_some(
                         boost::asio::null_buffers(),
-                        s->_parent->_strand.wrap(
+                        s->_multiAdapter->_strand.wrap(
                         boost::bind(&SocketAdapter::handleRead, s,
                             boost::asio::placeholders::error)));
 
@@ -92,7 +92,7 @@ SocketAdapter::handleRead(const boost::system::error_code& error) {
         return;
     }
     int i;
-    CURLMcode myStatus = curl_multi_socket_action(_parent->_curlMulti, native(), CURL_CSELECT_IN, &i);
+    CURLMcode myStatus = curl_multi_socket_action(_multiAdapter->_curlMulti, native(), CURL_CSELECT_IN, &i);
     MultiAdapter::checkCurlStatus(myStatus, PLUS_FILE_LINE);
     AC_TRACE << "   done read " << this << " socket " << native();
     SocketAdapter::handleOperations(self, native());
@@ -106,7 +106,7 @@ SocketAdapter::handleWrite(const boost::system::error_code& error) {
     write_in_progress = false;
     if (boost_socket.is_open() && error == 0) {
         int i;
-        CURLMcode myStatus = curl_multi_socket_action(_parent->_curlMulti, native(), CURL_CSELECT_OUT, &i);
+        CURLMcode myStatus = curl_multi_socket_action(_multiAdapter->_curlMulti, native(), CURL_CSELECT_OUT, &i);
         MultiAdapter::checkCurlStatus(myStatus, PLUS_FILE_LINE);
         AC_TRACE << "   done write " << this;
     }

@@ -11,6 +11,8 @@
 #ifndef _ac_mobile_masl_net_async_h_included_
 #define _ac_mobile_masl_net_async_h_included_
 
+#include "networking/Client.h"
+#include "networking/SocketAdapter.h"
 #include "networking/MultiAdapter.h"
 
 #include <boost/asio.hpp>
@@ -19,6 +21,10 @@
 #include "Singleton.h"
 
 namespace masl {
+
+    namespace networking {
+        class MultiAdapter;
+    };
 
 	class NetAsync {
     public:
@@ -62,7 +68,7 @@ namespace masl {
         public:
             virtual ~NetAsyncSingleton();
             void setNetAsync(NetAsyncPtr theNetAsync);
-            const NetAsyncPtr & ap() const { return _myNetAsync;};
+            const NetAsyncPtr & na() const { return _myNetAsync;};
 
         private:
             NetAsyncPtr _myNetAsync;

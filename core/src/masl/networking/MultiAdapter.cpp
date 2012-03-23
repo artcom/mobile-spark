@@ -10,7 +10,6 @@
 
 #include "MultiAdapter.h"
 #include "Client.h"
-//#include "../NetAsync.h"
 
 #include <asl/base/Logger.h>
 
