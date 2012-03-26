@@ -113,7 +113,6 @@ namespace android {
         bool isPlaying = false;
         jmethodID myMethodId = env->GetStaticMethodID(cls, "isMoviePlaying", "(I)Z");
         if(myMethodId != 0) {
-            AC_PRINT << "call Method";
             isPlaying = env->CallStaticBooleanMethod(cls, myMethodId, int(theMovieWidget));
         } else {
             AC_WARNING  << "Sorry, isMoviePlaying not found";

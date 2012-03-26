@@ -32,7 +32,7 @@ public VideoDelegate(Activity theActivity) {
             _myMovies.get(theMovieId).stop();
             _myMovies.remove(theMovieId);
         } else {
-            AC_Log.error("the movie " + theMovieId + " is not initialized yet");
+            //AC_Log.error("the movie " + theMovieId + " is not initialized yet");
         }
     }
 
@@ -40,18 +40,23 @@ public VideoDelegate(Activity theActivity) {
         if (_myMovies.containsKey(theMovieId)) {
             _myMovies.get(theMovieId).pause();
         } else {
-            AC_Log.error("the movie " + theMovieId + " is not initialized yet");
+            //AC_Log.error("the movie " + theMovieId + " is not initialized yet");
         }
     }
 
     public static void updateMovieTexture(int theMovieId) {
+        if (_myMovies.containsKey(theMovieId)) {
+            _myMovies.get(theMovieId).updateMovieTexture();
+        } else {
+            //AC_Log.error("the movie " + theMovieId + " is not initialized yet");
+        }
     }
 
     public static List<Integer> getMovieInfo(int theMovieId) {
         if (_myMovies.containsKey(theMovieId)) {
             return _myMovies.get(theMovieId).getMovieInfo();
         } else {
-            AC_Log.error("the movie " + theMovieId + " is not initialized yet");
+            //AC_Log.error("the movie " + theMovieId + " is not initialized yet");
             return new ArrayList<Integer>();
         }
     }
@@ -61,7 +66,7 @@ public VideoDelegate(Activity theActivity) {
         if (_myMovies.containsKey(theMovieId)) {
             return _myMovies.get(theMovieId).isPlaying();
         } else {
-            AC_Log.error("the movie " + theMovieId + " is not initialized yet");
+            //AC_Log.error("the movie " + theMovieId + " is not initialized yet");
             return false;
         }
     }
@@ -70,7 +75,7 @@ public VideoDelegate(Activity theActivity) {
         if (_myMovies.containsKey(theMovieId)) {
             _myMovies.get(theMovieId).setVolume(theVolume);
         } else {
-            AC_Log.error("the movie " + theMovieId + " is not initialized yet");
+            //AC_Log.error("the movie " + theMovieId + " is not initialized yet");
         }
     }
 }

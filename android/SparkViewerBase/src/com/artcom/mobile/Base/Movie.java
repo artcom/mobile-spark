@@ -21,13 +21,15 @@ import android.view.Surface;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 
-public class Movie {
+public class Movie implements SurfaceTexture.OnFrameAvailableListener {
     
     private MediaPlayer _myMediaPlayer;
     private int[] _myTextureId;
     private SurfaceTexture _mySurfaceTexture;
     private String _myCurrentPath = "";
+    private boolean _myUpdateSurfaceFlag = false;
     private static int GL_TEXTURE_EXTERNAL_OES = 0x8D65;
+
     public Movie() {
         init();
     }
@@ -61,12 +63,13 @@ public class Movie {
                 GLES20.GL_LINEAR);
 
         _mySurfaceTexture = new SurfaceTexture(_myTextureId[0]);
-//        _mySurfaceTexture.setOnFrameAvailableListener(this);
+        _mySurfaceTexture.setOnFrameAvailableListener(this);
 
         Surface mySurface = new Surface(_mySurfaceTexture);
         _myMediaPlayer = new MediaPlayer();
         _myMediaPlayer.setSurface(mySurface);
         mySurface.release();
+        // TODO: switch to async
         //_myMediaPlayer.setOnPreparedListener(this);
     }
 
@@ -76,6 +79,9 @@ public class Movie {
 
     }
 
+    synchronized public void onFrameAvailable(SurfaceTexture surface) {
+        _myUpdateSurfaceFlag = true;
+    }
     public void play(String thePath) {
         AC_Log.debug("Movie::play " + thePath);
         if (!("".equals(_myCurrentPath)) && ! _myCurrentPath.equals(thePath)){
@@ -101,6 +107,10 @@ public class Movie {
     }
 
     public void updateMovieTexture() {
+        if (_myUpdateSurfaceFlag) {
+            _mySurfaceTexture.updateTexImage();
+            _myUpdateSurfaceFlag = false;
+        }
     }
 
     public List<Integer> getMovieInfo() {
