@@ -22,18 +22,13 @@ namespace android {
         void playMovie(void* theMovieWidget, const std::string & theSrc);
         void stopMovie(void* theMovieWidget);
         void pauseMovie(void* theMovieWidget);
-        void resetMovie(void* theMovieWidget);
         void updateMovieTexture(void* theMovieWidget);
         const masl::VideoInfo getMovieInfo(void* theMovieWidget) const;
         bool isMoviePlaying(void* theMovieWidget) const;
         void setMovieVolume(void* theMovieWidget, float newVolume);
 
     private:
-        typedef std::map<void*, std::string> MovieMap;
-        MovieMap _movieMap;
-        
         std::string javaActivity_;
-
     };
     typedef masl::Ptr<AndroidMovieEngine> AndroidMovieEnginePtr;
 };

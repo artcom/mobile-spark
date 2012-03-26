@@ -56,7 +56,6 @@ namespace ios {
         void playMovie(const std::string &filePath);
         void stop();
         void pause();
-        void reset();
         
         float getVolume() const;
         void setVolume(float newVolume);

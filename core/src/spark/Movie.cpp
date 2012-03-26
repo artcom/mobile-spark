@@ -83,11 +83,6 @@ namespace spark {
         masl::MovieEngineSingleton::get().getNative()->pauseMovie(this);
     }
 
-    void
-    Movie::reset() {
-        masl::MovieEngineSingleton::get().getNative()->resetMovie(this);
-    }
-    
     bool
     Movie::isPlaying() {
         return  masl::MovieEngineSingleton::get().getNative()->isMoviePlaying(this);

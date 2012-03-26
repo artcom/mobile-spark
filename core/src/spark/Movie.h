@@ -24,7 +24,6 @@ namespace spark {
         void play();   // start playback at playcursor
         void stop();   // stop videoplayback
         void pause();  // pause video and do not touch playcursor
-        void reset();  // set playcursor to video start
         
         bool isPlaying();
         

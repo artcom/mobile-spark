@@ -39,11 +39,6 @@ namespace ios
         _movieMap[theMovieWidget]->pause();
     }
     
-    void IOSMovieEngine::resetMovie(void* theMovieWidget) 
-    {
-        _movieMap[theMovieWidget]->reset();
-    }
-    
     void IOSMovieEngine::updateMovieTexture(void* theMovieWidget)
     {
         MovieMap::iterator it = _movieMap.find(theMovieWidget);

@@ -24,7 +24,6 @@ namespace masl {
         virtual void playMovie(void* theMovieWidget, const std::string & theSrc) = 0;
         virtual void stopMovie(void* theMovieWidget) = 0;
         virtual void pauseMovie(void* theMovieWidget) = 0;
-        virtual void resetMovie(void* theMovieWidget) = 0;
         virtual void updateMovieTexture(void* theMovieWidget) = 0;
         virtual const VideoInfo getMovieInfo(void* theMovieWidget) const = 0;
         virtual bool isMoviePlaying(void* theMovieWidget) const = 0;
