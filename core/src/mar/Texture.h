@@ -29,7 +29,8 @@ namespace mar {
             GLuint _real_width;  // in some cases images must be downscaled to be loaded from android/ios 
             GLuint _real_height; // imageloader or fit max gl texture size, this is the real size
             bool _transparency;
-            GLuint _textureId;     
+            GLuint _textureId;
+            GLenum _textureTarget;
             bool _mirrorflag;  
             bool _mipmapFlag;
         

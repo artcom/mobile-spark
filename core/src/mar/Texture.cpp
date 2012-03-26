@@ -16,7 +16,7 @@ namespace mar {
 
     Texture::Texture() :
         _width(0), _height(0), _transparency(false),
-        _textureId(0), _mirrorflag(false), _mipmapFlag(false)
+        _textureId(0), _textureTarget(GL_TEXTURE_2D), _mirrorflag(false), _mipmapFlag(false)
     {
         AC_DEBUG << "create Texture " << (void*)this;
     }

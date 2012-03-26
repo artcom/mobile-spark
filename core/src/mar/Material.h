@@ -26,6 +26,7 @@ namespace mar {
     const std::string DEFAULT_TEXTURED_VERTEX_SHADER = "default_textured_vertex.glsl";
     const std::string DEFAULT_COLORED_FRAGMENT_SHADER = "default_colored_fragment.glsl";
     const std::string DEFAULT_TEXTURED_FRAGMENT_SHADER = "default_textured_fragment.glsl";
+    const std::string ANDROID_MOVIE_FRAGMENT_SHADER = "android_movie_fragment.glsl";
     const unsigned int MAX_NUM_HANDLES = 23;
 
     DECLARE_EXCEPTION(ProblemWithHandleException, masl::Exception)

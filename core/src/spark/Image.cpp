@@ -43,9 +43,7 @@ namespace spark {
     
     void Image::setMipMap(bool theMipMapFlag) {
         AC_TRACE << "Image::setMipMap : " << theMipMapFlag;
-        
-        if(_mipmap != theMipMapFlag)
-        {
+        if (_mipmap != theMipMapFlag) {
             _mipmap = theMipMapFlag;
             _myDirtyFlag = true;
         }
@@ -74,25 +72,17 @@ namespace spark {
         bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
         TexturePtr myTexture = TextureLoader::get().load(_data, myCacheFlag, _mipmap);
         
-        if (!getShape()) 
-        {
-            
+        if (!getShape()) {
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
             myMaterial->setCustomHandles(customShaderValues_);
             myMaterial->setShader(_vertexShader, _fragmentShader); 
             _myShape = createCustomShape(myMaterial);
-            
-        } 
-        else 
-        {
+        } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-    
-            
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
         
-        if(_mipmap)
-        {
+        if(_mipmap) {
             float factorW = 1.0;
             float factorH = 1.0;
 #ifdef iOS

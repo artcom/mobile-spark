@@ -22,6 +22,9 @@ namespace spark {
     {
         _moviesrc = _myXMLNode->getAttributeAs<std::string>("moviesrc", "");
         _volume = _myXMLNode->getAttributeAs<float>("volume", 1.f);
+#ifdef ANDROID
+        _fragmentShader = ANDROID_MOVIE_FRAGMENT_SHADER; 
+#endif
     }
 
     Movie::~Movie() {
@@ -44,6 +47,9 @@ namespace spark {
             
             // inject texture name 
             myMaterial->getTextureUnit()->getTexture()->_textureId = myMovieInfo.textureID;
+#ifdef ANDROID
+            myMaterial->getTextureUnit()->getTexture()->_textureTarget = GL_TEXTURE_EXTERNAL_OES;
+#endif
             
             _myTextureSize = vector2(myMovieInfo.width, myMovieInfo.height);
             _myRealImageSize = _myTextureSize;

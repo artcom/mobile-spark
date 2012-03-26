@@ -36,11 +36,9 @@ namespace spark {
         
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Movie::SPARK_TYPE;};
-        
 
     private:
         std::string _moviesrc;
-        
         float _volume;
     };
 
