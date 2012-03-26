@@ -13,7 +13,7 @@
 namespace spark {
     I18nShapeWidget::I18nShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
         : ShapeWidget(theApp, theXMLNode), 
-        i18nId_(theXMLNode->getAttributeAs<std::string>("i18nId", ""))    {
+        _i18nId(theXMLNode->getAttributeAs<std::string>("i18nId", ""))    {
     }
 
     I18nShapeWidget::~I18nShapeWidget() {
@@ -30,7 +30,7 @@ namespace spark {
     
     void 
     I18nShapeWidget::setI18nId(const std::string & theNewI18nId) {
-        i18nId_ = theNewI18nId;
+        _i18nId = theNewI18nId;
         attachToI18nItem();
     }
 
@@ -39,7 +39,7 @@ namespace spark {
         ShapeWidget::realize();
         I18nShapeWidgetPtr ptr = boost::static_pointer_cast<I18nShapeWidget>(shared_from_this());        
         _myHandleLanguageSwitch = EventCallbackPtr(new I18nWidgetEventCallback(ptr, &I18nShapeWidget::handleI18nOnLanguageSwitch));
-        if (!i18nId_.empty()) {
+        if (!_i18nId.empty()) {
             attachToI18nItem();
         }            
     }
@@ -59,10 +59,10 @@ namespace spark {
             }
             _myI18nItem = I18nItemPtr();
         }
-        if (!i18nId_.empty()) {
-            _myI18nItem = getI18nItemByName(i18nId_);
+        if (!_i18nId.empty()) {
+            _myI18nItem = getI18nItemByName(_i18nId);
             if (!_myI18nItem) {
-                throw I18nItemNotFoundException("no i18n item named " + i18nId_, PLUS_FILE_LINE);
+                throw I18nItemNotFoundException("no i18n item named " + _i18nId, PLUS_FILE_LINE);
             }
             _myI18nItem->addEventListener(I18nEvent::ON_LANGUAGE_SWITCH, _myHandleLanguageSwitch);
             _myHandleLanguageSwitch->execute(spark::EventPtr());
@@ -74,6 +74,6 @@ namespace spark {
 
     std::string 
     I18nShapeWidget::getAttributesAsString() const {
-        return ShapeWidget::getAttributesAsString() + " i18nId=\""+i18nId_+"\"";
+        return ShapeWidget::getAttributesAsString() + " i18nId=\""+_i18nId+"\"";
     }
 }

@@ -18,10 +18,9 @@ namespace spark {
     const char * const Movie::SPARK_TYPE = "Movie";
 
     Movie::Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        Image(theApp, theXMLNode)
+        Image(theApp, theXMLNode),
+        _volume(_myXMLNode->getAttributeAs<float>("volume", 1.f))
     {
-        _moviesrc = _myXMLNode->getAttributeAs<std::string>("moviesrc", "");
-        _volume = _myXMLNode->getAttributeAs<float>("volume", 1.f);
 #ifdef ANDROID
         _fragmentShader = ANDROID_MOVIE_FRAGMENT_SHADER; 
 #endif
@@ -65,18 +64,39 @@ namespace spark {
     }
     
     void
+    Movie::build() {
+        I18nShapeWidget::build();
+        if(getSrc().empty()) return;
+        
+        AC_DEBUG<<"build movie " << *this << " with src: "<<getSrc();
+        UnlitTexturedMaterialPtr myMaterial;
+        
+        if (!getShape()) {
+            myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial());
+            myMaterial->setCustomHandles(customShaderValues_);
+            myMaterial->setShader(_vertexShader, _fragmentShader); 
+            _myShape = createCustomShape(myMaterial);
+        } else {
+            myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+            myMaterial->getTextureUnit()->getTexture()->unbind();
+        }
+        float myWidth = _myForcedSize[0] == -1 ? 1 : _myForcedSize[0];
+        float myHeight = _myForcedSize[1] == -1 ? 1 : _myForcedSize[1];
+
+        // adjust widget´s size
+        I18nShapeWidget::setSize(vector2(myWidth, myHeight));
+    }
+
+    void
     Movie::play() {
         masl::MovieEngineSingleton::get().getNative()->playMovie(this, getSrc());
         setVolume(_volume);
-        
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-        myMaterial->getTextureUnit()->getTexture()->_textureId = 0;
         
         // flip texcoords just now to have correct coords for movie-textures
         _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
                                vector2(0, 0), vector2(1, 0));
         
-        AC_INFO<<"playing movie:"<< _moviesrc<<" (volume: "<<_volume<<")";
+        AC_INFO<<"playing movie:"<< getSrc() << " (volume: "<<_volume<<")";
     }
 
     void

@@ -56,21 +56,21 @@ namespace spark {
     
     void Image::setSrc(const std::string & theSrc) { 
         AC_TRACE << "Image::setSrc : " << theSrc;
-        _data = theSrc; 
+        setI18nData(theSrc);
         _myDirtyFlag = true;
     } 
     
     void
     Image::build() {
         I18nShapeWidget::build();
-        if(_data.empty()) return;
+        if(getSrc().empty()) return;
         
-        AC_DEBUG<<"build image " << *this << " with src: "<<_data;
+        AC_DEBUG<<"build image " << *this << " with src: "<<getSrc();
         UnlitTexturedMaterialPtr myMaterial;
         
         //XXX:not caching always generates a new Texture, setSrc would be enough
         bool myCacheFlag = getNode()->getAttributeAs<bool>("cache", false);
-        TexturePtr myTexture = TextureLoader::get().load(_data, myCacheFlag, _mipmap);
+        TexturePtr myTexture = TextureLoader::get().load(getSrc(), myCacheFlag, _mipmap);
         
         if (!getShape()) {
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
@@ -93,18 +93,12 @@ namespace spark {
             // TODO: resolve this temporary solution (adapt mipmapping implementations for ios/android)
             _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
                                    vector2(0, factorH), vector2(factorW, factorH));
-        
-            //            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
-            //                   myTexture->_real_width, myTexture->_real_height,
-            //                   myTexture->_width, myTexture->_height);
-            //            
-            //            printf("factorW: %.2f, factorH: %.2f\n",factorW, factorH);
         }
         
         _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->_width, myMaterial->getTextureUnit()->getTexture()->_height);
         _myRealImageSize = vector2(myTexture->_real_width, myTexture->_real_height);
         float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
         float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
-        I18nShapeWidget::setSize(vector2(myWidth, myHeight));//setSize(myWidth, myHeight);
+        I18nShapeWidget::setSize(vector2(myWidth, myHeight));
     }
 }

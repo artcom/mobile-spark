@@ -32,13 +32,12 @@ namespace spark {
         
         void togglePlayPause();
         
-        const std::string & getSrc() const {return _moviesrc;};
-        
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Movie::SPARK_TYPE;};
 
+    protected:
+        virtual void build();
     private:
-        std::string _moviesrc;
         float _volume;
     };
 

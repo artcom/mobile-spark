@@ -30,8 +30,8 @@ namespace spark {
         Text(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Text();
         
-        void setText(const std::string & theText) { _data = theText; _myDirtyFlag = true;};
-        const std::string& getText() const { return _data;};
+        void setText(const std::string & theText) { setI18nData(theText); _myDirtyFlag = true;};
+        inline const std::string & getText() const { return getData();};
         
         void setColor(const vector4 &theColor);
         
