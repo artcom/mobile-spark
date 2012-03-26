@@ -26,10 +26,11 @@ namespace android {
 
     void 
     AndroidMovieEngine::playMovie(void* theMovieWidget, const std::string & theSrc) {
+        AC_DEBUG << "playMovie";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theSrc);
         jclass cls = env->FindClass(javaActivity_.c_str());
-        jmethodID myMethodId = env->GetStaticMethodID(cls, "playMovie", "(I;Ljava/lang/String)V");
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "playMovie", "(ILjava/lang/String;)V");
         if(myMethodId != 0) {
             jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
             env->CallStaticVoidMethod(cls, myMethodId, int(theMovieWidget), StringArg);
@@ -64,6 +65,7 @@ namespace android {
 
     void 
     AndroidMovieEngine::updateMovieTexture(void* theMovieWidget) {
+        AC_DEBUG << "updateMovieTexture";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "updateMovieTexture", "(I)V");
@@ -76,14 +78,14 @@ namespace android {
 
     const masl::VideoInfo 
     AndroidMovieEngine::getMovieInfo(void* theMovieWidget) const {
+        AC_DEBUG << "getMovieInfo";
         masl::VideoInfo myMovieInfo;
         myMovieInfo.textureID=0;
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "getMovieInfo", "(I)Ljava/util/List;");
         if(myMethodId != 0) {
-            jvalue myArgs[0];
-            jobject myList = env->CallStaticObjectMethod (cls, myMethodId, myArgs);
+            jobject myList = env->CallStaticObjectMethod (cls, myMethodId, int(theMovieWidget));
             jclass listClass = env->GetObjectClass(myList);
             jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
 
@@ -105,11 +107,13 @@ namespace android {
 
     bool 
     AndroidMovieEngine::isMoviePlaying(void* theMovieWidget) const {
+        AC_DEBUG << "isMoviePlaying";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         bool isPlaying = false;
         jmethodID myMethodId = env->GetStaticMethodID(cls, "isMoviePlaying", "(I)Z");
         if(myMethodId != 0) {
+            AC_PRINT << "call Method";
             isPlaying = env->CallStaticBooleanMethod(cls, myMethodId, int(theMovieWidget));
         } else {
             AC_WARNING  << "Sorry, isMoviePlaying not found";
@@ -121,7 +125,7 @@ namespace android {
     AndroidMovieEngine::setMovieVolume(void* theMovieWidget, float theVolume) {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
-        jmethodID myMethodId = env->GetStaticMethodID(cls, "setMovieVolume", "(I;F)V");
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "setMovieVolume", "(IF)V");
         if(myMethodId != 0) {
             env->CallStaticVoidMethod(cls, myMethodId, int(theMovieWidget), theVolume);
         } else {
