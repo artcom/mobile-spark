@@ -47,7 +47,8 @@ namespace spark {
         _myLineHeight(_myXMLNode->getAttributeAs<int>("lineHeight", 0)),
         _myTextAlign(_myXMLNode->getAttributeAs<std::string>("align", "left")),
         _myRenderedGlyphIndex(0),
-        _myTextStartPos(0), _myCacheFlag(_myXMLNode->getAttributeAs<bool>("cache", false))
+        _myTextStartPos(0),
+        _myCacheFlag(_myXMLNode->getAttributeAs<bool>("cache", false))
     {
         setI18nData(getNode()->getAttributeAs<std::string>("text", ""));
         
@@ -57,8 +58,8 @@ namespace spark {
         AC_INFO << "Text ctor: " << _myFontPath;
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
         myMaterial->getTextureUnit()->getTexture()->_transparency = true;
-        myMaterial->setCustomHandles(customShaderValues_);
-        myMaterial->setShader(_vertexShader, _fragmentShader); 
+        myMaterial->setCustomHandles(_myCustomShaderValues);
+        myMaterial->setShader(_myVertexShader, _myFragmentShader); 
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
@@ -120,7 +121,7 @@ namespace spark {
             }
             masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(getText(), myTexture->_textureId, _myFontSize,
                                              _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos,
-                                             myTexture->_mirrorflag);                                             
+                                             myTexture->_mirrorFlag);                                             
             myMaterial->getTextureUnit()->setTexture(myTexture);
             _myTextSize[0] = myTextInfo.width;
             _myTextSize[1] = myTextInfo.height;

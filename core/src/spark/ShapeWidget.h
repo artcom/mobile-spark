@@ -40,18 +40,17 @@ namespace spark {
             virtual void setSize(const float & theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
             virtual void setSize(const vector2 & theSize);
             virtual const vector2 getSize();
-            
-            //TODO: get rid of this public member
-            std::map<std::string, float> customShaderValues_;
             virtual std::string getAttributesAsString() const;
 
         protected:
             virtual mar::ShapePtr createCustomShape(const mar::MaterialPtr theMaterial);
             void makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
-            mar::ShapePtr _myShape;
             virtual void propagateAlpha();
-            std::string _vertexShader;
-            std::string _fragmentShader;
+            mar::ShapePtr _myShape;
+            std::string _myVertexShader;
+            std::string _myFragmentShader;
+            std::map<std::string, float> _myCustomShaderValues;
+            
         private:
             enum ORIGIN_MODE {
                 NO_ORIGIN,

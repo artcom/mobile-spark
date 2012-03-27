@@ -15,8 +15,8 @@
 namespace mar {
 
     Texture::Texture() :
-        _width(0), _height(0), _transparency(false),
-        _textureId(0), _textureTarget(GL_TEXTURE_2D), _mirrorflag(false), _mipmapFlag(false)
+        _width(0), _height(0), _real_width(0), _real_height(0), _transparency(false),
+        _textureId(0), _textureTarget(GL_TEXTURE_2D), _mirrorFlag(false), _mipmapFlag(false)
     {
         AC_DEBUG << "create Texture " << (void*)this;
     }
@@ -36,7 +36,7 @@ namespace mar {
                                                                           _width, _height,  
                                                                           _real_width, _real_height,
                                                                           _transparency,
-                                                                          _mirrorflag,
+                                                                          _mirrorFlag,
                                                                           _mipmapFlag);
             
         } else {
@@ -57,8 +57,9 @@ namespace mar {
 
     std::string
     Texture::getAttributesAsString() const {
-        return "src=\""+_src+"\" width=\""+masl::as_string(_width)+"\" height=\""+masl::as_string(_height)+"\""
-            " transparency=\""+masl::as_string(_transparency)+"\""
-            " textureId=\""+masl::as_string(_textureId)+"\"";
+        return "src=\"" + _src + "\" width=\"" + masl::as_string(_width) +
+            "\" height=\"" + masl::as_string(_height) + "\" transparency=\"" +
+            masl::as_string(_transparency) + "\" textureId=\"" +
+            masl::as_string(_textureId) + "\"";
     }
 }

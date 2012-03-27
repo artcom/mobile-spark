@@ -14,8 +14,11 @@
 
 namespace mar {
 
-    TextureUnit::TextureUnit() : matrix_(cml::identity_4x4()), _myTextureScaleCorrection(cml::identity_4x4()), _myTexture(TexturePtr(new Texture())) {
-    }
+    TextureUnit::TextureUnit() :
+        _matrix(cml::identity_4x4()),
+        _textureScaleCorrection(cml::identity_4x4()),
+        _texture(TexturePtr(new Texture()))
+    {}
     
     TextureUnit::TextureUnit(const TexturePtr theTexture){
         setTexture(theTexture);
@@ -23,36 +26,31 @@ namespace mar {
 
     TextureUnit::~TextureUnit() {
     }
-    
+    //TODO: cleanup mirroring
     void 
     TextureUnit::setTexture(TexturePtr theTexture) {
-        matrix_ = cml::identity_4x4();
-        _myTextureScaleCorrection = cml::identity_4x4();
-        _myTexture = theTexture;
-        if (_myTexture->_mirrorflag) {
+        _matrix = cml::identity_4x4();
+        _textureScaleCorrection = cml::identity_4x4();
+        _texture = theTexture;
+        if (_texture->_mirrorFlag) {
             matrix scalematrix;        
             cml::matrix_scale(scalematrix, 1.0f, -1.0f, 1.0f);
     
             matrix translatematrix;        
             cml::matrix_translation(translatematrix, 0.0f, 1.0f);
     
-            _myTextureScaleCorrection = translatematrix * scalematrix;
+            _textureScaleCorrection = translatematrix * scalematrix;
         }
     }
     
-    matrix & 
-    TextureUnit::getMatrix() {
-        return matrix_;
-     }
-
     matrix
-    TextureUnit::getRenderMatrix() {
-        return matrix_ * _myTextureScaleCorrection;
+    TextureUnit::getRenderMatrix() const {
+        return _matrix * _textureScaleCorrection;
      }
 
     std::string
     TextureUnit::getAttributesAsString() const {
-        return "matrix=\""+masl::as_string(matrix_)+"\" "+_myTexture->getAttributesAsString();
+        return "matrix=\""+masl::as_string(_matrix)+"\" "+_texture->getAttributesAsString();
     }
 
 }

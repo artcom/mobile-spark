@@ -22,7 +22,7 @@ namespace spark {
         _volume(_myXMLNode->getAttributeAs<float>("volume", 1.f))
     {
 #ifdef ANDROID
-        _fragmentShader = ANDROID_MOVIE_FRAGMENT_SHADER; 
+        _myFragmentShader = ANDROID_MOVIE_FRAGMENT_SHADER; 
 #endif
     }
 
@@ -73,8 +73,8 @@ namespace spark {
         
         if (!getShape()) {
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial());
-            myMaterial->setCustomHandles(customShaderValues_);
-            myMaterial->setShader(_vertexShader, _fragmentShader); 
+            myMaterial->setCustomHandles(_myCustomShaderValues);
+            myMaterial->setShader(_myVertexShader, _myFragmentShader); 
             _myShape = createCustomShape(myMaterial);
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
@@ -91,7 +91,7 @@ namespace spark {
     Movie::play() {
         masl::MovieEngineSingleton::get().getNative()->playMovie(this, getSrc());
         setVolume(_volume);
-        
+        //XXX: rethink
         // flip texcoords just now to have correct coords for movie-textures
         _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
                                vector2(0, 0), vector2(1, 0));

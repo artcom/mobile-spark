@@ -21,11 +21,10 @@ namespace spark {
     const char * const Image::SPARK_TYPE = "Image";
 
     Image::Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        I18nShapeWidget(theApp, theXMLNode)
+        I18nShapeWidget(theApp, theXMLNode),
+        _myForcedSize(getNode()->getAttributeAs<float>("width", -1), getNode()->getAttributeAs<float>("height", -1)),
+        _mipmap(getNode()->getAttributeAs<bool>("mipmap", false))
     {
-        _myForcedSize[0] = getNode()->getAttributeAs<float>("width", -1);
-        _myForcedSize[1] = getNode()->getAttributeAs<float>("height", -1);
-        _mipmap = getNode()->getAttributeAs<bool>("mipmap", false);
         setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
     }
 
@@ -74,14 +73,15 @@ namespace spark {
         
         if (!getShape()) {
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial(myTexture));
-            myMaterial->setCustomHandles(customShaderValues_);
-            myMaterial->setShader(_vertexShader, _fragmentShader); 
+            myMaterial->setCustomHandles(_myCustomShaderValues);
+            myMaterial->setShader(_myVertexShader, _myFragmentShader); 
             _myShape = createCustomShape(myMaterial);
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
         
+         // TODO: cleanup mipmapping code
         if(_mipmap) {
             float factorW = 1.0;
             float factorH = 1.0;

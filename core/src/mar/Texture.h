@@ -31,7 +31,7 @@ namespace mar {
             bool _transparency;
             GLuint _textureId;
             GLenum _textureTarget;
-            bool _mirrorflag;  
+            bool _mirrorFlag;  
             bool _mipmapFlag;
         
         private:
