@@ -32,11 +32,19 @@
 
 
 #include "IOSMovieEngine.h"
-//#include <masl/AssetProvider.h>
-//#include <masl/CallStack.h>
 
 namespace ios
 {
+    IOSMovieEngine::IOSMovieEngine()
+    {
+    
+    }
+    
+    IOSMovieEngine::~IOSMovieEngine()
+    {
+    
+    }
+    
     bool IOSMovieEngine::playMovie(spark::MoviePtr theMovieWidget) 
     {
         std::string filePath;
@@ -80,7 +88,8 @@ namespace ios
             it->second->copyNextFrameToTexture();
     }
     
-    const masl::VideoInfo IOSMovieEngine::getMovieInfo(spark::MoviePtr theMovieWidget) const
+    const masl::VideoInfo 
+    IOSMovieEngine::getMovieInfo(spark::MoviePtr theMovieWidget) const
     {
         masl::VideoInfo movieInfo;
         
@@ -108,5 +117,15 @@ namespace ios
         }
 
         return ret;
+    }
+    
+    void IOSMovieEngine::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume)
+    {
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        
+        if(it != _movieMap.end())
+        {
+            it->second->setVolume(newVolume);
+        }
     }
 }

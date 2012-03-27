@@ -28,92 +28,37 @@ namespace ios
         
     }
     
-    /*bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
-    {
-        std::string filePath;
-        
-        if (theMovieWidget->getSrc().size() > 0 ) {
-            if (!masl::searchFile(theMovieWidget->getSrc(), filePath)) 
-                return false;
-        }
-        
-        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
-        if(it == _movieMap.end())
-            _movieMap[theMovieWidget] = MovieControllerPtr(new MovieController);
-        
-        _movieMap[theMovieWidget]->playMovie(filePath);
-        
-        return true;
-    }
-    
-    void IOSMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) 
-    {
-        _movieMap[theMovieWidget]->stop();
-        
-        _movieMap.erase(theMovieWidget);
-    }
-    
-    void IOSMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget) 
-    {
-        _movieMap[theMovieWidget]->pause();
-    }
-    
-    void IOSMobileSDK::resetMovie(spark::MoviePtr theMovieWidget) 
-    {
-        _movieMap[theMovieWidget]->reset();
-    }
-    
-    void IOSMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget)
-    {
-        MovieMap::iterator it = _movieMap.find(theMovieWidget);
-        
-        if(it != _movieMap.end())
-            it->second->copyNextFrameToTexture();
-    }
-    
-    const masl::VideoInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const
-    {
-        masl::VideoInfo movieInfo;
-        
-        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
-        
-        if(it != _movieMap.end())
-        {
-            movieInfo.textureID = it->second->getTextureID();
-            movieInfo.width = it->second->getWidth();
-            movieInfo.height = it->second->getHeight();
-        }
-        
-        return movieInfo;
-    }
-    
-    bool IOSMobileSDK::isMoviePlaying(spark::MoviePtr theMovieWidget) const
-    {
-        bool ret = false;
-        
-        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
-        
-        if(it != _movieMap.end())
-        {
-            ret = it->second->isPlaying();
-        }
-
-        return ret;
-    }
-    
     void IOSMobileSDK::updateCameraTexture()
     {
         // not needed currently (@see Camera.h)
     }
     
-    masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 
-                                            int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
-                                            int theLineHeight, int theStartIndex, bool & mirrorFlag) {
+    masl::TextInfo IOSMobileSDK::renderText(const std::string & theMessage,
+                                            unsigned int theTextureId,
+                                            int theFontSize,
+                                            vector4 theColor, 
+                                            int theMaxWidth,
+                                            int theMaxHeight,
+                                            const std::string & theAlign,
+                                            const std::string & theFontPath, 
+                                            int theLineHeight,
+                                            int theStartIndex,
+                                            bool & mirrorFlag) 
+    {
         mirrorFlag = false;                                            
         masl::TextInfo textInfo;        
         
         TextRendererPtr textRenderer = TextRendererPtr(new TextRenderer());
-        textRenderer->renderText(theMessage.substr(theStartIndex), theTextureId, theFontSize, theColor, (float) theMaxWidth, (float) theMaxHeight, theAlign, theFontPath,theLineHeight, theStartIndex);
+        textRenderer->renderText(theMessage.substr(theStartIndex),
+                                 theTextureId,
+                                 theFontSize, 
+                                 theColor,
+                                 (float) theMaxWidth,
+                                 (float) theMaxHeight,
+                                 theAlign,
+                                 theFontPath,
+                                 theLineHeight,
+                                 theStartIndex);
         
         textInfo.textureID = textRenderer.get()->getTextureID();
         textInfo.height = textRenderer.get()->getTextureHeight();
@@ -121,20 +66,16 @@ namespace ios
         textInfo.renderedGlyphIndex = textRenderer.get()->getRenderedGlyphIndex();
         return textInfo;
     }
+
     
-    void IOSMobileSDK::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume)
-    {
-        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
-        
-        if(it != _movieMap.end())
-        {
-            it->second->setVolume(newVolume);
-        }
-    }*/
-    
-    bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
-                                           unsigned int & width, unsigned int & height, 
-                                           unsigned int & real_width, unsigned int & real_height, bool & hasAlpha, bool & theMipmapFlag) 
+    bool IOSMobileSDK::loadTextureFromFile(const std::string & filename,
+                                           unsigned int & textureId, 
+                                           unsigned int & width,
+                                           unsigned int & height, 
+                                           unsigned int & real_width,
+                                           unsigned int & real_height,
+                                           bool & hasAlpha,
+                                           bool & theMipmapFlag) 
     {
         std::string filePath;
         
@@ -143,8 +84,10 @@ namespace ios
                 return false;
         }
         
-        NSString *filepathString = [NSString stringWithUTF8String:filePath.c_str()];
-        UIImage* imageClass = [[UIImage alloc] initWithContentsOfFile:filepathString];
+        NSString *filepathString = [NSString stringWithUTF8String:
+                                    filePath.c_str()];
+        UIImage* imageClass = [[UIImage alloc] initWithContentsOfFile:
+                               filepathString];
         
         CGImageRef cgImage = imageClass.CGImage;
         if (!cgImage)
@@ -240,10 +183,6 @@ namespace ios
             
             width = potWidth;
             height = potHeight;
-
-            //TODO: remove
-//            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
-//                   real_width, real_height, potWidth, potHeight);
             
             // create empty texture object with pot-dimensions
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
@@ -254,7 +193,8 @@ namespace ios
                             GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) data);
             
             // set filtering to mipmap/linear
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                            GL_LINEAR_MIPMAP_LINEAR);
             
             // generate mipmap pyramid
             glGenerateMipmap(GL_TEXTURE_2D);
@@ -262,8 +202,10 @@ namespace ios
         } 
         else 
         {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, real_width, real_height, 0, GL_RGBA,
+            glTexImage2D(GL_TEXTURE_2D, 0,
+                         GL_RGBA, real_width, real_height, 0, GL_RGBA,
                          GL_UNSIGNED_BYTE, (GLvoid*) data);
+            
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         }
         
@@ -283,7 +225,8 @@ namespace ios
         return true;
     }
 
-    void IOSMobileSDK::freezeMobileOrientation(const std::string & theOrientation) 
+    void 
+    IOSMobileSDK::freezeMobileOrientation(const std::string & theOrientation) 
     {
         m_orientationString = theOrientation;
     }
