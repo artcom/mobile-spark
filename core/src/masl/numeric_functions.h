@@ -10,6 +10,8 @@
 #ifndef _included_masl_numeric_functions_
 #define _included_masl_numeric_functions_
 
+#include "Settings.h"
+
 #include <cml/cml.h>
 #include <cml/util.h>
 #include <cml/mathlib/typedef.h>
@@ -95,14 +97,64 @@ inline bool is_power_of_2(NUM n) {
     return (n & (n - 1)) == 0;
 }
 
-template <class NUM>
-inline NUM next_power_of_2(NUM n) {
-    n -= 1;
-    n |= n >> 1;
-    n |= n >> 2;
-    n |= n >> 4;
-    n |= n >> 8;
-    n |= n >> 16;
+inline
+Int16 next_power_of_2(Int16 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    return n + 1;
+}
+inline
+UInt16 next_power_of_2(UInt16 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    return n + 1;
+}
+inline
+Int32 next_power_of_2(Int32 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    n |= (n >> 16);
+    return n + 1;
+}
+inline
+UInt32 next_power_of_2(UInt32 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    n |= (n >> 16);
+    return n + 1;
+}
+inline
+Int64 next_power_of_2(Int64 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    n |= (n >> 16);
+    n |= (n >> 32);
+    return n + 1;
+}
+inline
+UInt64 next_power_of_2(UInt64 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    n |= (n >> 16);
+    n |= (n >> 32);
     return n + 1;
 }
 
