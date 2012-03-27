@@ -61,6 +61,13 @@ namespace masl {
         return outValue;
     }
 
+    template <class T>
+    inline std::string as_hex(const T& x) {
+        std::ostringstream streamer;
+        streamer << std::hex << x;
+        return streamer.str();
+    }
+
     int as_int(const std::string & theString);
     float as_float(const std::string & theString);
 
