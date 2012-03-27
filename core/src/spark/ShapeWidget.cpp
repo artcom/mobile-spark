@@ -22,6 +22,7 @@
 namespace spark {
     ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode) :
         Widget(theApp, theXMLNode),
+        _myForcedSize(getNode()->getAttributeAs<float>("width", -1), getNode()->getAttributeAs<float>("height", -1)),
         _myVertexShader(getNode()->getAttributeAs<std::string>("vertex_shader","")),
         _myFragmentShader(getNode()->getAttributeAs<std::string>("fragment_shader","")),
         _myOrigin(vector2(0,0)),
@@ -215,6 +216,7 @@ namespace spark {
             vector2 myLowerLeftCorner = _myOrigin * -1.0f;
             vector2 myUpperRightCorner = theSize - _myOrigin;
             getShape()->setDimensions(myLowerLeftCorner, myUpperRightCorner);
+            _myForcedSize = theSize; // XXX: hmm?!
         }
     }
     

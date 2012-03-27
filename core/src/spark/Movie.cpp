@@ -18,64 +18,48 @@ namespace spark {
     const char * const Movie::SPARK_TYPE = "Movie";
 
     Movie::Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        Image(theApp, theXMLNode),
+        I18nShapeWidget(theApp, theXMLNode),
         _volume(_myXMLNode->getAttributeAs<float>("volume", 1.f))
     {
+        setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
 #ifdef ANDROID
-        _myFragmentShader = ANDROID_MOVIE_FRAGMENT_SHADER; 
+        _myFragmentShader = ANDROID_MOVIE_FRAGMENT_SHADER;
 #endif
     }
 
     Movie::~Movie() {
         AC_INFO << "....destructor Movie " << getName();
     }
-    
+
     void
     Movie::prerender(MatrixStack& theCurrentMatrixStack) {
-        ShapeWidget::prerender(theCurrentMatrixStack);
-        
-        if (isPlaying() && isRendered()) {
-            // retrieve MovieInfo
-            masl::VideoInfo myMovieInfo = masl::MovieEngineSingleton::get().getNative()->getMovieInfo(this);
-            
-            // load Material
-            mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-            
+        I18nShapeWidget::prerender(theCurrentMatrixStack);
+
+        if (isRendered() && isPlaying()) {
             // trigger update for OpenGL texture
             masl::MovieEngineSingleton::get().getNative()->updateMovieTexture(this);
-            
-            // inject texture name 
-            myMaterial->getTextureUnit()->getTexture()->_textureId = myMovieInfo.textureID;
-#ifdef ANDROID
-            myMaterial->getTextureUnit()->getTexture()->_textureTarget = GL_TEXTURE_EXTERNAL_OES;
-#endif
-            
-            _myTextureSize = vector2(myMovieInfo.width, myMovieInfo.height);
-            _myRealImageSize = _myTextureSize;
-            
-            float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
-            float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
-
-            // adjust widget´s size
-            I18nShapeWidget::setSize(vector2(myWidth, myHeight));
         } else {
             // TODO: stop movie if playing here !?
         }
     }
-    
+
     void
     Movie::build() {
         I18nShapeWidget::build();
         if(getSrc().empty()) return;
-        
+
         AC_DEBUG<<"build movie " << *this << " with src: "<<getSrc();
         UnlitTexturedMaterialPtr myMaterial;
-        
+
         if (!getShape()) {
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial());
             myMaterial->setCustomHandles(_myCustomShaderValues);
-            myMaterial->setShader(_myVertexShader, _myFragmentShader); 
+            myMaterial->setShader(_myVertexShader, _myFragmentShader);
             _myShape = createCustomShape(myMaterial);
+            //XXX: rethink
+            // flip texcoords just now to have correct coords for movie-textures
+            _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
+                                   vector2(0, 0), vector2(1, 0));
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             myMaterial->getTextureUnit()->getTexture()->unbind();
@@ -83,20 +67,30 @@ namespace spark {
         float myWidth = _myForcedSize[0] == -1 ? 1 : _myForcedSize[0];
         float myHeight = _myForcedSize[1] == -1 ? 1 : _myForcedSize[1];
 
-        // adjust widget´s size
+        // adjust widget size
         I18nShapeWidget::setSize(vector2(myWidth, myHeight));
     }
 
     void
     Movie::play() {
+        AC_INFO<<"playing movie:"<< getSrc() << " (volume: "<<_volume<<")";
         masl::MovieEngineSingleton::get().getNative()->playMovie(this, getSrc());
         setVolume(_volume);
-        //XXX: rethink
-        // flip texcoords just now to have correct coords for movie-textures
-        _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
-                               vector2(0, 0), vector2(1, 0));
-        
-        AC_INFO<<"playing movie:"<< getSrc() << " (volume: "<<_volume<<")";
+        masl::VideoInfo myMovieInfo = masl::MovieEngineSingleton::get().getNative()->getMovieInfo(this);
+        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
+
+        // inject texture name
+        myMaterial->getTextureUnit()->getTexture()->_textureId = myMovieInfo.textureID;
+        //TODO: add maybe video texture to wrap this preprocessor statement
+        //      define engine texture targets
+#ifdef ANDROID
+        myMaterial->getTextureUnit()->getTexture()->_textureTarget = GL_TEXTURE_EXTERNAL_OES;
+#endif
+        // adjust widget size
+        vector2 myMovieSize = vector2(myMovieInfo.width, myMovieInfo.height);
+        float myWidth = _myForcedSize[0] == -1 ? myMovieSize[0] : _myForcedSize[0];
+        float myHeight = _myForcedSize[1] == -1 ? myMovieSize[1] : _myForcedSize[1];
+        I18nShapeWidget::setSize(vector2(myWidth, myHeight));
     }
 
     void
@@ -113,21 +107,21 @@ namespace spark {
     Movie::isPlaying() {
         return  masl::MovieEngineSingleton::get().getNative()->isMoviePlaying(this);
     }
-    
+
     void
-    Movie::setVolume(float newVolume) {
-        _volume = cml::clamp(newVolume, 0.f, 1.f);
+    Movie::setVolume(const float theNewVolume) {
+        _volume = cml::clamp(theNewVolume, 0.f, 1.f);
         //if(isPlaying())
         {
             masl::MovieEngineSingleton::get().getNative()->setMovieVolume(this, _volume);
         }
     }
-    
+
     float
     Movie::getVolume() {
         return _volume;
     }
-    
+
     void
     Movie::togglePlayPause() {
         if(isPlaying()) {

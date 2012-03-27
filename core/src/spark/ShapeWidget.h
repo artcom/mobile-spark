@@ -47,6 +47,7 @@ namespace spark {
             void makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
             virtual void propagateAlpha();
             mar::ShapePtr _myShape;
+            vector2 _myForcedSize;      // this is the gl quad size
             std::string _myVertexShader;
             std::string _myFragmentShader;
             std::map<std::string, float> _myCustomShaderValues;

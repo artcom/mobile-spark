@@ -22,7 +22,6 @@ namespace spark {
 
     Image::Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
         I18nShapeWidget(theApp, theXMLNode),
-        _myForcedSize(getNode()->getAttributeAs<float>("width", -1), getNode()->getAttributeAs<float>("height", -1)),
         _mipmap(getNode()->getAttributeAs<bool>("mipmap", false))
     {
         setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
@@ -48,11 +47,6 @@ namespace spark {
         }
     }
 
-    void Image::setSize(const vector2 & theSize) {
-        I18nShapeWidget::setSize(theSize);
-        _myForcedSize = theSize;
-    }
-    
     void Image::setSrc(const std::string & theSrc) { 
         AC_TRACE << "Image::setSrc : " << theSrc;
         setI18nData(theSrc);
@@ -80,23 +74,21 @@ namespace spark {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             myMaterial->getTextureUnit()->setTexture(myTexture);
         }
+        _myTextureSize = vector2(myTexture->_width, myTexture->_height);
+        _myRealImageSize = vector2(myTexture->_real_width, myTexture->_real_height);
         
-         // TODO: cleanup mipmapping code
-        if(_mipmap) {
-            float factorW = 1.0;
-            float factorH = 1.0;
+        // I really do not like preprocessor conditions
+        // TODO: resolve this temporary solution (adapt mipmapping implementations for ios/android)
+        //       this is ios mipmap next_power_of_2, maybe we should add a npot matrix to texture
 #ifdef iOS
-            factorW = myTexture->_real_width / (float) myTexture->_width;
-            factorH = myTexture->_real_height / (float) myTexture->_height;
-#endif            
-            // I really do not like preprocessor conditions
-            // TODO: resolve this temporary solution (adapt mipmapping implementations for ios/android)
+        if(_mipmap) {
+            float factorW = _myRealImageSize[0] / (float) _myTextureSize[0];
+            float factorH = _myRealImageSize[1] / (float) _myTextureSize[1];
             _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
                                    vector2(0, factorH), vector2(factorW, factorH));
         }
+#endif            
         
-        _myTextureSize = vector2(myMaterial->getTextureUnit()->getTexture()->_width, myMaterial->getTextureUnit()->getTexture()->_height);
-        _myRealImageSize = vector2(myTexture->_real_width, myTexture->_real_height);
         float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
         float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
         I18nShapeWidget::setSize(vector2(myWidth, myHeight));

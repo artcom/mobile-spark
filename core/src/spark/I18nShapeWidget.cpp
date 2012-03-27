@@ -46,9 +46,11 @@ namespace spark {
 
     void 
     I18nShapeWidget::handleI18nOnLanguageSwitch(const EventPtr theEvent) {
-        setI18nData(getI18nItem()->getLanguageData());
-        _myDirtyFlag = true;
-        AC_DEBUG << "on language switch data " << _data;
+        if (getI18nItem()) {
+            setI18nData(getI18nItem()->getLanguageData());
+            _myDirtyFlag = true;
+            AC_DEBUG << "on language switch data " << _data;
+        }
     }
 
     void
