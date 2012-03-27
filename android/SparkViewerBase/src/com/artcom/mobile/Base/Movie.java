@@ -22,7 +22,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 
 public class Movie implements SurfaceTexture.OnFrameAvailableListener {
-    
+
     private MediaPlayer _myMediaPlayer;
     private int[] _myTextureId;
     private SurfaceTexture _mySurfaceTexture;
@@ -42,8 +42,8 @@ public class Movie implements SurfaceTexture.OnFrameAvailableListener {
     private void release() {
         AC_Log.debug("Movie::release");
         if (_myMediaPlayer != null){
-            _myMediaPlayer.release();               
-        }               
+            _myMediaPlayer.release();
+        }
         if (_myTextureId[0] != 0) {
             GLES20.glDeleteTextures(1, _myTextureId, 0);
         }
@@ -82,20 +82,27 @@ public class Movie implements SurfaceTexture.OnFrameAvailableListener {
     synchronized public void onFrameAvailable(SurfaceTexture surface) {
         _myUpdateSurfaceFlag = true;
     }
+
     public void play(String thePath) {
         AC_Log.debug("Movie::play " + thePath);
+        if (isPlaying()) {
+            stop();
+        }
         if (!("".equals(_myCurrentPath)) && ! _myCurrentPath.equals(thePath)){
             release();
             init();
         }
-        _myCurrentPath = thePath;
         try {
-            _myMediaPlayer.setDataSource(thePath);
-            _myMediaPlayer.prepare();
+            if (!_myCurrentPath.equals(thePath)) {
+                _myMediaPlayer.setDataSource(thePath);
+                _myMediaPlayer.prepare();
+            }
             _myMediaPlayer.start();
+            AC_Log.debug("Movie::play start playing");
+            _myCurrentPath = thePath;
         } catch (IOException e){
             AC_Log.error("mediaplayer setDataSource failed");
-        }           
+        }
     }
 
     public void stop() {
@@ -122,7 +129,11 @@ public class Movie implements SurfaceTexture.OnFrameAvailableListener {
     }
 
     public boolean isPlaying() {
-        return _myMediaPlayer.isPlaying();
+        if (_myMediaPlayer != null) {
+            return _myMediaPlayer.isPlaying();
+        } else {
+            return false;
+        }
     }
 
     public void setVolume(float theVolume) {
