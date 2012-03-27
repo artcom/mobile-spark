@@ -20,6 +20,9 @@ namespace mar {
             Texture();
             ~Texture();
             void unbind();
+            matrix & getNpotMatrix() {return _npotMatrix;};
+            const matrix & getNpotMatrix() const {return _npotMatrix;};
+            matrix getRenderMatrix() const;
             std::string getSrc() const {return _src;};
             void setSrc(const std::string & theSrc = "");
             std::string getAttributesAsString() const;
@@ -31,11 +34,12 @@ namespace mar {
             bool _transparency;
             GLuint _textureId;
             GLenum _textureTarget;
-            bool _mirrorFlag;  
+            bool _mirrorFlag;
             bool _mipmapFlag;
-        
         private:
             std::string _src;
+            matrix _matrix;
+            matrix _npotMatrix;
         
     };
     typedef masl::Ptr<Texture> TexturePtr;

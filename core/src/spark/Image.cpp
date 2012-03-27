@@ -76,19 +76,6 @@ namespace spark {
         }
         _myTextureSize = vector2(myTexture->_width, myTexture->_height);
         _myRealImageSize = vector2(myTexture->_real_width, myTexture->_real_height);
-        
-        // I really do not like preprocessor conditions
-        // TODO: resolve this temporary solution (adapt mipmapping implementations for ios/android)
-        //       this is ios mipmap next_power_of_2, maybe we should add a npot matrix to texture
-#ifdef iOS
-        if(_mipmap) {
-            float factorW = _myRealImageSize[0] / (float) _myTextureSize[0];
-            float factorH = _myRealImageSize[1] / (float) _myTextureSize[1];
-            _myShape->setTexCoords(vector2(0, 0), vector2(factorW, 0),
-                                   vector2(0, factorH), vector2(factorW, factorH));
-        }
-#endif            
-        
         float myWidth = _myForcedSize[0] == -1 ? _myRealImageSize[0] : _myForcedSize[0];
         float myHeight = _myForcedSize[1] == -1 ? _myRealImageSize[1] : _myForcedSize[1];
         I18nShapeWidget::setSize(vector2(myWidth, myHeight));

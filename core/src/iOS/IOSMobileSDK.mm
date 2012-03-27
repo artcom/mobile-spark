@@ -53,7 +53,9 @@ namespace ios
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                            unsigned int & width, unsigned int & height, 
-                                           unsigned int & real_width, unsigned int & real_height, bool & hasAlpha, bool & theMipmapFlag) 
+                                           unsigned int & real_width, unsigned int & real_height,
+                                           matrix & npotMatrix,
+                                           bool & hasAlpha, bool & theMipmapFlag) 
     {
         std::string filePath;
         
@@ -154,15 +156,12 @@ namespace ios
         {
             
             // get next power of two for width and height
-            uint potWidth = masl::next_power_of_2(real_width);
-            uint potHeight = masl::next_power_of_2(real_height);
-            
-            width = potWidth;
-            height = potHeight;
-
-            //TODO: remove
-//            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
-//                   real_width, real_height, potWidth, potHeight);
+            width = masl::next_power_of_2(real_width);
+            height = masl::next_power_of_2(real_height);
+            cml::matrix_scale(npotMatrix,
+                              float(real_width) / width,
+                              float(real_height) / height,
+                              1.0f);
             
             // create empty texture object with pot-dimensions
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,

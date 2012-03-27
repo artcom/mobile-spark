@@ -12,8 +12,8 @@ public class VideoDelegate {
 
 private static Map<Integer,Movie> _myMovies = new HashMap<Integer, Movie>();
 
-public VideoDelegate(Activity theActivity) {
-}
+    public VideoDelegate(Activity theActivity) {
+    }
 
 
     public static void playMovie(int theMovieId, String thePath) {
@@ -62,7 +62,7 @@ public VideoDelegate(Activity theActivity) {
     }
 
     public static boolean isMoviePlaying(int theMovieId) {
-        AC_Log.debug("VideoDelegate::isMoviePlaying");
+        AC_Log.debug("VideoDelegate::isMoviePlaying " + theMovieId);
         if (_myMovies.containsKey(theMovieId)) {
             return _myMovies.get(theMovieId).isPlaying();
         } else {

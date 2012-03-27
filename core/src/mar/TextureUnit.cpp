@@ -15,42 +15,28 @@
 namespace mar {
 
     TextureUnit::TextureUnit() :
-        _matrix(cml::identity_4x4()),
-        _textureScaleCorrection(cml::identity_4x4()),
-        _texture(TexturePtr(new Texture()))
+        _texture(TexturePtr(new Texture())),
+        _matrix(cml::identity_4x4())
     {}
-    
-    TextureUnit::TextureUnit(const TexturePtr theTexture){
+
+    TextureUnit::TextureUnit(const TexturePtr theTexture) :
+        _matrix(cml::identity_4x4())
+    {
         setTexture(theTexture);
     }
 
     TextureUnit::~TextureUnit() {
     }
-    //TODO: cleanup mirroring
-    void 
-    TextureUnit::setTexture(TexturePtr theTexture) {
-        _matrix = cml::identity_4x4();
-        _textureScaleCorrection = cml::identity_4x4();
-        _texture = theTexture;
-        if (_texture->_mirrorFlag) {
-            matrix scalematrix;        
-            cml::matrix_scale(scalematrix, 1.0f, -1.0f, 1.0f);
-    
-            matrix translatematrix;        
-            cml::matrix_translation(translatematrix, 0.0f, 1.0f);
-    
-            _textureScaleCorrection = translatematrix * scalematrix;
-        }
-    }
-    
+
     matrix
     TextureUnit::getRenderMatrix() const {
-        return _matrix * _textureScaleCorrection;
-     }
+        return _matrix * _texture->getRenderMatrix();
+    }
 
     std::string
     TextureUnit::getAttributesAsString() const {
-        return "matrix=\""+masl::as_string(_matrix)+"\" "+_texture->getAttributesAsString();
+        return "matrix=\"" + masl::as_string(_matrix) +
+               "\" " + _texture->getAttributesAsString();
     }
 
 }

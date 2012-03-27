@@ -44,8 +44,6 @@ namespace spark {
         if (isRendered() && isPlaying()) {
             // trigger update for OpenGL texture
             masl::MovieEngineSingleton::get().getNative()->updateMovieTexture(this);
-        } else {
-            // TODO: stop movie if playing here !?
         }
     }
 
@@ -56,16 +54,13 @@ namespace spark {
 
         AC_DEBUG<<"build movie " << *this << " with src: "<<getSrc();
         UnlitTexturedMaterialPtr myMaterial;
-
         if (!getShape()) {
             myMaterial = UnlitTexturedMaterialPtr(new UnlitTexturedMaterial());
             myMaterial->setCustomHandles(_myCustomShaderValues);
             myMaterial->setShader(_myVertexShader, _myFragmentShader);
             _myShape = createCustomShape(myMaterial);
-            //XXX: rethink
-            // flip texcoords just now to have correct coords for movie-textures
-            _myShape->setTexCoords(vector2(0, 1), vector2(1, 1),
-                                   vector2(0, 0), vector2(1, 0));
+            //given movie textures are flipped
+            myMaterial->getTextureUnit()->getTexture()->_mirrorFlag = true;
         } else {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             myMaterial->getTextureUnit()->getTexture()->unbind();

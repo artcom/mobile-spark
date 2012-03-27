@@ -36,7 +36,8 @@ namespace android {
     }
     bool AndroidMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                                unsigned int & width, unsigned int & height, 
-                                               unsigned int & real_width, unsigned int & real_height, 
+                                               unsigned int & real_width, unsigned int & real_height,
+                                               matrix & npotMatrix,
                                                bool & hasAlpha, bool & theMipmapFlag) {
         int myResultTextureId = -1;                                                
         if (env) {

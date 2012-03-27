@@ -119,9 +119,12 @@ namespace spark {
             } else {
                 myTexture = TexturePtr(new Texture());
             }
-            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(getText(), myTexture->_textureId, _myFontSize,
-                                             _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos,
-                                             myTexture->_mirrorFlag);                                             
+            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get()
+                                            .getNative()->renderText(getText(),
+                                            myTexture->_textureId, _myFontSize,
+                                            _myTextColor, _myMaxWidth, _myMaxHeight,
+                                            _myTextAlign, _myFontPath, _myLineHeight,
+                                            _myTextStartPos, myTexture->_mirrorFlag);                                             
             myMaterial->getTextureUnit()->setTexture(myTexture);
             _myTextSize[0] = myTextInfo.width;
             _myTextSize[1] = myTextInfo.height;

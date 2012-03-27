@@ -22,7 +22,7 @@ namespace mar {
             virtual ~TextureLoader();
             // we want a real singleton -> we need a non purevirtual out-of-line method other than dtor
             virtual void clear();
-            TexturePtr load(const std::string & theSrc, const bool theCacheFlag = false, bool theMipmapFlag = false);            
+            TexturePtr load(const std::string & theSrc, const bool theCacheFlag = false, const bool theMipmapFlag = false);            
             void storeTexture(const unsigned long theKey, TexturePtr theTexture);            
             TexturePtr getTexture(const unsigned long theKey);
         private:
