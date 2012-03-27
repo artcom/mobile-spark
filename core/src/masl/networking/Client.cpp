@@ -24,7 +24,9 @@ using namespace std;
 namespace masl {
 namespace networking {
 
-    Client::Client(const std::string &url, const bool verbose, const long connecttimeout) :
+    Client::Client(const std::string &url,
+                   const bool verbose,
+                   const long connecttimeout) :
         _curlHandle(0),
         _continueFlag(true)
     {
@@ -32,18 +34,27 @@ namespace networking {
         AC_DEBUG << "curl init " << curl_version();
 
         CURLcode myStatus;
-        myStatus = curl_easy_setopt(_curlHandle, CURLOPT_ERRORBUFFER, 
-                std::string(_myErrorBuffer.begin(), _myErrorBuffer.end()).c_str());
+        myStatus = curl_easy_setopt(_curlHandle,
+                                    CURLOPT_ERRORBUFFER, 
+                                    std::string(_myErrorBuffer.begin(),
+                                                _myErrorBuffer.end()).c_str());
+        
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         myStatus = curl_easy_setopt(_curlHandle, CURLOPT_PRIVATE, this);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         
-        myStatus = curl_easy_setopt(_curlHandle, CURLOPT_WRITEFUNCTION, &Client::_writeFunction);
+        myStatus = curl_easy_setopt(_curlHandle,
+                                    CURLOPT_WRITEFUNCTION,
+                                    &Client::_writeFunction);
+        
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         myStatus = curl_easy_setopt(_curlHandle, CURLOPT_WRITEDATA, this);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         
-        myStatus = curl_easy_setopt(_curlHandle, CURLOPT_OPENSOCKETFUNCTION, &Client::_openSocket);
+        myStatus = curl_easy_setopt(_curlHandle,
+                                    CURLOPT_OPENSOCKETFUNCTION,
+                                    &Client::_openSocket);
+        
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
         myStatus = curl_easy_setopt(_curlHandle, CURLOPT_OPENSOCKETDATA, this);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
@@ -62,7 +73,10 @@ namespace networking {
             checkCurlStatus(myStatus, PLUS_FILE_LINE);
         }
 
-        myStatus = curl_easy_setopt(_curlHandle, CURLOPT_CONNECTTIMEOUT, connecttimeout);
+        myStatus = curl_easy_setopt(_curlHandle,
+                                    CURLOPT_CONNECTTIMEOUT,
+                                    connecttimeout);
+        
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
     }
 
@@ -81,29 +95,29 @@ namespace networking {
     Client::~Client()
     {
         AC_DEBUG << "~Client " << this;
-        CURLcode myStatus = curl_easy_setopt(_curlHandle, CURLOPT_OPENSOCKETDATA, 0);
+        CURLcode myStatus = curl_easy_setopt(_curlHandle,
+                                             CURLOPT_OPENSOCKETDATA, 0);
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
     }
    
-    void
-    Client::checkCurlStatus(CURLcode theStatusCode, const std::string & theWhere) {
+    void Client::checkCurlStatus(CURLcode theStatusCode,
+                            const std::string & theWhere) 
+    {
         if (theStatusCode != CURLE_OK) {
-            throw masl::Exception(string(_myErrorBuffer.begin(), _myErrorBuffer.end()), theWhere);
+            throw masl::Exception(string(_myErrorBuffer.begin(),
+                                         _myErrorBuffer.end()), theWhere);
         }
     }
 
-    std::string
-    Client::getResponseString() const {
+    std::string Client::getResponseString() const {
         return std::string(_myResponseBlock.begin(), _myResponseBlock.end());
     }
 
-    std::vector<char> 
-    Client::getResponseBlock() const {
+    std::vector<char> Client::getResponseBlock() const {
         return _myResponseBlock;
     }
     
-    void 
-    Client::onProgress() {
+    void Client::onProgress() {
         bool newDataReceived = false;
         {
             AutoLocker<ThreadLock> myLocker(_lockResponseBuffer);        
@@ -123,8 +137,7 @@ namespace networking {
         }
     }
 
-    void
-    Client::onDone(CURLcode result) {
+    void Client::onDone(CURLcode result) {
         {
             AutoLocker<ThreadLock> myLocker(_lockResponseBuffer);        
             _myResponseBlock.insert(_myResponseBlock.end(), 
@@ -134,7 +147,8 @@ namespace networking {
         }
 
         AC_DEBUG << "onDone. CURLcode is " << result << " for " << this;
-        AC_DEBUG << "error string:" << std::string(_myErrorBuffer.begin(), _myErrorBuffer.end());
+        AC_DEBUG << "error string:" << std::string(_myErrorBuffer.begin(),
+                                                   _myErrorBuffer.end());
         if (result == CURLE_OK) {
             if (onSuccessCB) {
                 (*onSuccessCB)();
@@ -147,8 +161,7 @@ namespace networking {
         }
     }
 
-    size_t 
-    Client::writeFunction(const unsigned char *ptr, size_t size) {
+    size_t Client::writeFunction(const unsigned char *ptr, size_t size) {
         // NOTE: this will be called from one of io_service's threads
         AutoLocker<ThreadLock> myLocker(_lockResponseBuffer); 
         
@@ -157,8 +170,9 @@ namespace networking {
         return _continueFlag ? size : 0;
     }
 
-    curl_socket_t 
-    Client::openSocket(curlsocktype purpose, struct curl_sockaddr *addr) {
+    curl_socket_t Client::openSocket(curlsocktype purpose,
+                                     struct curl_sockaddr *addr) 
+    {
         AC_DEBUG << "curl requesting open socket";
         return NetAsyncSingleton::get().na()->getMultiAdapter()->openSocket();
     }
