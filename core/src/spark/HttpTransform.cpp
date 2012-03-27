@@ -98,6 +98,8 @@ namespace spark {
 
     void
     HttpTransform::onFrame(EventPtr theEvent) {
-        requestManager_.handleRequests();
+        if (isRendered()) {
+            requestManager_.handleRequests();
+        }
     }
 }
