@@ -90,9 +90,20 @@ NUM maximum(NUM a, NUM b) {
         return b;
 }
 
-inline
-bool powerOfTwo(unsigned long n) {
+template <class NUM>
+inline bool is_power_of_2(NUM n) {
     return (n & (n - 1)) == 0;
+}
+
+template <class NUM>
+inline NUM next_power_of_2(NUM n) {
+    n -= 1;
+    n |= n >> 1;
+    n |= n >> 2;
+    n |= n >> 4;
+    n |= n >> 8;
+    n |= n >> 16;
+    return n + 1;
 }
 
 inline long

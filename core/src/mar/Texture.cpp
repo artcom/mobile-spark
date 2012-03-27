@@ -61,16 +61,4 @@ namespace mar {
             " transparency=\""+masl::as_string(_transparency)+"\""
             " textureId=\""+masl::as_string(_textureId)+"\"";
     }
-    
-    uint Texture::nextPowerOfTwo(uint size)
-    {
-        uint ret = 1;
-        while (ret < size)
-        {
-            // shift
-            ret <<= 1;
-        }
-        
-        return ret;
-    };
 }

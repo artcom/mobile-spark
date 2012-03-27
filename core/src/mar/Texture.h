@@ -34,8 +34,6 @@ namespace mar {
             bool _mirrorflag;  
             bool _mipmapFlag;
         
-            static uint nextPowerOfTwo(uint size);
-        
         private:
             std::string _src;
         

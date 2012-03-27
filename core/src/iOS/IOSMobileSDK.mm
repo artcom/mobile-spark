@@ -11,6 +11,7 @@
 
 #include "TextRenderer.h"
 #include <masl/Logger.h>
+#include <masl/numeric_functions.h>
 
 #import "Camera.h"
 
@@ -153,8 +154,8 @@ namespace ios
         {
             
             // get next power of two for width and height
-            uint potWidth = mar::Texture::nextPowerOfTwo(real_width);
-            uint potHeight = mar::Texture::nextPowerOfTwo(real_height);
+            uint potWidth = masl::next_power_of_2(real_width);
+            uint potHeight = masl::next_power_of_2(real_height);
             
             width = potWidth;
             height = potHeight;
