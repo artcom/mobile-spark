@@ -9,8 +9,7 @@
 
 
 #include "SocketAdapter.h"
-//#include "MultiAdapter.h"
-#include "../NetAsync.h"
+#include "MultiAdapter.h"
 
 namespace masl {
 namespace networking {
@@ -18,6 +17,8 @@ namespace networking {
 std::map<curl_socket_t, SocketAdapterPtr> SocketAdapter::_allSockets;
 
 SocketAdapter::SocketAdapter(CURLM * theCurlMultihandle) :
+    _multiAdapter(NetAsyncSingleton::get().na()->getMultiAdapter()),
+    boost_socket(_multiAdapter->io),
     readyState(0),
     read_in_progress(false),
     write_in_progress(false)
@@ -28,8 +29,7 @@ SocketAdapter::SocketAdapter(CURLM * theCurlMultihandle) :
     boost_socket.io_control(non_blocking_io);
     AC_TRACE << "         socket is " << native();
     
-    _multiAdapter = NetAsyncSingleton::get().na()->getMultiAdapter();
-    boost_socket = _multiAdapter->io;
+    //_multiAdapter = NetAsyncSingleton::get().na()->getMultiAdapter();
 };
 
 SocketAdapter::~SocketAdapter() {
@@ -92,7 +92,10 @@ SocketAdapter::handleRead(const boost::system::error_code& error) {
         return;
     }
     int i;
-    CURLMcode myStatus = curl_multi_socket_action(_multiAdapter->_curlMulti, native(), CURL_CSELECT_IN, &i);
+    CURLMcode myStatus = curl_multi_socket_action(_multiAdapter->_curlMulti,
+                                                  native(), CURL_CSELECT_IN,
+                                                  &i);
+    
     MultiAdapter::checkCurlStatus(myStatus, PLUS_FILE_LINE);
     AC_TRACE << "   done read " << this << " socket " << native();
     SocketAdapter::handleOperations(self, native());
@@ -106,7 +109,11 @@ SocketAdapter::handleWrite(const boost::system::error_code& error) {
     write_in_progress = false;
     if (boost_socket.is_open() && error == 0) {
         int i;
-        CURLMcode myStatus = curl_multi_socket_action(_multiAdapter->_curlMulti, native(), CURL_CSELECT_OUT, &i);
+        CURLMcode myStatus = curl_multi_socket_action(_multiAdapter->_curlMulti,
+                                                      native(),
+                                                      CURL_CSELECT_OUT,
+                                                      &i);
+        
         MultiAdapter::checkCurlStatus(myStatus, PLUS_FILE_LINE);
         AC_TRACE << "   done write " << this;
     }

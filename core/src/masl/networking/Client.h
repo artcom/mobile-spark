@@ -23,19 +23,26 @@
 
 
 namespace masl {
-namespace networking {
-
-    class SocketAdapter;
-    typedef masl::Ptr<SocketAdapter> SocketAdapterPtr;
-
-    class Client : public boost::enable_shared_from_this<Client> {
+    namespace networking {
+        
+        class SocketAdapter;
+        typedef masl::Ptr<SocketAdapter> SocketAdapterPtr;
+        
+        class Client : public boost::enable_shared_from_this<Client> {
         public:
-            CURL * _curlHandle;
+            CURL *_curlHandle;
         private:
-            std::vector<char>   _myErrorBuffer;
-            std::vector<char> _privateResponseBuffer; // filled in io_service thread, emptied in application thread
-            masl::ThreadLock _lockResponseBuffer; // lock for _privateResponseBuffer;
-            std::vector<char> _myResponseBlock; // used only in application thread.
+            std::vector<char> _myErrorBuffer;
+            
+            // filled in io_service thread, emptied in application thread
+            std::vector<char> _privateResponseBuffer;
+            
+            // lock for _privateResponseBuffer;
+            masl::ThreadLock _lockResponseBuffer;
+            
+            // used only in application thread.
+            std::vector<char> _myResponseBlock;
+            
             bool _continueFlag;
         public:
             /// creates a new HttpClient
@@ -53,16 +60,16 @@ namespace networking {
             
         private:
             void checkCurlStatus(CURLcode theStatusCode, const std::string & theWhere); 
-
+            
             //TODO:
             //setOnError, setOnSuccess
             masl::CallbackPtr onErrorCB;
             masl::CallbackPtr onSuccessCB;
             masl::CallbackPtr onProgressCB;
-
+            
             //TODO: set from outside?
             SocketAdapterPtr _socketAdapter;
-
+            
             size_t writeFunction(const unsigned char *ptr, size_t size);
             static size_t _writeFunction(unsigned char *ptr, size_t size, size_t nmemb, Client *self) {
                 AC_DEBUG << "calling writefunction for " << self;
@@ -72,16 +79,16 @@ namespace networking {
                     return 0;
                 }
             };
-
+            
             curl_socket_t openSocket(curlsocktype purpose, struct curl_sockaddr *addr);
             static curl_socket_t _openSocket(Client *self, curlsocktype purpose, struct curl_sockaddr *addr) {
                 return self->openSocket(purpose, addr);
             };
             
             static int _closeSocket(Client *self, curl_socket_t item);
-    };
-
-    typedef masl::Ptr<Client> ClientPtr;
-} 
+        };
+        
+        //typedef masl::Ptr<Client> ClientPtr;
+    } 
 }
 #endif

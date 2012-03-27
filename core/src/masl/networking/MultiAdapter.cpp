@@ -9,13 +9,13 @@
 
 
 #include "MultiAdapter.h"
+
+#include <masl/Logger.h>
+
 #include "Client.h"
-
-#include <asl/base/Logger.h>
-
 #include "SocketAdapter.h"
 
-using namespace asl;
+using namespace masl;
 
 namespace masl {
 namespace networking {
@@ -36,18 +36,18 @@ MultiAdapter::MultiAdapter(boost::asio::io_service & theIOService) :
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
 
 }
+    
 MultiAdapter::~MultiAdapter() {
     AC_TRACE << "~MultiAdapter done";
 }
 
 curl_socket_t MultiAdapter::openSocket() {
-    SocketAdapter::Ptr s(new SocketAdapter(this, _curlMulti));
+    SocketAdapterPtr s(new SocketAdapter(_curlMulti));
     SocketAdapter::add(s);
     return s->native();
 }
 
-void
-MultiAdapter::shutdown() {
+void MultiAdapter::shutdown() {
     AC_TRACE << "MultiAdapter::shutdown";
     
     while (!_allClients.empty()) {
@@ -62,17 +62,17 @@ MultiAdapter::shutdown() {
         timeout_timer->cancel();
     }
     AC_TRACE << "MultiAdapter::shutdown done";
-};
+}
 
-void
-MultiAdapter::checkCurlStatus(CURLMcode theStatusCode, const std::string & theWhere) {
+void MultiAdapter::checkCurlStatus(CURLMcode theStatusCode,
+                                   const std::string & theWhere) 
+{
     if (theStatusCode != CURLM_OK) {
-        throw asl::Exception(curl_multi_strerror(theStatusCode), theWhere);
+        throw masl::Exception(curl_multi_strerror(theStatusCode), theWhere);
     }
-};
+}
 
-void 
-MultiAdapter::addClient(ClientPtr theClient) { 
+void  MultiAdapter::addClient(ClientPtr theClient) { 
     AC_DEBUG << "adding client " << theClient;
     CURLMcode myStatus = curl_multi_add_handle(_curlMulti,  theClient->_curlHandle);
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
@@ -80,9 +80,9 @@ MultiAdapter::addClient(ClientPtr theClient) {
     //int i;
     //myStatus = curl_multi_socket_action(_curlMulti, 0, 0, &i);
     //checkCurlStatus(myStatus, PLUS_FILE_LINE);
-};
-void 
-MultiAdapter::removeClient(ClientPtr theClient ){ 
+}
+    
+void MultiAdapter::removeClient(ClientPtr theClient ){ 
     AC_DEBUG << "removeClient client " << theClient;
     CURLMcode myStatus = curl_multi_remove_handle(_curlMulti,  theClient->_curlHandle); 
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
@@ -90,17 +90,16 @@ MultiAdapter::removeClient(ClientPtr theClient ){
 };
 
 
-int 
-MultiAdapter::curl_socket_callback(CURL *easy, /* easy handle */   
-                               curl_socket_t theCurlSocket, /* socket */   
-                               int action, /* see values below */   
-                               void *userp, /* private callback pointer */   
-                               void *socketp) /* private socket pointer */ 
+int MultiAdapter::curl_socket_callback(CURL *easy, /* easy handle */   
+                                       curl_socket_t theCurlSocket, /* socket */   
+                                       int action, /* see values below */   
+                                       void *userp, /* private callback pointer */   
+                                       void *socketp) /* private socket pointer */ 
 {
     Client * curClient = 0;
     curl_easy_getinfo(easy, CURLINFO_PRIVATE, &curClient);
     AC_DEBUG << "Curl Socket "<< theCurlSocket << " Callback: " << action << " on " << userp << "," << curClient;
-    SocketAdapter::Ptr s = SocketAdapter::find(theCurlSocket);
+    SocketAdapterPtr s = SocketAdapter::find(theCurlSocket);
     if (s) {
         s->readyState = action;
         SocketAdapter::handleOperations(s, theCurlSocket);
@@ -108,8 +107,10 @@ MultiAdapter::curl_socket_callback(CURL *easy, /* easy handle */
     return 0;
 };
 
-int 
-MultiAdapter::curl_timer_callback(CURLM *multi,  long timeout_ms, MultiAdapter * self) {
+int MultiAdapter::curl_timer_callback(CURLM *multi,
+                                      long timeout_ms,
+                                      MultiAdapter * self) 
+{
     AC_TRACE << "multi_timer_cb: Setting timeout to " << timeout_ms << " ms";
     if ( ! self->timeout_timer) {
         self->timeout_timer = boost::shared_ptr<boost::asio::deadline_timer>(new boost::asio::deadline_timer(self->io)); 
@@ -118,10 +119,9 @@ MultiAdapter::curl_timer_callback(CURLM *multi,  long timeout_ms, MultiAdapter *
     // self->onTimeout(boost::asio::error::operation_aborted);
     self->timeout_timer->async_wait(self->_strand.wrap(bind(&MultiAdapter::onTimeout, self, boost::asio::placeholders::error)));
     return 0;
-};
+}
 
-void
-MultiAdapter::onTimeout(const boost::system::error_code& error) {
+void MultiAdapter::onTimeout(const boost::system::error_code& error) {
     AC_TRACE << "onTimeout " << error;
     if (error != 0) {
         return;
@@ -138,14 +138,12 @@ MultiAdapter::processCallbacks() {
     }
 };
 
-void 
-MultiAdapter::setSocketInfo(curl_socket_t s, void * data) {
+void MultiAdapter::setSocketInfo(curl_socket_t s, void * data) {
     CURLMcode myStatus = curl_multi_assign(_curlMulti, s, data);
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
 };
 
-void
-MultiAdapter::processCompleted() {
+void MultiAdapter::processCompleted() {
     // take care of completed requests
     int myMessageCount = 0;
     CURLMsg * myMessage = 0;
@@ -160,7 +158,7 @@ MultiAdapter::processCompleted() {
                 curClient->onDone(myMessage->data.result);
                 removeClient(curClient->shared_from_this());
             } else {
-                throw asl::Exception("Unknown CURL message encountered");
+                throw masl::Exception("Unknown CURL message encountered");
             }
         }
     } while (myMessage);

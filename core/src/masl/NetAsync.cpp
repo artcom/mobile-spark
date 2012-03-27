@@ -9,14 +9,14 @@
 
 
 #include "NetAsync.h"
+#include "networking/MultiAdapter.h"
 
 namespace masl {
     
 
 NetAsyncSingleton::~NetAsyncSingleton() {}
 
-void
-NetAsyncSingleton::setNetAsync(NetAsyncPtr theNetAsync) {
+void NetAsyncSingleton::setNetAsync(NetAsyncPtr theNetAsync) {
     _myNetAsync = theNetAsync;
 };
 
@@ -24,8 +24,8 @@ NetAsyncSingleton::setNetAsync(NetAsyncPtr theNetAsync) {
 
 
 NetAsync::NetAsync() : 
-                keep_busy(new boost::asio::io_service::work(io)),
-                _multiAdapter(networking::MultiAdapterPtr(new MultiAdapter(io)))
+                keep_busy(new boost::asio::io_service::work(_io)),
+                _multiAdapter(networking::MultiAdapterPtr(new networking::MultiAdapter(_io)))
 {
     _myAsioThread = AsioThreadPtr(new boost::thread( boost::bind( &NetAsync::run, this, 10) ) );
 };
@@ -43,7 +43,7 @@ NetAsync::~NetAsync() {
 
 boost::asio::io_service & 
 NetAsync::io_service() {
-    return io;
+    return _io;
 };
 
 void
@@ -55,7 +55,7 @@ NetAsync::run(std::size_t thread_pool_size) {
     for (std::size_t i = 0; i < thread_pool_size; ++i)
     {
         boost::shared_ptr<boost::thread> thread(new boost::thread(
-                    boost::bind(&boost::asio::io_service::run, &io)));
+                    boost::bind(&boost::asio::io_service::run, &_io)));
         threads.push_back(thread);
     }
 

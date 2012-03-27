@@ -8,7 +8,6 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 #include "Client.h"
-#include "../NetAsync.h"
 
 #include <string>
 #include <boost/bind.hpp>
@@ -17,6 +16,8 @@
 #include <masl/AutoLocker.h>
 
 #include "SocketAdapter.h"
+#include "MultiAdapter.h"
+#include "../NetAsync.h"
 
 using namespace std;
 
@@ -114,9 +115,11 @@ namespace networking {
                 newDataReceived = true;
             }
         }
-        if (newDataReceived && onProgress) {
+        //TODO: check correctness here
+        //if (newDataReceived && onProgress) {
+        if (newDataReceived) {
             AC_TRACE << "calling onProgress for " << this;
-            _continueFlag = onProgressCB(/*TODO*/);
+            //_continueFlag = (*onProgressCB)(/*TODO*/);
         }
     }
 
@@ -134,12 +137,12 @@ namespace networking {
         AC_DEBUG << "error string:" << std::string(_myErrorBuffer.begin(), _myErrorBuffer.end());
         if (result == CURLE_OK) {
             if (onSuccessCB) {
-                onSuccessCB();
+                (*onSuccessCB)();
                 AC_DEBUG << "called success";
             }
         } else {
             if (onErrorCB) {
-                onErrorCB();
+                (*onErrorCB)();
             }
         }
     }
@@ -147,19 +150,20 @@ namespace networking {
     size_t 
     Client::writeFunction(const unsigned char *ptr, size_t size) {
         // NOTE: this will be called from one of io_service's threads
-        AutoLocker<ThreadLock> myLocker(_lockResponseBuffer);        
-        copy(theData, theData + size, back_inserter(_privateResponseBuffer));
+        AutoLocker<ThreadLock> myLocker(_lockResponseBuffer); 
+        
+        //TODO: fix
+        //copy(theData, theData + size, back_inserter(_privateResponseBuffer));
         return _continueFlag ? size : 0;
     }
 
     curl_socket_t 
     Client::openSocket(curlsocktype purpose, struct curl_sockaddr *addr) {
         AC_DEBUG << "curl requesting open socket";
-        return NetAsyncSingleton::get()->getMultiAdapter()->openSocket();
+        return NetAsyncSingleton::get().na()->getMultiAdapter()->openSocket();
     }
     
-    int 
-    Client::_closeSocket(Client *self, curl_socket_t item) {
+    int Client::_closeSocket(Client *self, curl_socket_t item) {
         AC_DEBUG << "closing socket " << item;
         SocketAdapterPtr s = SocketAdapter::find(item);
         if (s) {

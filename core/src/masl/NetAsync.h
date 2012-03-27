@@ -11,10 +11,6 @@
 #ifndef _ac_mobile_masl_net_async_h_included_
 #define _ac_mobile_masl_net_async_h_included_
 
-#include "networking/Client.h"
-#include "networking/SocketAdapter.h"
-#include "networking/MultiAdapter.h"
-
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
@@ -23,8 +19,11 @@
 namespace masl {
 
     namespace networking {
-        class MultiAdapter;
-    };
+        typedef masl::Ptr<class MultiAdapter> MultiAdapterPtr;
+        typedef masl::Ptr<class SocketAdapter> SocketAdapterPtr;
+        typedef masl::Ptr<class Client> ClientPtr;
+    }
+    
 
 	class NetAsync {
     public:
@@ -46,16 +45,19 @@ namespace masl {
                 _onFrameHandlers.erase(it);
             }
         }
-        networking::MultiAdapter & getMultiAdapater() { return _multiAdapter; };
+        networking::MultiAdapterPtr getMultiAdapter() {return _multiAdapter;};
 
     private:
         std::map<const void*, onFrameHandler> _onFrameHandlers;  
         void run(std::size_t thread_pool_size);
+        
         /// The io_service used to perform asynchronous operations.
-        boost::asio::io_service io;
+        boost::asio::io_service _io;
+        
         // fictional work item to prevent our io_service from being out of work and terminating
         boost::shared_ptr<boost::asio::io_service::work> keep_busy;
-        networking::MultiAdapter _multiAdapter;
+        
+        networking::MultiAdapterPtr _multiAdapter;
 
 
     private:

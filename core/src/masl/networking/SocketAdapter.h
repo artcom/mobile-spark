@@ -7,8 +7,8 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
-#ifndef _ac_mobile_masl_networking_multiadapter_h_included_
-#define _ac_mobile_masl_networking_multiadapter_h_included_
+#ifndef _ac_mobile_masl_networking_socketadapter_h_included_
+#define _ac_mobile_masl_networking_socketadapter_h_included_
 
 #include <map>
 #include <boost/thread.hpp>
@@ -16,16 +16,16 @@
 #include <boost/enable_shared_from_this.hpp>
 
 #include <curl/curl.h>
-
 #include <masl/Logger.h>
+
+#include "../NetAsync.h"
 
 namespace masl {
 namespace networking {
-
-class MultiAdapter; 
-typedef masl::Ptr<MultiAdapter> MultiAdapterPtr; 
-
-class SocketAdapter : public boost::noncopyable, public boost::enable_shared_from_this<SocketAdapter> {
+    
+    class SocketAdapter : public boost::noncopyable, 
+    public boost::enable_shared_from_this<SocketAdapter> {
+        
     public:
         typedef masl::Ptr<SocketAdapter> Ptr;
         SocketAdapter(CURLM * theCurlMultihandle);
@@ -48,7 +48,7 @@ class SocketAdapter : public boost::noncopyable, public boost::enable_shared_fro
             int n = _allSockets.erase(t);
             AC_DEBUG << "erased " << n << " socket " << t << " from _allSockets. " << _allSockets.size() << " left.";
         };
-
+        
         static void abort() {
             std::map<curl_socket_t, Ptr>::iterator it = _allSockets.begin();
             for (;it != _allSockets.end(); ++it) {
@@ -74,10 +74,10 @@ class SocketAdapter : public boost::noncopyable, public boost::enable_shared_fro
         SocketAdapter();
         MultiAdapterPtr _multiAdapter;
         static std::map<curl_socket_t, Ptr> _allSockets;
-};
-
-typedef SocketAdapter::Ptr SocketAdapterPtr;
-
+    };
+    
+    //typedef masl::Ptr<SocketAdapter> SocketAdapterPtr;
+    
 }
 }
 #endif
