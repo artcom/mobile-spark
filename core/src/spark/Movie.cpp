@@ -32,6 +32,12 @@ namespace spark {
     }
 
     void
+    Movie::onPause() {
+        I18nShapeWidget::onPause();
+        masl::MovieEngineSingleton::get().getNative()->stopMovie(this);
+    }
+
+    void
     Movie::prerender(MatrixStack& theCurrentMatrixStack) {
         I18nShapeWidget::prerender(theCurrentMatrixStack);
 

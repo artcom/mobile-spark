@@ -19,6 +19,7 @@ namespace spark {
         virtual ~Movie();
         
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
+        virtual void onPause();
         inline const std::string & getSrc() const {return getData();};
         
         void play();   // start playback at playcursor

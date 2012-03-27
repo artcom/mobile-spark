@@ -86,7 +86,7 @@ public class Movie implements SurfaceTexture.OnFrameAvailableListener {
     public void play(String thePath) {
         AC_Log.debug("Movie::play " + thePath);
         if (isPlaying()) {
-            stop();
+            _myMediaPlayer.stop();
         }
         if (!("".equals(_myCurrentPath)) && ! _myCurrentPath.equals(thePath)){
             release();
@@ -107,6 +107,7 @@ public class Movie implements SurfaceTexture.OnFrameAvailableListener {
 
     public void stop() {
         _myMediaPlayer.stop();
+        release();
     }
 
     public void pause() {
