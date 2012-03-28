@@ -17,7 +17,6 @@
 
 #include <masl/AssetProvider.h>
 #include <masl/AudioEngine.h>
-#include <masl/AutoLocker.h>
 #include <masl/BaseEntry.h>
 #include <masl/CallStack.h>
 #include <masl/Exception.h>
@@ -111,7 +110,7 @@ namespace spark {
         DB(AC_TRACE << "a string event came in :" << theEventString);
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
-            AutoLocker<ThreadLock> myLocker(_myLock);
+            boost::mutex::scoped_lock lock(_myEventMutex);
             _myEvents.push_back(myEvent);
         }
     }
@@ -153,7 +152,7 @@ namespace spark {
         // (i.e. events:['orientation', 'frame', 'orientation', 'frame'], ignore second 'frame' and 'orientation'
         // delay touch up events until we have no more touch or gesture events in our queue
         // -------------------------------------------------------------------------------------------------------
-        AutoLocker<ThreadLock> myLocker(_myLock);
+        boost::mutex::scoped_lock lock(_myEventMutex);
         EventPtrList myDelayedEvents;
         std::map<std::string, bool> myDelayEventFilter;
         std::map<std::string, bool> myIgnoreEventFilter;

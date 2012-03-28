@@ -14,10 +14,9 @@
 #include "JNIBinding.h"
 #endif
 
-#include <masl/Settings.h>
-#include <masl/ThreadLock.h>
-
 #include "Event.h"
+#include <masl/Settings.h>
+#include <boost/thread.hpp>
 
 namespace spark {
 
@@ -47,7 +46,7 @@ namespace spark {
             bool _mySetupFlag;       
         private:
             EventPtrList _myEvents;    
-            masl::ThreadLock _myLock;
+            boost::mutex _myEventMutex;
             bool _myOneBaseAppOnFrameCallPerRenderloopFlag;
 
             
