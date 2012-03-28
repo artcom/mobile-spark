@@ -24,7 +24,7 @@ namespace android {
     AndroidMovieEngine::~AndroidMovieEngine() {
     }
 
-    void 
+    void
     AndroidMovieEngine::playMovie(void* theMovieWidget, const std::string & theSrc) {
         AC_DEBUG << "playMovie";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
@@ -39,7 +39,7 @@ namespace android {
         }
     }
 
-    void 
+    void
     AndroidMovieEngine::stopMovie(void* theMovieWidget) {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
@@ -51,7 +51,7 @@ namespace android {
         }
     }
 
-    void 
+    void
     AndroidMovieEngine::pauseMovie(void* theMovieWidget) {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
@@ -63,7 +63,7 @@ namespace android {
         }
     }
 
-    void 
+    void
     AndroidMovieEngine::updateMovieTexture(void* theMovieWidget) {
         AC_DEBUG << "updateMovieTexture";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
@@ -76,7 +76,7 @@ namespace android {
         }
     }
 
-    const masl::VideoInfo 
+    const masl::VideoInfo
     AndroidMovieEngine::getMovieInfo(void* theMovieWidget) const {
         AC_DEBUG << "getMovieInfo";
         masl::VideoInfo myMovieInfo;
@@ -105,7 +105,7 @@ namespace android {
         return myMovieInfo;
     }
 
-    bool 
+    bool
     AndroidMovieEngine::isMoviePlaying(void* theMovieWidget) const {
         AC_DEBUG << "isMoviePlaying";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
@@ -120,7 +120,7 @@ namespace android {
         return isPlaying;
     }
 
-    void 
+    void
     AndroidMovieEngine::setMovieVolume(void* theMovieWidget, const float theVolume) {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());

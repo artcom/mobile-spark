@@ -9,7 +9,7 @@
 
 //Copyright (c) 2010-2011 cocos2d-x.org
 //Copyright (c) 2009      On-Core
-// 
+//
 //http://www.cocos2d-x.org
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -50,99 +50,99 @@ namespace android {
 
 
     //////////////////////////////////////////BackgroundMusic
-	void 
+    void
     AndroidAudioEngine::playBackgroundMusic(const std::string & theFile, bool isLoop) const {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "playBackgroundMusic " << myFoundFile;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "playBackgroundMusic", "(Ljava/lang/String;Z)V");
-		if (myMethodId) {
-			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
-			env->CallStaticVoidMethod(cls, myMethodId, StringArg, isLoop);
-		}
-	}
+        if (myMethodId) {
+            jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
+            env->CallStaticVoidMethod(cls, myMethodId, StringArg, isLoop);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::stopBackgroundMusic() const {
         AC_DEBUG << "stopBackgroundMusic";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "stopBackgroundMusic", "()V");
-		if (myMethodId) {
-			env->CallStaticVoidMethod(cls, myMethodId);
-		}
-	}
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::pauseBackgroundMusic() const {
         AC_DEBUG << "pauseBackgroundMusic";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "pauseBackgroundMusic", "()V");
-		if (myMethodId) {
-			env->CallStaticVoidMethod(cls, myMethodId);
-		}
-	}
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::resumeBackgroundMusic() const {
         AC_DEBUG << "resumeBackgroundMusic";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "resumeBackgroundMusic", "()V");
-		if (myMethodId) {
-			env->CallStaticVoidMethod(cls, myMethodId);
-		}
-	}
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::rewindBackgroundMusic() const {
         AC_DEBUG << "rewindBackgroundMusic";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "rewindBackgroundMusic", "()V");
-		if (myMethodId) {
-			env->CallStaticVoidMethod(cls, myMethodId);
-		}
-	}
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 
-	bool 
+    bool
     AndroidAudioEngine::isBackgroundMusicPlaying() const {
         AC_DEBUG << "isBackgroundMusicPlaying";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "isBackgroundMusicPlaying", "()Z");
-		jboolean ret = false;
-		if (myMethodId) {
-			ret = env->CallStaticBooleanMethod(cls, myMethodId);
-		}
-		return ret;
-	}
+        jboolean ret = false;
+        if (myMethodId) {
+            ret = env->CallStaticBooleanMethod(cls, myMethodId);
+        }
+        return ret;
+    }
 
-	float 
+    float
     AndroidAudioEngine::getBackgroundMusicVolume() const {
         AC_DEBUG << "getBackgroundMusicVolume";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "getBackgroundMusicVolume", "()F");
-		jfloat ret = 0.0;
-		if (myMethodId) {
-			ret = env->CallStaticFloatMethod(cls, myMethodId);
-		}
-		return ret;
-	}
+        jfloat ret = 0.0;
+        if (myMethodId) {
+            ret = env->CallStaticFloatMethod(cls, myMethodId);
+        }
+        return ret;
+    }
 
-	void 
+    void
     AndroidAudioEngine::setBackgroundMusicVolume(float theVolume) const {
         AC_DEBUG << "setBackgroundMusicVolume " << theVolume;
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "setBackgroundMusicVolume", "(F)V");
-		if (myMethodId) {
-			env->CallStaticVoidMethod(cls, myMethodId, theVolume);
-		}
-	}
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId, theVolume);
+        }
+    }
 
 
     ////////////////////////////////////////Effect Sounds
@@ -153,86 +153,86 @@ namespace android {
         jclass cls = env->FindClass(javaActivity_.c_str());
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "play Effect " << myFoundFile;
-		int ret = 0;
+        int ret = 0;
         jmethodID myMethodId = env->GetStaticMethodID(cls, "playEffect", "(Ljava/lang/String;)I");
-		if (myMethodId) {
-			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
-			ret = env->CallStaticIntMethod(cls, myMethodId, StringArg);
-		}
-		return ret;
+        if (myMethodId) {
+            jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
+            ret = env->CallStaticIntMethod(cls, myMethodId, StringArg);
+        }
+        return ret;
     }
 
-	void 
+    void
     AndroidAudioEngine::stopEffect(unsigned int theSoundId) const {
         AC_DEBUG << "stop Effect with soundId" << theSoundId;
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "stopEffect", "(I)V");
-		if (myMethodId) {
-			env->CallStaticVoidMethod(cls, myMethodId, static_cast<int>(theSoundId));
-		}
-	}
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId, static_cast<int>(theSoundId));
+        }
+    }
 
-	float 
+    float
     AndroidAudioEngine::getEffectsVolume() const {
         AC_DEBUG << "getEffectsVolume";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "getEffectsVolume", "()F");
-		jfloat ret = -1.0;
-		if (myMethodId) {
-			ret = env->CallStaticFloatMethod(cls, myMethodId);
-		}
-		return ret;
-	}
+        jfloat ret = -1.0;
+        if (myMethodId) {
+            ret = env->CallStaticFloatMethod(cls, myMethodId);
+        }
+        return ret;
+    }
 
-	void 
+    void
     AndroidAudioEngine::setEffectsVolume(float theVolume) const {
         AC_DEBUG << "setEffectsVolume " << theVolume;
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "setEffectsVolume", "(F)V");
-		if (myMethodId) {
-			env->CallStaticVoidMethod(cls, myMethodId, theVolume);
-		}
-	}
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId, theVolume);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::preloadEffect(const std::string & theFile) const {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "preload Effect " << myFoundFile;
         jmethodID myMethodId = env->GetStaticMethodID(cls, "preloadEffect", "(Ljava/lang/String;)V");
-		if (myMethodId) {
-			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
-			env->CallStaticVoidMethod(cls, myMethodId, StringArg);
-		}
-	}
+        if (myMethodId) {
+            jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
+            env->CallStaticVoidMethod(cls, myMethodId, StringArg);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::unloadEffect(const std::string & theFile) const {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "unload Effect " << myFoundFile;
         jmethodID myMethodId = env->GetStaticMethodID(cls, "unloadEffect", "(Ljava/lang/String;)V");
-		if (myMethodId) {
-			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
-			env->CallStaticVoidMethod(cls, myMethodId, StringArg);
-		}
-	}
-    
+        if (myMethodId) {
+            jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
+            env->CallStaticVoidMethod(cls, myMethodId, StringArg);
+        }
+    }
 
-	void 
+
+    void
     AndroidAudioEngine::end() const {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         AC_DEBUG << "end";
         jmethodID myMethodId = env->GetStaticMethodID(cls, "end", "()V");
-		if (myMethodId) {
-			env->CallStaticVoidMethod(cls, myMethodId);
-		}
-	}
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 }
 

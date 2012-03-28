@@ -26,11 +26,11 @@ namespace android {
         virtual std::string getStringFromFile(const std::string & theFileName) const;
         virtual std::vector<char> getBlockFromFile(const std::string & theFileName) const;
         virtual std::vector<std::string> getLineByLineFromFile(const std::string & theFile) const;
-        virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
-                                         unsigned int & width, unsigned int & height, 
+        virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId,
+                                         unsigned int & width, unsigned int & height,
                                          unsigned int & realwidth, unsigned int & realheight,
                                          matrix & npotMatrix,
-                                         bool & hasAlpha, bool & theMirrorFlag, bool & theMipMapFlag);            
+                                         bool & hasAlpha, bool & theMirrorFlag, bool & theMipMapFlag);
         virtual void addIncludePath(const std::string & thePath);
         virtual void storeInFile(const std::string & theFileName, const std::string & theData);
         virtual void storeInFile(const std::string & theFileName, const std::vector<char> & theData);

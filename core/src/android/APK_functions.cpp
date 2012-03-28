@@ -53,7 +53,7 @@ namespace android {
             return "";
         }
         zip_file* file = zip_fopen(theAPKArchive, myFoundFilePath.c_str(), 0);
-        
+
         char buffer[MAX_LENGTH];
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
         content = std::string(buffer, size);
@@ -72,7 +72,7 @@ namespace android {
             return content;
         }
         zip_file* file = zip_fopen(theAPKArchive, myFoundFilePath.c_str(), 0);
-        
+
         char buffer[MAX_LENGTH];
         size_t size = zip_fread(file, buffer, MAX_LENGTH);
         copy(buffer, buffer + size, back_inserter(content));
@@ -114,11 +114,11 @@ namespace android {
         zip_fclose(file);
         return content;
     }
- 
+
     bool searchFile(zip* theAPKArchive, const string & theFileName, std::string & retPath, const bool theForce) {
         const std::vector<std::string> & myIncludeList = masl::AssetProviderSingleton::get().ap()->getIncludePaths();
         for (std::vector<std::string>::const_iterator it = myIncludeList.begin(); it != myIncludeList.end(); ++it) {
-            if (fileExist(theAPKArchive, (*it) + theFileName)) {   
+            if (fileExist(theAPKArchive, (*it) + theFileName)) {
                 retPath = (*it) + theFileName;
                 return true;
             }
@@ -126,10 +126,10 @@ namespace android {
         if (theForce) {
             AC_ERROR << "Error opening " << theFileName << " from APK";
             throw APKLoadingException("Error opening APK " + theFileName, PLUS_FILE_LINE);
-        }        
+        }
         return false;
     }
-    
+
     //if file exists, returns reference to zip_file which has to be zip_fclosed by caller
     bool fileExist(zip* theAPKArchive, const string & theFileName) {
         if (!theAPKArchive) {
@@ -159,6 +159,6 @@ namespace android {
         }
     }
 
-    
+
 }
 
