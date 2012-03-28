@@ -28,7 +28,6 @@ namespace spark {
     }
 
     Movie::~Movie() {
-        AC_INFO << "....destructor Movie " << getName();
     }
 
     void

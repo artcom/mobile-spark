@@ -55,7 +55,7 @@ namespace spark {
         std::string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
         setFont(myFontName);
         
-        AC_INFO << "Text ctor: " << _myFontPath;
+        AC_TRACE << "Text ctor: " << _myFontPath;
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
         myMaterial->getTextureUnit()->getTexture()->_transparency = true;
         myMaterial->setCustomHandles(_myCustomShaderValues);
@@ -64,7 +64,7 @@ namespace spark {
     }
 
     Text::~Text() {
-        AC_INFO << "....destructor text " << getName();
+        AC_TRACE << "....delete text " << getName();
     }
 
     //TODO maybe remove textSize member

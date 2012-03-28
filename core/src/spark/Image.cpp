@@ -28,7 +28,7 @@ namespace spark {
     }
 
     Image::~Image() {
-        AC_INFO << "....destructor image " << getName();
+        AC_TRACE << "....delete image " << getName();
     }
 
     const vector2 &
@@ -40,7 +40,7 @@ namespace spark {
     }
     
     void Image::setMipMap(bool theMipMapFlag) {
-        AC_TRACE << "Image::setMipMap : " << theMipMapFlag;
+        AC_DEBUG << "Image::setMipMap : " << theMipMapFlag;
         if (_mipmap != theMipMapFlag) {
             _mipmap = theMipMapFlag;
             _myDirtyFlag = true;
@@ -48,7 +48,7 @@ namespace spark {
     }
 
     void Image::setSrc(const std::string & theSrc) { 
-        AC_TRACE << "Image::setSrc : " << theSrc;
+        AC_DEBUG << "Image::setSrc : " << theSrc;
         setI18nData(theSrc);
         _myDirtyFlag = true;
     } 

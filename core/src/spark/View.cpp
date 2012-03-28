@@ -24,6 +24,8 @@ using namespace masl;
 using namespace mar;
 using namespace std;
 
+#define DBT(x) //x
+
 namespace spark {
 
     const char * const View::SPARK_TYPE = "View";
@@ -61,21 +63,21 @@ namespace spark {
         myVisibleBB.min[1] = _myGLViewport->getPos()[1];
         myVisibleBB.max[0] = (_myGLViewport->getPos()[0] + _myGLViewport->getSize()[0]);
         myVisibleBB.max[1] = (_myGLViewport->getPos()[1] + _myGLViewport->getSize()[1]);        
-        boost::timer::timer myTimer;
+        DBT(boost::timer::timer myTimer;)
         RenderList myRenderList;
         CollectVisibleNodesVisitor myVisitor(myRenderList, myVisibleBB, _myCamera->getProjectionMatrix());
         parentFirstVisitComponents(myVisitor, myWorld);
         stable_sort(myRenderList.begin(), myRenderList.end(), sortByRenderKey);
-        //AC_PRINT << "               View::renderWord create renderlist: " << myTimer.elapsed() << " s";
+        DBT(AC_PRINT << "               View::renderWord create renderlist: " << myTimer.elapsed() << " s";)
 
-        boost::timer::timer myTimer2;
+        DBT(boost::timer::timer myTimer2;)
         unsigned myRenderCount = 0;            
         for (RenderList::const_iterator it = myRenderList.begin(); it != myRenderList.end(); ++it) {
             AC_TRACE << " View::renderWorld render component: " << it->first->getName();
             it->first->render(_myCamera->getProjectionMatrix());
             myRenderCount++;
         }
-        //AC_PRINT << "               View::renderWord render renderlist: " << myTimer2.elapsed() << " s" << " rendered objects : #" << myRenderCount;
+        DBT(AC_PRINT << "               View::renderWord render renderlist: " << myTimer2.elapsed() << " s" << " rendered objects : #" << myRenderCount;)
     }
 
     void
