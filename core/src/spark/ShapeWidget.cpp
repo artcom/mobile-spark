@@ -216,7 +216,6 @@ namespace spark {
             vector2 myLowerLeftCorner = _myOrigin * -1.0f;
             vector2 myUpperRightCorner = theSize - _myOrigin;
             getShape()->setDimensions(myLowerLeftCorner, myUpperRightCorner);
-            _myForcedSize = theSize; // XXX: hmm?!
         }
     }
     
