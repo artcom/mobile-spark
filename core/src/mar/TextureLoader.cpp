@@ -10,7 +10,7 @@
 #include "TextureLoader.h"
 
 #include <masl/Logger.h>
-#include <masl/checksum.h>
+#include <masl/string_functions.h>
 #include <masl/AssetProvider.h>
 
 namespace mar {
@@ -27,9 +27,7 @@ namespace mar {
         
     TexturePtr
     TextureLoader::load(const std::string & theSrc, const bool theCacheFlag, const bool theMipmapFlag) {
-        unsigned long myKey = masl::initiateCRC32();
-        masl::appendCRC32(myKey, theSrc);     
-        
+        unsigned int myKey = masl::CRC32(theSrc);
         if (theCacheFlag && _myTextureMap.find(myKey) != _myTextureMap.end()) {
             AC_INFO << "TextureLoader::load found texture: '" << theSrc
                     << "' in map -> do not reload, glid -> "<< _myTextureMap[myKey]->_textureId;
@@ -55,7 +53,7 @@ namespace mar {
     }
     
     TexturePtr 
-    TextureLoader::getTexture(const unsigned long theKey) {
+    TextureLoader::getTexture(const unsigned int theKey) {
         if (_myTextureMap.find(theKey) != _myTextureMap.end()) {
             AC_INFO << "TextureLoader::getTexture : '" << theKey
                     << "' in map -> do not reload, glid -> "<< _myTextureMap[theKey]->_textureId;
@@ -66,7 +64,7 @@ namespace mar {
     }
         
     void 
-    TextureLoader::storeTexture(const unsigned long theKey, TexturePtr theTexture) {
+    TextureLoader::storeTexture(const unsigned int theKey, TexturePtr theTexture) {
         AC_INFO << "TextureLoader::storeTexture : '" << theKey
                 << "' generated store in map, glid -> "<< theTexture->_textureId;
         _myTextureMap[theKey] = theTexture;

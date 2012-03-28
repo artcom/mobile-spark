@@ -11,7 +11,7 @@
 
 #include <masl/MobileSDK.h>
 #include <masl/AssetProvider.h>
-#include <masl/checksum.h>
+#include <masl/string_functions.h>
 #include <mar/Shape.h>
 #include <mar/Material.h>
 #include <mar/Texture.h>
@@ -30,8 +30,8 @@ namespace spark {
     
     TextGlyphIndexMap::TextGlyphIndexMap() {}
     TextGlyphIndexMap::~TextGlyphIndexMap() {}
-    void TextGlyphIndexMap::store(const unsigned long theKey, int myRenderedGlyphIndex) {_myRenderedGlyphTextureMap[theKey] =  myRenderedGlyphIndex;}         
-    int TextGlyphIndexMap::getIndex(const unsigned long theKey)  {
+    void TextGlyphIndexMap::store(const unsigned int theKey, int myRenderedGlyphIndex) {_myRenderedGlyphTextureMap[theKey] =  myRenderedGlyphIndex;}         
+    int TextGlyphIndexMap::getIndex(const unsigned int theKey)  {
         return  (_myRenderedGlyphTextureMap.find(theKey) != _myRenderedGlyphTextureMap.end()) ? _myRenderedGlyphTextureMap[theKey] : -1;
     }       
         
@@ -95,12 +95,12 @@ namespace spark {
         AC_TRACE << "data: " << getText().substr(_myTextStartPos, getText().size());
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         bool myCreateTextureFlag = true;            
-        unsigned long myKey =  masl::initiateCRC32();
+        unsigned int myKey = 0;
         if (_myCacheFlag) {
-            appendCRC32(myKey, getText().substr(_myTextStartPos, getText().size()));
-            appendCRC32(myKey, as_string(_myFontSize));
-            appendCRC32(myKey, _myFontPath);
-            appendCRC32(myKey, as_string(_myTextColor));
+            myKey = masl::CRC32(getText().substr(_myTextStartPos, getText().size()) +
+                                as_string(_myFontSize) +
+                                _myFontPath +
+                                as_string(_myTextColor));
             TexturePtr myTexturePtr = TextureLoader::get().getTexture(myKey);
             if (myTexturePtr) {
                 _myTextSize[0] = myTexturePtr->_width;

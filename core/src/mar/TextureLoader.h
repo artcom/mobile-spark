@@ -14,7 +14,7 @@
 #include "Texture.h"
 
 namespace mar {
-    typedef std::map<unsigned long, TexturePtr> TextureMap;
+    typedef std::map<unsigned int, TexturePtr> TextureMap;
 
     class TextureLoader : public masl::Singleton<TextureLoader> {
         public:
@@ -22,9 +22,9 @@ namespace mar {
             virtual ~TextureLoader();
             // we want a real singleton -> we need a non purevirtual out-of-line method other than dtor
             virtual void clear();
-            TexturePtr load(const std::string & theSrc, const bool theCacheFlag = false, const bool theMipmapFlag = false);            
-            void storeTexture(const unsigned long theKey, TexturePtr theTexture);            
-            TexturePtr getTexture(const unsigned long theKey);
+            TexturePtr load(const std::string & theSrc, const bool theCacheFlag = false, const bool theMipmapFlag = false);
+            void storeTexture(const unsigned int theKey, TexturePtr theTexture);
+            TexturePtr getTexture(const unsigned int theKey);
         private:
             TextureMap _myTextureMap;
     };

@@ -14,13 +14,13 @@
 
 namespace spark {
     
-    typedef std::map<unsigned long, int> RenderedGlyphTextureMap;    
+    typedef std::map<unsigned int, int> RenderedGlyphTextureMap;    
     class TextGlyphIndexMap : public masl::Singleton<TextGlyphIndexMap> {
         public:
             TextGlyphIndexMap();
             virtual ~TextGlyphIndexMap();
-            void store(const unsigned long theKey, int myRenderedGlyphIndex);
-            int getIndex(const unsigned long theKey);
+            void store(const unsigned int theKey, int myRenderedGlyphIndex);
+            int getIndex(const unsigned int theKey);
         private:
             RenderedGlyphTextureMap _myRenderedGlyphTextureMap;
     };
