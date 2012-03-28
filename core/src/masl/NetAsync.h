@@ -19,6 +19,8 @@
 namespace masl {
 
     namespace networking {
+        
+        // forward declarations + typedefs
         typedef masl::Ptr<class MultiAdapter> MultiAdapterPtr;
         typedef masl::Ptr<class SocketAdapter> SocketAdapterPtr;
         typedef masl::Ptr<class Client> ClientPtr;
@@ -36,11 +38,16 @@ namespace masl {
 
         virtual void onFrame();
 
-        void registerHandler(const void * theInstance, onFrameHandler & theHandler) {
+        inline void registerHandler(const void *theInstance,
+                             onFrameHandler & theHandler) 
+        {
             _onFrameHandlers.insert(std::make_pair(theInstance, theHandler));
         }
+        
         void unregisterHandler(const void * theInstance) {
-            std::map<const void*, onFrameHandler>::iterator it = _onFrameHandlers.find(theInstance);
+            std::map<const void*, onFrameHandler>::iterator it = 
+            _onFrameHandlers.find(theInstance);
+            
             if (it != _onFrameHandlers.end()) {
                 _onFrameHandlers.erase(it);
             }
@@ -54,7 +61,8 @@ namespace masl {
         /// The io_service used to perform asynchronous operations.
         boost::asio::io_service _io;
         
-        // fictional work item to prevent our io_service from being out of work and terminating
+        // fictional work item to prevent our io_service from being 
+        // out of work and terminating
         boost::shared_ptr<boost::asio::io_service::work> keep_busy;
         
         networking::MultiAdapterPtr _multiAdapter;

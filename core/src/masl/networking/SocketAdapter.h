@@ -25,17 +25,27 @@ namespace networking {
     
     class SocketAdapter : public boost::noncopyable, 
     public boost::enable_shared_from_this<SocketAdapter> {
+    
+    private:
+        SocketAdapter();
         
-    public:
-        typedef masl::Ptr<SocketAdapter> Ptr;
-        SocketAdapter(CURLM * theCurlMultihandle);
-        ~SocketAdapter();
-        curl_socket_t native() { return boost_socket.native(); };
+        static std::map<curl_socket_t, SocketAdapterPtr> _allSockets;
+        
+        MultiAdapterPtr _multiAdapter;
         boost::asio::ip::tcp::socket boost_socket;
-        int readyState;
+        int _readyState;
         bool read_in_progress;
         bool write_in_progress;
         boost::mutex op_in_progress_;
+        
+    public:
+        typedef masl::Ptr<SocketAdapter> Ptr;
+        
+        SocketAdapter(CURLM * theCurlMultihandle);
+        ~SocketAdapter();
+        
+        curl_socket_t native() { return boost_socket.native(); };
+        
         void handleRead(const boost::system::error_code& error);
         void handleWrite(const boost::system::error_code& error);
         static void handleOperations(Ptr s, curl_socket_t theCurlSocket);
@@ -70,10 +80,11 @@ namespace networking {
             release(item);
             AC_DEBUG << "socket " << item << " closed";
         };
-    private:
-        SocketAdapter();
-        MultiAdapterPtr _multiAdapter;
-        static std::map<curl_socket_t, Ptr> _allSockets;
+            
+        inline int getReadyState() const {return _readyState;};
+        inline void setReadyState(const int theState){_readyState = theState;};
+        
+    
     };
     
     //typedef masl::Ptr<SocketAdapter> SocketAdapterPtr;

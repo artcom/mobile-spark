@@ -25,12 +25,16 @@ MultiAdapter::MultiAdapter(boost::asio::io_service & theIOService) :
     _strand(theIOService)
 {
     _curlMulti = curl_multi_init(); 
-    CURLMcode myStatus = curl_multi_setopt(_curlMulti, CURLMOPT_SOCKETFUNCTION, &MultiAdapter::curl_socket_callback);
+    CURLMcode myStatus = curl_multi_setopt(_curlMulti, CURLMOPT_SOCKETFUNCTION,
+                                           &MultiAdapter::curl_socket_callback);
+    
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
     myStatus = curl_multi_setopt(_curlMulti, CURLMOPT_SOCKETDATA, this); 
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
 
-    myStatus = curl_multi_setopt(_curlMulti, CURLMOPT_TIMERFUNCTION, &MultiAdapter::curl_timer_callback);
+    myStatus = curl_multi_setopt(_curlMulti, CURLMOPT_TIMERFUNCTION,
+                                 &MultiAdapter::curl_timer_callback);
+    
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
     myStatus = curl_multi_setopt(_curlMulti, CURLMOPT_TIMERDATA, this); 
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
@@ -74,7 +78,8 @@ void MultiAdapter::checkCurlStatus(CURLMcode theStatusCode,
 
 void  MultiAdapter::addClient(ClientPtr theClient) { 
     AC_DEBUG << "adding client " << theClient;
-    CURLMcode myStatus = curl_multi_add_handle(_curlMulti,  theClient->_curlHandle);
+    CURLMcode myStatus = curl_multi_add_handle(_curlMulti,
+                                               theClient->_curlHandle);
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
     _allClients.insert(theClient);
     //int i;
@@ -84,7 +89,8 @@ void  MultiAdapter::addClient(ClientPtr theClient) {
     
 void MultiAdapter::removeClient(ClientPtr theClient ){ 
     AC_DEBUG << "removeClient client " << theClient;
-    CURLMcode myStatus = curl_multi_remove_handle(_curlMulti,  theClient->_curlHandle); 
+    CURLMcode myStatus = curl_multi_remove_handle(_curlMulti,
+                                                  theClient->_curlHandle); 
     checkCurlStatus(myStatus, PLUS_FILE_LINE);
     _allClients.erase(theClient);
 };
@@ -101,7 +107,7 @@ int MultiAdapter::curl_socket_callback(CURL *easy, /* easy handle */
     AC_DEBUG << "Curl Socket "<< theCurlSocket << " Callback: " << action << " on " << userp << "," << curClient;
     SocketAdapterPtr s = SocketAdapter::find(theCurlSocket);
     if (s) {
-        s->readyState = action;
+        s->setReadyState(action);
         SocketAdapter::handleOperations(s, theCurlSocket);
     }
     return 0;

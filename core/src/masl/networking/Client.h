@@ -46,7 +46,11 @@ namespace masl {
             bool _continueFlag;
         public:
             /// creates a new HttpClient
-            Client(const std::string &url, const bool verbose, const long connecttimeout);
+            Client(const std::string &url,
+                   const bool verbose,
+                   const long connecttimeout);
+            
+            
             virtual ~Client();
             curl_socket_t getCurlSocket();
             void performSync();
@@ -59,7 +63,8 @@ namespace masl {
             std::string debugIdentifier;
             
         private:
-            void checkCurlStatus(CURLcode theStatusCode, const std::string & theWhere); 
+            void checkCurlStatus(CURLcode theStatusCode,
+                                 const std::string & theWhere); 
             
             //TODO:
             //setOnError, setOnSuccess
@@ -71,7 +76,12 @@ namespace masl {
             SocketAdapterPtr _socketAdapter;
             
             size_t writeFunction(const unsigned char *ptr, size_t size);
-            static size_t _writeFunction(unsigned char *ptr, size_t size, size_t nmemb, Client *self) {
+            
+            inline static size_t _writeFunction(unsigned char *ptr,
+                                         size_t size,
+                                         size_t nmemb,
+                                         Client *self) 
+            {
                 AC_DEBUG << "calling writefunction for " << self;
                 if (self) {
                     return self->writeFunction(ptr, size*nmemb);
@@ -80,8 +90,13 @@ namespace masl {
                 }
             };
             
-            curl_socket_t openSocket(curlsocktype purpose, struct curl_sockaddr *addr);
-            static curl_socket_t _openSocket(Client *self, curlsocktype purpose, struct curl_sockaddr *addr) {
+            curl_socket_t openSocket(curlsocktype purpose,
+                                     struct curl_sockaddr *addr);
+            
+            inline static curl_socket_t _openSocket(Client *self,
+                                                    curlsocktype purpose,
+                                                    struct curl_sockaddr *addr) 
+            {
                 return self->openSocket(purpose, addr);
             };
             

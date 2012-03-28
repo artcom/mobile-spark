@@ -19,7 +19,7 @@ std::map<curl_socket_t, SocketAdapterPtr> SocketAdapter::_allSockets;
 SocketAdapter::SocketAdapter(CURLM * theCurlMultihandle) :
     _multiAdapter(NetAsyncSingleton::get().na()->getMultiAdapter()),
     boost_socket(_multiAdapter->io),
-    readyState(0),
+    _readyState(0),
     read_in_progress(false),
     write_in_progress(false)
 { 
@@ -38,12 +38,12 @@ SocketAdapter::~SocketAdapter() {
 
 void
 SocketAdapter::handleOperations(SocketAdapterPtr s, curl_socket_t theCurlSocket) {
-    AC_TRACE << "handleOperations: socket " << theCurlSocket << " is " << s->readyState;
+    AC_TRACE << "handleOperations: socket " << theCurlSocket << " is " << s->getReadyState();
     if (!s->boost_socket.is_open()) {
         return;
     }
     // NOTE: this will be called from one of io_service's threads
-    switch (s->readyState) {
+    switch (s->getReadyState()) {
         case CURL_POLL_OUT:
             if (s->write_in_progress == false) {
                 s->write_in_progress = true;
@@ -72,7 +72,7 @@ SocketAdapter::handleOperations(SocketAdapterPtr s, curl_socket_t theCurlSocket)
             // so it can be reused by later clients
             break;
         default:
-            throw masl::Exception("Unknown Socket State "+s->readyState); 
+            throw masl::Exception("Unknown Socket State "+s->getReadyState()); 
     };
 }
 

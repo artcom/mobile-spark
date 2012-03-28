@@ -49,8 +49,8 @@ namespace masl {
             void onTimeout(const boost::system::error_code& error);
             
             // Boost IO stuff
+            // TODO: understand this construction
             
-            // TODO: good idea !?
             // owned by NetAsync
             boost::asio::io_service & io;
             boost::asio::io_service::strand _strand;

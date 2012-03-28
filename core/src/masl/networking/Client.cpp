@@ -101,7 +101,7 @@ namespace networking {
     }
    
     void Client::checkCurlStatus(CURLcode theStatusCode,
-                            const std::string & theWhere) 
+                                 const std::string & theWhere) 
     {
         if (theStatusCode != CURLE_OK) {
             throw masl::Exception(string(_myErrorBuffer.begin(),
@@ -129,11 +129,11 @@ namespace networking {
                 newDataReceived = true;
             }
         }
-        //TODO: check correctness here
-        //if (newDataReceived && onProgress) {
-        if (newDataReceived) {
+        if (newDataReceived && onProgressCB) {
             AC_TRACE << "calling onProgress for " << this;
+            
             //_continueFlag = (*onProgressCB)(/*TODO*/);
+            (*onProgressCB)();
         }
     }
 
