@@ -57,7 +57,7 @@ public class NativeBinding {
         System.loadLibrary("masl");
         System.loadLibrary("animation");
         System.loadLibrary("mar");
-        System.loadLibrary("android");
+        //System.loadLibrary("android");
         System.loadLibrary("spark");        
     }
 
