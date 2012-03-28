@@ -200,14 +200,6 @@ namespace ios {
         _playing = !_playing;
     }
     
-    void MovieController::reset()
-    {
-        // reset all AV related stuff
-        _avStruct = AVStructPtr(new AVStruct);
-        
-        _playing = false;
-    }
-    
     float MovieController::getVolume() const
     {
         return _avStruct->m_audioPlayer.volume;

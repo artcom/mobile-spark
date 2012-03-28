@@ -10,6 +10,8 @@
 #ifndef _included_masl_numeric_functions_
 #define _included_masl_numeric_functions_
 
+#include "Settings.h"
+
 #include <cml/cml.h>
 #include <cml/util.h>
 #include <cml/mathlib/typedef.h>
@@ -38,13 +40,6 @@ template<class T>
 inline
 T abs(T theNumber) {
     return (theNumber < (T)(0) ? -theNumber : theNumber);
-}
-
-template <class Number>
-Number clamp(Number x, Number min, Number max) {
-    if (x < min) x = min;
-    if (x > max) x = max;
-    return x;
 }
 
 template<class T>
@@ -97,9 +92,70 @@ NUM maximum(NUM a, NUM b) {
         return b;
 }
 
-inline
-bool powerOfTwo(unsigned long n) {
+template <class NUM>
+inline bool is_power_of_2(NUM n) {
     return (n & (n - 1)) == 0;
+}
+
+inline
+Int16 next_power_of_2(Int16 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    return n + 1;
+}
+inline
+UInt16 next_power_of_2(UInt16 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    return n + 1;
+}
+inline
+Int32 next_power_of_2(Int32 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    n |= (n >> 16);
+    return n + 1;
+}
+inline
+UInt32 next_power_of_2(UInt32 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    n |= (n >> 16);
+    return n + 1;
+}
+inline
+Int64 next_power_of_2(Int64 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    n |= (n >> 16);
+    n |= (n >> 32);
+    return n + 1;
+}
+inline
+UInt64 next_power_of_2(UInt64 n) {
+    --n;
+    n |= (n >> 1);
+    n |= (n >> 2);
+    n |= (n >> 4);
+    n |= (n >> 8);
+    n |= (n >> 16);
+    n |= (n >> 32);
+    return n + 1;
 }
 
 inline long

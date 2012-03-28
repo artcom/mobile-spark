@@ -15,7 +15,7 @@
 #include "Texture.h"
 
 namespace mar {
-        
+
     class TextureUnit {
         public:
             TextureUnit();
@@ -23,14 +23,14 @@ namespace mar {
             ~TextureUnit();
 
             std::string getAttributesAsString() const;
-            void setTexture(TexturePtr theTexture);
-            const TexturePtr getTexture() const { return _myTexture;}
-            matrix getRenderMatrix();
-            matrix & getMatrix();
+            void setTexture(TexturePtr theTexture) { _texture = theTexture;};
+            const TexturePtr getTexture() const { return _texture;}
+            matrix & getMatrix() { return _matrix;};
+            const matrix & getMatrix() const { return _matrix;};
+            matrix getRenderMatrix() const;
         private:
-            matrix matrix_;
-            matrix _myTextureScaleCorrection;
-            TexturePtr _myTexture;
+            TexturePtr _texture;
+            matrix _matrix;
     };
     typedef masl::Ptr<TextureUnit> TextureUnitPtr;
 

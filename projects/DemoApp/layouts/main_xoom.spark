@@ -38,7 +38,7 @@
         </Controls>
 
         <Slide name="MovieSlide" alpha="1" title="Movie-Examples">
-            <Movie name="testMovie" src="testmovie_still.png" moviesrc="testmovie.mp4" x="0" y="0" z="0" width="480" height="270"/>
+            <Movie name="testMovie" src="testmovie.mp4" width="480" height="270"/>
         </Slide>
 
         <Slide name="TextSlide" alpha="1" title="Text-Examples">
@@ -147,8 +147,8 @@
 
         <Slide name="InternetSlide" title="Internet" subtitle="data from www - press button to load scene/remove transform again">
             <NinePatch name="load_button" x="20" y="500" z="20" height="80" width="80" edgeTop="28" edgeRight="28" edgeBottom="28" edgeLeft="28" src="button_normal.png"/>
-            <Text name="textfromserver" x="510" y="700" z="13" maxWidth="350" color="[1,1,1,1]" fontsize="16"/>
-            <Text name="datefromserver" x="510" y="650" z="13" maxWidth="350" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="textfromserver" x="10" y="800" z="13" maxWidth="350" color="[1,1,1,1]" fontsize="16"/>
+            <Text name="datefromserver" x="10" y="750" z="13" maxWidth="350" color="[1,1,1,1]" fontsize="16"/>
             <Text name="getrequest" x="10" y="650" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="headrequest" x="10" y="620" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>
             <Text name="postrequest" x="10" y="590" z="13" maxWidth="550" color="[1,1,1,1]" fontsize="16"/>

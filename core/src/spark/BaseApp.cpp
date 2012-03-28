@@ -294,7 +294,7 @@ namespace spark {
 #elif ANDROID
         masl::AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
         masl::AudioEngineSingleton::get().setAudioEngine(android::AndroidAudioEnginePtr(new android::AndroidAudioEngine("com/artcom/mobile/Base/AudioDelegate")));
-        masl::MovieEngineSingleton::get().setMovieEngine(android::AndroidMovieEnginePtr(new android::AndroidMovieEngine("com/artcom/mobile/Base/MovieDelegate")));
+        masl::MovieEngineSingleton::get().setMovieEngine(android::AndroidMovieEnginePtr(new android::AndroidMovieEngine("com/artcom/mobile/Base/VideoDelegate")));
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath()).c_str(), 755);
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
 #endif

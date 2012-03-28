@@ -30,6 +30,7 @@
 #include <spark/Transform.h>
 #include <spark/Shape3D.h>
 #include <spark/Text.h>
+#include <spark/Movie.h>
 #include <spark/SparkComponentFactory.h>
 #include <spark/AppProvider.h>
 
@@ -397,8 +398,11 @@ namespace demoapp {
     }
     
     void DemoApp::onFrame(EventPtr theEvent) {
-        BaseApp::onFrame(theEvent);            
-        _myRequestManager.handleRequests();
+        BaseApp::onFrame(theEvent);
+        spark::WidgetPtr myTransform = boost::static_pointer_cast<spark::Widget>(_mySparkWindow->getChildByName("InternetSlide", true));
+        if (myTransform->isVisible()) {
+            _myRequestManager.handleRequests();
+        }
     }
     
     void DemoApp::changeSlide(int theDirection) {

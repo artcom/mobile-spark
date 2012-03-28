@@ -23,24 +23,17 @@ namespace android {
         virtual masl::TextInfo renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 
                                           int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
                                           int theLineHeight, int theStartIndex, bool & mirrorFlag);
-        virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, unsigned int & width, unsigned int & height,
-                                         unsigned int & real_width, unsigned int & real_height,  bool & hasAlpha, bool & theMipmapFlag);                                           
+        virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId,
+                                         unsigned int & width, unsigned int & height,
+                                         unsigned int & real_width, unsigned int & real_height,
+                                         matrix & npotMatrix,
+                                         bool & hasAlpha, bool & theMipmapFlag);
         virtual void updateCameraTexture();
         virtual void freezeMobileOrientation(const std::string & theOrientation);
         virtual masl::VideoInfo getCameraSpec();
         virtual void startCameraCapture(bool theColorConversionFlag);
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
-        
-        
-        virtual bool playMovie(spark::MoviePtr theMovieWidget);
-        virtual void stopMovie(spark::MoviePtr theMovieWidget);
-        virtual void pauseMovie(spark::MoviePtr theMovieWidget);
-        virtual void resetMovie(spark::MoviePtr theMovieWidget);
-        virtual void updateMovieTexture(spark::MoviePtr theMovieWidget);
-        virtual const masl::VideoInfo getMovieInfo(spark::MoviePtr theMovieWidget) const;
-        virtual bool isMoviePlaying(spark::MoviePtr theMovieWidget) const;
-        virtual void setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume);
         
         virtual void exit();
 

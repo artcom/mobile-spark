@@ -10,38 +10,32 @@
 #ifndef _included_mobile_spark_Movie_
 #define _included_mobile_spark_Movie_
 
-#include "Image.h"
+#include "I18nShapeWidget.h"
 
 namespace spark {
-    class Movie : public Image {
+    class Movie : public I18nShapeWidget {
     public:
         Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Movie();
         
-        // overwrite from ShapeWidget
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
+        virtual void onPause();
+        inline const std::string & getSrc() const {return getData();};
         
         void play();   // start playback at playcursor
         void stop();   // stop videoplayback
         void pause();  // pause video and do not touch playcursor
-        void reset();  // set playcursor to video start
-        
         bool isPlaying();
-        
-        void setVolume(float newVolume);
-        float getVolume();
-        
         void togglePlayPause();
-        
-        const std::string & getSrc() const {return _moviesrc;};
+        void setVolume(const float theNewVolume);
+        float getVolume();
         
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Movie::SPARK_TYPE;};
-        
 
+    protected:
+        virtual void build();
     private:
-        std::string _moviesrc;
-        
         float _volume;
     };
 

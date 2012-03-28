@@ -11,6 +11,7 @@
 
 #include "TextRenderer.h"
 #include <masl/Logger.h>
+#include <masl/numeric_functions.h>
 
 #import "Camera.h"
 
@@ -26,79 +27,6 @@ namespace ios
     void IOSMobileSDK::vibrate(long theDurationMillisec) 
     {
         
-    }
-    
-    /*bool IOSMobileSDK::playMovie(spark::MoviePtr theMovieWidget) 
-    {
-        std::string filePath;
-        
-        if (theMovieWidget->getSrc().size() > 0 ) {
-            if (!masl::searchFile(theMovieWidget->getSrc(), filePath)) 
-                return false;
-        }
-        
-        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
-        if(it == _movieMap.end())
-            _movieMap[theMovieWidget] = MovieControllerPtr(new MovieController);
-        
-        _movieMap[theMovieWidget]->playMovie(filePath);
-        
-        return true;
-    }
-    
-    void IOSMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) 
-    {
-        _movieMap[theMovieWidget]->stop();
-        
-        _movieMap.erase(theMovieWidget);
-    }
-    
-    void IOSMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget) 
-    {
-        _movieMap[theMovieWidget]->pause();
-    }
-    
-    void IOSMobileSDK::resetMovie(spark::MoviePtr theMovieWidget) 
-    {
-        _movieMap[theMovieWidget]->reset();
-    }
-    
-    void IOSMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget)
-    {
-        MovieMap::iterator it = _movieMap.find(theMovieWidget);
-        
-        if(it != _movieMap.end())
-            it->second->copyNextFrameToTexture();
-    }
-    
-    const masl::VideoInfo IOSMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const
-    {
-        masl::VideoInfo movieInfo;
-        
-        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
-        
-        if(it != _movieMap.end())
-        {
-            movieInfo.textureID = it->second->getTextureID();
-            movieInfo.width = it->second->getWidth();
-            movieInfo.height = it->second->getHeight();
-        }
-        
-        return movieInfo;
-    }
-    
-    bool IOSMobileSDK::isMoviePlaying(spark::MoviePtr theMovieWidget) const
-    {
-        bool ret = false;
-        
-        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
-        
-        if(it != _movieMap.end())
-        {
-            ret = it->second->isPlaying();
-        }
-
-        return ret;
     }
     
     void IOSMobileSDK::updateCameraTexture()
@@ -122,19 +50,12 @@ namespace ios
         return textInfo;
     }
     
-    void IOSMobileSDK::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume)
-    {
-        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
-        
-        if(it != _movieMap.end())
-        {
-            it->second->setVolume(newVolume);
-        }
-    }*/
     
     bool IOSMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                            unsigned int & width, unsigned int & height, 
-                                           unsigned int & real_width, unsigned int & real_height, bool & hasAlpha, bool & theMipmapFlag) 
+                                           unsigned int & real_width, unsigned int & real_height,
+                                           matrix & npotMatrix,
+                                           bool & hasAlpha, bool & theMipmapFlag) 
     {
         std::string filePath;
         
@@ -235,15 +156,12 @@ namespace ios
         {
             
             // get next power of two for width and height
-            uint potWidth = mar::Texture::nextPowerOfTwo(real_width);
-            uint potHeight = mar::Texture::nextPowerOfTwo(real_height);
-            
-            width = potWidth;
-            height = potHeight;
-
-            //TODO: remove
-//            printf("real_width: %d, real_height: %d   --  potWidth: %d, potHeight: %d\n",
-//                   real_width, real_height, potWidth, potHeight);
+            width = masl::next_power_of_2(real_width);
+            height = masl::next_power_of_2(real_height);
+            cml::matrix_scale(npotMatrix,
+                              float(real_width) / width,
+                              float(real_height) / height,
+                              1.0f);
             
             // create empty texture object with pot-dimensions
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,

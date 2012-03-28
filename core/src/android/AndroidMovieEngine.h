@@ -7,19 +7,17 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
-#ifndef _included_mobile_ios_IOSMovieEngine_
-#define _included_mobile_ios_IOSMovieEngine_
+#ifndef _included_mobile_android_AndroidMovieEngine_
+#define _included_mobile_android_AndroidMovieEngine_
 
 #include <masl/MovieEngine.h>
 
-namespace ios {
-    class MovieController;
-    typedef masl::Ptr<MovieController> MovieControllerPtr;
+namespace android {
 
-    class IOSMovieEngine : public masl::MovieEngine {
+    class AndroidMovieEngine : public masl::MovieEngine {
     public:
-        IOSMovieEngine() {};
-        virtual ~IOSMovieEngine(){};
+        AndroidMovieEngine(const std::string & theJavaActivity);
+        virtual ~AndroidMovieEngine();
 
         void playMovie(void* theMovieWidget, const std::string & theSrc);
         void stopMovie(void* theMovieWidget);
@@ -30,11 +28,9 @@ namespace ios {
         void setMovieVolume(void* theMovieWidget, const float newVolume);
 
     private:
-        typedef std::map<void*, MovieControllerPtr> MovieMap;
-        MovieMap _movieMap;
-        
+        std::string javaActivity_;
     };
-    typedef masl::Ptr<IOSMovieEngine> IOSMovieEnginePtr;
+    typedef masl::Ptr<AndroidMovieEngine> AndroidMovieEnginePtr;
 };
 
 #endif

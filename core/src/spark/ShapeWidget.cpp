@@ -20,11 +20,14 @@
 #define DB(x) // x
 
 namespace spark {
-    ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
-        : Widget(theApp, theXMLNode), _myOrigin(vector2(0,0)), _myOriginMode(NO_ORIGIN) 
+    ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode) :
+        Widget(theApp, theXMLNode),
+        _myForcedSize(getNode()->getAttributeAs<float>("width", -1), getNode()->getAttributeAs<float>("height", -1)),
+        _myVertexShader(getNode()->getAttributeAs<std::string>("vertex_shader","")),
+        _myFragmentShader(getNode()->getAttributeAs<std::string>("fragment_shader","")),
+        _myOrigin(vector2(0,0)),
+        _myOriginMode(NO_ORIGIN)
     {
-        _vertexShader = getNode()->getAttributeAs<std::string>("vertex_shader","");
-        _fragmentShader = getNode()->getAttributeAs<std::string>("fragment_shader","");
         std::string customShaderHandles = getNode()->getAttributeAs<std::string>("custom_shader_handles","");
         std::istringstream iss(customShaderHandles);
         std::vector<std::string> myHandles;
@@ -32,7 +35,7 @@ namespace spark {
              std::istream_iterator<std::string>(),
              std::back_inserter<std::vector<std::string> >(myHandles));
         for (std::vector<std::string>::iterator it = myHandles.begin(); it != myHandles.end(); ++it) {
-            customShaderValues_[(*it)] = 0.0f;
+            _myCustomShaderValues[(*it)] = 0.0f;
         }        
         std::string myOriginStr = getNode()->getAttributeAs<std::string>("origin","");
         if (myOriginStr == "") {
@@ -56,8 +59,8 @@ namespace spark {
     void 
     ShapeWidget::prerender(MatrixStack& theCurrentMatrixStack) {
         Widget::prerender(theCurrentMatrixStack);
-        if (isVisible() && customShaderValues_.size() > 0) {
-            _myShape->updateCustomHandles(customShaderValues_);
+        if (isVisible() && !_myCustomShaderValues.empty()) {
+            _myShape->updateCustomHandles(_myCustomShaderValues);
         }
     }
 

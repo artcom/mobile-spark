@@ -25,23 +25,29 @@ namespace mar {
         _myTextureMap.clear();
     }
         
-    TexturePtr TextureLoader::load(const std::string & theSrc, const bool theCacheFlag, bool theMipmapFlag) {
+    TexturePtr
+    TextureLoader::load(const std::string & theSrc, const bool theCacheFlag, const bool theMipmapFlag) {
         unsigned long myKey = masl::initiateCRC32();
         masl::appendCRC32(myKey, theSrc);     
         
         if (theCacheFlag && _myTextureMap.find(myKey) != _myTextureMap.end()) {
-            AC_INFO << "TextureLoader::load found texture: '" << theSrc << "' in map -> do not reload, glid -> "<< _myTextureMap[myKey]->_textureId;
+            AC_INFO << "TextureLoader::load found texture: '" << theSrc
+                    << "' in map -> do not reload, glid -> "<< _myTextureMap[myKey]->_textureId;
             return _myTextureMap[myKey];
         } else {
             TexturePtr myTexture = TexturePtr(new Texture());       
             myTexture->_mipmapFlag = theMipmapFlag;
+        
             masl::AssetProviderSingleton::get().ap()->loadTextureFromFile(theSrc, myTexture->_textureId, 
                                                                           myTexture->_width, myTexture->_height,  
-                                                                          myTexture->_real_width, myTexture->_real_height,  
-                                                                          myTexture->_transparency, myTexture->_mirrorflag,
+                                                                          myTexture->_real_width, myTexture->_real_height,
+                                                                          myTexture->getNpotMatrix(),
+                                                                          myTexture->_transparency,
+                                                                          myTexture->_mirrorFlag,
                                                                           myTexture->_mipmapFlag);                        
             if (theCacheFlag) {    
-                AC_INFO << "TextureLoader::load texture: '" << theSrc << "' generated store in map, glid -> "<< myTexture->_textureId;
+                AC_INFO << "TextureLoader::load texture: '" << theSrc
+                        << "' generated store in map, glid -> "<< myTexture->_textureId;
                 storeTexture(myKey, myTexture);
             }
             return myTexture;
@@ -51,7 +57,8 @@ namespace mar {
     TexturePtr 
     TextureLoader::getTexture(const unsigned long theKey) {
         if (_myTextureMap.find(theKey) != _myTextureMap.end()) {
-            AC_INFO << "TextureLoader::getTexture : '" << theKey << "' in map -> do not reload, glid -> "<< _myTextureMap[theKey]->_textureId;
+            AC_INFO << "TextureLoader::getTexture : '" << theKey
+                    << "' in map -> do not reload, glid -> "<< _myTextureMap[theKey]->_textureId;
             return _myTextureMap[theKey];
         } else {
             return TexturePtr();                    
@@ -60,7 +67,8 @@ namespace mar {
         
     void 
     TextureLoader::storeTexture(const unsigned long theKey, TexturePtr theTexture) {
-        AC_INFO << "TextureLoader::storeTexture : '" << theKey << "' generated store in map, glid -> "<< theTexture->_textureId;
+        AC_INFO << "TextureLoader::storeTexture : '" << theKey
+                << "' generated store in map, glid -> "<< theTexture->_textureId;
         _myTextureMap[theKey] = theTexture;
     }
 

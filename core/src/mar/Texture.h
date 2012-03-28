@@ -20,6 +20,9 @@ namespace mar {
             Texture();
             ~Texture();
             void unbind();
+            matrix & getNpotMatrix() {return _npotMatrix;};
+            const matrix & getNpotMatrix() const {return _npotMatrix;};
+            matrix getRenderMatrix() const;
             std::string getSrc() const {return _src;};
             void setSrc(const std::string & theSrc = "");
             std::string getAttributesAsString() const;
@@ -29,14 +32,14 @@ namespace mar {
             GLuint _real_width;  // in some cases images must be downscaled to be loaded from android/ios 
             GLuint _real_height; // imageloader or fit max gl texture size, this is the real size
             bool _transparency;
-            GLuint _textureId;     
-            bool _mirrorflag;  
+            GLuint _textureId;
+            GLenum _textureTarget;
+            bool _mirrorFlag;
             bool _mipmapFlag;
-        
-            static uint nextPowerOfTwo(uint size);
-        
         private:
             std::string _src;
+            matrix _matrix;
+            matrix _npotMatrix;
         
     };
     typedef masl::Ptr<Texture> TexturePtr;
