@@ -66,14 +66,12 @@ namespace spark {
         }
         float myWidth = _myForcedSize[0] == -1 ? 1 : _myForcedSize[0];
         float myHeight = _myForcedSize[1] == -1 ? 1 : _myForcedSize[1];
-
-        // adjust widget size
         I18nShapeWidget::setSize(vector2(myWidth, myHeight));
     }
 
     void
     Movie::play() {
-        AC_INFO<<"playing movie:"<< getSrc() << " (volume: "<<_volume<<")";
+        AC_INFO << "playing movie: "<< getSrc() << " (volume: " << _volume <<")";
         masl::MovieEngineSingleton::get().getNative()->playMovie(this, getSrc());
         setVolume(_volume);
         masl::VideoInfo myMovieInfo = masl::MovieEngineSingleton::get().getNative()->getMovieInfo(this);
