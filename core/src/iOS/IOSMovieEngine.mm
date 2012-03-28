@@ -76,4 +76,13 @@ namespace ios
 
         return ret;
     }
+    
+    void IOSMovieEngine::setMovieVolume(void* theMovieWidget, const float newVolume)
+    {
+        MovieMap::const_iterator it = _movieMap.find(theMovieWidget);
+        if(it != _movieMap.end())
+        {
+            it->second->setVolume(newVolume);
+        }
+    }
 }

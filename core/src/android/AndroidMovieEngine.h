@@ -25,7 +25,7 @@ namespace android {
         void updateMovieTexture(void* theMovieWidget);
         const masl::VideoInfo getMovieInfo(void* theMovieWidget) const;
         bool isMoviePlaying(void* theMovieWidget) const;
-        void setMovieVolume(void* theMovieWidget, float newVolume);
+        void setMovieVolume(void* theMovieWidget, const float newVolume);
 
     private:
         std::string javaActivity_;

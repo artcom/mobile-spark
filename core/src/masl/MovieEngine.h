@@ -27,7 +27,7 @@ namespace masl {
         virtual void updateMovieTexture(void* theMovieWidget) = 0;
         virtual const VideoInfo getMovieInfo(void* theMovieWidget) const = 0;
         virtual bool isMoviePlaying(void* theMovieWidget) const = 0;
-        virtual void setMovieVolume(void* theMovieWidget, float newVolume) = 0;
+        virtual void setMovieVolume(void* theMovieWidget, const float newVolume) = 0;
 
     };
     typedef masl::Ptr<MovieEngine> MovieEnginePtr;

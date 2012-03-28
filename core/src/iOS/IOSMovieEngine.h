@@ -18,8 +18,8 @@ namespace ios {
 
     class IOSMovieEngine : public masl::MovieEngine {
     public:
-        IOSMovieEngine();
-        virtual ~IOSMovieEngine();
+        IOSMovieEngine() {};
+        virtual ~IOSMovieEngine(){};
 
         void playMovie(void* theMovieWidget, const std::string & theSrc);
         void stopMovie(void* theMovieWidget);
@@ -27,7 +27,7 @@ namespace ios {
         void updateMovieTexture(void* theMovieWidget);
         const masl::VideoInfo getMovieInfo(void* theMovieWidget) const;
         bool isMoviePlaying(void* theMovieWidget) const;
-        void setMovieVolume(void* theMovieWidget, float newVolume);
+        void setMovieVolume(void* theMovieWidget, const float newVolume);
 
     private:
         typedef std::map<void*, MovieControllerPtr> MovieMap;

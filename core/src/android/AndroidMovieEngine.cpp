@@ -121,7 +121,7 @@ namespace android {
     }
 
     void 
-    AndroidMovieEngine::setMovieVolume(void* theMovieWidget, float theVolume) {
+    AndroidMovieEngine::setMovieVolume(void* theMovieWidget, const float theVolume) {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "setMovieVolume", "(IF)V");
