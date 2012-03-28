@@ -21,7 +21,7 @@ namespace ios {
         IOSMovieEngine();
         virtual ~IOSMovieEngine();
 
-        void playMovie(void* theMovieWidget, const std::string theSrc);
+        void playMovie(void* theMovieWidget, const std::string & theSrc);
         void stopMovie(void* theMovieWidget);
         void pauseMovie(void* theMovieWidget);
         void updateMovieTexture(void* theMovieWidget);
