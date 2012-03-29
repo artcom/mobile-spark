@@ -11,9 +11,10 @@
 #define _ac_mobile_masl_TextureLoader_h_included_
 
 #include <masl/Singleton.h>
-#include "Texture.h"
 
 namespace mar {
+    class Texture;
+    typedef masl::Ptr<Texture> TexturePtr;
     typedef std::map<unsigned int, TexturePtr> TextureMap;
 
     class TextureLoader : public masl::Singleton<TextureLoader> {

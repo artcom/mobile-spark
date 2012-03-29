@@ -33,7 +33,7 @@ namespace spark {
 
             virtual bool AABB2Dcontains(const float x, const float y,
                                         const matrix & theProjectionMatrix) const;
-            bool touches2DScreenCoords( mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
+            bool touches2DScreenCoords( const mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
     
             inline mar::ShapePtr getShape() const {return _myShape;};
             float getWorldZ() const;
@@ -45,6 +45,7 @@ namespace spark {
         protected:
             virtual mar::ShapePtr createCustomShape(const mar::MaterialPtr theMaterial);
             void makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
+            void makeMVPBB2(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
             virtual void propagateAlpha();
             mar::ShapePtr _myShape;
             vector2 _myForcedSize;      // this is the gl quad size

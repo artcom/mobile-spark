@@ -8,6 +8,7 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 #include "TextureLoader.h"
+#include "Texture.h"
 
 #include <masl/Logger.h>
 #include <masl/string_functions.h>

@@ -16,6 +16,8 @@
 
 using namespace masl;
 
+#define DB(x) //x
+
 namespace spark {
 
     DEFINE_EXCEPTION(EventFactoryException, masl::Exception);
@@ -51,7 +53,7 @@ namespace spark {
 
 	EventPtr
 	EventFactory::createEvent(const std::string & theEventString) const {
-        AC_TRACE << "create event : " << theEventString;
+        DB(AC_TRACE << "create event : " << theEventString;)
         XMLNodePtr myXMLNode(new XMLNode(theEventString));
         CallbackMap::const_iterator i = _myCreateCallbackMap.find(myXMLNode->nodeName);
         if (i == _myCreateCallbackMap.end()) {

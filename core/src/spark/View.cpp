@@ -31,8 +31,9 @@ namespace spark {
     const char * const View::SPARK_TYPE = "View";
 
     View::View(const BaseAppPtr theApp, const XMLNodePtr theXMLNode):
-        Widget(theApp, theXMLNode){
-        _myWorldName  = theXMLNode->getAttributeAs<std::string>("world", "");
+        Widget(theApp, theXMLNode),
+        _myWorldName(theXMLNode->getAttributeAs<std::string>("world", ""))
+    {
         vector2 myPos = theXMLNode->getAttributeAs<vector2>("pos", vector2(0,0));
         vector2 mySize = theXMLNode->getAttributeAs<vector2>("size", vector2(1,1));
         _myGLViewport = ViewportPtr(new Viewport(mySize[0],mySize[1], myPos[0],myPos[1]));

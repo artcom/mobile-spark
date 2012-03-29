@@ -31,8 +31,8 @@ namespace spark {
         string myFrustum = theXMLNode->getAttributeAs<std::string>("frustum", "");
         size_t myIndex  = myFrustum.find(OrtohonormalStr);
         if (myIndex == 0) {
-             size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());
-             size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
+             size_t myOpening = myFrustum.find("[", string(OrtohonormalStr).size());
+             size_t myClosing = myFrustum.find("]", string(OrtohonormalStr).size());
              if (myOpening != string::npos && myClosing != string::npos) {
                  string myParams = myFrustum.substr(myOpening, myClosing-myOpening);
                  if (myParams == AutoOrthonormalStr) {
@@ -43,11 +43,11 @@ namespace spark {
         } else {
             myIndex = myFrustum.find(PerspectiveStr);
             if (myIndex == 0) {
-                 size_t myOpening  = myFrustum.find("[", string(OrtohonormalStr).size());
-                 size_t myClosing  = myFrustum.find("]", string(OrtohonormalStr).size());
+                 size_t myOpening = myFrustum.find("[", string(OrtohonormalStr).size());
+                 size_t myClosing = myFrustum.find("]", string(OrtohonormalStr).size());
                  if (myOpening != string::npos && myClosing != string::npos) {
                      string myParamsStr = myFrustum.substr(myOpening, myClosing-myOpening);
-                     fromString(myParamsStr, _myPerspectiveParams);
+                     _myPerspectiveParams = masl::as<vector3>(myParamsStr);
                      _myProjectionType = PERSPECTIVE;
                      myFrustumSpecified = true;
                  }

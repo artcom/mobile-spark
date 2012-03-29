@@ -16,9 +16,9 @@ namespace mar {
     /////////////////////////////////////////////////////////////Element
     Element::Element():
         dirtyFlag_(true),
-        #ifdef iOS
+#ifdef iOS
         vertexArrayObject_(0),
-        #endif
+#endif
         vertexBuffer_(0),
         indexBuffer_(0),
         stride_(VERTEX_SIZE)
