@@ -34,6 +34,21 @@ namespace android {
             }
         }
     }
+    float AndroidMobileSDK::getDeviceBatteryLevel() {
+        float level = 0.f;
+        if (env) {
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "getBatteryLevel", "()F");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                level = env->CallStaticFloatMethodA (cls, myMethodId, myArgs);
+            } else {
+                AC_WARNING  << "Sorry, java-vibrate not found";
+            }
+        }
+        return level;
+    }
+
     bool AndroidMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId,
                                                unsigned int & width, unsigned int & height,
                                                unsigned int & real_width, unsigned int & real_height,
@@ -263,11 +278,6 @@ namespace android {
 
     std::string AndroidMobileSDK::getOrientation(){
         return "";
-    }
-
-    float AndroidMobileSDK::getDeviceBatteryLevel()
-    {
-        return 0.f;
     }
 
 

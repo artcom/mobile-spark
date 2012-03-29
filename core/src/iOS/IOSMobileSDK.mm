@@ -212,7 +212,7 @@ namespace ios
         
         //[[UIDevice currentDevice] batteryState];
         
-        return [[UIDevice currentDevice] batteryLevel];
+        return 100.f * [[UIDevice currentDevice] batteryLevel];
     }
     
     masl::VideoInfo IOSMobileSDK::getCameraSpec() {
