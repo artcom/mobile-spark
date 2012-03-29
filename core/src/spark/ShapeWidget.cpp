@@ -79,58 +79,9 @@ namespace spark {
             getShape()->setAlpha(getActualAlpha());
         }
     }
-    void 
-    ShapeWidget::makeMVPBB2(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const{
-                                    
-        mar::BoundingBox myBB = _myShape->getBoundingBox();
-        matrix mvp = theProjectionMatrix * _myWorldMVMatrix;
-        
-        //use 8 corner points
-        vector4 corner = myBB.min;
-        corner[3] = 1;
-        theBB.min = mvp * corner;
-        theBB.max = mvp * corner;
-        corner[2] = myBB.max[2];
-        theBB.min.minimize(mvp * corner);
-        theBB.max.maximize(mvp * corner);
-        corner[1] = myBB.max[1];
-        theBB.min.minimize(mvp * corner);
-        theBB.max.maximize(mvp * corner);
-        corner[0] = myBB.max[0];
-        theBB.min.minimize(mvp * corner);
-        theBB.max.maximize(mvp * corner);
-        corner[2] = myBB.min[2];
-        theBB.min.minimize(mvp * corner);
-        theBB.max.maximize(mvp * corner);
-        corner[0] = myBB.min[0];
-        theBB.min.minimize(mvp * corner);
-        theBB.max.maximize(mvp * corner);
-        corner[0] = myBB.max[0];
-        corner[1] = myBB.min[1];
-        theBB.min.minimize(mvp * corner);
-        theBB.max.maximize(mvp * corner);
-        corner[2] = myBB.max[2];
-        theBB.min.minimize(mvp * corner);
-        theBB.max.maximize(mvp * corner);
-        
-        DB(AC_DEBUG << "makeMVPBB2: " << getName();)
-        DB(AC_DEBUG << " bounding box " << myBB.min << ", " << myBB.max;)
-        DB(AC_DEBUG << "mv " << _myWorldMVMatrix << "p " << theProjectionMatrix << " final " << mvp;)
-        DB(AC_DEBUG << " projected bounding box " << theBB.min << ", " << theBB.max;)
 
-        theBB.min /= theBB.min[3];
-        theBB.max /= theBB.max[3];
-
-        //+1/2
-        theBB.min[0] = (theBB.min[0] + 1) / 2;
-        theBB.min[1] = (theBB.min[1] + 1) / 2;
-        theBB.max[0] = (theBB.max[0] + 1) / 2;
-        theBB.max[1] = (theBB.max[1] + 1) / 2;
-        
-    }
     void 
     ShapeWidget::makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const{
-                                    
         mar::BoundingBox myBB = _myShape->getBoundingBox();
         //use 8 corner points
         vector4 corners[8];
@@ -207,7 +158,6 @@ namespace spark {
         theBB.min[1] = (theBB.min[1] + 1) / 2;
         theBB.max[0] = (theBB.max[0] + 1) / 2;
         theBB.max[1] = (theBB.max[1] + 1) / 2;
-        
     }
     
     /** Returns TRUE if at least one point exists that is contained by both boxes;
@@ -227,12 +177,7 @@ namespace spark {
         makeMVPBB(myMVPBB, theProjectionMatrix);
         DB(AC_DEBUG << " projected bounding box " << myMVPBB.min << ", " << myMVPBB.max;)
         DB(AC_DEBUG << "pick at " << x << ", " << y;)
-
-        if (x >= myMVPBB.min[0] && x <= myMVPBB.max[0] &&
-            y >= myMVPBB.min[1] && y <= myMVPBB.max[1]) {
-            return true;
-        }
-        return false;
+        return myMVPBB.contains2D(vector2(x,y));
     }
 
     //ANDROID ONLY: gl context is lost, so reset all buffers/shaders/textures to zero to create new ones

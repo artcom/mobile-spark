@@ -45,7 +45,6 @@ namespace spark {
         protected:
             virtual mar::ShapePtr createCustomShape(const mar::MaterialPtr theMaterial);
             void makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
-            void makeMVPBB2(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
             virtual void propagateAlpha();
             mar::ShapePtr _myShape;
             vector2 _myForcedSize;      // this is the gl quad size
