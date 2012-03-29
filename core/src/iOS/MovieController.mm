@@ -80,7 +80,7 @@ namespace ios {
         return [_avStruct->m_audioPlayer isPlaying];
     }
     
-    void MovieController::load()
+    void MovieController::load(const std::string &filePath)
     {        
         NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filePath.c_str()]];
         
@@ -98,7 +98,7 @@ namespace ios {
         
         [asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:tracksKey] 
                              completionHandler:
-         {
+         ^{
              // completion code
              NSError *error = nil;
              

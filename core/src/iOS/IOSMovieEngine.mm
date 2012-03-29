@@ -25,7 +25,7 @@ namespace ios
         _movieMap[theMovieWidget]->load(filePath);
     }
 
-    void IOSMovieEngine::playMovie(void* theMovieWidget, const std::string & theSrc) {
+    void IOSMovieEngine::playMovie(void* theMovieWidget) {
         _movieMap[theMovieWidget]->play();
     }
 
