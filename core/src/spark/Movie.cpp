@@ -39,11 +39,17 @@ namespace spark {
     void
     Movie::prerender(MatrixStack& theCurrentMatrixStack) {
         I18nShapeWidget::prerender(theCurrentMatrixStack);
-
         if (isRendered() && isPlaying()) {
             // trigger update for OpenGL texture
             masl::MovieEngineSingleton::get().getNative()->updateMovieTexture(this);
         }
+    }
+
+    void
+    Movie::setSrc(const std::string & theSrc) {
+        AC_DEBUG << "Movie::setSrc : " << theSrc;
+        setI18nData(theSrc);
+        _myDirtyFlag = true;
     }
 
     void
@@ -64,19 +70,8 @@ namespace spark {
             myMaterial = boost::static_pointer_cast<UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
             myMaterial->getTextureUnit()->getTexture()->unbind();
         }
-        float myWidth = _myForcedSize[0] == -1 ? 1 : _myForcedSize[0];
-        float myHeight = _myForcedSize[1] == -1 ? 1 : _myForcedSize[1];
-        I18nShapeWidget::setSize(vector2(myWidth, myHeight));
-    }
-
-    void
-    Movie::play() {
-        AC_INFO << "playing movie: "<< getSrc() << " (volume: " << _volume <<")";
-        masl::MovieEngineSingleton::get().getNative()->playMovie(this, getSrc());
-        setVolume(_volume);
+        masl::MovieEngineSingleton::get().getNative()->loadMovie(this, getSrc());
         masl::VideoInfo myMovieInfo = masl::MovieEngineSingleton::get().getNative()->getMovieInfo(this);
-        mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
-
         // inject texture name
         myMaterial->getTextureUnit()->getTexture()->_textureId = myMovieInfo.textureID;
         //TODO: add maybe video texture to wrap this preprocessor statement
@@ -89,6 +84,13 @@ namespace spark {
         float myWidth = _myForcedSize[0] == -1 ? myMovieSize[0] : _myForcedSize[0];
         float myHeight = _myForcedSize[1] == -1 ? myMovieSize[1] : _myForcedSize[1];
         I18nShapeWidget::setSize(vector2(myWidth, myHeight));
+    }
+
+    void
+    Movie::play() {
+        AC_INFO << "playing movie: "<< getSrc() << " (volume: " << _volume <<")";
+        masl::MovieEngineSingleton::get().getNative()->playMovie(this);
+        setVolume(_volume);
     }
 
     void

@@ -19,7 +19,8 @@ namespace android {
         AndroidMovieEngine(const std::string & theJavaActivity);
         virtual ~AndroidMovieEngine();
 
-        void playMovie(void* theMovieWidget, const std::string & theSrc);
+        void loadMovie(void* theMovieWidget, const std::string & theSrc);
+        void playMovie(void* theMovieWidget);
         void stopMovie(void* theMovieWidget);
         void pauseMovie(void* theMovieWidget);
         void updateMovieTexture(void* theMovieWidget);

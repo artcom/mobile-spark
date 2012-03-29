@@ -16,14 +16,21 @@ private static Map<Integer,Movie> _myMovies = new HashMap<Integer, Movie>();
     }
 
 
-    public static void playMovie(int theMovieId, String thePath) {
-        AC_Log.debug("VideoDelegate::playMovie " + thePath);
+    public static void loadMovie(int theMovieId, String thePath) {
         if (_myMovies.containsKey(theMovieId)) {
-             _myMovies.get(theMovieId).play(thePath);
+             _myMovies.get(theMovieId).load(thePath);
         } else {
             Movie myMovie = new Movie();
             _myMovies.put(theMovieId, myMovie);
-            myMovie.play(thePath);
+            myMovie.load(thePath);
+        }
+    }
+
+    public static void playMovie(int theMovieId) {
+        if (_myMovies.containsKey(theMovieId)) {
+            _myMovies.get(theMovieId).play();
+        } else {
+            //AC_Log.error("the movie " + theMovieId + " is not initialized yet");
         }
     }
 
@@ -62,7 +69,6 @@ private static Map<Integer,Movie> _myMovies = new HashMap<Integer, Movie>();
     }
 
     public static boolean isMoviePlaying(int theMovieId) {
-        AC_Log.trace("VideoDelegate::isMoviePlaying " + theMovieId);
         if (_myMovies.containsKey(theMovieId)) {
             return _myMovies.get(theMovieId).isPlaying();
         } else {

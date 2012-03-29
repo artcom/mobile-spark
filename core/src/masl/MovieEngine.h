@@ -21,7 +21,8 @@ namespace masl {
     
     class MovieEngine {
     public:
-        virtual void playMovie(void* theMovieWidget, const std::string & theSrc) = 0;
+        virtual void loadMovie(void* theMovieWidget, const std::string & theSrc) = 0;
+        virtual void playMovie(void* theMovieWidget) = 0;
         virtual void stopMovie(void* theMovieWidget) = 0;
         virtual void pauseMovie(void* theMovieWidget) = 0;
         virtual void updateMovieTexture(void* theMovieWidget) = 0;

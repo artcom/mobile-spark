@@ -17,11 +17,12 @@ namespace spark {
     public:
         Movie(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Movie();
-        
+
         virtual void prerender(MatrixStack& theCurrentMatrixStack);
         virtual void onPause();
         inline const std::string & getSrc() const {return getData();};
-        
+        void setSrc(const std::string & theSrc);
+
         void play();   // start playback at playcursor
         void stop();   // stop videoplayback
         void pause();  // pause video and do not touch playcursor
@@ -29,7 +30,7 @@ namespace spark {
         void togglePlayPause();
         void setVolume(const float theNewVolume);
         float getVolume();
-        
+
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Movie::SPARK_TYPE;};
 

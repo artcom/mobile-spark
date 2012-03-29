@@ -83,8 +83,8 @@ public class Movie implements SurfaceTexture.OnFrameAvailableListener {
         _myUpdateSurfaceFlag = true;
     }
 
-    public void play(String thePath) {
-        AC_Log.debug("Movie::play " + thePath);
+    public void load(String thePath) {
+        AC_Log.debug("Movie::load " + thePath);
         if (isPlaying()) {
             _myMediaPlayer.stop();
         }
@@ -97,12 +97,14 @@ public class Movie implements SurfaceTexture.OnFrameAvailableListener {
                 _myMediaPlayer.setDataSource(thePath);
                 _myMediaPlayer.prepare();
             }
-            _myMediaPlayer.start();
-            AC_Log.debug("Movie::play start playing");
             _myCurrentPath = thePath;
         } catch (IOException e){
             AC_Log.error("mediaplayer setDataSource failed");
         }
+    }
+
+    public void play() {
+        _myMediaPlayer.start();
     }
 
     public void stop() {

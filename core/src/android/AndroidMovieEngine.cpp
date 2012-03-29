@@ -25,16 +25,28 @@ namespace android {
     }
 
     void
-    AndroidMovieEngine::playMovie(void* theMovieWidget, const std::string & theSrc) {
+    AndroidMovieEngine::loadMovie(void* theMovieWidget, const std::string & theSrc) {
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theSrc);
         jclass cls = env->FindClass(javaActivity_.c_str());
-        jmethodID myMethodId = env->GetStaticMethodID(cls, "playMovie", "(ILjava/lang/String;)V");
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "loadMovie", "(ILjava/lang/String;)V");
         if(myMethodId != 0) {
             jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
             env->CallStaticVoidMethod(cls, myMethodId, int(theMovieWidget), StringArg);
         } else {
             AC_WARNING  << "Sorry, playMovie not found";
+        }
+    }
+
+    void
+    AndroidMovieEngine::playMovie(void* theMovieWidget) {
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "playMovie", "(I)V");
+        if(myMethodId != 0) {
+            env->CallStaticVoidMethod(cls, myMethodId, int(theMovieWidget));
+        } else {
+            AC_WARNING  << "Sorry, stopMovie not found";
         }
     }
 
