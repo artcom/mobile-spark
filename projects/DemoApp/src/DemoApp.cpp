@@ -568,7 +568,7 @@ namespace demoapp {
     
     void DemoApp::onSizeChanged(EventPtr theEvent) {
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);            
-        centerSlideTitlesToNewCanvasSize(myEvent->size_[0], myEvent->size_[1]);
+        centerSlideTitlesToNewCanvasSize(myEvent->getSize()[0], myEvent->getSize()[1]);
     }
     
     void DemoApp::onTouchMovie(EventPtr theEvent)

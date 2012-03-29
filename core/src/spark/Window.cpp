@@ -108,8 +108,8 @@ namespace spark {
     void
     Window::onSizeChanged(EventPtr theEvent) {
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
-        _myWidth = myEvent->size_[0];
-        _myHeight= myEvent->size_[1];
+        _myWidth = myEvent->getSize()[0];
+        _myHeight= myEvent->getSize()[1];
     
         DB(AC_DEBUG<<"onSizeChanged: "<< _myWidth <<", "<< _myHeight;)
     }

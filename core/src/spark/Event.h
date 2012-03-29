@@ -108,6 +108,7 @@ namespace spark {
             virtual const char * const &  classname_() const {return WindowEvent::CLASSNAME;};
             static const char * const ON_RESIZE;
             static const char * const WORLD_REALIZED;
+            vector2 getSize() const { return size_;};
         private:
             vector2 size_;
             vector2 oldsize_;

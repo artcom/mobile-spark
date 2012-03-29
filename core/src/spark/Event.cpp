@@ -59,12 +59,13 @@ namespace spark {
 	const char * const SensorEvent::TEMPERATURE = "TEMPERATURE";
 
 
-    Event::Event(const std::string & theType, ComponentPtr theTarget) : type_(theType),target_(theTarget), systemrelevant_(true) {
-    }
-    Event::Event(const masl::XMLNodePtr theXMLNode)
-         : type_(theXMLNode->getAttributeAs<std::string>("type", theXMLNode->nodeName)), systemrelevant_(true) {
-
-    }
+    Event::Event(const std::string & theType, ComponentPtr theTarget):
+        type_(theType),target_(theTarget), systemrelevant_(true)
+    {}
+    Event::Event(const masl::XMLNodePtr theXMLNode):
+        type_(theXMLNode->getAttributeAs<std::string>("type", theXMLNode->nodeName)),
+        systemrelevant_(true)
+    {}
 
     Event::~Event() {
     }
@@ -78,7 +79,8 @@ namespace spark {
 
     std::ostream &
     Event::print(std::ostream & os) const {
-        os << classname_() << " type: '" << type_ << "' target: '" << *target_ << "' currentPhase: " << currentPhase_;
+        os << classname_() << " type: '" << type_ << "' target: '" << *target_
+           << "' currentPhase: " << currentPhase_;
         return os;
     }
 
@@ -116,7 +118,8 @@ namespace spark {
     };
 
 
-    StageEvent::StageEvent(const std::string & theType, ComponentPtr theTarget, const UInt64 theCurrentTime) :
+    StageEvent::StageEvent(const std::string & theType, ComponentPtr theTarget,
+                           const UInt64 theCurrentTime) :
         Event(theType, theTarget), currenttime_(theCurrentTime)
     {
         if (theType == FRAME) {
@@ -145,13 +148,15 @@ namespace spark {
     StageEvent::~StageEvent() {}
 
     WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget,
-                             const unsigned int theNewWidth, const unsigned int theNewHeight, const unsigned int theOldWidth, const unsigned int theOldHeight) :
+                             const unsigned int theNewWidth, const unsigned int theNewHeight,
+                             const unsigned int theOldWidth, const unsigned int theOldHeight) :
         Event(theType, theTarget),
         size_(theNewWidth, theNewHeight),
         oldsize_(theOldWidth, theOldHeight)
     {}
     
-    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theWorldname) :
+    WindowEvent::WindowEvent(const std::string & theType, ComponentPtr theTarget,
+                             const std::string & theWorldname) :
         Event(theType, theTarget),worldname_(theWorldname)
     {}
         
@@ -166,7 +171,8 @@ namespace spark {
 
 
 
-    TouchEvent::TouchEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY) :
+    TouchEvent::TouchEvent(const std::string & theType, ComponentPtr theTarget,
+                           const unsigned int theX, const unsigned int theY) :
         Event(theType, theTarget), x_(theX), y_(theY)
     {
         systemrelevant_ = false;
@@ -185,7 +191,9 @@ namespace spark {
 
 
 
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const unsigned int theX, const unsigned int theY, const int dx, const int dy)
+    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget,
+                               const unsigned int theX, const unsigned int theY,
+                               const int dx, const int dy)
          : Event(theType, theTarget), x_(theX), y_(theY), dx_(dx), dy_(dy)
     {
         systemrelevant_ = false;
@@ -193,7 +201,8 @@ namespace spark {
         	systemrelevant_ = true;
         }
     }
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const float theFactor)
+    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget,
+                               const float theFactor)
          : Event(theType, theTarget), factor_(theFactor)
     { 
         systemrelevant_ = false;
@@ -201,8 +210,9 @@ namespace spark {
         	systemrelevant_ = true;
         }
     }
-    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget, const std::string & theDirection)
-         : Event(theType, theTarget), direction_(theDirection)
+    GestureEvent::GestureEvent(const std::string & theType, ComponentPtr theTarget,
+                              const std::string & theDirection):
+        Event(theType, theTarget), direction_(theDirection)
     { 
         systemrelevant_ = false;
         if (theType == SWIPE_LEFT || theType == SWIPE_RIGHT || theType == SWIPE_UP || theType == SWIPE_DOWN) {
@@ -224,8 +234,10 @@ namespace spark {
     GestureEvent::~GestureEvent() {}
 
 
-    SensorEvent::SensorEvent(const std::string & theType, ComponentPtr theTarget, const float theValue0, const float theValue1, const float theValue2)
-         : Event(theType, theTarget), value0_(theValue0), value1_(theValue1), value2_(theValue2)
+    SensorEvent::SensorEvent(const std::string & theType, ComponentPtr theTarget,
+                             const float theValue0, const float theValue1, const float theValue2):
+        Event(theType, theTarget),
+        value0_(theValue0), value1_(theValue1), value2_(theValue2)
     {
         systemrelevant_ = false; 
     }
