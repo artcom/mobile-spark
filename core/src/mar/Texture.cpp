@@ -79,9 +79,12 @@ namespace mar {
 
     std::string
     Texture::getAttributesAsString() const {
-        return "src=\"" + _src + "\" width=\"" + masl::as_string(_width) +
-            "\" height=\"" + masl::as_string(_height) + "\" transparency=\"" +
-            masl::as_string(_transparency) + "\" textureId=\"" +
-            masl::as_string(_textureId) + "\"";
+        return "src=\"" + _src + "\" textureId=\"" + masl::as_string(_textureId) +
+            "\" width=\"" + masl::as_string(_width) +
+            "\" height=\"" + masl::as_string(_height) +
+            "\" transparency=\"" + masl::as_string(_transparency) +
+            "\" mipmap=\"" + masl::as_string(_mipmapFlag) +
+            "\" mirror=\"" + masl::as_string(_mirrorFlag) +
+            "\" matrix=\"" + masl::as_string(getRenderMatrix());
     }
 }

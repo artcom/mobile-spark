@@ -62,7 +62,7 @@ private static Map<Integer,Movie> _myMovies = new HashMap<Integer, Movie>();
     }
 
     public static boolean isMoviePlaying(int theMovieId) {
-        AC_Log.debug("VideoDelegate::isMoviePlaying " + theMovieId);
+        AC_Log.trace("VideoDelegate::isMoviePlaying " + theMovieId);
         if (_myMovies.containsKey(theMovieId)) {
             return _myMovies.get(theMovieId).isPlaying();
         } else {

@@ -26,7 +26,6 @@ namespace android {
 
     void
     AndroidMovieEngine::playMovie(void* theMovieWidget, const std::string & theSrc) {
-        AC_DEBUG << "playMovie";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theSrc);
         jclass cls = env->FindClass(javaActivity_.c_str());
@@ -65,7 +64,6 @@ namespace android {
 
     void
     AndroidMovieEngine::updateMovieTexture(void* theMovieWidget) {
-        AC_DEBUG << "updateMovieTexture";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         jmethodID myMethodId = env->GetStaticMethodID(cls, "updateMovieTexture", "(I)V");
@@ -78,7 +76,6 @@ namespace android {
 
     const masl::VideoInfo
     AndroidMovieEngine::getMovieInfo(void* theMovieWidget) const {
-        AC_DEBUG << "getMovieInfo";
         masl::VideoInfo myMovieInfo;
         myMovieInfo.textureID=0;
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
@@ -107,7 +104,6 @@ namespace android {
 
     bool
     AndroidMovieEngine::isMoviePlaying(void* theMovieWidget) const {
-        AC_DEBUG << "isMoviePlaying";
         JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         jclass cls = env->FindClass(javaActivity_.c_str());
         bool isPlaying = false;

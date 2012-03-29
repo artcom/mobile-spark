@@ -89,7 +89,7 @@ namespace spark {
         AC_TRACE << "Window::onTouch " << myPickEvent->getType() << " x: "<< myPickEvent->getX() << " y: " << myPickEvent->getY();
         ComponentPtr myPicked = pick2DAABBStyle(myPickEvent->getX(), myPickEvent->getY());
         if (myPicked) {
-            AC_DEBUG << "Window::onTouch picked: " << *myPicked;
+            AC_DEBUG << "Window::onTouch dispatch Event with type: " << theEvent->getType() << " to picked widget: " << *myPicked;
             EventPtr myEvent = EventPtr(new TouchEvent(theEvent->getType(), myPicked, myPickEvent->getX(), myPickEvent->getY()));
             (*myEvent)();
         } else {
@@ -111,7 +111,7 @@ namespace spark {
         _myWidth = myEvent->getSize()[0];
         _myHeight= myEvent->getSize()[1];
     
-        DB(AC_DEBUG<<"onSizeChanged: "<< _myWidth <<", "<< _myHeight;)
+        AC_DEBUG<<"onSizeChanged: "<< _myWidth <<", "<< _myHeight;
     }
     void
     Window::renderWindow(){
