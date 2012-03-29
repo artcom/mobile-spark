@@ -22,12 +22,11 @@ namespace spark {
     const char * const Camera::SPARK_TYPE = "Camera";
 
     Camera::Camera(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode):
-        ShapeWidget(theApp, theXMLNode) {
-
+        ShapeWidget(theApp, theXMLNode),
+        _myColorConversionFlag(_myXMLNode->getAttributeAs<bool>("cpu_color_conversion", false))
+    {
         mar::MaterialPtr myMaterial = mar::MaterialPtr(new mar::UnlitTexturedMaterial());
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
-        _myColorConversionFlag = _myXMLNode->getAttributeAs<bool>("cpu_color_conversion", false);
-
     }
 
     Camera::~Camera() {
