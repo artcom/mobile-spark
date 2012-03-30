@@ -58,8 +58,11 @@ namespace spark {
     
     void Image::setSrc(const std::string & theSrc) { 
         AC_TRACE << "Image::setSrc : " << theSrc;
-        _data = theSrc; 
-        _myDirtyFlag = true;
+        
+        if(_data != theSrc){
+            _data = theSrc; 
+            _myDirtyFlag = true;
+        }
     } 
     
     void
