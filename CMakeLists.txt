@@ -9,6 +9,8 @@
 
 cmake_minimum_required(VERSION 2.8)
 
+option(ACMAKE_BUILD_TESTS "Should tests be compiled?" NO)
+
 set(APP_NAME mobile-spark)
 project(${APP_NAME})
 
