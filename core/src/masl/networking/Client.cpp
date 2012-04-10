@@ -26,7 +26,7 @@ namespace networking {
 
     Client::Client(const std::string &url,
                    const bool verbose,
-                   const long connecttimeout) :
+                   const long connectTimeout) :
         _curlHandle(0),
         _continueFlag(true)
     {
@@ -75,19 +75,17 @@ namespace networking {
 
         myStatus = curl_easy_setopt(_curlHandle,
                                     CURLOPT_CONNECTTIMEOUT,
-                                    connecttimeout);
+                                    connectTimeout);
         
         checkCurlStatus(myStatus, PLUS_FILE_LINE);
     }
 
-    void 
-    Client::performSync() {
+    void Client::performSync() {
         CURLcode myStatus = curl_easy_perform(_curlHandle);
         onDone(myStatus);
     }
 
-    void
-    Client::performAsync() {
+    void Client::performAsync() {
         AC_DEBUG << "starting request " << this;
         NetAsyncSingleton::get().na()->getMultiAdapter()->addClient(shared_from_this());
     }
@@ -129,11 +127,11 @@ namespace networking {
                 newDataReceived = true;
             }
         }
-        if (newDataReceived && onProgressCB) {
+        if (newDataReceived && _onProgressCB) {
             AC_TRACE << "calling onProgress for " << this;
             
             //_continueFlag = (*onProgressCB)(/*TODO*/);
-            (*onProgressCB)();
+            (*_onProgressCB)();
         }
     }
 
@@ -150,23 +148,23 @@ namespace networking {
         AC_DEBUG << "error string:" << std::string(_myErrorBuffer.begin(),
                                                    _myErrorBuffer.end());
         if (result == CURLE_OK) {
-            if (onSuccessCB) {
-                (*onSuccessCB)();
+            if (_onSuccessCB) {
+                (*_onSuccessCB)();
                 AC_DEBUG << "called success";
             }
-        } else {
-            if (onErrorCB) {
-                (*onErrorCB)();
+        } 
+        else {
+            if (_onErrorCB) {
+                (*_onErrorCB)();
             }
         }
     }
 
-    size_t Client::writeFunction(const unsigned char *ptr, size_t size) {
+    size_t Client::writeFunction(const unsigned char *theData, size_t size) {
         // NOTE: this will be called from one of io_service's threads
         AutoLocker<ThreadLock> myLocker(_lockResponseBuffer); 
         
-        //TODO: fix
-        //copy(theData, theData + size, back_inserter(_privateResponseBuffer));
+        copy(theData, theData + size, back_inserter(_privateResponseBuffer));
         return _continueFlag ? size : 0;
     }
 
@@ -177,6 +175,13 @@ namespace networking {
         return NetAsyncSingleton::get().na()->getMultiAdapter()->openSocket();
     }
     
+    curl_socket_t Client::_openSocket(Client *self,
+                                            curlsocktype purpose,
+                                            struct curl_sockaddr *addr) 
+    {
+        return self->openSocket(purpose, addr);
+    }
+    
     int Client::_closeSocket(Client *self, curl_socket_t item) {
         AC_DEBUG << "closing socket " << item;
         SocketAdapterPtr s = SocketAdapter::find(item);
@@ -184,6 +189,14 @@ namespace networking {
             s->close();
         }
         return 0;
+    }
+    
+    void Client::setOnSuccesCallback(const masl::CallbackPtr theCB){
+        _onSuccessCB = theCB;
+    }
+    
+    void Client::setOnErrorCallback(const masl::CallbackPtr theCB){
+        _onErrorCB = theCB;
     }
 }
 }
