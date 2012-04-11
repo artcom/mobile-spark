@@ -87,8 +87,8 @@ namespace spark {
             static const char * const FRAME;
             masl::UInt64 getCurrentTime() const { return currenttime_;};
             masl::UInt64 getDeltaTime() const { return deltaT_;};
-            masl::UInt64 currenttime_;
         private:
+            masl::UInt64 currenttime_;
             masl::UInt64 deltaT_;
     };
 
@@ -108,6 +108,8 @@ namespace spark {
             virtual const char * const &  classname_() const {return WindowEvent::CLASSNAME;};
             static const char * const ON_RESIZE;
             static const char * const WORLD_REALIZED;
+            vector2 getSize() const { return size_;};
+        private:
             vector2 size_;
             vector2 oldsize_;
             std::string worldname_;
@@ -163,6 +165,7 @@ namespace spark {
             int getTranslateX() const { return dx_;};
             int getTranslateY() const { return dy_;};
             float getFactor() const { return factor_;};
+            const std::string & getDirection() const { return direction_;};
 
 
         private:

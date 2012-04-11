@@ -11,7 +11,7 @@
 
 #include <masl/MobileSDK.h>
 #include <masl/AssetProvider.h>
-#include <masl/checksum.h>
+#include <masl/string_functions.h>
 #include <mar/Shape.h>
 #include <mar/Material.h>
 #include <mar/Texture.h>
@@ -30,8 +30,8 @@ namespace spark {
     
     TextGlyphIndexMap::TextGlyphIndexMap() {}
     TextGlyphIndexMap::~TextGlyphIndexMap() {}
-    void TextGlyphIndexMap::store(const unsigned long theKey, int myRenderedGlyphIndex) {_myRenderedGlyphTextureMap[theKey] =  myRenderedGlyphIndex;}         
-    int TextGlyphIndexMap::getIndex(const unsigned long theKey)  {
+    void TextGlyphIndexMap::store(const unsigned int theKey, int myRenderedGlyphIndex) {_myRenderedGlyphTextureMap[theKey] =  myRenderedGlyphIndex;}         
+    int TextGlyphIndexMap::getIndex(const unsigned int theKey)  {
         return  (_myRenderedGlyphTextureMap.find(theKey) != _myRenderedGlyphTextureMap.end()) ? _myRenderedGlyphTextureMap[theKey] : -1;
     }       
         
@@ -47,23 +47,24 @@ namespace spark {
         _myLineHeight(_myXMLNode->getAttributeAs<int>("lineHeight", 0)),
         _myTextAlign(_myXMLNode->getAttributeAs<std::string>("align", "left")),
         _myRenderedGlyphIndex(0),
-        _myTextStartPos(0), _myCacheFlag(_myXMLNode->getAttributeAs<bool>("cache", false))
+        _myTextStartPos(0),
+        _myCacheFlag(_myXMLNode->getAttributeAs<bool>("cache", false))
     {
         setI18nData(getNode()->getAttributeAs<std::string>("text", ""));
         
         std::string myFontName = _myXMLNode->getAttributeAs<std::string>("font", "");
         setFont(myFontName);
         
-        AC_INFO << "Text ctor: " << _myFontPath;
+        AC_TRACE << "Text ctor: " << _myFontPath;
         mar::UnlitTexturedMaterialPtr myMaterial = mar::UnlitTexturedMaterialPtr(new mar::UnlitTexturedMaterial());
         myMaterial->getTextureUnit()->getTexture()->_transparency = true;
-        myMaterial->setCustomHandles(customShaderValues_);
-        myMaterial->setShader(_vertexShader, _fragmentShader); 
+        myMaterial->setCustomHandles(_myCustomShaderValues);
+        myMaterial->setShader(_myVertexShader, _myFragmentShader); 
         _myShape = mar::ShapePtr(new mar::RectangleShape(myMaterial));
     }
 
     Text::~Text() {
-        AC_INFO << "....destructor text " << getName();
+        AC_TRACE << "....delete text " << getName();
     }
 
     //TODO maybe remove textSize member
@@ -84,22 +85,22 @@ namespace spark {
         
     void
     Text::setStartIndex(unsigned int theIndex) {
-        _myTextStartPos = (theIndex<=_data.size() ? theIndex:0);
+        _myTextStartPos = (theIndex <= getText().size() ? theIndex:0);
         AC_DEBUG << "incoming index : " << theIndex << "->" << _myTextStartPos;
     }    
     void
     Text::build() {
         I18nShapeWidget::build();
         AC_DEBUG << "build "<<*this << " caching: " << _myCacheFlag;
-        AC_TRACE << "data: " << _data.substr(_myTextStartPos, _data.size());
+        AC_TRACE << "data: " << getText().substr(_myTextStartPos, getText().size());
         mar::UnlitTexturedMaterialPtr myMaterial = boost::static_pointer_cast<mar::UnlitTexturedMaterial>(getShape()->elementList_[0]->material_);
         bool myCreateTextureFlag = true;            
-        unsigned long myKey =  masl::initiateCRC32();
+        unsigned int myKey = 0;
         if (_myCacheFlag) {
-            appendCRC32(myKey, _data.substr(_myTextStartPos, _data.size()));
-            appendCRC32(myKey, as_string(_myFontSize));
-            appendCRC32(myKey, _myFontPath);
-            appendCRC32(myKey, as_string(_myTextColor));
+            myKey = masl::CRC32(getText().substr(_myTextStartPos, getText().size()) +
+                                as_string(_myFontSize) +
+                                _myFontPath +
+                                as_string(_myTextColor));
             TexturePtr myTexturePtr = TextureLoader::get().getTexture(myKey);
             if (myTexturePtr) {
                 _myTextSize[0] = myTexturePtr->_width;
@@ -118,9 +119,12 @@ namespace spark {
             } else {
                 myTexture = TexturePtr(new Texture());
             }
-            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get().getNative()->renderText(_data, myTexture->_textureId, _myFontSize,
-                                             _myTextColor, _myMaxWidth, _myMaxHeight, _myTextAlign, _myFontPath, _myLineHeight, _myTextStartPos,
-                                             myTexture->_mirrorflag);                                             
+            masl::TextInfo myTextInfo = masl::MobileSDK_Singleton::get()
+                                            .getNative()->renderText(getText(),
+                                            myTexture->_textureId, _myFontSize,
+                                            _myTextColor, _myMaxWidth, _myMaxHeight,
+                                            _myTextAlign, _myFontPath, _myLineHeight,
+                                            _myTextStartPos, myTexture->_mirrorFlag);                                             
             myMaterial->getTextureUnit()->setTexture(myTexture);
             _myTextSize[0] = myTextInfo.width;
             _myTextSize[1] = myTextInfo.height;

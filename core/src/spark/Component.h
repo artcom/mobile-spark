@@ -37,8 +37,8 @@ namespace spark {
             return c.print(os);
         }
 
-        virtual void reparent() {AC_INFO << "reparent " << *this;};
-        virtual void realize() {AC_INFO << "realize " << *this; _myRealizedFlag = true;};
+        virtual void reparent() {AC_DEBUG << "reparent " << *this;};
+        virtual void realize() {AC_DEBUG << "realize " << *this; _myRealizedFlag = true;};
         virtual void realizeASync();
         const bool isAllRealized() const { return _myRealizedFlag;}
 

@@ -122,7 +122,7 @@ namespace mar {
         if (myMaterial) {
             materialMap_[myMaterialId] = myMaterial;
         }
-        AC_INFO << "num materials " << materialMap_.size();
+        AC_DEBUG << "num materials " << materialMap_.size();
     }
 
     void ObjImporter::createElementVertices(ShapePtr theShape, ElementPtr element,
@@ -172,7 +172,7 @@ namespace mar {
             element->getVertexData()[vertexDataIndex++] = *it;
         }
         theShape->elementList_.push_back(element);
-        AC_INFO << "num parts " << theShape->elementList_.size();
+        AC_DEBUG << "num parts " << theShape->elementList_.size();
     }
 
     bool ObjImporter::sortByTransparencyFunction(ElementPtr i,ElementPtr j) {
@@ -256,8 +256,8 @@ namespace mar {
         }
 
         std::sort(theShape->elementList_.begin(), theShape->elementList_.end(), sortByTransparencyFunction);
-        AC_INFO << "vertex size " << vertices_.size() << " normals_ size " << normals_.size() << " tex size " << texData_.size();
-        AC_INFO << "faces_ size " << faces_.size() << " objectParts " << theShape->elementList_.size();
+        AC_DEBUG << "vertex size " << vertices_.size() << " normals_ size " << normals_.size() << " tex size " << texData_.size();
+        AC_DEBUG << "faces_ size " << faces_.size() << " objectParts " << theShape->elementList_.size();
         theShape->setBoundingBox(min_, max_);
     }
 }

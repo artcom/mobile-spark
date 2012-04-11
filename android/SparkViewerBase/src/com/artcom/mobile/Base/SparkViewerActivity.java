@@ -17,6 +17,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 public class SparkViewerActivity extends Activity {
 
@@ -36,6 +40,20 @@ public class SparkViewerActivity extends Activity {
 
         mViewDelegate.init(this, _myPackageName);
         setContentView(mViewDelegate.getView());
+        setupBatteryLevelReceiver();
+    }
+
+    private void setupBatteryLevelReceiver () {
+        BroadcastReceiver batteryLevelReceiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                int level = intent.getIntExtra("level", 0);
+                int scale = intent.getIntExtra("scale", 1);
+                level = (level * 100) / scale;
+                NativeBinding.ourBatteryLevel = level;
+            }
+        };
+        IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(batteryLevelReceiver, batteryLevelFilter);
     }
 
     public boolean onTouchEvent(MotionEvent event) {

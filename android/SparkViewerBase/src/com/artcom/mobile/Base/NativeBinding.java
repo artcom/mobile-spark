@@ -44,6 +44,7 @@ import com.artcom.mobile.Base.Severity;
 import com.artcom.mobile.Base.NativeException;
 public class NativeBinding {
     public static Activity ourActivity;
+    public static float ourBatteryLevel = 0.f;
     public static boolean ourAllowOrientationChange = true;
 
     private static final String TAG = "NativeBinding";
@@ -57,7 +58,7 @@ public class NativeBinding {
         System.loadLibrary("masl");
         System.loadLibrary("animation");
         System.loadLibrary("mar");
-        System.loadLibrary("android");
+        //System.loadLibrary("android");
         System.loadLibrary("spark");        
     }
 
@@ -286,6 +287,10 @@ public class NativeBinding {
       }
 	  
   }
+
+    public static float getBatteryLevel() {
+        return ourBatteryLevel;
+    }
 
   public static void exit() {
       ourActivity.finish();    

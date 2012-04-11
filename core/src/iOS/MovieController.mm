@@ -80,21 +80,8 @@ namespace ios {
         return [_avStruct->m_audioPlayer isPlaying];
     }
     
-    void MovieController::playMovie(const std::string &filePath)
+    void MovieController::load(const std::string &filePath)
     {        
-        // already playing. nothing to do
-        if (_playing) 
-            return;
-        
-        // resume paused playback
-        else if(_avStruct->m_audioPlayer)
-        {
-            printf("RESUME\n");
-            [_avStruct->m_audioPlayer play];
-            _playing = true;
-            return;
-        }
-        
         NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filePath.c_str()]];
         
         //_avStruct->m_player = [[AVPlayer alloc] initWithURL:url];
@@ -163,19 +150,25 @@ namespace ios {
 //                     AC_ERROR<<"Error: AssetReader could not add audio-track ...";
 //                 }
 //             }
-
-             
              if (![_avStruct->m_assetReader startReading]) 
              {
                  AC_ERROR<<"Error: AssetReader could not start reading ...";
              }
-             
-             //[_avStruct->m_player play];
-             [_avStruct->m_audioPlayer play];
-             
-             _playing = true;
 
+             
          }];
+    }
+    void MovieController::play()
+    {        
+        // already playing. nothing to do
+        if (_playing) {
+            return;
+        } // resume paused playback
+        else if(_avStruct->m_audioPlayer) {
+            AC_INFO << "resume movie playback";
+            [_avStruct->m_audioPlayer play];
+            _playing = true;
+        }
     }
     
     void MovieController::stop()
@@ -198,14 +191,6 @@ namespace ios {
         
         
         _playing = !_playing;
-    }
-    
-    void MovieController::reset()
-    {
-        // reset all AV related stuff
-        _avStruct = AVStructPtr(new AVStruct);
-        
-        _playing = false;
     }
     
     float MovieController::getVolume() const

@@ -9,7 +9,7 @@
 
 //Copyright (c) 2010-2011 cocos2d-x.org
 //Copyright (c) 2009      On-Core
-// 
+//
 //http://www.cocos2d-x.org
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,50 +31,14 @@
 //THE SOFTWARE.
 
 #include "AndroidAudioEngine.h"
+#include "AndroidMobileSDK.h"
 
 #include <masl/AssetProvider.h>
 
-
-static JavaVM *gJavaVM = 0;
-static jclass classOfSparkViewerActivity = 0;
-JNIEnv *env = 0;
-
-#ifdef ANDROID
-JNIEXPORT jint JNICALL
-JNI_OnLoad(JavaVM *vm, void *reserved) {
-    gJavaVM = vm;
-    return JNI_VERSION_1_6;
-}
-#endif
-
+#include <jni.h>
 
 namespace android {
     //supported audio formats: http://developer.android.com/guide/appendix/media-formats.html#core
-
-	static jmethodID getMethodID(const std::string & theJavaActivity, const char *methodName, const char *paramCode) {
-		jmethodID ret = 0;
-		if (gJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4) != JNI_OK) {
-			AC_ERROR << "Failed to get the environment using GetEnv()";
-			return 0;
-		}
-		if (gJavaVM->AttachCurrentThread(&env, 0) < 0) {
-			AC_ERROR << "Failed to get the environment using AttachCurrentThread()";
-			return 0;
-		}
-		classOfSparkViewerActivity = env->FindClass(theJavaActivity.c_str());
-		if (! classOfSparkViewerActivity) {
-			AC_ERROR << "Failed to find class of " << theJavaActivity.c_str();
-			return 0;
-		}
-		if (env != 0 && classOfSparkViewerActivity != 0) {
-			ret = env->GetStaticMethodID(classOfSparkViewerActivity, methodName, paramCode);
-		}
-		if (! ret) {
-			AC_ERROR << "get method id of " << methodName << " error";
-		}
-		return ret;
-	}
-
 
     AndroidAudioEngine::AndroidAudioEngine(const std::string & theJavaActivity)
         : AudioEngine(), javaActivity_(theJavaActivity)
@@ -86,160 +50,189 @@ namespace android {
 
 
     //////////////////////////////////////////BackgroundMusic
-	void 
+    void
     AndroidAudioEngine::playBackgroundMusic(const std::string & theFile, bool isLoop) const {
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "playBackgroundMusic " << myFoundFile;
-		jmethodID playBackgroundMusicMethodID = getMethodID(javaActivity_, "playBackgroundMusic", "(Ljava/lang/String;Z)V");
-		if (playBackgroundMusicMethodID) {
-			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, playBackgroundMusicMethodID, StringArg, isLoop);
-			//env->ReleaseStringUTFChars(StringArg, path);
-		}
-	}
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "playBackgroundMusic", "(Ljava/lang/String;Z)V");
+        if (myMethodId) {
+            jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
+            env->CallStaticVoidMethod(cls, myMethodId, StringArg, isLoop);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::stopBackgroundMusic() const {
         AC_DEBUG << "stopBackgroundMusic";
-		jmethodID stopBackgroundMusicMethodID = getMethodID(javaActivity_, "stopBackgroundMusic", "()V");
-		if (stopBackgroundMusicMethodID) {
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, stopBackgroundMusicMethodID);
-		}
-	}
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "stopBackgroundMusic", "()V");
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::pauseBackgroundMusic() const {
         AC_DEBUG << "pauseBackgroundMusic";
-		jmethodID pauseBackgroundMusicMethodID = getMethodID(javaActivity_, "pauseBackgroundMusic", "()V");
-		if (pauseBackgroundMusicMethodID) {
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, pauseBackgroundMusicMethodID);
-		}
-	}
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "pauseBackgroundMusic", "()V");
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::resumeBackgroundMusic() const {
         AC_DEBUG << "resumeBackgroundMusic";
-		jmethodID resumeBackgroundMusicMethodID = getMethodID(javaActivity_, "resumeBackgroundMusic", "()V");
-		if (resumeBackgroundMusicMethodID) {
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, resumeBackgroundMusicMethodID);
-		}
-	}
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "resumeBackgroundMusic", "()V");
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::rewindBackgroundMusic() const {
         AC_DEBUG << "rewindBackgroundMusic";
-		jmethodID rewindBackgroundMusicMethodID = getMethodID(javaActivity_, "rewindBackgroundMusic", "()V");
-		if (rewindBackgroundMusicMethodID) {
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, rewindBackgroundMusicMethodID);
-		}
-	}
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "rewindBackgroundMusic", "()V");
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 
-	bool 
+    bool
     AndroidAudioEngine::isBackgroundMusicPlaying() const {
         AC_DEBUG << "isBackgroundMusicPlaying";
-		jmethodID isBackgroundMusicPlayingMethodID = getMethodID(javaActivity_, "isBackgroundMusicPlaying", "()Z");
-		jboolean ret = false;
-		if (isBackgroundMusicPlayingMethodID) {
-			ret = env->CallStaticBooleanMethod(classOfSparkViewerActivity, isBackgroundMusicPlayingMethodID);
-		}
-		return ret;
-	}
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "isBackgroundMusicPlaying", "()Z");
+        jboolean ret = false;
+        if (myMethodId) {
+            ret = env->CallStaticBooleanMethod(cls, myMethodId);
+        }
+        return ret;
+    }
 
-	float 
+    float
     AndroidAudioEngine::getBackgroundMusicVolume() const {
         AC_DEBUG << "getBackgroundMusicVolume";
-		jmethodID getBackgroundMusicVolumeID = getMethodID(javaActivity_, "getBackgroundMusicVolume", "()F");
-		jfloat ret = 0.0;
-		if (getBackgroundMusicVolumeID) {
-			ret = env->CallStaticFloatMethod(classOfSparkViewerActivity, getBackgroundMusicVolumeID);
-		}
-		return ret;
-	}
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "getBackgroundMusicVolume", "()F");
+        jfloat ret = 0.0;
+        if (myMethodId) {
+            ret = env->CallStaticFloatMethod(cls, myMethodId);
+        }
+        return ret;
+    }
 
-	void 
-    AndroidAudioEngine::setBackgroundMusicVolume(float volume) const {
-        AC_DEBUG << "setBackgroundMusicVolume " << volume;
-		jmethodID setBackgroundMusicVolumeMethodID = getMethodID(javaActivity_, "setBackgroundMusicVolume", "(F)V");
-		if (setBackgroundMusicVolumeMethodID) {
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, setBackgroundMusicVolumeMethodID, volume);
-		}
-	}
+    void
+    AndroidAudioEngine::setBackgroundMusicVolume(float theVolume) const {
+        AC_DEBUG << "setBackgroundMusicVolume " << theVolume;
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "setBackgroundMusicVolume", "(F)V");
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId, theVolume);
+        }
+    }
 
 
     ////////////////////////////////////////Effect Sounds
     //returns soundid
     unsigned int
     AndroidAudioEngine::playEffect(const std::string & theFile) const {
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "play Effect " << myFoundFile;
-		int ret = 0;
-		jmethodID playEffectMethodID = getMethodID(javaActivity_, "playEffect", "(Ljava/lang/String;)I");
-		if (playEffectMethodID) {
-			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
-			ret = env->CallStaticIntMethod(classOfSparkViewerActivity, playEffectMethodID, StringArg);
-		}
-		return (unsigned int)ret;
+        int ret = 0;
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "playEffect", "(Ljava/lang/String;)I");
+        if (myMethodId) {
+            jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
+            ret = env->CallStaticIntMethod(cls, myMethodId, StringArg);
+        }
+        return ret;
     }
 
-	void 
-    AndroidAudioEngine::stopEffect(unsigned int nSoundId) const {
-        AC_DEBUG << "stop Effect with soundId" << nSoundId;
-		jmethodID stopEffectMethodID = getMethodID(javaActivity_, "stopEffect", "(I)V");
-		if (stopEffectMethodID) {
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, stopEffectMethodID, (int)nSoundId);
-		}
-	}
+    void
+    AndroidAudioEngine::stopEffect(unsigned int theSoundId) const {
+        AC_DEBUG << "stop Effect with soundId" << theSoundId;
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "stopEffect", "(I)V");
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId, static_cast<int>(theSoundId));
+        }
+    }
 
-	float 
+    float
     AndroidAudioEngine::getEffectsVolume() const {
         AC_DEBUG << "getEffectsVolume";
-		jmethodID getEffectsVolumeMethodID = getMethodID(javaActivity_, "getEffectsVolume", "()F");
-		jfloat ret = -1.0;
-		if (getEffectsVolumeMethodID) {
-			ret = env->CallStaticFloatMethod(classOfSparkViewerActivity, getEffectsVolumeMethodID);
-		}
-		return ret;
-	}
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "getEffectsVolume", "()F");
+        jfloat ret = -1.0;
+        if (myMethodId) {
+            ret = env->CallStaticFloatMethod(cls, myMethodId);
+        }
+        return ret;
+    }
 
-	void 
-    AndroidAudioEngine::setEffectsVolume(float volume) const {
-        AC_DEBUG << "setEffectsVolume " << volume;
-		jmethodID setEffectsVolumeMethodID = getMethodID(javaActivity_, "setEffectsVolume", "(F)V");
-		if (setEffectsVolumeMethodID) {
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, setEffectsVolumeMethodID, volume);
-		}
-	}
+    void
+    AndroidAudioEngine::setEffectsVolume(float theVolume) const {
+        AC_DEBUG << "setEffectsVolume " << theVolume;
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "setEffectsVolume", "(F)V");
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId, theVolume);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::preloadEffect(const std::string & theFile) const {
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "preload Effect " << myFoundFile;
-		jmethodID preloadEffectMethodID = getMethodID(javaActivity_, "preloadEffect", "(Ljava/lang/String;)V");
-		if (preloadEffectMethodID) {
-			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, preloadEffectMethodID, StringArg);
-		}
-	}
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "preloadEffect", "(Ljava/lang/String;)V");
+        if (myMethodId) {
+            jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
+            env->CallStaticVoidMethod(cls, myMethodId, StringArg);
+        }
+    }
 
-	void 
+    void
     AndroidAudioEngine::unloadEffect(const std::string & theFile) const {
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
         std::string myFoundFile = masl::AssetProviderSingleton::get().ap()->findFile(theFile);
         AC_DEBUG << "unload Effect " << myFoundFile;
-		jmethodID unloadEffectMethodID = getMethodID(javaActivity_, "unloadEffect", "(Ljava/lang/String;)V");
-		if (unloadEffectMethodID) {
-			jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, unloadEffectMethodID, StringArg);
-		}
-	}
-    
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "unloadEffect", "(Ljava/lang/String;)V");
+        if (myMethodId) {
+            jstring StringArg = env->NewStringUTF(myFoundFile.c_str());
+            env->CallStaticVoidMethod(cls, myMethodId, StringArg);
+        }
+    }
 
-	void 
+
+    void
     AndroidAudioEngine::end() const {
+        JNIEnv *env = boost::static_pointer_cast<android::AndroidMobileSDK>(masl::MobileSDK_Singleton::get().getNative())->env;
+        jclass cls = env->FindClass(javaActivity_.c_str());
         AC_DEBUG << "end";
-		jmethodID endMethodID = getMethodID(javaActivity_, "end", "()V");
-		if (endMethodID) {
-			env->CallStaticVoidMethod(classOfSparkViewerActivity, endMethodID);
-		}
-	}
+        jmethodID myMethodId = env->GetStaticMethodID(cls, "end", "()V");
+        if (myMethodId) {
+            env->CallStaticVoidMethod(cls, myMethodId);
+        }
+    }
 }
 

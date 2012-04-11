@@ -31,11 +31,11 @@ namespace ios
     
     bool IOSAssetProvider::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
                                                unsigned int & width, unsigned int & height, 
-                                               unsigned int & realwidth, unsigned int & realheight,                                                
+                                               unsigned int & realwidth, unsigned int & realheight,
+                                               matrix & npotMatrix,
                                                bool & hasAlpha,  bool & mirrorFlag, bool & theMipmapFlag) 
     {
-        mirrorFlag = false;
-        return masl::MobileSDK_Singleton::get().getNative()->loadTextureFromFile(filename, textureId, width, height, realwidth, realheight, hasAlpha, theMipmapFlag);
+        return masl::MobileSDK_Singleton::get().getNative()->loadTextureFromFile(filename, textureId, width, height, realwidth, realheight, npotMatrix, hasAlpha, theMipmapFlag);
     }
 
     std::string

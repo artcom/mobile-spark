@@ -27,4 +27,6 @@ ac_add_library(
     DEPENDS ${DEPENDS}
 )
 
-add_subdirectory(Tests)
+if (ACMAKE_BUILD_TESTS)
+    add_subdirectory(Tests)
+endif (ACMAKE_BUILD_TESTS)

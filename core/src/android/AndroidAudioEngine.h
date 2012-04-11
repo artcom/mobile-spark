@@ -9,7 +9,7 @@
 
 //Copyright (c) 2010-2011 cocos2d-x.org
 //Copyright (c) 2009      On-Core
-// 
+//
 //http://www.cocos2d-x.org
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,15 +33,7 @@
 #ifndef _included_mobile_android_AndroidAudioEngine_
 #define _included_mobile_android_AndroidAudioEngine_
 
-#include <jni.h>
 #include <masl/AudioEngine.h>
-
-#ifdef ANDROID
-extern "C" {
-    JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved);
-}
-#endif
-
 
 
 namespace android {

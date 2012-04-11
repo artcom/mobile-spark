@@ -10,11 +10,14 @@
 #ifndef _included_mobile_masl_string_functions_
 #define _included_mobile_masl_string_functions_
 
-#include <sstream>
-#include <algorithm>
 #include "Exception.h"
 #include "numeric_functions.h"
 #include "file_functions.h"
+
+#include <boost/crc.hpp>
+
+#include <sstream>
+#include <algorithm>
 
 namespace masl {
 
@@ -61,6 +64,13 @@ namespace masl {
         return outValue;
     }
 
+    template <class T>
+    inline std::string as_hex(const T& x) {
+        std::ostringstream streamer;
+        streamer << std::hex << x;
+        return streamer.str();
+    }
+
     int as_int(const std::string & theString);
     float as_float(const std::string & theString);
 
@@ -90,6 +100,17 @@ namespace masl {
     #define PLUS_FILE_LINE masl::location_string(__FILE__,__LINE__)
     #define JUST_FILE_LINE masl::line_string(__LINE__),masl::file_string(__FILE__)
 
+    inline std::string removeMultipleWhiteSpaces( std::string theString ) { 
+        std::string search = "  "; // this is 2 spaces
+        std::size_t index;
+    
+        while((index = theString.find(search)) != std::string::npos ) { 
+            // remove 1 character from the string at index
+            theString.erase(index,1);
+        }
+    
+        return theString;
+    }
 
     inline std::string trimLeft (const std::string & theString, const std::string & theTrimChars = " " ) {
         std::string myString(theString);
@@ -121,6 +142,13 @@ namespace masl {
         }
     };
     
+    inline unsigned int
+    CRC32 (const std::string & theString) {
+        boost::crc_32_type result;
+        result.process_bytes(theString.data(), theString.length());
+        return result.checksum();
+    }
+
 } //Namespace masl
 
 #endif

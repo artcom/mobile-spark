@@ -53,22 +53,22 @@ namespace ios {
         MovieController();
         virtual ~MovieController();
         
-        void playMovie(const std::string &filePath);
+        void load(const std::string &filePath);
+        void play();
         void stop();
         void pause();
-        void reset();
         
         float getVolume() const;
-        void setVolume(float newVolume);
+        void setVolume(const float newVolume);
         
         bool isPlaying() const;
         
         void copyNextFrameToTexture();
         
-        GLuint getTextureID(){return _textureID;};
+        GLuint getTextureID() const {return _textureID;};
         
-        int getWidth(){return _width;};
-        int getHeight(){return _height;};
+        int getWidth() const {return _width;};
+        int getHeight() const {return _height;};
         
     };
     

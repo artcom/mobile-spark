@@ -16,6 +16,8 @@
 
 using namespace std;
 
+#define DB(x) //x
+
 namespace spark {
 
     ComponentVisitor::~ComponentVisitor() {
@@ -107,8 +109,8 @@ namespace spark {
                 if (myShapeWidget && myShapeWidget->getShape() &&                    
                     myShapeWidget->AABB2Dcontains(x_,y_,projectionMatrix_)) {
                     list_.push_back(std::make_pair(myShapeWidget, myShapeWidget->getWorldZ()));
-                    AC_TRACE << "CollectAABBComponentVisitor collected: " << *myShapeWidget << ", z: " 
-                             << myShapeWidget->getZ() << "  current size " << list_.size();
+                    DB(AC_TRACE << "CollectAABBComponentVisitor collected: " << *myShapeWidget << ", z: "
+                             << myShapeWidget->getZ() << "  current size " << list_.size();)
                 }
                 return true;
             }
@@ -136,9 +138,9 @@ namespace spark {
                     myShapeWidget->touches2DScreenCoords(_myScreenBB, projectionMatrix_)) {
                     RenderKey myKey(myShapeWidget->getWorldZ(), myShapeWidget->getShape()->isTransparent());
                     list_.push_back(std::make_pair(myShapeWidget, myKey));
-                    AC_TRACE << "CollectVisibleNodesVisitor collected: " << *myShapeWidget << ", worldZ: " 
-                             << myShapeWidget->getWorldZ() << " isTransparent: " << myShapeWidget->getShape()->isTransparent() 
-                             << "  current size " << list_.size();
+                    DB(AC_TRACE << "CollectVisibleNodesVisitor collected: " << *myShapeWidget << ", worldZ: "
+                             << myShapeWidget->getWorldZ() << " isTransparent: " << myShapeWidget->getShape()->isTransparent()
+                             << "  current size " << list_.size();)
                 }
                 return true;
             }

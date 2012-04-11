@@ -17,7 +17,6 @@
 
 #include <masl/AssetProvider.h>
 #include <masl/AudioEngine.h>
-#include <masl/AutoLocker.h>
 #include <masl/BaseEntry.h>
 #include <masl/CallStack.h>
 #include <masl/Exception.h>
@@ -54,12 +53,13 @@
 
 using namespace mar;
 using namespace masl;
-//using namespace std;
+
+#define DB(x) //x
 
 namespace spark {
 
 
-    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath), 
+    BaseApp::BaseApp(const std::string & theAppPath) : appPath_(theAppPath),
         _mySetupFlag(false), _myOneBaseAppOnFrameCallPerRenderloopFlag(false){
         masl::initSignalHandling();
     }
@@ -96,7 +96,7 @@ namespace spark {
         spark::EventCallbackPtr myFrameCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppWeakPtr > ( BaseAppWeakPtr(BaseAppPtr(shared_from_this())), &BaseApp::onFrame));
         spark::EventCallbackPtr myBackButtonCB = EventCallbackPtr(new MemberFunctionEventCallback<BaseApp, BaseAppWeakPtr > ( BaseAppWeakPtr(BaseAppPtr(shared_from_this())), &BaseApp::onBackButton));
         _mySparkWindow->addEventListener(StageEvent::FRAME, myFrameCB);
-            
+
         spark::EventCallbackPtr myCB = EventCallbackPtr(new MemberFunctionEventCallback<Window, WindowWeakPtr>( _mySparkWindow, &Window::onTouch));
         _mySparkWindow->addEventListener(TouchEvent::TAP, myCB);
         _mySparkWindow->addEventListener(TouchEvent::DOUBLETAP, myCB);
@@ -107,10 +107,10 @@ namespace spark {
     }
 
     void BaseApp::onEvent(const std::string & theEventString) {
-        AC_TRACE << "a string event came in :" << theEventString;
+        DB(AC_TRACE << "a string event came in :" << theEventString);
         EventPtr myEvent = spark::EventFactory::get().createEvent(theEventString);
         if (myEvent) {
-            AutoLocker<ThreadLock> myLocker(_myLock);        
+            boost::mutex::scoped_lock lock(_myEventMutex);
             _myEvents.push_back(myEvent);
         }
     }
@@ -131,101 +131,101 @@ namespace spark {
             childFirstVisitComponents(myVisitor, _mySparkWindow);
         }
     }
-    
+
     void BaseApp::onBackButton(EventPtr theEvent) {
         exit();
     }
-    
+
     void BaseApp::exit() {
         masl::MobileSDK_Singleton::get().getNative()->exit();
     }
-    
+
     void BaseApp::handleEvents() {
-        //AC_PRINT << "-----------------------------------------------";
+        DB(AC_TRACE << "-----------------------------------------------");
         _myOneBaseAppOnFrameCallPerRenderloopFlag = false;
         // ------------------------------ handle event strategy -------------------------------------------------
         // do not delay or ignore systemrelevant events
         // handle the first incoming type of classtype and type events
-        // delay second incoming events of same classtype 
+        // delay second incoming events of same classtype
         // (i.e. events:['down', 'tap'] are class type 'GestureEvent' but different type, delay 'tap'
         // ignore second incoming event of same classtype and type
         // (i.e. events:['orientation', 'frame', 'orientation', 'frame'], ignore second 'frame' and 'orientation'
-        // delay touch up events until we have no more touch or gesture events in our queue 
+        // delay touch up events until we have no more touch or gesture events in our queue
         // -------------------------------------------------------------------------------------------------------
-        AutoLocker<ThreadLock> myLocker(_myLock); 
-        EventPtrList myDelayedEvents;       
+        boost::mutex::scoped_lock lock(_myEventMutex);
+        EventPtrList myDelayedEvents;
         std::map<std::string, bool> myDelayEventFilter;
         std::map<std::string, bool> myIgnoreEventFilter;
         int myHandledEventCounter = 0;
         boost::timer::timer myTimer;
-        AC_TRACE << "########################################Base App handle Events " << _myEvents.size();
+        DB(AC_TRACE << "########################################Base App handle Events " << _myEvents.size());
         int i = 0;
         bool myGestureOrTouchEvents = false;
         for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
-            bool myCurrentEventisTouchUp = (*it)->classname_()== TouchEvent::CLASSNAME  && (*it)->getType() == TouchEvent::UP; 
+            bool myCurrentEventisTouchUp = (*it)->classname_()== TouchEvent::CLASSNAME  && (*it)->getType() == TouchEvent::UP;
             if ( ((*it)->classname_()== TouchEvent::CLASSNAME ||  (*it)->classname_()== GestureEvent::CLASSNAME) && !myCurrentEventisTouchUp) {
                 myGestureOrTouchEvents = true;
                 break;
-            }    
-        }            
+            }
+        }
         for (EventPtrList::iterator it = _myEvents.begin(); it != _myEvents.end(); ++it) {
-            AC_TRACE << "EVENT# " << i;
+            DB(AC_TRACE << "EVENT# " << i);
             bool myIgnoreEventFlag = false;
             bool myDelayEventFlag = false;
             if (!(*it)->isSystemRelevant()) {
                 // allow only one type per frame and therefore do not delay it
                 if (myIgnoreEventFilter.find( (*it)->getType()) != myIgnoreEventFilter.end() ) {
                     myIgnoreEventFlag = true;
-                }                
+                }
                 if (myDelayEventFilter.find( (*it)->classname_()) != myDelayEventFilter.end() ) {
                     myDelayEventFlag = true;
-                }    
-                bool myCurrentEventisTouchUp = (*it)->classname_()== TouchEvent::CLASSNAME  && (*it)->getType() == TouchEvent::UP; 
+                }
+                bool myCurrentEventisTouchUp = (*it)->classname_()== TouchEvent::CLASSNAME  && (*it)->getType() == TouchEvent::UP;
                 if (myCurrentEventisTouchUp && myGestureOrTouchEvents){
-                    myDelayEventFlag = true;                    
+                    myDelayEventFlag = true;
                 }
             }
             if (!myIgnoreEventFlag && !myDelayEventFlag) {
                 myIgnoreEventFilter[(*it)->getType()] = true;
                 myDelayEventFilter[(*it)->classname_()] = true;
                 (*it)->connect(_mySparkWindow);
-                AC_TRACE << "handle event: " << (*(*it));
+                DB(AC_TRACE << "handle event: " << (*(*it)));
                 (*(*it))();
                 myHandledEventCounter++;
             } else {
                 if (myDelayEventFlag && !myIgnoreEventFlag) {
-                    AC_TRACE << "delay event: " << (*it)->getType(); 
-                    myDelayedEvents.push_back((*it));               
+                    DB(AC_TRACE << "delay event: " << (*it)->getType());
+                    myDelayedEvents.push_back((*it));
                 } else {
-                    AC_TRACE << "ignore event: " << (*it)->getType(); 
+                    DB(AC_TRACE << "ignore event: " << (*it)->getType());
                 }
             }
             ++i;
-        }            
-        //_myEvents.clear();        
+        }
+        //_myEvents.clear();
         _myEvents = myDelayedEvents;
-        AC_TRACE << "################ handle events finished " << myHandledEventCounter;
-        AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " ms";
+        DB(AC_TRACE << "################ handle events finished " << myHandledEventCounter);
+        DB(AC_TRACE << "handleEvents duration " << myTimer.elapsed() << " ms");
     }
-    
+
 
     void BaseApp::onFrame(EventPtr theEvent) {
         if (!_myOneBaseAppOnFrameCallPerRenderloopFlag) {
             boost::timer::timer myTimer;
-            AC_TRACE << "onFrame";
+            DB(AC_TRACE << "onFrame");
             StageEventPtr myEvent = boost::static_pointer_cast<StageEvent>(theEvent);
             animation::AnimationManager::get().doFrame(myEvent->getCurrentTime());
             _mySparkWindow->renderWindow();
-            AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime();
-            AC_TRACE << "OnFrame duration " << myTimer.elapsed() << " s";
+            DB(AC_TRACE << "onFrame done, currentTime "<< myEvent->getCurrentTime());
+            DB(AC_TRACE << "OnFrame duration " << myTimer.elapsed() << " s");
         }
         _myOneBaseAppOnFrameCallPerRenderloopFlag = true;
     }
-    
-   
+
+
     std::string
     findBestMatchedLayout(const std::string & theBaseName, int theScreenWidth, int theScreenHeight, bool &isPortrait) {
-        AC_PRINT << "......... findBestMatchedLayout for baseName: " << theBaseName << " with screen resolution: " << theScreenWidth << "/" << theScreenHeight;
+        AC_INFO << "......... findBestMatchedLayout for baseName: " << theBaseName << " with screen resolution: " << theScreenWidth << "/" << theScreenHeight;
         std::vector<std::string> myFiles = AssetProviderSingleton::get().ap()->getFilesFromPath("layouts/", theBaseName);
         int myScreensLargerSide = theScreenWidth > theScreenHeight ? theScreenWidth : theScreenHeight;
         int myScreensSmallerSide = myScreensLargerSide ==  theScreenHeight ? theScreenWidth : theScreenHeight;
@@ -234,7 +234,7 @@ namespace spark {
         int myBestLayoutWidth = 0;
         int myBestLayoutHeight = 0;
         bool myPortrait = false;
-        
+
         bool myExactMatchFlag = false;
         int myLayoutWidth = 0;
         int myLayoutHeight = 0;
@@ -254,7 +254,7 @@ namespace spark {
                             myLayoutHeight = as<int>(it->second);
                         } else if (it->first == "orientation") {
                             myPortrait = "portrait" == (it->second);
-                        } 
+                        }
                     }
                 }
                 if (i == 0) {
@@ -273,15 +273,15 @@ namespace spark {
                     myBestLayoutHeight = myLayoutHeight;
                     isPortrait = myPortrait;
                     myExactMatchFlag = true;
-                    AC_PRINT << "Excellent we have a layout<->device match -> use layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
-                    AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
+                    AC_INFO << "Excellent we have a layout<->device match -> use layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
+                    AC_INFO << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
                     break;
                 }
             }
         }
         if (!myExactMatchFlag) {
-            AC_PRINT << "Sorry, we did not find layout<->device match -> use default layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
-            AC_PRINT << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
+            AC_INFO << "Sorry, we did not find layout<->device match -> use default layout '" << myBestLayoutName << "' file: '" << myBestMatch << "'";
+            AC_INFO << "Layout : "<< myBestLayoutWidth << "x" <<  myBestLayoutHeight;
         }
         return myBestMatch;
     }
@@ -294,7 +294,7 @@ namespace spark {
 #elif ANDROID
         masl::AssetProviderSingleton::get().setAssetProvider(android::AndroidAssetProviderPtr(new android::AndroidAssetProvider(theAssetPath, theAppPath)));
         masl::AudioEngineSingleton::get().setAudioEngine(android::AndroidAudioEnginePtr(new android::AndroidAudioEngine("com/artcom/mobile/Base/AudioDelegate")));
-        masl::MovieEngineSingleton::get().setMovieEngine(android::AndroidMovieEnginePtr(new android::AndroidMovieEngine("com/artcom/mobile/Base/MovieDelegate")));
+        masl::MovieEngineSingleton::get().setMovieEngine(android::AndroidMovieEnginePtr(new android::AndroidMovieEngine("com/artcom/mobile/Base/VideoDelegate")));
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath()).c_str(), 755);
         mkdir(std::string(masl::AssetProviderSingleton::get().ap()->getAssetPath() + "/downloads/").c_str(), 755);
 #endif
@@ -306,7 +306,7 @@ namespace spark {
         masl::AssetProviderSingleton::get().ap()->addIncludePath("downloads/");
 #endif
         masl::AssetProviderSingleton::get().ap()->addIncludePath("");
-        masl::AssetProviderSingleton::get().ap()->addIncludePath("textures/");            
+        masl::AssetProviderSingleton::get().ap()->addIncludePath("textures/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("layouts/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("shaders/");
         masl::AssetProviderSingleton::get().ap()->addIncludePath("models/");
@@ -315,6 +315,6 @@ namespace spark {
 
 
     }
-    
+
 }
 
