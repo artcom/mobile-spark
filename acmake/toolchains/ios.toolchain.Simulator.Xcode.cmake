@@ -13,7 +13,7 @@ SET(IOS_DEPLOY_TGT "4.2")
 SET(IOS True)
 
 # SDK Info
-SET(DEVROOT "/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
+SET(DEVROOT "/Applications/Xcode.app/Contents/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
 
 #Gather all available SDK-paths and select latest
 FILE(GLOB SDK_PATHS ${DEVROOT}/SDKs/*)
