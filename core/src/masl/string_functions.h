@@ -14,8 +14,6 @@
 #include "numeric_functions.h"
 #include "file_functions.h"
 
-#include <boost/crc.hpp>
-
 #include <sstream>
 #include <algorithm>
 
@@ -142,12 +140,7 @@ namespace masl {
         }
     };
     
-    inline unsigned int
-    CRC32 (const std::string & theString) {
-        boost::crc_32_type result;
-        result.process_bytes(theString.data(), theString.length());
-        return result.checksum();
-    }
+    unsigned int CRC32 (const std::string & theString);
 
 } //Namespace masl
 
