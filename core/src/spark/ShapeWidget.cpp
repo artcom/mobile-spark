@@ -16,15 +16,19 @@
 
 #include <mar/Material.h>
 #include <animation/AnimationManager.h>
+#include "masl/Exception.h"
 
 #define DB(x) // x
 
 namespace spark {
-    ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode)
-        : Widget(theApp, theXMLNode), _myOrigin(vector2(0,0)), _myOriginMode(NO_ORIGIN) 
+    ShapeWidget::ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode) :
+        Widget(theApp, theXMLNode),
+        _myForcedSize(getNode()->getAttributeAs<float>("width", -1), getNode()->getAttributeAs<float>("height", -1)),
+        _myVertexShader(getNode()->getAttributeAs<std::string>("vertex_shader","")),
+        _myFragmentShader(getNode()->getAttributeAs<std::string>("fragment_shader","")),
+        _myOrigin(vector2(0,0)),
+        _myOriginMode(NO_ORIGIN)
     {
-        _vertexShader = getNode()->getAttributeAs<std::string>("vertex_shader","");
-        _fragmentShader = getNode()->getAttributeAs<std::string>("fragment_shader","");
         std::string customShaderHandles = getNode()->getAttributeAs<std::string>("custom_shader_handles","");
         std::istringstream iss(customShaderHandles);
         std::vector<std::string> myHandles;
@@ -32,7 +36,7 @@ namespace spark {
              std::istream_iterator<std::string>(),
              std::back_inserter<std::vector<std::string> >(myHandles));
         for (std::vector<std::string>::iterator it = myHandles.begin(); it != myHandles.end(); ++it) {
-            customShaderValues_[(*it)] = 0.0f;
+            _myCustomShaderValues[(*it)] = 0.0f;
         }        
         std::string myOriginStr = getNode()->getAttributeAs<std::string>("origin","");
         if (myOriginStr == "") {
@@ -56,8 +60,8 @@ namespace spark {
     void 
     ShapeWidget::prerender(MatrixStack& theCurrentMatrixStack) {
         Widget::prerender(theCurrentMatrixStack);
-        if (isVisible() && customShaderValues_.size() > 0) {
-            _myShape->updateCustomHandles(customShaderValues_);
+        if (isVisible() && !_myCustomShaderValues.empty()) {
+            _myShape->updateCustomHandles(_myCustomShaderValues);
         }
     }
 
@@ -76,9 +80,9 @@ namespace spark {
             getShape()->setAlpha(getActualAlpha());
         }
     }
+
     void 
     ShapeWidget::makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const{
-                                    
         mar::BoundingBox myBB = _myShape->getBoundingBox();
         //use 8 corner points
         vector4 corners[8];
@@ -118,7 +122,7 @@ namespace spark {
         for (size_t i = 0; i < 8; ++i) {
             corners[i] = mvp * corners[i];
         }
-        DB(AC_DEBUG << "AABB2D " << getName();)
+        DB(AC_DEBUG << "makeMVPBB: " << getName();)
         DB(AC_DEBUG << " bounding box " << myBB.min << ", " << myBB.max;)
         DB(AC_DEBUG << "mv " << _myWorldMVMatrix << "p " << theProjectionMatrix << " final " << mvp;)
 
@@ -155,18 +159,16 @@ namespace spark {
         theBB.min[1] = (theBB.min[1] + 1) / 2;
         theBB.max[0] = (theBB.max[0] + 1) / 2;
         theBB.max[1] = (theBB.max[1] + 1) / 2;
-        
     }
     
     /** Returns TRUE if at least one point exists that is contained by both boxes;
     */    
     bool
-    ShapeWidget::touches2DScreenCoords( mar::BoundingBox & theBB,
+    ShapeWidget::touches2DScreenCoords( const mar::BoundingBox & theBB,
                                 const matrix & theProjectionMatrix) const {
         mar::BoundingBox myMVPBB;
         makeMVPBB(myMVPBB, theProjectionMatrix);
-        bool myTouch = myMVPBB.touches2D(theBB);
-        return myTouch;
+        return myMVPBB.touches2D(theBB);
     }
     
     bool
@@ -176,12 +178,7 @@ namespace spark {
         makeMVPBB(myMVPBB, theProjectionMatrix);
         DB(AC_DEBUG << " projected bounding box " << myMVPBB.min << ", " << myMVPBB.max;)
         DB(AC_DEBUG << "pick at " << x << ", " << y;)
-
-        if (x >= myMVPBB.min[0] && x <= myMVPBB.max[0] &&
-            y >= myMVPBB.min[1] && y <= myMVPBB.max[1]) {
-            return true;
-        }
-        return false;
+        return myMVPBB.contains2D(vector2(x,y));
     }
 
     //ANDROID ONLY: gl context is lost, so reset all buffers/shaders/textures to zero to create new ones
@@ -236,6 +233,22 @@ namespace spark {
         return Widget::getAttributesAsString() + " origin=\""+masl::as_string(_myOrigin)+"\""
                 " originMode=\""+masl::as_string(_myOriginMode)+"\""
                 " shape={"+(_myShape?_myShape->getAttributesAsString():"")+"}";
+    }
+    
+    float& ShapeWidget::getCustomShaderValue(const std::string& theName){
+        
+        std::map<std::string, float>::iterator it;
+        it = _myCustomShaderValues.find(theName);
+        
+        if(it != _myCustomShaderValues.end()){
+            return it->second;
+        }
+        
+        // we did not find the requested name
+        std::stringstream stringStream;
+        stringStream<<"uniform value '"<<theName<<"' not defined";
+        throw masl::Exception(stringStream.str());
+        
     }
 
 }

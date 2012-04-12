@@ -38,6 +38,7 @@ public class SparkOpenGLViewDelegate {
        
         CameraTexture.init(theActivity);
         AudioDelegate audioDelegate = new AudioDelegate(theActivity);
+        VideoDelegate myVideoDelegate = new VideoDelegate(theActivity);
 
         DisplayMetrics dm = new DisplayMetrics();
         theActivity.getWindowManager().getDefaultDisplay().getMetrics(dm);

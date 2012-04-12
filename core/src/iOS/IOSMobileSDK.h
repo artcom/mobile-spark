@@ -13,36 +13,21 @@
 #include <masl/MobileSDK.h>
 #include <masl/numeric_functions.h>
 
-//#include "MovieController.h"
-
 namespace ios {
     
     class IOSMobileSDK : public masl::MobileSDK {
     public:
         IOSMobileSDK();
         virtual ~IOSMobileSDK();
-        virtual void vibrate(long theDurationMillisec);  
-        
-        virtual masl::TextInfo renderText(const std::string & theMessage,
-                                          unsigned int theTextureId,
-                                          int theFontSize,
-                                          vector4 theColor, 
-                                          int theMaxWidth,
-                                          int theMaxHeight,
-                                          const std::string & theAlign,
-                                          const std::string & theFontPath, 
-                                          int theLineHeight,
-                                          int theStartIndex,
-                                          bool & mirrorFlag);
-        
-        virtual bool loadTextureFromFile(const std::string & filename,
-                                         unsigned int & textureId, 
-                                         unsigned int & width,
-                                         unsigned int & height, 
-                                         unsigned int & real_width,
-                                         unsigned int & real_height,
-                                         bool & hasAlpha,
-                                         bool & theMipmapFlag); 
+        virtual void vibrate(long theDurationMillisec);                            
+        virtual masl::TextInfo renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor, 
+                                          int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath, 
+                                          int theLineHeight, int theStartIndex, bool & mirrorFlag);
+        virtual bool loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
+                                         unsigned int & width, unsigned int & height, 
+                                         unsigned int & real_width, unsigned int & real_height,
+                                         matrix & npotMatrix,
+                                         bool & hasAlpha, bool & theMipmapFlag); 
         
 
         virtual void freezeMobileOrientation(const std::string &theOrientation);
@@ -51,6 +36,7 @@ namespace ios {
         virtual void stopCameraCapture();
         virtual bool isCameraCapturing();
         virtual void updateCameraTexture();
+
         virtual void exit();
 
         std::string getOrientation();

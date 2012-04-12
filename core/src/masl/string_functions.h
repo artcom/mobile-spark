@@ -10,11 +10,12 @@
 #ifndef _included_mobile_masl_string_functions_
 #define _included_mobile_masl_string_functions_
 
-#include <sstream>
-#include <algorithm>
 #include "Exception.h"
 #include "numeric_functions.h"
 #include "file_functions.h"
+
+#include <sstream>
+#include <algorithm>
 
 namespace masl {
 
@@ -59,6 +60,13 @@ namespace masl {
             throw ParseException("as<T>",std::string("could not convert '")+theString);
         };
         return outValue;
+    }
+
+    template <class T>
+    inline std::string as_hex(const T& x) {
+        std::ostringstream streamer;
+        streamer << std::hex << x;
+        return streamer.str();
     }
 
     int as_int(const std::string & theString);
@@ -132,6 +140,8 @@ namespace masl {
         }
     };
     
+    unsigned int CRC32 (const std::string & theString);
+
 } //Namespace masl
 
 #endif

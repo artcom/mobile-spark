@@ -38,7 +38,7 @@
         </Controls>
 
         <Slide name="MovieSlide" alpha="1" title="Movie-Examples">
-            <Movie name="testMovie" src="testmovie_still.png" moviesrc="testmovie.mp4" x="0" y="0" z="0" width="480" height="270"/>
+            <Movie name="testMovie" src="testmovie.mp4" width="480" height="270"/>
         </Slide>
         
         <Slide name="TextSlide" alpha="1" title="Text-Examples">

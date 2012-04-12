@@ -77,14 +77,11 @@ namespace spark {
             unsigned int myMemoryUsage = masl::getUsedMemory();
             unsigned int myTotalMemory = masl::getTotalMemory();
             _myMemoryText->setText("memory: " + masl::as_string(myMemoryUsage) + "/" + masl::as_string(myTotalMemory));
-            //AC_TRACE << "memory: " << masl::as_string(myMemoryUsage) << "/" << masl::as_string(myTotalMemory);
         }
         if (_myBatteryLevelText) {
-            float myBatteryLevel = 100.f * masl::MobileSDK_Singleton::get().getNative()->getDeviceBatteryLevel();
+            float myBatteryLevel = masl::MobileSDK_Singleton::get().getNative()->getDeviceBatteryLevel();
             _myBatteryLevelText->setText("battery %: " + masl::as_string(myBatteryLevel) + "/" + masl::as_string(100));
         }
-        
-        
         lasttime_ = myEvent->getCurrentTime();
         _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);        
     }

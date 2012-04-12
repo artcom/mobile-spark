@@ -108,13 +108,14 @@ add_custom_command(
 #    POST_BUILD 
 #    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/#${EXECUTABLE_NAME}.app/
 #)
+SET(XCODE_PBXCP "/Applications/Xcode.app/Contents/OtherFrameworks/DevToolsCore.framework/Versions/A/Resources/pbxcp")
 
 #copy layouts folder
 set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/layouts)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
 #copy models folder
@@ -122,7 +123,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/models)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
 #copy shaders folder
@@ -130,7 +131,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/shaders)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
 #copy textures folder
@@ -138,7 +139,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/textures)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
 #copy assets layouts folder
@@ -146,7 +147,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/assets/layouts)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/layouts/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/layouts/
 )
 
 #copy assets texturesfolder
@@ -154,7 +155,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/assets/textures)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/textures/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/textures/
 )
 
 
@@ -164,7 +165,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/fonts)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
 #copy sounds folder
@@ -172,7 +173,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/sounds)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/
 )
 
 #copy core/shaders folder
@@ -180,12 +181,25 @@ set(ASSETS_DIR $ENV{MOBILE_SPARK}/core/shaders)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/shaders/
+    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}/shaders/
 )
 
 
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp $ENV{MOBILE_SPARK}/iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+    COMMAND ${XCODE_PBXCP} $ENV{MOBILE_SPARK}/iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
 )
+# copy our Setting.bundle
+add_custom_command( 
+    TARGET ${EXECUTABLE_NAME} 
+    POST_BUILD 
+    COMMAND ${XCODE_PBXCP} ${PROJECT_SOURCE_DIR}/ios/Settings.bundle -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+)
+# copy our icon files
+add_custom_command( 
+    TARGET ${EXECUTABLE_NAME} 
+    POST_BUILD 
+    COMMAND ${XCODE_PBXCP} ${PROJECT_SOURCE_DIR}/ios/icon*.png -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+)
+

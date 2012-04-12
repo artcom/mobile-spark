@@ -22,6 +22,9 @@
 using namespace mar;
 using namespace std;
 
+#define DB(x) //x
+#define DBP(x) //x
+
 namespace spark {
 
     const char * const Orientation::PORTRAIT = "portrait";
@@ -62,7 +65,7 @@ namespace spark {
             ViewPtr myView = boost::static_pointer_cast<spark::View>(*it);
             _myUnrealizedWorlds.push_back(getChildByName(myView->getWorldName()));
         }
-        AC_INFO << "worlds realize _myUnrealizedWorlds : "<< _myUnrealizedWorlds.size();   
+        AC_DEBUG << "worlds realize _myUnrealizedWorlds : "<< _myUnrealizedWorlds.size();   
         _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);             
     }
 
@@ -83,10 +86,10 @@ namespace spark {
     void
     Window::onTouch(EventPtr theEvent) {
         TouchEventPtr myPickEvent = boost::static_pointer_cast<TouchEvent>(theEvent);
-        AC_INFO << "Window::onTouch " << myPickEvent->getType() << " x: "<< myPickEvent->getX() << " y: " << myPickEvent->getY();
+        AC_TRACE << "Window::onTouch " << myPickEvent->getType() << " x: "<< myPickEvent->getX() << " y: " << myPickEvent->getY();
         ComponentPtr myPicked = pick2DAABBStyle(myPickEvent->getX(), myPickEvent->getY());
         if (myPicked) {
-            AC_INFO << "____________picked " << *myPicked;
+            AC_DEBUG << "Window::onTouch dispatch Event with type: " << theEvent->getType() << " to picked widget: " << *myPicked;
             EventPtr myEvent = EventPtr(new TouchEvent(theEvent->getType(), myPicked, myPickEvent->getX(), myPickEvent->getY()));
             (*myEvent)();
         } else {
@@ -105,10 +108,10 @@ namespace spark {
     void
     Window::onSizeChanged(EventPtr theEvent) {
         WindowEventPtr myEvent = boost::static_pointer_cast<WindowEvent>(theEvent);
-        _myWidth = myEvent->size_[0];
-        _myHeight= myEvent->size_[1];
+        _myWidth = myEvent->getSize()[0];
+        _myHeight= myEvent->getSize()[1];
     
-        //AC_PRINT<<"WINDOW SIZE:"<< _myWidth <<", "<< _myHeight ;
+        AC_DEBUG<<"onSizeChanged: "<< _myWidth <<", "<< _myHeight;
     }
     void
     Window::renderWindow(){
@@ -149,9 +152,9 @@ namespace spark {
                 }
                 usleep(myRemainingTime);
             }
-            //AC_PRINT << " sleep to reach " << _myTargetFPS << "fps: " << mySleepTimeInMillis << "ms";
+            DB(AC_TRACE << " sleep to reach " << _myTargetFPS << "fps: " << mySleepTimeInMillis << "ms";)
         }
-        //AC_PRINT << "render duration " << _myFPSTimerPtr->elapsed();
+        DB(AC_TRACE << "render duration " << _myFPSTimerPtr->elapsed();)
         _myFPSTimerPtr = masl::Ptr<boost::timer::timer>(new boost::timer::timer);
     }
 
@@ -161,9 +164,6 @@ namespace spark {
         AC_PRINT << "--------------------------SceneDump---------------------";
         PrintNodeVisitor myVisitor;
 		childFirstVisitComponents(myVisitor, shared_from_this());
-        //std::string test ="<Window name=\"xxx\"></Window>";
-        //masl::XMLNodePtr myScene = masl::XMLNodePtr(new masl::XMLNode(test));
-        //AC_PRINT << *myScene;
     }
 
     std::string 
@@ -179,7 +179,7 @@ namespace spark {
     //////////////picking
     ComponentPtr
     Window::pick2DAABBStyle(const unsigned int x, const unsigned int y) {
-        AC_DEBUG << "pick at " << x << ", " << y;
+        DB(AC_DEBUG << "pick at " << x << ", " << y;)
         VectorOfComponentPtr myViews = getChildrenByType(View::SPARK_TYPE);
         std::vector<std::pair<ComponentPtr, float> > myPickedComponentList;  //pairs of components and z
         //pick through worlds of all views
@@ -190,7 +190,7 @@ namespace spark {
                                                   myView->getCamera()->getProjectionMatrix());
             parentFirstVisitComponents(myVisitor, getChildByName(myView->getWorldName()));
         }
-        AC_DEBUG << "collected " << myPickedComponentList.size() << " components";
+        DB(AC_DEBUG << "collected " << myPickedComponentList.size() << " components";)
         if (myPickedComponentList.size() > 0) {
             sort(myPickedComponentList.begin(), myPickedComponentList.end(), sortByZ);
             return myPickedComponentList.begin()->first;

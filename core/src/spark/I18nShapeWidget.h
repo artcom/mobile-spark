@@ -23,12 +23,13 @@ namespace spark {
 
             void setI18nId(const std::string & theNewI18nId);
             void setI18nData(const std::string & theData);
+            inline const std::string & getData() const {return _data;};
             virtual std::string getAttributesAsString() const;
         protected:
-            std::string _data;
         private:            
             void attachToI18nItem();
-            std::string i18nId_;
+            std::string _data;
+            std::string _i18nId;
             EventCallbackPtr _myHandleLanguageSwitch;
     };
 

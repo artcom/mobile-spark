@@ -24,7 +24,7 @@ namespace spark {
     {}
 
     Component::~Component() {
-        AC_INFO << ".................delete " << _myName;
+        AC_TRACE << ".................delete " << _myName;
     }
 
     std::ostream &

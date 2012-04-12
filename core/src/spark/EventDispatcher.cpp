@@ -8,14 +8,13 @@
 // __ ___ ____ _____ ______ _______ ________ _______ ______ _____ ____ ___ __
 
 #include "EventDispatcher.h"
-
-#include <masl/Logger.h>
-
 #include "Component.h"
-
+#include <masl/Logger.h>
 #include <deque>
 
 using namespace masl;
+
+#define DB(x) //x
 
 namespace spark {
 
@@ -41,14 +40,14 @@ namespace spark {
     
     void
     EventDispatcher::addEventListener(const std::string & theType, const EventCallbackPtr theListener, const Event::EventPhase thePhase) {
-        AC_INFO << "addEventListener for type " << theType << " capturing: " << (thePhase == Event::CAPTURING) << " bubbling: " << (thePhase == Event::BUBBLING);
+        AC_DEBUG << "addEventListener for type " << theType << " capturing: " << (thePhase == Event::CAPTURING) << " bubbling: " << (thePhase == Event::BUBBLING);
         std::pair<std::string, Event::EventPhase> myKey(theType, thePhase);
         _myListenersMap.insert(std::pair<std::pair<std::string, Event::EventPhase>, EventCallbackPtr > (myKey, theListener));
     };
 
     void
     EventDispatcher::removeEventListener(const std::string & theType, const EventCallbackPtr theListener, const Event::EventPhase thePhase) {
-        AC_INFO << "removeEventListener for type " << theType << " capturing: " << (thePhase == Event::CAPTURING) << " bubbling: " << (thePhase == Event::BUBBLING);
+        AC_DEBUG << "removeEventListener for type " << theType << " capturing: " << (thePhase == Event::CAPTURING) << " bubbling: " << (thePhase == Event::BUBBLING);
         std::pair<std::string, Event::EventPhase> myKey(theType, thePhase);
         std::pair<EventListenerMap::iterator, EventListenerMap::iterator> itp = _myListenersMap.equal_range(myKey);
         for (EventListenerMap::iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
@@ -66,7 +65,7 @@ namespace spark {
         theEvent->startDispatch();
 
         ComponentPtr myCurrent = theEvent->getTarget();
-        AC_TRACE << " dispatchEvent " << *theEvent;
+        DB(AC_TRACE << " dispatchEvent " << *theEvent);
 
         // collect dispatchers to capture & bubble on
         std::deque<ComponentPtr> myTopToBottomList;
@@ -84,7 +83,7 @@ namespace spark {
                 EventListenerMap myListeners = (*it)->getEventListeners();
                 std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = myListeners.equal_range(myCaptureKey);
                 for (EventListenerMap::const_iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
-                    AC_TRACE << "CAPTURE_PHASE: calling listener: "<<(*mapIt).second;
+                    DB(AC_TRACE << "CAPTURE_PHASE: calling listener: "<<(*mapIt).second);
                     (*(*mapIt).second)(theEvent);
                     if (!theEvent->isDispatching()) {
                         return;
@@ -100,7 +99,7 @@ namespace spark {
 
         std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = _myListenersMap.equal_range(myKey);
         for (EventListenerMap::const_iterator it = itp.first; it != itp.second; ++it) {
-            AC_TRACE << "TARGET_PHASE: calling listener: "<<(*it).second;
+            DB(AC_TRACE << "TARGET_PHASE: calling listener: "<<(*it).second);
             (*(*it).second)(theEvent);
             if (!theEvent->isDispatching()) {
                 return;
@@ -115,7 +114,7 @@ namespace spark {
                 EventListenerMap myListeners = (*it)->getEventListeners();
                 std::pair<EventListenerMap::const_iterator, EventListenerMap::const_iterator> itp = myListeners.equal_range(myBubbleKey);
                 for (EventListenerMap::const_iterator mapIt = itp.first; mapIt != itp.second; ++mapIt) {
-                    AC_TRACE << "BUBBLE_PHASE: calling listener: "<<(*mapIt).second;
+                    DB(AC_TRACE << "BUBBLE_PHASE: calling listener: "<<(*mapIt).second);
                     (*(*mapIt).second)(theEvent);
                     if (!theEvent->isDispatching()) {
                         return;

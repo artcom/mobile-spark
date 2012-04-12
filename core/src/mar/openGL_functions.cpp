@@ -27,7 +27,7 @@ namespace mar {
     void checkGlError(const std::string & op, const std::string & where) {
         for (GLint error = glGetError(); error; error
                 = glGetError()) {
-            AC_PRINT << "after " << op << "() glError (" << error << ") " << where;
+            AC_ERROR << "after " << op << "() glError (" << error << ") " << where;
             throw GLRenderException(std::string("glError(") + masl::as_string(error) + ") after " + op, where);
         }
     }

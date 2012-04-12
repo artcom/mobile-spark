@@ -14,13 +14,13 @@
 
 namespace spark {
     
-    typedef std::map<unsigned long, int> RenderedGlyphTextureMap;    
+    typedef std::map<unsigned int, int> RenderedGlyphTextureMap;    
     class TextGlyphIndexMap : public masl::Singleton<TextGlyphIndexMap> {
         public:
             TextGlyphIndexMap();
             virtual ~TextGlyphIndexMap();
-            void store(const unsigned long theKey, int myRenderedGlyphIndex);
-            int getIndex(const unsigned long theKey);
+            void store(const unsigned int theKey, int myRenderedGlyphIndex);
+            int getIndex(const unsigned int theKey);
         private:
             RenderedGlyphTextureMap _myRenderedGlyphTextureMap;
     };
@@ -30,8 +30,8 @@ namespace spark {
         Text(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Text();
         
-        void setText(const std::string & theText) { _data = theText; _myDirtyFlag = true;};
-        const std::string& getText() const { return _data;};
+        void setText(const std::string & theText) { setI18nData(theText); _myDirtyFlag = true;};
+        inline const std::string & getText() const { return getData();};
         
         void setColor(const vector4 &theColor);
         

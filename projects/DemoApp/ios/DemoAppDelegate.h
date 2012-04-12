@@ -10,7 +10,7 @@
 #import <SparkViewerBase/SparkAppDelegate.h>
 
 @interface DemoAppDelegate : SparkAppDelegate {
-
+    NSUserDefaults *_defaults;
 }
 
 - (void)createGLView;

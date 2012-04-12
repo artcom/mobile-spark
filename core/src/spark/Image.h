@@ -17,21 +17,19 @@ namespace spark {
     public:
         Image(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
         virtual ~Image();
-        const std::string & getSrc() const {return _data;};
-        virtual void setSrc(const std::string & theSrc);
         const vector2 & getRealImageSize();
-        virtual void setSize(const float & theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
-        virtual void setSize(const vector2 & theSize);        
+        inline const std::string & getSrc() const {return getData();};
+        void setSrc(const std::string & theSrc);
+        void setMipMap(bool theMipMapFlag);
+
         static const char * const SPARK_TYPE;
         virtual const char * const & getType() const { return Image::SPARK_TYPE;};
-        void setMipMap(bool theMipMapFlag);
     protected:
         virtual void build();
-    
+    private: 
         vector2 _myTextureSize;     // this is the size of the gl texture
         vector2 _myRealImageSize;   // this is the size of the asset image
 
-        vector2 _myForcedSize;      // this is the gl quad size
         bool _mipmap;
     };
 

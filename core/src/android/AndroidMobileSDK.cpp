@@ -20,16 +20,7 @@ namespace android {
     AndroidMobileSDK::~AndroidMobileSDK() {
 
     }
-   
-    bool AndroidMobileSDK::playMovie(spark::MoviePtr theMovieWidget) {return false;}
-    void AndroidMobileSDK::stopMovie(spark::MoviePtr theMovieWidget) {}
-    void AndroidMobileSDK::pauseMovie(spark::MoviePtr theMovieWidget){}
-    void AndroidMobileSDK::resetMovie(spark::MoviePtr theMovieWidget){}
-    void AndroidMobileSDK::updateMovieTexture(spark::MoviePtr theMovieWidget) {}
-    const masl::VideoInfo AndroidMobileSDK::getMovieInfo(spark::MoviePtr theMovieWidget) const {return masl::VideoInfo();}
-    bool AndroidMobileSDK::isMoviePlaying(spark::MoviePtr theMovieWidget) const {return false;}
-    void AndroidMobileSDK::setMovieVolume(spark::MoviePtr theMovieWidget, float newVolume) {}
-    
+
     void AndroidMobileSDK::vibrate(long theDurationMillisec) {
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
@@ -41,13 +32,29 @@ namespace android {
             } else {
                 AC_WARNING  << "Sorry, java-vibrate not found";
             }
-        }       
+        }
     }
-    bool AndroidMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId, 
-                                               unsigned int & width, unsigned int & height, 
-                                               unsigned int & real_width, unsigned int & real_height, 
+    float AndroidMobileSDK::getDeviceBatteryLevel() {
+        float level = 0.f;
+        if (env) {
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "getBatteryLevel", "()F");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];
+                level = env->CallStaticFloatMethodA (cls, myMethodId, myArgs);
+            } else {
+                AC_WARNING  << "Sorry, java-vibrate not found";
+            }
+        }
+        return level;
+    }
+
+    bool AndroidMobileSDK::loadTextureFromFile(const std::string & filename, unsigned int & textureId,
+                                               unsigned int & width, unsigned int & height,
+                                               unsigned int & real_width, unsigned int & real_height,
+                                               matrix & npotMatrix,
                                                bool & hasAlpha, bool & theMipmapFlag) {
-        int myResultTextureId = -1;                                                
+        int myResultTextureId = -1;
         if (env) {
             std::string myFullPath = filename;
             bool myFileIsonSDCardFlag = masl::searchFile(filename, myFullPath);
@@ -55,11 +62,11 @@ namespace android {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
             jmethodID myMethodId = env->GetStaticMethodID(cls, "loadTextureFromFile", "(Ljava/lang/String;ZZ)Ljava/util/List;");
             if(myMethodId != 0) {
-                env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)                
+                env->PushLocalFrame(10); // i can only guess about the capacity for the local reference frame [http://java.sun.com/docs/books/jni/html/refs.html] (vs)
                 jvalue myArgs[3];
                 myArgs[0].l =  env->NewStringUTF(filename.c_str());
                 myArgs[1].b =  myFileIsonSDCardFlag;
-                myArgs[2].b =  theMipmapFlag;                
+                myArgs[2].b =  theMipmapFlag;
                 jobject myList = env->CallStaticObjectMethodA (cls, myMethodId, myArgs);
                 jclass listClass = env->GetObjectClass(myList);
                 jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
@@ -75,7 +82,7 @@ namespace android {
 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);
                 height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
-                
+
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);
                 real_width = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
 
@@ -83,12 +90,12 @@ namespace android {
                 real_height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 5);
-                hasAlpha = (jint)env->CallIntMethod(myInt, intValueMethod, 0) == 1;    
-                
+                hasAlpha = (jint)env->CallIntMethod(myInt, intValueMethod, 0) == 1;
+
             } else {
-                AC_WARNING  << "Sorry, java-loadTextureFromXXX not found";                
+                AC_WARNING  << "Sorry, java-loadTextureFromXXX not found";
             }
-            env->PopLocalFrame(NULL);            
+            env->PopLocalFrame(NULL);
         }
         if (myResultTextureId != -1) {
             textureId = myResultTextureId;
@@ -97,7 +104,7 @@ namespace android {
             return false;
         }
     }
-    
+
     masl::TextInfo AndroidMobileSDK::renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize,
                                                 vector4 theColor, int theMaxWidth, int theMaxHeight, const std::string & theAlign,
                                                 const std::string & theFontPath, int theLineHeight, int theStartIndex,
@@ -138,10 +145,10 @@ namespace android {
 
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 2);
                 myTextInfo.height = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
-                
+
                 myInt = (jobject)env->CallObjectMethod(myList, getMethod, 3);
-                myTextInfo.renderedGlyphIndex = (jint)env->CallIntMethod(myInt, intValueMethod, 0);    
-                            
+                myTextInfo.renderedGlyphIndex = (jint)env->CallIntMethod(myInt, intValueMethod, 0);
+
             } else {
                 AC_WARNING  << "Sorry, java-rendertext not found";
             }
@@ -254,7 +261,7 @@ namespace android {
         }
         return myResult;
     }
-    
+
     void AndroidMobileSDK::exit() {
         if (env) {
             jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
@@ -268,15 +275,10 @@ namespace android {
             }
         }
     }
-    
+
     std::string AndroidMobileSDK::getOrientation(){
-    	return "";	
+        return "";
     }
 
-    float AndroidMobileSDK::getDeviceBatteryLevel()
-    {
-        return 0.f;
-    }
-    
 
 }
