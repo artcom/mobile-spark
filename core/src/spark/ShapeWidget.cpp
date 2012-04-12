@@ -16,6 +16,7 @@
 
 #include <mar/Material.h>
 #include <animation/AnimationManager.h>
+#include "masl/Exception.h"
 
 #define DB(x) // x
 
@@ -232,6 +233,22 @@ namespace spark {
         return Widget::getAttributesAsString() + " origin=\""+masl::as_string(_myOrigin)+"\""
                 " originMode=\""+masl::as_string(_myOriginMode)+"\""
                 " shape={"+(_myShape?_myShape->getAttributesAsString():"")+"}";
+    }
+    
+    float& ShapeWidget::getCustomShaderValue(const std::string& theName){
+        
+        std::map<std::string, float>::iterator it;
+        it = _myCustomShaderValues.find(theName);
+        
+        if(it != _myCustomShaderValues.end()){
+            return it->second;
+        }
+        
+        // we did not find the requested name
+        std::stringstream stringStream;
+        stringStream<<"uniform value '"<<theName<<"' not defined";
+        throw masl::Exception(stringStream.str());
+        
     }
 
 }

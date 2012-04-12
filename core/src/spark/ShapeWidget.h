@@ -20,47 +20,49 @@ namespace mar {
 }
 
 namespace spark {
-
-    class ShapeWidget : public Widget {
-        public:
-            ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
-            virtual ~ShapeWidget() = 0;
-            
-            virtual void prerender(MatrixStack& theCurrentMatrixStack);
-            virtual void render(const matrix & theP) const;
-            virtual void onPause();
-            virtual void onResume();
-
-            virtual bool AABB2Dcontains(const float x, const float y,
-                                        const matrix & theProjectionMatrix) const;
-            bool touches2DScreenCoords( const mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
     
-            inline mar::ShapePtr getShape() const {return _myShape;};
-            float getWorldZ() const;
-            virtual void setSize(const float & theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
-            virtual void setSize(const vector2 & theSize);
-            virtual const vector2 getSize();
-            virtual std::string getAttributesAsString() const;
-
-        protected:
-            virtual mar::ShapePtr createCustomShape(const mar::MaterialPtr theMaterial);
-            void makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
-            virtual void propagateAlpha();
-            mar::ShapePtr _myShape;
-            vector2 _myForcedSize;      // this is the gl quad size
-            std::string _myVertexShader;
-            std::string _myFragmentShader;
-            std::map<std::string, float> _myCustomShaderValues;
-            
-        private:
-            enum ORIGIN_MODE {
-                NO_ORIGIN,
-                CENTER_ORIGIN,
-                EXPLICIT_ORIGIN
-            };
-            vector2 _myOrigin;
-            ORIGIN_MODE _myOriginMode;
-                
+    class ShapeWidget : public Widget {
+    public:
+        ShapeWidget(const BaseAppPtr theApp, const masl::XMLNodePtr theXMLNode);
+        virtual ~ShapeWidget() = 0;
+        
+        virtual void prerender(MatrixStack& theCurrentMatrixStack);
+        virtual void render(const matrix & theP) const;
+        virtual void onPause();
+        virtual void onResume();
+        
+        virtual bool AABB2Dcontains(const float x, const float y,
+                                    const matrix & theProjectionMatrix) const;
+        bool touches2DScreenCoords( const mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
+        
+        inline mar::ShapePtr getShape() const {return _myShape;};
+        float getWorldZ() const;
+        virtual void setSize(const float & theWidth, const float theHeight) { setSize(vector2(theWidth, theHeight));};
+        virtual void setSize(const vector2 & theSize);
+        virtual const vector2 getSize();
+        virtual std::string getAttributesAsString() const;
+        
+        float& getCustomShaderValue(const std::string& theName);
+        
+    protected:
+        virtual mar::ShapePtr createCustomShape(const mar::MaterialPtr theMaterial);
+        void makeMVPBB(mar::BoundingBox & theBB, const matrix & theProjectionMatrix) const;
+        virtual void propagateAlpha();
+        mar::ShapePtr _myShape;
+        vector2 _myForcedSize;      // this is the gl quad size
+        std::string _myVertexShader;
+        std::string _myFragmentShader;
+        std::map<std::string, float> _myCustomShaderValues;
+        
+    private:
+        enum ORIGIN_MODE {
+            NO_ORIGIN,
+            CENTER_ORIGIN,
+            EXPLICIT_ORIGIN
+        };
+        vector2 _myOrigin;
+        ORIGIN_MODE _myOriginMode;
+        
     };
     typedef masl::Ptr<ShapeWidget> ShapeWidgetPtr;
 };
