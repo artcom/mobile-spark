@@ -57,6 +57,8 @@
 - (void)dealloc
 {
     [super dealloc];
+    
+    [_defaults release];
 }
 
 @end
