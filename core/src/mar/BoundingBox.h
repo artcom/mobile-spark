@@ -17,6 +17,7 @@ namespace mar {
     struct BoundingBox {
         vector4 min;
         vector4 max;
+        
         bool
         touches2D(const BoundingBox & theOtherBox) const {
             return
@@ -33,14 +34,9 @@ namespace mar {
         }
 
         std::ostream &
-        print(std::ostream & os) const {
-            os << "[min[" << min << "], max[" << max << "]]";
-            return os;
-        }
+        print(std::ostream & os) const;
 
-        friend inline std::ostream& operator<<(std::ostream& os, const BoundingBox& bb) {
-            return bb.print(os);
-        }
+        friend std::ostream& operator<<(std::ostream& os, const BoundingBox& bb);
     };
 };
 
