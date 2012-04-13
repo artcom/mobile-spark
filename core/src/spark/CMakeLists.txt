@@ -27,6 +27,10 @@ ac_add_library(
     DEPENDS ${DEPENDS}
 )
 
+if(IOS)
+    ADD_FRAMEWORK(spark OpenGLES)
+endif(IOS)
+
 if (ACMAKE_BUILD_TESTS)
     add_subdirectory(Tests)
 endif (ACMAKE_BUILD_TESTS)

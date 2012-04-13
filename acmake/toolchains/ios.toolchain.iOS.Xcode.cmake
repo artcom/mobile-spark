@@ -9,7 +9,7 @@
 
 SET (CMAKE_CROSSCOMPILING 1)
 
-SET(TARGET_PLATFORM iPhoneOS)
+SET(TARGET_PLATFORM "iPhoneOS")
 
 SET(IOS_SDK_VERSION "5.1")
 SET(IOS_DEPLOY_TGT "5.0")
@@ -17,6 +17,7 @@ SET(IOS_DEPLOY_TGT "5.0")
 SET(IOS_ARCH "armv7")
 
 SET(IOS True)
+#ADD_DEFINITIONS(-D__IPHONE_OS_VERSION_MIN_REQUIRED=__IPHONE_5_0)
 
 # run xcode-select
 find_program(CMAKE_XCODE_SELECT xcode-select)
@@ -32,12 +33,13 @@ if(XCODE)
     set(CMAKE_OSX_SYSROOT "iphoneos${IOS_SDK_VERSION}" CACHE STRING "SDK version" FORCE)
 else()
     set(CMAKE_OSX_SYSROOT ${SDKROOT} CACHE STRING "SDK version" FORCE)
+    ADD_DEFINITIONS("-D__IPHONE_OS_VERSION_MIN_REQUIRED=__IPHONE_5_0")
 endif()
 
 SET(CMAKE_CXX_COMPILER_WORKS TRUE)
 SET(CMAKE_C_COMPILER_WORKS TRUE)
 
-SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET ${IOS_DEPLOY_TGT})
+SET(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${IOS_DEPLOY_TGT})
 
 #set target device: "1" -> iPhone, "2" -> iPad, "1,2 " -> both (remember the <whitespace> after the '2' !!!)
 SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2 ")
@@ -65,7 +67,9 @@ SET (CMAKE_NM      "${DEVROOT}/usr/bin/nm")
 SET (CMAKE_RANLIB  "${DEVROOT}/usr/bin/ranlib")
 
 # Flags
-SET(OUR_FLAGS="-arch ${IOS_ARCH}  -Wall -pipe -no-cpp-precomp  --sysroot=${SDKROOT} -miphoneos-version-min=${IOS_DEPLOY_TGT} -I${SDKROOT}/usr/include/")
+SET(OUR_FLAGS="-arch ${IOS_ARCH}  -Wall -pipe -no-cpp-precomp  --sysroot=${SDKROOT} 
+        -miphoneos-version-min=${IOS_DEPLOY_TGT}
+        -I${SDKROOT}/usr/include/")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OUR_FLAGS}" CACHE STRING "c flags")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OUR_FLAGS}" CACHE STRING "c++ flags")
 
