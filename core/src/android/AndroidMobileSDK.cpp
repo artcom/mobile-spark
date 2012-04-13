@@ -20,6 +20,21 @@ namespace android {
     AndroidMobileSDK::~AndroidMobileSDK() {
 
     }
+        
+    int AndroidMobileSDK::getApiVersion() {
+        int myApiVersion = 0;
+        if (env) {
+            jclass cls = env->FindClass("com/artcom/mobile/Base/NativeBinding");
+            jmethodID myMethodId = env->GetStaticMethodID(cls, "getApiVersion", "()I");
+            if(myMethodId != 0) {
+                jvalue myArgs[0];                
+                myApiVersion = env->CallStaticIntMethod (cls, myMethodId, myArgs);
+            } else {
+                AC_WARNING  << "Sorry, java-getApiVersion not found";
+            }
+        }
+        return myApiVersion;
+    }
 
     void AndroidMobileSDK::vibrate(long theDurationMillisec) {
         if (env) {

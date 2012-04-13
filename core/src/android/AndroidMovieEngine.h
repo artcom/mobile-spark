@@ -18,6 +18,7 @@ namespace android {
     public:
         AndroidMovieEngine(const std::string & theJavaActivity);
         virtual ~AndroidMovieEngine();
+        virtual bool isAvailable();        
 
         void loadMovie(void* theMovieWidget, const std::string & theSrc);
         void playMovie(void* theMovieWidget);

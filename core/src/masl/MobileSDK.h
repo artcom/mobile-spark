@@ -31,6 +31,9 @@ namespace masl {
     class MobileSDK {
         public:
         virtual void vibrate(long theDurationMillisec) = 0;                                
+#ifdef ANDROID        
+        virtual int getApiVersion() = 0;                                
+#endif                
         virtual TextInfo renderText(const std::string & theMessage, unsigned int theTextureId,
                                     int theFontSize, vector4 theColor, int theMaxWidth,
                                     int theMaxHeight, const std::string & theAlign,

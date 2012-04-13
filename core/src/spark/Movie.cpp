@@ -22,9 +22,11 @@ namespace spark {
         _volume(_myXMLNode->getAttributeAs<float>("volume", 1.f))
     {
         setI18nData(getNode()->getAttributeAs<std::string>("src", ""));
+        if (masl::MovieEngineSingleton::get().getNative()->isAvailable()) {
 #ifdef ANDROID
-        _myFragmentShader = ANDROID_MOVIE_FRAGMENT_SHADER;
+            _myFragmentShader = ANDROID_MOVIE_FRAGMENT_SHADER;
 #endif
+        }
     }
 
     Movie::~Movie() {
@@ -72,13 +74,16 @@ namespace spark {
         }
         masl::MovieEngineSingleton::get().getNative()->loadMovie(this, getSrc());
         masl::VideoInfo myMovieInfo = masl::MovieEngineSingleton::get().getNative()->getMovieInfo(this);
+            
         // inject texture name
         myMaterial->getTextureUnit()->getTexture()->_textureId = myMovieInfo.textureID;
         //TODO: add maybe video texture to wrap this preprocessor statement
         //      define engine texture targets
+        if (masl::MovieEngineSingleton::get().getNative()->isAvailable()) {
 #ifdef ANDROID
-        myMaterial->getTextureUnit()->getTexture()->_textureTarget = GL_TEXTURE_EXTERNAL_OES;
+            myMaterial->getTextureUnit()->getTexture()->_textureTarget = GL_TEXTURE_EXTERNAL_OES;            
 #endif
+        }
         // adjust widget size
         vector2 myMovieSize = vector2(myMovieInfo.width, myMovieInfo.height);
         float myWidth = _myForcedSize[0] == -1 ? myMovieSize[0] : _myForcedSize[0];
