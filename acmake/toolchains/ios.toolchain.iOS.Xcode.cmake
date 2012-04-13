@@ -14,26 +14,19 @@ SET(TARGET_PLATFORM iPhoneOS)
 SET(IOS_SDK_VERSION "5.1")
 SET(IOS_DEPLOY_TGT "5.0")
 
+SET(IOS_ARCH "armv7")
+
 SET(IOS True)
 
-# SDK Info
-SET(DEVROOT "/Applications/Xcode.app/Contents/Developer/Platforms/${TARGET_PLATFORM}.platform/Developer")
+# run xcode-select
+find_program(CMAKE_XCODE_SELECT xcode-select)
+if(CMAKE_XCODE_SELECT)
+    execute_process(COMMAND ${CMAKE_XCODE_SELECT} "-print-path" OUTPUT_VARIABLE OSX_DEVELOPER_ROOT OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
 
-#Gather all available SDK-paths and select latest
-FILE(GLOB SDK_PATHS ${DEVROOT}/SDKs/*)
-LIST(LENGTH SDK_PATHS length)
-
-FOREACH(path ${SDK_PATHS})
-	#MESSAGE ("Found SDK ${path}")
-	SET(latest_SDK ${path})
-ENDFOREACH(path)
-
-#MESSAGE("Found ${length} SDKs -- latest is ${latest_SDK}")
-
-#Make sure SDK is valid
-find_path(SDKROOT "usr/include/stdlib.h" PATHS ${latest_SDK} NO_CMAKE_FIND_ROOT_PATH)
-
-#SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
+# some internal values
+set(DEVROOT "${OSX_DEVELOPER_ROOT}/Platforms/${TARGET_PLATFORM}.platform/Developer")
+set(SDKROOT "${DEVROOT}/SDKs/${TARGET_PLATFORM}${IOS_SDK_VERSION}.sdk")
 
 if(XCODE)
     set(CMAKE_OSX_SYSROOT "iphoneos${IOS_SDK_VERSION}" CACHE STRING "SDK version" FORCE)
@@ -50,7 +43,7 @@ SET(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET ${IOS_DEPLOY_TGT})
 SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2 ")
 
 SET(CMAKE_SYSTEM_PROCESSOR arm)
-SET(CMAKE_OSX_ARCHITECTURES armv7)
+SET(CMAKE_OSX_ARCHITECTURES "${IOS_ARCH}" CACHE STRING "SDK Architecture" FORCE)
 
 # Skip the platform compiler checks for cross compiling
 
@@ -72,18 +65,12 @@ SET (CMAKE_NM      "${DEVROOT}/usr/bin/nm")
 SET (CMAKE_RANLIB  "${DEVROOT}/usr/bin/ranlib")
 
 # Flags
-SET(OUR_FLAGS="-arch armv7  -Wall -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT -I${SDKROOT}/usr/include/")
+SET(OUR_FLAGS="-arch ${IOS_ARCH}  -Wall -pipe -no-cpp-precomp  --sysroot=${SDKROOT} -miphoneos-version-min=${IOS_DEPLOY_TGT} -I${SDKROOT}/usr/include/")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OUR_FLAGS}" CACHE STRING "c flags")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OUR_FLAGS}" CACHE STRING "c++ flags")
 
-set(CMAKE_EXE_LINKER_FLAGS
-    "-framework OpenGLES -framework AudioToolbox -framework CoreGraphics -framework QuartzCore -framework UIKit"
-)
-
 # Header
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
-#INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1")
-#INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include/c++/4.2.1/armv7-apple-darwin10")
 INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/System/Library/Frameworks")
 
 # System Libraries
@@ -91,11 +78,8 @@ LINK_DIRECTORIES("${SDKROOT}/usr/lib")
 LINK_DIRECTORIES("${SDKROOT}/System/Library/Frameworks")
 LINK_DIRECTORIES("${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1")
 
-set(CMAKE_FIND_ROOT_PATH ${DEVROOT} ${SDKROOT})
+SET(CMAKE_FIND_ROOT_PATH ${DEVROOT} ${SDKROOT})
+SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+SET (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+SET (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
-#SET (CMAKE_FIND_ROOT_PATH "${SDKROOT}")
-#SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
-#SET (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-#SET (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-
-#MESSAGE("CMAKE_OSX_SYSROOT: ${CMAKE_OSX_SYSROOT}")
