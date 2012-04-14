@@ -15,7 +15,6 @@
 
 @implementation TemplateAppDelegate
 
-using namespace templateapp;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -40,8 +39,8 @@ using namespace templateapp;
     //NSString *exampleString = [_defaults stringForKey:@"exampleText"];
     
     // the Application Ptr
-    TemplateAppPtr appPtr = boost::static_pointer_cast
-    <TemplateApp> (spark::AppProvider::get().getApp());
+    templateapp::TemplateAppPtr appPtr = boost::static_pointer_cast
+    <templateapp::TemplateApp> (spark::AppProvider::get().getApp());
     
     //appPtr->callSomeMemberFunctions();
     

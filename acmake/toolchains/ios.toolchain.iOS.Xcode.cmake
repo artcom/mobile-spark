@@ -9,20 +9,22 @@
 
 SET (CMAKE_CROSSCOMPILING 1)
 
+# System and architecture
 SET(TARGET_PLATFORM "iPhoneOS")
+SET(IOS_ARCH "armv7")
 
+# SDK- and Deploy-versions
 SET(IOS_SDK_VERSION "5.1")
 SET(IOS_DEPLOY_TGT "5.0")
 
-SET(IOS_ARCH "armv7")
-
 SET(IOS True)
-#ADD_DEFINITIONS(-D__IPHONE_OS_VERSION_MIN_REQUIRED=__IPHONE_5_0)
 
-# run xcode-select
+# run xcode-select for SDK paths
 find_program(CMAKE_XCODE_SELECT xcode-select)
 if(CMAKE_XCODE_SELECT)
-    execute_process(COMMAND ${CMAKE_XCODE_SELECT} "-print-path" OUTPUT_VARIABLE OSX_DEVELOPER_ROOT OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process(COMMAND ${CMAKE_XCODE_SELECT} "-print-path" 
+        OUTPUT_VARIABLE OSX_DEVELOPER_ROOT
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
 # some internal values
@@ -36,6 +38,7 @@ else()
     ADD_DEFINITIONS("-D__IPHONE_OS_VERSION_MIN_REQUIRED=__IPHONE_5_0")
 endif()
 
+# Skip the platform compiler checks for cross compiling
 SET(CMAKE_CXX_COMPILER_WORKS TRUE)
 SET(CMAKE_C_COMPILER_WORKS TRUE)
 
@@ -46,8 +49,6 @@ SET(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2 ")
 
 SET(CMAKE_SYSTEM_PROCESSOR arm)
 SET(CMAKE_OSX_ARCHITECTURES "${IOS_ARCH}" CACHE STRING "SDK Architecture" FORCE)
-
-# Skip the platform compiler checks for cross compiling
 
 SET (CMAKE_C_COMPILER             "${DEVROOT}/usr/bin/clang")
 SET (CMAKE_C_FLAGS_DEBUG          "-g -x objective-c")
