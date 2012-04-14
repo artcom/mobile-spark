@@ -20,7 +20,8 @@ namespace ios {
     public:
         IOSMovieEngine();
         virtual ~IOSMovieEngine();
-
+        
+        virtual bool isAvailable() { return true; }               
         void loadMovie(void* theMovieWidget, const std::string & theSrc);
         void playMovie(void* theMovieWidget);
         void stopMovie(void* theMovieWidget);

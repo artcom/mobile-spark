@@ -74,6 +74,11 @@ public class NativeBinding {
   public static native void setLoggerTopLevelTag(String theTagString);
   public static native void setSeverity(Severity theSeverity);
 
+  public static int getApiVersion() {
+    int apiLevel = android.os.Build.VERSION.SDK_INT;
+    return apiLevel;
+  }
+
   public static List<Integer> loadTextureFromFile(String theFilename, boolean theSDCardFlag, boolean theMipMapFlag) {
     List<Integer> myResult = new ArrayList<Integer>();	
     try{    

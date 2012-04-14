@@ -20,6 +20,7 @@ namespace android {
         AndroidMobileSDK();
         virtual ~AndroidMobileSDK();
         virtual void vibrate(long theDurationMillisec);
+        virtual int getApiVersion();
         virtual masl::TextInfo renderText(const std::string & theMessage, unsigned int theTextureId, int theFontSize, vector4 theColor,
                                           int theMaxWidth, int theMaxHeight, const std::string & theAlign, const std::string & theFontPath,
                                           int theLineHeight, int theStartIndex, bool & mirrorFlag);

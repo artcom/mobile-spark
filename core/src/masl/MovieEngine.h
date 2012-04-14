@@ -21,6 +21,8 @@ namespace masl {
     
     class MovieEngine {
     public:
+        static const int MINIMAL_ANDROID_API_VERSION_FOR_MOVIE_SUPPORT = 14;        
+        virtual bool isAvailable() = 0;                
         virtual void loadMovie(void* theMovieWidget, const std::string & theSrc) = 0;
         virtual void playMovie(void* theMovieWidget) = 0;
         virtual void stopMovie(void* theMovieWidget) = 0;
