@@ -35,7 +35,12 @@ if(XCODE)
     set(CMAKE_OSX_SYSROOT "iphoneos${IOS_SDK_VERSION}" CACHE STRING "SDK version" FORCE)
 else()
     set(CMAKE_OSX_SYSROOT ${SDKROOT} CACHE STRING "SDK version" FORCE)
-    ADD_DEFINITIONS("-D__IPHONE_OS_VERSION_MIN_REQUIRED=__IPHONE_5_0")
+    
+    if(NOT IOS_VER_OPTION)
+    set(IOS_VER_OPTION "-D__IPHONE_OS_VERSION_MIN_REQUIRED=__IPHONE_5_0")
+    #REMOVE_DEFINITIONS(${IOS_VER_OPTION})
+    ADD_DEFINITIONS(${IOS_VER_OPTION})
+    endif()
 endif()
 
 # Skip the platform compiler checks for cross compiling
@@ -81,7 +86,7 @@ INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/System/Library/Frameworks")
 # System Libraries
 LINK_DIRECTORIES("${SDKROOT}/usr/lib")
 LINK_DIRECTORIES("${SDKROOT}/System/Library/Frameworks")
-LINK_DIRECTORIES("${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1")
+#LINK_DIRECTORIES("${SDKROOT}/usr/lib/gcc/arm-apple-darwin10/4.2.1")
 
 SET(CMAKE_FIND_ROOT_PATH ${DEVROOT} ${SDKROOT})
 SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)

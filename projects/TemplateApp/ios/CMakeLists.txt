@@ -101,13 +101,8 @@ add_custom_command(
 #This copies the asset folder into the iOS app, 
 #as well as if you drag and drop the folder into the Xcodeproject 
 #or into the final app by opening it with the packetmanager.
-#copy assets folder
-#set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/android/${APP_NAME}/assets)
-#add_custom_command( 
-#    TARGET ${EXECUTABLE_NAME} 
-#    POST_BUILD 
-#    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/#${EXECUTABLE_NAME}.app/
-#)
+
+# set copy tool
 SET(XCODE_PBXCP "/Applications/Xcode.app/Contents/OtherFrameworks/DevToolsCore.framework/Versions/A/Resources/pbxcp")
 
 #copy layouts folder

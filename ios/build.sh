@@ -12,7 +12,7 @@ fi
 
 cd $MYDIR/build
 
-cmake -DCMAKE_TOOLCHAIN_FILE=$MOBILE_SPARK/acmake/toolchains/ios.toolchain.iOS.Xcode.cmake $MOBILE_SPARK
+cmake -DCMAKE_TOOLCHAIN_FILE=$MOBILE_SPARK/acmake/toolchains/ios.toolchain.iOS.cmake $MOBILE_SPARK
 make $1
 BUILD_OK=$?
 
