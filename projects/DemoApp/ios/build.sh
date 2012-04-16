@@ -22,20 +22,25 @@ BUILD_OK=$?
 if [ $BUILD_OK == "0" ] 
 then
     echo "build done :-)"
+
+    #create .ipa bundle
+    APP_NAME="$( ls $MYDIR/build/bin/ | grep '.app' | cut -d'.' -f1)"
+    APP_BUNDLE=$APP_NAME.app
+
+    echo "creating package '$MYDIR/build/$APP_NAME.ipa' ..."
+
+    mkdir $MYDIR/build/bin/Payload
+    mv $MYDIR/build/bin/$APP_BUNDLE $MYDIR/build/bin/Payload
+
+    zip -r $MYDIR/build/$APP_NAME.ipa $MYDIR/build/bin/Payload >> /dev/null
+    rm -rf $MYDIR/build/bin/Payload
+
+    echo "done"
+
 else
     echo ":-( BUILD FAILED :-("
     exit 1
 fi
 
-#create .ipa bundle
-APP_NAME="$( ls $MYDIR/build/bin/ | grep '.app' | cut -d'.' -f1)"
-APP_BUNDLE=$APP_NAME.app
 
-echo "creating package $APP_BUNDLE ..."
-
-mkdir $MYDIR/build/bin/Payload
-mv $MYDIR/build/bin/$APP_BUNDLE $MYDIR/build/bin/Payload
-
-zip -r $MYDIR/build/bin/$APP_NAME.ipa $MYDIR/build/bin/Payload
-rm -rf $MYDIR/build/bin/Payload
 
