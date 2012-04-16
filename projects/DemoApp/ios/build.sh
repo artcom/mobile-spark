@@ -15,7 +15,7 @@ cd $MYDIR/build
 
 cmake -GXcode -DCMAKE_TOOLCHAIN_FILE=$MOBILE_SPARK/acmake/toolchains/ios.toolchain.iOS.cmake $MYDIR/..
 
-xcodebuild -project $MYDIR/build/*.xcodeproj/ -target ALL_BUILD -configuration RELEASE CODE_SIGN_IDENTITY="${IDENTITY}"
+xcodebuild -project $MYDIR/build/*.xcodeproj/ -target ALL_BUILD -configuration Release CODE_SIGN_IDENTITY="${IDENTITY}"
 
 BUILD_OK=$?
 
@@ -26,4 +26,16 @@ else
     echo ":-( BUILD FAILED :-("
     exit 1
 fi
+
+#create .ipa bundle
+APP_NAME="$( ls $MYDIR/build/bin/ | grep '.app' | cut -d'.' -f1)"
+APP_BUNDLE=$APP_NAME.app
+
+echo "creating package $APP_BUNDLE ..."
+
+mkdir $MYDIR/build/bin/Payload
+mv $MYDIR/build/bin/$APP_BUNDLE $MYDIR/build/bin/Payload
+
+zip -r $MYDIR/build/bin/$APP_NAME.ipa $MYDIR/build/bin/Payload
+rm -rf $MYDIR/build/bin/Payload
 
