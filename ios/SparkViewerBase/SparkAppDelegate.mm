@@ -33,7 +33,14 @@
 -(void) initialize:(NSString*) projectName 
 {
     NSString *path = [[NSBundle mainBundle] resourcePath];
-    spark::assetProviderSetup([path UTF8String],[projectName UTF8String]);
+    
+    NSString *assetsFolder = [NSString stringWithFormat:@"%@%@",
+                              projectName,
+                              @"_assets"];
+    
+    NSLog(@"%@",assetsFolder);
+    
+    spark::assetProviderSetup([path UTF8String],[assetsFolder UTF8String]);
     masl::Logger::get().setLoggerTopLevelTag([projectName UTF8String]);
     
     // create download folder
