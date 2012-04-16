@@ -31,8 +31,10 @@ then
 
     mkdir $MYDIR/build/bin/Payload
     mv $MYDIR/build/bin/$APP_BUNDLE $MYDIR/build/bin/Payload
+    
+    cd $MYDIR/build/bin
 
-    zip -r $MYDIR/build/$APP_NAME.ipa $MYDIR/build/bin/Payload >> /dev/null
+    zip -r ../$APP_NAME.ipa Payload/ >> /dev/null
     rm -rf $MYDIR/build/bin/Payload
 
     echo "done"
