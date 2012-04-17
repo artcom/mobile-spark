@@ -109,6 +109,9 @@ namespace spark {
             static const char * const ON_RESIZE;
             static const char * const WORLD_REALIZED;
             vector2 getSize() const { return size_;};
+        
+            inline const std::string& getWorldName() const {return worldname_;};
+        
         private:
             vector2 size_;
             vector2 oldsize_;
