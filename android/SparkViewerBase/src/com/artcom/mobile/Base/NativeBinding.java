@@ -14,12 +14,15 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.microedition.khronos.opengles.GL10;
+
 import android.util.Log;
 
 import android.app.Activity;
@@ -48,7 +51,6 @@ public class NativeBinding {
     public static boolean ourAllowOrientationChange = true;
 
     private static final String TAG = "NativeBinding";
-    
     public static void loadLibraries() {
         // with android ndk 7 and up, we get shared stl libs, we need to load them by hand
         try{            
@@ -79,7 +81,21 @@ public class NativeBinding {
     return apiLevel;
   }
 
-  public static List<Integer> loadTextureFromFile(String theFilename, boolean theSDCardFlag, boolean theMipMapFlag) {
+    // http://stackoverflow.com/questions/1322510/given-an-integer-how-do-i-find-the-next-largest-power-of-two-using-bit-twiddlin
+    public static double log2(double num) {
+        return (Math.log(num)/Math.log(2));
+    }     
+    public static int next_2_power (int n)
+    {
+        n--;        
+      return 1<<((int)log2((double)n)+1);
+    }
+    public static byte[] getByteArray(Bitmap bitmap) {
+	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	    bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+	    return bos.toByteArray();
+	}    
+    public static List<Integer> loadTextureFromFile(String theFilename, boolean theSDCardFlag, boolean theMipMapFlag) {
     List<Integer> myResult = new ArrayList<Integer>();	
     try{    
         int[] maxTextureSize = new int[1];
@@ -92,6 +108,8 @@ public class NativeBinding {
         
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
+        o.inScaled = false;
+        
         InputStream is = null;
         if (theSDCardFlag) {
             is = new BufferedInputStream(new FileInputStream(theFilename));            
@@ -115,6 +133,7 @@ public class NativeBinding {
             }
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize=scale;
+            o2.inScaled = false;
             InputStream is2 = null;
             if (theSDCardFlag) {
                 is2 = new BufferedInputStream(new FileInputStream(theFilename));            
@@ -129,26 +148,50 @@ public class NativeBinding {
         GLES20.glGenTextures(1, textures,0);
         
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
-        
         //Create Nearest Filtered Texture
         if (theMipMapFlag) {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_NEAREST);//GLES20.GL_LINEAR);
         } else {
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+              GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         }
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 
         //Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-          try {
-              GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, myBitmap, 0);                                            
-          } catch (Exception theEx) {
-              AC_Log.print(String.format("exception %s", theEx.getMessage()));
-          }
 
-        if (theMipMapFlag) {
-            GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
+        try {
+            if (theMipMapFlag) {
+                int myTextureWidth = next_2_power(myBitmap.getWidth());
+                int myTextureHeight = next_2_power(myBitmap.getHeight());
+                boolean myNPOTImage = myTextureWidth != myBitmap.getWidth() || myTextureHeight != myBitmap.getHeight();
+                if (myNPOTImage) {
+                    // Generate, and load up all of the mipmaps:
+                    for(int level=0, height = myBitmap.getHeight(), width = myBitmap.getWidth(); true; level++) {
+                        // Push the bitmap onto the GPU:
+                        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, level, myBitmap, 0);
+                        
+                        // We need to stop when the texture is 1x1:
+                        if(height==1 && width==1) break;
+                        
+                        // Resize, and let's go again:
+                        width >>= 1; height >>= 1;
+                        if(width<1)  width = 1;
+                        if(height<1) height = 1;
+                        
+                        Bitmap bmp2 = Bitmap.createScaledBitmap(myBitmap, width, height, true);
+                        myBitmap.recycle();
+                        myBitmap = bmp2;
+                    }
+                } else {                        
+                    GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, myBitmap, 0);                                            
+                    GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
+                }
+            } else {
+                  GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, myBitmap, 0);                                            
+            }
+        } catch (Exception theEx) {
+          AC_Log.print(String.format("exception %s", theEx.getMessage()));
         }
                   
         //Clean up
@@ -168,6 +211,49 @@ public class NativeBinding {
     return myResult;
   }
   
+  private static ByteBuffer extract(Bitmap bmp, boolean theYFlipFlag) {
+    AC_Log.print("extract start");
+    	ByteBuffer bb = ByteBuffer.allocateDirect(bmp.getHeight() * bmp.getWidth() * 3);
+    	bb.order(ByteOrder.BIG_ENDIAN);
+    	IntBuffer ib = bb.asIntBuffer();
+    	// Convert ARGB -> RGBA
+    	int myYStart = 0;
+    	if (theYFlipFlag) {
+    	    myYStart = bmp.getHeight()-1;
+    	}
+    	for (int y = myYStart;; )
+    	{
+        	for (int x = 0; x < bmp.getWidth(); x++)
+        	{
+            	int pix = bmp.getPixel(x, bmp.getHeight() - y - 1);
+            	int red = ((pix >> 16) & 0xFF);
+            	int green = ((pix >> 8) & 0xFF);
+            	int blue = ((pix) & 0xFF);
+            	//int red = ((pix >> 24) & 0xFF);
+            	//int green = ((pix >> 16) & 0xFF);
+            	//int blue = ((pix >> 8) & 0xFF);
+            	//int alpha = ((pix) & 0xFF);
+            	// Make up alpha for interesting effect
+            	//ib.put(red << 24 | green << 16 | blue << 8 | ((red + blue + green) / 3));
+            	//ib.put(red << 24 | green << 16 | blue << 8 | alpha);
+            	ib.put(red << 16 | green << 8 | blue);
+        	}
+        	if (!theYFlipFlag) {
+            	y++;
+            	if (y >= bmp.getHeight()) {
+                	break;
+            	}
+        	} else {
+            	y--;
+            	if ( y <= 0) {
+                	break;
+            	}
+        	}
+    	}
+    	bb.position(0);
+    AC_Log.print("extract end");
+    	return bb;
+	}   
   public static List<Integer> renderText(String theMessage, int theTextureId, int theFontSize, int[] theColor, 
 		                                 int maxWidth, int maxHeight, String theAlign, String theFontpath, int theLineHeight, int theStartIndex) {
     List<Integer> myResult = new ArrayList<Integer>();
