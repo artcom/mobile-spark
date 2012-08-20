@@ -42,7 +42,8 @@ namespace spark {
         virtual const vector2 getSize();
         virtual std::string getAttributesAsString() const;
         
-        float& getCustomShaderValue(const std::string& theName);
+        void setCustomShaderValue(const std::string& theName, float theVal);
+        float getCustomShaderValue(const std::string& theName);
         
     protected:
         virtual mar::ShapePtr createCustomShape(const mar::MaterialPtr theMaterial);

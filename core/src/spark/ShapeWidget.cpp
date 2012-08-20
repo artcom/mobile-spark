@@ -235,7 +235,16 @@ namespace spark {
                 " shape={"+(_myShape?_myShape->getAttributesAsString():"")+"}";
     }
     
-    float& ShapeWidget::getCustomShaderValue(const std::string& theName){
+    void ShapeWidget::setCustomShaderValue(const std::string& theName, float theVal){
+        std::map<std::string, float>::iterator it;
+        it = _myCustomShaderValues.find(theName);
+        
+        if(it != _myCustomShaderValues.end()){
+            it->second = theVal;
+        }
+    }
+    
+    float ShapeWidget::getCustomShaderValue(const std::string& theName){
         
         std::map<std::string, float>::iterator it;
         it = _myCustomShaderValues.find(theName);
@@ -247,6 +256,7 @@ namespace spark {
         // we did not find the requested name
         std::stringstream stringStream;
         stringStream<<"uniform value '"<<theName<<"' not defined";
+        std::cout<<stringStream.str();
         throw masl::Exception(stringStream.str());
         
     }
