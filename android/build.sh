@@ -1,5 +1,7 @@
 #! /bin/bash
 
+MYDIR="$( cd "$( dirname "$0" )" && pwd )"
+
 MAKE_TOOL="make"
 if [[ "`uname -s`" == *CYGWIN* ]]; then
     MAKE_TOOL="nmake"
@@ -14,10 +16,10 @@ if [ -z "${ANDROID_LEVEL:+1}" ]; then
     echo "Using default ANDROID_LEVEL $ANDROID_LEVEL"
 fi
 
-mkdir -p ../_build
-cd ../_build
+mkdir -p $MYDIR/../_build
+cd $MYDIR/../_build
 
-cmake -DCMAKE_TOOLCHAIN_FILE=../acmake/toolchains/android.toolchain.cmake ..
+cmake -DCMAKE_TOOLCHAIN_FILE=$MYDIR/../acmake/toolchains/android.toolchain.cmake $MYDIR/..
 
 
 $MAKE_TOOL $1

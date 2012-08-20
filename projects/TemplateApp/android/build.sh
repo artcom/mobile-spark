@@ -1,6 +1,10 @@
 #! /bin/bash
 
-SPARK_COMPONENT_DIR=`pwd`/..
+#SPARK_COMPONENT_DIR=`pwd`/..
+
+MYDIR="$( cd "$( dirname "$0" )" && pwd )"
+SPARK_COMPONENT_DIR=$MYDIR/..
+
 if [[ "`uname -s`" == *CYGWIN* ]]; then
     cd $(cygpath "$MOBILE_SPARK/")
 else

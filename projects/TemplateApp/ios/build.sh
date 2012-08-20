@@ -33,8 +33,7 @@ then
     mv $MYDIR/build/bin/$APP_BUNDLE $MYDIR/build/bin/Payload
     
     cd $MYDIR/build/bin
-
-    zip -r ../$APP_NAME.ipa Payload/ >> /dev/null
+    zip -r ../$APP_NAME.ipa Payload >> /dev/null
     rm -rf $MYDIR/build/bin/Payload
 
     echo "done"
