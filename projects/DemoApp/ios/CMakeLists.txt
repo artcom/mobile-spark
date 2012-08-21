@@ -17,7 +17,7 @@ ELSEIF(${TARGET_PLATFORM} STREQUAL iPhoneSimulator)
 ENDIF()
 
 #set include paths
-include_directories($ENV{MOBILE_SPARK}/ios)
+include_directories($ENV{MOBILE_SPARK}/iOS)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${libXML2_INCLUDE_DIRS})
 include_directories(${Cml_INCLUDE_DIRS})
@@ -101,16 +101,20 @@ add_custom_command(
 #This copies the asset folder into the iOS app, 
 #as well as if you drag and drop the folder into the Xcodeproject 
 #or into the final app by opening it with the packetmanager.
-
-# set copy tool
-SET(XCODE_PBXCP "/Applications/Xcode.app/Contents/OtherFrameworks/DevToolsCore.framework/Versions/A/Resources/pbxcp")
+#copy assets folder
+#set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/android/${APP_NAME}/assets)
+#add_custom_command( 
+#    TARGET ${EXECUTABLE_NAME} 
+#    POST_BUILD 
+#    COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/#${EXECUTABLE_NAME}.app/
+#)
 
 #copy layouts folder
 set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/layouts)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
+    COMMAND cp -r ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
 )
 
 #copy models folder
@@ -118,7 +122,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/models)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
+    COMMAND cp -r ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
 )
 
 #copy shaders folder
@@ -126,7 +130,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/shaders)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
+    COMMAND cp -r ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
 )
 
 #copy textures folder
@@ -134,7 +138,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/textures)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
+    COMMAND cp -r ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
 )
 
 #copy assets layouts folder
@@ -142,7 +146,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/assets/layouts)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/layouts/
+    COMMAND cp -r ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/layouts/
 )
 
 #copy assets texturesfolder
@@ -150,7 +154,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/assets/textures)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/textures/
+    COMMAND cp -r ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/textures/
 )
 
 
@@ -160,7 +164,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/fonts)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
+    COMMAND cp -r ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
 )
 
 #copy sounds folder
@@ -168,7 +172,7 @@ set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/sounds)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
+    COMMAND cp -r ${ASSETS_DIR} ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/
 )
 
 #copy core/shaders folder
@@ -176,25 +180,26 @@ set(ASSETS_DIR $ENV{MOBILE_SPARK}/core/shaders)
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/shaders/
+    COMMAND cp -r ${ASSETS_DIR}/* ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/${APP_NAME}_assets/shaders/
 )
 
 
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} $ENV{MOBILE_SPARK}/iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+    COMMAND cp -r $ENV{MOBILE_SPARK}/iOS/Environment.plist  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
 )
 # copy our Setting.bundle
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} ${PROJECT_SOURCE_DIR}/ios/Settings.bundle -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+    COMMAND cp -r ${PROJECT_SOURCE_DIR}/ios/Settings.bundle  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
 )
 # copy our icon files
 add_custom_command( 
     TARGET ${EXECUTABLE_NAME} 
     POST_BUILD 
-    COMMAND ${XCODE_PBXCP} ${PROJECT_SOURCE_DIR}/ios/icon*.png -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
+    COMMAND cp -r ${PROJECT_SOURCE_DIR}/ios/icon*.png  ${CMAKE_BINARY_DIR}/bin/${EXECUTABLE_NAME}.app/
 )
+
 
