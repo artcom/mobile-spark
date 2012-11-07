@@ -2,6 +2,7 @@
 
 MYDIR="$( cd "$( dirname "$0" )" && pwd )"
 
+
 MAKE_TOOL="make"
 if [[ "`uname -s`" == *CYGWIN* ]]; then
     MAKE_TOOL="nmake"
